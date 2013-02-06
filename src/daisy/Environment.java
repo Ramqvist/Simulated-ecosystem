@@ -1,5 +1,10 @@
 package daisy;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jfree.ui.RefineryUtilities;
+
 public class Environment implements Runnable {
 	private int white;
 	private int black;
@@ -53,6 +58,17 @@ public class Environment implements Runnable {
 			System.out.println("White: " + white + " Black: " + black + " Temp: " + temperature + " proportion " + proportion);
 //			System.out.println("Black: " + black);
 		}
+		
+		List<Integer> blackFlowerList = new ArrayList<Integer>();
+		List<Integer> whiteFlowerList = new ArrayList<Integer>();
+		
+		blackFlowerList.add(black);
+		whiteFlowerList.add(white);
+        final DaisyLineFrame demo = new DaisyLineFrame("Line Chart Demo 6", blackFlowerList, whiteFlowerList);
+        demo.pack();
+        RefineryUtilities.centerFrameOnScreen(demo);
+        demo.setVisible(true);
+
 	}
 	
 }
