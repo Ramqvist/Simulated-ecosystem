@@ -1,0 +1,59 @@
+package daisy;
+
+public class Environment implements Runnable {
+	private int white;
+	private int black;
+	private double temperature; //Between 0-1
+	private int oldWhite;
+	private int oldBlack;
+	private int delay;
+	private int loops;
+	private double growthRate;
+	
+	public Environment(int white, int black, double temp, int loops, double growthRate) {
+		this.white = white;
+		this.black = black;
+		temperature = temp;
+		delay = 0;
+		this.loops = loops;
+		this.growthRate = growthRate;
+	}
+	
+	
+	@Override
+	public void run() {
+		while(loops-- > 0) {
+			int deadWhite = 0;
+			for (int i = 0; i < white; i++) {
+				if (Math.random() > temperature) {
+					deadWhite++;
+				}
+			}
+			
+			int deadBlack = 0;
+			for (int i = 0; i < black; i++) {
+				if (Math.random() < temperature) {
+					deadBlack++;
+				}
+			}
+			
+			white -= deadWhite;
+			black -= deadBlack;
+			
+			int newFlowers = (int)(0.5 + (white + black) * growthRate);
+			double proportion = black / (black + white);
+			
+			for (int i = 0; i < newFlowers; i++) {
+				if (Math.random() < proportion) {
+					black++;
+				} else {
+					white++;
+				}
+			}
+			
+			System.out.println("White: " + white + " Black: " + black + " Temp: " + temperature);
+//			System.out.println("Black: " + black);
+		}
+	}
+	
+}
