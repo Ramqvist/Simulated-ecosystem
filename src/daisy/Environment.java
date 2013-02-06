@@ -8,20 +8,23 @@ import org.jfree.ui.RefineryUtilities;
 public class Environment implements Runnable {
 	private int white;
 	private int black;
-	private double temperature; //Between 0-1
-	private int oldWhite;
-	private int oldBlack;
+	private double[] temperature; //Between 0-1
 	private int delay;
-	private int loops;
+	private int nInterations;
 	private double growthRate;
+	private double[] proportions;
+	private double mutationRate;
 	
-	public Environment(int white, int black, double temp, int loops, double growthRate) {
+	public Environment(int white, int black, double temp, int nInterations, double growthRate, int delay, double mutationRate) {
 		this.white = white;
 		this.black = black;
-		temperature = temp;
-		delay = 0;
-		this.loops = loops;
+		temperature = new double[nInterations+1];
+		temperature[0]=temp;
+		this.delay = delay;
+		this.nInterations = nInterations;
 		this.growthRate = growthRate;
+		proportions = new double[nInterations];
+		this.mutationRate = mutationRate;
 	}
 	
 	
@@ -29,37 +32,57 @@ public class Environment implements Runnable {
 	public void run() {
 		List<Integer> blackFlowerList = new ArrayList<Integer>();
 		List<Integer> whiteFlowerList = new ArrayList<Integer>();
-		while(loops-- > 0) {
+		for(int iteration = 0; iteration < nInterations; iteration++) {
+			
+			//Killing white flowers
 			int deadWhite = 0;
 			for (int i = 0; i < white; i++) {
-				if (Math.random() > temperature) {
+				if (Math.random() < (1-temperature[iteration])/5) {
 					deadWhite++;
 				}
 			}
 			
+			//Killing black flowers
 			int deadBlack = 0;
 			for (int i = 0; i < black; i++) {
-				if (Math.random() < temperature) {
+				if (Math.random() < temperature[iteration]/5) {
 					deadBlack++;
 				}
 			}
 			
 			white -= deadWhite;
 			black -= deadBlack;
+			
+			//Giving birth to new flowers
 			int newFlowers = (int)(0.5 + (white + black) * growthRate);
-			double proportion = ((double)black / (double)(black + white));
+			proportions[iteration] = ((double)black / (double)(black + white));
 			
 			for (int i = 0; i < newFlowers; i++) {
-				if (Math.random() < proportion) {
-					black++;
+				if (Math.random() < proportions[iteration]) { //Black
+					if (Math.random() < mutationRate) {
+						white++;
+					} else {
+						black++;
+					}
 				} else {
-					white++;
+					if (Math.random() < mutationRate) {
+						black++;
+					} else {
+						white++;
+					}
 				}
 			}
 
+			//Updating temperature
+			if(iteration>=delay){
+				temperature[iteration+1] = proportions[iteration-delay];
+			} else {
+				temperature[iteration+1] = temperature[iteration];
+			}
+			
 			blackFlowerList.add(black);
 			whiteFlowerList.add(white);
-			System.out.println("White: " + white + " Black: " + black + " Temp: " + temperature + " proportion " + proportion);
+			System.out.println("White: " + white + " Black: " + black + " Temp: " + temperature + " proportion " + proportions[iteration]);
 //			System.out.println("Black: " + black);
 		}
 		
