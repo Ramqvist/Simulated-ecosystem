@@ -14,8 +14,9 @@ public class Environment implements Runnable {
 	private double growthRate;
 	private double[] proportions;
 	private double mutationRate;
+	private int capacity;
 	
-	public Environment(int white, int black, double temp, int nInterations, double growthRate, int delay, double mutationRate) {
+	public Environment(int white, int black,int capacity, double temp, int nInterations, double growthRate, int delay, double mutationRate) {
 		this.white = white;
 		this.black = black;
 		temperature = new double[nInterations+1];
@@ -25,6 +26,7 @@ public class Environment implements Runnable {
 		this.growthRate = growthRate;
 		proportions = new double[nInterations];
 		this.mutationRate = mutationRate;
+		this.capacity = capacity;
 	}
 	
 	
@@ -54,7 +56,7 @@ public class Environment implements Runnable {
 			black -= deadBlack;
 			
 			//Giving birth to new flowers
-			int newFlowers = (int)(0.5 + (white + black) * growthRate);
+			int newFlowers = (int)((white+black)*growthRate*(1-(white+black)/capacity)+0.5);
 			proportions[iteration] = ((double)black / (double)(black + white));
 			
 			for (int i = 0; i < newFlowers; i++) {
