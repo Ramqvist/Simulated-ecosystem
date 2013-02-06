@@ -27,6 +27,8 @@ public class Environment implements Runnable {
 	
 	@Override
 	public void run() {
+		List<Integer> blackFlowerList = new ArrayList<Integer>();
+		List<Integer> whiteFlowerList = new ArrayList<Integer>();
 		while(loops-- > 0) {
 			int deadWhite = 0;
 			for (int i = 0; i < white; i++) {
@@ -54,16 +56,14 @@ public class Environment implements Runnable {
 					white++;
 				}
 			}
-			
+
+			blackFlowerList.add(black);
+			whiteFlowerList.add(white);
 			System.out.println("White: " + white + " Black: " + black + " Temp: " + temperature + " proportion " + proportion);
 //			System.out.println("Black: " + black);
 		}
 		
-		List<Integer> blackFlowerList = new ArrayList<Integer>();
-		List<Integer> whiteFlowerList = new ArrayList<Integer>();
 		
-		blackFlowerList.add(black);
-		whiteFlowerList.add(white);
         final DaisyLineFrame demo = new DaisyLineFrame("Line Chart Demo 6", blackFlowerList, whiteFlowerList);
         demo.pack();
         RefineryUtilities.centerFrameOnScreen(demo);

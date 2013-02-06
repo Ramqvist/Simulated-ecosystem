@@ -113,9 +113,9 @@ public class DaisyLineFrame extends ApplicationFrame {
         
         // create the chart...
         final JFreeChart chart = ChartFactory.createXYLineChart(
-            "Line Chart Demo 6",      // chart title
-            "X",                      // x axis label
-            "Y",                      // y axis label
+            "Daisy Black/White simulation",      // chart title
+            "Generation",                      // x axis label
+            "Population size",                      // y axis label
             dataset,                  // data
             PlotOrientation.VERTICAL,
             true,                     // include legend
@@ -136,7 +136,7 @@ public class DaisyLineFrame extends ApplicationFrame {
         plot.setDomainGridlinePaint(Color.white);
         plot.setRangeGridlinePaint(Color.white);
         
-        final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+        final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true, true);
         renderer.setSeriesLinesVisible(0, false);
         renderer.setSeriesShapesVisible(1, false);
         plot.setRenderer(renderer);
