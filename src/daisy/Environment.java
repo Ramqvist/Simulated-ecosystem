@@ -39,9 +39,8 @@ public class Environment implements Runnable {
 			
 			white -= deadWhite;
 			black -= deadBlack;
-			
 			int newFlowers = (int)(0.5 + (white + black) * growthRate);
-			double proportion = black / (black + white);
+			double proportion = ((double)black / (double)(black + white));
 			
 			for (int i = 0; i < newFlowers; i++) {
 				if (Math.random() < proportion) {
@@ -51,7 +50,7 @@ public class Environment implements Runnable {
 				}
 			}
 			
-			System.out.println("White: " + white + " Black: " + black + " Temp: " + temperature);
+			System.out.println("White: " + white + " Black: " + black + " Temp: " + temperature + " proportion " + proportion);
 //			System.out.println("Black: " + black);
 		}
 	}
