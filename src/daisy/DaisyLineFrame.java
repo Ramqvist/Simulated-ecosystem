@@ -50,7 +50,7 @@ public class DaisyLineFrame extends ApplicationFrame {
         counter = 1;
         final XYSeries whiteSerie = new XYSeries("White");
         for(Integer i : whiteFlowerList) {
-        	blackSerie.add(counter++, i);
+        	whiteSerie.add(counter++, i);
         }
 
         final XYSeriesCollection dataset = new XYSeriesCollection();
