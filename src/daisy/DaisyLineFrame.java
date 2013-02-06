@@ -130,7 +130,7 @@ public class DaisyLineFrame extends ApplicationFrame {
   //      legend.setDisplaySeriesShapes(true);
         
         // get a reference to the plot for further customisation...
-        final XYPlot plot = chart.getXYPlot();
+        /*final XYPlot plot = chart.getXYPlot();
         plot.setBackgroundPaint(Color.lightGray);
     //    plot.setAxisOffset(new Spacer(Spacer.ABSOLUTE, 5.0, 5.0, 5.0, 5.0));
         plot.setDomainGridlinePaint(Color.white);
@@ -139,11 +139,11 @@ public class DaisyLineFrame extends ApplicationFrame {
         final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true, true);
         renderer.setSeriesLinesVisible(0, false);
         renderer.setSeriesShapesVisible(1, false);
-        plot.setRenderer(renderer);
+        plot.setRenderer(renderer);*/
 
         // change the auto tick unit selection to integer units only...
-        final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        //final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        //rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
         // OPTIONAL CUSTOMISATION COMPLETED.
                 
         return chart;
