@@ -41,15 +41,15 @@ public class Environment implements Runnable {
 		
 		this.white = white;
 		this.black = black;
-		temperature = new double[nInterations+1];
-		temperature[0]=startTemperature;
-		this.delay = delay;
-		this.nInterations = nInterations;
-		this.growthRate = growthRate;
-		proportions = new double[nInterations];
-		this.mutationRate = mutationRate;
 		this.capacity = capacity;
+		temperature[0]=startTemperature;
+		temperature = new double[nInterations+1];
+		this.nInterations = nInterations;
+		proportions = new double[nInterations];
+		this.growthRate = growthRate;
 		this.deathSupression = deathSuppression;
+		this.delay = delay;
+		this.mutationRate = mutationRate;
 	}
 	
 	public Environment() {
@@ -112,8 +112,7 @@ public class Environment implements Runnable {
 			blackFlowerList.add(black);
 			whiteFlowerList.add(white);
 			temperatureList.add(temperature[iteration+1] * capacity);
-			System.out.println("White: " + white + " Black: " + black + " Temp: " + temperature + " proportion " + proportions[iteration]);
-//			System.out.println("Black: " + black);
+			System.out.println("White: " + white + " Black: " + black + " Temp: " + temperature[iteration] + " proportion " + proportions[iteration]);
 		}
 		
 		
