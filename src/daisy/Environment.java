@@ -5,6 +5,10 @@ import java.util.List;
 
 import org.jfree.ui.RefineryUtilities;
 
+/**
+ * 
+ * @author Albin Bramstång
+ */
 public class Environment implements Runnable {
 	private int white;
 	private int black;
@@ -15,8 +19,26 @@ public class Environment implements Runnable {
 	private double[] proportions;
 	private double mutationRate;
 	private int capacity;
+	private double deathSupression;
 	
-	public Environment(int white, int black,int capacity, double startTemperature, int nInterations, double growthRate, int delay, double mutationRate) {
+	/**
+	 * Creates an environment with black and white daisies. The populations change over time depending 
+	 * on temperature, growth rate, death suppression and mutation rate. The amount of black daisies affect the temperature.
+	 * 
+	 * @param white - initial white daisy population
+	 * @param black - initial black daisy population
+	 * @param capacity - max number of daisies in the environment
+	 * @param startTemperature - initial temperature
+	 * @param nInterations - amount of iterations the simulation will run
+	 * @param growthRate - the speed of which the daisies grow
+	 * @param deathSuppression - limits the speed of death of the daisies
+	 * @param delay - offset of temperature from the population of black daisies
+	 * @param mutationRate - probability of mutation, i.e. change of color for new born daisies
+	 */
+	public Environment(int white, int black, int capacity, 
+			double startTemperature, int nInterations, double growthRate, double deathSuppression, 
+			int delay, double mutationRate) {
+		
 		this.white = white;
 		this.black = black;
 		temperature = new double[nInterations+1];
@@ -27,8 +49,12 @@ public class Environment implements Runnable {
 		proportions = new double[nInterations];
 		this.mutationRate = mutationRate;
 		this.capacity = capacity;
+		this.deathSupression = deathSuppression;
 	}
 	
+	public Environment() {
+		this(100, 100, 2000, 0.9, 500, 0.12, 10, 50, 0.1);
+	}
 	
 	@Override
 	public void run() {
@@ -40,7 +66,7 @@ public class Environment implements Runnable {
 			//Killing white flowers
 			int deadWhite = 0;
 			for (int i = 0; i < white; i++) {
-				if (Math.random() < (1-temperature[iteration])/5) {
+				if (Math.random() < (1-temperature[iteration])/deathSupression) {
 					deadWhite++;
 				}
 			}
@@ -48,7 +74,7 @@ public class Environment implements Runnable {
 			//Killing black flowers
 			int deadBlack = 0;
 			for (int i = 0; i < black; i++) {
-				if (Math.random() < temperature[iteration]/5) {
+				if (Math.random() < temperature[iteration]/deathSupression) {
 					deadBlack++;
 				}
 			}
