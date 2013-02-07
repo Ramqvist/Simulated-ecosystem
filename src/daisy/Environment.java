@@ -104,7 +104,7 @@ public class Environment implements Runnable {
 
 			//Updating temperature
 			if(iteration>=delay){
-				temperature[iteration+1] = proportions[iteration-delay];
+				temperature[iteration+1] = ( proportions[iteration-delay] + temperature[iteration] + temperature[iteration-1]) / 3;
 			} else {
 				temperature[iteration+1] = temperature[iteration];
 			}
@@ -117,7 +117,7 @@ public class Environment implements Runnable {
 		}
 		
 		
-        final DaisyLineFrame demo = new DaisyLineFrame("Line Chart Demo 6", blackFlowerList, whiteFlowerList, temperatureList);
+        final DaisyLineFrame demo = new DaisyLineFrame("Daisy simulation", blackFlowerList, whiteFlowerList, temperatureList);
         demo.pack();
         RefineryUtilities.centerFrameOnScreen(demo);
         demo.setVisible(true);
