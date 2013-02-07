@@ -16,11 +16,11 @@ public class Environment implements Runnable {
 	private double mutationRate;
 	private int capacity;
 	
-	public Environment(int white, int black,int capacity, double temp, int nInterations, double growthRate, int delay, double mutationRate) {
+	public Environment(int white, int black,int capacity, double startTemperature, int nInterations, double growthRate, int delay, double mutationRate) {
 		this.white = white;
 		this.black = black;
 		temperature = new double[nInterations+1];
-		temperature[0]=temp;
+		temperature[0]=startTemperature;
 		this.delay = delay;
 		this.nInterations = nInterations;
 		this.growthRate = growthRate;
@@ -32,8 +32,9 @@ public class Environment implements Runnable {
 	
 	@Override
 	public void run() {
-		List<Integer> blackFlowerList = new ArrayList<Integer>();
-		List<Integer> whiteFlowerList = new ArrayList<Integer>();
+		List<Integer> blackFlowerList = new ArrayList<Integer>(1024);
+		List<Integer> whiteFlowerList = new ArrayList<Integer>(1024);
+		List<Double> temperatureList = new ArrayList<Double>(1024);
 		for(int iteration = 0; iteration < nInterations; iteration++) {
 			
 			//Killing white flowers
@@ -77,19 +78,20 @@ public class Environment implements Runnable {
 
 			//Updating temperature
 			if(iteration>=delay){
-				temperature[iteration+1] = proportions[iteration-delay];
+				temperature[iteration+1] = ( proportions[iteration-delay] + temperature[iteration] + temperature[iteration-1]) / 3;
 			} else {
 				temperature[iteration+1] = temperature[iteration];
 			}
 			
 			blackFlowerList.add(black);
 			whiteFlowerList.add(white);
+			temperatureList.add(temperature[iteration+1] * capacity);
 			System.out.println("White: " + white + " Black: " + black + " Temp: " + temperature + " proportion " + proportions[iteration]);
 //			System.out.println("Black: " + black);
 		}
 		
 		
-        final DaisyLineFrame demo = new DaisyLineFrame("Line Chart Demo 6", blackFlowerList, whiteFlowerList);
+        final DaisyLineFrame demo = new DaisyLineFrame("Daisy simulation", blackFlowerList, whiteFlowerList, temperatureList);
         demo.pack();
         RefineryUtilities.centerFrameOnScreen(demo);
         demo.setVisible(true);
