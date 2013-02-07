@@ -16,11 +16,11 @@ public class Environment implements Runnable {
 	private double mutationRate;
 	private int capacity;
 	
-	public Environment(int white, int black,int capacity, double temp, int nInterations, double growthRate, int delay, double mutationRate) {
+	public Environment(int white, int black,int capacity, double startTemperature, int nInterations, double growthRate, int delay, double mutationRate) {
 		this.white = white;
 		this.black = black;
 		temperature = new double[nInterations+1];
-		temperature[0]=temp;
+		temperature[0]=startTemperature;
 		this.delay = delay;
 		this.nInterations = nInterations;
 		this.growthRate = growthRate;
