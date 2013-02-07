@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.jfree.ui.RefineryUtilities;
 
-import daisy.DaisyLineFrame;
-
 public class DiscreteLogisticChaosModel implements Runnable{
 	
 	private double u0;

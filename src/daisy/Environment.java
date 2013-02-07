@@ -42,8 +42,8 @@ public class Environment implements Runnable {
 		this.white = white;
 		this.black = black;
 		this.capacity = capacity;
-		temperature[0]=startTemperature;
 		temperature = new double[nInterations+1];
+		temperature[0]=startTemperature;
 		this.nInterations = nInterations;
 		proportions = new double[nInterations];
 		this.growthRate = growthRate;

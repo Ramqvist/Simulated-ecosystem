@@ -1,6 +1,5 @@
 package discreteLogisticChaosModel;
 
-import daisy.Environment;
 
 public class BifurcationMain {
 
