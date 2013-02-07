@@ -18,28 +18,19 @@ import org.jfree.ui.ApplicationFrame;
 public class DaisyLineFrame extends ApplicationFrame {
 	private static final long serialVersionUID = -2796492945005823682L;
 	
-	public DaisyLineFrame(String title) {
-		super(title);
-
-        final XYDataset dataset = createDataset();
-        final JFreeChart chart = createChart(dataset);
-        final ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(1200, 750));
-        setContentPane(chartPanel);
-	}
 
 	
-	public DaisyLineFrame(String title, List<Integer> blackFlowerList, List<Integer> whiteFlowerList) {
+	public DaisyLineFrame(String title, List<Integer> blackFlowerList, List<Integer> whiteFlowerList, List<Double> temperatureList) {
 		super(title);
 
-        final XYDataset dataset = setDataset(blackFlowerList, whiteFlowerList);
+        final XYDataset dataset = setDataset(blackFlowerList, whiteFlowerList, temperatureList);
         final JFreeChart chart = createChart(dataset);
         final ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(750, 500));
+        chartPanel.setPreferredSize(new java.awt.Dimension(1300, 700));
         setContentPane(chartPanel);
 	}
 	
-	public XYDataset setDataset(List<Integer> blackFlowerList, List<Integer> whiteFlowerList) {
+	public XYDataset setDataset(List<Integer> blackFlowerList, List<Integer> whiteFlowerList, List<Double> temperatureList) {
 
         final XYSeries blackSerie = new XYSeries("Black");
         int counter = 1;
@@ -53,9 +44,19 @@ public class DaisyLineFrame extends ApplicationFrame {
         	whiteSerie.add(counter++, i);
         }
 
+
+        counter = 1;
+        final XYSeries temperatureSerie = new XYSeries("Temperature * Capacity");
+        for(Double i : temperatureList) {
+        	temperatureSerie.add(counter++, i);
+        }
+
         final XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(blackSerie);
         dataset.addSeries(whiteSerie);
+        dataset.addSeries(temperatureSerie);
+        
+        
                 
         return dataset;
 	}
