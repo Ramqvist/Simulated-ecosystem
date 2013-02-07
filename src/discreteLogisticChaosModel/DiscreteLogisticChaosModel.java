@@ -14,6 +14,12 @@ public class DiscreteLogisticChaosModel implements Runnable{
 	private List<Double> u;
 	private int nIterations;
 	
+	/**
+	 * 
+	 * @param u0 starting value for the population u (0 < u0 < 1).
+	 * @param r the growth rate of the population
+	 * @param nIterations the number of iterations to calculate and plot
+	 */
 	public DiscreteLogisticChaosModel(double u0, double r, int nIterations) {
 		if(u0>=1 || u0<=0) {
 			u0 = 0.5;
@@ -30,8 +36,9 @@ public class DiscreteLogisticChaosModel implements Runnable{
 	@Override
 	public void run() {
 		for(int i=0;i<nIterations;i++) {
+			//Calculates the population according to the simple discrete logistic growth model.
 			double lastU = u.get(u.size()-1);
-			double newU = lastU*Math.exp(r*(1-lastU));
+			double newU = lastU + lastU*r*(1-lastU);
 			u.add(newU);
 			System.out.println(newU);
 		}
