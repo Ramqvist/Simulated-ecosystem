@@ -112,6 +112,7 @@ public class Environment implements Runnable {
 			blackFlowerList.add(black);
 			whiteFlowerList.add(white);
 			temperatureList.add(temperature[iteration+1] * capacity);
+			
 			System.out.println("White: " + white + " Black: " + black + " Temp: " + temperature[iteration] + " proportion " + proportions[iteration]);
 		}
 		

@@ -54,10 +54,17 @@ public class DaisyLineFrame extends ApplicationFrame {
         	temperatureSerie.add(counter++, i);
         }
 
+        counter = 1;
+        final XYSeries totalPopSerie = new XYSeries("Total capacity");
+        for(int i=0; i< blackFlowerList.size(); i++) {
+        	totalPopSerie.add(counter++, blackFlowerList.get(i)+whiteFlowerList.get(i));
+        }
+        
         final XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(blackSerie);
         dataset.addSeries(whiteSerie);
         dataset.addSeries(temperatureSerie);
+        dataset.addSeries(totalPopSerie);
         
         
                 
