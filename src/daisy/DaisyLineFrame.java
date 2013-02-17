@@ -25,7 +25,7 @@ public class DaisyLineFrame extends ApplicationFrame {
 	
 	public DaisyLineFrame(String title, List<Integer> blackFlowerList, List<Integer> whiteFlowerList, List<Double> temperatureList) {
 		super(title);
-
+		
         final XYDataset dataset = setDataset(blackFlowerList, whiteFlowerList, temperatureList);
         final JFreeChart chart = createChart(dataset);
         final ChartPanel chartPanel = new ChartPanel(chart);
