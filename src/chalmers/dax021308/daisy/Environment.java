@@ -1,4 +1,4 @@
-package daisy;
+package chalmers.dax021308.daisy;
 
 import java.util.ArrayList;
 import java.util.List;

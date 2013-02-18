@@ -1,4 +1,4 @@
-package discreteLogisticChaosModel;
+package chalmers.dax021308.daisy;
 
 import java.awt.Color;
 import java.util.List;
@@ -12,87 +12,65 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
 
-public class DiscreteLineFrame extends ApplicationFrame {
+/**
+ * Daisy application graph frame.
+ * 
+ * @author Erik
+ *
+ */
+public class DaisyLineFrame extends ApplicationFrame {
 	private static final long serialVersionUID = -2796492945005823682L;
 	
-	public DiscreteLineFrame(String title) {
-		super(title);
-
-        final XYDataset dataset = createDataset();
-        final JFreeChart chart = createChart(dataset);
-        final ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(1200, 750));
-        setContentPane(chartPanel);
-	}
 
 	
-	public DiscreteLineFrame(String title, List<Double> blackFlowerList) {
+	public DaisyLineFrame(String title, List<Integer> blackFlowerList, List<Integer> whiteFlowerList, List<Double> temperatureList) {
 		super(title);
-
-        final XYDataset dataset = setDataset(blackFlowerList);
+		
+        final XYDataset dataset = setDataset(blackFlowerList, whiteFlowerList, temperatureList);
         final JFreeChart chart = createChart(dataset);
         final ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(750, 500));
+        chartPanel.setPreferredSize(new java.awt.Dimension(1300, 700));
         setContentPane(chartPanel);
 	}
 	
-	public XYDataset setDataset(List<Double> blackFlowerList) {
+	public XYDataset setDataset(List<Integer> blackFlowerList, List<Integer> whiteFlowerList, List<Double> temperatureList) {
 
         final XYSeries blackSerie = new XYSeries("Black");
         int counter = 1;
-        for(Double i : blackFlowerList) {
+        for(Integer i : blackFlowerList) {
         	blackSerie.add(counter++, i);
         }
         
-     
+        counter = 1;
+        final XYSeries whiteSerie = new XYSeries("White");
+        for(Integer i : whiteFlowerList) {
+        	whiteSerie.add(counter++, i);
+        }
+
+
+        counter = 1;
+        final XYSeries temperatureSerie = new XYSeries("Temperature * Capacity");
+        for(Double i : temperatureList) {
+        	temperatureSerie.add(counter++, i);
+        }
+
+        counter = 1;
+        final XYSeries totalPopSerie = new XYSeries("Total capacity");
+        for(int i=0; i< blackFlowerList.size(); i++) {
+        	totalPopSerie.add(counter++, blackFlowerList.get(i)+whiteFlowerList.get(i));
+        }
+        
         final XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(blackSerie);
+        dataset.addSeries(whiteSerie);
+        dataset.addSeries(temperatureSerie);
+        dataset.addSeries(totalPopSerie);
+        
+        
                 
         return dataset;
 	}
 	
-    public XYDataset createDataset() {
-        
-        final XYSeries series1 = new XYSeries("First");
-        series1.add(1.0, 1.0);
-        series1.add(2.0, 4.0);
-        series1.add(3.0, 3.0);
-        series1.add(4.0, 5.0);
-        series1.add(5.0, 5.0);
-        series1.add(6.0, 7.0);
-        series1.add(7.0, 7.0);
-        series1.add(8.0, 8.0);
-
-        final XYSeries series2 = new XYSeries("Second");
-        series2.add(1.0, 5.0);
-        series2.add(2.0, 7.0);
-        series2.add(3.0, 6.0);
-        series2.add(4.0, 8.0);
-        series2.add(5.0, 4.0);
-        series2.add(6.0, 4.0);
-        series2.add(7.0, 2.0);
-        series2.add(8.0, 1.0);
-
-        final XYSeries series3 = new XYSeries("Third");
-        series3.add(3.0, 4.0);
-        series3.add(4.0, 3.0);
-        series3.add(5.0, 2.0);
-        series3.add(6.0, 3.0);
-        series3.add(7.0, 6.0);
-        series3.add(8.0, 3.0);
-        series3.add(9.0, 4.0);
-        series3.add(10.0, 3.0);
-
-        final XYSeriesCollection dataset = new XYSeriesCollection();
-        dataset.addSeries(series1);
-        dataset.addSeries(series2);
-        dataset.addSeries(series3);
-                
-        return dataset;
-        
-    }
-    
-
     /**
      * Creates a chart.
      * 
@@ -116,6 +94,9 @@ public class DiscreteLineFrame extends ApplicationFrame {
 
         // NOW DO SOME OPTIONAL CUSTOMISATION OF THE CHART...
         chart.setBackgroundPaint(Color.white);
+        chart.setAntiAlias(true);
+        chart.setTextAntiAlias(true);
+        
 
 //        final StandardLegend legend = (StandardLegend) chart.getLegend();
   //      legend.setDisplaySeriesShapes(true);

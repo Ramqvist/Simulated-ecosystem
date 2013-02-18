@@ -1,4 +1,4 @@
-package ecosystem;
+package chalmers.dax021308.ecosystem;
 
 /**
  * Starter class for the Ecosystem program.
@@ -9,7 +9,7 @@ public class EcosystemInitializer {
 	
 	public static void main(String[] args) {
 		int periodTime = 20;
-		Ecosystem eco = new Ecosystem(periodTime);
+		EcoWorld eco = new EcoWorld(periodTime);
 		eco.start();
 	}
 }

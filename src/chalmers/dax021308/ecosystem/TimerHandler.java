@@ -1,9 +1,10 @@
-package ecosystem;
+package chalmers.dax021308.ecosystem;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import ecosystem.Ecosystem.OnTickUpdate;
+import chalmers.dax021308.ecosystem.EcoWorld.OnTickUpdate;
+
 
 public class TimerHandler {
 	

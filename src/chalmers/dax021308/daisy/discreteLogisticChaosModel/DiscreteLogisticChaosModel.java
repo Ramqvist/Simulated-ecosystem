@@ -1,4 +1,4 @@
-package discreteLogisticChaosModel;
+package chalmers.dax021308.daisy.discreteLogisticChaosModel;
 
 import java.util.ArrayList;
 import java.util.List;

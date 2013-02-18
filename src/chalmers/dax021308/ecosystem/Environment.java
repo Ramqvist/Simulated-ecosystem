@@ -1,10 +1,11 @@
-package ecosystem;
+package chalmers.dax021308.ecosystem;
 
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import ecosystem.Ecosystem.OnFinishListener;
+import chalmers.dax021308.ecosystem.EcoWorld.OnFinishListener;
+
 
 /**
  * Environment class.
@@ -22,7 +23,9 @@ public class Environment implements Runnable {
 
 	@Override
 	public void run() {
-		//Do work here, will run on separate thread.y
+		//Do work here, will run on separate thread.
+		
+		//Sover bara för att simulera arbete. (Ta bort)
 		long sleep = 10 + mRandom.nextInt(20);
 		Log.print("Environment sleeping " + sleep + " ms");
 		try {
@@ -31,6 +34,7 @@ public class Environment implements Runnable {
 			e.printStackTrace();
 		}
 		Log.print("Environment onFinish().");
+		//Callback metod när arbetet är färdigt, till Ecosystem.
 		mListener.onFinish();
 	}
 }

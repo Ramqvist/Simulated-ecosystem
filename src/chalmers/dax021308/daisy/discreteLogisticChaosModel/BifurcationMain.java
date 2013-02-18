@@ -1,4 +1,4 @@
-package discreteLogisticChaosModel;
+package chalmers.dax021308.daisy.discreteLogisticChaosModel;
 
 
 public class BifurcationMain {

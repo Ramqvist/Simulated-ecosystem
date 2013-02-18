@@ -1,4 +1,4 @@
-package ecosystem;
+package chalmers.dax021308.ecosystem;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author Erik
  *
  */
-public class Ecosystem {
+public class EcoWorld {
 	private AtomicBoolean environmentFinished = new AtomicBoolean(false);
 	private AtomicBoolean timerFinished       = new AtomicBoolean(false);
 	private TimerHandler timer;
@@ -58,7 +58,7 @@ public class Ecosystem {
 		}
 	};
 	
-	public Ecosystem(int periodTime) {
+	public EcoWorld(int periodTime) {
 		this.periodTime = periodTime;
 		timer = new TimerHandler();
 		env = new Environment(mOnFinishListener);
