@@ -1,8 +1,6 @@
 package chalmers.dax021308.ecosystem.model;
 
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import chalmers.dax021308.ecosystem.model.EcoWorld.OnFinishListener;
 
@@ -27,13 +25,13 @@ public class Environment implements Runnable {
 		
 		//Sover bara för att simulera arbete. (Ta bort)
 		long sleep = 10 + mRandom.nextInt(20);
-		Log.print("Environment sleeping " + sleep + " ms");
+		Log.v("Environment sleeping " + sleep + " ms");
 		try {
 			Thread.sleep(sleep);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		Log.print("Environment onFinish().");
+		Log.v("Environment onFinish().");
 		//Callback metod när arbetet är färdigt, till Ecosystem.
 		mListener.onFinish();
 	}

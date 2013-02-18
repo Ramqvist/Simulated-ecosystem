@@ -1,5 +1,20 @@
 package chalmers.dax021308.ecosystem.controller;
 
-public interface IController {
+import java.util.Observer;
 
+/**
+ * IController inteface.
+ * @author Erik
+ *
+ */
+public interface IController extends Observer {
+	/**
+	 * Called to initialize the controller.
+	 */
+	public void init();
+	
+	/**
+	 * Releases all the resources held by this Controller.
+	 */
+	public void release();
 }
