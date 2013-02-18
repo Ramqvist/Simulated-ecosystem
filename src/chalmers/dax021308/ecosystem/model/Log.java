@@ -1,4 +1,4 @@
-package chalmers.dax021308.ecosystem;
+package chalmers.dax021308.ecosystem.model;
 
 public class Log {
 	static void print(String s) {

@@ -1,10 +1,10 @@
-package chalmers.dax021308.ecosystem;
+package chalmers.dax021308.ecosystem.model;
 
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import chalmers.dax021308.ecosystem.EcoWorld.OnFinishListener;
+import chalmers.dax021308.ecosystem.model.EcoWorld.OnFinishListener;
 
 
 /**

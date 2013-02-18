@@ -1,4 +1,4 @@
-package chalmers.dax021308.ecosystem;
+package chalmers.dax021308.ecosystem.model;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,17 +12,21 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class EcoWorld {
 	private AtomicBoolean environmentFinished = new AtomicBoolean(false);
 	private AtomicBoolean timerFinished       = new AtomicBoolean(false);
+	private AtomicBoolean shouldRun       = new AtomicBoolean(false);
 	private TimerHandler timer;
 	private Environment env;
-	private int periodTime;
+	private int tickTime;
+	/**
+	 * Simple object, used for synchronizing the {@link TimerHandler} and the Enviroment {@link OnFinishListener}
+	 */
 	private Object syncObj = new Object();
 	private static final int NUM_THREAD = 1;
 	private int numUpdates = 0;
     private ExecutorService executor = Executors.newFixedThreadPool(NUM_THREAD);
 	
+
 	private OnFinishListener mOnFinishListener = new OnFinishListener() {
 		@Override
-		//När Environment är klar.
 		public void onFinish() {
 			synchronized (syncObj) {
 				Log.print("Environment: Finished.");
@@ -58,31 +62,62 @@ public class EcoWorld {
 		}
 	};
 	
-	public EcoWorld(int periodTime) {
-		this.periodTime = periodTime;
+	public EcoWorld(int tickTime, int numIterations) {
+		this.tickTime = tickTime;
 		timer = new TimerHandler();
 		env = new Environment(mOnFinishListener);
 	}
 	
 	public void start() {
+		shouldRun.set(true);
 		scheduleEnvironmentUpdate();
 	}
 	
+	/**
+	 * Stops the scheduling algorithms. 
+	 * 
+	 */
 	public void stop() {
+		shouldRun.set(true);
 		executor.shutdown();
 		timer.stop();
 	}
 	
+	/**
+	 * Starts the {@link TimerHandler} and executes one Environment iteration.
+	 */
 	private void scheduleEnvironmentUpdate() {
 		Log.print("---- sheduleEnvironmentUpdate() ---- Number of updates:" + ++numUpdates);
-		timer.start(periodTime, onTickListener);
+		timer.start(tickTime, onTickListener);
 		executor.execute(env);
 	}
 	
+	/**
+	 * Adjust the tick rate of the next iteration.
+	 * The currently executing iteration will not be affected.
+	 * @param newTickRate
+	 */
+	public void adjustTickRate(int newTickRate) {
+		
+	}
+	
+	/**
+	 * Tick listener for the TimerHandler. Called when timer has expired.
+	 * 
+	 * @author Erik
+	 *
+	 */
 	public interface OnTickUpdate {
 		public void onTick();
 	}
 	
+
+	/**
+	 * Environment onFinish listener. Called when one iteration of the Environment is done.
+	 * 
+	 * @author Erik
+	 *
+	 */
 	public interface OnFinishListener {
 		public void onFinish();
 	}
