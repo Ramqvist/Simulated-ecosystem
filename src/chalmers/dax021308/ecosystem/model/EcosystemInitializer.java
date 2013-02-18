@@ -9,7 +9,7 @@ public class EcosystemInitializer {
 	
 	public static void main(String[] args) {
 		int periodTime = 20;
-		EcoWorld eco = new EcoWorld();
+		EcoWorld eco = new EcoWorld(20, Integer.MAX_VALUE);
 		eco.start();
 	}
 }

@@ -35,17 +35,18 @@ public class EcoWorld extends Observable {
 		public void onFinish() {
 			if(runWithoutTimer) {
 				scheduleEnvironmentUpdate();				
-			}
-			synchronized (syncObject) {
-				Log.v("Environment: Finished.");
-				if(timerFinished.get()) {
-					Log.v("Environment: Timer is finished, doing Environment update");
-					environmentFinished.set(false);
-					timerFinished.set(false);
-					scheduleEnvironmentUpdate();
-				} else {
-					Log.v("Environment: Timer NOT finished, waiting...");
-					environmentFinished.set(true);
+			} else {
+				synchronized (syncObject) {
+					Log.v("Environment: Finished.");
+					if(timerFinished.get()) {
+						Log.v("Environment: Timer is finished, doing Environment update");
+						environmentFinished.set(false);
+						timerFinished.set(false);
+						scheduleEnvironmentUpdate();
+					} else {
+						Log.v("Environment: Timer NOT finished, waiting...");
+						environmentFinished.set(true);
+					}
 				}
 			}
 		}
