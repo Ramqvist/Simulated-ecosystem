@@ -1,25 +1,30 @@
 package chalmers.dax021308.ecosystem.model;
 
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Ecosystem main class.
+ * Ecosystem main class. Extends {@link Observable}
+ * 
  * @author Erik
  *
  */
-public class EcoWorld {
+public class EcoWorld extends Observable {
 	private AtomicBoolean environmentFinished = new AtomicBoolean(false);
 	private AtomicBoolean timerFinished       = new AtomicBoolean(false);
-	private AtomicBoolean shouldRun       = new AtomicBoolean(false);
+	private AtomicBoolean shouldRun       	  = new AtomicBoolean(false);
+	private boolean runWithoutTimer;
+	private int numIterations;
 	private TimerHandler timer;
 	private Environment env;
 	private int tickTime;
 	/**
 	 * Simple object, used for synchronizing the {@link TimerHandler} and the Enviroment {@link OnFinishListener}
 	 */
-	private Object syncObj = new Object();
+	private Object syncObject = new Object();
 	private static final int NUM_THREAD = 1;
 	private int numUpdates = 0;
     private ExecutorService executor = Executors.newFixedThreadPool(NUM_THREAD);
@@ -28,16 +33,20 @@ public class EcoWorld {
 	private OnFinishListener mOnFinishListener = new OnFinishListener() {
 		@Override
 		public void onFinish() {
-			synchronized (syncObj) {
-				Log.v("Environment: Finished.");
-				if(timerFinished.get()) {
-					Log.v("Environment: Timer is finished, doing Environment update");
-					environmentFinished.set(false);
-					timerFinished.set(false);
-					scheduleEnvironmentUpdate();
-				} else {
-					Log.v("Environment: Timer NOT finished, waiting...");
-					environmentFinished.set(true);
+			if(runWithoutTimer) {
+				scheduleEnvironmentUpdate();				
+			} else {
+				synchronized (syncObject) {
+					Log.v("Environment: Finished.");
+					if(timerFinished.get()) {
+						Log.v("Environment: Timer is finished, doing Environment update");
+						environmentFinished.set(false);
+						timerFinished.set(false);
+						scheduleEnvironmentUpdate();
+					} else {
+						Log.v("Environment: Timer NOT finished, waiting...");
+						environmentFinished.set(true);
+					}
 				}
 			}
 		}
@@ -47,7 +56,7 @@ public class EcoWorld {
 		@Override
 		//När timer är klar.
 		public void onTick() {
-			synchronized (syncObj) {
+			synchronized (syncObject) {
 				Log.v("Timer: Finished.");
 				if(environmentFinished.get()) {
 					Log.v("Timer: Environment is finished, doing Environment update");
@@ -66,11 +75,23 @@ public class EcoWorld {
 		this.tickTime = tickTime;
 		timer = new TimerHandler();
 		env = new Environment(mOnFinishListener);
+		runWithoutTimer = false;
+		this.numIterations = numIterations; 
+	}
+	
+	public EcoWorld(int numIterations) {
+		this(0, numIterations);
+		runWithoutTimer = true;
+	}
+	
+	public EcoWorld() {
+		this(Integer.MAX_VALUE);
 	}
 	
 	public void start() {
 		shouldRun.set(true);
 		scheduleEnvironmentUpdate();
+		Log.i("EcoWorld started.");
 	}
 	
 	/**
@@ -78,18 +99,26 @@ public class EcoWorld {
 	 * 
 	 */
 	public void stop() {
-		shouldRun.set(true);
+		shouldRun.set(false);
 		executor.shutdown();
 		timer.stop();
+		numUpdates = 0;
+		Log.i("EcoWorld stopped.");
 	}
 	
 	/**
 	 * Starts the {@link TimerHandler} and executes one Environment iteration.
 	 */
 	private void scheduleEnvironmentUpdate() {
-		Log.v("---- sheduleEnvironmentUpdate() ---- Number of updates:" + ++numUpdates);
-		timer.start(tickTime, onTickListener);
-		executor.execute(env);
+		if(numIterations-- >= 0) {
+			if(!runWithoutTimer) {
+				timer.start(tickTime, onTickListener);
+			}
+			Log.v("---- sheduleEnvironmentUpdate() ---- Number of updates:" + ++numUpdates);
+			executor.execute(env);				
+		} else {
+			stop();
+		}
 	}
 	
 	/**
@@ -98,7 +127,7 @@ public class EcoWorld {
 	 * @param newTickRate
 	 */
 	public void adjustTickRate(int newTickRate) {
-		
+		this.tickTime = newTickRate;
 	}
 	
 	/**
@@ -109,6 +138,10 @@ public class EcoWorld {
 	 */
 	public interface OnTickUpdate {
 		public void onTick();
+	}
+	
+	public void setRunWithoutTimer(boolean runWithoutTimer) {
+		this.runWithoutTimer = runWithoutTimer;
 	}
 	
 

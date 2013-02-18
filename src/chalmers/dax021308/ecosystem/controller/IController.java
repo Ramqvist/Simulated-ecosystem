@@ -7,7 +7,7 @@ import java.util.Observer;
  * @author Erik
  *
  */
-public interface IController extends Observer {
+public interface IController {
 	/**
 	 * Called to initialize the controller.
 	 */
