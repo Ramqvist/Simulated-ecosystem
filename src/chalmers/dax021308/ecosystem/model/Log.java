@@ -5,6 +5,8 @@ import java.util.List;
 
 /**
  * Class for saving and printing various data for testing and development.
+ * 
+ * TODO: Put inputs to the historyList.
  * @author Erik
  *
  */
@@ -12,12 +14,15 @@ public class Log {
 	
 	private static List<String> printHistory;
 	
+	private static boolean enableLog = true;
+	
+	/* Log level constants */
 	public static final int LEVEL_VERBOSE = 1;
-	public static final int LEVEL_INFO = 2;
-	public static final int LEVEL_ERROR = 3;
+	public static final int LEVEL_INFO    = 2;
+	public static final int LEVEL_ERROR   = 3;
 	
 	static {
-		printHistory = new ArrayList<String>();
+		printHistory = new ArrayList<String>(256);
 	}
 	
 	
@@ -26,7 +31,8 @@ public class Log {
 	 * @param s
 	 */
 	public static void i(String s) {
-		System.out.println(System.currentTimeMillis() + " - "+ Thread.currentThread().toString() + " - " + s);		
+		if(enableLog) 
+			System.out.println(s);		
 	}
 	
 	/**
@@ -34,11 +40,28 @@ public class Log {
 	 * @param s
 	 */
 	public static void v(String s) {
-		System.out.println(System.currentTimeMillis() + " - "+ Thread.currentThread().toString() + " - " + s);
+		if(enableLog)
+			System.out.println(s);
 	}
 	
+	/**
+	 * Error printout.
+	 * @param s
+	 */
+	public static void e(String s) {
+		if(enableLog)
+			System.out.println(s);
+	}
+	
+	
+	/**
+	 * Prints the String with the {@link System#currentTimeMillis()} and {@link Thread#currentThread()}.
+	 * 
+	 * @param s
+	 */
 	public static void printWithThreadAndTime(String s) {
-		System.out.println(System.currentTimeMillis() + " - "+ Thread.currentThread().toString() + " - " + s);
+		if(enableLog)
+			System.out.println(System.currentTimeMillis() + " - "+ Thread.currentThread().toString() + " - " + s);
 	}
 	
 	public static void clearLogHistory() {
