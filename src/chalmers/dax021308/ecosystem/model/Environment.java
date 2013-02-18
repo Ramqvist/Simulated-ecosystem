@@ -10,7 +10,7 @@ import chalmers.dax021308.ecosystem.model.EcoWorld.OnFinishListener;
  * @author Erik
  *
  */
-public class Environment implements Runnable {
+public class Environment implements IEnvironment {
 	private OnFinishListener mListener;
 	private Random mRandom = new Random();
 	
@@ -34,5 +34,11 @@ public class Environment implements Runnable {
 		Log.v("Environment onFinish().");
 		//Callback metod när arbetet är färdigt, till Ecosystem.
 		mListener.onFinish();
+	}
+
+	@Override
+	public boolean isFree(Position p) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
