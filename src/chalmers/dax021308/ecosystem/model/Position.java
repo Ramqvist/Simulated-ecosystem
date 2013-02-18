@@ -8,8 +8,10 @@ import java.awt.Point;
  * @author Henrik
  * 
  */
-@SuppressWarnings("serial")
-public class Position extends Point {
+
+public class Position {
+	private int x;
+	private int y;
 
 	public Position() {
 		this(0, 0);
@@ -21,14 +23,31 @@ public class Position extends Point {
 	}
 
 	public double getDistance(Position p) {
-		double dX = p.getX() - x;
-		double dY = p.getY() - y;
+		double dX = p.x - x;
+		double dY = p.y - y;
 		return Math.sqrt(dX * dX + dY * dY);
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public void setPosition(Position p) {
+		setPosition(p.x, p.y);
+	}
+
+	public void setPosition(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
 
 	public boolean equals(Object o) {
 		if (o instanceof Position) {
-			return ((Position) o).getX() == x && ((Position) o).getY() == y;
+			return ((Position) o).x == x && ((Position) o).y == y;
 		} else {
 			return false;
 		}

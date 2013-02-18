@@ -1,38 +1,54 @@
 package chalmers.dax021308.ecosystem.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.EcoWorld.OnFinishListener;
+
 /**
- * SquareEnvironment Class. Represents a environment in the shape of a square
+ * SquareEnvironment Class. Represents a environment in the shape of a square.
  * 
  * @author Henrik
  * 
  */
 public class SquareEnvironment implements IEnvironment {
-	List<IPopulation> populations;
-	List<IObstacle> obstacles;
-
-	public SquareEnvironment() {
-		this(new ArrayList<IPopulation>(), new ArrayList<IObstacle>());
-	}
+	//Should maybe use an abstract class Environment where suitable instance variables can be kept
+	private List<IPopulation> populations;
+	private List<IObstacle> obstacles;
+	private OnFinishListener mListener;
 
 	public SquareEnvironment(List<IPopulation> populations,
-			List<IObstacle> obstacles) {
+			List<IObstacle> obstacles, OnFinishListener listener) {
 		this.populations = populations;
 		this.obstacles = obstacles;
+		this.mListener = listener;
 	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public boolean isFree(Position p) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
+		// for each population, check if any agent is currently occupying
+		// position p
+		/* Needs some kind of lookup method in IPopulation to function easily. 
+		 * Or some kind of getPosition for each agent or something similar
+		for (int i = 0; i < populations.size(); i++) 
+			if (populations.get(i).occupies(p))
+				return false;
+		*/
+		
+		// for each obstacle, check if the position p lies inside any obstacle
+		for (int i = 0; i < obstacles.size(); i++)
+			if (obstacles.get(i).insideObstacle(p))
+				return false;
+		
+		// If there is neither a population nor an obstacle at position p, then
+		// it is free
+		return true;
+	}
 }
