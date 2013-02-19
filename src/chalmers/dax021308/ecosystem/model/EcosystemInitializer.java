@@ -11,6 +11,6 @@ public class EcosystemInitializer {
 //		int periodTime = 20;
 //		EcoWorld eco = new EcoWorld(20, Integer.MAX_VALUE);
 //		eco.start();
-		Obstacle o = new Obstacle("Rectangle.txt");
+		Obstacle o = new Obstacle("Obstacle.txt");
 	}
 }
