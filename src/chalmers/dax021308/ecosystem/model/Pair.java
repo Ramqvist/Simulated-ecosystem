@@ -58,4 +58,9 @@ public class Pair<startNumber, endNumber> {
 	public void setEnd(endNumber end) {
 		this.end = end;
 	}
+	
+	@Override
+	public String toString(){
+		return "("+this.getStart()+","+this.getEnd()+")";
+	}
 }
