@@ -42,14 +42,14 @@ public class Obstacle implements IObstacle {
 	 */
 	
 	private List<Pair>[] fileToObstacle(String filePath){
+		//TODO: How to do here correct???
+		List<Pair>[] o = new List[1000]; //TODO: The number 1000 is probably wrong. This number should be some constant?
 		try{
 			FileInputStream fstream = new FileInputStream(filePath);
 			// Get the object of DataInputStream
 			DataInputStream in = new DataInputStream(fstream);
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			String line;
-			//TODO: How to do here correct???
-			List<Pair>[] o = new List[1000]; 
 			int yPos = 0;
 			
 			//Read line by line (every y-position)
@@ -59,22 +59,21 @@ public class Obstacle implements IObstacle {
 				int lastPos = -1;
 				int startPos = -1;
 				for(int i=0;i<line.length();i++) {
-					if(line.charAt(i)!= ' ') {
+					if(line.charAt(i)!= ' ') { //An obstacle starts
 						if(!started){
 							startPos = i;
 							started = true;
-						} else if(i+1<line.length() && (line.charAt(i+1)==' ')) {
+						} else if(i+1<line.length() && (line.charAt(i+1)==' ')) { //One obstacle ends but another might start after it.
 							lastPos = i;
 							pl.add(new Pair(startPos,lastPos));
 							started = false;
-//							System.out.println("ASDF");
-						} else if(i==line.length()-1) {
+						} else if(i==line.length()-1) { //End of last obstacle
 							lastPos = i;
 							pl.add(new Pair(startPos,lastPos));
 							started = false;
-							
 						}
-					} 
+					}
+				//TODO: Handle the situation where an obstacle starts and stops in same spot.
 				}
 				o[yPos] = pl;
 				System.out.println(pl);
@@ -82,10 +81,11 @@ public class Obstacle implements IObstacle {
 			}
 			
 			in.close();
-		    }catch (Exception e){//Catch exception if any
-		    	System.err.println("Error: " + e.getMessage());
-		    }
-//		    
-	    return null;
+			
+		}catch (Exception e){//Catch exception if any
+	    	System.err.println("Error: " + e.getMessage());
+	    	return null; //Not really necesarry?
+	    }
+	    return o;
 	}
 }
