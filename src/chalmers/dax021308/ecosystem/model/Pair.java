@@ -1,27 +1,61 @@
 package chalmers.dax021308.ecosystem.model;
 
+/**
+ * The generic Pair class
+ * 
+ * @author Henrik
+ * 
+ * @param <startNumber>
+ *            The first item of the pair
+ * @param <endNumber>
+ *            The second item of the pair
+ */
+// Helps the Obstacle class for creating pairs of start
+// and end positions on a line for where the obstacle begins and ends
 public class Pair<startNumber, endNumber> {
 	private startNumber start;
 	private endNumber end;
-	
-	public Pair(startNumber start, endNumber end){
+
+	public Pair(startNumber start, endNumber end) {
 		this.start = start;
 		this.end = end;
 	}
-	
-	public startNumber getStart(){
+
+	/**
+	 * Getter for the first item of the pair
+	 * 
+	 * @return the first item of the pair is returned
+	 */
+	public startNumber getStart() {
 		return start;
 	}
-	
-	public endNumber getEnd(){
+
+	/**
+	 * Getter for the second item of the pair
+	 * 
+	 * @return the second item of the pair is returned
+	 */
+	public endNumber getEnd() {
 		return end;
 	}
-	
-	public void setStart(startNumber start){
+
+	/**
+	 * Setter for the first item of the pair
+	 * 
+	 * @param start
+	 *            the item to be set
+	 */
+	public void setStart(startNumber start) {
 		this.start = start;
 	}
-	
-	public void setEnd(endNumber end){
+
+	/**
+	 * Setter for the second item of the pair
+	 * 
+	 * @param start
+	 *            the item to be set
+	 */
+	public void setEnd(endNumber end) {
 		this.end = end;
 	}
 }

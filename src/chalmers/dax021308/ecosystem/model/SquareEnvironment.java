@@ -37,7 +37,7 @@ public class SquareEnvironment implements IEnvironment {
 
 		// Callback function called to inform EcoWorld that the current update
 		// is run
-		mListener.onFinish();
+		mListener.onFinish(null, null);
 	}
 
 	@Override
