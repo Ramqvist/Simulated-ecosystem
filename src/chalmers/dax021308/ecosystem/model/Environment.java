@@ -33,7 +33,7 @@ public class Environment implements IEnvironment {
 		}
 		Log.v("Environment onFinish().");
 		//Callback metod när arbetet är färdigt, till Ecosystem.
-		mListener.onFinish();
+		mListener.onFinish(null, null);
 	}
 
 	@Override

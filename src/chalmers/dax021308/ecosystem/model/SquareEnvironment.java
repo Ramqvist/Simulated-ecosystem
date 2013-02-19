@@ -13,7 +13,8 @@ import chalmers.dax021308.ecosystem.model.EcoWorld.OnFinishListener;
  * 
  */
 public class SquareEnvironment implements IEnvironment {
-	//Should maybe use an abstract class Environment where suitable instance variables can be kept
+	// Should maybe use an abstract class Environment where suitable instance
+	// variables can be declared
 	private List<IPopulation> populations;
 	private List<IObstacle> obstacles;
 	private OnFinishListener mListener;
@@ -26,8 +27,17 @@ public class SquareEnvironment implements IEnvironment {
 	}
 
 	@Override
+	/**
+	 * Run method, called for each tick of the timer
+	 * Updates each population and then informs EcoWorld once it's finished
+	 */
 	public void run() {
-		// TODO Auto-generated method stub
+		for (int i = 0; i < populations.size(); i++)
+			populations.get(i).update();
+
+		// Callback function called to inform EcoWorld that the current update
+		// is run
+		mListener.onFinish();
 	}
 
 	@Override
@@ -35,18 +45,18 @@ public class SquareEnvironment implements IEnvironment {
 
 		// for each population, check if any agent is currently occupying
 		// position p
-		/* Needs some kind of lookup method in IPopulation to function easily. 
-		 * Or some kind of getPosition for each agent or something similar
-		for (int i = 0; i < populations.size(); i++) 
-			if (populations.get(i).occupies(p))
-				return false;
-		*/
-		
+		/*
+		 * Needs some kind of lookup method in IPopulation to function easily.
+		 * Or some kind of getPosition for each agent or something similar for
+		 * (int i = 0; i < populations.size(); i++) if
+		 * (populations.get(i).occupies(p)) return false;
+		 */
+
 		// for each obstacle, check if the position p lies inside any obstacle
 		for (int i = 0; i < obstacles.size(); i++)
 			if (obstacles.get(i).insideObstacle(p))
 				return false;
-		
+
 		// If there is neither a population nor an obstacle at position p, then
 		// it is free
 		return true;

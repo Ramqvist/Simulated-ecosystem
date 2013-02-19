@@ -1,5 +1,6 @@
 package chalmers.dax021308.ecosystem.model;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.ExecutorService;
@@ -32,7 +33,7 @@ public class EcoWorld extends Observable {
 
 	private OnFinishListener mOnFinishListener = new OnFinishListener() {
 		@Override
-		public void onFinish() {
+		public void onFinish(List<IPopulation> popList, List<Obstacle> obsList) {
 			if(runWithoutTimer) {
 				scheduleEnvironmentUpdate();				
 			} else {
@@ -152,7 +153,7 @@ public class EcoWorld extends Observable {
 	 *
 	 */
 	public interface OnFinishListener {
-		public void onFinish();
+		public void onFinish(List<IPopulation> popList, List<Obstacle> obsList);
 	}
 	
 }
