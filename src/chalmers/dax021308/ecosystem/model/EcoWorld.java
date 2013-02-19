@@ -1,5 +1,7 @@
 package chalmers.dax021308.ecosystem.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -13,7 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author Erik
  *
  */
-public class EcoWorld extends Observable {
+public class EcoWorld {
 	private AtomicBoolean environmentFinished = new AtomicBoolean(false);
 	private AtomicBoolean timerFinished       = new AtomicBoolean(false);
 	private AtomicBoolean shouldRun       	  = new AtomicBoolean(false);
@@ -22,6 +24,7 @@ public class EcoWorld extends Observable {
 	private TimerHandler timer;
 	private Environment env;
 	private int tickTime;
+	private PropertyChangeSupport observers;
 	/**
 	 * Simple object, used for synchronizing the {@link TimerHandler} and the Enviroment {@link OnFinishListener}
 	 */
@@ -29,11 +32,16 @@ public class EcoWorld extends Observable {
 	private static final int NUM_THREAD = 1;
 	private int numUpdates = 0;
     private ExecutorService executor = Executors.newFixedThreadPool(NUM_THREAD);
+    
+    public static final String EVENT_TICK = "chalmers.dax021308.ecosystem.model.event_tick";
+    public static final String EVENT_STOP = "chalmers.dax021308.ecosystem.model.event_stop";
 	
 
 	private OnFinishListener mOnFinishListener = new OnFinishListener() {
 		@Override
 		public void onFinish(List<IPopulation> popList, List<Obstacle> obsList) {
+			//Fire state changed to observers, notify there has been an update.
+			observers.firePropertyChange(EVENT_TICK, obsList, popList);
 			if(runWithoutTimer) {
 				scheduleEnvironmentUpdate();				
 			} else {
@@ -74,15 +82,16 @@ public class EcoWorld extends Observable {
 	
 	public EcoWorld(int tickTime, int numIterations) {
 		this.tickTime = tickTime;
-		timer = new TimerHandler();
-		env = new Environment(mOnFinishListener);
-		runWithoutTimer = false;
+		this.timer = new TimerHandler();
+		this.env = new Environment(mOnFinishListener);
+		this.runWithoutTimer = false;
 		this.numIterations = numIterations; 
+		this.observers = new PropertyChangeSupport(this);
 	}
 	
 	public EcoWorld(int numIterations) {
 		this(0, numIterations);
-		runWithoutTimer = true;
+		this.runWithoutTimer = true;
 	}
 	
 	public EcoWorld() {
@@ -154,6 +163,14 @@ public class EcoWorld extends Observable {
 	 */
 	public interface OnFinishListener {
 		public void onFinish(List<IPopulation> popList, List<Obstacle> obsList);
+	}
+
+	public void addObserver(PropertyChangeListener listener) {
+		observers.addPropertyChangeListener(listener);
+	}
+	
+	public void removeObserver(PropertyChangeListener listener) {
+		observers.removePropertyChangeListener(listener);
 	}
 	
 }

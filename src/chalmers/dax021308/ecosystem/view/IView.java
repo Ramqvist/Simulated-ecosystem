@@ -1,6 +1,7 @@
 package chalmers.dax021308.ecosystem.view;
 
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
 import java.util.Observer;
 
 import chalmers.dax021308.ecosystem.controller.IController;
@@ -11,7 +12,7 @@ import chalmers.dax021308.ecosystem.controller.IController;
  * @author Erik
  *
  */
-public interface IView extends Observer {
+public interface IView extends PropertyChangeListener {
 	
 	/**
 	 * Initialize the View.

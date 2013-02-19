@@ -13,6 +13,7 @@ import java.util.List;
 public class Obstacle implements IObstacle {
 
 	private String obstacleType;
+	//Borde inte samtliga Pair klasser parametriseras? //Erik
 	private List<Pair>[] obstacles;
 
 	public Obstacle(String type, List<Pair>[] obstacles) {
