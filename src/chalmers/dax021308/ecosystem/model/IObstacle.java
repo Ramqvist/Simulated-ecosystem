@@ -7,6 +7,7 @@ package chalmers.dax021308.ecosystem.model;
  * 
  */
 public interface IObstacle {
+	
 	/**
 	 * Checks if the current obstacle occupies Position p
 	 * 
@@ -16,4 +17,10 @@ public interface IObstacle {
 	 *         otherwise false
 	 */
 	public boolean insideObstacle(Position p);
+	
+	/**
+	 * 
+	 * @return returns the type of the Obstacle 
+	 */
+	public String getObstacleType();
 }

@@ -10,14 +10,14 @@ import java.awt.Point;
  */
 
 public class Position {
-	private int x;
-	private int y;
+	private double x;
+	private double y;
 
 	public Position() {
 		this(0, 0);
 	}
 
-	public Position(int x, int y) {
+	public Position(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -28,11 +28,11 @@ public class Position {
 		return Math.sqrt(dX * dX + dY * dY);
 	}
 
-	public int getY() {
+	public double getY() {
 		return y;
 	}
 
-	public int getX() {
+	public double getX() {
 		return x;
 	}
 
@@ -40,7 +40,7 @@ public class Position {
 		setPosition(p.x, p.y);
 	}
 
-	public void setPosition(int x, int y) {
+	public void setPosition(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
