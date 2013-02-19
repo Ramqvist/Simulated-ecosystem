@@ -10,13 +10,17 @@ import java.awt.Color;
  */
 public interface IAgent {
 	
-//	public Position getPosition();
-//	public void setPosition(Position);
+	public Position getPosition();
+	public void setPosition(Position position);
 	public String getName();
 	public Color getColor();
 	public int getWidth();
 	public int getHeight();
-//	Fitness
+	public double getFitness();
+	public void setFitness(double fitness);
+	public double getSpeed();
+	public void setSpeed(double speed);
+	
 //	Mutation state
 //	Probability to reproduce
 }
