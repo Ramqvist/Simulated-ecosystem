@@ -64,10 +64,22 @@ public class Log {
 			System.out.println(System.currentTimeMillis() + " - "+ Thread.currentThread().toString() + " - " + s);
 	}
 	
+	/**
+	 * Clear out the stored Log data.
+	 */
 	public static void clearLogHistory() {
 		printHistory.clear();
 	}
 	
+	/**
+	 * Dump the stored Log data to the given filename. 
+	 * <P>
+	 * The file will be stored in the local folder of the JRE.
+	 * <p>
+	 * Not implemented.
+	 * @param fileName
+	 * @param level
+	 */
 	public static void dumpLogToTextfile(String fileName, int level) {
 		//TODO: Implement
 	}

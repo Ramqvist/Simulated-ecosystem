@@ -10,7 +10,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Ecosystem main class. Extends {@link Observable}
+ * Ecosystem main class.
+ * <p>
+ * Recieves notifications from the {@link TimerHandler} and the {@link IEnvironment}.
  * 
  * @author Erik
  *
@@ -26,7 +28,7 @@ public class EcoWorld {
 	private int tickTime;
 	private PropertyChangeSupport observers;
 	/**
-	 * Simple object, used for synchronizing the {@link TimerHandler} and the Enviroment {@link OnFinishListener}
+	 * Simple object, used for synchronizing the {@link TimerHandler} and the {@link IEnvironment} {@link OnFinishListener}
 	 */
 	private Object syncObject = new Object();
 	private static final int NUM_THREAD = 1;
@@ -98,6 +100,10 @@ public class EcoWorld {
 		this(Integer.MAX_VALUE);
 	}
 	
+	/**
+	 * Start the EcoWorld simulation program.
+	 * 
+	 */
 	public void start() {
 		shouldRun.set(true);
 		scheduleEnvironmentUpdate();
@@ -106,11 +112,27 @@ public class EcoWorld {
 	
 	/**
 	 * Stops the scheduling algorithms. 
+	 * <p>
+	 * Warning! Will not affect ongoing execution!
 	 * 
 	 */
 	public void stop() {
 		shouldRun.set(false);
 		executor.shutdown();
+		timer.stop();
+		numUpdates = 0;
+		Log.i("EcoWorld stopped.");
+	}
+	
+	/**
+	 * Forces the ongoing execution to stop!
+	 * <p>
+	 * Warning! Untested method, might not work.
+	 * 
+	 */
+	public void forceStop() {
+		shouldRun.set(false);
+		executor.shutdownNow();
 		timer.stop();
 		numUpdates = 0;
 		Log.i("EcoWorld stopped.");
