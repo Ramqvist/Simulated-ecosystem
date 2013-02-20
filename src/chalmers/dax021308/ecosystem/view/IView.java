@@ -9,7 +9,7 @@ import chalmers.dax021308.ecosystem.controller.IController;
 /**
  * IVew inteface. Extends {@link Observer} interface.
  * 
- * @author Erik
+ * @author Hanna
  *
  */
 public interface IView extends PropertyChangeListener {
