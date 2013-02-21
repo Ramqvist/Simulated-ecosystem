@@ -18,7 +18,8 @@ public class SquareEnvironment implements IEnvironment {
 	private List<IPopulation> populations;
 	private List<IObstacle> obstacles;
 	private OnFinishListener mListener;
-
+	
+	//Width and height parameters should be here imo. //Erik
 	public SquareEnvironment(List<IPopulation> populations,
 			List<IObstacle> obstacles, OnFinishListener listener) {
 		this.populations = populations;
@@ -37,7 +38,7 @@ public class SquareEnvironment implements IEnvironment {
 
 		// Callback function called to inform EcoWorld that the current update
 		// is run
-		mListener.onFinish(null, null);
+		mListener.onFinish(populations, obstacles);
 	}
 
 	@Override

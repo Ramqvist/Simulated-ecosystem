@@ -41,7 +41,7 @@ public class EcoWorld {
 
 	private OnFinishListener mOnFinishListener = new OnFinishListener() {
 		@Override
-		public void onFinish(List<IPopulation> popList, List<Obstacle> obsList) {
+		public void onFinish(List<IPopulation> popList, List<IObstacle> obsList) {
 			//Fire state changed to observers, notify there has been an update.
 			observers.firePropertyChange(EVENT_TICK, obsList, popList);
 			if(runWithoutTimer) {
@@ -184,7 +184,7 @@ public class EcoWorld {
 	 *
 	 */
 	public interface OnFinishListener {
-		public void onFinish(List<IPopulation> popList, List<Obstacle> obsList);
+		public void onFinish(List<IPopulation> popList, List<IObstacle> obstacleList);
 	}
 
 	public void addObserver(PropertyChangeListener listener) {

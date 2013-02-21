@@ -21,8 +21,11 @@ public class Log {
 	public static final int LEVEL_INFO    = 2;
 	public static final int LEVEL_ERROR   = 3;
 	
+	private static int currentLogLevel;
+	
 	static {
 		printHistory = new ArrayList<String>(256);
+		currentLogLevel = 1;
 	}
 	
 	
@@ -31,8 +34,9 @@ public class Log {
 	 * @param s
 	 */
 	public static void i(String s) {
-		if(enableLog) 
-			System.out.println(s);		
+		if(enableLog) {
+			System.out.println(s);
+		}
 	}
 	
 	/**
@@ -40,8 +44,9 @@ public class Log {
 	 * @param s
 	 */
 	public static void v(String s) {
-		if(enableLog)
+		if(enableLog) {
 			System.out.println(s);
+		}
 	}
 	
 	/**
@@ -49,8 +54,9 @@ public class Log {
 	 * @param s
 	 */
 	public static void e(String s) {
-		if(enableLog)
+		if(enableLog) {
 			System.out.println(s);
+		}
 	}
 	
 	
@@ -62,6 +68,16 @@ public class Log {
 	public static void printWithThreadAndTime(String s) {
 		if(enableLog)
 			System.out.println(System.currentTimeMillis() + " - "+ Thread.currentThread().toString() + " - " + s);
+	}
+	
+	public static void setLogLevel(int level) {
+		if(level == LEVEL_ERROR || level == LEVEL_INFO || level == LEVEL_VERBOSE) {
+			currentLogLevel = level;
+		}
+	}
+	
+	public static int getLogLevel() {
+		return currentLogLevel;
 	}
 	
 	/**
