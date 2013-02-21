@@ -5,15 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Obstacle Class.
+ * Obstacle Class
  * 
  * @author Henrik
  * 
  */
 public class Obstacle implements IObstacle {
 
-
-	// Borde inte samtliga Pair klasser parametriseras? //Erik
 	private List<Pair<Integer, Integer>>[] obstacles;
 
 	public Obstacle(String filename) {
@@ -35,16 +33,16 @@ public class Obstacle implements IObstacle {
 		return false;
 	}
 
-
 	/**
 	 * @author Sebastian
 	 * @param filePath
-	 *            a path to the file which to read ascii obstacle from.
+	 *            a path to the file which to read ASCII obstacle from.
 	 * @return an array containing lists with start/stop x-values for the
 	 *         obstacle.
 	 */
 
 	private List<Pair<Integer, Integer>>[] fileToObstacle(String filePath) {
+
 		// TODO: How to do here correct???
 		List<Pair<Integer, Integer>>[] o = new List[1000]; // TODO: The number
 															// 1000 is probably
@@ -80,12 +78,12 @@ public class Obstacle implements IObstacle {
 																	// start
 																	// after it.
 							lastPos = i;
-							pl.add(new Pair(startPos, lastPos));
+							pl.add(new Pair<Integer, Integer>(startPos, lastPos));
 							started = false;
 						} else if (i == line.length() - 1) { // End of last
 																// obstacle
 							lastPos = i;
-							pl.add(new Pair(startPos, lastPos));
+							pl.add(new Pair<Integer, Integer>(startPos, lastPos));
 							started = false;
 						}
 					}
@@ -101,7 +99,7 @@ public class Obstacle implements IObstacle {
 
 		} catch (Exception e) {// Catch exception if any
 			System.err.println("Error: " + e.getMessage());
-			return null; // Not really necesarry?
+			// return null; // Not really necessary?
 		}
 		return o;
 	}

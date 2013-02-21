@@ -1,7 +1,5 @@
 package chalmers.dax021308.ecosystem.model;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.EcoWorld.OnFinishListener;
