@@ -2,6 +2,7 @@ package chalmers.dax021308.ecosystem.controller;
 
 import chalmers.dax021308.ecosystem.model.EcoWorld;
 import chalmers.dax021308.ecosystem.model.Obstacle;
+import chalmers.dax021308.ecosystem.view.SimulationView;
 import chalmers.dax021308.ecosystem.view.ToyView;
 
 /**
@@ -12,7 +13,7 @@ import chalmers.dax021308.ecosystem.view.ToyView;
 public class ToyController implements IController {
 
 	private EcoWorld model;
-	private ToyView toyView;
+	private SimulationView simView;
 
 	public ToyController() {
 		init();
@@ -27,8 +28,8 @@ public class ToyController implements IController {
 		
 		//Uncomment to start model.
 		model.start();
-		this.toyView = new ToyView(model);
-		toyView.init();
+		this.simView = new SimulationView(model);
+		simView.init();
 	}
 
 	@Override
