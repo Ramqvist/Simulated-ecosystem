@@ -18,13 +18,30 @@ public class SquareEnvironment implements IEnvironment {
 	private List<IPopulation> populations;
 	private List<IObstacle> obstacles;
 	private OnFinishListener mListener;
-	
-	//Width and height parameters should be here imo. //Erik
+	private int height;
+	private int width;
+
+	/**
+	 * 
+	 * @param populations
+	 *            The populations to be used in the environment
+	 * @param obstacles
+	 *            The obstacles to be used in the environment
+	 * @param listener
+	 *            The listener to this instance
+	 * @param height
+	 *            The height of the environment
+	 * @param width
+	 *            The width of the environment
+	 */
 	public SquareEnvironment(List<IPopulation> populations,
-			List<IObstacle> obstacles, OnFinishListener listener) {
+			List<IObstacle> obstacles, OnFinishListener listener, int height,
+			int width) {
 		this.populations = populations;
 		this.obstacles = obstacles;
 		this.mListener = listener;
+		this.height = height;
+		this.width = width;
 	}
 
 	@Override
