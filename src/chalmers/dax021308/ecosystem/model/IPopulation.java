@@ -1,19 +1,38 @@
 package chalmers.dax021308.ecosystem.model;
 
+import java.util.List;
+
 /**
  * Describes the general configuration of an arbitrary population.
  * 
- * @author Albin Bramstång
+ * @author Albin
  */
 public interface IPopulation {
 	
 	/**
-	 * Handles everything that should change on each tick.
+	 * Handles things that should be updated regularly. 
 	 */
 	public void update();
-//	Maturity
-//	Fitness
-//	List of agents
-//	List of predators that prey on this population
-//	List of preys this population preys on
+	
+	/**
+	 * 
+	 * @param agent
+	 * @return
+	 */
+	public double calculateFitness(IAgent agent);
+	
+	/**
+	 * @return The whole population of IAgents.
+	 */
+	public List<IAgent> getAgents();
+	
+	/**
+	 * @return The predators that prey on a population. 
+	 */
+	public List<IAgent> getPredators();
+	
+	/**
+	 * @return The preys that a predator population eats.
+	 */
+	public List<IAgent> getPreys();
 }
