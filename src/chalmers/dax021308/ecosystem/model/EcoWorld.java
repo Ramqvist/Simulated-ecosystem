@@ -1,5 +1,7 @@
 package chalmers.dax021308.ecosystem.model;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
@@ -153,7 +155,10 @@ public class EcoWorld {
 	}
 
 	private List<IPopulation> createInitialPopulations() {
-		return new ArrayList<IPopulation>();
+		List<IPopulation> populations = new ArrayList<IPopulation>();
+		populations.add(new DummyPopulation(new Dimension(1000, 750),Color.red));
+		populations.add(new DummyPopulation(new Dimension(1000, 750),Color.green));
+		return populations;
 	}
 
 	private List<IObstacle> readObsticlesFromFile() {
