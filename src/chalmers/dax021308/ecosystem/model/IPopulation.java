@@ -28,10 +28,10 @@ public interface IPopulation {
 	/**
 	 * @return The predators that prey on a population. 
 	 */
-	public List<IAgent> getPredators();
+	public List<IPopulation> getPredators();
 	
 	/**
 	 * @return The preys that a predator population eats.
 	 */
-	public List<IAgent> getPreys();
+	public List<IPopulation> getPreys();
 }
