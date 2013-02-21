@@ -22,10 +22,10 @@ public class ToyController implements IController {
 	@Override
 	public void init() {
 		Dimension d = new Dimension(1000, 750);
-//		int periodTime = 20;
-		this.model = new EcoWorld(100, Integer.MAX_VALUE);
-//		eco.start();
-//		this.model = new EcoWorld();
+		
+		this.model = new EcoWorld(d, 100, Integer.MAX_VALUE);
+		//Uncommend below to run without delay.
+//		this.model = new EcoWorld(d);
 		
 		//Uncomment to start model.
 		model.start();
