@@ -1,6 +1,7 @@
 package chalmers.dax021308.ecosystem.view;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -28,12 +29,12 @@ public class SimulationView extends JPanel implements IView {
 	/**
 	 * Create the panel.
 	 */
-	public SimulationView(EcoWorld model) {
+	public SimulationView(EcoWorld model, Dimension size) {
 		model.addObserver(this);
 		frame = new JFrame("Simulation View");
 		frame.add(this);
-		frame.setSize(1000, 750);
-		frame.show();
+		frame.setSize(size);
+		frame.setVisible(true);
 		this.setBackground(Color.white);
 	}
 

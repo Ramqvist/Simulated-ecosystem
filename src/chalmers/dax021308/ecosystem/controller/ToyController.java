@@ -1,5 +1,7 @@
 package chalmers.dax021308.ecosystem.controller;
 
+import java.awt.Dimension;
+
 import chalmers.dax021308.ecosystem.model.EcoWorld;
 import chalmers.dax021308.ecosystem.model.Obstacle;
 import chalmers.dax021308.ecosystem.view.SimulationView;
@@ -21,6 +23,7 @@ public class ToyController implements IController {
 
 	@Override
 	public void init() {
+		Dimension d = new Dimension(1000, 750);
 //		int periodTime = 20;
 		this.model = new EcoWorld(100, Integer.MAX_VALUE);
 //		eco.start();
@@ -28,7 +31,7 @@ public class ToyController implements IController {
 		
 		//Uncomment to start model.
 		model.start();
-		this.simView = new SimulationView(model);
+		this.simView = new SimulationView(model, d);
 		simView.init();
 	}
 
