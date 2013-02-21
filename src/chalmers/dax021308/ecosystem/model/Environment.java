@@ -8,7 +8,9 @@ import chalmers.dax021308.ecosystem.model.util.Position;
 
 
 /**
- * Environment class.
+ * Toy environment class.
+ * <p>
+ * Only for testing the tick-function.
  * @author Erik
  *
  */
