@@ -58,4 +58,10 @@ public class DummyPopulation implements IPopulation {
 		return null;
 	}
 
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

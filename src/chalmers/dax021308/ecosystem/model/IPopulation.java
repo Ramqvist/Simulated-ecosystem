@@ -21,6 +21,11 @@ public interface IPopulation {
 	public double calculateFitness(IAgent agent);
 	
 	/**
+	 * @return The name of the population.
+	 */
+	public String getName();
+	
+	/**
 	 * @return The whole population of IAgents.
 	 */
 	public List<IAgent> getAgents();
