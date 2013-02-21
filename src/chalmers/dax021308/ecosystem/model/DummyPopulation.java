@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.util.Position;
+
 /**
  * 
  * @author Mr. BigTasty

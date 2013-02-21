@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.util.Position;
+
 /**
  * A basic implementation of the IAgent interface.
  * @author Albin

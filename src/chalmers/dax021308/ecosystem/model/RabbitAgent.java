@@ -3,6 +3,8 @@ package chalmers.dax021308.ecosystem.model;
 import java.awt.Color;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.util.Position;
+
 public class RabbitAgent implements IAgent {
 
 	@Override

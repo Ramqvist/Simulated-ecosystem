@@ -4,6 +4,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.util.Pair;
+import chalmers.dax021308.ecosystem.model.util.Position;
+
 /**
  * Obstacle Class
  * 
