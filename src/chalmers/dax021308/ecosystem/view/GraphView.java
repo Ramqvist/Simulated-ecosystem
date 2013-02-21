@@ -3,6 +3,7 @@ package chalmers.dax021308.ecosystem.view;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -23,25 +24,18 @@ public class GraphView implements IView{
 	private JFrame frame;
 	private Chart2D chart = new Chart2D();
 	// Create an ITrace: 
-    // Note that dynamic charts need limited amount of values!!! 
-	final ITrace2D trace1 = new Trace2DLtd(200); 
-	final ITrace2D trace2 = new Trace2DLtd(200);
+	private List<ITrace2D> traces = new ArrayList<ITrace2D>();
 	
 	private double m_y = 0;
     private long m_starttime = System.currentTimeMillis();
-    int tempY = 0;
 	/**
 	 * Create the panel.
 	 */
 	public GraphView(EcoWorld model) {
 		frame = new JFrame("Graph View");
-		trace1.setColor(Color.RED);
-		trace1.setColor(Color.BLUE);
-	    // Add the trace to the chart. This has to be done before adding points (deadlock prevention): 
-	    chart.addTrace(trace1);
-	    chart.addTrace(trace2);
 	    
 	    model.addObserver(this);
+	    
 	}
 
 	@Override
@@ -52,26 +46,31 @@ public class GraphView implements IView{
 			//Model has stopped. Maybe hide view?
 			//frame.setVisible(false);
 		} else if(eventName == EcoWorld.EVENT_TICK) {
-			// This is just computation of some nice looking value.
-	        /*double rand = Math.random();
-	        boolean add = (rand >= 0.5) ? true : false;
-	        this.m_y = (add) ? this.m_y + Math.random() : this.m_y - Math.random();
-	        // This is the important thing: Point is added from separate Thread.
-	        trace.addPoint(((double) System.currentTimeMillis() - this.m_starttime), this.m_y);*/
 	        
 			//Tick notification recived from model. Do something with the data.
 			if(event.getNewValue() instanceof List<?>) {
-				tempY++;
-				List<IPopulation> newPops = (List<IPopulation>) event.getNewValue();
-				if (newPops.size() >= 1) {
-					int numOfAgents = newPops.get(0).getAgents().size();
 				
-					trace1.addPoint(((double) System.currentTimeMillis() - this.m_starttime), 5);
+				List<IPopulation> newPops = (List<IPopulation>) event.getNewValue();
+				
+				// init traces
+				if (traces.size() == 0) {
+					for (IPopulation p: newPops) {
+						ITrace2D newTrace = new Trace2DLtd(200);
+						newTrace.setName(p.getAgents().get(0).getName());
+						newTrace.setColor(Color.RED);
+						traces.add(newTrace);
+						chart.addTrace(newTrace);
+						
+					}
 				}
-				else {
-					trace1.addPoint(((double) System.currentTimeMillis() - this.m_starttime), tempY);
-					trace2.addPoint(((double) System.currentTimeMillis() - this.m_starttime), tempY+10);
+				
+				for (int i = 0; i < newPops.size(); ++i) {
+					int numOfAgents = newPops.get(i).getAgents().size();
+					traces.get(i).addPoint(((double) System.currentTimeMillis() - this.m_starttime), numOfAgents);
 				}
+				
+
+				
 			}
 			/*if(event.getOldValue() instanceof List<?>) {
 				this.newObs = (List<IObstacle>) event.getOldValue();
@@ -91,6 +90,7 @@ public class GraphView implements IView{
 	    this.frame.setSize(500, 500);
 	    this.frame.getContentPane().add(chart);
 	    this.frame.setVisible(true); 
+	  
 	}
 
 	@Override
