@@ -84,7 +84,43 @@ public class SimpleAgent implements IAgent {
 
 	@Override
 	public void updatePosition() {
-		// TODO Auto-generated method stub
+		int rand = (int)(Math.random() * 2);
+		double x = 0;
+		double y = 0;
 		
+		switch (rand) {
+		case 0: x = position.getX() + speed;
+			break;
+		case 1: x = position.getX() - speed;
+			break;
+		}
+		
+		rand = (int)(Math.random() * 2);
+		switch (rand) {
+		case 0: y = position.getY() + speed;
+			break;
+		case 1: y = position.getY() - speed;
+			break;
+		}
+		position.setPosition(x, y);
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

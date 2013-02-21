@@ -1,4 +1,4 @@
-package chalmers.dax021308.ecosystem.model;
+package chalmers.dax021308.ecosystem.main;
 
 import chalmers.dax021308.ecosystem.controller.ToyController;
 

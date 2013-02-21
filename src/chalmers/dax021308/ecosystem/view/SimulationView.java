@@ -1,5 +1,6 @@
 package chalmers.dax021308.ecosystem.view;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -33,6 +34,7 @@ public class SimulationView extends JPanel implements IView {
 		frame.add(this);
 		frame.setSize(1000, 750);
 		frame.show();
+		this.setBackground(Color.white);
 	}
 
 	@Override
@@ -62,10 +64,10 @@ public class SimulationView extends JPanel implements IView {
 		for(IPopulation pop : newPops) {
 			for(IAgent a : pop.getAgents()) {
 				Position p = a.getPosition();
-		        g.drawRect((int)( 1000 - p.getX()), (int) (750 - p.getY()), a.getHeight(), a.getWidth());
+				g.setColor(a.getColor());
+		        g.fillOval((int)(p.getX()), (int) (750 - p.getY()), a.getHeight(), a.getWidth());
 			}
 		}
-        g.drawRect(ran.nextInt(1000), ran.nextInt(750), 10, 10);
     }
 
 	@Override
