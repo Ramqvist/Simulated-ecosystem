@@ -3,9 +3,7 @@ package chalmers.dax021308.ecosystem.controller;
 import java.awt.Dimension;
 
 import chalmers.dax021308.ecosystem.model.EcoWorld;
-import chalmers.dax021308.ecosystem.model.Obstacle;
 import chalmers.dax021308.ecosystem.view.SimulationView;
-import chalmers.dax021308.ecosystem.view.ToyView;
 
 /**
  * Controller class

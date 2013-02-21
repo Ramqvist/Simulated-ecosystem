@@ -10,6 +10,6 @@ import chalmers.dax021308.ecosystem.controller.ToyController;
 public class EcosystemInitializer {
 	
 	public static void main(String[] args) {
-		ToyController toy = new ToyController();
+		new ToyController();
 	}
 }

@@ -1,7 +1,5 @@
 package chalmers.dax021308.ecosystem.model;
 
-import java.awt.Point;
-
 /**
  * Position class.
  * 
