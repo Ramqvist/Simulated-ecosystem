@@ -5,6 +5,11 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 
+ * @author Mr. BigTasty
+ *
+ */
 public class DummyPopulation implements IPopulation {
 	
 	private List<IAgent> agents;

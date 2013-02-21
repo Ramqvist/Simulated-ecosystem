@@ -105,7 +105,7 @@ public class EcoWorld {
 		// this.env = new Environment(mOnFinishListener);
 
 		/* Use SquareEnvironment instead. */
-		this.env = new SquareEnvironment(createInitialPopulations(),
+		this.env = new SquareEnvironment(createInitialPopulations(d),
 				readObsticlesFromFile(), mOnFinishListener, d.height, d.width);
 
 		this.runWithoutTimer = false;
@@ -141,10 +141,10 @@ public class EcoWorld {
 		this(d, Integer.MAX_VALUE);
 	}
 
-	private List<IPopulation> createInitialPopulations() {
+	private List<IPopulation> createInitialPopulations(Dimension dim) {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
-		populations.add(new DummyPopulation(new Dimension(1000, 750),Color.red));
-		populations.add(new DummyPopulation(new Dimension(1000, 750),Color.green));
+		populations.add(new DummyPopulation(dim,Color.red));
+		populations.add(new DummyPopulation(dim,Color.green));
 		return populations;
 	}
 
