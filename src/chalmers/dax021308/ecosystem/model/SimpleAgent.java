@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.util.Gender;
+
 /**
  * A basic implementation of the IAgent interface.
  * @author Albin
@@ -78,8 +80,8 @@ public class SimpleAgent implements IAgent {
 	}
 
 	@Override
-	public int getGender() {
-		return -1;
+	public Gender getGender() {
+		return null;
 	}
 
 	@Override

@@ -3,12 +3,32 @@ package chalmers.dax021308.ecosystem.model;
 import java.awt.Color;
 import java.util.List;
 
-public class RabbitAgent implements IAgent {
+import chalmers.dax021308.ecosystem.model.util.Gender;
 
+public class RabbitAgent implements IAgent {
+	
+	private Position position;
+	private String name;
+	private Color color;
+	private int width;
+	private int height;
+	private double fitness;
+	private double speed;
+	private Gender gender;
+	
+	public RabbitAgent(Position position, String name, Color color, int width, int height, double speed, Gender gender) {
+		this.position = position;
+		this.name = name;
+		this.color = color;
+		this.width = width;
+		this.height = height;
+		this.speed = speed;
+		this.gender = gender;
+	}
+	
 	@Override
 	public Position getPosition() {
-		// TODO Auto-generated method stub
-		return null;
+		return position;
 	}
 
 	@Override
@@ -19,50 +39,42 @@ public class RabbitAgent implements IAgent {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return name;
 	}
 
 	@Override
 	public Color getColor() {
-		// TODO Auto-generated method stub
-		return null;
+		return color;
 	}
 
 	@Override
 	public int getWidth() {
-		// TODO Auto-generated method stub
-		return 0;
+		return width;
 	}
 
 	@Override
 	public int getHeight() {
-		// TODO Auto-generated method stub
-		return 0;
+		return height;
 	}
 
 	@Override
 	public double getFitness() {
-		// TODO Auto-generated method stub
-		return 0;
+		return fitness;
 	}
 
 	@Override
 	public void setFitness(double fitness) {
-		// TODO Auto-generated method stub
-
+		this.fitness = fitness;
 	}
 
 	@Override
 	public double getSpeed() {
-		// TODO Auto-generated method stub
-		return 0;
+		return speed;
 	}
 
 	@Override
 	public void setSpeed(double speed) {
-		// TODO Auto-generated method stub
-
+		this.speed = speed;
 	}
 
 	@Override
@@ -72,9 +84,7 @@ public class RabbitAgent implements IAgent {
 	}
 
 	@Override
-	public int getGender() {
-		// TODO Auto-generated method stub
-		return 0;
+	public Gender getGender() {
+		return gender;
 	}
-
 }

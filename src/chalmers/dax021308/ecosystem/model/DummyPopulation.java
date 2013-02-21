@@ -69,4 +69,16 @@ public class DummyPopulation implements IPopulation {
 		return null;
 	}
 
+	@Override
+	public void setPredators(List<IPopulation> predators) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setPreys(List<IPopulation> preys) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

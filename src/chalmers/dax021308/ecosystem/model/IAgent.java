@@ -3,6 +3,8 @@ package chalmers.dax021308.ecosystem.model;
 import java.awt.Color;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.util.Gender;
+
 
 /**
  * IAgent describes an arbitrary single individual. 
@@ -68,7 +70,7 @@ public interface IAgent {
 	public List<IAgent> reproduce(IAgent agent);
 	
 	/**
-	 * @return The gender of the IAgent specified by some enum. Returns -1 if genderless.
+	 * @return The gender of the IAgent specified by some enum. Returns null if genderless.
 	 */
-	public int getGender();
+	public Gender getGender();
 }
