@@ -2,6 +2,7 @@ package chalmers.dax021308.ecosystem.model;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -24,7 +25,7 @@ public class EcoWorld {
 	private boolean runWithoutTimer;
 	private int numIterations;
 	private TimerHandler timer;
-	private Environment env;
+	private IEnvironment env;
 	private int tickTime;
 	private PropertyChangeSupport observers;
 	/**
@@ -85,12 +86,21 @@ public class EcoWorld {
 	public EcoWorld(int tickTime, int numIterations) {
 		this.tickTime = tickTime;
 		this.timer = new TimerHandler();
-		this.env = new Environment(mOnFinishListener);
+		/* Uncomment to test ticking functionallity */
+		// this.env = new Environment(mOnFinishListener);
+		
+		/* Use SquareEnvironment instead. */
+		this.env = new SquareEnvironment(createInitialPopulations(), readObsticlesFromFile(), mOnFinishListener);
+		
 		this.runWithoutTimer = false;
 		this.numIterations = numIterations; 
 		this.observers = new PropertyChangeSupport(this);
 	}
 	
+	private List<IPopulation> createInitialPopulations() {
+		return new ArrayList<IPopulation>();
+	}
+
 	public EcoWorld(int numIterations) {
 		this(0, numIterations);
 		this.runWithoutTimer = true;
@@ -98,6 +108,12 @@ public class EcoWorld {
 	
 	public EcoWorld() {
 		this(Integer.MAX_VALUE);
+	}
+	
+	private List<IObstacle> readObsticlesFromFile() {
+		List<IObstacle> obsList = new ArrayList<IObstacle>();
+		obsList.add(new Obstacle("Obstacle.txt"));
+		return obsList;
 	}
 	
 	/**

@@ -23,11 +23,10 @@ public class ToyController implements IController {
 //		int periodTime = 20;
 //		EcoWorld eco = new EcoWorld(20, Integer.MAX_VALUE);
 //		eco.start();
-		Obstacle o = new Obstacle("Obstacle.txt");
 		this.model = new EcoWorld();
 		
 		//Uncomment to start model.
-		//model.start();
+		model.start();
 		this.toyView = new ToyView(model);
 		toyView.init();
 	}
