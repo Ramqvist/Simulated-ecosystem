@@ -43,15 +43,15 @@ public class SimulationView extends JPanel implements IView {
 			//frame.setVisible(false);
 		} else if(eventName == EcoWorld.EVENT_TICK) {
 			//Tick notification recived from model. Do something with the data.
-			removeAll();
-			repaint();
-			revalidate();
 			if(event.getNewValue() instanceof List<?>) {
 				this.newPops = (List<IPopulation>) event.getNewValue();
 			}
 			if(event.getOldValue() instanceof List<?>) {
 				this.newObs = (List<IObstacle>) event.getOldValue();
 			}
+			removeAll();
+			repaint();
+			revalidate();
 		}
 	}
 	
@@ -62,7 +62,7 @@ public class SimulationView extends JPanel implements IView {
 		for(IPopulation pop : newPops) {
 			for(IAgent a : pop.getAgents()) {
 				Position p = a.getPosition();
-		        g.drawRect((int) p.getX(),(int) p.getY(), 10, 10);
+		        g.drawRect((int)( 1000 - p.getX()), (int) (750 - p.getY()), a.getHeight(), a.getWidth());
 			}
 		}
         g.drawRect(ran.nextInt(1000), ran.nextInt(750), 10, 10);
