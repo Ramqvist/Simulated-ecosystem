@@ -7,9 +7,14 @@ import java.util.Observer;
 import chalmers.dax021308.ecosystem.controller.IController;
 
 /**
- * IVew inteface. Extends {@link Observer} interface.
+ * IVew interface. Extends {@link PropertyChangeListener} interface.
+ * <p>
+ * Should hold references the all the view and the model.
+ * It listens to commands from the model via. the observer pattern.
+ * <p>
+ * Taking in a refrence to the model in the constructor is recommended.
  * 
- * @author Hanna
+ * @author Hanna & Erik
  *
  */
 public interface IView extends PropertyChangeListener {
@@ -30,6 +35,7 @@ public interface IView extends PropertyChangeListener {
 	
 	/**
 	 * Redraw the GUI, should be implemented fast to allow high frame-rate.
+	 * <p>
 	 */
 	public void onTick();
 	

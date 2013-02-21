@@ -7,13 +7,14 @@ import java.util.List;
  * Class for saving and printing various data for testing and development.
  * 
  * TODO: Put inputs to the historyList.
- * @author Erik
+ * @author Erik Ramqvist
  *
  */
 public class Log {
 	
 	private static List<String> printHistory;
 	
+	/* Disable for performance increase. */
 	private static boolean enableLog = true;
 	
 	/* Log level constants */
@@ -34,7 +35,7 @@ public class Log {
 	 * @param s
 	 */
 	public static void i(String s) {
-		if(enableLog) {
+		if(enableLog && (currentLogLevel == LEVEL_VERBOSE || currentLogLevel == LEVEL_INFO)) {
 			System.out.println(s);
 		}
 	}
@@ -44,7 +45,7 @@ public class Log {
 	 * @param s
 	 */
 	public static void v(String s) {
-		if(enableLog) {
+		if(enableLog && currentLogLevel == LEVEL_VERBOSE) {
 			System.out.println(s);
 		}
 	}

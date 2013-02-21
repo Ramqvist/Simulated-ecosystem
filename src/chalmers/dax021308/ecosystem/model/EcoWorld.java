@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * <p>
  * Recieves notifications from the {@link TimerHandler} and the {@link IEnvironment}.
  * 
- * @author Erik
+ * @author Erik Ramqvist
  *
  */
 public class EcoWorld {
@@ -83,6 +83,11 @@ public class EcoWorld {
 		}
 	};
 	
+	/**
+	 * Start EcoWorld with a tick-timer.
+	 * @param tickTime Minimum time it will take for one tick to complete.
+	 * @param numIterations Number of iterations before the program finishes.
+	 */
 	public EcoWorld(int tickTime, int numIterations) {
 		this.tickTime = tickTime;
 		this.timer = new TimerHandler();
@@ -96,20 +101,34 @@ public class EcoWorld {
 		this.numIterations = numIterations; 
 		this.observers = new PropertyChangeSupport(this);
 	}
-	
-	private List<IPopulation> createInitialPopulations() {
-		return new ArrayList<IPopulation>();
-	}
 
+	/**
+	 * Start EcoWorld WITHOUT a tick-timer.
+	 * <p>
+	 * EcoWorld simulation will run as fast as it can, without delays.
+	 * 
+	 * @param numIterations Number of iterations before the program finishes.
+	 */
 	public EcoWorld(int numIterations) {
 		this(0, numIterations);
 		this.runWithoutTimer = true;
 	}
-	
+
+	/**
+	 * Start EcoWorld WITHOUT a tick-timer.
+	 * <p>
+	 * EcoWorld simulation will run as fast as it can, without delays.
+	 * For a very long time.
+	 * 
+	 */
 	public EcoWorld() {
 		this(Integer.MAX_VALUE);
 	}
-	
+
+	private List<IPopulation> createInitialPopulations() {
+		return new ArrayList<IPopulation>();
+	}
+
 	private List<IObstacle> readObsticlesFromFile() {
 		List<IObstacle> obsList = new ArrayList<IObstacle>();
 		obsList.add(new Obstacle("Obstacle.txt"));
