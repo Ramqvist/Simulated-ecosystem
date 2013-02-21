@@ -83,6 +83,7 @@ public class EcoWorld {
 			}
 		}
 	};
+	
 
 	/**
 	 * Start EcoWorld with a tick-timer.
@@ -91,28 +92,10 @@ public class EcoWorld {
 	 *            Minimum time it will take for one tick to complete.
 	 * @param numIterations
 	 *            Number of iterations before the program finishes.
+	 *            
+	 * @param d Dimension of the simulation.
 	 */
-	public EcoWorld(int tickTime, int numIterations) {
-		// Added initial height and width for the squareEnvironment, this size
-		// should probably be chosen earlier (at the same time one chooses to
-		// use
-		// squareEnvironment
-		this(0, numIterations, 1000, 1000);
-	}
-
-	/**
-	 * Start EcoWorld with a tick-timer.
-	 * 
-	 * @param tickTime
-	 *            Minimum time it will take for one tick to complete.
-	 * @param numIterations
-	 *            Number of iterations before the program finishes.
-	 * @param height
-	 *            Height of the environment to be created
-	 * @param width
-	 *            Width of the environment to be created
-	 */
-	public EcoWorld(int tickTime, int numIterations, int height, int width) {
+	public EcoWorld(Dimension d, int tickTime, int numIterations ) {
 		this.tickTime = tickTime;
 		this.timer = new TimerHandler();
 
@@ -121,7 +104,7 @@ public class EcoWorld {
 
 		/* Use SquareEnvironment instead. */
 		this.env = new SquareEnvironment(createInitialPopulations(),
-				readObsticlesFromFile(), mOnFinishListener, height, width);
+				readObsticlesFromFile(), mOnFinishListener, d.height, d.width);
 
 		this.runWithoutTimer = false;
 		this.numIterations = numIterations;
@@ -135,9 +118,11 @@ public class EcoWorld {
 	 * 
 	 * @param numIterations
 	 *            Number of iterations before the program finishes.
+	 *            
+	 * @param d Dimension of the simulation.
 	 */
-	public EcoWorld(int numIterations) {
-		this(0, numIterations);
+	public EcoWorld(Dimension d, int numIterations) {
+		this(d, 0, numIterations);
 		this.runWithoutTimer = true;
 	}
 
@@ -146,10 +131,12 @@ public class EcoWorld {
 	 * <p>
 	 * EcoWorld simulation will run as fast as it can, without delays. For a
 	 * very long time.
+	 *            
+	 * @param d Dimension of the simulation.
 	 * 
 	 */
-	public EcoWorld() {
-		this(Integer.MAX_VALUE);
+	public EcoWorld(Dimension d) {
+		this(d, Integer.MAX_VALUE);
 	}
 
 	private List<IPopulation> createInitialPopulations() {
