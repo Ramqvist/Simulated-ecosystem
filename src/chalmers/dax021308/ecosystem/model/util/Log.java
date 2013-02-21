@@ -1,4 +1,4 @@
-package chalmers.dax021308.ecosystem.model;
+package chalmers.dax021308.ecosystem.model.util;
 
 import java.util.ArrayList;
 import java.util.List;

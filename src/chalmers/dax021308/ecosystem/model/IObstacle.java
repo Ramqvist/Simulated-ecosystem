@@ -1,5 +1,7 @@
 package chalmers.dax021308.ecosystem.model;
 
+import chalmers.dax021308.ecosystem.model.util.Position;
+
 /**
  * IObstacle interface.
  * 

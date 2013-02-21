@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.util.Gender;
+import chalmers.dax021308.ecosystem.model.util.Position;
 
 
 /**

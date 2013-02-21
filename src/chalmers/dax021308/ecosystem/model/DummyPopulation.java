@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.util.Position;
+
 /**
  * 
  * @author Mr. BigTasty
@@ -13,12 +15,14 @@ import java.util.List;
 public class DummyPopulation implements IPopulation {
 	
 	private List<IAgent> agents;
+	private Dimension gridDimension;
 	
 	public DummyPopulation(List<IAgent> agentList){
 		agents = agentList;
 	}
 
 	public DummyPopulation(Dimension gridDimension, Color color){
+		this.gridDimension = gridDimension;
 		agents = initializePopulation(100, gridDimension, color);
 	}
 	

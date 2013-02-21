@@ -23,9 +23,9 @@ public class ToyController implements IController {
 	public void init() {
 		Dimension d = new Dimension(1000, 750);
 		
-		this.model = new EcoWorld(d, 100, Integer.MAX_VALUE);
+		//this.model = new EcoWorld(d, 100, Integer.MAX_VALUE);
 		//Uncommend below to run without delay.
-//		this.model = new EcoWorld(d);
+		this.model = new EcoWorld(d);
 		
 		//Uncomment to start model.
 		model.start();

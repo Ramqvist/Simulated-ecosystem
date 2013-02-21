@@ -17,8 +17,8 @@ import chalmers.dax021308.ecosystem.model.EcoWorld;
 import chalmers.dax021308.ecosystem.model.IAgent;
 import chalmers.dax021308.ecosystem.model.IObstacle;
 import chalmers.dax021308.ecosystem.model.IPopulation;
-import chalmers.dax021308.ecosystem.model.Log;
-import chalmers.dax021308.ecosystem.model.Position;
+import chalmers.dax021308.ecosystem.model.util.Log;
+import chalmers.dax021308.ecosystem.model.util.Position;
 
 public class SimulationView extends JPanel implements IView {
 	
