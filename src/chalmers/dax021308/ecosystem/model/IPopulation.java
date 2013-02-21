@@ -15,9 +15,8 @@ public interface IPopulation {
 	public void update();
 	
 	/**
-	 * 
-	 * @param agent
-	 * @return
+	 * @param agent - The IAgent for which the fitness will be calculated.
+	 * @return The fitness for the provided IAgent.
 	 */
 	public double calculateFitness(IAgent agent);
 	

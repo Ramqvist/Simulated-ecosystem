@@ -16,9 +16,9 @@ public interface IAgent {
 	public Position getPosition();
 	
 	/**
-	 * @param position - The new position.
+	 * Updates the position of the IAgent.
 	 */
-	public void setPosition(Position position);
+	public void updatePosition();
 	
 	/**
 	 * @return The name of the IAgent.
