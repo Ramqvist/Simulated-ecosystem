@@ -36,6 +36,7 @@ public class EcoWorld {
 	private Object syncObject = new Object();
 	private static final int NUM_THREAD = 1;
 	private int numUpdates = 0;
+	private Dimension d;
 	private ExecutorService executor = Executors.newFixedThreadPool(NUM_THREAD);
 
 	public static final String EVENT_TICK = "chalmers.dax021308.ecosystem.model.event_tick";
@@ -98,6 +99,7 @@ public class EcoWorld {
 	public EcoWorld(Dimension d, int tickTime, int numIterations ) {
 		this.tickTime = tickTime;
 		this.timer = new TimerHandler();
+		this.d = d;
 
 		/* Uncomment to test ticking functionality */
 		// this.env = new Environment(mOnFinishListener);
