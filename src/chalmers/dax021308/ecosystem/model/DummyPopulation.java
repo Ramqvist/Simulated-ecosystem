@@ -30,8 +30,9 @@ public class DummyPopulation implements IPopulation {
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-
+		for(IAgent a: agents){
+			a.updatePosition();
+		}
 	}
 
 	@Override
@@ -46,13 +47,13 @@ public class DummyPopulation implements IPopulation {
 	}
 
 	@Override
-	public List<IAgent> getPredators() {
+	public List<IPopulation> getPredators() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<IAgent> getPreys() {
+	public List<IPopulation> getPreys() {
 		// TODO Auto-generated method stub
 		return null;
 	}

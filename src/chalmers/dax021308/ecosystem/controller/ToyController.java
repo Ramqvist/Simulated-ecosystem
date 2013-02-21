@@ -22,9 +22,9 @@ public class ToyController implements IController {
 	@Override
 	public void init() {
 //		int periodTime = 20;
-//		EcoWorld eco = new EcoWorld(20, Integer.MAX_VALUE);
+		this.model = new EcoWorld(100, Integer.MAX_VALUE);
 //		eco.start();
-		this.model = new EcoWorld();
+//		this.model = new EcoWorld();
 		
 		//Uncomment to start model.
 		model.start();
