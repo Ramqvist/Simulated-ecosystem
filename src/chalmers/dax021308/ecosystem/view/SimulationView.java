@@ -32,8 +32,10 @@ public class SimulationView extends JPanel implements IView {
 	private Dimension gridDimension;
 	private Timer fpsTimer;
 	private int updates;
-	private int fps;
+	private int lastFps;
 	private boolean showFPS;
+	private int newFps;
+	private Object fpsSync = new Object();
 	/**
 	 * Create the panel.
 	 */
@@ -52,12 +54,49 @@ public class SimulationView extends JPanel implements IView {
 			fpsTimer.schedule(new TimerTask() {
 				@Override
 				public void run() {
-					fps = updates;
-					updates = 0;
+					int fps = getUpdate();
+					if(fps + lastFps != 0) {
+						fps = ( fps + lastFps ) / 2;
+					} 
+					setNewFps(fps);
+					lastFps = fps;
+					setUpdateValue(0);
 				}
 			}, 1000, 1000);
 		}
 	}
+	
+	private int getUpdate() {
+		synchronized (SimulationView.class) {
+			return updates;
+		}
+	}
+
+	private void setUpdateValue(int newValue) {
+		synchronized (SimulationView.class) {
+			updates = newValue;
+		}
+	}
+	
+
+	private int getNewFps() {
+		synchronized (fpsSync) {
+			return updates;
+		}
+	}
+
+	private void setNewFps(int newValue) {
+		synchronized (fpsSync) {
+			newFps = newValue;
+		}
+	}
+	
+	private void increaseUpdateValue() {
+		synchronized (SimulationView.class) {
+			updates++;
+		}
+	}
+
 
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
@@ -82,8 +121,9 @@ public class SimulationView extends JPanel implements IView {
 	@Override
     public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		int fps = newFps;
 		if(showFPS) {
-			updates++;
+			increaseUpdateValue();
 			Log.v(fps + "");
 			char[] fpsChar;
 			if(fps > 1000) {
@@ -99,7 +139,7 @@ public class SimulationView extends JPanel implements IView {
 				fpsChar = new char[7];
 				fpsChar[1] = Character.forDigit( (fps / 100) , 10);
 				fpsChar[1] = Character.forDigit( (fps % 100) / 10, 10);
-				fpsChar[2] = Character.forDigit(fps % 10, 10);
+				fpsChar[2] = Character.forDigit(  fps % 10   , 10);
 				fpsChar[3] = ' ';
 				fpsChar[4] = 'f';
 				fpsChar[5] = 'p';
@@ -161,8 +201,13 @@ public class SimulationView extends JPanel implements IView {
 			fpsTimer.schedule(new TimerTask() {
 				@Override
 				public void run() {
-					fps = updates;
-					updates = 0;
+					newFps = getUpdate();
+					int temp = newFps;
+					if(newFps + lastFps != 0) {
+						newFps = ( newFps + lastFps ) / 2;
+					} 
+					lastFps = temp;
+					setUpdateValue(0);
 				}
 			}, 1000, 1000);
 			showFPS = true;
