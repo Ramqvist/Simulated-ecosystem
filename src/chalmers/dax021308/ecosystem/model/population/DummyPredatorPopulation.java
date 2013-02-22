@@ -42,8 +42,7 @@ public class DummyPredatorPopulation extends AbstractPopulation {
 			Position randPos = new Position(gridDimension.getWidth()
 					* Math.random(), gridDimension.getHeight() * Math.random());
 			Vector velocity = new Vector(maxSpeed, maxSpeed);
-			while (Math.sqrt(Math.pow(velocity.getX(), 2)
-					+ Math.pow(velocity.getY(), 2)) > maxSpeed) {
+			while (velocity.getNorm() > maxSpeed) {
 				velocity.setVector(-maxSpeed + Math.random() * 2 * maxSpeed,
 						-maxSpeed + Math.random() * 2 * maxSpeed);
 			}

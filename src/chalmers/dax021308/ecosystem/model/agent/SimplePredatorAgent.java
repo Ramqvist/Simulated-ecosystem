@@ -58,16 +58,15 @@ public class SimplePredatorAgent extends AbstractAgent {
 				Position p = a.getPosition();
 				double distance = getPosition().getDistance(p);
 				if (distance <= visionRange) {
-				Vector newForce = new Vector(getPosition(), p);
-				preyForce.add(newForce.multiply(1 / getPosition()
-						.getDistance(p) + 0.0000001));
+				Vector newForce = new Vector(p, getPosition());
+				preyForce.add(newForce.multiply(1/getPosition().getDistance(p) + 0.0000001));
 				nVisiblePreys++;
 				 }
 			}
 		}
 
 		if (nVisiblePreys == 0) { // Be unaffacted
-			preyForce.setVector(getVelocity());
+			preyForce.setVector(0,0);
 		} else {
 			preyForce.multiply(1 / (double) nVisiblePreys);
 			double norm = preyForce.getNorm();
@@ -80,31 +79,18 @@ public class SimplePredatorAgent extends AbstractAgent {
 		 */
 		Vector environmentForce = new Vector(0, 0);
 		Position xWallLeft = new Position(0, getPosition().getY());
-		Position xWallRight = new Position(dim.getWidth(), getPosition()
-				.getY());
+		Position xWallRight = new Position(dim.getWidth(), getPosition().getY());
 		Position yWallBottom = new Position(getPosition().getX(), 0);
-		Position yWallTop = new Position(getPosition().getX(),
-				dim.getHeight());
+		Position yWallTop = new Position(getPosition().getX(), dim.getHeight());
 
-		double scale = 10;
-		double xWallLeftForce = 1 / Math.pow((1 / scale)
-				* (getPosition().getDistance(xWallLeft) - 1), 2);
-		double xWallRightForce = -1
-				/ Math.pow(
-						(1 / scale)
-								* (getPosition().getDistance(xWallRight) - 1),
-						2);
-		double yWallBottomForce = 1 / Math.pow((1 / scale)
-				* (getPosition().getDistance(yWallBottom) - 1), 2);
-		double yWallTopForce = -1
-				/ Math.pow(
-						(1 / scale)
-								* (getPosition().getDistance(yWallTop) - 1),
-						2);
+		double scale = WALL_CONSTANT;
+		double xWallLeftForce = 1/Math.pow((1/scale)*(getPosition().getDistance(xWallLeft)-1), 2);
+		double xWallRightForce = -1/Math.pow((1/scale)*(getPosition().getDistance(xWallRight)-1),2);
+		double yWallBottomForce = 1/Math.pow((1/scale)*(getPosition().getDistance(yWallBottom)-1), 2);
+		double yWallTopForce = -1/Math.pow((1/scale)*(getPosition().getDistance(yWallTop)-1),2);
 
 		double xForce = (xWallLeftForce + xWallRightForce);
 		double yForce = (yWallBottomForce + yWallTopForce);
-		preyForce.setVector(5, 5);
 		environmentForce.setVector(xForce, yForce);
 		//System.out.println("Environment: " + environmentForce.toString()
 		//		+ " | preyForce: " + preyForce.toString());

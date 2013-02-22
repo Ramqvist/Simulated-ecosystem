@@ -69,11 +69,11 @@ public class SimpleAgent extends AbstractAgent {
 		}
 		
 		if(nVisiblePredators==0){ //Be unaffected
-			predatorForce.setVector(this.getVelocity());
+			predatorForce.setVector(0,0);
 		} else { //Else set the force depending on visible predators.
 			predatorForce.multiply(1/(double)nVisiblePredators);
 			double norm = predatorForce.getNorm();
-			predatorForce.multiply(maxSpeed/norm);
+			predatorForce.multiply(1/norm);
 		}	
 		
 		/*
@@ -85,7 +85,7 @@ public class SimpleAgent extends AbstractAgent {
 		Position yWallBottom = new Position(this.getPosition().getX(),0);
 		Position yWallTop = new Position(this.getPosition().getX(),dim.getHeight());
 		
-		double scale = 10;
+		double scale = WALL_CONSTANT;
 		double xWallLeftForce = 1/Math.pow((1/scale)*(this.getPosition().getDistance(xWallLeft)-1),2);
 		double xWallRightForce = -1/Math.pow((1/scale)*(this.getPosition().getDistance(xWallRight)-1),2);
 		double yWallBottomForce = 1/Math.pow((1/scale)*(this.getPosition().getDistance(yWallBottom)-1),2);
@@ -100,7 +100,7 @@ public class SimpleAgent extends AbstractAgent {
 		Vector acceleration = environmentForce.add(predatorForce);
 		double accelerationNorm = acceleration.getNorm();
 		if(accelerationNorm > maxAcceleration){
-			//Scales the norm of the vector back to maxSpeed
+			//Scales the norm of the vector back to maxAcceleration
 			acceleration.multiply(maxAcceleration/accelerationNorm); 
 		}
 		
