@@ -23,14 +23,17 @@ public class SimpleAgent implements IAgent {
 	private double maxSpeed;
 	private double visionRange;
 	private Vector velocity;
+	private double maxAcceleration;
 	
-	public SimpleAgent(String name, Position p, Color c, int width, int height, Vector velocity, double maxSpeed, double visionRange) {
+	public SimpleAgent(String name, Position p, Color c, int width, int height, 
+			Vector velocity, double maxSpeed, double maxAcceleration,double visionRange) {
 		this.name = name;
 		position = p;
 		color = c;
 		this.width = width;
 		this.height = height;
 		this.maxSpeed = maxSpeed;
+		this.maxAcceleration = maxAcceleration;
 		this.velocity = velocity;
 		this.visionRange = visionRange;
 	}
@@ -96,7 +99,7 @@ public class SimpleAgent implements IAgent {
 	@Override
 	public void updatePosition(List<IPopulation> predators,
 							   List<IPopulation> preys, Dimension gridDimension) {
-		setNewVelocity(predators, preys, this.maxSpeed, gridDimension);
+		setNewVelocity(predators, preys, gridDimension);
 		position.addVector(velocity);
 	}
 	
@@ -104,7 +107,7 @@ public class SimpleAgent implements IAgent {
 	 * @author Sebbe
 	 * 
 	 */
-	private void setNewVelocity(List<IPopulation> predators, List<IPopulation> preys, double maxSpeed, Dimension dim){
+	private void setNewVelocity(List<IPopulation> predators, List<IPopulation> preys, Dimension dim){
 		/* 
 		 * "Best velocity" is defined as the sum of the vectors pointing away from all the predators in vision, weighted by
 		 * the distance to the predators, divided by the number of predators in vision. 
@@ -143,25 +146,31 @@ public class SimpleAgent implements IAgent {
 		Position yWallBottom = new Position(this.position.getX(),0);
 		Position yWallTop = new Position(this.position.getX(),dim.getHeight());
 		
-		double xWallLeftForce = 1/Math.pow(this.position.getDistance(xWallLeft)-1,2);
-		double xWallRightForce = -1/Math.pow(this.position.getDistance(xWallRight)-1,2);
-		double yWallBottomForce = 1/Math.pow(this.position.getDistance(yWallBottom)-1,2);
-		double yWallTopForce = -1/Math.pow(this.position.getDistance(yWallTop)-1,2);
-		
 		double scale = 10;
-		double xForce = (xWallLeftForce + xWallRightForce)*scale;
-		double yForce = (yWallBottomForce + yWallTopForce)*scale;
+		double xWallLeftForce = 1/Math.pow((1/scale)*(this.position.getDistance(xWallLeft)-1),2);
+		double xWallRightForce = -1/Math.pow((1/scale)*(this.position.getDistance(xWallRight)-1),2);
+		double yWallBottomForce = 1/Math.pow((1/scale)*(this.position.getDistance(yWallBottom)-1),2);
+		double yWallTopForce = -1/Math.pow((1/scale)*(this.position.getDistance(yWallTop)-1),2);
+		
+		double xForce = (xWallLeftForce + xWallRightForce);
+		double yForce = (yWallBottomForce + yWallTopForce);
 		
 		environmentForce.setVector(xForce, yForce);
 		System.out.println("Environment: " + environmentForce.toString() + " | predatorForce: " + predatorForce.toString());
 		//Rescale the new velocity to not exceed maxSpeed
-		Vector newVelocity = environmentForce.add(predatorForce);
+		Vector acceleration = environmentForce.add(predatorForce);
+		double accelerationNorm = acceleration.getNorm();
+		if(accelerationNorm > maxAcceleration){
+			//Scales the norm of the vector back to maxSpeed
+			acceleration.multiply(maxAcceleration/accelerationNorm); 
+		}
+		
+		Vector newVelocity = this.velocity.add(acceleration);
 		double speed = newVelocity.getNorm();
-		if(speed > maxSpeed){
+		if(speed > maxAcceleration){
 			//Scales the norm of the vector back to maxSpeed
 			newVelocity.multiply(maxSpeed/speed); 
 		}
-		
 		
 		this.velocity.setVector(newVelocity);
 	}

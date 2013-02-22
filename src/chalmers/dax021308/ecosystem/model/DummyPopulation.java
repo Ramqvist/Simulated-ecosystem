@@ -26,14 +26,15 @@ public class DummyPopulation implements IPopulation {
 		agents = agentList;
 	}
 
-	public DummyPopulation(Dimension gridDimension, int initPopulationSize, Color color, double maxSpeed, double visionRange){
+	public DummyPopulation(Dimension gridDimension, int initPopulationSize, Color color, 
+			double maxSpeed, double maxAcceleration,double visionRange){
 		this.gridDimension = gridDimension;
 		this.visionRange = visionRange;
-		agents = initializePopulation(initPopulationSize, gridDimension, color, maxSpeed, visionRange);
+		agents = initializePopulation(initPopulationSize, gridDimension, color, maxSpeed, maxAcceleration, visionRange);
 	}
 	
 	private List<IAgent> initializePopulation(int populationSize, Dimension gridDimension, 
-											Color color, double maxSpeed, double visionRange) {
+											Color color, double maxSpeed, double maxAcceleration,double visionRange) {
 		List<IAgent> newAgents = new ArrayList<IAgent>(populationSize);
 		preys = new ArrayList<IPopulation>();
 		predators = new ArrayList<IPopulation>();
@@ -45,7 +46,7 @@ public class DummyPopulation implements IPopulation {
 				velocity.setVector(-maxSpeed+Math.random()*2*maxSpeed, -maxSpeed+Math.random()*2*maxSpeed);
 			}
 			SimpleAgent a = new SimpleAgent("Big tasty", randPos, color, 10, 10, 
-											velocity, maxSpeed, visionRange);
+											velocity, maxSpeed, maxAcceleration,visionRange);
 			newAgents.add(a);
 		}
 		return newAgents;
