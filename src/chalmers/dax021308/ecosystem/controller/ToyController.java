@@ -2,7 +2,7 @@ package chalmers.dax021308.ecosystem.controller;
 
 import java.awt.Dimension;
 
-import chalmers.dax021308.ecosystem.model.EcoWorld;
+import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.view.SimulationView;
 
 /**

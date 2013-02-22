@@ -1,6 +1,8 @@
-package chalmers.dax021308.ecosystem.model;
+package chalmers.dax021308.ecosystem.model.population;
 
 import java.util.List;
+
+import chalmers.dax021308.ecosystem.model.agent.IAgent;
 
 public class RabbitPopulation implements IPopulation {
 

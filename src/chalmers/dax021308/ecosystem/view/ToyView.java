@@ -7,9 +7,10 @@ import java.util.Observable;
 
 import javax.swing.JFrame;
 
-import chalmers.dax021308.ecosystem.model.EcoWorld;
-import chalmers.dax021308.ecosystem.model.IObstacle;
-import chalmers.dax021308.ecosystem.model.IPopulation;
+import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.environment.IObstacle;
+import chalmers.dax021308.ecosystem.model.population.IPopulation;
+
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import javax.swing.GroupLayout;

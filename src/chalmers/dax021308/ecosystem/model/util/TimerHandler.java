@@ -3,8 +3,8 @@ package chalmers.dax021308.ecosystem.model.util;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import chalmers.dax021308.ecosystem.model.EcoWorld;
-import chalmers.dax021308.ecosystem.model.EcoWorld.OnTickUpdate;
+import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.environment.EcoWorld.OnTickUpdate;
 
 /**
  * Class for controlling the {@link Timer} in a simple way.

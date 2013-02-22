@@ -13,10 +13,10 @@ import javax.swing.JPanel;
 
 import sun.misc.Cleaner;
 
-import chalmers.dax021308.ecosystem.model.EcoWorld;
-import chalmers.dax021308.ecosystem.model.IAgent;
-import chalmers.dax021308.ecosystem.model.IObstacle;
-import chalmers.dax021308.ecosystem.model.IPopulation;
+import chalmers.dax021308.ecosystem.model.agent.IAgent;
+import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.environment.IObstacle;
+import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 
