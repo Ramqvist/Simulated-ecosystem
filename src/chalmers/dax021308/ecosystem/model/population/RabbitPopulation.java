@@ -1,19 +1,50 @@
 package chalmers.dax021308.ecosystem.model.population;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.util.LinkedList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
+import chalmers.dax021308.ecosystem.model.agent.RabbitAgent;
+import chalmers.dax021308.ecosystem.model.util.Gender;
+import chalmers.dax021308.ecosystem.model.util.Position;
+import chalmers.dax021308.ecosystem.model.util.Vector;
 
 public class RabbitPopulation implements IPopulation {
 
-	public RabbitPopulation() {
-		// TODO Auto-generated constructor stub
+	private List<IAgent> rabbits;
+	private String name = "Rabbits";
+	private List<IPopulation> preys;
+	private List<IPopulation> predators;
+	private Dimension worldSize;
+	
+	public RabbitPopulation(int popSize, Dimension d) {
+		rabbits = new LinkedList<IAgent>();
+		preys = new LinkedList<IPopulation>();
+		predators = new LinkedList<IPopulation>();
+		worldSize = d;
+		
+		
+		for (int i = 0; i < popSize; i++) {
+			Gender g = Gender.MALE;
+			Color c = Color.black;
+			
+			if (i%2 == 0) {
+				g = Gender.FEMALE;
+				c = Color.lightGray;
+			}
+			
+			rabbits.add(new RabbitAgent(new Position(d.getWidth() * Math.random(), d.getHeight()*Math.random()), 
+					name, c, 20, 20, new Vector(Math.random(), Math.random()), g));
+		}
 	}
 	
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-
+		for (IAgent a : rabbits) {
+			a.updatePosition(predators, preys, worldSize);
+		}
 	}
 
 	@Override
@@ -24,37 +55,31 @@ public class RabbitPopulation implements IPopulation {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return name;
 	}
 
 	@Override
 	public List<IAgent> getAgents() {
-		// TODO Auto-generated method stub
-		return null;
+		return rabbits;
 	}
 
 	@Override
 	public List<IPopulation> getPredators() {
-		// TODO Auto-generated method stub
-		return null;
+		return predators;
 	}
 
 	@Override
 	public List<IPopulation> getPreys() {
-		// TODO Auto-generated method stub
-		return null;
+		return preys;
 	}
 
 	@Override
 	public void addPredator(IPopulation predator) {
-		// TODO Auto-generated method stub
-		
+		predators.add(predator);
 	}
 
 	@Override
 	public void addPrey(IPopulation prey) {
-		// TODO Auto-generated method stub
-		
+		preys.add(prey);
 	}
 }

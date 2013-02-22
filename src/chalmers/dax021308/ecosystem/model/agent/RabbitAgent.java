@@ -19,6 +19,7 @@ public class RabbitAgent implements IAgent {
 	private double fitness;
 	private Vector velocity;
 	private Gender gender;
+	private IAgent selectedFemale = null;
 	
 	public RabbitAgent(Position position, String name, Color color, int width, int height, Vector velocity, Gender gender) {
 		this.position = position;
@@ -89,7 +90,46 @@ public class RabbitAgent implements IAgent {
 	@Override
 	public void updatePosition(List<IPopulation> predators,
 			List<IPopulation> preys, Dimension dim) {
-		// TODO Auto-generated method stub
 		
+		if (gender == Gender.MALE) {
+			//Locate the closest female
+			double minDistance = Double.MAX_VALUE; 
+			
+			for (IPopulation p : preys) {
+				for (IAgent a : p.getAgents()) {
+					if (a.getGender() == Gender.FEMALE) {
+						if (position.getDistance(a.getPosition()) < minDistance) {
+							minDistance = position.getDistance(a.getPosition());
+							selectedFemale = a;
+						}
+					}
+				}
+			}
+			
+			if (selectedFemale != null) {
+				Vector unitVector = new Vector(selectedFemale.getPosition(), position).toUnitVector();
+				velocity = unitVector.multiply(velocity.getNorm());
+			}
+			position.addVector(velocity);
+		} else if (gender == Gender.FEMALE) {
+			//Calculate random position
+			double tempX = velocity.getX();
+			double tempY = velocity.getY();
+			
+			if (position.getX() + velocity.getX() < 0 || position.getX() + velocity.getX() > dim.getWidth()) {
+				tempX *= -1;
+			}
+			
+			if (position.getY() + velocity.getY() < 0 || position.getY() + velocity.getY() > dim.getHeight()) {
+				tempY *= -1;
+			}
+			velocity = new Vector(tempX, tempY);
+			position.addVector(velocity);
+		}
 	}
 }
+
+
+
+
+

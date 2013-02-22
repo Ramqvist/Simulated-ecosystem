@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import chalmers.dax021308.ecosystem.model.population.DummyPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.population.RabbitPopulation;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.TimerHandler;
 
@@ -148,12 +149,17 @@ public class EcoWorld {
 
 	private List<IPopulation> createInitialPopulations(Dimension dim) {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
-		IPopulation prey = new DummyPopulation(dim, 200, Color.red, 1, 2,200);
-		IPopulation predator = new DummyPopulation(dim, 20, Color.green, 0, 0,500);
-		prey.addPredator(predator);
-		predator.addPrey(prey);
-		populations.add(prey);
-		populations.add(predator);
+//		IPopulation prey = new DummyPopulation(dim, 200, Color.red, 1, 2,200);
+//		IPopulation predator = new DummyPopulation(dim, 20, Color.green, 0, 0,500);
+//		prey.addPredator(predator);
+//		predator.addPrey(prey);
+//		populations.add(prey);
+//		populations.add(predator);
+		
+		IPopulation rabbits = new RabbitPopulation(20, dim);
+		rabbits.addPrey(rabbits);
+		populations.add(rabbits);
+		
 		return populations;
 	}
 

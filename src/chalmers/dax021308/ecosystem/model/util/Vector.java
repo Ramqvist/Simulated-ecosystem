@@ -107,9 +107,15 @@ public class Vector {
 		return Math.sqrt(Math.pow(this.getX(),2)+Math.pow(this.getY(),2));
 	}
 
-	public Vector scaleVector(double maxSpeed) {
-		
+	public Vector scaleVector(double scalar) {
 		return null;
+	}
+	
+	public Vector toUnitVector() {
+		double length = this.getNorm();
+		this.x = this.x / length;
+		this.y = this.y / length;
+		return this;
 	}
 	
 	@Override

@@ -3,6 +3,8 @@ package chalmers.dax021308.ecosystem.view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
@@ -64,27 +66,29 @@ public class SimulationView extends JPanel implements IView {
 	@Override
     public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		Graphics2D g2 = (Graphics2D)g;
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		Log.v("invalidate");
 		for(IPopulation pop : newPops) {
 			for(IAgent a : pop.getAgents()) {
 				Position p = a.getPosition();
-				g.setColor(a.getColor());
-		        g.fillOval((int)(p.getX()), (int) (frame.getSize().getHeight() - p.getY()), a.getHeight(), a.getWidth());
+				g2.setColor(a.getColor());
+		        g2.fillOval((int)(p.getX()), (int) (frame.getSize().getHeight() - p.getY()), a.getHeight(), a.getWidth());
 			}
 		}
 		
-		g.setColor(Color.black);
+		g2.setColor(Color.black);
 		int xLeft = 0;
 		int xRight = (int)gridDimension.getWidth();
 		int yBot = (int)(frame.getSize().getHeight());
 		int yTop = (int)(frame.getSize().getHeight())-(int)gridDimension.getHeight();
-		g.drawLine(xLeft, yBot, 
+		g2.drawLine(xLeft, yBot, 
 				   xLeft, yTop);
-		g.drawLine(xLeft, yTop, 
+		g2.drawLine(xLeft, yTop, 
 				   xRight, yTop);
-		g.drawLine(xRight, yTop,
+		g2.drawLine(xRight, yTop,
 				   xRight, yBot);
-		g.drawLine(xRight, yBot,
+		g2.drawLine(xRight, yBot,
 				   xLeft, yBot);
     }
 
