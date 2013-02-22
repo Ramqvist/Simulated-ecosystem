@@ -1,15 +1,11 @@
 package chalmers.dax021308.ecosystem.controller;
 
-<<<<<<< HEAD
-import chalmers.dax021308.ecosystem.model.EcoWorld;
-import chalmers.dax021308.ecosystem.model.Obstacle;
+
 import chalmers.dax021308.ecosystem.view.GraphView;
-=======
+import chalmers.dax021308.ecosystem.view.SimulationView;
 import java.awt.Dimension;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
->>>>>>> 9e1ebc08f39a9b984b6e1e4b66d6a99d33fd608d
-import chalmers.dax021308.ecosystem.view.SimulationView;
 
 /**
  * Controller class

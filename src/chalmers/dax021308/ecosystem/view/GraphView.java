@@ -9,14 +9,16 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import chalmers.dax021308.ecosystem.model.EcoWorld;
-import chalmers.dax021308.ecosystem.model.IObstacle;
-import chalmers.dax021308.ecosystem.model.IPopulation;
+import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.population.IPopulation;
+
+
 
 import info.monitorenter.gui.chart.Chart2D;
-import info.monitorenter.gui.chart.IAxis;
+
 import info.monitorenter.gui.chart.ITrace2D;
 import info.monitorenter.gui.chart.traces.Trace2DLtd;
+import info.monitorenter.gui.chart.IAxis;
 import info.monitorenter.gui.chart.views.ChartPanel;
 
 public class GraphView implements IView{
@@ -47,23 +49,23 @@ public class GraphView implements IView{
 			//frame.setVisible(false);
 		} else if(eventName == EcoWorld.EVENT_TICK) {
 	        
-			//Tick notification recived from model. Do something with the data.
+			//Tick notification recived from model. Update graph.
 			if(event.getNewValue() instanceof List<?>) {
 				
 				List<IPopulation> newPops = (List<IPopulation>) event.getNewValue();
 				
-				// init traces
+				// init traces. hm.
 				if (traces.size() == 0) {
 					for (IPopulation p: newPops) {
 						ITrace2D newTrace = new Trace2DLtd(200);
 						newTrace.setName(p.getAgents().get(0).getName());
 						newTrace.setColor(Color.RED);
 						traces.add(newTrace);
-						chart.addTrace(newTrace);
-						
+						chart.addTrace(newTrace);	
 					}
 				}
 				
+				// update graph
 				for (int i = 0; i < newPops.size(); ++i) {
 					int numOfAgents = newPops.get(i).getAgents().size();
 					traces.get(i).addPoint(((double) System.currentTimeMillis() - this.m_starttime), numOfAgents);
