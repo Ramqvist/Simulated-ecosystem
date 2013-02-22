@@ -130,7 +130,7 @@ public class SimpleAgent extends AbstractAgent {
 		 */
 		Vector newVelocity = this.getVelocity().add(acceleration);
 		double speed = newVelocity.getNorm();
-		if(speed > maxAcceleration){
+		if(speed > maxSpeed){
 			newVelocity.multiply(maxSpeed/speed); 
 		}
 		

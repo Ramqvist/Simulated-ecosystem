@@ -137,7 +137,7 @@ public class SimplePredatorAgent extends AbstractAgent {
 		 */
 		Vector newVelocity = getVelocity().add(acceleration);
 		double speed = newVelocity.getNorm();
-		if (speed > maxAcceleration) {
+		if (speed > maxSpeed) {
 			// Scales the norm of the vector back to maxSpeed
 			newVelocity.multiply(maxSpeed / speed);
 		}
