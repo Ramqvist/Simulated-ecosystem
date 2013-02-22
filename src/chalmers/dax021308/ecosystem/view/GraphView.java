@@ -21,6 +21,11 @@ import info.monitorenter.gui.chart.traces.Trace2DLtd;
 import info.monitorenter.gui.chart.IAxis;
 import info.monitorenter.gui.chart.views.ChartPanel;
 
+/**
+ * 
+ * @author Loanne
+ *
+ */
 public class GraphView implements IView{
 
 	private JFrame frame;
@@ -28,8 +33,8 @@ public class GraphView implements IView{
 	// Create an ITrace: 
 	private List<ITrace2D> traces = new ArrayList<ITrace2D>();
 	
-	private double m_y = 0;
     private long m_starttime = System.currentTimeMillis();
+    
 	/**
 	 * Create the panel.
 	 */
@@ -56,30 +61,37 @@ public class GraphView implements IView{
 				
 				// init traces. hm.
 				if (traces.size() == 0) {
+					
+					// used for naming, in case a population doesn't have a name.
+					int popNum = 0; 
+					
 					for (IPopulation p: newPops) {
-						ITrace2D newTrace = new Trace2DLtd(200);
-						newTrace.setName(p.getAgents().get(0).getName());
-						newTrace.setColor(Color.RED);
+						
+						ITrace2D newTrace = new Trace2DLtd(200); // 200 is an arbitrary number.
+						
+						++popNum;
+						String pName = p.getName();
+						if (pName == null) {
+							pName = "Population " + popNum; 
+						}
+						newTrace.setName(pName);
+						
+						double rand = Math.random() * 16777215;
+						newTrace.setColor(new Color((int) rand));
 						traces.add(newTrace);
 						chart.addTrace(newTrace);	
 					}
 				}
 				
-				// update graph
+				// update graph. 
+				// For the moment, this assumes that the population list doesn't change after start.
+				// 
 				for (int i = 0; i < newPops.size(); ++i) {
 					int numOfAgents = newPops.get(i).getAgents().size();
 					traces.get(i).addPoint(((double) System.currentTimeMillis() - this.m_starttime), numOfAgents);
-				}
-				
-
-				
+				}	
 			}
-			/*if(event.getOldValue() instanceof List<?>) {
-				this.newObs = (List<IObstacle>) event.getOldValue();
-			}*/
-			/*removeAll();
-			repaint();
-			revalidate();*/
+
 		}
 		
 		
