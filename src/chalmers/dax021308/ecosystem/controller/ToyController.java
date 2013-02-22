@@ -21,7 +21,8 @@ public class ToyController implements IController {
 
 	@Override
 	public void init() {
-		Dimension d = new Dimension(1000, 750);
+		Dimension d = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		d.height = d.height - 40;
 		
 		this.model = new EcoWorld(d, 20, Integer.MAX_VALUE);
 		//Uncommend below to run without delay.
