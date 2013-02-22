@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -22,11 +24,15 @@ import chalmers.dax021308.ecosystem.model.util.Position;
 
 public class SimulationView extends JPanel implements IView {
 	
+	private static final long serialVersionUID = 1585638837620985591L;
 	private JFrame frame;
 	private List<IPopulation> newPops;
 	private List<IObstacle> newObs;
 	private Random ran = new Random();
 	private Dimension gridDimension;
+	private Timer fpsTimer;
+	private int updates;
+	private int fps;
 	/**
 	 * Create the panel.
 	 */
@@ -39,6 +45,16 @@ public class SimulationView extends JPanel implements IView {
 		frame.setVisible(true);
 		this.setBackground(Color.white);
 		gridDimension = size;
+		if(true) {
+			fpsTimer = new Timer();
+			fpsTimer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					fps = updates;
+					updates = 0;
+				}
+			}, 1000, 1000);
+		}
 	}
 
 	@Override
@@ -64,6 +80,45 @@ public class SimulationView extends JPanel implements IView {
 	@Override
     public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		updates++;
+		Log.v(fps + "");
+		char[] fpsChar;
+		if(fps > 1000) {
+			fpsChar = new char[8];
+			fpsChar[0] = '9';
+			fpsChar[1] = '9';
+			fpsChar[2] = '9';
+			fpsChar[3] = ' ';
+			fpsChar[4] = 'f';
+			fpsChar[5] = 'p';
+			fpsChar[6] = 's';
+		} else if(fps > 100) {
+			fpsChar = new char[7];
+			fpsChar[1] = Character.forDigit( (fps / 100) , 10);
+			fpsChar[1] = Character.forDigit( (fps % 100) / 10, 10);
+			fpsChar[2] = Character.forDigit(fps % 10, 10);
+			fpsChar[3] = ' ';
+			fpsChar[4] = 'f';
+			fpsChar[5] = 'p';
+			fpsChar[6] = 's';
+		} else if(fps > 10) {
+			fpsChar = new char[6];
+			fpsChar[0] = Character.forDigit(fps / 10, 10);
+			fpsChar[1] = Character.forDigit(fps % 10, 10);
+			fpsChar[2] = ' ';
+			fpsChar[3] = 'f';
+			fpsChar[4] = 'p';
+			fpsChar[5] = 's';		
+		} else {
+			fpsChar = new char[5];
+			fpsChar[0] = Character.forDigit(fps, 10);
+			fpsChar[1] = ' ';
+			fpsChar[2] = 'f';
+			fpsChar[3] = 'p';
+			fpsChar[4] = 's';
+		}
+		//char[] = [Character.forDigit(i, 10);]
+		g.drawChars(fpsChar, 0, fpsChar.length, 15, 30);
 		Log.v("invalidate");
 		for(IPopulation pop : newPops) {
 			for(IAgent a : pop.getAgents()) {
@@ -74,6 +129,7 @@ public class SimulationView extends JPanel implements IView {
 		}
 		
 		g.setColor(Color.black);
+		
 		int xLeft = 0;
 		int xRight = (int)gridDimension.getWidth();
 		int yBot = (int)(frame.getSize().getHeight());
