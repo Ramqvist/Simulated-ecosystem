@@ -44,7 +44,9 @@ public class DummyPopulation implements IPopulation {
 			Position randPos = new Position(gridDimension.getWidth()*Math.random(), 
 											gridDimension.getHeight()*Math.random());
 			Vector velocity = new Vector(maxSpeed,maxSpeed);
-			while(Math.sqrt(Math.pow(velocity.getX(),2)+Math.pow(velocity.getY(),2))>maxSpeed){
+			
+			//Create a random vector (uniformly) inside a circle with radius maxSpeed.
+			while(velocity.getNorm()>maxSpeed){
 				velocity.setVector(-maxSpeed+Math.random()*2*maxSpeed, -maxSpeed+Math.random()*2*maxSpeed);
 			}
 			SimpleAgent a = new SimpleAgent("Big tasty", randPos, color, 10, 10, 

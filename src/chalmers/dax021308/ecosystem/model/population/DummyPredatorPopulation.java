@@ -42,12 +42,14 @@ public class DummyPredatorPopulation extends AbstractPopulation {
 			Position randPos = new Position(gridDimension.getWidth()
 					* Math.random(), gridDimension.getHeight() * Math.random());
 			Vector velocity = new Vector(maxSpeed, maxSpeed);
+			
+			//Create a random vector (uniformly) inside a circle with radius maxSpeed.
 			while (velocity.getNorm() > maxSpeed) {
 				velocity.setVector(-maxSpeed + Math.random() * 2 * maxSpeed,
 						-maxSpeed + Math.random() * 2 * maxSpeed);
 			}
-			IAgent a = new SimplePredatorAgent("Big Hungry", randPos, color, 10,
-					10, velocity, maxSpeed, maxAcceleration, visionRange);
+			IAgent a = new SimplePredatorAgent("Big Hungry", randPos, color, 13,
+					13, velocity, maxSpeed, maxAcceleration, visionRange);
 			newAgents.add(a);
 		}
 		return newAgents;
