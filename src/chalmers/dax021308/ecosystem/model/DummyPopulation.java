@@ -6,32 +6,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.util.Position;
+import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
  * 
- * @author Mr. BigTasty
+ * @author Sebastian
  *
  */
 public class DummyPopulation implements IPopulation {
 	
 	private List<IAgent> agents;
 	private Dimension gridDimension;
+	private double maxSpeed;
+	private double visionRange;
+	private List<IPopulation> preys;
+	private List<IPopulation> predators;
 	
 	public DummyPopulation(List<IAgent> agentList){
 		agents = agentList;
 	}
 
-	public DummyPopulation(Dimension gridDimension, Color color){
+	public DummyPopulation(Dimension gridDimension, int initPopulationSize, Color color, double maxSpeed, double visionRange){
 		this.gridDimension = gridDimension;
-		agents = initializePopulation(100, gridDimension, color);
+		this.visionRange = visionRange;
+		agents = initializePopulation(initPopulationSize, gridDimension, color, maxSpeed, visionRange);
 	}
 	
-	private List<IAgent> initializePopulation(int populationSize, Dimension gridDimension, Color color) {
+	private List<IAgent> initializePopulation(int populationSize, Dimension gridDimension, 
+											Color color, double maxSpeed, double visionRange) {
 		List<IAgent> newAgents = new ArrayList<IAgent>(populationSize);
+		preys = new ArrayList<IPopulation>();
+		predators = new ArrayList<IPopulation>();
 		for(int i=0;i<populationSize;i++) {
 			Position randPos = new Position(gridDimension.getWidth()*Math.random(), 
-											gridDimension.getWidth()*Math.random());
-			SimpleAgent a = new SimpleAgent("Big tasty", randPos, color, 10, 10, 1);
+											gridDimension.getHeight()*Math.random());
+			Vector velocity = new Vector(maxSpeed,maxSpeed);
+			while(Math.sqrt(Math.pow(velocity.getX(),2)+Math.pow(velocity.getY(),2))>maxSpeed){
+				velocity.setVector(-maxSpeed+Math.random()*2*maxSpeed, -maxSpeed+Math.random()*2*maxSpeed);
+			}
+			SimpleAgent a = new SimpleAgent("Big tasty", randPos, color, 10, 10, 
+											velocity, maxSpeed, visionRange);
 			newAgents.add(a);
 		}
 		return newAgents;
@@ -40,10 +54,10 @@ public class DummyPopulation implements IPopulation {
 	@Override
 	public void update() {
 		for(IAgent a: agents){
-			a.updatePosition();
+			a.updatePosition(predators, preys, gridDimension);
 		}
 	}
-
+	
 	@Override
 	public double calculateFitness(IAgent agent) {
 		// TODO Auto-generated method stub
@@ -74,15 +88,13 @@ public class DummyPopulation implements IPopulation {
 	}
 
 	@Override
-	public void setPredators(List<IPopulation> predators) {
-		// TODO Auto-generated method stub
-		
+	public void addPredator(IPopulation predator) {
+		this.predators.add(predator);
 	}
 
 	@Override
-	public void setPreys(List<IPopulation> preys) {
-		// TODO Auto-generated method stub
-		
+	public void addPrey(IPopulation prey) {
+		this.preys.add(prey);
 	}
 
 }

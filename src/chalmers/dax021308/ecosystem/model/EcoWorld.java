@@ -146,8 +146,12 @@ public class EcoWorld {
 
 	private List<IPopulation> createInitialPopulations(Dimension dim) {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
-		populations.add(new DummyPopulation(dim,Color.red));
-		populations.add(new DummyPopulation(dim,Color.green));
+		IPopulation prey = new DummyPopulation(dim, 200, Color.red, 2,150);
+		IPopulation predator = new DummyPopulation(dim, 20, Color.green, 0, 500);
+		prey.addPredator(predator);
+		predator.addPrey(prey);
+		populations.add(prey);
+		populations.add(predator);
 		return populations;
 	}
 

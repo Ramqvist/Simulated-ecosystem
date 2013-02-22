@@ -1,9 +1,11 @@
 package chalmers.dax021308.ecosystem.model;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.util.Gender;
+import chalmers.dax021308.ecosystem.model.util.Vector;
 import chalmers.dax021308.ecosystem.model.util.Position;
 
 
@@ -21,7 +23,7 @@ public interface IAgent {
 	/**
 	 * Updates the position of the IAgent.
 	 */
-	public void updatePosition();
+	public void updatePosition(List<IPopulation> predators, List<IPopulation> preys, Dimension dim);
 	
 	/**
 	 * @return The name of the IAgent.
@@ -56,12 +58,12 @@ public interface IAgent {
 	/**
 	 * @return The speed of the IAgent.
 	 */
-	public double getSpeed();
+	public Vector getVelocity();
 	
 	/**
 	 * @param speed - The new speed.
 	 */
-	public void setSpeed(double speed);
+	public void setVelocity(Vector velocity);
 	
 	/**
 	 * Tries to create one or more new IAgents, with data from the two provided IAgents.

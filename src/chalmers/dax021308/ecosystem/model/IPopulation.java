@@ -36,9 +36,9 @@ public interface IPopulation {
 	public List<IPopulation> getPredators();
 	
 	/**
-	 * @param predators - Population of predators.
+	 * @param predator - Population of a predator.
 	 */
-	public void setPredators(List<IPopulation> predators);
+	public void addPredator(IPopulation predator);
 	
 	/**
 	 * @return The preys that a predator population eats.
@@ -46,7 +46,7 @@ public interface IPopulation {
 	public List<IPopulation> getPreys();
 	
 	/**
-	 * @param preys - Population of preys.
+	 * @param prey - Population of a prey.
 	 */
-	public void setPreys(List<IPopulation> preys);
+	public void addPrey(IPopulation prey);
 }

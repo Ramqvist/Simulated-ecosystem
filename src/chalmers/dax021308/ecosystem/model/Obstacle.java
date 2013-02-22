@@ -141,14 +141,14 @@ public class Obstacle implements IObstacle {
 					// stops in same spot.
 				}
 				o[yPos] = pl;
-				System.out.println(pl);
+				//System.out.println(pl);
 				yPos++;
 			}
 
 			in.close();
 
 		} catch (Exception e) {// Catch exception if any
-			System.err.println("Error: " + e.getMessage());
+//			System.err.println("Error: " + e.getMessage());
 			// return null; // Not really necessary?
 		}
 		return o;

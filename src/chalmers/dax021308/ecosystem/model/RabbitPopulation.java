@@ -45,13 +45,13 @@ public class RabbitPopulation implements IPopulation {
 	}
 
 	@Override
-	public void setPredators(List<IPopulation> predators) {
+	public void addPredator(IPopulation predator) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void setPreys(List<IPopulation> preys) {
+	public void addPrey(IPopulation prey) {
 		// TODO Auto-generated method stub
 		
 	}
