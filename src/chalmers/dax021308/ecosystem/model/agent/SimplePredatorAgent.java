@@ -13,14 +13,15 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  * @author Henrik Its purpose is simply to hunt down the SimpleAgent (or any
  *         other agent) in a simple way
  */
-public class SimplePreyAgent extends AbstractAgent {
+public class SimplePredatorAgent extends AbstractAgent {
 
 	private double maxSpeed;
 	private double visionRange;
 	private double maxAcceleration;
 
-	public SimplePreyAgent(String name, Position p, Color c, int width,
-			int height, Vector velocity) {
+	public SimplePredatorAgent(String name, Position p, Color c, int width,
+			int height, Vector velocity, double maxSpeed,
+			double maxAcceleration, double visionRange) {
 		super(name, p, c, width, height, velocity);
 		this.maxSpeed = maxSpeed;
 		this.maxAcceleration = maxAcceleration;
@@ -41,38 +42,38 @@ public class SimplePreyAgent extends AbstractAgent {
 		System.err.println("ERROR IN REPRODUCE METHOD, METHOD UNDEFINED");
 		return null;
 	}
-	
+
 	/**
-	 * @author Sebastian/Henrik 
+	 * @author Sebastian/Henrik
 	 * @param predators
 	 * @param preys
 	 * @param dim
 	 */
 	private void setNewVelocity(List<IPopulation> predators,
 			List<IPopulation> preys, Dimension dim) {
-
 		Vector preyForce = new Vector(0, 0);
 		int nVisiblePreys = 0;
 		for (IPopulation pop : preys) {
 			for (IAgent a : pop.getAgents()) {
 				Position p = a.getPosition();
 				double distance = getPosition().getDistance(p);
-				if (distance <= visionRange) {
-					Vector newForce = new Vector(this.getPosition(), p);
-					preyForce.add(newForce.multiply(1 / this.getPosition().getDistance(p) + 0.0000001));
-					nVisiblePreys++;
-				}
+				// if (distance <= visionRange) {
+				Vector newForce = new Vector(this.getPosition(), p);
+				preyForce.add(newForce.multiply(1 / this.getPosition()
+						.getDistance(p) + 0.0000001));
+				nVisiblePreys++;
+				// }
 			}
 		}
 
 		if (nVisiblePreys == 0) { // Be unaffacted
 			preyForce.setVector(this.getVelocity());
-		}else{
+		} else {
 			preyForce.multiply(1 / (double) nVisiblePreys);
 			double norm = preyForce.getNorm();
 			preyForce.multiply(maxSpeed / norm);
 		}
-		
+
 		/*
 		 * The environment force is at the moment defined as 1/(distance to
 		 * wall)^2.
@@ -105,8 +106,8 @@ public class SimplePreyAgent extends AbstractAgent {
 		double yForce = (yWallBottomForce + yWallTopForce);
 
 		environmentForce.setVector(xForce, yForce);
-		// System.out.println("Environment: " + environmentForce.toString() +
-		// " | predatorForce: " + predatorForce.toString());
+		System.out.println("Environment: " + environmentForce.toString()
+				+ " | preyForce: " + preyForce.toString());
 		// Rescale the new velocity to not exceed maxSpeed
 		Vector acceleration = environmentForce.add(preyForce);
 		double accelerationNorm = acceleration.getNorm();
