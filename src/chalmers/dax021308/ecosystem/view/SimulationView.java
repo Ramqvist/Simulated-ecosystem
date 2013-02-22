@@ -35,6 +35,7 @@ public class SimulationView extends JPanel implements IView {
 		frame = new JFrame("Simulation View");
 		frame.add(this);
 		frame.setSize(size);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		this.setBackground(Color.white);
 		gridDimension = size;

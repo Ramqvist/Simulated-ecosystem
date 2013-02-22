@@ -56,12 +56,12 @@ public interface IAgent {
 	public void setFitness(double fitness);
 	
 	/**
-	 * @return The speed of the IAgent.
+	 * @return The velocity of the IAgent.
 	 */
 	public Vector getVelocity();
 	
 	/**
-	 * @param speed - The new speed.
+	 * @param speed - The new velocity.
 	 */
 	public void setVelocity(Vector velocity);
 	
