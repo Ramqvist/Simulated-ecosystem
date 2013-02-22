@@ -1,6 +1,4 @@
-package chalmers.dax021308.ecosystem.model;
-
-import java.awt.Point;
+package chalmers.dax021308.ecosystem.model.util;
 
 /**
  * Position class.
@@ -43,6 +41,15 @@ public class Position {
 	public void setPosition(double x, double y) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	/**
+	 * Adds a vector to current position.
+	 * @param v vector to add.
+	 */
+	public void addVector(Vector v){
+		this.x += v.getX();
+		this.y += v.getY();
 	}
 
 	public boolean equals(Object o) {

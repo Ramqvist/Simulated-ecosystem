@@ -1,6 +1,8 @@
-package chalmers.dax021308.ecosystem.model;
+package chalmers.dax021308.ecosystem.model.population;
 
 import java.util.List;
+
+import chalmers.dax021308.ecosystem.model.agent.IAgent;
 
 /**
  * Describes the general configuration of an arbitrary population.
@@ -21,6 +23,11 @@ public interface IPopulation {
 	public double calculateFitness(IAgent agent);
 	
 	/**
+	 * @return The name of the population.
+	 */
+	public String getName();
+	
+	/**
 	 * @return The whole population of IAgents.
 	 */
 	public List<IAgent> getAgents();
@@ -31,7 +38,17 @@ public interface IPopulation {
 	public List<IPopulation> getPredators();
 	
 	/**
+	 * @param predator - Population of a predator.
+	 */
+	public void addPredator(IPopulation predator);
+	
+	/**
 	 * @return The preys that a predator population eats.
 	 */
 	public List<IPopulation> getPreys();
+	
+	/**
+	 * @param prey - Population of a prey.
+	 */
+	public void addPrey(IPopulation prey);
 }

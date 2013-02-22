@@ -1,12 +1,16 @@
-package chalmers.dax021308.ecosystem.model;
+package chalmers.dax021308.ecosystem.model.environment;
 
 import java.util.Random;
 
-import chalmers.dax021308.ecosystem.model.EcoWorld.OnFinishListener;
+import chalmers.dax021308.ecosystem.model.environment.EcoWorld.OnFinishListener;
+import chalmers.dax021308.ecosystem.model.util.Log;
+import chalmers.dax021308.ecosystem.model.util.Position;
 
 
 /**
- * Environment class.
+ * Toy environment class.
+ * <p>
+ * Only for testing the tick-function.
  * @author Erik
  *
  */

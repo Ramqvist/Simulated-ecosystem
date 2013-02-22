@@ -1,10 +1,10 @@
-package chalmers.dax021308.ecosystem.model;
+package chalmers.dax021308.ecosystem.model.environment;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import chalmers.dax021308.ecosystem.model.EcoWorld.OnFinishListener;
+import chalmers.dax021308.ecosystem.model.environment.EcoWorld.OnFinishListener;
+import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.util.Position;
 
 /**
  * SquareEnvironment Class. Represents a environment in the shape of a square.

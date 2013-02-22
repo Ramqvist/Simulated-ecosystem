@@ -1,7 +1,13 @@
-package chalmers.dax021308.ecosystem.model;
+package chalmers.dax021308.ecosystem.model.agent;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.util.List;
+
+import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.util.Gender;
+import chalmers.dax021308.ecosystem.model.util.Vector;
+import chalmers.dax021308.ecosystem.model.util.Position;
 
 
 /**
@@ -18,7 +24,7 @@ public interface IAgent {
 	/**
 	 * Updates the position of the IAgent.
 	 */
-	public void updatePosition();
+	public void updatePosition(List<IPopulation> predators, List<IPopulation> preys, Dimension dim);
 	
 	/**
 	 * @return The name of the IAgent.
@@ -51,14 +57,14 @@ public interface IAgent {
 	public void setFitness(double fitness);
 	
 	/**
-	 * @return The speed of the IAgent.
+	 * @return The velocity of the IAgent.
 	 */
-	public double getSpeed();
+	public Vector getVelocity();
 	
 	/**
-	 * @param speed - The new speed.
+	 * @param speed - The new velocity.
 	 */
-	public void setSpeed(double speed);
+	public void setVelocity(Vector velocity);
 	
 	/**
 	 * Tries to create one or more new IAgents, with data from the two provided IAgents.
@@ -68,7 +74,7 @@ public interface IAgent {
 	public List<IAgent> reproduce(IAgent agent);
 	
 	/**
-	 * @return The gender of the IAgent specified by some enum. Returns -1 if genderless.
+	 * @return The gender of the IAgent specified by some enum. Returns null if genderless.
 	 */
-	public int getGender();
+	public Gender getGender();
 }

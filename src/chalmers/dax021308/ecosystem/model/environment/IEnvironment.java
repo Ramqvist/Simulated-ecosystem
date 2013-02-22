@@ -1,4 +1,6 @@
-package chalmers.dax021308.ecosystem.model;
+package chalmers.dax021308.ecosystem.model.environment;
+
+import chalmers.dax021308.ecosystem.model.util.Position;
 
 /**
  * Environment Interface.

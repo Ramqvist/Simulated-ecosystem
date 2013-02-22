@@ -1,4 +1,4 @@
-package chalmers.dax021308.ecosystem.model;
+package chalmers.dax021308.ecosystem.model.environment;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -6,11 +6,14 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import chalmers.dax021308.ecosystem.model.population.DummyPopulation;
+import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.util.Log;
+import chalmers.dax021308.ecosystem.model.util.TimerHandler;
 
 /**
  * Ecosystem main class.
@@ -38,6 +41,7 @@ public class EcoWorld {
 	private Object syncObject = new Object();
 	private static final int NUM_THREAD = 1;
 	private int numUpdates = 0;
+	private Dimension d;
 	private ExecutorService executor = Executors.newFixedThreadPool(NUM_THREAD);
 
 	public static final String EVENT_TICK = "chalmers.dax021308.ecosystem.model.event_tick";
@@ -85,6 +89,7 @@ public class EcoWorld {
 			}
 		}
 	};
+	
 
 	/**
 	 * Start EcoWorld with a tick-timer.
@@ -93,37 +98,20 @@ public class EcoWorld {
 	 *            Minimum time it will take for one tick to complete.
 	 * @param numIterations
 	 *            Number of iterations before the program finishes.
+	 *            
+	 * @param d Dimension of the simulation.
 	 */
-	public EcoWorld(int tickTime, int numIterations) {
-		// Added initial height and width for the squareEnvironment, this size
-		// should probably be chosen earlier (at the same time one chooses to
-		// use
-		// squareEnvironment
-		this(0, numIterations, 1000, 1000);
-	}
-
-	/**
-	 * Start EcoWorld with a tick-timer.
-	 * 
-	 * @param tickTime
-	 *            Minimum time it will take for one tick to complete.
-	 * @param numIterations
-	 *            Number of iterations before the program finishes.
-	 * @param height
-	 *            Height of the environment to be created
-	 * @param width
-	 *            Width of the environment to be created
-	 */
-	public EcoWorld(int tickTime, int numIterations, int height, int width) {
+	public EcoWorld(Dimension d, int tickTime, int numIterations ) {
 		this.tickTime = tickTime;
 		this.timer = new TimerHandler();
+		this.d = d;
 
 		/* Uncomment to test ticking functionality */
 		// this.env = new Environment(mOnFinishListener);
 
 		/* Use SquareEnvironment instead. */
-		this.env = new SquareEnvironment(createInitialPopulations(),
-				readObsticlesFromFile(), mOnFinishListener, height, width);
+		this.env = new SquareEnvironment(createInitialPopulations(d),
+				readObsticlesFromFile(), mOnFinishListener, d.height, d.width);
 
 		this.runWithoutTimer = false;
 		this.numIterations = numIterations;
@@ -137,9 +125,11 @@ public class EcoWorld {
 	 * 
 	 * @param numIterations
 	 *            Number of iterations before the program finishes.
+	 *            
+	 * @param d Dimension of the simulation.
 	 */
-	public EcoWorld(int numIterations) {
-		this(0, numIterations);
+	public EcoWorld(Dimension d, int numIterations) {
+		this(d, 0, numIterations);
 		this.runWithoutTimer = true;
 	}
 
@@ -148,16 +138,22 @@ public class EcoWorld {
 	 * <p>
 	 * EcoWorld simulation will run as fast as it can, without delays. For a
 	 * very long time.
+	 *            
+	 * @param d Dimension of the simulation.
 	 * 
 	 */
-	public EcoWorld() {
-		this(Integer.MAX_VALUE);
+	public EcoWorld(Dimension d) {
+		this(d, Integer.MAX_VALUE);
 	}
 
-	private List<IPopulation> createInitialPopulations() {
+	private List<IPopulation> createInitialPopulations(Dimension dim) {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
-		populations.add(new DummyPopulation(new Dimension(1000, 750),Color.red));
-		populations.add(new DummyPopulation(new Dimension(1000, 750),Color.green));
+		IPopulation prey = new DummyPopulation(dim, 200, Color.red, 1, 2,200);
+		IPopulation predator = new DummyPopulation(dim, 20, Color.green, 0, 0,500);
+		prey.addPredator(predator);
+		predator.addPrey(prey);
+		populations.add(prey);
+		populations.add(predator);
 		return populations;
 	}
 
