@@ -146,6 +146,28 @@ public class SimulationView extends JPanel implements IView {
 		g.drawLine(xRight, yBot,
 				   xLeft, yBot);
     }
+	
+	/**
+	 * Sets the FPS counter visible or not visible
+	 * 
+	 * @param visible
+	 */
+	public void setFPSCounterVisible(boolean visible) {
+		if(showFPS && !visible) {
+				fpsTimer.cancel();
+				showFPS = visible;
+		} else if(!showFPS && visible) {
+			fpsTimer = new Timer();
+			fpsTimer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					fps = updates;
+					updates = 0;
+				}
+			}, 1000, 1000);
+			showFPS = true;
+		}
+	}
 
 	@Override
 	public void init() {
