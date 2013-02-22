@@ -10,7 +10,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import chalmers.dax021308.ecosystem.model.population.DummyPopulation;
+import chalmers.dax021308.ecosystem.model.population.DummyPreyPopulation;
+import chalmers.dax021308.ecosystem.model.population.DummyPredatorPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.population.RabbitPopulation;
 import chalmers.dax021308.ecosystem.model.util.Log;
@@ -149,17 +150,17 @@ public class EcoWorld {
 
 	private List<IPopulation> createInitialPopulations(Dimension dim) {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
-//		IPopulation prey = new DummyPopulation(dim, 200, Color.red, 1, 2,200);
-//		IPopulation predator = new DummyPopulation(dim, 20, Color.green, 0, 0,500);
-//		prey.addPredator(predator);
-//		predator.addPrey(prey);
-//		populations.add(prey);
-//		populations.add(predator);
+//		IPopulation rabbits = new RabbitPopulation(20, dim);
+//		rabbits.addPrey(rabbits);
+//		populations.add(rabbits);
 		
-		IPopulation rabbits = new RabbitPopulation(20, dim);
-		rabbits.addPrey(rabbits);
-		populations.add(rabbits);
+		IPopulation prey = new DummyPreyPopulation(dim, 300, Color.red, 1.5, 0.8,175);
+		IPopulation predator = new DummyPredatorPopulation(dim,3, Color.green, 2, 1,200);
 		
+		prey.addPredator(predator);
+		predator.addPrey(prey);
+		populations.add(prey);
+		populations.add(predator);
 		return populations;
 	}
 

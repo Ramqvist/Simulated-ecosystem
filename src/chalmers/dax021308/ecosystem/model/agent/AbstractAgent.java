@@ -19,6 +19,7 @@ public abstract class AbstractAgent implements IAgent {
 	private Vector velocity;
 	private Gender gender;
 	private double fitness;
+	protected final static double WALL_CONSTANT = 1;
 	
 	public AbstractAgent(String name, Position p, Color c, int width, int height, Vector velocity){
 		this.name = name;

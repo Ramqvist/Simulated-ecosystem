@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
-import chalmers.dax021308.ecosystem.model.agent.SimpleAgent;
+import chalmers.dax021308.ecosystem.model.agent.SimplePreyAgent;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
@@ -15,7 +15,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  * @author Sebastian
  *
  */
-public class DummyPopulation implements IPopulation {
+public class DummyPreyPopulation implements IPopulation {
 	
 	private List<IAgent> agents;
 	private Dimension gridDimension;
@@ -24,11 +24,11 @@ public class DummyPopulation implements IPopulation {
 	private List<IPopulation> preys;
 	private List<IPopulation> predators;
 	
-	public DummyPopulation(List<IAgent> agentList){
+	public DummyPreyPopulation(List<IAgent> agentList){
 		agents = agentList;
 	}
 
-	public DummyPopulation(Dimension gridDimension, int initPopulationSize, Color color, 
+	public DummyPreyPopulation(Dimension gridDimension, int initPopulationSize, Color color, 
 			double maxSpeed, double maxAcceleration,double visionRange){
 		this.gridDimension = gridDimension;
 		this.visionRange = visionRange;
@@ -49,7 +49,7 @@ public class DummyPopulation implements IPopulation {
 			while(velocity.getNorm()>maxSpeed){
 				velocity.setVector(-maxSpeed+Math.random()*2*maxSpeed, -maxSpeed+Math.random()*2*maxSpeed);
 			}
-			SimpleAgent a = new SimpleAgent("Big tasty", randPos, color, 10, 10, 
+			SimplePreyAgent a = new SimplePreyAgent("Big tasty", randPos, color, 11, 11, 
 											velocity, maxSpeed, maxAcceleration,visionRange);
 			newAgents.add(a);
 		}

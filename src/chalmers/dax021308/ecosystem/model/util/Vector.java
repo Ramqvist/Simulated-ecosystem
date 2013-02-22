@@ -44,6 +44,11 @@ public class Vector {
 		this.y = v.getY();
 	}
 	
+	public Vector(Vector v1, Vector v2) {
+		this.x = v1.getX()-v2.getX();
+		this.y = v1.getY()-v2.getY();
+	}
+
 	public double getX() {
 		return x;
 	}
