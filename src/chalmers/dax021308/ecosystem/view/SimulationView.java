@@ -33,10 +33,11 @@ public class SimulationView extends JPanel implements IView {
 	private Timer fpsTimer;
 	private int updates;
 	private int fps;
+	private boolean showFPS;
 	/**
 	 * Create the panel.
 	 */
-	public SimulationView(EcoWorld model, Dimension size) {
+	public SimulationView(EcoWorld model, Dimension size, boolean showFPS) {
 		model.addObserver(this);
 		frame = new JFrame("Simulation View");
 		frame.add(this);
@@ -45,7 +46,8 @@ public class SimulationView extends JPanel implements IView {
 		frame.setVisible(true);
 		this.setBackground(Color.white);
 		gridDimension = size;
-		if(true) {
+		this.showFPS = showFPS;
+		if(showFPS) {
 			fpsTimer = new Timer();
 			fpsTimer.schedule(new TimerTask() {
 				@Override
@@ -80,45 +82,46 @@ public class SimulationView extends JPanel implements IView {
 	@Override
     public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		updates++;
-		Log.v(fps + "");
-		char[] fpsChar;
-		if(fps > 1000) {
-			fpsChar = new char[8];
-			fpsChar[0] = '9';
-			fpsChar[1] = '9';
-			fpsChar[2] = '9';
-			fpsChar[3] = ' ';
-			fpsChar[4] = 'f';
-			fpsChar[5] = 'p';
-			fpsChar[6] = 's';
-		} else if(fps > 100) {
-			fpsChar = new char[7];
-			fpsChar[1] = Character.forDigit( (fps / 100) , 10);
-			fpsChar[1] = Character.forDigit( (fps % 100) / 10, 10);
-			fpsChar[2] = Character.forDigit(fps % 10, 10);
-			fpsChar[3] = ' ';
-			fpsChar[4] = 'f';
-			fpsChar[5] = 'p';
-			fpsChar[6] = 's';
-		} else if(fps > 10) {
-			fpsChar = new char[6];
-			fpsChar[0] = Character.forDigit(fps / 10, 10);
-			fpsChar[1] = Character.forDigit(fps % 10, 10);
-			fpsChar[2] = ' ';
-			fpsChar[3] = 'f';
-			fpsChar[4] = 'p';
-			fpsChar[5] = 's';		
-		} else {
-			fpsChar = new char[5];
-			fpsChar[0] = Character.forDigit(fps, 10);
-			fpsChar[1] = ' ';
-			fpsChar[2] = 'f';
-			fpsChar[3] = 'p';
-			fpsChar[4] = 's';
+		if(showFPS) {
+			updates++;
+			Log.v(fps + "");
+			char[] fpsChar;
+			if(fps > 1000) {
+				fpsChar = new char[8];
+				fpsChar[0] = '9';
+				fpsChar[1] = '9';
+				fpsChar[2] = '9';
+				fpsChar[3] = ' ';
+				fpsChar[4] = 'f';
+				fpsChar[5] = 'p';
+				fpsChar[6] = 's';
+			} else if(fps > 100) {
+				fpsChar = new char[7];
+				fpsChar[1] = Character.forDigit( (fps / 100) , 10);
+				fpsChar[1] = Character.forDigit( (fps % 100) / 10, 10);
+				fpsChar[2] = Character.forDigit(fps % 10, 10);
+				fpsChar[3] = ' ';
+				fpsChar[4] = 'f';
+				fpsChar[5] = 'p';
+				fpsChar[6] = 's';
+			} else if(fps > 10) {
+				fpsChar = new char[6];
+				fpsChar[0] = Character.forDigit(fps / 10, 10);
+				fpsChar[1] = Character.forDigit(fps % 10, 10);
+				fpsChar[2] = ' ';
+				fpsChar[3] = 'f';
+				fpsChar[4] = 'p';
+				fpsChar[5] = 's';		
+			} else {
+				fpsChar = new char[5];
+				fpsChar[0] = Character.forDigit(fps, 10);
+				fpsChar[1] = ' ';
+				fpsChar[2] = 'f';
+				fpsChar[3] = 'p';
+				fpsChar[4] = 's';
+			}
+			g.drawChars(fpsChar, 0, fpsChar.length, 15, 30);
 		}
-		//char[] = [Character.forDigit(i, 10);]
-		g.drawChars(fpsChar, 0, fpsChar.length, 15, 30);
 		Log.v("invalidate");
 		for(IPopulation pop : newPops) {
 			for(IAgent a : pop.getAgents()) {
