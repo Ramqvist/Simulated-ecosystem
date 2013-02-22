@@ -12,87 +12,24 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  * A basic implementation of the IAgent interface.
  * @author Albin
  */
-public class SimpleAgent implements IAgent {
+public class SimpleAgent extends AbstractAgent {
 
-	private Position position;
-	private String name;
-	private Color color;
-	private int width; 
-	private int height;
-	private double finess;
 	private double maxSpeed;
 	private double visionRange;
-	private Vector velocity;
 	private double maxAcceleration;
 	
 	public SimpleAgent(String name, Position p, Color c, int width, int height, 
 			Vector velocity, double maxSpeed, double maxAcceleration,double visionRange) {
-		this.name = name;
-		position = p;
-		color = c;
-		this.width = width;
-		this.height = height;
+		super(name, p, c, width, height, velocity);
 		this.maxSpeed = maxSpeed;
 		this.maxAcceleration = maxAcceleration;
-		this.velocity = velocity;
 		this.visionRange = visionRange;
 	}
-	
-	@Override
-	public Position getPosition() {
-		return position;
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public Color getColor() {
-		return color;
-	}
-
-	@Override
-	public int getWidth() {
-		return width;
-	}
-
-	@Override
-	public int getHeight() {
-		return height;
-	}
-
-	@Override
-	public double getFitness() {
-		return finess;
-	}
-
-	@Override
-	public void setFitness(double fitness) {
-		this.finess = fitness;
-	}
-
-	@Override
-	public Vector getVelocity() {
-		return velocity;
-	}
-
-	@Override
-	public void setVelocity(Vector velocity) {
-		this.velocity = velocity;
-	}
-
-	@Override
+		@Override
 	public List<IAgent> reproduce(IAgent agent) {
 		return new LinkedList<IAgent>();
 	}
-
-	@Override
-	public Gender getGender() {
-		return null;
-	}
-
+		
 	/**
 	 * @author Sebbe
 	 */
@@ -100,7 +37,7 @@ public class SimpleAgent implements IAgent {
 	public void updatePosition(List<IPopulation> predators,
 							   List<IPopulation> preys, Dimension gridDimension) {
 		setNewVelocity(predators, preys, gridDimension);
-		position.addVector(velocity);
+		getPosition().addVector(getVelocity());
 	}
 	
 	/**
@@ -120,17 +57,17 @@ public class SimpleAgent implements IAgent {
 		for(IPopulation pop : predators) {
 			for(IAgent a : pop.getAgents()) {
 				Position p = a.getPosition();
-				double distance = position.getDistance(p);
+				double distance = getPosition().getDistance(p);
 				if(distance<=visionRange){
-					Vector newForce = new Vector(this.position,p);
-					predatorForce.add(newForce.multiply(1/this.position.getDistance(p)+0.0000001));
+					Vector newForce = new Vector(this.getPosition(),p);
+					predatorForce.add(newForce.multiply(1/this.getPosition().getDistance(p)+0.0000001));
 					nVisiblePredators++;
 				}
 			}
 		}
 		
 		if(nVisiblePredators==0){ //Be unaffected
-			predatorForce.setVector(this.velocity);
+			predatorForce.setVector(this.getVelocity());
 		} else { //Else set the force depending on visible predators.
 			predatorForce.multiply(1/(double)nVisiblePredators);
 			double norm = predatorForce.getNorm();
@@ -141,16 +78,16 @@ public class SimpleAgent implements IAgent {
 		 * The environment force is at the moment defined as 1/(distance to wall)^2.
 		 */
 		Vector environmentForce = new Vector(0,0);
-		Position xWallLeft = new Position(0,this.position.getY());
-		Position xWallRight = new Position(dim.getWidth(),this.position.getY());
-		Position yWallBottom = new Position(this.position.getX(),0);
-		Position yWallTop = new Position(this.position.getX(),dim.getHeight());
+		Position xWallLeft = new Position(0,this.getPosition().getY());
+		Position xWallRight = new Position(dim.getWidth(),this.getPosition().getY());
+		Position yWallBottom = new Position(this.getPosition().getX(),0);
+		Position yWallTop = new Position(this.getPosition().getX(),dim.getHeight());
 		
 		double scale = 10;
-		double xWallLeftForce = 1/Math.pow((1/scale)*(this.position.getDistance(xWallLeft)-1),2);
-		double xWallRightForce = -1/Math.pow((1/scale)*(this.position.getDistance(xWallRight)-1),2);
-		double yWallBottomForce = 1/Math.pow((1/scale)*(this.position.getDistance(yWallBottom)-1),2);
-		double yWallTopForce = -1/Math.pow((1/scale)*(this.position.getDistance(yWallTop)-1),2);
+		double xWallLeftForce = 1/Math.pow((1/scale)*(this.getPosition().getDistance(xWallLeft)-1),2);
+		double xWallRightForce = -1/Math.pow((1/scale)*(this.getPosition().getDistance(xWallRight)-1),2);
+		double yWallBottomForce = 1/Math.pow((1/scale)*(this.getPosition().getDistance(yWallBottom)-1),2);
+		double yWallTopForce = -1/Math.pow((1/scale)*(this.getPosition().getDistance(yWallTop)-1),2);
 		
 		double xForce = (xWallLeftForce + xWallRightForce);
 		double yForce = (yWallBottomForce + yWallTopForce);
@@ -165,14 +102,14 @@ public class SimpleAgent implements IAgent {
 			acceleration.multiply(maxAcceleration/accelerationNorm); 
 		}
 		
-		Vector newVelocity = this.velocity.add(acceleration);
+		Vector newVelocity = this.getVelocity().add(acceleration);
 		double speed = newVelocity.getNorm();
 		if(speed > maxAcceleration){
 			//Scales the norm of the vector back to maxSpeed
 			newVelocity.multiply(maxSpeed/speed); 
 		}
 		
-		this.velocity.setVector(newVelocity);
+		this.getVelocity().setVector(newVelocity);
 	}
 	
 	
