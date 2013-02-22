@@ -1,4 +1,4 @@
-package chalmers.dax021308.ecosystem.model;
+package chalmers.dax021308.ecosystem.model.agent;
 
 import java.awt.Color;
 

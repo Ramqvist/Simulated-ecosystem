@@ -95,7 +95,7 @@ public class SimpleAgent extends AbstractAgent {
 		double yForce = (yWallBottomForce + yWallTopForce);
 		
 		environmentForce.setVector(xForce, yForce);
-		System.out.println("Environment: " + environmentForce.toString() + " | predatorForce: " + predatorForce.toString());
+	//	System.out.println("Environment: " + environmentForce.toString() + " | predatorForce: " + predatorForce.toString());
 		//Rescale the new velocity to not exceed maxSpeed
 		Vector acceleration = environmentForce.add(predatorForce);
 		double accelerationNorm = acceleration.getNorm();
