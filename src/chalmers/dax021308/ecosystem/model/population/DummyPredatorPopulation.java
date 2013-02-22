@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
-import chalmers.dax021308.ecosystem.model.agent.SimpleAgent;
+import chalmers.dax021308.ecosystem.model.agent.SimplePreyAgent;
 import chalmers.dax021308.ecosystem.model.agent.SimplePredatorAgent;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
@@ -48,8 +48,8 @@ public class DummyPredatorPopulation extends AbstractPopulation {
 				velocity.setVector(-maxSpeed + Math.random() * 2 * maxSpeed,
 						-maxSpeed + Math.random() * 2 * maxSpeed);
 			}
-			IAgent a = new SimplePredatorAgent("Big Hungry", randPos, color, 13,
-					13, velocity, maxSpeed, maxAcceleration, visionRange);
+			IAgent a = new SimplePredatorAgent("Big Hungry", randPos, color, 14,
+					14, velocity, maxSpeed, maxAcceleration, visionRange);
 			newAgents.add(a);
 		}
 		return newAgents;

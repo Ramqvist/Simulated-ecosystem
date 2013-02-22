@@ -29,7 +29,7 @@ public class ToyController implements IController {
 		
 		this.model = new EcoWorld(d, 15, Integer.MAX_VALUE);
 		//Uncommend below to run without delay.
-		//this.model = new EcoWorld(d);
+		this.model = new EcoWorld(d);
 		
 		//Uncomment to start model.
 		model.start();
