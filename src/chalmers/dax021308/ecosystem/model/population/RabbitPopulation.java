@@ -42,9 +42,22 @@ public class RabbitPopulation implements IPopulation {
 	
 	@Override
 	public void update() {
+		List<IAgent> newPopulation = new LinkedList<IAgent>();
+		
 		for (IAgent a : rabbits) {
 			a.updatePosition(predators, preys, worldSize);
+			
+			if (a.getGender() == Gender.MALE) {
+				List <IAgent> kids = a.reproduce(null);
+				
+				if (kids.size() > 0) {
+					newPopulation.addAll(kids);
+				}
+			}
 		}
+		newPopulation.addAll(rabbits);
+		rabbits = newPopulation;
+		System.out.println("Size: "+rabbits.size());
 	}
 
 	@Override
