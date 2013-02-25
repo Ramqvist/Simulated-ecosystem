@@ -37,7 +37,7 @@ public class DummyPredatorPopulation extends AbstractPopulation {
 			Dimension gridDimension, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange) {
 		List<IAgent> newAgents = new ArrayList<IAgent>(populationSize);
-		
+		addNeutralPopulation(this);
 		for (int i = 0; i < populationSize; i++) {
 			Position randPos = new Position(gridDimension.getWidth()
 					* Math.random(), gridDimension.getHeight() * Math.random());
