@@ -58,14 +58,14 @@ public class EcoWorld {
 				scheduleEnvironmentUpdate();
 			} else {
 				synchronized (syncObject) {
-					Log.v("Environment: Finished.");
+					//Log.v("Environment: Finished.");
 					if (timerFinished.get()) {
-						Log.v("Environment: Timer is finished, doing Environment update");
+						//Log.v("Environment: Timer is finished, doing Environment update");
 						environmentFinished.set(false);
 						timerFinished.set(false);
 						scheduleEnvironmentUpdate();
 					} else {
-						Log.v("Environment: Timer NOT finished, waiting...");
+						//Log.v("Environment: Timer NOT finished, waiting...");
 						environmentFinished.set(true);
 					}
 				}
@@ -78,14 +78,14 @@ public class EcoWorld {
 		// När timer är klar.
 		public void onTick() {
 			synchronized (syncObject) {
-				Log.v("Timer: Finished.");
+				//Log.v("Timer: Finished.");
 				if (environmentFinished.get()) {
-					Log.v("Timer: Environment is finished, doing Environment update");
+					//Log.v("Timer: Environment is finished, doing Environment update");
 					timerFinished.set(false);
 					environmentFinished.set(false);
 					scheduleEnvironmentUpdate();
 				} else {
-					Log.v("Timer: Environment NOT finished, waiting...");
+					//Log.v("Timer: Environment NOT finished, waiting...");
 					timerFinished.set(true);
 				}
 			}
@@ -216,7 +216,7 @@ public class EcoWorld {
 			if (!runWithoutTimer) {
 				timer.start(tickTime, onTickListener);
 			}
-			Log.v("---- sheduleEnvironmentUpdate() ---- Number of updates:"
+			Log.v("---- Simulation model Update ---- Number of updates: "
 					+ ++numUpdates);
 			executor.execute(env);
 		} else {

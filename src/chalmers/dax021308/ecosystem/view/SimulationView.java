@@ -24,6 +24,14 @@ import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 
+/**
+ * Simulation JPanel showing graphical representation of the model.
+ * <p>
+ * Uses the build-in Java AWT for rendering.
+ * 
+ * @author Erik Ramqvist
+ *
+ */
 public class SimulationView extends JPanel implements IView {
 	
 	private static final long serialVersionUID = 1585638837620985591L;
@@ -190,6 +198,7 @@ public class SimulationView extends JPanel implements IView {
 				   xRight, yBot);
 		g2.drawLine(xRight, yBot,
 				   xLeft, yBot);
+		
     }
 	
 	/**

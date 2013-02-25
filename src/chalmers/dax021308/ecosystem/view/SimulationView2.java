@@ -2,14 +2,10 @@ package chalmers.dax021308.ecosystem.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -18,7 +14,6 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
@@ -40,6 +35,8 @@ import chalmers.dax021308.ecosystem.model.util.Position;
  * Extract the files to a folder.
  * Add the extracted files jogl.jar and gluegen-rt.jar to build-path.
  * Add path to jogl library to VM-argument in Run Configurations
+ * <p>
+ * For Javadoc add the Jogl Javadoc jar as Javadoc refernce to the selected JOGL jar.
  * <p>
  * @author Erik Ramqvist
  *
@@ -183,16 +180,16 @@ public class SimulationView2 extends GLCanvas implements IView {
 
     private class JOGLListener implements GLEventListener {
     		//The last number is the number of edges the created circle.
-    		private final double VERTEXES_IN_CIRCLE = 4;
+    		private final double VERTEXES_PER_CIRCLE = 4;
     		
-        	double increment = 2*Math.PI/VERTEXES_IN_CIRCLE;
+        	double increment = 2*Math.PI/VERTEXES_PER_CIRCLE;
         	GL gl = getGL();
         	double PI_TIMES_TWO = 2*Math.PI;
     		
             @Override
             public void display(GLAutoDrawable drawable) {
             	increaseUpdateValue();
-            	Log.v("OpenGL Redraw! Fps: " + getNewFps());
+            	long start = System.currentTimeMillis();
 
                 //Background drawing
                 //Color of the background.
@@ -202,7 +199,7 @@ public class SimulationView2 extends GLCanvas implements IView {
           		gl.glVertex2d(0, 0);
           		gl.glVertex2d(getWidth(), getHeight());
           		gl.glEnd();
-          		gl.glBegin(GL.GL_POLYGON);
+          		gl.glBegin(GL.GL_TRIANGLES);
           		gl.glVertex2d(0, getHeight());
           		gl.glVertex2d(0, 0);
           		gl.glVertex2d(getWidth(), getHeight());
@@ -222,7 +219,7 @@ public class SimulationView2 extends GLCanvas implements IView {
                         double cy = getHeight() - p.getY();
                         double radius = a.getWidth()/2 - 2;
         	          	for(double angle = 0; angle < PI_TIMES_TWO; angle+=increment){
-        	          		gl.glBegin(GL.GL_POLYGON);
+        	          		gl.glBegin(GL.GL_TRIANGLES);
         	              //One vertex of each triangle is at center of circle
         	          		gl.glVertex2d(cx, cy);
         	              //Other two vertices form the periphery of the circle		
@@ -231,7 +228,15 @@ public class SimulationView2 extends GLCanvas implements IView {
         	          		gl.glEnd();
         	          	}
         			}
-        		}        		
+        		}      
+        		
+        		/* Information print, comment out to increase performance. */
+        		Long totalTime = System.currentTimeMillis() - start;
+        		StringBuffer sb = new StringBuffer("OpenGL Redraw! Fps: ");
+        		sb.append(getNewFps());
+        		sb.append(" Rendertime in ms: ");
+        		sb.append(totalTime);
+            	System.out.println(sb.toString());	
 
             }
  
