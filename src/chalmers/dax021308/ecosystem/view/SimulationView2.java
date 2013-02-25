@@ -85,9 +85,9 @@ public class SimulationView2 extends GLCanvas implements IView {
 				@Override
 				public void run() {
 					int fps = getUpdate();
-					if(fps + lastFps != 0) {
+					/*if(fps + lastFps != 0) {
 						fps = ( fps + lastFps ) / 2;
-					} 
+					} */
 					setNewFps(fps);
 					lastFps = fps;
 					setUpdateValue(0);
@@ -146,6 +146,7 @@ public class SimulationView2 extends GLCanvas implements IView {
 				canvas.repaint();
 			}*/
 			repaint();
+			//display();
 			//removeAll();
 			//repaint();
 			//revalidate();
@@ -182,7 +183,9 @@ public class SimulationView2 extends GLCanvas implements IView {
 
     private class JOGLListener implements GLEventListener {
     		//The last number is the number of edges the created circle.
-        	double increment = 2*Math.PI/4;
+    		private final double VERTEXES_IN_CIRCLE = 4;
+    		
+        	double increment = 2*Math.PI/VERTEXES_IN_CIRCLE;
         	GL gl = getGL();
         	double PI_TIMES_TWO = 2*Math.PI;
     		
