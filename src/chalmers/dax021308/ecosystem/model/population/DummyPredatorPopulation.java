@@ -48,8 +48,8 @@ public class DummyPredatorPopulation extends AbstractPopulation {
 				velocity.setVector(-maxSpeed + Math.random() * 2 * maxSpeed,
 						-maxSpeed + Math.random() * 2 * maxSpeed);
 			}
-			IAgent a = new SimplePredatorAgent("Big Hungry", randPos, color, 14,
-					14, velocity, maxSpeed, maxAcceleration, visionRange);
+			IAgent a = new SimplePredatorAgent("Big Hungry", randPos, color, 9,
+					9, velocity, maxSpeed, maxAcceleration, visionRange);
 			newAgents.add(a);
 		}
 		return newAgents;

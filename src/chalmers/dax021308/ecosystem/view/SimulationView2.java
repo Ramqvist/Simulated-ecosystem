@@ -210,7 +210,7 @@ public class SimulationView2 extends GLCanvas implements IView {
         				Position p = a.getPosition();
                         double cx = p.getX();
                         double cy = getHeight() - p.getY();
-                        double radius = a.getWidth()/2 - 2;
+                        double radius = a.getWidth()/2;
                         Color c = a.getColor();
     	          		gl.glColor4f((1.0f/255)*c.getRed(), (1.0f/255)*c.getGreen(), (1.0f/255)*c.getBlue(), (1.0f/255)*c.getAlpha());
         	          	for(double angle = 0; angle < PI_TIMES_TWO; angle+=increment){

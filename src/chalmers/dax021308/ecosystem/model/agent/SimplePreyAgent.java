@@ -40,8 +40,8 @@ public class SimplePreyAgent extends AbstractAgent {
 							   List<IPopulation> preys, List<IPopulation> neutral,Dimension gridDimension) {
 		
 		Vector predatorForce = getPredatorForce(predators);
-		Vector separationForce = getSeparationForce(neutral);
-		//Vector separationForce = new Vector();
+//		Vector separationForce = getSeparationForce(neutral);
+		Vector separationForce = new Vector();
 		Vector environmentForce = getEnvironmentForce(gridDimension);
 		
 		/*

@@ -52,7 +52,7 @@ public class DummyPreyPopulation implements IPopulation {
 			while(velocity.getNorm()>maxSpeed){
 				velocity.setVector(-maxSpeed+Math.random()*2*maxSpeed, -maxSpeed+Math.random()*2*maxSpeed);
 			}
-			SimplePreyAgent a = new SimplePreyAgent("Big tasty", randPos, color, 11, 11, 
+			SimplePreyAgent a = new SimplePreyAgent("Big tasty", randPos, color, 4, 4, 
 											velocity, maxSpeed, maxAcceleration,visionRange);
 			newAgents.add(a);
 		}
