@@ -83,7 +83,7 @@ public class SimulationView extends JPanel implements IView {
 
 	private int getNewFps() {
 		synchronized (fpsSync) {
-			return updates;
+			return newFps;
 		}
 	}
 
@@ -126,7 +126,7 @@ public class SimulationView extends JPanel implements IView {
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
-		int fps = newFps;
+		int fps = getNewFps();
 		if(showFPS) {
 			increaseUpdateValue();
 			Log.v(fps + "");

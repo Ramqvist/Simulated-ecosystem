@@ -111,7 +111,7 @@ public class SimulationView2 extends GLCanvas implements IView {
 
 	private int getNewFps() {
 		synchronized (fpsSync) {
-			return updates;
+			return newFps;
 		}
 	}
 
@@ -188,33 +188,9 @@ public class SimulationView2 extends GLCanvas implements IView {
     		
             @Override
             public void display(GLAutoDrawable drawable) {
-            	Log.v("OpenGL Redraw!");
-              //Projection mode is for setting camera
-            	gl.glMatrixMode(GL.GL_PROJECTION);
-              //This will set the camera for orthographic projection and allow 2D view
-              //Our projection will be on 400 X 400 screen
-                gl.glLoadIdentity();
-             //   Log.v("Width: " + getWidth());
-             //   Log.v("Height: " + getHeight());
-                gl.glOrtho(0, getWidth(), getHeight(), 0, 0, 1);
-              //Modelview is for drawing
-                gl.glMatrixMode(GL.GL_MODELVIEW);
-              //Depth is disabled because we are drawing in 2D
-                gl.glDisable(GL.GL_DEPTH_TEST);
-              //Setting the clear color (in this case black)
-              //and clearing the buffer with this set clear color
-                gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);  
-                gl.glClear(GL.GL_COLOR_BUFFER_BIT);
-              //This defines how to blend when a transparent graphics
-              //is placed over another (here we have blended colors of
-              //two consecutively overlapping graphic objects)
-                gl.glBlendFunc (GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
-                gl.glEnable (GL.GL_BLEND);
-              //After this we start the drawing of object  
-              //We want to draw a triangle which is a type of polygon
+            	increaseUpdateValue();
+            	Log.v("OpenGL Redraw! Fps: " + getNewFps());
 
-              //We want to draw circle in red colour
-                
                 //Background drawing
                 //Color of the background.
                 gl.glColor4f(1, 1, 1, 1);
@@ -229,7 +205,6 @@ public class SimulationView2 extends GLCanvas implements IView {
           		gl.glVertex2d(getWidth(), getHeight());
           		gl.glEnd();
                 boolean flipBoolean = false;
-              //Starting loop for drawing triangles  
         		for(IPopulation pop : newPops) {
         			if(flipBoolean) {
                         gl.glColor4f(0, 1, 0, 1);
@@ -260,8 +235,45 @@ public class SimulationView2 extends GLCanvas implements IView {
             @Override
             public void init(GLAutoDrawable drawable) {
                     System.out.println("INIT CALLED");
+                    //Projection mode is for setting camera
+                	gl.glMatrixMode(GL.GL_PROJECTION);
+                  //This will set the camera for orthographic projection and allow 2D view
+                  //Our projection will be on 400 X 400 screen
+                    gl.glLoadIdentity();
+                 //   Log.v("Width: " + getWidth());
+                 //   Log.v("Height: " + getHeight());
+                    gl.glOrtho(0, getWidth(), getHeight(), 0, 0, 1);
+                  //Modelview is for drawing
+                    gl.glMatrixMode(GL.GL_MODELVIEW);
+                  //Depth is disabled because we are drawing in 2D
+                    gl.glDisable(GL.GL_DEPTH_TEST);
+                  //Setting the clear color (in this case black)
+                  //and clearing the buffer with this set clear color
+                    gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);  
+                    gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+                  //This defines how to blend when a transparent graphics
+                  //is placed over another (here we have blended colors of
+                  //two consecutively overlapping graphic objects)
+                    gl.glBlendFunc (GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+                    gl.glEnable (GL.GL_BLEND);
+                    gl.glLoadIdentity();
+                  //After this we start the drawing of object  
+                  //We want to draw a triangle which is a type of polygon
             }
- 
+            
+           /**
+            * Called by the drawable during the first repaint after the component has been resized. The
+            * client can update the viewport and view volume of the window appropriately, for example by a
+            * call to GL.glViewport(int, int, int, int); note that for convenience the component has
+            * already called GL.glViewport(int, int, int, int)(x, y, width, height) when this method is
+            * called, so the client may not have to do anything in this method.
+		    *
+		    * @param gLDrawable The GLDrawable object.
+		    * @param x The X Coordinate of the viewport rectangle.
+		    * @param y The Y coordinate of the viewport rectanble.
+		    * @param width The new width of the window.
+		    * @param height The new height of the window.
+		    */
             @Override
             public void reshape(GLAutoDrawable arg0, int arg1, int arg2, int arg3,
                             int arg4) {
@@ -272,7 +284,6 @@ public class SimulationView2 extends GLCanvas implements IView {
 			@Override
 			public void displayChanged(GLAutoDrawable arg0, boolean arg1,
 					boolean arg2) {
-				// TODO Auto-generated method stub
 				
 			}     
     }
