@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
@@ -46,8 +47,8 @@ import chalmers.dax021308.ecosystem.model.util.Position;
 public class SimulationView2 extends GLCanvas implements IView {
 	
 	private static final long serialVersionUID = 1585638837620985591L;
-	private List<IPopulation> newPops;
-	private List<IObstacle> newObs;
+	private List<IPopulation> newPops = new ArrayList<IPopulation>();
+	private List<IObstacle> newObs = new ArrayList<IObstacle>();
 	private Timer fpsTimer;
 	private int updates;
 	private int lastFps;
@@ -180,19 +181,21 @@ public class SimulationView2 extends GLCanvas implements IView {
 	
 
     private class JOGLListener implements GLEventListener {
+    		//The last number is the number of edges the created circle.
         	double increment = 2*Math.PI/4;
+        	GL gl = getGL();
+        	double PI_TIMES_TWO = 2*Math.PI;
     		
             @Override
             public void display(GLAutoDrawable drawable) {
             	Log.v("OpenGL Redraw!");
-            	GL gl = drawable.getGL();
               //Projection mode is for setting camera
             	gl.glMatrixMode(GL.GL_PROJECTION);
               //This will set the camera for orthographic projection and allow 2D view
               //Our projection will be on 400 X 400 screen
                 gl.glLoadIdentity();
-                Log.v("Width: " + getWidth());
-                Log.v("Height: " + getHeight());
+             //   Log.v("Width: " + getWidth());
+             //   Log.v("Height: " + getHeight());
                 gl.glOrtho(0, getWidth(), getHeight(), 0, 0, 1);
               //Modelview is for drawing
                 gl.glMatrixMode(GL.GL_MODELVIEW);
@@ -209,9 +212,22 @@ public class SimulationView2 extends GLCanvas implements IView {
                 gl.glEnable (GL.GL_BLEND);
               //After this we start the drawing of object  
               //We want to draw a triangle which is a type of polygon
-                //Making circle in 50 small triangles	
 
               //We want to draw circle in red colour
+                
+                //Background drawing
+                //Color of the background.
+                gl.glColor4f(1, 1, 1, 1);
+          		gl.glBegin(GL.GL_POLYGON);
+          		gl.glVertex2d(getWidth(), 0);
+          		gl.glVertex2d(0, 0);
+          		gl.glVertex2d(getWidth(), getHeight());
+          		gl.glEnd();
+          		gl.glBegin(GL.GL_POLYGON);
+          		gl.glVertex2d(0, getHeight());
+          		gl.glVertex2d(0, 0);
+          		gl.glVertex2d(getWidth(), getHeight());
+          		gl.glEnd();
                 boolean flipBoolean = false;
               //Starting loop for drawing triangles  
         		for(IPopulation pop : newPops) {
@@ -226,8 +242,8 @@ public class SimulationView2 extends GLCanvas implements IView {
         				Position p = a.getPosition();
                         double cx = p.getX();
                         double cy = getHeight() - p.getY();
-                        double radius = a.getWidth()/2 - 4;
-        	          	for(double angle = 0; angle < 2*Math.PI; angle+=increment){
+                        double radius = a.getWidth()/2 - 2;
+        	          	for(double angle = 0; angle < PI_TIMES_TWO; angle+=increment){
         	          		gl.glBegin(GL.GL_POLYGON);
         	              //One vertex of each triangle is at center of circle
         	          		gl.glVertex2d(cx, cy);
