@@ -179,12 +179,14 @@ public class SimulationView2 extends GLCanvas implements IView {
 	
 
     private class JOGLListener implements GLEventListener {
-    		//The last number is the number of edges the created circle.
+    	
+    		//Number of edges in each created circle.
     		private final double VERTEXES_PER_CIRCLE = 4;
-    		
-        	double increment = 2*Math.PI/VERTEXES_PER_CIRCLE;
-        	GL gl = getGL();
+
         	double PI_TIMES_TWO = 2*Math.PI;
+        	
+        	double increment = PI_TIMES_TWO/VERTEXES_PER_CIRCLE;
+        	GL gl = getGL();
     		
             @Override
             public void display(GLAutoDrawable drawable) {
@@ -231,11 +233,8 @@ public class SimulationView2 extends GLCanvas implements IView {
         		sb.append(" Rendertime in ms: ");
         		sb.append(totalTime);
             	System.out.println(sb.toString());	
+        		/* End Information print. */
 
-            }
-            
-            private float rgbColorToFloatColor(int rgbValue) {
-            	return (1.0f/255)*rgbValue;
             }
  
             @Override
