@@ -31,7 +31,7 @@ public class SimplePredatorAgent extends AbstractAgent {
 
 	@Override
 	public void updatePosition(List<IPopulation> predators,
-			List<IPopulation> preys, Dimension dim) {
+			List<IPopulation> preys, List<IPopulation> neutral,Dimension dim) {
 		setNewVelocity(predators, preys, dim);
 		getPosition().addVector(getVelocity());
 	}

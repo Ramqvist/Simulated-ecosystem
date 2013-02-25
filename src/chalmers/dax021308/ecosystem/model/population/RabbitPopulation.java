@@ -45,7 +45,7 @@ public class RabbitPopulation implements IPopulation {
 		List<IAgent> newPopulation = new LinkedList<IAgent>();
 		
 		for (IAgent a : rabbits) {
-			a.updatePosition(predators, preys, worldSize);
+			a.updatePosition(predators, preys, getNeutralPopulations(),worldSize);
 			
 			if (a.getGender() == Gender.MALE) {
 				List <IAgent> kids = a.reproduce(null);
@@ -94,5 +94,17 @@ public class RabbitPopulation implements IPopulation {
 	@Override
 	public void addPrey(IPopulation prey) {
 		preys.add(prey);
+	}
+
+	@Override
+	public void addNeutralPopulation(IPopulation neutral) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<IPopulation> getNeutralPopulations() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

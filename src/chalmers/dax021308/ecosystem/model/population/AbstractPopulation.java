@@ -12,11 +12,13 @@ public abstract class AbstractPopulation implements IPopulation {
 	private Dimension gridDimension;
 	private List<IPopulation> preys;
 	private List<IPopulation> predators;
+	private List<IPopulation> neutral;
 	private String name;
 
 	public AbstractPopulation() {
 		preys = new ArrayList<IPopulation>();
 		predators = new ArrayList<IPopulation>();
+		neutral = new ArrayList<IPopulation>();
 	}
 
 	public AbstractPopulation(Dimension gridDimension) {
@@ -27,7 +29,7 @@ public abstract class AbstractPopulation implements IPopulation {
 	@Override
 	public void update() {
 		for (IAgent a : agents) {
-			a.updatePosition(predators, preys, gridDimension);
+			a.updatePosition(predators, preys, neutral, gridDimension);
 		}
 	}
 
@@ -61,4 +63,13 @@ public abstract class AbstractPopulation implements IPopulation {
 		preys.add(prey);
 	}
 
+	@Override
+	public List<IPopulation> getNeutralPopulations() {
+		return neutral;
+	}
+
+	@Override
+	public void addNeutralPopulation(IPopulation neutral) {
+		this.neutral.add(neutral);
+	}
 }

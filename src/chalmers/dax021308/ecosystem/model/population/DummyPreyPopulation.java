@@ -23,6 +23,7 @@ public class DummyPreyPopulation implements IPopulation {
 	private double visionRange;
 	private List<IPopulation> preys;
 	private List<IPopulation> predators;
+	private List<IPopulation> neutral;
 	
 	public DummyPreyPopulation(List<IAgent> agentList){
 		agents = agentList;
@@ -40,6 +41,8 @@ public class DummyPreyPopulation implements IPopulation {
 		List<IAgent> newAgents = new ArrayList<IAgent>(populationSize);
 		preys = new ArrayList<IPopulation>();
 		predators = new ArrayList<IPopulation>();
+		neutral = new ArrayList<IPopulation>();
+		neutral.add(this);
 		for(int i=0;i<populationSize;i++) {
 			Position randPos = new Position(gridDimension.getWidth()*Math.random(), 
 											gridDimension.getHeight()*Math.random());
@@ -59,7 +62,7 @@ public class DummyPreyPopulation implements IPopulation {
 	@Override
 	public void update() {
 		for(IAgent a: agents){
-			a.updatePosition(predators, preys, gridDimension);
+			a.updatePosition(predators, preys, neutral,gridDimension);
 		}
 	}
 	
@@ -100,6 +103,16 @@ public class DummyPreyPopulation implements IPopulation {
 	@Override
 	public void addPrey(IPopulation prey) {
 		this.preys.add(prey);
+	}
+
+	@Override
+	public void addNeutralPopulation(IPopulation neutral) {
+		this.neutral.add(neutral);
+	}
+
+	@Override
+	public List<IPopulation> getNeutralPopulations() {
+		return this.neutral;
 	}
 
 }

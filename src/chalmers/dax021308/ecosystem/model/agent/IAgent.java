@@ -24,7 +24,7 @@ public interface IAgent {
 	/**
 	 * Updates the position of the IAgent.
 	 */
-	public void updatePosition(List<IPopulation> predators, List<IPopulation> preys, Dimension dim);
+	public void updatePosition(List<IPopulation> predators, List<IPopulation> preys, List<IPopulation> neutral, Dimension dim);
 	
 	/**
 	 * @return The name of the IAgent.

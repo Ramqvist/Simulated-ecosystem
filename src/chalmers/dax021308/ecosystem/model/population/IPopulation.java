@@ -51,4 +51,15 @@ public interface IPopulation {
 	 * @param prey - Population of a prey.
 	 */
 	public void addPrey(IPopulation prey);
+	
+	/**
+	 * @param prey - Add a neutral population to this.
+	 */
+	public void addNeutralPopulation(IPopulation neutral);
+	
+	/**
+	 * @return A list of the neutral populations.
+	 */
+	public List<IPopulation> getNeutralPopulations();
+	
 }

@@ -109,7 +109,7 @@ public class RabbitAgent implements IAgent {
 
 	@Override
 	public void updatePosition(List<IPopulation> predators,
-			List<IPopulation> preys, Dimension dim) {
+			List<IPopulation> preys, List<IPopulation> neutral,Dimension dim) {
 		
 		if (gender == Gender.MALE) {
 			if (delay == 0) {
