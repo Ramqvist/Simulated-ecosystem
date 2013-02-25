@@ -204,20 +204,14 @@ public class SimulationView2 extends GLCanvas implements IView {
           		gl.glVertex2d(0, 0);
           		gl.glVertex2d(getWidth(), getHeight());
           		gl.glEnd();
-                boolean flipBoolean = false;
         		for(IPopulation pop : newPops) {
-        			if(flipBoolean) {
-                        gl.glColor4f(0, 1, 0, 1);
-        				flipBoolean = false;
-        			} else {
-                        gl.glColor4f(1, 0, 0, 1);
-        				flipBoolean = true;
-        			}
         			for(IAgent a : pop.getAgents()) {
         				Position p = a.getPosition();
                         double cx = p.getX();
                         double cy = getHeight() - p.getY();
                         double radius = a.getWidth()/2 - 2;
+                        Color c = a.getColor();
+    	          		gl.glColor3f((1.0f/255)*c.getRed(), (1.0f/255)*c.getGreen(), (1.0f/255)*c.getBlue());
         	          	for(double angle = 0; angle < PI_TIMES_TWO; angle+=increment){
         	          		gl.glBegin(GL.GL_TRIANGLES);
         	              //One vertex of each triangle is at center of circle
@@ -238,6 +232,10 @@ public class SimulationView2 extends GLCanvas implements IView {
         		sb.append(totalTime);
             	System.out.println(sb.toString());	
 
+            }
+            
+            private float rgbColorToFloatColor(int rgbValue) {
+            	return (1.0f/255)*rgbValue;
             }
  
             @Override
