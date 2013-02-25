@@ -123,6 +123,14 @@ public class Vector {
 		return this;
 	}
 	
+	public Vector rotate(double degree) {
+		double tempX = this.x * Math.cos(degree) - this.y * Math.sin(degree);
+		double tempY = this.x * Math.sin(degree) + this.y * Math.cos(degree);
+		this.x = tempX;
+		this.y = tempY;
+		return this;
+	}
+	
 	@Override
 	public String toString(){
 		return "("+this.x+","+this.y+")";

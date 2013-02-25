@@ -68,10 +68,9 @@ public class SimplePreyAgent extends AbstractAgent {
 					/*
 					 * Add this vector to the predator force, with proportion to how close the predator is.
 					 * Closer predators will affect the force more than those far away. 
-					 * There is a "+0.0000001" in the multiplication. That is just if the distance
-					 * gets 0. You can't divide by 0, but you can with 0.0000001.
 					 */
-					predatorForce.add(newForce.multiply(1/this.getPosition().getDistance(p)+0.0000001));
+					double norm = newForce.getNorm();
+					predatorForce.add(newForce.multiply(1/(norm*distance)));
 					nVisiblePredators++;
 				}
 			}
@@ -99,10 +98,10 @@ public class SimplePreyAgent extends AbstractAgent {
 		 * despite the force they feel (can be interpreted as they stop 1 pixel before the wall).
 		 */
 		Vector environmentForce = new Vector(0,0);
-		double xWallLeftForce = 1/Math.pow((this.getPosition().getDistance(xWallLeft)-1)/WALL_CONSTANT,2);
-		double xWallRightForce = -1/Math.pow((this.getPosition().getDistance(xWallRight)-1)/WALL_CONSTANT,2);
-		double yWallBottomForce = 1/Math.pow((this.getPosition().getDistance(yWallBottom)-1)/WALL_CONSTANT,2);
-		double yWallTopForce = -1/Math.pow((this.getPosition().getDistance(yWallTop)-1)/WALL_CONSTANT,2);
+		double xWallLeftForce = 1/Math.pow((this.getPosition().getDistance(xWallLeft)-1.0000001)/WALL_CONSTANT,2);
+		double xWallRightForce = -1/Math.pow((this.getPosition().getDistance(xWallRight)-1.0000001)/WALL_CONSTANT,2);
+		double yWallBottomForce = 1/Math.pow((this.getPosition().getDistance(yWallBottom)-1.0000001)/WALL_CONSTANT,2);
+		double yWallTopForce = -1/Math.pow((this.getPosition().getDistance(yWallTop)-1.0000001)/WALL_CONSTANT,2);
 		
 		/*
 		 * Add the forces from left and right to form the total force from walls in x-axis.
