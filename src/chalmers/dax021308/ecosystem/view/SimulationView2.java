@@ -54,6 +54,7 @@ public class SimulationView2 extends GLCanvas implements IView {
 	private Object fpsSync = new Object();
 	private Dimension size;
 	private JFrame frame;
+	private JOGLListener glListener;
 	//private GLCanvas canvas;
 	/**
 	 * Create the panel.
@@ -72,7 +73,8 @@ public class SimulationView2 extends GLCanvas implements IView {
         //canvas = new GLCanvas();
         //canvas.setSize(size);
         //canvas.addGLEventListener(new JOGLListener());
-		addGLEventListener(new JOGLListener());
+		glListener = new JOGLListener();
+		addGLEventListener(glListener);
         //add();
         
 		this.showFPS = showFPS;
@@ -197,15 +199,12 @@ public class SimulationView2 extends GLCanvas implements IView {
                 //Color of the background.
                 gl.glColor4f(1, 1, 1, 1);
           		gl.glBegin(GL.GL_POLYGON);
-          		gl.glVertex2d(getWidth(), 0);
           		gl.glVertex2d(0, 0);
-          		gl.glVertex2d(getWidth(), getHeight());
-          		gl.glEnd();
-          		gl.glBegin(GL.GL_TRIANGLES);
           		gl.glVertex2d(0, getHeight());
-          		gl.glVertex2d(0, 0);
           		gl.glVertex2d(getWidth(), getHeight());
+          		gl.glVertex2d(getWidth(), 0);
           		gl.glEnd();
+          		
         		for(IPopulation pop : newPops) {
         			for(IAgent a : pop.getAgents()) {
         				Position p = a.getPosition();
