@@ -19,7 +19,6 @@ public class SimplePreyAgent extends AbstractAgent {
 	private double maxSpeed;
 	private double visionRange;
 	private double maxAcceleration;
-	private static final double VELOCITY_DECAY = 0.95;
 	
 	public SimplePreyAgent(String name, Position p, Color c, int width, int height, 
 			Vector velocity, double maxSpeed, double maxAcceleration,double visionRange) {
@@ -42,7 +41,7 @@ public class SimplePreyAgent extends AbstractAgent {
 		
 		Vector predatorForce = getPredatorForce(predators);
 		Vector separationForce = getSeparationForce(neutral);
-//		Vector separationForce = new Vector();
+		//Vector separationForce = new Vector();
 		Vector environmentForce = getEnvironmentForce(gridDimension);
 		
 		/*
@@ -50,7 +49,7 @@ public class SimplePreyAgent extends AbstractAgent {
 		 * If the acceleration exceeds maximum acceleration --> scale it to maxAcceleration,
 		 * but keep the correct direction of the acceleration.
 		 */
-		Vector acceleration = environmentForce.add(predatorForce).add(separationForce.multiply(10.0/1.0));
+		Vector acceleration = environmentForce.multiply(100).add(predatorForce).add(separationForce.multiply(10));
 		double accelerationNorm = acceleration.getNorm();
 		if(accelerationNorm > maxAcceleration){
 			acceleration.multiply(maxAcceleration/accelerationNorm); 
@@ -133,10 +132,33 @@ public class SimplePreyAgent extends AbstractAgent {
 		 * despite the force they feel (can be interpreted as they stop 1 pixel before the wall).
 		 */
 		Vector environmentForce = new Vector(0,0);
-		double xWallLeftForce = 1/Math.pow((this.getPosition().getDistance(xWallLeft)-1.0000001)/WALL_CONSTANT,2);
-		double xWallRightForce = -1/Math.pow((this.getPosition().getDistance(xWallRight)-1.0000001)/WALL_CONSTANT,2);
-		double yWallBottomForce = 1/Math.pow((this.getPosition().getDistance(yWallBottom)-1.0000001)/WALL_CONSTANT,2);
-		double yWallTopForce = -1/Math.pow((this.getPosition().getDistance(yWallTop)-1.0000001)/WALL_CONSTANT,2);
+		double xWallLeftForce = 0;
+		double xWallRightForce = 0;
+		double yWallBottomForce = 0;
+		double yWallTopForce = 0;
+		
+		/*
+		 * Only interacts with walls that are closer than INTERACTION_RANGE.
+		 */
+		double leftWallDistance = this.getPosition().getDistance(xWallLeft);
+		if(leftWallDistance<=INTERACTION_RANGE){
+			xWallLeftForce = 1/Math.pow((leftWallDistance-1.0)/WALL_CONSTANT,2);
+		}
+		
+		double rightWallDistance = this.getPosition().getDistance(xWallRight);
+		if(rightWallDistance<=INTERACTION_RANGE){
+			xWallRightForce = -1/Math.pow((rightWallDistance-1.0)/WALL_CONSTANT,2);
+		}
+		
+		double bottomWallDistance = this.getPosition().getDistance(yWallBottom);
+		if(bottomWallDistance<=INTERACTION_RANGE){
+			yWallBottomForce = 1/Math.pow((bottomWallDistance-1.0)/WALL_CONSTANT,2);
+		}
+		
+		double topWallDistance = this.getPosition().getDistance(yWallTop);
+		if(topWallDistance<=INTERACTION_RANGE){
+			yWallBottomForce = yWallTopForce = -1/Math.pow((topWallDistance-1.0)/WALL_CONSTANT,2);
+		}
 		
 		/*
 		 * Add the forces from left and right to form the total force from walls in x-axis.
@@ -161,15 +183,15 @@ public class SimplePreyAgent extends AbstractAgent {
 				if(agent != this) {
 					Position p = agent.getPosition();
 					double distance = getPosition().getDistance(p);
-					if(distance<=visionRange){ //If neutral is in vision range for prey
+					if(distance<=INTERACTION_RANGE){ //If neutral is in vision range for prey
 						/*
 						 * Create a vector that points away from the neutral.
 						 */
 						Vector newForce = new Vector(this.getPosition(),p);
 						
 						/*
-						 * Add this vector to the predator force, with proportion to how close the predator is.
-						 * Closer predators will affect the force more than those far away. 
+						 * Add this vector to the separation force, with proportion to how close the neutral agent is.
+						 * Closer agents will affect the force more than those far away. 
 						 */
 						double norm = newForce.getNorm();
 						separationForce.add(newForce.multiply(1/(norm*distance*distance)));
@@ -182,6 +204,7 @@ public class SimplePreyAgent extends AbstractAgent {
 		return separationForce;
 		
 	}
+	
 }
 
 
