@@ -68,10 +68,9 @@ public class SimplePreyAgent extends AbstractAgent {
 					/*
 					 * Add this vector to the predator force, with proportion to how close the predator is.
 					 * Closer predators will affect the force more than those far away. 
-					 * There is a "+0.0000001" in the multiplication. That is just if the distance
-					 * gets 0. You can't divide by 0, but you can with 0.0000001.
 					 */
-					predatorForce.add(newForce.multiply(1/distance + Math.signum(-1+2*Math.random())*0.0000001));
+					double norm = newForce.getNorm();
+					predatorForce.add(newForce.multiply(1/(norm*distance)));
 					nVisiblePredators++;
 				}
 			}
