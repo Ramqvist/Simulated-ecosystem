@@ -44,7 +44,7 @@ public class DummyPreyPopulation extends AbstractPopulation {
 			while(velocity.getNorm()>maxSpeed){
 				velocity.setVector(-maxSpeed+Math.random()*2*maxSpeed, -maxSpeed+Math.random()*2*maxSpeed);
 			}
-			SimplePreyAgent a = new SimplePreyAgent("Big tasty", randPos, color, 4, 4, 
+			SimplePreyAgent a = new SimplePreyAgent("Big tasty", randPos, color, 5, 10, 
 											velocity, maxSpeed, maxAcceleration,visionRange);
 			newAgents.add(a);
 		}
