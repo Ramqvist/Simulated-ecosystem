@@ -22,6 +22,7 @@ import chalmers.dax021308.ecosystem.model.environment.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
+import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
  * OpenGL version of SimulationView.
@@ -184,10 +185,10 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
     	
     		//Number of edges in each created circle.
     		private final double VERTEXES_PER_CIRCLE = 4;
-
-        	double PI_TIMES_TWO = 2*Math.PI;
+    		private final double PI_TIMES_TWO        = 2*Math.PI;
+        	private final double increment           = PI_TIMES_TWO/VERTEXES_PER_CIRCLE;
+        	private final float COLOR_FACTOR         = (1.0f/255);
         	
-        	double increment = PI_TIMES_TWO/VERTEXES_PER_CIRCLE;
         	GL gl = getGL();
     		
             @Override
@@ -212,7 +213,17 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
                         double cy = getHeight() - p.getY();
                         double radius = a.getWidth()/2;
                         Color c = a.getColor();
-    	          		gl.glColor4f((1.0f/255)*c.getRed(), (1.0f/255)*c.getGreen(), (1.0f/255)*c.getBlue(), (1.0f/255)*c.getAlpha());
+    	          		gl.glColor4f((1.0f/255)*c.getRed(), COLOR_FACTOR*c.getGreen(), COLOR_FACTOR*c.getBlue(), COLOR_FACTOR*c.getAlpha());
+
+                        Vector v = a.getVelocity();
+                        Vector curV = new Vector(cx, cy);
+                        //Log.v(v.toString());
+    	          		gl.glBegin(GL.GL_TRIANGLES);
+      	          		gl.glVertex2d(cx-8, cy-8);
+      	          		gl.glVertex2d(cx+v.getX()*10, cy+v.getY()*10);
+      	          		gl.glVertex2d(cx+8, cy+8);
+      	          		gl.glEnd();
+      	          		
         	          	for(double angle = 0; angle < PI_TIMES_TWO; angle+=increment){
         	          		gl.glBegin(GL.GL_TRIANGLES);
         	              //One vertex of each triangle is at center of circle
