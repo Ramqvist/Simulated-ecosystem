@@ -231,8 +231,8 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 	      	          		gl.glVertex2d(cx-8, cy-8);
 	      	          		
 	      	          		/* Need help with these! X and Y to the direction of the agent */
-	      	          		double targetPosX = (cx + v.getX()*12);
-	      	          		double targetPosY = (cy + v.getY()*12);
+	      	          		double targetPosX = (cx + (cx*v.getX()*0.1) );
+	      	          		double targetPosY = (cy + (cy*v.getY()*0.1) );
 	      	          		
 	      	          		gl.glVertex2d(targetPosX, targetPosY);
 	      	          		gl.glVertex2d(cx+8, cy+8);
