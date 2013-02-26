@@ -2,6 +2,7 @@ package chalmers.dax021308.ecosystem.model.population;
 
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.agent.AbstractAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 
 /**
@@ -9,7 +10,7 @@ import chalmers.dax021308.ecosystem.model.agent.IAgent;
  * 
  * @author Albin
  */
-public interface IPopulation {
+public interface IPopulation extends Cloneable {
 	
 	/**
 	 * Handles things that should be updated regularly. 
@@ -61,5 +62,10 @@ public interface IPopulation {
 	 * @return A list of the neutral populations.
 	 */
 	public List<IPopulation> getNeutralPopulations();
+	
+	/**
+	 * @return clone a population. Uses {@link AbstractAgent#cloneAgent()}
+	 */
+	public IPopulation clonePopulation();
 	
 }

@@ -26,6 +26,28 @@ public abstract class AbstractPopulation implements IPopulation {
 		this.gridDimension = gridDimension;
 	}
 
+	/**
+	 * Clone constructor.
+	 * <p>
+	 * Use only for cloning.
+	 * @param original the AbstractPopulation to clone
+	 */
+	public AbstractPopulation(AbstractPopulation original) {
+		this.gridDimension = original.gridDimension;
+		this.name = original.name;
+		preys = new ArrayList<IPopulation>();
+		predators = new ArrayList<IPopulation>();
+		neutral = new ArrayList<IPopulation>();
+		agents = new ArrayList<IAgent>();
+		for(IAgent a : original.agents) {
+			try {
+				agents.add(a.cloneAgent());
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	@Override
 	public void update() {
 		for (IAgent a : agents) {
@@ -71,5 +93,15 @@ public abstract class AbstractPopulation implements IPopulation {
 	@Override
 	public void addNeutralPopulation(IPopulation neutral) {
 		this.neutral.add(neutral);
+	}
+	
+	@Override
+	public IPopulation clonePopulation() {
+		return new AbstractPopulation(this) {
+			@Override
+			public double calculateFitness(IAgent agent) {
+				return 0;
+			}
+		};
 	}
 }

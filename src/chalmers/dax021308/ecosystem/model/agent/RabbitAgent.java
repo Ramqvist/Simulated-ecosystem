@@ -109,4 +109,9 @@ public class RabbitAgent extends AbstractAgent {
 			break;
 		}
 	}
+	
+	@Override
+	public IAgent cloneAgent() throws CloneNotSupportedException {
+		return null;
+	}
 }
