@@ -193,7 +193,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
     		private final double VERTEXES_PER_CIRCLE = 6;
     		private final double PI_TIMES_TWO        = 2*Math.PI;
         	private final double increment           = PI_TIMES_TWO/VERTEXES_PER_CIRCLE;
-        	private final float COLOR_FACTOR         = (1.0f/255);
+        	private final float  COLOR_FACTOR        = (1.0f/255);
         	
         	GL gl = getGL();
     		
@@ -219,41 +219,41 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
         		for(IPopulation pop : newPops) {
         			for(IAgent a : pop.getAgents()) {
         				Position p = a.getPosition();
-                        double cx = p.getX();
+                        /*double cx = p.getX();
                         double cy = getHeight() - p.getY();
-                        double radius = a.getWidth()/2 + 5;
+                        double radius = a.getWidth()/2 + 5;*/
                         double height = (double)a.getHeight();
                         double width = (double)a.getWidth();
                         Color c = a.getColor();
     	          		gl.glColor4f((1.0f/255)*c.getRed(), COLOR_FACTOR*c.getGreen(), COLOR_FACTOR*c.getBlue(), COLOR_FACTOR*c.getAlpha());
 
                         Vector v = new Vector(a.getVelocity());
-                        if(v.getX() != 0 && v.getY() != 0) {
-	                  		gl.glBegin(GL.GL_TRIANGLES);
-	      	         
-	      	          		Vector bodyCenter = new Vector(p,new Position(0,0));
-	      	          		v.multiply(2.0*height/(3.0*v.getNorm()));
-	      	          		Vector nose = v.add(bodyCenter);
-	      	          		
-	      	          		v = new Vector(a.getVelocity());
-	      	          		v.multiply(-1.0*height/(3.0*v.getNorm()));
-	      	          		Vector bottom = v.add(bodyCenter);
-	      	          		
-	      	          		v = new Vector(a.getVelocity());
-	      	          		Vector legLengthVector = new Vector(-v.getY()/v.getX(),1);
-	      	          		legLengthVector = legLengthVector.multiply(width/(2*legLengthVector.getNorm()));
-	      	          		Vector rightLeg = legLengthVector.add(bottom);
-	      	          		
-	      	          		v = new Vector(a.getVelocity());
-	      	          	    legLengthVector = new Vector(v.getY()/v.getX(),-1);
-	      	          	    legLengthVector = legLengthVector.multiply(width/(2*legLengthVector.getNorm()));
-	      	          		Vector leftLeg = legLengthVector.add(bottom);
-	      	          		
-	      	          		gl.glVertex2d(nose.getX(), getHeight() - nose.getY());
-	      	          		gl.glVertex2d(rightLeg.getX(), getHeight() - rightLeg.getY());
-	      	          		gl.glVertex2d(leftLeg.getX(), getHeight() - leftLeg.getY());
-	      	          		gl.glEnd();
-                        } else {
+                        //if(v.getX() != 0 && v.getY() != 0) {
+                  		gl.glBegin(GL.GL_TRIANGLES);
+      	         
+      	          		Vector bodyCenter = new Vector(p,new Position(0,0));
+      	          		v.multiply(2.0*height/(3.0*v.getNorm()));
+      	          		Vector nose = v.add(bodyCenter);
+      	          		
+      	          		v = new Vector(a.getVelocity());
+      	          		v.multiply(-1.0*height/(3.0*v.getNorm()));
+      	          		Vector bottom = v.add(bodyCenter);
+      	          		
+      	          		v = new Vector(a.getVelocity());
+      	          		Vector legLengthVector = new Vector(-v.getY()/v.getX(),1);
+      	          		legLengthVector = legLengthVector.multiply(width/(2*legLengthVector.getNorm()));
+      	          		Vector rightLeg = legLengthVector.add(bottom);
+      	          		
+      	          		v = new Vector(a.getVelocity());
+      	          	    legLengthVector = new Vector(v.getY()/v.getX(),-1);
+      	          	    legLengthVector = legLengthVector.multiply(width/(2*legLengthVector.getNorm()));
+      	          		Vector leftLeg = legLengthVector.add(bottom);
+      	          		
+      	          		gl.glVertex2d(nose.getX(), getHeight() - nose.getY());
+      	          		gl.glVertex2d(rightLeg.getX(), getHeight() - rightLeg.getY());
+      	          		gl.glVertex2d(leftLeg.getX(), getHeight() - leftLeg.getY());
+      	          		gl.glEnd();
+	      	          	/*} else {
 	        	          	for(double angle = 0; angle < PI_TIMES_TWO; angle+=increment){
 	        	          		gl.glBegin(GL.GL_TRIANGLES);
 	        	          		gl.glVertex2d(cx, cy);
@@ -261,7 +261,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 	        	          		gl.glVertex2d(cx + Math.cos(angle + increment)*radius, cy + Math.sin(angle + increment)*radius);
 	        	          		gl.glEnd();
 	        	          	}
-                        }
+                        }*/
         			}
         		}      
         		
