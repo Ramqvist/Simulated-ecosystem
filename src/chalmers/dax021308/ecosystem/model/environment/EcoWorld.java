@@ -10,6 +10,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import chalmers.dax021308.ecosystem.model.agent.IAgent;
+import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPreyPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPredatorPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
@@ -266,6 +268,14 @@ public class EcoWorld {
 
 	public void removeObserver(PropertyChangeListener listener) {
 		observers.removePropertyChangeListener(listener);
+	}
+	
+	private List<IPopulation> clonePopulationList(List<IPopulation> popList) {
+		List<IPopulation> list = new ArrayList<IPopulation>(popList.size());
+		for(IPopulation p : popList) {
+			list.add(p.clonePopulation());
+		}
+		return list;
 	}
 
 }

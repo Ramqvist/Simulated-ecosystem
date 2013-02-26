@@ -107,4 +107,10 @@ public class RabbitPopulation implements IPopulation {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public IPopulation clonePopulation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

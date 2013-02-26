@@ -2,6 +2,7 @@ package chalmers.dax021308.ecosystem.model.agent;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.Collections;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
@@ -40,6 +41,14 @@ public abstract class AbstractAgent implements IAgent {
 		this.maxSpeed = maxSpeed;
 		this.visionRange = visionRange;
 		this.maxAcceleration = maxAcceleration;
+	}
+	
+	/**
+	 * Clone constructed. Use this to create a copy.
+	 * @param a
+	 */
+	public AbstractAgent(AbstractAgent a) {
+		 this(a.name, a.position, a.color, a.width, a.height, a.velocity, a.maxSpeed, a.visionRange, a.maxAcceleration);
 	}
 	
 	@Override
@@ -91,6 +100,27 @@ public abstract class AbstractAgent implements IAgent {
 	@Override
 	public Gender getGender() {
 		return gender;
+	}
+	
+	@Override
+	public IAgent cloneAgent() throws CloneNotSupportedException {
+		return (IAgent) clone();
+	}
+	
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		AbstractAgent a = new AbstractAgent(name, position, color, width, height, velocity, maxSpeed, visionRange, maxAcceleration) {
+			@Override
+			public void updatePosition(List<IPopulation> predators,
+					List<IPopulation> preys, List<IPopulation> neutral, Dimension dim) {
+			}
+			@Override
+			public List<IAgent> reproduce(IAgent agent) {
+				return Collections.emptyList();
+			}
+
+		};
+		return a;
 	}
 	
 	/**

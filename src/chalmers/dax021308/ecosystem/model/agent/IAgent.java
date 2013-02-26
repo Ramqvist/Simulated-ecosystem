@@ -14,7 +14,7 @@ import chalmers.dax021308.ecosystem.model.util.Position;
  * IAgent describes an arbitrary single individual. 
  * @author Albin
  */
-public interface IAgent {
+public interface IAgent extends Cloneable {
 	
 	/**
 	 * @return The position of the IAgent.
@@ -77,4 +77,12 @@ public interface IAgent {
 	 * @return The gender of the IAgent specified by some enum. Returns null if genderless.
 	 */
 	public Gender getGender();
+
+	/**
+	 * Clone an agent. 
+	 * <p>
+	 * Returns a reference to a new agent with the values of the calling one. 
+	 * @throws CloneNotSupportedException 
+	 */
+	public IAgent cloneAgent() throws CloneNotSupportedException;
 }

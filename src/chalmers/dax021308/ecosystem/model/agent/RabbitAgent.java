@@ -172,6 +172,11 @@ public class RabbitAgent implements IAgent {
 		velocity.setX(tempX);
 		velocity.setY(tempY);
 	}
+
+	@Override
+	public IAgent cloneAgent() throws CloneNotSupportedException {
+		return null;
+	}
 }
 
 
