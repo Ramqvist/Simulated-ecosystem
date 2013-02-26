@@ -18,41 +18,41 @@ public class RabbitPopulation implements IPopulation {
 	private List<IPopulation> preys;
 	private List<IPopulation> predators;
 	private Dimension worldSize;
-	
+
 	public RabbitPopulation(int popSize, Dimension d) {
 		rabbits = new LinkedList<IAgent>();
 		preys = new LinkedList<IPopulation>();
 		predators = new LinkedList<IPopulation>();
 		worldSize = d;
-		
-		
+
 		for (int i = 0; i < popSize; i++) {
 			Gender g = Gender.MALE;
 			Color c = Color.black;
-			
-			if (i%2 == 0) {
+			Vector velocity = new Vector(1, 1);
+
+			if (i % 2 == 0) {
 				g = Gender.FEMALE;
 				c = Color.lightGray;
+//				velocity = new Vector(1, 1);
 			}
-			
-			rabbits.add(new RabbitAgent(new Position(d.getWidth() * Math.random(), d.getHeight()*Math.random()), 
-					name, c, 20, 20, new Vector(Math.random(), Math.random()), g));
+
+			rabbits.add(new RabbitAgent(new Position(d.getWidth()
+					* Math.random(), d.getHeight() * Math.random()), name, c,
+					20, 20, velocity, g));
 		}
 	}
-	
+
 	@Override
 	public void update() {
 		List<IAgent> newPopulation = new LinkedList<IAgent>();
-		
+
 		for (IAgent a : rabbits) {
-			a.updatePosition(predators, preys, getNeutralPopulations(),worldSize);
-			
-			if (a.getGender() == Gender.MALE) {
-				List <IAgent> kids = a.reproduce(null);
-				
-				if (kids.size() > 0) {
-					newPopulation.addAll(kids);
-				}
+			a.updatePosition(predators, preys, getNeutralPopulations(),
+					worldSize);
+
+			List<IAgent> kids = a.reproduce(null);
+			if (kids.size() > 0) {
+				newPopulation.addAll(kids);
 			}
 		}
 		newPopulation.addAll(rabbits);
@@ -99,7 +99,7 @@ public class RabbitPopulation implements IPopulation {
 	@Override
 	public void addNeutralPopulation(IPopulation neutral) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
