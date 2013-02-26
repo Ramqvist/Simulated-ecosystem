@@ -41,7 +41,7 @@ import chalmers.dax021308.ecosystem.model.util.Position;
  * @author Erik Ramqvist
  *
  */
-public class SimulationView2 extends GLCanvas implements IView {
+public class OpenGLSimulationView extends GLCanvas implements IView {
 	
 	private static final long serialVersionUID = 1585638837620985591L;
 	private List<IPopulation> newPops = new ArrayList<IPopulation>();
@@ -59,8 +59,8 @@ public class SimulationView2 extends GLCanvas implements IView {
 	/**
 	 * Create the panel.
 	 */
-	public SimulationView2(EcoWorld model, Dimension size, boolean showFPS) {
-		frame = new JFrame("Simulation View");
+	public OpenGLSimulationView(EcoWorld model, Dimension size, boolean showFPS) {
+		frame = new JFrame("OpenGL Simulation View");
 		this.size = size;
 		model.addObserver(this);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -96,13 +96,13 @@ public class SimulationView2 extends GLCanvas implements IView {
 	}
 	
 	private int getUpdate() {
-		synchronized (SimulationView2.class) {
+		synchronized (OpenGLSimulationView.class) {
 			return updates;
 		}
 	}
 
 	private void setUpdateValue(int newValue) {
-		synchronized (SimulationView2.class) {
+		synchronized (OpenGLSimulationView.class) {
 			updates = newValue;
 		}
 	}
@@ -121,7 +121,7 @@ public class SimulationView2 extends GLCanvas implements IView {
 	}
 	
 	private void increaseUpdateValue() {
-		synchronized (SimulationView2.class) {
+		synchronized (OpenGLSimulationView.class) {
 			updates++;
 		}
 	}

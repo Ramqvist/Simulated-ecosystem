@@ -2,8 +2,8 @@ package chalmers.dax021308.ecosystem.controller;
 
 
 import chalmers.dax021308.ecosystem.view.GraphView;
-import chalmers.dax021308.ecosystem.view.SimulationView;
-import chalmers.dax021308.ecosystem.view.SimulationView2;
+import chalmers.dax021308.ecosystem.view.AWTSimulationView;
+import chalmers.dax021308.ecosystem.view.OpenGLSimulationView;
 
 import java.awt.Dimension;
 
@@ -36,7 +36,7 @@ public class ToyController implements IController {
 		model.start();
 		
 		//OpenGL 
-		SimulationView2 simView = new SimulationView2(model, d, true);
+		OpenGLSimulationView simView = new OpenGLSimulationView(model, d, true);
 		//Java AWT
 		//SimulationView simView = new SimulationView(model, d, true);
 		simView.init();

@@ -32,7 +32,7 @@ import chalmers.dax021308.ecosystem.model.util.Position;
  * @author Erik Ramqvist
  *
  */
-public class SimulationView extends JPanel implements IView {
+public class AWTSimulationView extends JPanel implements IView {
 	
 	private static final long serialVersionUID = 1585638837620985591L;
 	private JFrame frame;
@@ -49,9 +49,9 @@ public class SimulationView extends JPanel implements IView {
 	/**
 	 * Create the panel.
 	 */
-	public SimulationView(EcoWorld model, Dimension size, boolean showFPS) {
+	public AWTSimulationView(EcoWorld model, Dimension size, boolean showFPS) {
 		model.addObserver(this);
-		frame = new JFrame("Simulation View");
+		frame = new JFrame("AWT Simulation View");
 		frame.add(this);
 		frame.setSize(size);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -77,13 +77,13 @@ public class SimulationView extends JPanel implements IView {
 	}
 	
 	private int getUpdate() {
-		synchronized (SimulationView.class) {
+		synchronized (AWTSimulationView.class) {
 			return updates;
 		}
 	}
 
 	private void setUpdateValue(int newValue) {
-		synchronized (SimulationView.class) {
+		synchronized (AWTSimulationView.class) {
 			updates = newValue;
 		}
 	}
@@ -102,7 +102,7 @@ public class SimulationView extends JPanel implements IView {
 	}
 	
 	private void increaseUpdateValue() {
-		synchronized (SimulationView.class) {
+		synchronized (AWTSimulationView.class) {
 			updates++;
 		}
 	}
