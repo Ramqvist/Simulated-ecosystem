@@ -14,14 +14,14 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  * Abstract class for handling the dummy methods
  */
 public abstract class AbstractAgent implements IAgent {
-	private Position position;
-	private String name;
-	private Color color;
-	private int width;
-	private int height;
-	private Vector velocity;
-	private Gender gender;
-	private double fitness;
+	protected Position position;
+	protected String name;
+	protected Color color;
+	protected int width;
+	protected int height;
+	protected Vector velocity;
+	protected Gender gender;
+	protected double fitness;
 	protected double maxSpeed;
 	protected double visionRange;
 	protected double maxAcceleration;
@@ -41,6 +41,7 @@ public abstract class AbstractAgent implements IAgent {
 		this.visionRange = visionRange;
 		this.maxAcceleration = maxAcceleration;
 	}
+	
 	@Override
 	public Position getPosition() {
 		return position;
