@@ -57,6 +57,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 	private JFrame frame;
 	private JOGLListener glListener;
 	//private GLCanvas canvas;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -180,17 +181,26 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 		}
 	}
 	
-
+	/**
+	 * JOGL Listener, listenes to commands from the GLCanvas.
+	 * 
+	 * @author Erik
+	 *
+	 */
     private class JOGLListener implements GLEventListener {
     	
     		//Number of edges in each created circle.
-    		private final double VERTEXES_PER_CIRCLE = 4;
+    		private final double VERTEXES_PER_CIRCLE = 6;
     		private final double PI_TIMES_TWO        = 2*Math.PI;
         	private final double increment           = PI_TIMES_TWO/VERTEXES_PER_CIRCLE;
         	private final float COLOR_FACTOR         = (1.0f/255);
         	
         	GL gl = getGL();
     		
+        	/**
+        	 * Called each frame to redraw all the 3D elements.
+        	 * 
+        	 */
             @Override
             public void display(GLAutoDrawable drawable) {
             	increaseUpdateValue();
@@ -205,34 +215,37 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
           		gl.glVertex2d(getWidth(), getHeight());
           		gl.glVertex2d(getWidth(), 0);
           		gl.glEnd();
-          		
+
         		for(IPopulation pop : newPops) {
         			for(IAgent a : pop.getAgents()) {
         				Position p = a.getPosition();
                         double cx = p.getX();
                         double cy = getHeight() - p.getY();
-                        double radius = a.getWidth()/2;
+                        double radius = a.getWidth()/2 + 5;
                         Color c = a.getColor();
     	          		gl.glColor4f((1.0f/255)*c.getRed(), COLOR_FACTOR*c.getGreen(), COLOR_FACTOR*c.getBlue(), COLOR_FACTOR*c.getAlpha());
 
                         Vector v = a.getVelocity();
-                        Vector curV = new Vector(cx, cy);
-                        //Log.v(v.toString());
-    	          		gl.glBegin(GL.GL_TRIANGLES);
-      	          		gl.glVertex2d(cx-8, cy-8);
-      	          		gl.glVertex2d(cx+v.getX()*10, cy+v.getY()*10);
-      	          		gl.glVertex2d(cx+8, cy+8);
-      	          		gl.glEnd();
-      	          		
-        	          	for(double angle = 0; angle < PI_TIMES_TWO; angle+=increment){
-        	          		gl.glBegin(GL.GL_TRIANGLES);
-        	              //One vertex of each triangle is at center of circle
-        	          		gl.glVertex2d(cx, cy);
-        	              //Other two vertices form the periphery of the circle		
-        	          		gl.glVertex2d(cx + Math.cos(angle)* radius, cy + Math.sin(angle)*radius);
-        	          		gl.glVertex2d(cx + Math.cos(angle + increment)*radius, cy + Math.sin(angle + increment)*radius);
-        	          		gl.glEnd();
-        	          	}
+                        if(v.getX() != 0 && v.getY() != 0) {
+	                  		gl.glBegin(GL.GL_TRIANGLES);
+	      	          		gl.glVertex2d(cx-8, cy-8);
+	      	          		
+	      	          		/* Need help with these! X and Y to the direction of the agent */
+	      	          		double targetPosX = (cx + v.getX()*12);
+	      	          		double targetPosY = (cy + v.getY()*12);
+	      	          		
+	      	          		gl.glVertex2d(targetPosX, targetPosY);
+	      	          		gl.glVertex2d(cx+8, cy+8);
+	      	          		gl.glEnd();
+                        } /*else {*/
+	        	          	for(double angle = 0; angle < PI_TIMES_TWO; angle+=increment){
+	        	          		gl.glBegin(GL.GL_TRIANGLES);
+	        	          		gl.glVertex2d(cx, cy);
+	        	          		gl.glVertex2d(cx + Math.cos(angle)* radius, cy + Math.sin(angle)*radius);
+	        	          		gl.glVertex2d(cx + Math.cos(angle + increment)*radius, cy + Math.sin(angle + increment)*radius);
+	        	          		gl.glEnd();
+	        	          	}
+                        //}
         			}
         		}      
         		
