@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.media.opengl.GL;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -23,6 +24,7 @@ import chalmers.dax021308.ecosystem.model.environment.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
+import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
  * Simulation JPanel showing graphical representation of the model.
@@ -131,6 +133,7 @@ public class AWTSimulationView extends JPanel implements IView {
 	@Override
     public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+    	long start = System.currentTimeMillis();
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
@@ -181,8 +184,49 @@ public class AWTSimulationView extends JPanel implements IView {
 			for(IAgent a : pop.getAgents()) {
 				Position p = a.getPosition();
 				g2.setColor(a.getColor());
-		        g2.fillOval((int)(p.getX()), (int) (frame.getSize().getHeight() - p.getY()), a.getHeight(), a.getWidth());
+		       // g2.fillOval((int)(p.getX()), (int) (frame.getSize().getHeight() - p.getY()), a.getHeight(), a.getWidth());
+		        double height = (double)a.getHeight();
+                double width = (double)a.getWidth();
+                Color c = a.getColor();
+
+                Vector v = new Vector(a.getVelocity());
+          		Vector bodyCenter = new Vector(p,new Position(0,0));
+          		v.multiply(2.0*height/(3.0*v.getNorm()));
+          		Vector nose = v.add(bodyCenter);
+          		
+          		v = new Vector(a.getVelocity());
+          		v.multiply(-1.0*height/(3.0*v.getNorm()));
+          		Vector bottom = v.add(bodyCenter);
+          		
+          		v = new Vector(a.getVelocity());
+          		Vector legLengthVector = new Vector(-v.getY()/v.getX(),1);
+          		legLengthVector = legLengthVector.multiply(width/(2*legLengthVector.getNorm()));
+          		Vector rightLeg = legLengthVector.add(bottom);
+          		
+          		v = new Vector(a.getVelocity());
+          	    legLengthVector = new Vector(v.getY()/v.getX(),-1);
+          	    legLengthVector = legLengthVector.multiply(width/(2*legLengthVector.getNorm()));
+          		Vector leftLeg = legLengthVector.add(bottom);
+          		
+          		int[] xPoints = new int[3];
+      			int[] yPoints = new int[3];
+      			xPoints[0] = (int) nose.getX();
+      			xPoints[1] = (int) rightLeg.getX();
+      			xPoints[2] = (int) leftLeg.getX();
+      			
+      			yPoints[0] = (int) (getHeight() - nose.getY());
+      			yPoints[1] = (int) (getHeight() - rightLeg.getY());
+      			yPoints[2] = (int) (getHeight() - leftLeg.getY());
+      			
+      			
+          		g2.drawPolygon(xPoints, yPoints, 3);
 			}
+    		Long totalTime = System.currentTimeMillis() - start;
+    		StringBuffer sb = new StringBuffer("AWT Redraw! Fps: ");
+    		sb.append(getNewFps());
+    		sb.append(" Rendertime in ms: ");
+    		sb.append(totalTime);
+        	System.out.println(sb.toString());	
 		}
 		
 		g2.setColor(Color.black);
