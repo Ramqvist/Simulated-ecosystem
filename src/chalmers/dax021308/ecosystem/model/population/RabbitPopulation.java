@@ -2,6 +2,7 @@ package chalmers.dax021308.ecosystem.model.population;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,6 +40,29 @@ public class RabbitPopulation implements IPopulation {
 			rabbits.add(new RabbitAgent(new Position(d.getWidth()
 					* Math.random(), d.getHeight() * Math.random()), name, c,
 					20, 20, velocity, g));
+		}
+	}
+
+	
+	/**
+	 * Clone constructed. Creates a copy of the parameter one.
+	 * <p>
+	 * Will be here until {@link RabbitPopulation} extends {@link AbstractPopulation} and can use {@link AbstractPopulation#clonePopulation()}
+	 * @author Erik Ramqvist
+	 * @param rabbitPopulation
+	 */
+	public RabbitPopulation(RabbitPopulation original) {
+		this.worldSize = (Dimension) original.worldSize.clone();
+		this.name = original.name;
+		preys = new ArrayList<IPopulation>();
+		predators = new ArrayList<IPopulation>();
+		rabbits = new ArrayList<IAgent>(original.rabbits.size());
+		for(IAgent a : original.rabbits) {
+			try {
+				rabbits.add(a.cloneAgent());
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -108,9 +132,14 @@ public class RabbitPopulation implements IPopulation {
 		return null;
 	}
 
+
 	@Override
 	public IPopulation clonePopulation() {
-		// TODO Auto-generated method stub
-		return null;
+		return new RabbitPopulation(this) {
+			@Override
+			public double calculateFitness(IAgent agent) {
+				return 0;
+			}
+		};
 	}
 }

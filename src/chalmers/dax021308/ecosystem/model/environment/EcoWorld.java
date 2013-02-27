@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -29,15 +30,28 @@ import chalmers.dax021308.ecosystem.model.util.TimerHandler;
  * 
  */
 public class EcoWorld {
+
+	public static final String EVENT_TICK              = "chalmers.dax021308.ecosystem.model.Ecoworld.event_tick";
+	public static final String EVENT_STOP              = "chalmers.dax021308.ecosystem.model.Ecoworld.event_stop";
+	public static final String EVENT_PAUSE		       = "chalmers.dax021308.ecosystem.model.Ecoworld.event_pause";
+	public static final String EVENT_RECORDINGFINISHED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_pause";
+	
 	private AtomicBoolean environmentFinished = new AtomicBoolean(false);
 	private AtomicBoolean timerFinished = new AtomicBoolean(false);
 	private AtomicBoolean shouldRun = new AtomicBoolean(false);
 	private boolean runWithoutTimer;
+	private boolean recordSimulation;
+	
 	private int numIterations;
 	private TimerHandler timer;
 	private IEnvironment env;
 	private int tickTime;
 	private PropertyChangeSupport observers;
+	
+	/**
+	 * Each list in the list contains one snapshot of frame;
+	 */
+	private List<List<IPopulation>> recordedSimulation;
 	/**
 	 * Simple object, used for synchronizing the {@link TimerHandler} and the
 	 * {@link IEnvironment} {@link OnFinishListener}
@@ -48,16 +62,17 @@ public class EcoWorld {
 	private Dimension d;
 	private ExecutorService executor = Executors.newFixedThreadPool(NUM_THREAD);
 
-	public static final String EVENT_TICK = "chalmers.dax021308.ecosystem.model.event_tick";
-	public static final String EVENT_STOP = "chalmers.dax021308.ecosystem.model.event_stop";
-
 	private OnFinishListener mOnFinishListener = new OnFinishListener() {
 		@Override
 		public void onFinish(List<IPopulation> popList, List<IObstacle> obsList) {
 			// Fire state changed to observers, notify there has been an update.
-			observers.firePropertyChange(EVENT_TICK, obsList, popList);
+			if(recordSimulation) {
+				recordedSimulation.add(clonePopulationList(popList));
+			} else {
+				observers.firePropertyChange(EVENT_TICK, obsList, popList);
+			}
 			if (runWithoutTimer) {
-				scheduleEnvironmentUpdate();
+				scheduleEnvironmentUpdate();		
 			} else {
 				synchronized (syncObject) {
 					//Log.v("Environment: Finished.");
@@ -105,10 +120,14 @@ public class EcoWorld {
 	 *            
 	 * @param d Dimension of the simulation.
 	 */
-	public EcoWorld(Dimension d, int tickTime, int numIterations ) {
+	public EcoWorld(Dimension d, int tickTime, int numIterations, boolean recordSimulation) {
 		this.tickTime = tickTime;
 		this.timer = new TimerHandler();
 		this.d = d;
+		this.recordSimulation = recordSimulation;
+		if(recordSimulation) {
+			recordedSimulation = new ArrayList<List<IPopulation>>(1000);
+		}
 
 		/* Uncomment to test ticking functionality */
 		// this.env = new Environment(mOnFinishListener);
@@ -133,7 +152,7 @@ public class EcoWorld {
 	 * @param d Dimension of the simulation.
 	 */
 	public EcoWorld(Dimension d, int numIterations) {
-		this(d, 0, numIterations);
+		this(d, 0, numIterations, false);
 		this.runWithoutTimer = true;
 	}
 
@@ -152,7 +171,7 @@ public class EcoWorld {
 
 	private List<IPopulation> createInitialPopulations(Dimension dim) {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
-		IPopulation rabbits = new RabbitPopulation(100, dim);
+		IPopulation rabbits = new RabbitPopulation(300, dim);
 		rabbits.addPrey(rabbits);
 		populations.add(rabbits);
 		
@@ -194,6 +213,38 @@ public class EcoWorld {
 		timer.stop();
 		numUpdates = 0;
 		Log.i("EcoWorld stopped.");
+		if(recordSimulation) {
+//			for(List<IPopulation> list : recordedSimulation) {
+//				for(IPopulation pop : list) {
+//					Log.v("Population: " + pop);
+//					for(IAgent a : pop.getAgents()) {
+//						Log.v("Population: " + pop.toString() + " Agent:" + a.toString());
+//					}
+//				}
+//			}
+			observers.firePropertyChange(EVENT_RECORDINGFINISHED, null, null);
+		}
+	}
+	
+	public void playRecordedSimulation() {
+		if(!recordSimulation) {
+			throw new IllegalStateException("No simulation has been recorded");
+		}
+		final TimerHandler t = new TimerHandler();
+		t.start(17, new OnTickUpdate() {
+			@Override
+			public void onTick() {
+				if(recordedSimulation.size() > 0) {
+					List<IPopulation> popList = recordedSimulation.get(0);
+					recordedSimulation.remove(0);
+					observers.firePropertyChange(EVENT_TICK, Collections.emptyList(), popList);
+					t.start(17, this);
+				} else {
+					t.stop();
+					observers.firePropertyChange(EVENT_STOP, Collections.emptyList(), Collections.emptyList());
+				}
+			}
+		});
 	}
 
 	/**
@@ -214,7 +265,7 @@ public class EcoWorld {
 	 * Starts the {@link TimerHandler} and executes one Environment iteration.
 	 */
 	private void scheduleEnvironmentUpdate() {
-		if (numIterations-- >= 0) {
+		if (numIterations-- > 0) {
 			if (!runWithoutTimer) {
 				timer.start(tickTime, onTickListener);
 			}
@@ -223,9 +274,10 @@ public class EcoWorld {
 			executor.execute(env);
 		} else {
 			stop();
+			playRecordedSimulation();
 		}
 	}
-
+	
 	/**
 	 * Adjust the tick rate of the next iteration. The currently executing
 	 * iteration will not be affected.
@@ -265,11 +317,14 @@ public class EcoWorld {
 	public void addObserver(PropertyChangeListener listener) {
 		observers.addPropertyChangeListener(listener);
 	}
-
+	
 	public void removeObserver(PropertyChangeListener listener) {
 		observers.removePropertyChangeListener(listener);
 	}
 	
+	/**
+	 * Clones the given list with {@link IPopulation#clonePopulation()} method.
+	 */
 	private List<IPopulation> clonePopulationList(List<IPopulation> popList) {
 		List<IPopulation> list = new ArrayList<IPopulation>(popList.size());
 		for(IPopulation p : popList) {
