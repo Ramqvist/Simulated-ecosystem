@@ -29,17 +29,15 @@ public class RabbitPopulation implements IPopulation {
 		for (int i = 0; i < popSize; i++) {
 			Gender g = Gender.MALE;
 			Color c = Color.black;
-			Vector velocity = new Vector(1, 1);
 
 			if (i % 2 == 0) {
 				g = Gender.FEMALE;
 				c = Color.lightGray;
-//				velocity = new Vector(1, 1);
 			}
 
 			rabbits.add(new RabbitAgent(new Position(d.getWidth()
 					* Math.random(), d.getHeight() * Math.random()), name, c,
-					20, 20, velocity, g));
+					20, 20, new Vector(Math.random()*2, Math.random()*2), g));
 		}
 	}
 
@@ -71,17 +69,10 @@ public class RabbitPopulation implements IPopulation {
 		List<IAgent> newPopulation = new LinkedList<IAgent>();
 
 		for (IAgent a : rabbits) {
-			a.calculateNextPosition(predators, preys, getNeutralPopulations(),
-					worldSize);
-
-			List<IAgent> kids = a.reproduce(null);
-			if (kids.size() > 0) {
-				newPopulation.addAll(kids);
-			}
+			a.calculateNextPosition(predators, preys, getNeutralPopulations(), worldSize);
+			newPopulation.addAll(a.reproduce(null));
 		}
-		newPopulation.addAll(rabbits);
-		rabbits = newPopulation;
-		System.out.println("Size: "+rabbits.size());
+		rabbits.addAll(newPopulation);
 	}
 
 	@Override

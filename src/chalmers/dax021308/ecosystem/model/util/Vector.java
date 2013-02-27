@@ -126,9 +126,14 @@ public class Vector {
 		return this;
 	}
 	
-	public Vector rotate(double degree) {
-		double tempX = this.x * Math.cos(degree) - this.y * Math.sin(degree);
-		double tempY = this.x * Math.sin(degree) + this.y * Math.cos(degree);
+	/**
+	 * Rotates the Vector.
+	 * @param angle - The rotation angle in radians.
+	 * @return The rotated Vector.
+	 */
+	public Vector rotate(double angle) {
+		double tempX = (this.x * Math.cos(angle)) - (this.y * Math.sin(angle));
+		double tempY = (this.x * Math.sin(angle)) + (this.y * Math.cos(angle));
 		this.x = tempX;
 		this.y = tempY;
 		return this;
