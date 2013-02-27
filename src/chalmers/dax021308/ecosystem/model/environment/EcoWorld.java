@@ -4,6 +4,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,16 +33,22 @@ import chalmers.dax021308.ecosystem.model.util.TimerHandler;
  * <p>
  * Recieves notifications from the {@link TimerHandler} and the
  * {@link IEnvironment}.
+ * <p>
+ * Use the proper constructor for the wanted behavior of EcoWorld.
  * 
  * @author Erik Ramqvist
  * 
  */
 public class EcoWorld {
-
-	public static final String EVENT_TICK              = "chalmers.dax021308.ecosystem.model.Ecoworld.event_tick";
-	public static final String EVENT_STOP              = "chalmers.dax021308.ecosystem.model.Ecoworld.event_stop";
-	public static final String EVENT_PAUSE		       = "chalmers.dax021308.ecosystem.model.Ecoworld.event_pause";
-	public static final String EVENT_RECORDINGFINISHED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_pause";
+	
+	/* Property change events constants */
+	public static final String EVENT_TICK               = "chalmers.dax021308.ecosystem.model.Ecoworld.event_tick";
+	public static final String EVENT_STOP               = "chalmers.dax021308.ecosystem.model.Ecoworld.event_stop";
+	public static final String EVENT_START              = "chalmers.dax021308.ecosystem.model.Ecoworld.event_stop";
+	public static final String EVENT_PAUSE		        = "chalmers.dax021308.ecosystem.model.Ecoworld.event_pause";
+	public static final String EVENT_RECORDING_FINISHED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recordingstarted";
+	public static final String EVENT_RECORDING_STARTED  = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recordingfinished";
+	/* 								   */
 	
 	private AtomicBoolean environmentFinished = new AtomicBoolean(false);
 	private AtomicBoolean timerFinished = new AtomicBoolean(false);
@@ -57,9 +71,9 @@ public class EcoWorld {
 	 * {@link IEnvironment} {@link OnFinishListener}
 	 */
 	private Object syncObject = new Object();
-	private static final int NUM_THREAD = 1;
 	private int numUpdates = 0;
 	private Dimension d;
+	private static final int NUM_THREAD = 1;
 	private ExecutorService executor = Executors.newFixedThreadPool(NUM_THREAD);
 
 	private OnFinishListener mOnFinishListener = new OnFinishListener() {
@@ -171,7 +185,7 @@ public class EcoWorld {
 
 	private List<IPopulation> createInitialPopulations(Dimension dim) {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
-		IPopulation rabbits = new RabbitPopulation(1000, dim);
+		IPopulation rabbits = new RabbitPopulation(10000, dim);
 		rabbits.addPrey(rabbits);
 		populations.add(rabbits);
 		
@@ -199,6 +213,11 @@ public class EcoWorld {
 		shouldRun.set(true);
 		scheduleEnvironmentUpdate();
 		Log.i("EcoWorld started.");
+		if(recordSimulation) {
+			observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
+		} else {
+			observers.firePropertyChange(EVENT_START, null, null);
+		}
 	}
 
 	/**
@@ -222,7 +241,7 @@ public class EcoWorld {
 //					}
 //				}
 //			}
-			observers.firePropertyChange(EVENT_RECORDINGFINISHED, null, null);
+			observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
 		}
 	}
 	
@@ -337,5 +356,100 @@ public class EcoWorld {
 		}
 		return list;
 	}
+	
+	/**
+	 * Reads the recording from the given filePath.
+	 * <p>
+	 * Untested!
+	 * @param filePath
+	 * @return True if success, otherwise false.
+	 */
+	private boolean readRecordFromDisk(String filePath) {
+		String frameDivider = "FRAME";
+		String populationDivider = "POPULATION";
+		String agentDivider = "AGENT";
+		File f = new File(filePath);
+		if(!f.exists()) {
+			return false;
+		}
+		if(!f.canRead()) {
+			return false;
+		}
+		try {
+			FileInputStream fileStream = new FileInputStream(f);
+			Charset utf8 = Charset.forName("UTF-8");     
+			BufferedReader br = new BufferedReader(new InputStreamReader(fileStream, utf8));
+			String input = br.readLine();
+			while(input != null) {
+				input = br.readLine();
+				handleInput(input);
+			}
+			br.close();
+			fileStream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return false;
+	}
+	
+	/**
+	 * Handles the input and parses it to the correct value.
+	 * @param input
+	 */
+	private void handleInput(String input) {
+		// TODO: Implement parser
+		String frameDivider = "FRAME";
+		String populationDivider = "POPULATION";
+		String agentDivider = "AGENT";
+		if(input.startsWith(frameDivider)) {
+			//Add the population-list to the record
+		} else if(input.startsWith(populationDivider)) {
+			//Create new population
+		} else if(input.startsWith(agentDivider)) {
+			//Parse agent and add it to the last population.
+		}
+	}
 
+	/**
+	 * Saves the given recording to the filePath
+	 * 
+	 * @param record
+	 * @param filePath
+	 * @return
+	 */
+	private boolean dumpRecordToDisk(List<List<IPopulation>> record, String filePath) {
+		String frameDivider = "FRAME";
+		String populationDivider = "POPULATION";
+		String agentDivider = "AGENT";
+		File f = new File(filePath);
+		if(f.exists()) {
+			f.delete();
+		} 
+		try {
+			f.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(f);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		}
+		for(List<IPopulation> popList : record) {
+			pw.println(frameDivider);
+			for(IPopulation p : popList) {
+				pw.println(populationDivider + ';' /*+ p.toBinaryString()*/ );
+				for(IAgent a : p.getAgents()) {
+					pw.println(agentDivider + ';' /*+a.toBinaryString() */);
+				}
+			}
+		}
+		pw.close();
+		return true;
+	}
+	
 }

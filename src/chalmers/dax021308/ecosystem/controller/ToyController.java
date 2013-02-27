@@ -30,7 +30,7 @@ public class ToyController implements IController {
 		
 		int tickDelay = 17;
 		int numIterations = 1000;
-		boolean recordSimulation = true;
+		boolean recordSimulation = false;
 		this.model = new EcoWorld(d, tickDelay, numIterations, recordSimulation);
 		//Uncommend below to run without delay.
 //		this.model = new EcoWorld(d);
