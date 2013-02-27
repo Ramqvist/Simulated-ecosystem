@@ -39,14 +39,17 @@ public class Vector {
 		this.y = p1.getY()-p2.getY();
 	}
 	
+	/**
+	 * Create a new Vector with the values of the parameter one.
+	 */
 	public Vector(Vector v){
-		this.x = v.getX();
-		this.y = v.getY();
+		this.x = v.x;
+		this.y = v.y;
 	}
 	
 	public Vector(Vector v1, Vector v2) {
-		this.x = v1.getX()-v2.getX();
-		this.y = v1.getY()-v2.getY();
+		this.x = v1.x-v2.y;
+		this.y = v1.y-v2.y;
 	}
 
 	public double getX() {
@@ -70,8 +73,8 @@ public class Vector {
 	 * @param v the vector with the new values.
 	 */
 	public void setVector(Vector v){
-		this.x = v.getX();
-		this.y = v.getY();
+		this.x = v.x;
+		this.y = v.y;
 	}
 	
 	/**
@@ -89,8 +92,8 @@ public class Vector {
 	 * @param v vector to add.
 	 */
 	public Vector add(Vector v){
-		this.x = this.x + v.getX();
-		this.y = this.y + v.getY();
+		this.x = this.x + v.x;
+		this.y = this.y + v.y;
 		return this;
 	}
 	

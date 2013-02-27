@@ -20,6 +20,15 @@ public class Position {
 		this.y = y;
 	}
 
+	/**
+	 * Clone a position. Returning a new Position with the value of this one.
+	 * @return
+	 */
+	public Position(Position p) {
+		this.x = p.x;
+		this.y = p.y;
+	}
+
 	public double getDistance(Position p) {
 		double dX = p.x - x;
 		double dY = p.y - y;
