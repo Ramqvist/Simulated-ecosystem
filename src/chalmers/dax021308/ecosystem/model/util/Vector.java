@@ -2,6 +2,8 @@ package chalmers.dax021308.ecosystem.model.util;
 
 /**
  * 
+ * TODO: Add more documentation.
+ * 
  * @author Sebbe
  *
  */
@@ -108,7 +110,7 @@ public class Vector {
 	}
 
 	/**
-	 * 
+	 * TODO: Documentation needed. What is this?
 	 * @return the norm of the vector.
 	 */
 	public double getNorm(){
@@ -119,6 +121,9 @@ public class Vector {
 		return null;
 	}
 	
+	/**
+	 * TODO: Documentation needed. What is this?
+	 */
 	public Vector toUnitVector() {
 		double length = this.getNorm();
 		this.x = this.x / length;
