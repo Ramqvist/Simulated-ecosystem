@@ -171,7 +171,7 @@ public class EcoWorld {
 
 	private List<IPopulation> createInitialPopulations(Dimension dim) {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
-		IPopulation rabbits = new RabbitPopulation(300, dim);
+		IPopulation rabbits = new RabbitPopulation(1000, dim);
 		rabbits.addPrey(rabbits);
 		populations.add(rabbits);
 		
@@ -226,6 +226,11 @@ public class EcoWorld {
 		}
 	}
 	
+	/**
+	 * Plays the recorded simulation (if any), otherwise throws {@link IllegalArgumentException}.
+	 * <P>
+	 * Uses internal {@link TimerHandler} for smooth playing.
+	 */
 	public void playRecordedSimulation() {
 		if(!recordSimulation) {
 			throw new IllegalStateException("No simulation has been recorded");

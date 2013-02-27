@@ -109,7 +109,7 @@ public abstract class AbstractAgent implements IAgent {
 	
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
-		AbstractAgent a = new AbstractAgent(name, position, color, width, height, velocity, maxSpeed, visionRange, maxAcceleration) {
+		AbstractAgent a = new AbstractAgent(name, new Position(position), color, width, height, new Vector(velocity), maxSpeed, visionRange, maxAcceleration) {
 			@Override
 			public void updatePosition(List<IPopulation> predators,
 					List<IPopulation> preys, List<IPopulation> neutral, Dimension dim) {
