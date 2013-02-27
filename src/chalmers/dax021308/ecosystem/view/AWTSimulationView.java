@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
@@ -119,14 +120,12 @@ public class AWTSimulationView extends JPanel implements IView {
 		} else if(eventName == EcoWorld.EVENT_TICK) {
 			//Tick notification recived from model. Do something with the data.
 			if(event.getNewValue() instanceof List<?>) {
-				this.newPops = (List<IPopulation>) event.getNewValue();
+				this.newPops = clonePopulationList((List<IPopulation>) event.getNewValue());
 			}
 			if(event.getOldValue() instanceof List<?>) {
 				this.newObs = (List<IObstacle>) event.getOldValue();
 			}
-			removeAll();
 			repaint();
-			revalidate();
 		}
 	}
 	
@@ -244,6 +243,17 @@ public class AWTSimulationView extends JPanel implements IView {
 				   xLeft, yBot);
 		
     }
+	
+	/**
+	 * Clones the given list with {@link IPopulation#clonePopulation()} method.
+	 */
+	private List<IPopulation> clonePopulationList(List<IPopulation> popList) {
+		List<IPopulation> list = new ArrayList<IPopulation>(popList.size());
+		for(IPopulation p : popList) {
+			list.add(p.clonePopulation());
+		}
+		return list;
+	}
 	
 	/**
 	 * Sets the FPS counter visible or not visible
