@@ -125,9 +125,7 @@ public class AWTSimulationView extends JPanel implements IView {
 			if(event.getOldValue() instanceof List<?>) {
 				this.newObs = (List<IObstacle>) event.getOldValue();
 			}
-			removeAll();
 			repaint();
-			revalidate();
 		}
 	}
 	
