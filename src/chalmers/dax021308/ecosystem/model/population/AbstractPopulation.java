@@ -14,7 +14,7 @@ import chalmers.dax021308.ecosystem.model.agent.IAgent;
  */
 public abstract class AbstractPopulation implements IPopulation {
 	protected List<IAgent> agents;
-	private Dimension gridDimension;
+	protected Dimension gridDimension;
 	private List<IPopulation> preys;
 	private List<IPopulation> predators;
 	private List<IPopulation> neutral;

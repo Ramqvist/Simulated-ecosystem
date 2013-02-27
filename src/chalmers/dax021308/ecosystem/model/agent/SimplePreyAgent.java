@@ -42,8 +42,6 @@ public class SimplePreyAgent extends AbstractAgent {
 		// Vector separationForce = new Vector();
 		Vector environmentForce = getEnvironmentForce(gridDimension);
 		Vector preyForce = getPreyForce(preys);
-		// System.out.println("pred: " + predatorForce + " sep: " +
-		// separationForce + " env: " + environmentForce);
 
 		/*
 		 * Sum the forces from walls, predators and neutral to form the
@@ -51,7 +49,7 @@ public class SimplePreyAgent extends AbstractAgent {
 		 * --> scale it to maxAcceleration, but keep the correct direction of
 		 * the acceleration.
 		 */
-		Vector acceleration = environmentForce.multiply(100).add(predatorForce)
+		Vector acceleration = environmentForce.multiply(100).add(predatorForce.multiply(3))
 				.add(separationForce.multiply(10).add(preyForce));
 		double accelerationNorm = acceleration.getNorm();
 		if (accelerationNorm > maxAcceleration) {
