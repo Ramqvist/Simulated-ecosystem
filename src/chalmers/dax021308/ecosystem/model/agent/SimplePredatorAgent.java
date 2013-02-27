@@ -22,7 +22,7 @@ public class SimplePredatorAgent extends AbstractAgent {
 	}
 
 	@Override
-	public void updatePosition(List<IPopulation> predators,
+	public void calculateNextPosition(List<IPopulation> predators,
 			List<IPopulation> preys, List<IPopulation> neutral,Dimension gridDimension) {
 		Vector preyForce = getPreyForce(preys);
 		Vector separationForce = getSeparationForce(neutral);
@@ -47,14 +47,14 @@ public class SimplePredatorAgent extends AbstractAgent {
 		 * they will eventually stop.
 		 * If speed exceeds maxSpeed --> scale it to maxSpeed, but keep the correct direction.
 		 */
-		Vector newVelocity = this.getVelocity().add(acceleration).multiply(VELOCITY_DECAY);
+		Vector newVelocity = this.getVelocity().add(acceleration);
 		double speed = newVelocity.getNorm();
 		if(speed > maxSpeed){
 			newVelocity.multiply(maxSpeed/speed); 
 		}
 		
 		this.setVelocity(newVelocity);
-		getPosition().addVector(getVelocity());
+		nextPosition = Position.positionPlusVector(position,velocity);
 	}
 
 	@Override
@@ -78,10 +78,15 @@ public class SimplePredatorAgent extends AbstractAgent {
 		Vector preyForce = new Vector(0, 0);
 		int nVisiblePreys = 0;
 		for (IPopulation pop : preys) {
-			for (IAgent a : pop.getAgents()) {
+			List<IAgent> agents = pop.getAgents();
+			for (int i=0;i<pop.getAgents().size();i++) {
+				IAgent a = agents.get(i);
 				Position p = a.getPosition();
 				double distance = getPosition().getDistance(p);
 				if (distance <= visionRange) {
+					if(distance <= INTERACTION_RANGE) {
+						pop.getAgents().remove(i);
+					} else {
 					/*
 					 * Create a vector that points towards the prey.
 					 */
@@ -94,6 +99,7 @@ public class SimplePredatorAgent extends AbstractAgent {
 					double norm = newForce.getNorm();
 					preyForce.add(newForce.multiply(1/(norm*distance)));
 					nVisiblePreys++;
+					}
 				 }
 			}
 		}

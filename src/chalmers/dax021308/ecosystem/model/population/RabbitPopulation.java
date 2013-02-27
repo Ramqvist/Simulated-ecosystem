@@ -71,7 +71,7 @@ public class RabbitPopulation implements IPopulation {
 		List<IAgent> newPopulation = new LinkedList<IAgent>();
 
 		for (IAgent a : rabbits) {
-			a.updatePosition(predators, preys, getNeutralPopulations(),
+			a.calculateNextPosition(predators, preys, getNeutralPopulations(),
 					worldSize);
 
 			List<IAgent> kids = a.reproduce(null);

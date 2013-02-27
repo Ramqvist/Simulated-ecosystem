@@ -22,9 +22,14 @@ public interface IAgent extends Cloneable {
 	public Position getPosition();
 	
 	/**
-	 * Updates the position of the IAgent.
+	 * Calculates the new position of the IAgent to which it will move when calling updatePosition().
 	 */
-	public void updatePosition(List<IPopulation> predators, List<IPopulation> preys, List<IPopulation> neutral, Dimension dim);
+	public void calculateNextPosition(List<IPopulation> predators, List<IPopulation> preys, List<IPopulation> neutral, Dimension dim);
+	
+	/**
+	 * Updates the position of the IAgent
+	 */
+	public void updatePosition();
 	
 	/**
 	 * @return The name of the IAgent.

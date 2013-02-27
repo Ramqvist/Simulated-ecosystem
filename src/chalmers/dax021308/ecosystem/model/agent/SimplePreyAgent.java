@@ -30,12 +30,12 @@ public class SimplePreyAgent extends AbstractAgent {
 	 * @author Sebbe
 	 */
 	@Override
-	public void updatePosition(List<IPopulation> predators,
+	public void calculateNextPosition(List<IPopulation> predators,
 							   List<IPopulation> preys, List<IPopulation> neutral,Dimension gridDimension) {
 		
 		Vector predatorForce = getPredatorForce(predators);
 		Vector separationForce = getSeparationForce(neutral);
-		//Vector separationForce = new Vector();
+//		Vector separationForce = new Vector();
 		Vector environmentForce = getEnvironmentForce(gridDimension);
 		
 		/*
@@ -63,7 +63,7 @@ public class SimplePreyAgent extends AbstractAgent {
 		}
 		
 		this.setVelocity(newVelocity);
-		getPosition().addVector(getVelocity());
+		nextPosition = Position.positionPlusVector(position,velocity);
 	}
 	
 	/** 

@@ -185,17 +185,17 @@ public class EcoWorld {
 
 	private List<IPopulation> createInitialPopulations(Dimension dim) {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
-		IPopulation rabbits = new RabbitPopulation(300, dim);
-		rabbits.addPrey(rabbits);
-		populations.add(rabbits);
+//		IPopulation rabbits = new RabbitPopulation(300, dim);
+//		rabbits.addPrey(rabbits);
+//		populations.add(rabbits);
 		
-//		IPopulation prey = new DummyPreyPopulation(dim, 300, Color.red, 1.5, 1, 250);
-//		IPopulation predator = new DummyPredatorPopulation(dim,10, Color.green, 2, 0.5,275);
-//		
-//		prey.addPredator(predator);
-//		predator.addPrey(prey);
-//		populations.add(prey);
-//		populations.add(predator);
+		IPopulation prey = new DummyPreyPopulation(dim, 500, Color.red, 1.5, 1, 250);
+		IPopulation predator = new DummyPredatorPopulation(dim,10, Color.green, 2, 0.5,275);
+		
+		prey.addPredator(predator);
+		predator.addPrey(prey);
+		populations.add(prey);
+		populations.add(predator);
 		return populations;
 	}
 

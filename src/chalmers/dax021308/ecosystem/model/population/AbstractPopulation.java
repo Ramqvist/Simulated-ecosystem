@@ -51,7 +51,10 @@ public abstract class AbstractPopulation implements IPopulation {
 	@Override
 	public void update() {
 		for (IAgent a : agents) {
-			a.updatePosition(predators, preys, neutral, gridDimension);
+			a.calculateNextPosition(predators, preys, neutral, gridDimension);
+		}
+		for (IAgent a : agents) {
+			a.updatePosition();
 		}
 	}
 

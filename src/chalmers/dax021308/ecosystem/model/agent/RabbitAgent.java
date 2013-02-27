@@ -60,7 +60,7 @@ public class RabbitAgent extends AbstractAgent {
 	}
 
 	@Override
-	public void updatePosition(List<IPopulation> predators,
+	public void calculateNextPosition(List<IPopulation> predators,
 			List<IPopulation> preys, List<IPopulation> neutral, Dimension dim) {
 
 		if (gender == Gender.MALE) {

@@ -16,6 +16,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public abstract class AbstractAgent implements IAgent {
 	protected Position position;
+	protected Position nextPosition;
 	protected String name;
 	protected Color color;
 	protected int width;
@@ -96,6 +97,11 @@ public abstract class AbstractAgent implements IAgent {
 	public void setFitness(double fitness) {
 		this.fitness = fitness;
 	}
+	
+	@Override
+	public void updatePosition() {
+		this.position = new Position(nextPosition);
+	}
 
 	@Override
 	public Gender getGender() {
@@ -111,7 +117,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected Object clone() throws CloneNotSupportedException {
 		AbstractAgent a = new AbstractAgent(name, new Position(position), color, width, height, new Vector(velocity), maxSpeed, visionRange, maxAcceleration) {
 			@Override
-			public void updatePosition(List<IPopulation> predators,
+			public void calculateNextPosition(List<IPopulation> predators,
 					List<IPopulation> preys, List<IPopulation> neutral, Dimension dim) {
 			}
 			@Override

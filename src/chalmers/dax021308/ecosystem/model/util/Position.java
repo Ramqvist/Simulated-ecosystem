@@ -56,11 +56,21 @@ public class Position {
 	 * Adds a vector to current position.
 	 * @param v vector to add.
 	 */
-	public void addVector(Vector v){
+	public Position addVector(Vector v){
 		this.x += v.getX();
 		this.y += v.getY();
+		return this;
 	}
 
+	/**
+	 * Adds a vector to a position and returns the new position.
+	 * @param p the position
+	 * @param v the vector
+	 * @return a position p+v.
+	 */
+	public static Position positionPlusVector(Position p, Vector v) {
+		return new Position(p.x+v.getX(),p.y+v.getY());
+	}
 	public boolean equals(Object o) {
 		if (o instanceof Position) {
 			return ((Position) o).x == x && ((Position) o).y == y;

@@ -28,8 +28,8 @@ public class ToyController implements IController {
 		Dimension d = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		d.height = d.height - 40;
 		
-		int tickDelay = 17;
-		int numIterations = 1000;
+		int tickDelay = 15;
+		int numIterations = Integer.MAX_VALUE;
 		boolean recordSimulation = false;
 		this.model = new EcoWorld(d, tickDelay, numIterations, recordSimulation);
 		//Uncommend below to run without delay.
