@@ -19,10 +19,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.jfree.text.G2TextMeasurer;
+
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPreyPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPredatorPopulation;
+import chalmers.dax021308.ecosystem.model.population.GrassPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.population.RabbitPopulation;
 import chalmers.dax021308.ecosystem.model.util.Log;
@@ -191,11 +194,14 @@ public class EcoWorld {
 		
 		IPopulation prey = new DummyPreyPopulation(dim, 500, Color.red, 1.5, 1, 250);
 		IPopulation predator = new DummyPredatorPopulation(dim,10, Color.green, 2, 0.5,275);
+		IPopulation grass = new GrassPopulation(dim, 1000, Color.DARK_GRAY, 1, 1, 0);
 		
 		prey.addPredator(predator);
+		prey.addPrey(grass);
 		predator.addPrey(prey);
 		populations.add(prey);
 		populations.add(predator);
+		populations.add(grass);
 		return populations;
 	}
 

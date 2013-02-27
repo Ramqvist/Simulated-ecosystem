@@ -7,6 +7,11 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 
+/**
+ * 
+ * @author Henrik
+ * Abstract class for handling the dummy methods
+ */
 public abstract class AbstractPopulation implements IPopulation {
 	protected List<IAgent> agents;
 	private Dimension gridDimension;
@@ -30,7 +35,9 @@ public abstract class AbstractPopulation implements IPopulation {
 	 * Clone constructor.
 	 * <p>
 	 * Use only for cloning.
-	 * @param original the AbstractPopulation to clone
+	 * 
+	 * @param original
+	 *            the AbstractPopulation to clone
 	 */
 	public AbstractPopulation(AbstractPopulation original) {
 		this.gridDimension = original.gridDimension;
@@ -39,7 +46,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		predators = new ArrayList<IPopulation>();
 		neutral = new ArrayList<IPopulation>();
 		agents = new ArrayList<IAgent>();
-		for(IAgent a : original.agents) {
+		for (IAgent a : original.agents) {
 			try {
 				agents.add(a.cloneAgent());
 			} catch (CloneNotSupportedException e) {
@@ -97,7 +104,7 @@ public abstract class AbstractPopulation implements IPopulation {
 	public void addNeutralPopulation(IPopulation neutral) {
 		this.neutral.add(neutral);
 	}
-	
+
 	@Override
 	public IPopulation clonePopulation() {
 		return new AbstractPopulation(this) {

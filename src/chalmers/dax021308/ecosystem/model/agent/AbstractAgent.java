@@ -52,6 +52,15 @@ public abstract class AbstractAgent implements IAgent {
 		 this(a.name, a.position, a.color, a.width, a.height, a.velocity, a.maxSpeed, a.visionRange, a.maxAcceleration);
 	}
 	
+	public AbstractAgent(String name, Position pos, Color color,
+			int width, int height) {
+		this.name = name;
+		position = pos;
+		this.color = color;
+		this.width = width;
+		this.height = height;
+	}
+
 	@Override
 	public Position getPosition() {
 		return position;
