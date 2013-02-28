@@ -18,7 +18,8 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public class GrassAgent extends AbstractAgent {
 	private double reproduceDelay = 0;
 	private final Dimension gridDimension;
-
+	private static final double REPRODUCTION_RATE = 0.002;
+	
 	public GrassAgent(String name, Position pos, Color color, int width,
 			int height, Vector velocity, double maxSpeed,
 			Dimension gridDimension) {
@@ -42,7 +43,7 @@ public class GrassAgent extends AbstractAgent {
 		double repr = Math.random() * 100000; // Random number, 'randomly' chosen
 		// Do the reproducing if repr < reproduceDelay, if not increase
 		// reproduceDelay to increase the chance of reproducing next iteration
-		if (Math.random() < 0.001) {
+		if (Math.random() < REPRODUCTION_RATE) {
 
 			List<IAgent> spawn = new ArrayList<IAgent>();
 			IAgent a = new GrassAgent(name,

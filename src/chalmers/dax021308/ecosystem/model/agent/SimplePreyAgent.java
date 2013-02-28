@@ -21,7 +21,8 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public class SimplePreyAgent extends AbstractAgent {
 
 	private boolean hungry = true;
-
+	private static final double REPRODUCTION_RATE = 0.15;
+	
 	public SimplePreyAgent(String name, Position p, Color c, int width,
 			int height, Vector velocity, double maxSpeed,
 			double maxAcceleration, double visionRange) {
@@ -35,7 +36,7 @@ public class SimplePreyAgent extends AbstractAgent {
 			return null;
 		else {
 			List<IAgent> spawn = new ArrayList<IAgent>();
-			if (Math.random() < 0.18) {
+			if (Math.random() < REPRODUCTION_RATE) {
 				hungry = true;
 				double xSign = Math.signum(-1+2*Math.random());
 				double ySign = Math.signum(-1+2*Math.random());

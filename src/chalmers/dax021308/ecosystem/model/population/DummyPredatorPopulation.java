@@ -56,6 +56,20 @@ public class DummyPredatorPopulation extends AbstractPopulation {
 	}
 
 	@Override
+	public void update() {
+		super.update();
+		int size = agents.size();
+		SimplePredatorAgent a;
+		for(int i=0; i<size; i++){
+			a = (SimplePredatorAgent) agents.get(i);
+			if(a.getEnergy()<=0){
+				agents.remove(i);
+				i--;
+				size--;
+			}
+		}
+	}
+	@Override
 	public double calculateFitness(IAgent agent) {
 		// TODO Auto-generated method stub
 		return 0;

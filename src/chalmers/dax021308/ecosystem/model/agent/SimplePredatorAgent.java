@@ -2,6 +2,7 @@ package chalmers.dax021308.ecosystem.model.agent;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
@@ -14,11 +15,20 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  *         other agent) in a simple way
  */
 public class SimplePredatorAgent extends AbstractAgent {
+	
+	private boolean hungry = true;
+	private static final int LIFE_LENGTH = 1200;
+	private static final double REPRODUCTION_RATE = 0.05;
+	private int energy = LIFE_LENGTH;
 
 	public SimplePredatorAgent(String name, Position p, Color c, int width,
 			int height, Vector velocity, double maxSpeed,
 			double maxAcceleration, double visionRange) {
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange, maxAcceleration);
+	}
+
+	public int getEnergy() {
+		return energy;
 	}
 
 	@Override
@@ -59,8 +69,25 @@ public class SimplePredatorAgent extends AbstractAgent {
 
 	@Override
 	public List<IAgent> reproduce(IAgent agent) {
-		// TODO Auto-generated method stub
-		return null;
+		if (hungry)
+			return null;
+		else {
+			List<IAgent> spawn = new ArrayList<IAgent>();
+			if (Math.random() < REPRODUCTION_RATE) {
+				hungry = true;
+				double xSign = Math.signum(-1+2*Math.random());
+				double ySign = Math.signum(-1+2*Math.random());
+				double newX = this.getPosition().getX()+xSign*(1+5*Math.random());
+				double newY = this.getPosition().getY()+ySign*(1+5*Math.random());
+				Position pos = new Position(newX,newY);
+				IAgent child = new SimplePredatorAgent(name, pos, color, width, height, new Vector(velocity),
+						maxSpeed, maxAcceleration, visionRange);
+				spawn.add(child);
+			} else {
+				hungry = true;
+			}
+			return spawn;
+		}
 	}
 
 	/**
@@ -86,6 +113,8 @@ public class SimplePredatorAgent extends AbstractAgent {
 				if (distance <= visionRange) {
 					if(distance <= INTERACTION_RANGE) {
 						agents.remove(i);
+						hungry = false;
+						this.energy = LIFE_LENGTH;
 						i--;
 						size--;
 					} else {
@@ -115,4 +144,9 @@ public class SimplePredatorAgent extends AbstractAgent {
 		return preyForce;
 	}
 	
+	@Override
+	public void updatePosition() {
+		this.position = new Position(nextPosition);
+		this.energy--;
+	}
 }

@@ -29,7 +29,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected double maxAcceleration;
 	protected final static double INTERACTION_RANGE = 4;
 	protected final static double WALL_CONSTANT = 1;
-	protected static final double VELOCITY_DECAY = 0.95;
+	protected static final double VELOCITY_DECAY = 1;
 	
 	public AbstractAgent(String name, Position p, Color c, int width, int height, Vector velocity, 
 			double maxSpeed, double visionRange, double maxAcceleration){
