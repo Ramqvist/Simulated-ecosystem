@@ -42,7 +42,7 @@ public class GrassAgent extends AbstractAgent {
 		double repr = Math.random() * 100000; // Random number, 'randomly' chosen
 		// Do the reproducing if repr < reproduceDelay, if not increase
 		// reproduceDelay to increase the chance of reproducing next iteration
-		if (repr < reproduceDelay) {
+		if (Math.random() < 0.001) {
 
 			List<IAgent> spawn = new ArrayList<IAgent>();
 			IAgent a = new GrassAgent(name,

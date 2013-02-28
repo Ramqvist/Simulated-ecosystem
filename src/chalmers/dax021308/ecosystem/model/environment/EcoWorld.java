@@ -197,9 +197,9 @@ public class EcoWorld {
 		//rabbits.addPrey(rabbits);
 		//populations.add(rabbits);
 		
-		IPopulation prey = new DummyPreyPopulation("Deers", dim, 300, Color.red, 1.5, 1, 250);
-		IPopulation predator = new DummyPredatorPopulation("Wolves", dim,5, Color.green, 2, 0.5,275);
-		IPopulation grass = new GrassPopulation("Grass", dim, 1000, Color.DARK_GRAY, 1, 1, 0);
+		IPopulation prey = new DummyPreyPopulation("Deers", dim, 50, Color.red, 1.5, 1, 250);
+		IPopulation predator = new DummyPredatorPopulation("Wolves", dim, 10, Color.green, 2, 0.5,275);
+		IPopulation grass = new GrassPopulation("Grass", dim, 500, Color.DARK_GRAY, 1, 1, 0);
 		
 		prey.addPredator(predator);
 		prey.addPrey(grass);
