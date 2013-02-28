@@ -40,7 +40,7 @@ public class GrassAgent extends AbstractAgent {
 
 	@Override
 	public List<IAgent> reproduce(IAgent agent) {
-		double repr = Math.random()*50000; // for whenever we want the spawns to happen randomly
+		double repr = Math.random()*500000; // for whenever we want the spawns to happen randomly
 		int i1 = Double.compare(repr, reproduceDelay);
 		if (repr < reproduceDelay) {
 			
