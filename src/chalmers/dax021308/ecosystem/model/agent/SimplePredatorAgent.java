@@ -79,13 +79,16 @@ public class SimplePredatorAgent extends AbstractAgent {
 		int nVisiblePreys = 0;
 		for (IPopulation pop : preys) {
 			List<IAgent> agents = pop.getAgents();
-			for (int i=0;i<pop.getAgents().size();i++) {
+			int size = agents.size();
+			for (int i=0;i<size;i++) {
 				IAgent a = agents.get(i);
 				Position p = a.getPosition();
 				double distance = getPosition().getDistance(p);
 				if (distance <= visionRange) {
 					if(distance <= INTERACTION_RANGE) {
 						pop.getAgents().remove(i);
+						i--;
+						size--;
 					} else {
 					/*
 					 * Create a vector that points towards the prey.
