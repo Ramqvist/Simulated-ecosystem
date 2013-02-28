@@ -1,7 +1,8 @@
 package chalmers.dax021308.ecosystem.controller;
 
 
-import chalmers.dax021308.ecosystem.view.GraphView;
+import chalmers.dax021308.ecosystem.view.GraphPopulationAmountView;
+import chalmers.dax021308.ecosystem.view.IGraphView;
 import chalmers.dax021308.ecosystem.view.AWTSimulationView;
 import chalmers.dax021308.ecosystem.view.OpenGLSimulationView;
 
@@ -17,7 +18,7 @@ import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 public class ToyController implements IController {
 
 	private EcoWorld model;
-	private GraphView graphView;
+	private IGraphView graphView;
 
 	public ToyController() {
 		init();
@@ -45,8 +46,8 @@ public class ToyController implements IController {
 		//AWTSimulationView simView = new AWTSimulationView(model, d, true);
 		simView.init();
 		
-		//this.graphView = new GraphView(model);
-		//graphView.init();
+		this.graphView = new GraphPopulationAmountView(model);
+		graphView.init();
 	}
 
 	@Override
