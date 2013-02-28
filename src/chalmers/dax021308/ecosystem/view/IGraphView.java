@@ -9,7 +9,7 @@ import java.beans.PropertyChangeEvent;
  * Useless so far.
  */
 public interface IGraphView extends IView{
-
+	
 	@Override
 	public void propertyChange(PropertyChangeEvent event);
 
