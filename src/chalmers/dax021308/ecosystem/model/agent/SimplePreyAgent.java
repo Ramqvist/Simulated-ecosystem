@@ -2,8 +2,11 @@ package chalmers.dax021308.ecosystem.model.agent;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import com.lowagie.text.pdf.ArabicLigaturizer;
 
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Gender;
@@ -17,6 +20,8 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class SimplePreyAgent extends AbstractAgent {
 
+	private boolean hungry = true;
+
 	public SimplePreyAgent(String name, Position p, Color c, int width,
 			int height, Vector velocity, double maxSpeed,
 			double maxAcceleration, double visionRange) {
@@ -26,7 +31,19 @@ public class SimplePreyAgent extends AbstractAgent {
 
 	@Override
 	public List<IAgent> reproduce(IAgent agent) {
-		return new LinkedList<IAgent>();
+		if (hungry)
+			return null;
+		else {
+			List<IAgent> spawn = new ArrayList<IAgent>();
+			if (Math.random() < 0.1) {
+				hungry = true;
+				Position pos = new Position(getPosition());
+				IAgent child = new SimplePreyAgent(name, pos, color, width, height, velocity,
+						maxSpeed, maxAcceleration, visionRange);
+				spawn.add(child);
+			}
+			return spawn;
+		}
 	}
 
 	/**
@@ -49,7 +66,8 @@ public class SimplePreyAgent extends AbstractAgent {
 		 * --> scale it to maxAcceleration, but keep the correct direction of
 		 * the acceleration.
 		 */
-		Vector acceleration = environmentForce.multiply(100).add(predatorForce.multiply(3))
+		Vector acceleration = environmentForce.multiply(100)
+				.add(predatorForce.multiply(3))
 				.add(separationForce.multiply(10).add(preyForce));
 		double accelerationNorm = acceleration.getNorm();
 		if (accelerationNorm > maxAcceleration) {
@@ -83,17 +101,20 @@ public class SimplePreyAgent extends AbstractAgent {
 		Vector preyForce = new Vector(0, 0);
 		for (IPopulation pop : preys) {
 			List<IAgent> agents = pop.getAgents();
-			for (int i=0;i<pop.getAgents().size();i++) {
+			for (int i = 0; i < pop.getAgents().size(); i++) {
 				IAgent a = agents.get(i);
 				Position p = a.getPosition();
 				double distance = getPosition().getDistance(p);
 				if (distance <= visionRange) {
-					if(distance <= INTERACTION_RANGE) {
+					if (distance <= INTERACTION_RANGE) {
+						// Food found, let's eat it and make some reproducing
+						// possible
 						pop.getAgents().remove(i);
+						hungry = false;
 					} else {
 						Vector newForce = new Vector(p, getPosition());
 						double norm = newForce.getNorm();
-						preyForce.add(newForce.multiply(1/(norm*distance)));
+						preyForce.add(newForce.multiply(1 / (norm * distance)));
 					}
 				}
 			}

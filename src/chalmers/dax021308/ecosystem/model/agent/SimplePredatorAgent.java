@@ -60,7 +60,6 @@ public class SimplePredatorAgent extends AbstractAgent {
 	@Override
 	public List<IAgent> reproduce(IAgent agent) {
 		// TODO Auto-generated method stub
-		System.err.println("ERROR IN REPRODUCE METHOD, METHOD UNDEFINED");
 		return null;
 	}
 

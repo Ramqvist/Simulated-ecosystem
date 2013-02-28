@@ -49,6 +49,7 @@ public class GrassPopulation extends AbstractPopulation {
 		for (IAgent a : agents) {
 			List<IAgent> spawn = a.reproduce(null);
 			if (spawn != null) {
+				//Simply comment the line below to remove spawning of new grass
 				newAgents.addAll(spawn);
 			}
 		}

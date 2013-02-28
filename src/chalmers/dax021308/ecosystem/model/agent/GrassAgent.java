@@ -39,18 +39,14 @@ public class GrassAgent extends AbstractAgent {
 
 	@Override
 	public List<IAgent> reproduce(IAgent agent) {
-		double repr = Math.random() * 50000; // for whenever we want the spawns
-												// to happen randomly
+		double repr = Math.random() * 100000; // Random number, 'randomly' chosen
+		// Do the reproducing if repr < reproduceDelay, if not increase
+		// reproduceDelay to increase the chance of reproducing next iteration
 		if (repr < reproduceDelay) {
 
 			List<IAgent> spawn = new ArrayList<IAgent>();
-			Position pos = new Position(getPosition());
-			Vector v = new Vector(5, 5);
-			v.rotate(Math.random() * 2 * Math.PI)
-					.add(getEnvironmentForce(gridDimension).multiply(100))
-					.getNorm();
-			pos.addVector(v);
-			IAgent a = new GrassAgent(name, pos, color, 5, 5, velocity,
+			IAgent a = new GrassAgent(name,
+					calculateNewPosition(getPosition()), color, 5, 5, velocity,
 					maxSpeed, gridDimension);
 			reproduceDelay = 0;
 			spawn.add(a);
@@ -60,5 +56,27 @@ public class GrassAgent extends AbstractAgent {
 			return null;
 		}
 
+	}
+
+	/**
+	 * Finds a new position close to the current position
+	 * 
+	 * @param p
+	 *            the initial position
+	 * @return a 'legit' position, aka one that is inside the view
+	 */
+	private Position calculateNewPosition(Position p) {
+		// Randomly chooses a direction and adds a vector to it to ensure it
+		// isn't on top of the current position, and then weighs in the
+		// environmentforce
+		/*Position(p);
+		Vector v = new Vector(5, 5);
+		v.rotate(Math.random() * 2 * Math.PI).add(
+				getEnvironmentForce(gridDimension).multiply(100));
+		pos.addVector(v);*/
+		//random position
+		Position pos = new Position(gridDimension.getWidth()
+				* Math.random(), gridDimension.getHeight() * Math.random());
+		return pos;
 	}
 }
