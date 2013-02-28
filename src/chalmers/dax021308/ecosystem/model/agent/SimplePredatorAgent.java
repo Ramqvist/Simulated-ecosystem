@@ -86,7 +86,7 @@ public class SimplePredatorAgent extends AbstractAgent {
 				double distance = getPosition().getDistance(p);
 				if (distance <= visionRange) {
 					if(distance <= INTERACTION_RANGE) {
-						pop.getAgents().remove(i);
+						agents.remove(i);
 						i--;
 						size--;
 					} else {
