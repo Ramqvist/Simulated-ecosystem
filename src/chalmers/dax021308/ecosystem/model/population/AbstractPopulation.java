@@ -26,8 +26,9 @@ public abstract class AbstractPopulation implements IPopulation {
 		neutral = new ArrayList<IPopulation>();
 	}
 
-	public AbstractPopulation(Dimension gridDimension) {
+	public AbstractPopulation(String name, Dimension gridDimension) {
 		this();
+		this.name = name;
 		this.gridDimension = gridDimension;
 	}
 

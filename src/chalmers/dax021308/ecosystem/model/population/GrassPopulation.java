@@ -19,10 +19,10 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public class GrassPopulation extends AbstractPopulation {
 	int reproduceDelay = 0;
 
-	public GrassPopulation(Dimension gridDimension, int initPopulationSize,
+	public GrassPopulation(String name, Dimension gridDimension, int initPopulationSize,
 			Color color, double maxSpeed, double maxAcceleration,
 			double visionRange) {
-		super(gridDimension);
+		super(name, gridDimension);
 		agents = initializePopulation(initPopulationSize, gridDimension, color,
 				maxSpeed);
 	}
@@ -34,7 +34,7 @@ public class GrassPopulation extends AbstractPopulation {
 			Position randPos = new Position(gridDimension.getWidth()
 					* Math.random(), gridDimension.getHeight() * Math.random());
 			Vector velocity = new Vector(maxSpeed, maxSpeed);
-			IAgent a = new GrassAgent("Grass", randPos, color, 5, 5, velocity,
+			IAgent a = new GrassAgent(getName(), randPos, color, 5, 5, velocity,
 					maxSpeed);
 			newAgents.add(a);
 		}

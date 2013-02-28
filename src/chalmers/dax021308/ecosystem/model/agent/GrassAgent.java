@@ -38,18 +38,21 @@ public class GrassAgent extends AbstractAgent {
 		// Do nothing, grass shouldn't move!
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public List<IAgent> reproduce(IAgent agent) {
-		double repr = Math.random()*500000; // for whenever we want the spawns to happen randomly
-		int i1 = Double.compare(repr, reproduceDelay);
+		double repr = Math.random() * 50000; // for whenever we want the spawns
+												// to happen randomly
 		if (repr < reproduceDelay) {
-			
+
 			List<IAgent> spawn = new ArrayList<IAgent>();
 			Position pos = new Position(getPosition());
-			Vector v = new Vector(5,5);
-			v.rotate(Math.random()*360);
+			Vector v = new Vector(5, 5);
+			v.rotate(Math.random() * 2 * Math.PI);
 			pos.addVector(v);
-			IAgent a = new GrassAgent("Grass", pos, color, 5, 5, velocity,
+			IAgent a = new GrassAgent(name, pos, color, 5, 5, velocity,
 					maxSpeed);
 			reproduceDelay = 0;
 			spawn.add(a);
