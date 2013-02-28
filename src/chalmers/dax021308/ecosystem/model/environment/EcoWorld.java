@@ -80,7 +80,7 @@ public class EcoWorld {
 	private int numUpdates = 0;
 	private Dimension d;
 	private static final int NUM_THREAD = 1;
-	private ExecutorService executor = Executors.newFixedThreadPool(NUM_THREAD);
+	private ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	private OnFinishListener mOnFinishListener = new OnFinishListener() {
 

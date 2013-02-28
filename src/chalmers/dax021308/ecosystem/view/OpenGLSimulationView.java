@@ -15,6 +15,8 @@ import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
 import javax.swing.JFrame;
 
+import com.sun.opengl.util.FPSAnimator;
+
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
@@ -77,6 +79,8 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
         //canvas.addGLEventListener(new JOGLListener());
 		glListener = new JOGLListener();
 		addGLEventListener(glListener);
+		FPSAnimator animator = new FPSAnimator(this, 60);
+		animator.start();
         //add();
         
 		this.showFPS = showFPS;
@@ -146,7 +150,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 			/*if(canvas != null) {
 				canvas.repaint();
 			}*/
-			repaint();
+			//repaint();
 			//display();
 			//removeAll();
 			//repaint();
@@ -301,14 +305,14 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
                         }*/
         			}
         		}      
-        		
-        		/* Information print, comment out to increase performance. */
-        		Long totalTime = System.currentTimeMillis() - start;
-        		StringBuffer sb = new StringBuffer("OpenGL Redraw! Fps: ");
-        		sb.append(getNewFps());
-        		//sb.append(" Rendertime in ms: ");
-        		//sb.append(totalTime);
-            	System.out.println(sb.toString());	
+//        		
+//        		/* Information print, comment out to increase performance. */
+//        		Long totalTime = System.currentTimeMillis() - start;
+//        		StringBuffer sb = new StringBuffer("OpenGL Redraw! Fps: ");
+//        		sb.append(getNewFps());
+//        		//sb.append(" Rendertime in ms: ");
+//        		//sb.append(totalTime);
+//            	System.out.println(sb.toString());	
         		/* End Information print. */
             }
             
