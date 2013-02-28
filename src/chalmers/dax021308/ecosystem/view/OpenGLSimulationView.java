@@ -295,8 +295,10 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
                   //This will set the camera for orthographic projection and allow 2D view
                   //Our projection will be on 400 X 400 screen
                     gl.glLoadIdentity();
-                 //   Log.v("Width: " + getWidth());
-                 //   Log.v("Height: " + getHeight());
+                    Log.v("getWidth(): " + getWidth());
+                    Log.v("getHeight(): " + getHeight());
+                    Log.v("size.width: " + size.width);
+                    Log.v("size.height: " + size.height);
                     gl.glOrtho(0, getWidth(), getHeight(), 0, 0, 1);
                   //Modelview is for drawing
                     gl.glMatrixMode(GL.GL_MODELVIEW);
