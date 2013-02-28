@@ -33,9 +33,9 @@ public class ToyController implements IController {
 		int numIterations = Integer.MAX_VALUE;
 		boolean recordSimulation = false;
 		Dimension f = new Dimension(d.width-16, d.height-39);
-		this.model = new EcoWorld(f, tickDelay, numIterations, recordSimulation);
+//		this.model = new EcoWorld(f, tickDelay, numIterations, recordSimulation);
 		//Uncommend below to run without delay.
-//		this.model = new EcoWorld(d);
+		this.model = new EcoWorld(d);
 		
 		//Uncomment to start model.
 		model.start();

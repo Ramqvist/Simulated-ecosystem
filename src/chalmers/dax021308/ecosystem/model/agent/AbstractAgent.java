@@ -147,7 +147,10 @@ public abstract class AbstractAgent implements IAgent {
 		Vector separationForce = new Vector(0,0);
 		int nVisiblePredators = 0;
 		for(IPopulation pop : neutral) {
-			for(IAgent agent : pop.getAgents()) {
+			int size = pop.getAgents().size();
+			List<IAgent> agents = pop.getAgents();
+			for(int i = 0; i < size; i++) {
+				IAgent agent = agents.get(i);
 				if(agent != this) {
 					Position p = agent.getPosition();
 					double distance = getPosition().getDistance(p);

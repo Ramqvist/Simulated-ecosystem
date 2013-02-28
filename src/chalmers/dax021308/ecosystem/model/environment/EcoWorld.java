@@ -65,6 +65,9 @@ public class EcoWorld {
 	private int tickTime;
 	private PropertyChangeSupport observers;
 	
+	private long startIterationTime;
+	private long elapsedTime;
+	
 	/**
 	 * Each list in the list contains one snapshot of frame;
 	 */
@@ -80,8 +83,10 @@ public class EcoWorld {
 	private ExecutorService executor = Executors.newFixedThreadPool(NUM_THREAD);
 
 	private OnFinishListener mOnFinishListener = new OnFinishListener() {
+
 		@Override
 		public void onFinish(List<IPopulation> popList, List<IObstacle> obsList) {
+			elapsedTime = System.currentTimeMillis() - startIterationTime;
 			// Fire state changed to observers, notify there has been an update.
 			if(recordSimulation) {
 				recordedSimulation.add(clonePopulationList(popList));
@@ -143,7 +148,7 @@ public class EcoWorld {
 		this.d = d;
 		this.recordSimulation = recordSimulation;
 		if(recordSimulation) {
-			recordedSimulation = new ArrayList<List<IPopulation>>(1000);
+			recordedSimulation = new ArrayList<List<IPopulation>>(numIterations);
 		}
 
 		/* Uncomment to test ticking functionality */
@@ -299,9 +304,15 @@ public class EcoWorld {
 			if (!runWithoutTimer) {
 				timer.start(tickTime, onTickListener);
 			}
-			Log.v("---- Simulation model Update ---- Number of updates: "
+			if(startIterationTime != 0) {
+				Log.v("---- Simulation model Update ---- Number of updates: "
+						+ ++numUpdates + " - Iteration time:" + elapsedTime);
+			} else {
+				Log.v("---- Simulation model Update ---- Number of updates: "
 					+ ++numUpdates);
+			}
 			executor.execute(env);
+			startIterationTime = System.currentTimeMillis();
 		} else {
 			stop();
 			playRecordedSimulation();

@@ -229,8 +229,13 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
           		gl.glVertex2d(frameWidth, frameHeight);
           		gl.glVertex2d(frameWidth, 0);
           		gl.glEnd();
-        		for(IPopulation pop : newPops) {
-        			for(IAgent a : pop.getAgents()) {
+          		int popSize = newPops.size();
+          		for(int i = 0; i < popSize; i ++) {
+        			List<IAgent> agents = newPops.get(i).getAgents();
+        			int size = agents.size();
+        			IAgent a;
+        			for(int j = 0; j < size; j++) {
+        				a = agents.get(j);
                         Color c = a.getColor();
         				gl.glColor4f((1.0f/255)*c.getRed(), COLOR_FACTOR*c.getGreen(), COLOR_FACTOR*c.getBlue(), COLOR_FACTOR*c.getAlpha());
 
@@ -305,11 +310,10 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
         		//sb.append(totalTime);
             	System.out.println(sb.toString());	
         		/* End Information print. */
-            	repaint();
             }
             
         	public double getNorm(double x, double y){
-        		return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
+        		return Math.sqrt((x*x)+(y*y));
         	}
 
  
