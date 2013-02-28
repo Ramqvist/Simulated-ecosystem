@@ -216,37 +216,49 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
             public void display(GLAutoDrawable drawable) {
             	increaseUpdateValue();
             	long start = System.currentTimeMillis();
+            	
+                double frameHeight = getHeight();
+                double frameWidth  = getWidth();
 
                 //Background drawing
                 //Color of the background.
                 gl.glColor4f(1, 1, 1, 1);
           		gl.glBegin(GL.GL_POLYGON);
           		gl.glVertex2d(0, 0);
-          		gl.glVertex2d(0, getHeight());
-          		gl.glVertex2d(getWidth(), getHeight());
-          		gl.glVertex2d(getWidth(), 0);
+          		gl.glVertex2d(0, frameHeight);
+          		gl.glVertex2d(frameWidth, frameHeight);
+          		gl.glVertex2d(frameWidth, 0);
           		gl.glEnd();
-
         		for(IPopulation pop : newPops) {
         			for(IAgent a : pop.getAgents()) {
+                        Color c = a.getColor();
+        				gl.glColor4f((1.0f/255)*c.getRed(), COLOR_FACTOR*c.getGreen(), COLOR_FACTOR*c.getBlue(), COLOR_FACTOR*c.getAlpha());
+
         				Position p = a.getPosition();
                         /*double cx = p.getX();
                         double cy = getHeight() - p.getY();
                         double radius = a.getWidth()/2 + 5;*/
+        				double x;
+        				double y;
                         double height = (double)a.getHeight();
                         double width = (double)a.getWidth();
-                        Color c = a.getColor();
-    	          		gl.glColor4f((1.0f/255)*c.getRed(), COLOR_FACTOR*c.getGreen(), COLOR_FACTOR*c.getBlue(), COLOR_FACTOR*c.getAlpha());
-
-                        Vector v = new Vector(a.getVelocity());
+    	          		
+                        x = a.getVelocity().getX();
+                        y = a.getVelocity().getY();
                         //if(v.getX() != 0 && v.getY() != 0) {
                   		gl.glBegin(GL.GL_TRIANGLES);
-      	         
-      	          		Vector bodyCenter = new Vector(p,new Position(0,0));
-      	          		v.multiply(2.0*height/(3.0*v.getNorm()));
-      	          		Vector nose = v.add(bodyCenter);
+                  		
+      	          		x = x * 2.0*height/(3.0*getNorm(x, y));
+      	          		y = y * 2.0*height/(3.0*getNorm(x, y));
+      	          		 
+          				Vector bodyCenter = new Vector(p.getX(), p.getY());
+      	      	        double xBodyCenter = p.getX()-0;
+      	      	        double yBodyCenter = p.getY()-0;
+      	          		//Vector nose = new Vector(x+xBodyCenter, y+yBodyCenter);
+      	          		double noseX = x+xBodyCenter;
+  	          			double noseY = y+yBodyCenter;
       	          		
-      	          		v = new Vector(a.getVelocity());
+      	          		Vector v = new Vector(a.getVelocity());
       	          		v.multiply(-1.0*height/(3.0*v.getNorm()));
       	          		Vector bottom = v.add(bodyCenter);
       	          		
@@ -255,14 +267,14 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
       	          		legLengthVector = legLengthVector.multiply(width/(2*legLengthVector.getNorm()));
       	          		Vector rightLeg = legLengthVector.add(bottom);
       	          		
-      	          		v = new Vector(a.getVelocity());
+      	          		//v = new Vector(a.getVelocity());
       	          	    legLengthVector = new Vector(v.getY()/v.getX(),-1);
       	          	    legLengthVector = legLengthVector.multiply(width/(2*legLengthVector.getNorm()));
       	          		Vector leftLeg = legLengthVector.add(bottom);
       	          		
-      	          		gl.glVertex2d(nose.getX(), getHeight() - nose.getY());
-      	          		gl.glVertex2d(rightLeg.getX(), getHeight() - rightLeg.getY());
-      	          		gl.glVertex2d(leftLeg.getX(), getHeight() - leftLeg.getY());
+      	          		gl.glVertex2d(noseX, frameHeight - noseY);
+      	          		gl.glVertex2d(rightLeg.getX(), frameHeight - rightLeg.getY());
+      	          		gl.glVertex2d(leftLeg.getX(), frameHeight - leftLeg.getY());
       	          		gl.glEnd();
 	      	          	/*} else {
 	        	          	for(double angle = 0; angle < PI_TIMES_TWO; angle+=increment){
@@ -284,8 +296,13 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
         		sb.append(totalTime);
             	System.out.println(sb.toString());	
         		/* End Information print. */
-
+            	repaint();
             }
+            
+        	public double getNorm(double x, double y){
+        		return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
+        	}
+
  
             @Override
             public void init(GLAutoDrawable drawable) {

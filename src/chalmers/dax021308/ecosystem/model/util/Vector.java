@@ -9,6 +9,7 @@ package chalmers.dax021308.ecosystem.model.util;
  */
 public class Vector {
 
+	//Make these public?!
 	private double x;
 
 	private double y;
