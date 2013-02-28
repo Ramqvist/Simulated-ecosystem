@@ -310,7 +310,6 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
         		//sb.append(totalTime);
             	System.out.println(sb.toString());	
         		/* End Information print. */
-            	repaint();
             }
             
         	public double getNorm(double x, double y){
