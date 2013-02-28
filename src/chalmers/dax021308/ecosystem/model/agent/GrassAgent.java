@@ -15,7 +15,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  * 
  */
 public class GrassAgent extends AbstractAgent {
-	private int reproduceDelay = 0;
+	private double reproduceDelay = 0;
 
 	public GrassAgent(String name, Position pos, Color color, int width,
 			int height) {
@@ -40,17 +40,22 @@ public class GrassAgent extends AbstractAgent {
 
 	@Override
 	public List<IAgent> reproduce(IAgent agent) {
-		if (reproduceDelay == 50) {
-			Position pos = new Position(getPosition().getX() + 1, getPosition()
-					.getY() + 1);
+		double repr = Math.random()*50000; // for whenever we want the spawns to happen randomly
+		int i1 = Double.compare(repr, reproduceDelay);
+		if (repr < reproduceDelay) {
+			
+			List<IAgent> spawn = new ArrayList<IAgent>();
+			Position pos = new Position(getPosition());
+			Vector v = new Vector(5,5);
+			v.rotate(Math.random()*360);
+			pos.addVector(v);
 			IAgent a = new GrassAgent("Grass", pos, color, 5, 5, velocity,
 					maxSpeed);
 			reproduceDelay = 0;
-			List<IAgent> spawn = new ArrayList<IAgent>();
 			spawn.add(a);
 			return spawn;
 		} else {
-			//reproduceDelay++; uncomment once it works
+			reproduceDelay++;
 			return null;
 		}
 
