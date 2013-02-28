@@ -24,10 +24,10 @@ public class DummyPredatorPopulation extends AbstractPopulation {
 	
 	
 
-	public DummyPredatorPopulation(Dimension gridDimension,
+	public DummyPredatorPopulation(String name, Dimension gridDimension,
 			int initPopulationSize, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange) {
-		super(gridDimension);
+		super(name, gridDimension);
 		this.visionRange = visionRange;
 		agents = initializePopulation(initPopulationSize, gridDimension, color,
 				maxSpeed, maxAcceleration, visionRange);
