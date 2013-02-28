@@ -10,21 +10,20 @@ import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
+ * Simple grass, lowest part of the food chain
  * 
  * @author Henrik
  * 
  */
 public class GrassAgent extends AbstractAgent {
 	private double reproduceDelay = 0;
+	private final Dimension gridDimension;
 
 	public GrassAgent(String name, Position pos, Color color, int width,
-			int height) {
-		super(name, pos, color, width, height);
-	}
-
-	public GrassAgent(String name, Position pos, Color color, int width,
-			int height, Vector velocity, double maxSpeed) {
+			int height, Vector velocity, double maxSpeed,
+			Dimension gridDimension) {
 		super(name, pos, color, width, height, velocity, maxSpeed, 0, 0);
+		this.gridDimension = gridDimension;
 	}
 
 	@Override
@@ -38,9 +37,6 @@ public class GrassAgent extends AbstractAgent {
 		// Do nothing, grass shouldn't move!
 	}
 
-	/**
-	 * 
-	 */
 	@Override
 	public List<IAgent> reproduce(IAgent agent) {
 		double repr = Math.random() * 50000; // for whenever we want the spawns
@@ -50,10 +46,12 @@ public class GrassAgent extends AbstractAgent {
 			List<IAgent> spawn = new ArrayList<IAgent>();
 			Position pos = new Position(getPosition());
 			Vector v = new Vector(5, 5);
-			v.rotate(Math.random() * 2 * Math.PI);
+			v.rotate(Math.random() * 2 * Math.PI)
+					.add(getEnvironmentForce(gridDimension).multiply(100))
+					.getNorm();
 			pos.addVector(v);
 			IAgent a = new GrassAgent(name, pos, color, 5, 5, velocity,
-					maxSpeed);
+					maxSpeed, gridDimension);
 			reproduceDelay = 0;
 			spawn.add(a);
 			return spawn;
@@ -63,5 +61,4 @@ public class GrassAgent extends AbstractAgent {
 		}
 
 	}
-
 }
