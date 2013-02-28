@@ -10,9 +10,9 @@ package chalmers.dax021308.ecosystem.model.util;
 public class Vector {
 
 	//Make these public?!
-	private double x;
+	public double x;
 
-	private double y;
+	public double y;
 	
 	/**
 	 * Creates a 2-Dimensional vector with start values (0,0).

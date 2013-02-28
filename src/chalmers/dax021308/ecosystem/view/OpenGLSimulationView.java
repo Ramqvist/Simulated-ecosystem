@@ -238,43 +238,52 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
                         /*double cx = p.getX();
                         double cy = getHeight() - p.getY();
                         double radius = a.getWidth()/2 + 5;*/
-        				double x;
-        				double y;
                         double height = (double)a.getHeight();
                         double width = (double)a.getWidth();
     	          		
-                        x = a.getVelocity().getX();
-                        y = a.getVelocity().getY();
+                        double originalX = a.getVelocity().x;
+                        double originalY = a.getVelocity().y;
+                        double originalNorm = getNorm(originalX, originalY);
                         //if(v.getX() != 0 && v.getY() != 0) {
                   		gl.glBegin(GL.GL_TRIANGLES);
                   		
-      	          		x = x * 2.0*height/(3.0*getNorm(x, y));
-      	          		y = y * 2.0*height/(3.0*getNorm(x, y));
+                  		double x = originalX * 2.0*height/(3.0*originalNorm);
+                  		double y = originalY * 2.0*height/(3.0*originalNorm);
       	          		 
-          				Vector bodyCenter = new Vector(p.getX(), p.getY());
-      	      	        double xBodyCenter = p.getX()-0;
-      	      	        double yBodyCenter = p.getY()-0;
+          				//Vector bodyCenter = new Vector(p.getX(), p.getY());
+      	      	        double xBodyCenter = p.getX();
+      	      	        double yBodyCenter = p.getY();
       	          		//Vector nose = new Vector(x+xBodyCenter, y+yBodyCenter);
       	          		double noseX = x+xBodyCenter;
   	          			double noseY = y+yBodyCenter;
       	          		
-      	          		Vector v = new Vector(a.getVelocity());
-      	          		v.multiply(-1.0*height/(3.0*v.getNorm()));
-      	          		Vector bottom = v.add(bodyCenter);
+      	          		double bottomX = (originalX * -1.0*height/(3.0*originalNorm)) + xBodyCenter;
+      	          		double bottomY = (originalY * -1.0*height/(3.0*originalNorm)) + yBodyCenter ;
       	          		
-      	          		v = new Vector(a.getVelocity());
-      	          		Vector legLengthVector = new Vector(-v.getY()/v.getX(),1);
-      	          		legLengthVector = legLengthVector.multiply(width/(2*legLengthVector.getNorm()));
-      	          		Vector rightLeg = legLengthVector.add(bottom);
+      	          		//Vector legLengthVector = new Vector(-originalY/originalX,1);
+      	          		double legLengthX1 = -originalY/originalX;
+      	          		double legLengthY1 = 1;
+      	          		double legLenthVectorNorm2 = width/(2*getNorm(legLengthX1,legLengthY1 ));
+      	          		//legLengthVector = legLengthVector.multiply(legLenthVectorNorm2);
+      	          		legLengthX1 = legLengthX1 * legLenthVectorNorm2;
+      	          		legLengthY1 = legLengthY1 * legLenthVectorNorm2;
+      	          		//Vector rightLeg = legLengthVector;
+      	          		double rightLegX = legLengthX1 + bottomX;
+      	          		double rightLegY = legLengthY1 + bottomY;
       	          		
       	          		//v = new Vector(a.getVelocity());
-      	          	    legLengthVector = new Vector(v.getY()/v.getX(),-1);
-      	          	    legLengthVector = legLengthVector.multiply(width/(2*legLengthVector.getNorm()));
-      	          		Vector leftLeg = legLengthVector.add(bottom);
+      	          	    double legLengthX2 = originalY/originalX * legLenthVectorNorm2;
+      	          	    double legLengthY2 = -1 * legLenthVectorNorm2;
+      	          	    //legLengthVector = new Vector(originalY/originalX,-1);
+      	          	   // legLengthVector = legLengthVector.multiply(legLenthVectorNorm2);
+      	          		//Vector leftLeg = legLengthVector.add(bottom);
+      	          		//Vector leftLeg = legLengthVector;
+  	          			double leftLegX = legLengthX2 + bottomX;
+      	          		double leftLegY = legLengthY2 + bottomY;
       	          		
       	          		gl.glVertex2d(noseX, frameHeight - noseY);
-      	          		gl.glVertex2d(rightLeg.getX(), frameHeight - rightLeg.getY());
-      	          		gl.glVertex2d(leftLeg.getX(), frameHeight - leftLeg.getY());
+      	          		gl.glVertex2d(rightLegX, frameHeight - rightLegY);
+      	          		gl.glVertex2d(leftLegX, frameHeight - leftLegY);
       	          		gl.glEnd();
 	      	          	/*} else {
 	        	          	for(double angle = 0; angle < PI_TIMES_TWO; angle+=increment){
@@ -292,8 +301,8 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
         		Long totalTime = System.currentTimeMillis() - start;
         		StringBuffer sb = new StringBuffer("OpenGL Redraw! Fps: ");
         		sb.append(getNewFps());
-        		sb.append(" Rendertime in ms: ");
-        		sb.append(totalTime);
+        		//sb.append(" Rendertime in ms: ");
+        		//sb.append(totalTime);
             	System.out.println(sb.toString());	
         		/* End Information print. */
             	repaint();
