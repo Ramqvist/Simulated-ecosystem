@@ -218,7 +218,7 @@ public class AWTSimulationView extends JPanel implements IView {
       			yPoints[2] = (int) (getHeight() - leftLeg.getY());
       			
       			
-          		g2.drawPolygon(xPoints, yPoints, 3);
+          		g2.fillPolygon(xPoints, yPoints, 3);
 			}
     		Long totalTime = System.currentTimeMillis() - start;
     		StringBuffer sb = new StringBuffer("AWT Redraw! Fps: ");
