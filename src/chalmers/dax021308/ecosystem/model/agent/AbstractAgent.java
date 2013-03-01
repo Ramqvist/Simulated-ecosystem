@@ -21,6 +21,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected Color color;
 	protected int width;
 	protected int height;
+	protected int capacity;
 	protected Vector velocity;
 	protected Gender gender;
 	protected double fitness;
@@ -42,6 +43,13 @@ public abstract class AbstractAgent implements IAgent {
 		this.maxSpeed = maxSpeed;
 		this.visionRange = visionRange;
 		this.maxAcceleration = maxAcceleration;
+		this.capacity = Integer.MAX_VALUE;
+	}
+	
+	public AbstractAgent(String name, Position p, Color c, int width, int height, Vector velocity, 
+			double maxSpeed, double visionRange, double maxAcceleration, int capacity){
+		this(name, p, c, width, height, velocity, maxSpeed, visionRange, maxAcceleration);
+		this.capacity = capacity;
 	}
 	
 	/**
@@ -130,7 +138,7 @@ public abstract class AbstractAgent implements IAgent {
 					List<IPopulation> preys, List<IPopulation> neutral, Dimension dim) {
 			}
 			@Override
-			public List<IAgent> reproduce(IAgent agent) {
+			public List<IAgent> reproduce(IAgent agent, int populationSize) {
 				return Collections.emptyList();
 			}
 

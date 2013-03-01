@@ -18,13 +18,20 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public class GrassAgent extends AbstractAgent {
 	private double reproduceDelay = 0;
 	private final Dimension gridDimension;
-	private static final double REPRODUCTION_RATE = 0.0025;
+	private static final double REPRODUCTION_RATE = 0.005;
 	
 	public GrassAgent(String name, Position pos, Color color, int width,
 			int height, Vector velocity, double maxSpeed,
 			Dimension gridDimension) {
 		super(name, pos, color, width, height, velocity, maxSpeed, 0, 0);
 		this.gridDimension = gridDimension;
+	}
+	
+	public GrassAgent(String name, Position pos, Color color, int width,
+			int height, Vector velocity, double maxSpeed,
+			Dimension gridDimension, int capacity) {
+		this(name, pos, color, width, height, velocity, maxSpeed, gridDimension);
+		this.capacity = capacity;
 	}
 
 	@Override
@@ -39,16 +46,17 @@ public class GrassAgent extends AbstractAgent {
 	}
 
 	@Override
-	public List<IAgent> reproduce(IAgent agent) {
+	public List<IAgent> reproduce(IAgent agent, int populationSize) {
 		double repr = Math.random() * 100000; // Random number, 'randomly' chosen
 		// Do the reproducing if repr < reproduceDelay, if not increase
 		// reproduceDelay to increase the chance of reproducing next iteration
-		if (Math.random() < REPRODUCTION_RATE) {
-
+		double popSize = (double)populationSize;
+		double cap = (double)capacity;
+		if (Math.random() < REPRODUCTION_RATE*(1.0-popSize/cap)) {
 			List<IAgent> spawn = new ArrayList<IAgent>();
 			IAgent a = new GrassAgent(name,
 					calculateNewPosition(getPosition()), color, 5, 5, velocity,
-					maxSpeed, gridDimension);
+					maxSpeed, gridDimension, capacity);
 			reproduceDelay = 0;
 			spawn.add(a);
 			return spawn;

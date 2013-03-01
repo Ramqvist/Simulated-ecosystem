@@ -68,7 +68,7 @@ public class WolfAgent extends AbstractAgent {
 	}
 
 	@Override
-	public List<IAgent> reproduce(IAgent agent) {
+	public List<IAgent> reproduce(IAgent agent, int populationSize) {
 		if (hungry)
 			return null;
 		else {

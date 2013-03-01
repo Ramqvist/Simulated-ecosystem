@@ -70,7 +70,7 @@ public class RabbitPopulation implements IPopulation {
 
 		for (IAgent a : rabbits) {
 			a.calculateNextPosition(predators, preys, getNeutralPopulations(), worldSize);
-			newPopulation.addAll(a.reproduce(null));
+			newPopulation.addAll(a.reproduce(null, Integer.MAX_VALUE));
 		}
 		rabbits.addAll(newPopulation);
 	}

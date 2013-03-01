@@ -15,6 +15,7 @@ import chalmers.dax021308.ecosystem.model.agent.IAgent;
 public abstract class AbstractPopulation implements IPopulation {
 	protected List<IAgent> agents;
 	protected Dimension gridDimension;
+	protected int capacity = Integer.MAX_VALUE;
 	private List<IPopulation> preys;
 	private List<IPopulation> predators;
 	private List<IPopulation> neutral;
@@ -32,6 +33,11 @@ public abstract class AbstractPopulation implements IPopulation {
 		this.gridDimension = gridDimension;
 	}
 
+	public AbstractPopulation(String name, Dimension gridDimension, int capacity) {
+		this(name, gridDimension);
+		this.capacity = capacity;
+	}
+	
 	/**
 	 * Clone constructor.
 	 * <p>
@@ -62,9 +68,10 @@ public abstract class AbstractPopulation implements IPopulation {
 			a.calculateNextPosition(predators, preys, neutral, gridDimension);
 		}
 		List<IAgent> kids = new ArrayList<IAgent>();
+		int populationSize = agents.size();
 		for (IAgent a : agents) {
 			a.updatePosition();
-			List<IAgent> spawn = a.reproduce(null);
+			List<IAgent> spawn = a.reproduce(null,populationSize);
 			if (spawn != null) {
 				kids.addAll(spawn);
 			}
