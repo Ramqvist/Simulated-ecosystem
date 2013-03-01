@@ -23,8 +23,10 @@ import org.jfree.text.G2TextMeasurer;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
-import chalmers.dax021308.ecosystem.model.population.DummyPreyPopulation;
+import chalmers.dax021308.ecosystem.model.population.DeerPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPredatorPopulation;
+import chalmers.dax021308.ecosystem.model.population.DummyPreyPopulation;
+import chalmers.dax021308.ecosystem.model.population.WolfPopulation;
 import chalmers.dax021308.ecosystem.model.population.GrassPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.population.RabbitPopulation;
@@ -197,16 +199,20 @@ public class EcoWorld {
 		//rabbits.addPrey(rabbits);
 		//populations.add(rabbits);
 		
-		IPopulation prey = new DummyPreyPopulation("Deers", dim, 100, Color.blue, 2.2, 2, 250);
-		IPopulation predator = new DummyPredatorPopulation("Wolves", dim, 10, Color.red, 2.5, 0.75,275);
-		IPopulation grass = new GrassPopulation("Grass", dim, 500, Color.green, 1, 1, 0);
+
+		IPopulation prey = new DummyPreyPopulation(dim, 500, Color.blue, 2.2, 2, 250);
+		IPopulation predator = new DummyPredatorPopulation(dim, 10, Color.red, 2.5, 0.75,275);
+		
+//		IPopulation prey = new DeerPopulation("Deers", dim, 100, Color.blue, 2.2, 2, 250);
+//		IPopulation predator = new WolfPopulation("Wolves", dim, 10, Color.red, 2.5, 0.75,275);
+//		IPopulation grass = new GrassPopulation("Grass", dim, 500, Color.green, 1, 1, 0);
 		
 		prey.addPredator(predator);
-		prey.addPrey(grass);
+//		prey.addPrey(grass);
 		predator.addPrey(prey);
 		populations.add(prey);
 		populations.add(predator);
-		populations.add(grass);
+//		populations.add(grass);
 		return populations;
 	}
 

@@ -24,10 +24,10 @@ public class DummyPredatorPopulation extends AbstractPopulation {
 	
 	
 
-	public DummyPredatorPopulation(String name, Dimension gridDimension,
+	public DummyPredatorPopulation(Dimension gridDimension,
 			int initPopulationSize, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange) {
-		super(name, gridDimension);
+		super("Simple Predator", gridDimension);
 		this.visionRange = visionRange;
 		agents = initializePopulation(initPopulationSize, gridDimension, color,
 				maxSpeed, maxAcceleration, visionRange);
@@ -55,20 +55,6 @@ public class DummyPredatorPopulation extends AbstractPopulation {
 		return newAgents;
 	}
 
-	@Override
-	public void update() {
-		super.update();
-		int size = agents.size();
-		SimplePredatorAgent a;
-		for(int i=0; i<size; i++){
-			a = (SimplePredatorAgent) agents.get(i);
-			if(a.getEnergy()<=0){
-				agents.remove(i);
-				i--;
-				size--;
-			}
-		}
-	}
 	@Override
 	public double calculateFitness(IAgent agent) {
 		// TODO Auto-generated method stub
