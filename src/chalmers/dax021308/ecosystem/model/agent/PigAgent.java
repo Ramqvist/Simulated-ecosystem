@@ -2,57 +2,89 @@ package chalmers.dax021308.ecosystem.model.agent;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-
-import com.lowagie.text.pdf.ArabicLigaturizer;
+import java.util.Random;
 
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
-import chalmers.dax021308.ecosystem.model.util.Gender;
+import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
- * A basic implementation of the IAgent interface.
+ * The pig is wide and pink, nuff said.
  * 
- * @author Albin
+ * @author Erik
+ *
  */
-public class DeerAgent extends AbstractAgent {
+public class PigAgent extends AbstractAgent {
 
-	private boolean hungry = true;
-	private static final double REPRODUCTION_RATE = 0.15;
-	
-	public DeerAgent(String name, Position p, Color c, int width,
-			int height, Vector velocity, double maxSpeed,
-			double maxAcceleration, double visionRange) {
-		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
-				maxAcceleration);
+	private Position reUsedPosition;
+	private Random ran;
+	private double wanderVelocity = 0.3;
+	private boolean hungry;
+
+	public PigAgent(String name, Position p, Color c, int width, int height,Vector velocity, double maxSpeed, double visionRange,double maxAcceleration, Random ran) {
+		super(name, p, c, width, height, velocity, maxSpeed, visionRange, maxAcceleration);
+		this.ran = ran;
 	}
+/*
+	@Override
+	public void calculateNextPosition(List<IPopulation> predators, List<IPopulation> preys, List<IPopulation> neutral, Dimension dim) {
+		/*if(reUsedPosition == null) {
+			reUsedPosition = new Position(position);
+		}
+		nextPosition = reUsedPosition;
+		int predatorsSize = predators.size();
+		List<IAgent> predatorPop;
+		boolean hasNearbyPredator = false;
+		for(int i = 0 ; i < predatorsSize ; i++) {
+			predatorPop = predators.get(i).getAgents();
+			int predatorPopSize = predatorPop.size();
+			IAgent pred;
+			Position p;
+			for(int j = 0 ; j < predatorPopSize; j++) {
+				pred = predatorPop.get(j);
+				p = pred.getPosition();
+				double distance = p.getDistance(position);
+				if(distance < visionRange) {
+					if(p.getX() > position.getX()) {
+						velocity.x = -maxAcceleration;
+					} else {
+						velocity.x = maxAcceleration;						
+					}
+					if(p.getY() > position.getX()) {
+						velocity.y = -maxAcceleration;	
+					} else {
+						velocity.y = maxAcceleration;						
+					}
+					hasNearbyPredator = true;
+				}
+			}
+		}
+		if(!hasNearbyPredator) {
+			if(ran.nextBoolean()) {
+				velocity.x = wanderVelocity;
+				velocity.y = -wanderVelocity;
+			} else if(ran.nextBoolean())  {
+				velocity.x = -wanderVelocity;
+				velocity.y = wanderVelocity;
+			}
+		}
+
+		Vector separationForce = getSeparationForce(neutral);
+		velocity.x = velocity.x * 1000 + separationForce.x * 1000 + ran.nextDouble() * 10;
+		velocity.y = velocity.y * 1000 + separationForce.y * 1000 + ran.nextDouble() * 10;
+		Log.v(velocity.toString());
+		nextPosition = new Position(position.getX() + separationForce.x, position.getY() + separationForce.x);
+		Log.v(nextPosition.toString());
+	}*/
 
 	@Override
-	public List<IAgent> reproduce(IAgent agent, int populationSize) {
-		if (hungry)
-			return null;
-		else {
-			List<IAgent> spawn = new ArrayList<IAgent>();
-			if (Math.random() < REPRODUCTION_RATE) {
-				hungry = true;
-				double xSign = Math.signum(-1+2*Math.random());
-				double ySign = Math.signum(-1+2*Math.random());
-				double newX = this.getPosition().getX()+xSign*(1+5*Math.random());
-				double newY = this.getPosition().getY()+ySign*(1+5*Math.random());
-				Position pos = new Position(newX,newY);
-				IAgent child = new DeerAgent(name, pos, color, width, height, new Vector(velocity),
-						maxSpeed, maxAcceleration, visionRange);
-				spawn.add(child);
-			} else {
-				hungry = true;
-			}
-			return spawn;
-		}
+	public void updatePosition() {
+		this.reUsedPosition = position;
+		this.position = nextPosition;
 	}
-
+	
 	/**
 	 * @author Sebbe
 	 */
@@ -106,9 +138,13 @@ public class DeerAgent extends AbstractAgent {
 	 */
 	private Vector getPreyForce(List<IPopulation> preys) {
 		Vector preyForce = new Vector(0, 0);
-		for (IPopulation pop : preys) {
+		IPopulation pop;
+		int preySize = preys.size();
+		for (int j = 0; j < preySize; j++) {
+			pop = preys.get(j);
 			List<IAgent> agents = pop.getAgents();
-			for (int i = 0; i < pop.getAgents().size(); i++) {
+			int agentSize = agents.size();
+			for (int i = 0; i < agentSize; i++) {
 				IAgent a = agents.get(i);
 				Position p = a.getPosition();
 				double distance = getPosition().getDistance(p);
@@ -116,7 +152,9 @@ public class DeerAgent extends AbstractAgent {
 					if (distance <= INTERACTION_RANGE) {
 						// Food found, let's eat it and make some reproducing
 						// possible
-						pop.getAgents().remove(i);
+						agents.remove(i);
+						i--;
+						agentSize--;
 						hungry = false;
 					} else {
 						Vector newForce = new Vector(p, getPosition());
@@ -140,8 +178,15 @@ public class DeerAgent extends AbstractAgent {
 	private Vector getPredatorForce(List<IPopulation> predators) {
 		Vector predatorForce = new Vector(0, 0);
 		int nVisiblePredators = 0;
-		for (IPopulation pop : predators) {
-			for (IAgent predator : pop.getAgents()) {
+		IPopulation pop;
+		int popSize = predators.size();
+		for (int i = 0; i < popSize ; i++) {
+			pop = predators.get(i);
+			List<IAgent> agents = pop.getAgents();
+			int agentSize = agents.size();
+			IAgent predator;
+			for (int j = 0; j < agentSize; j++ ) {
+				predator = agents.get(j);
 				Position p = predator.getPosition();
 				double distance = getPosition().getDistance(p);
 				if (distance <= visionRange) { // If predator is in vision range
@@ -172,6 +217,15 @@ public class DeerAgent extends AbstractAgent {
 		}
 
 		return predatorForce;
+	}
+
+	@Override
+	public List<IAgent> reproduce(IAgent agent, int populationSize) {
+		return null;
+	}
+
+	public IAgent reproduceOne(int populationSize) {
+		return null;
 	}
 
 }
