@@ -41,9 +41,9 @@ public class ToyController implements IController {
 		model.start();
 		
 		//OpenGL 
-//		OpenGLSimulationView simView = new OpenGLSimulationView(model, d, true);
+		OpenGLSimulationView simView = new OpenGLSimulationView(model, d, true);
 		//Java AWT
-		AWTSimulationView simView = new AWTSimulationView(model, d, true);
+//		AWTSimulationView simView = new AWTSimulationView(model, d, true);
 		simView.init();
 		
 		this.graphView = new GraphPopulationAmountView(model);
