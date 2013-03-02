@@ -71,7 +71,7 @@ public class EcoWorld {
 	private long startIterationTime;
 	private long elapsedTime;
 	
-	public static List<IAgent>[][] worldGrid;
+	public static WorldGrid worldGrid;
 	
 	/**
 	 * Each list in the list contains one snapshot of frame;
@@ -155,6 +155,8 @@ public class EcoWorld {
 		if(recordSimulation) {
 			recordedSimulation = new ArrayList<List<IPopulation>>(numIterations);
 		}
+		
+//		worldGrid = new WorldGrid(d.height, d.width);
 
 		/* Uncomment to test ticking functionality */
 		// this.env = new Environment(mOnFinishListener);
@@ -478,5 +480,4 @@ public class EcoWorld {
 		pw.close();
 		return true;
 	}
-	
 }
