@@ -2,7 +2,9 @@ package chalmers.dax021308.ecosystem.model.agent;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
@@ -22,10 +24,15 @@ public class PigAgent extends AbstractAgent {
 	private Random ran;
 	private double wanderVelocity = 0.3;
 	private boolean hungry;
+	
+	private Map<IAgent, List<IAgent>> seperationForceMap;
+	private int skips;
+	private int calc;
 
-	public PigAgent(String name, Position p, Color c, int width, int height,Vector velocity, double maxSpeed, double visionRange,double maxAcceleration, Random ran) {
+	public PigAgent(String name, Position p, Color c, int width, int height,Vector velocity, double maxSpeed, double visionRange,double maxAcceleration, Random ran, Map<IAgent, List<IAgent>> seperationForceMap) {
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange, maxAcceleration);
 		this.ran = ran;
+		this.seperationForceMap = seperationForceMap;
 	}
 /*
 	@Override
@@ -94,6 +101,7 @@ public class PigAgent extends AbstractAgent {
 			Dimension gridDimension) {
 
 		Vector predatorForce = getPredatorForce(predators);
+//		Vector separationForce = getEriksOptimeradeSeparationForce(neutral);
 		Vector separationForce = getSeparationForce(neutral);
 		// Vector separationForce = new Vector();
 		Vector environmentForce = getEnvironmentForce(gridDimension);
@@ -134,6 +142,96 @@ public class PigAgent extends AbstractAgent {
 			reUsedPosition.setPosition(position.getX() + velocity.x, position.getY() + velocity.y);
 			nextPosition = reUsedPosition;
 		}
+	}
+	
+	/**
+	 * @author Sebbe
+	 * @param neutral the population of neutral agents that this agent should be separated from (not collide with).
+	 * @return a vector with the force that this agent feels from other neutral agents in order not to collide with them.
+	 * <p>
+	 * Warning! Not optimal for linked-lists, due to O(n) complexity of linked list get(n) method. 
+	 * TODO: Special method for linked list using collection.iterator(), hasNext() & next().
+	 */
+	protected Vector getEriksOptimeradeSeparationForce(List<IPopulation> neutral){
+		//Allocating new object here is ok since its only 1 per method call. //Erik
+		Vector separationForce = new Vector(0,0);
+		IPopulation pop;
+		int popSize = neutral.size();
+		skips = 0;
+		calc = 0;
+		for(int j = 0 ; j < popSize ; j++) {
+			pop = neutral.get(j);
+			int size = pop.getAgents().size();
+			List<IAgent> agents = pop.getAgents();
+			IAgent agent;
+			for(int i = 0; i < size; i++) {
+				agent = agents.get(i);
+				if(agent != this && agent != null) {
+					if( seperationForceMap.get(agent) == null) {
+						seperationForceMap.put(agent, new ArrayList<IAgent>(neutral.size()));
+					}
+					if( seperationForceMap.get(this) == null) {
+						seperationForceMap.put(this, new ArrayList<IAgent>(neutral.size()));
+					}
+					if( seperationForceMap.get(agent).contains(this) ) {
+						++skips;
+					} else {
+						++calc;
+						Position p = agent.getPosition();
+						double distance = getPosition().getDistance(p);
+						if(distance<=INTERACTION_RANGE){ //If neutral is in vision range for prey
+							/*
+							 * Create a vector that points away from the neutral.
+							 * TODO: Remove the "new Vector" and replace with doubles. This will be called alot of times.
+							 * Low level programming is crucial.
+							 */
+							Vector newForce = new Vector(this.getPosition(),p);
+							
+							/*
+							 * Add this vector to the separation force, with proportion to how close the neutral agent is.
+							 * Closer agents will affect the force more than those far away. 
+							 */
+							double norm = newForce.getNorm();
+							double v = 1/(norm*distance*distance);
+							newForce.x = newForce.x * v;
+							newForce.y = newForce.y * v;
+							separationForce.x = separationForce.x + newForce.x;
+							separationForce.y = separationForce.y + newForce.y;
+							
+						}
+						//nVisiblePredators++;//Unused?
+						seperationForceMap.get(this).add(agent);
+					}
+				}
+			}
+		}
+		//Log.v("SKips " + skips);
+		//Log.v("Calculations: " + calc);
+		return separationForce;		
+	}
+	
+	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((name == null) ? 0 : name.hashCode());
+		result = result + position.hashCode();
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		
+		return true;
 	}
 
 	/**
