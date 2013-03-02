@@ -39,11 +39,11 @@ public class GraphPopulationAmountView implements IGraphView {
 	// Values for axis. More values are set in init()
 	private IAxis<IAxisScalePolicy> xAxis;
 	private IAxis<IAxisScalePolicy> yAxis;
-	private Range rangeX = new Range(0, 20000);
+	private Range rangeX = new Range(0, 1000);
 	private Range rangeY = new Range(0, 500);
-	private String xAxisTitle = "Time (ms)";
+	private String xAxisTitle = "Iterations";
 	private String yAxisTitle = "Population amount";
-	
+	private int nIterationsPassed = 0;
 
 	public GraphPopulationAmountView(EcoWorld model) {
 		initJFrame(); // TODO temporary
@@ -77,7 +77,7 @@ public class GraphPopulationAmountView implements IGraphView {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
-
+		nIterationsPassed++;
 		String eventName = event.getPropertyName();
 		if(eventName == EcoWorld.EVENT_STOP) {
 			//Model has stopped. Maybe hide view?
@@ -98,7 +98,7 @@ public class GraphPopulationAmountView implements IGraphView {
 				// 
 				for (int i = 0; i < newPops.size(); ++i) {
 					int numOfAgents = newPops.get(i).getAgents().size();
-					traces.get(i).addPoint(((double) System.currentTimeMillis() - this.m_starttime), numOfAgents);					
+					traces.get(i).addPoint(nIterationsPassed, numOfAgents);					
 				}	
 			}
 		}
