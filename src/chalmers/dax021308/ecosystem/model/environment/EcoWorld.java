@@ -71,6 +71,8 @@ public class EcoWorld {
 	private long startIterationTime;
 	private long elapsedTime;
 	
+	public static List<IAgent>[][] worldGrid;
+	
 	/**
 	 * Each list in the list contains one snapshot of frame;
 	 */
