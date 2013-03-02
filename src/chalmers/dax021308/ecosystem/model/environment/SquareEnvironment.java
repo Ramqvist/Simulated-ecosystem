@@ -28,6 +28,7 @@ public class SquareEnvironment implements IEnvironment {
 	
 	private ExecutorService workPool;
 	private List<Future<Runnable>> futures;
+	private PopulationWorker popWorkers[];
 
 	/**
 	 * 
@@ -52,6 +53,10 @@ public class SquareEnvironment implements IEnvironment {
 		this.width = width;
 		this.workPool = Executors.newFixedThreadPool(populations.size());
 		this.futures = new ArrayList<Future<Runnable>>();
+		this.popWorkers = new PopulationWorker[populations.size()];
+		for(int i = 0; i < popWorkers.length ; i++) {
+			popWorkers[i] = new PopulationWorker();
+		}
 	}
 
 	@Override
@@ -60,8 +65,11 @@ public class SquareEnvironment implements IEnvironment {
 	 * Updates each population and then informs EcoWorld once it's finished
 	 */
 	public void run() {
-        Future f = workPool.submit(new PopulationWorker());
-        futures.add(f);
+		for(int i = 0 ; i < populations.size(); i ++) {
+			popWorkers[i].p = populations.get(i);
+			Future f = workPool.submit(popWorkers[i]);
+	        futures.add(f);
+		}
 
         for (Future<Runnable> fut : futures)
         {
@@ -88,10 +96,11 @@ public class SquareEnvironment implements IEnvironment {
 	}
 	
 	private class PopulationWorker implements Runnable {
+		private IPopulation p;
+		
 		@Override
 		public void run() {
-			for (int i = 0; i < populations.size(); i++)
-				populations.get(i).update();
+			p.update();
 		}
 	}
 

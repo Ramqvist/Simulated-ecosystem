@@ -112,11 +112,9 @@ public class WolfAgent extends AbstractAgent {
 				double distance = getPosition().getDistance(p);
 				if (distance <= visionRange) {
 					if(distance <= INTERACTION_RANGE) {
-						agents.remove(i);
+						pop.addToRemoveList(a);
 						hungry = false;
 						this.energy = LIFE_LENGTH;
-						i--;
-						size--;
 					} else {
 					/*
 					 * Create a vector that points towards the prey.

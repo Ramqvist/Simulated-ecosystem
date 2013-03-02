@@ -116,7 +116,7 @@ public class DeerAgent extends AbstractAgent {
 					if (distance <= INTERACTION_RANGE) {
 						// Food found, let's eat it and make some reproducing
 						// possible
-						pop.getAgents().remove(i);
+						pop.addToRemoveList(a);
 						hungry = false;
 					} else {
 						Vector newForce = new Vector(p, getPosition());

@@ -160,9 +160,7 @@ public class PigAgent extends AbstractAgent {
 					if (distance <= INTERACTION_RANGE) {
 						// Food found, let's eat it and make some reproducing
 						// possible
-						agents.remove(i);
-						i--;
-						agentSize--;
+						pop.addToRemoveList(a);
 						hungry = false;
 					} else {
 						Vector newForce = new Vector(p, getPosition());

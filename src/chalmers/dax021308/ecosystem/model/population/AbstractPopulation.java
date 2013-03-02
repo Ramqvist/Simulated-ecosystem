@@ -7,6 +7,7 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.util.AgentContainer;
+import chalmers.dax021308.ecosystem.model.util.Log;
 
 /**
  * 
@@ -68,6 +69,7 @@ public abstract class AbstractPopulation implements IPopulation {
 	public void update() {
 		for (IAgent a : agents) {
 			a.calculateNextPosition(predators, preys, neutral, gridDimension);
+			Log.v("Updating" + a.getName());
 		}
 		List<IAgent> kids = new ArrayList<IAgent>();
 		int populationSize = agents.size();
