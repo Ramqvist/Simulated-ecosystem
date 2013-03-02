@@ -27,7 +27,7 @@ public class SquareEnvironment implements IEnvironment {
 	private int width;
 	
 	private ExecutorService workPool;
-    List<Future<Runnable>> futures = new ArrayList<Future<Runnable>>();
+	private List<Future<Runnable>> futures;
 
 	/**
 	 * 
@@ -50,7 +50,8 @@ public class SquareEnvironment implements IEnvironment {
 		this.mListener = listener;
 		this.height = height;
 		this.width = width;
-		workPool = Executors.newFixedThreadPool(populations.size());
+		this.workPool = Executors.newFixedThreadPool(populations.size());
+		this.futures = new ArrayList<Future<Runnable>>();
 	}
 
 	@Override
@@ -62,7 +63,6 @@ public class SquareEnvironment implements IEnvironment {
         Future f = workPool.submit(new PopulationWorker());
         futures.add(f);
 
-
         for (Future<Runnable> fut : futures)
         {
            try {
@@ -73,6 +73,15 @@ public class SquareEnvironment implements IEnvironment {
 			e.printStackTrace();
 		}
         }
+        //Remove all agents from the remove list.
+		for (int i = 0; i < populations.size(); i++)
+			populations.get(i).removeAgentsFromRemoveList();
+		
+
+        //Update all the positions, i.e. position = nextPosition.
+		//for (int i = 0; i < populations.size(); i++)
+		//	populations.get(i).removeAgentsFromRemoveList();
+		
 		// Callback function called to inform EcoWorld that the current update
 		// is run
 		mListener.onFinish(populations, obstacles);

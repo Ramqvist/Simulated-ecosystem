@@ -133,4 +133,16 @@ public class RabbitPopulation implements IPopulation {
 			}
 		};
 	}
+
+
+	@Override
+	public void removeAgentsFromRemoveList() {
+		
+	}
+
+
+	@Override
+	public void addToRemoveList(IAgent a) {
+		
+	}
 }

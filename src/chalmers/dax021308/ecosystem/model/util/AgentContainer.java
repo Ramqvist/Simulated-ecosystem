@@ -6,6 +6,7 @@ import java.util.List;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 
 /**
+ * TODO: Remove class?
  * AgentContainer, contains an ordinary IAgent-list and a remove list.
  * <p>
  * This removelist is a list of agents that is to be removed.

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
+import chalmers.dax021308.ecosystem.model.util.AgentContainer;
 
 /**
  * 
@@ -19,14 +20,16 @@ public abstract class AbstractPopulation implements IPopulation {
 	protected List<IPopulation> preys;
 	protected List<IPopulation> predators;
 	protected List<IPopulation> neutral;
+	protected List<IAgent> removeList;
 	private String name;
 
 	public AbstractPopulation() {
 		preys = new ArrayList<IPopulation>();
 		predators = new ArrayList<IPopulation>();
 		neutral = new ArrayList<IPopulation>();
+		removeList = new ArrayList<IAgent>();
 	}
-
+	
 	public AbstractPopulation(String name, Dimension gridDimension) {
 		this();
 		this.name = name;
@@ -127,5 +130,25 @@ public abstract class AbstractPopulation implements IPopulation {
 				return 0;
 			}
 		};
+	}
+	
+	/**
+	 * Cleares out the agents in the removeList.
+	 * <p>
+	 * Warning! Use only when no other thread is iterating of the agentlist.
+	 */
+	public void removeAgentsFromRemoveList() {
+		IAgent a;
+		for(int i = 0 ; i < removeList.size() ; i++)  {
+			a = removeList.get(i);
+			agents.remove(a);
+		}
+		removeList.clear();
+	}
+
+
+	@Override
+	public synchronized void addToRemoveList(IAgent a) {
+		removeList.add(a);
 	}
 }
