@@ -150,21 +150,31 @@ public abstract class AbstractAgent implements IAgent {
 	 * @author Sebbe
 	 * @param neutral the population of neutral agents that this agent should be separated from (not collide with).
 	 * @return a vector with the force that this agent feels from other neutral agents in order not to collide with them.
+	 * <p>
+	 * Warning! Not optimal for linked-lists, due to O(n) complexity of linked list get(n) method. 
+	 * TODO: Special method for linked list using collection.iterator(), hasNext() & next().
 	 */
 	protected Vector getSeparationForce(List<IPopulation> neutral){
+		//Allocating new object here is ok since its only 1 per method call. //Erik
 		Vector separationForce = new Vector(0,0);
-		int nVisiblePredators = 0;
-		for(IPopulation pop : neutral) {
+		//int nVisiblePredators = 0; //Unused?
+		IPopulation pop;
+		int popSize = neutral.size();
+		for(int j = 0 ; j < popSize ; j++) {
+			pop = neutral.get(j);
 			int size = pop.getAgents().size();
 			List<IAgent> agents = pop.getAgents();
+			IAgent agent;
 			for(int i = 0; i < size; i++) {
-				IAgent agent = agents.get(i);
+				agent = agents.get(i);
 				if(agent != this) {
 					Position p = agent.getPosition();
 					double distance = getPosition().getDistance(p);
 					if(distance<=INTERACTION_RANGE){ //If neutral is in vision range for prey
 						/*
 						 * Create a vector that points away from the neutral.
+						 * TODO: Remove the "new Vector" and replace with doubles. This will be called alot of times.
+						 * Low level programming is crucial.
 						 */
 						Vector newForce = new Vector(this.getPosition(),p);
 						
@@ -173,8 +183,13 @@ public abstract class AbstractAgent implements IAgent {
 						 * Closer agents will affect the force more than those far away. 
 						 */
 						double norm = newForce.getNorm();
-						separationForce.add(newForce.multiply(1/(norm*distance*distance)));
-						nVisiblePredators++;
+						double v = 1/(norm*distance*distance);
+						newForce.x = newForce.x * v;
+						newForce.y = newForce.y * v;
+						separationForce.x = separationForce.x + newForce.x;
+						separationForce.y = separationForce.y + newForce.y;
+						
+						//nVisiblePredators++;//Unused?
 					}
 				}
 			}

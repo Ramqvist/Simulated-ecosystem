@@ -127,7 +127,13 @@ public class PigAgent extends AbstractAgent {
 		}
 
 		this.setVelocity(newVelocity);
-		nextPosition = Position.positionPlusVector(position, velocity);
+		if(reUsedPosition == null) { 
+			reUsedPosition = Position.positionPlusVector(position, velocity);
+			nextPosition = reUsedPosition;
+		} else {
+			reUsedPosition.setPosition(position.getX() + velocity.x, position.getY() + velocity.y);
+			nextPosition = reUsedPosition;
+		}
 	}
 
 	/**
@@ -135,6 +141,8 @@ public class PigAgent extends AbstractAgent {
 	 * @param preys
 	 *            The list of preys to eat
 	 * @return returns The force the preys attracts the agent with
+	 * 
+	 * @author Erik, Method optimized for ArrayList  
 	 */
 	private Vector getPreyForce(List<IPopulation> preys) {
 		Vector preyForce = new Vector(0, 0);
@@ -174,6 +182,8 @@ public class PigAgent extends AbstractAgent {
 	 *         unit norm. Can be interpreted as the average sum of forces that
 	 *         the agent feels, weighted by how close the source of the force
 	 *         is.
+	 *         
+	 * @author Erik, Method optimized for ArrayList        
 	 */
 	private Vector getPredatorForce(List<IPopulation> predators) {
 		Vector predatorForce = new Vector(0, 0);

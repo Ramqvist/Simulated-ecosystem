@@ -21,7 +21,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  * I tried to keep allocation of new objects at a minimum.
  * <p>
  * Uses {@link PigAgent} as agent.
- * Coded this for practise.
+ * Coded this for practice.
  * @author Erik Ramqvist
  *
  */
@@ -55,8 +55,8 @@ public class PigPopulation extends AbstractPopulation {
 			Position pos = new Position(ran.nextInt(gridDimension.width), ran.nextInt(gridDimension.height));
 			Vector velocity = new Vector(maxSpeed, maxSpeed);
 			while (velocity.getNorm() > maxSpeed) {
-				velocity.setVector(-maxSpeed + Math.random() * 2 * maxSpeed,
-						-maxSpeed + Math.random() * 2 * maxSpeed);
+				velocity.setVector(-maxSpeed + ran.nextDouble() * 2 * maxSpeed,
+						-maxSpeed + ran.nextDouble() * 2 * maxSpeed);
 			}
 		IAgent newPig = new PigAgent("Pig - " + i, pos , color, pigWidth, pigHeight,velocity, maxSpeed, visionRange, maxAcceleration, ran);
 			agents.add(newPig);
@@ -67,8 +67,7 @@ public class PigPopulation extends AbstractPopulation {
 	public double calculateFitness(IAgent agent) {
 		return 0;
 	}
-	
-	/*
+
 	@Override
 	public void update() {
 		int populationSize = agents.size();
@@ -89,6 +88,6 @@ public class PigPopulation extends AbstractPopulation {
 		if (kids != null && !kids.isEmpty()) {
 			agents.addAll(kids);
 		}
-	}*/
+	}
 
 }
