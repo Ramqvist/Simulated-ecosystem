@@ -25,14 +25,14 @@ public class PigAgent extends AbstractAgent {
 	private double wanderVelocity = 0.3;
 	private boolean hungry;
 	
-	private Map<IAgent, List<IAgent>> seperationForceMap;
+	private List<IAgent> seperationForceList;
 	private int skips;
 	private int calc;
 
-	public PigAgent(String name, Position p, Color c, int width, int height,Vector velocity, double maxSpeed, double visionRange,double maxAcceleration, Random ran, Map<IAgent, List<IAgent>> seperationForceMap) {
+	public PigAgent(String name, Position p, Color c, int width, int height,Vector velocity, double maxSpeed, double visionRange,double maxAcceleration, Random ran, List<IAgent> seperationForceMap) {
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange, maxAcceleration);
 		this.ran = ran;
-		this.seperationForceMap = seperationForceMap;
+		this.seperationForceList = seperationForceMap;
 	}
 /*
 	@Override
@@ -101,8 +101,8 @@ public class PigAgent extends AbstractAgent {
 			Dimension gridDimension) {
 
 		Vector predatorForce = getPredatorForce(predators);
-//		Vector separationForce = getEriksOptimeradeSeparationForce(neutral);
-		Vector separationForce = getSeparationForce(neutral);
+		Vector separationForce = getEriksOptimeradeSeparationForce(neutral);
+//		Vector separationForce = getSeparationForce(neutral);
 		// Vector separationForce = new Vector();
 		Vector environmentForce = getEnvironmentForce(gridDimension);
 		Vector preyForce = getPreyForce(preys);
@@ -167,13 +167,7 @@ public class PigAgent extends AbstractAgent {
 			for(int i = 0; i < size; i++) {
 				agent = agents.get(i);
 				if(agent != this && agent != null) {
-					if( seperationForceMap.get(agent) == null) {
-						seperationForceMap.put(agent, new ArrayList<IAgent>(neutral.size()));
-					}
-					if( seperationForceMap.get(this) == null) {
-						seperationForceMap.put(this, new ArrayList<IAgent>(neutral.size()));
-					}
-					if( seperationForceMap.get(agent).contains(this) ) {
+					if(seperationForceList.contains(agent)) {
 						++skips;
 					} else {
 						++calc;
@@ -199,14 +193,14 @@ public class PigAgent extends AbstractAgent {
 							separationForce.y = separationForce.y + newForce.y;
 							
 						}
-						//nVisiblePredators++;//Unused?
-						seperationForceMap.get(this).add(agent);
 					}
 				}
-			}
+			}		
+			seperationForceList.add(this);
 		}
-		//Log.v("SKips " + skips);
-		//Log.v("Calculations: " + calc);
+//		Log.v("SKips " + skips);
+//		Log.v("Calculations: " + calc);			
+
 		return separationForce;		
 	}
 	

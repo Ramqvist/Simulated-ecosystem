@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -37,7 +38,7 @@ public class PigPopulation extends AbstractPopulation {
 	private final int pigHeight = 25;
 	private double maxAcceleration;
 	
-	private Map<IAgent, List<IAgent>> seperationForceMap;
+	private List<IAgent> seperationForceList;
 
 	public PigPopulation(String name, Dimension gridDimension,int initPopulationSize, Color color, double maxSpeed,double maxAcceleration, double visionRange) {
 		super(name, gridDimension);
@@ -47,7 +48,7 @@ public class PigPopulation extends AbstractPopulation {
 		this.maxAcceleration = maxAcceleration;
 		this.gridDimension = gridDimension;
 		ran = new Random();
-		this.seperationForceMap = new HashMap<IAgent, List<IAgent>>(initPopulationSize * initPopulationSize); 
+		this.seperationForceList = new LinkedList<IAgent>(); 
 		createInitialPopulation(initPopulationSize);
 	}
 	
@@ -63,7 +64,7 @@ public class PigPopulation extends AbstractPopulation {
 				velocity.setVector(-maxSpeed + ran.nextDouble() * 2 * maxSpeed,
 						-maxSpeed + ran.nextDouble() * 2 * maxSpeed);
 			}
-			IAgent newPig = new PigAgent("Pig - " + i, pos , color, pigWidth, pigHeight,velocity, maxSpeed, visionRange, maxAcceleration, ran, seperationForceMap);
+			IAgent newPig = new PigAgent("Pig - " + i, pos , color, pigWidth, pigHeight,velocity, maxSpeed, visionRange, maxAcceleration, ran, seperationForceList);
 			agents.add(newPig);
 		}
 	}
@@ -80,7 +81,7 @@ public class PigPopulation extends AbstractPopulation {
 		for (int i = 0; i < populationSize; i++) {
 			agents.get(i).calculateNextPosition(predators, preys, neutral,gridDimension);
 		}
-		seperationForceMap.clear();
+		seperationForceList.clear();
 		List<IAgent> kids = new ArrayList<IAgent>();
 		populationSize = agents.size();
 		for (int i = 0; i < populationSize; i++) {
