@@ -14,7 +14,7 @@ import chalmers.dax021308.ecosystem.model.util.Position;
 /**
  * SquareEnvironment Class. Represents a environment in the shape of a square.
  * 
- * @author Henrik
+ * @author Henrik, Erik
  * 
  */
 public class SquareEnvironment implements IEnvironment {
@@ -23,9 +23,8 @@ public class SquareEnvironment implements IEnvironment {
 	private List<IPopulation> populations;
 	private List<IObstacle> obstacles;
 	private OnFinishListener mListener;
-	private int height;
-	private int width;
-	
+
+	/* Concurrent variables */
 	private ExecutorService workPool;
 	private List<Future<Runnable>> futures;
 	private PopulationWorker popWorkers[];
@@ -49,8 +48,6 @@ public class SquareEnvironment implements IEnvironment {
 		this.populations = populations;
 		this.obstacles = obstacles;
 		this.mListener = listener;
-		this.height = height;
-		this.width = width;
 		this.workPool = Executors.newFixedThreadPool(populations.size());
 		this.futures = new ArrayList<Future<Runnable>>();
 		this.popWorkers = new PopulationWorker[populations.size()];
@@ -82,8 +79,9 @@ public class SquareEnvironment implements IEnvironment {
 		}
         }
         //Remove all agents from the remove list.
-		for (int i = 0; i < populations.size(); i++)
+		for (int i = 0; i < populations.size(); i++) {
 			populations.get(i).removeAgentsFromRemoveList();
+		}
 		
 
         //Update all the positions, i.e. position = nextPosition.
