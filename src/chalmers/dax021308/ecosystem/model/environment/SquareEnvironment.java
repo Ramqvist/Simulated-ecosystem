@@ -1,6 +1,11 @@
 package chalmers.dax021308.ecosystem.model.environment;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld.OnFinishListener;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
@@ -20,6 +25,9 @@ public class SquareEnvironment implements IEnvironment {
 	private OnFinishListener mListener;
 	private int height;
 	private int width;
+	
+	private ExecutorService workPool;
+    List<Future<Runnable>> futures = new ArrayList<Future<Runnable>>();
 
 	/**
 	 * 
@@ -42,6 +50,7 @@ public class SquareEnvironment implements IEnvironment {
 		this.mListener = listener;
 		this.height = height;
 		this.width = width;
+		workPool = Executors.newFixedThreadPool(populations.size());
 	}
 
 	@Override
@@ -50,12 +59,31 @@ public class SquareEnvironment implements IEnvironment {
 	 * Updates each population and then informs EcoWorld once it's finished
 	 */
 	public void run() {
-		for (int i = 0; i < populations.size(); i++)
-			populations.get(i).update();
+        Future f = workPool.submit(new PopulationWorker());
+        futures.add(f);
 
+
+        for (Future<Runnable> fut : futures)
+        {
+           try {
+			fut.get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+        }
 		// Callback function called to inform EcoWorld that the current update
 		// is run
 		mListener.onFinish(populations, obstacles);
+	}
+	
+	private class PopulationWorker implements Runnable {
+		@Override
+		public void run() {
+			for (int i = 0; i < populations.size(); i++)
+				populations.get(i).update();
+		}
 	}
 
 	@Override

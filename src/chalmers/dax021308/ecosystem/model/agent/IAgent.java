@@ -83,6 +83,7 @@ public interface IAgent extends Cloneable {
 	 */
 	public Gender getGender();
 
+
 	/**
 	 * Clone an agent. 
 	 * <p>
