@@ -4,7 +4,6 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.AbstractAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
-import chalmers.dax021308.ecosystem.model.util.AgentContainer;
 
 /**
  * Describes the general configuration of an arbitrary population.
