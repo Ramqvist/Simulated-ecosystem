@@ -139,7 +139,6 @@ public class AWTSimulationView extends JPanel implements IView {
 		int fps = getNewFps();
 		if(showFPS) {
 			increaseUpdateValue();
-			Log.v(fps + "");
 			char[] fpsChar;
 			if(fps > 1000) {
 				fpsChar = new char[8];
@@ -178,7 +177,6 @@ public class AWTSimulationView extends JPanel implements IView {
 			g2.drawChars(fpsChar, 0, fpsChar.length, 15, 30);
 		}
 		
-		Log.v("invalidate");
 		for(IPopulation pop : newPops) {
 			for(IAgent a : pop.getAgents()) {
 				Position p = a.getPosition();
@@ -220,12 +218,6 @@ public class AWTSimulationView extends JPanel implements IView {
       			
           		g2.fillPolygon(xPoints, yPoints, 3);
 			}
-    		Long totalTime = System.currentTimeMillis() - start;
-    		StringBuffer sb = new StringBuffer("AWT Redraw! Fps: ");
-    		sb.append(getNewFps());
-    		sb.append(" Rendertime in ms: ");
-    		sb.append(totalTime);
-        	System.out.println(sb.toString());	
 		}
 		
 		g2.setColor(Color.black);
@@ -241,6 +233,14 @@ public class AWTSimulationView extends JPanel implements IView {
 				   xRight, yBot);
 		g2.drawLine(xRight, yBot,
 				   xLeft, yBot);
+		
+
+		Long totalTime = System.currentTimeMillis() - start;
+		StringBuffer sb = new StringBuffer("AWT Redraw! Fps: ");
+		sb.append(getNewFps());
+		sb.append(" Rendertime in ms: ");
+		sb.append(totalTime);
+    	System.out.println(sb.toString());	
 		
     }
 	

@@ -90,4 +90,5 @@ public interface IAgent extends Cloneable {
 	 * @throws CloneNotSupportedException 
 	 */
 	public IAgent cloneAgent() throws CloneNotSupportedException;
+
 }

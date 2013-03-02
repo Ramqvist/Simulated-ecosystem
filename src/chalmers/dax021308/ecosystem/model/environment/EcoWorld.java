@@ -26,6 +26,7 @@ import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.DeerPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPredatorPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPreyPopulation;
+import chalmers.dax021308.ecosystem.model.population.PigPopulation;
 import chalmers.dax021308.ecosystem.model.population.WolfPopulation;
 import chalmers.dax021308.ecosystem.model.population.GrassPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
@@ -56,8 +57,8 @@ public class EcoWorld {
 	/* 								   */
 	
 	private AtomicBoolean environmentFinished = new AtomicBoolean(false);
-	private AtomicBoolean timerFinished = new AtomicBoolean(false);
-	private AtomicBoolean shouldRun = new AtomicBoolean(false);
+	private AtomicBoolean timerFinished       = new AtomicBoolean(false);
+	private AtomicBoolean shouldRun           = new AtomicBoolean(false);
 	private boolean runWithoutTimer;
 	private boolean recordSimulation;
 	
@@ -81,7 +82,7 @@ public class EcoWorld {
 	private Object syncObject = new Object();
 	private int numUpdates = 0;
 	private Dimension d;
-	private static final int NUM_THREAD = 1;
+	//private static final int NUM_THREAD = 1;
 	private ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	private OnFinishListener mOnFinishListener = new OnFinishListener() {
@@ -203,9 +204,12 @@ public class EcoWorld {
 //		IPopulation prey = new DummyPreyPopulation(dim, 500, Color.blue, 2.2, 2, 250);
 //		IPopulation predator = new DummyPredatorPopulation(dim, 10, Color.red, 2.5, 0.75,275);
 		
-		IPopulation prey = new DeerPopulation("Deers", dim, 100, Color.blue, 2.2, 2, 200);
-		IPopulation predator = new WolfPopulation("Wolves", dim, 10, Color.red, 2.5, 0.75,250);
-		IPopulation grass = new GrassPopulation("Grass", dim, 500, Color.green, 1, 1, 0, 1000);
+		
+		IPopulation prey = new DeerPopulation("Deers", dim, 100, Color.blue, 2.2, 2, 250);
+//		IPopulation prey = new PigPopulation("Filthy Pigs", dim, 100, Color.pink, 2.0, 1.5, 225);
+		IPopulation predator = new WolfPopulation("Wolves", dim, 10, Color.red, 2.5, 0.75,275);
+		IPopulation grass = new GrassPopulation("Grass", dim, 500, Color.green, 1, 1, 0, 1500);
+
 		
 		prey.addPredator(predator);
 		prey.addPrey(grass);

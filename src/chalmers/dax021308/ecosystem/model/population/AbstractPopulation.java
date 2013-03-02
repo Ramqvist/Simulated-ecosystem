@@ -16,9 +16,9 @@ public abstract class AbstractPopulation implements IPopulation {
 	protected List<IAgent> agents;
 	protected Dimension gridDimension;
 	protected int capacity = Integer.MAX_VALUE;
-	private List<IPopulation> preys;
-	private List<IPopulation> predators;
-	private List<IPopulation> neutral;
+	protected List<IPopulation> preys;
+	protected List<IPopulation> predators;
+	protected List<IPopulation> neutral;
 	private String name;
 
 	public AbstractPopulation() {
@@ -61,7 +61,6 @@ public abstract class AbstractPopulation implements IPopulation {
 			}
 		}
 	}
-
 	@Override
 	public void update() {
 		for (IAgent a : agents) {
@@ -76,7 +75,6 @@ public abstract class AbstractPopulation implements IPopulation {
 				kids.addAll(spawn);
 			}
 		}
-		
 		if (kids != null)
 			agents.addAll(kids);
 	}
