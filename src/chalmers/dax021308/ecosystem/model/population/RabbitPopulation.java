@@ -19,12 +19,14 @@ public class RabbitPopulation implements IPopulation {
 	private String name = "Rabbits";
 	private List<IPopulation> preys;
 	private List<IPopulation> predators;
+	private List<IPopulation> neutral;
 	private Dimension worldSize;
 
 	public RabbitPopulation(int popSize, Dimension d) {
-		rabbits = new LinkedList<IAgent>();
-		preys = new LinkedList<IPopulation>();
-		predators = new LinkedList<IPopulation>();
+		rabbits = new ArrayList<IAgent>();
+		preys = new ArrayList<IPopulation>();
+		predators = new ArrayList<IPopulation>();
+		neutral = new ArrayList<IPopulation>();
 		worldSize = d;
 
 		for (int i = 0; i < popSize; i++) {
@@ -42,6 +44,7 @@ public class RabbitPopulation implements IPopulation {
 			rabbits.add(r);
 			EcoWorld.worldGrid.add(r);
 		}
+//		System.out.println(EcoWorld.worldGrid.getSize());
 	}
 
 	
@@ -69,11 +72,11 @@ public class RabbitPopulation implements IPopulation {
 
 	@Override
 	public void update() {
-		List<IAgent> newPopulation = new LinkedList<IAgent>();
+		List<IAgent> newPopulation = new ArrayList<IAgent>();
 
-		for (IAgent a : rabbits) {
-			a.calculateNextPosition(predators, preys, getNeutralPopulations(), worldSize);
-			newPopulation.addAll(a.reproduce(null, Integer.MAX_VALUE));
+		for (int i = 0; i < rabbits.size(); i++) {
+			rabbits.get(i).calculateNextPosition(predators, preys, neutral, worldSize);
+			newPopulation.addAll(rabbits.get(i).reproduce(null, Integer.MAX_VALUE));
 		}
 		rabbits.addAll(newPopulation);
 	}
@@ -116,14 +119,12 @@ public class RabbitPopulation implements IPopulation {
 
 	@Override
 	public void addNeutralPopulation(IPopulation neutral) {
-		// TODO Auto-generated method stub
-
+		this.neutral.add(neutral);
 	}
 
 	@Override
 	public List<IPopulation> getNeutralPopulations() {
-		// TODO Auto-generated method stub
-		return null;
+		return neutral;
 	}
 
 
