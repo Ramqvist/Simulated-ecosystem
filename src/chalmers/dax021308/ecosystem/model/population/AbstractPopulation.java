@@ -67,19 +67,7 @@ public abstract class AbstractPopulation implements IPopulation {
 	public void update() {
 		for (IAgent a : agents) {
 			a.calculateNextPosition(predators, preys, neutral, gridDimension);
-			//Log.v("Updating" + a.getName());
 		}
-		List<IAgent> kids = new ArrayList<IAgent>();
-		int populationSize = agents.size();
-		for (IAgent a : agents) {
-			a.updatePosition();
-			List<IAgent> spawn = a.reproduce(null,populationSize);
-			if (spawn != null) {
-				kids.addAll(spawn);
-			}
-		}
-		if (kids != null)
-			agents.addAll(kids);
 	}
 
 	@Override
@@ -129,7 +117,24 @@ public abstract class AbstractPopulation implements IPopulation {
 			public double calculateFitness(IAgent agent) {
 				return 0;
 			}
+
+
 		};
+	}
+	
+	@Override
+	public void updatePositions() {
+		List<IAgent> kids = new ArrayList<IAgent>();
+		int populationSize = agents.size();
+		for (IAgent a : agents) {
+			a.updatePosition();
+			List<IAgent> spawn = a.reproduce(null,populationSize);
+			if (spawn != null) {
+				kids.addAll(spawn);
+			}
+		}
+		if (kids != null)
+			agents.addAll(kids);
 	}
 	
 	/**

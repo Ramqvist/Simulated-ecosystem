@@ -145,4 +145,10 @@ public class RabbitPopulation implements IPopulation {
 	public void addToRemoveList(IAgent a) {
 		
 	}
+
+
+	@Override
+	public void updatePositions() {
+		
+	}
 }

@@ -79,5 +79,7 @@ public interface IPopulation extends Cloneable {
 	 * Warning! This is suppose to be a thread-safe method!
 	 */
 	public void addToRemoveList(IAgent a);
+
+	public void updatePositions();
 	
 }
