@@ -449,10 +449,12 @@ public class EcoWorld {
 				if(currentPop != null) {
 					currentFrame.add(currentPop);
 				}
-				currentPop = AbstractPopulation.createFromFile();
+				String [] inputArr = input.split(";", 2);
+				currentPop = AbstractPopulation.createFromFile(inputArr[1]);
 			} else if(input.startsWith(agentDivider)) {
 				if(currentPop != null) {
-					IAgent newIAgent = AbstractAgent.createFromFile(input); 
+					String [] inputArr = input.split(";", 2);
+					IAgent newIAgent = AbstractAgent.createFromFile(inputArr[1]); 
 					currentPop.getAgents().add(newIAgent);
 				}
 			}

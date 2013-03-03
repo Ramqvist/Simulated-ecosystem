@@ -129,13 +129,29 @@ public abstract class AbstractPopulation implements IPopulation {
 		};
 	}
 
-	public static IPopulation createFromFile() {
-		return null;
+	public static IPopulation createFromFile(String input) {
+		String[] inputArray = input.split(";");
+		String name = inputArray[0];
+		Dimension dim = new Dimension(Integer.parseInt(inputArray[1]), Integer.parseInt(inputArray[2]));
+		int cap = Integer.parseInt(inputArray[3]);
+		return new AbstractPopulation(name, dim, cap) {
+			@Override
+			public double calculateFitness(IAgent agent) {
+				return 0;
+			}
+		};
 	}
 	
 	@Override
 	public String toBinaryString() {
-		// TODO Auto-generated method stub
+		StringBuffer sb = new StringBuffer();
+		sb.append(name);
+		sb.append(';');
+		sb.append(gridDimension.width);
+		sb.append(';');
+		sb.append(gridDimension.height);
+		sb.append(';');
+		sb.append(capacity);
 		return null;
 	}
 }
