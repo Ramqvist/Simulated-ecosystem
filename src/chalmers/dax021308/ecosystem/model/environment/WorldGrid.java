@@ -16,7 +16,7 @@ import chalmers.dax021308.ecosystem.model.util.Position;
  */
 public class WorldGrid {
 	
-	private List<List<List<IAgent>>> grid;
+	private ArrayList<ArrayList<ArrayList<IAgent>>> grid;
 	private int rows;
 	private int columns;
 	private Dimension dimension;
@@ -33,18 +33,26 @@ public class WorldGrid {
 		lock = new Semaphore(1);
 		dimension = dim;
 		this.scale = scale;
-		rows = dim.height / scale;
-		columns = dim.width / scale;
+		rows = dim.height / scale + 1;
+		columns = dim.width / scale + 1;
 		
-		grid = new ArrayList<List<List<IAgent>>>(rows);
+		grid = new ArrayList<ArrayList<ArrayList<IAgent>>>(rows);
 		
-		for (int i = 0; i < grid.size(); i++) {
-			List<List<IAgent>> temp = new ArrayList<List<IAgent>>(columns);
-			for (int j = 0; j < temp.size(); j++) {
+		for (int i = 0; i < rows; i++) {
+			ArrayList<ArrayList<IAgent>> temp = new ArrayList<ArrayList<IAgent>>(columns);
+			for (int j = 0; j < columns; j++) {
 				temp.add(new ArrayList<IAgent>());
 			}
 			grid.add(temp);
 		}
+		
+		System.out.println("Dim: "+dimension.height + ", "+dimension.width);
+		System.out.println("Rows: "+rows);
+		System.out.println("Cols: "+columns);
+		System.out.println("Height: "+grid.size());
+		System.out.println("Width: "+grid.get(0).size());
+		System.out.println("Depth: "+grid.get(0).get(0).size());
+//		System.exit(0);
 	}
 	
 	/**

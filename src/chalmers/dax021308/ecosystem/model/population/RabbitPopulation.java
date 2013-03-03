@@ -8,6 +8,7 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.agent.RabbitAgent;
+import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.util.Gender;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
@@ -34,10 +35,12 @@ public class RabbitPopulation implements IPopulation {
 				g = Gender.FEMALE;
 				c = Color.lightGray;
 			}
-
-			rabbits.add(new RabbitAgent(new Position(d.getWidth()
+			
+			RabbitAgent r = new RabbitAgent(new Position(d.getWidth()
 					* Math.random(), d.getHeight() * Math.random()), name, c,
-					20, 20, new Vector(Math.random()*2, Math.random()*2), g));
+					20, 20, new Vector(Math.random()*2, Math.random()*2), g);
+			rabbits.add(r);
+			EcoWorld.worldGrid.add(r);
 		}
 	}
 

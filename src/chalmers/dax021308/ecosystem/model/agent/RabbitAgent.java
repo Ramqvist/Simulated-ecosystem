@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.util.LinkedList;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Gender;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -36,10 +37,12 @@ public class RabbitAgent extends AbstractAgent {
 	public void calculateNextPosition(List<IPopulation> predators,
 			List<IPopulation> preys, List<IPopulation> neutral, Dimension dim) {
 
+		Position oldPosition = position;
 		changeDirection();
 		double length = velocity.getNorm();
 		position.addVector(velocity.add(getEnvironmentForce(dim)));
 		velocity = velocity.toUnitVector().multiply(length);
+		EcoWorld.worldGrid.updatePosition(this, oldPosition, position);
 	}
 
 	//Randomly changes direction
