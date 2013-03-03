@@ -38,9 +38,9 @@ public class RabbitAgent extends AbstractAgent {
 			List<IPopulation> preys, List<IPopulation> neutral, Dimension dim) {
 
 		Position oldPosition = position;
-		changeDirection();
+//		changeDirection();
 		double length = velocity.getNorm();
-		position.addVector(velocity.add(getEnvironmentForce(dim)));
+		position.addVector(velocity.add(getEnvironmentForce(dim)).add(getSeparationForce(neutral)));
 		velocity = velocity.toUnitVector().multiply(length);
 		EcoWorld.worldGrid.updatePosition(this, oldPosition, position);
 	}

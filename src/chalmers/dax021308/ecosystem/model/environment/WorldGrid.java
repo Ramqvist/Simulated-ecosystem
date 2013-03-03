@@ -46,13 +46,12 @@ public class WorldGrid {
 			grid.add(temp);
 		}
 		
-		System.out.println("Dim: "+dimension.height + ", "+dimension.width);
-		System.out.println("Rows: "+rows);
-		System.out.println("Cols: "+columns);
-		System.out.println("Height: "+grid.size());
-		System.out.println("Width: "+grid.get(0).size());
-		System.out.println("Depth: "+grid.get(0).get(0).size());
-//		System.exit(0);
+//		System.out.println("Dim: "+dimension.height + ", "+dimension.width);
+//		System.out.println("Rows: "+rows);
+//		System.out.println("Cols: "+columns);
+//		System.out.println("Height: "+grid.size());
+//		System.out.println("Width: "+grid.get(0).size());
+//		System.out.println("Depth: "+grid.get(0).get(0).size());
 	}
 	
 	/**
@@ -173,6 +172,25 @@ public class WorldGrid {
 	
 	public int getScale() {
 		return scale;
+	}
+	
+	public int getSize() {
+		try {
+			lock.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		int sum = 0;
+		for (int i = 0; i < grid.size(); i++) {
+			for (int j = 0; j < grid.get(i).size(); j++) {
+				for (int k = 0; k < grid.get(i).get(j).size(); k++) {
+					sum++;
+				}
+			}
+		}
+		lock.release();
+		return sum;
 	}
 }
 

@@ -201,8 +201,8 @@ public class EcoWorld {
 
 	private List<IPopulation> createInitialPopulations(Dimension dim) {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
-		IPopulation rabbits = new RabbitPopulation(300, dim);
-		rabbits.addPrey(rabbits);
+		IPopulation rabbits = new RabbitPopulation(1000, dim);
+		rabbits.addNeutralPopulation(rabbits);
 		populations.add(rabbits);
 		
 
