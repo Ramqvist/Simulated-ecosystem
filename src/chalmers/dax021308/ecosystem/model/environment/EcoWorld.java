@@ -220,6 +220,9 @@ public class EcoWorld {
 //		populations.add(prey);
 //		populations.add(predator);
 //		populations.add(grass);
+		
+
+		
 		return populations;
 	}
 

@@ -72,8 +72,8 @@ public class SimplePreyAgent extends AbstractAgent {
 	public void calculateNextPosition(List<IPopulation> predators,
 			List<IPopulation> preys, List<IPopulation> neutral, Dimension dim) {
 		Vector predatorForce = getPredatorForce(predators);
-		Vector separationForce = getSeparationForce(neutral);
-		//Vector separationForce = new Vector();
+//		Vector separationForce = getSeparationForce(neutral);
+		Vector separationForce = new Vector();
 		Vector environmentForce = getEnvironmentForce(dim);
 		
 		/*
