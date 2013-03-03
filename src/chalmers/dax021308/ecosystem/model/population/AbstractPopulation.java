@@ -1,6 +1,5 @@
 package chalmers.dax021308.ecosystem.model.population;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;

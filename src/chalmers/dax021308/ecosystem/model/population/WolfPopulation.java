@@ -8,6 +8,7 @@ import java.util.List;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.agent.DeerAgent;
 import chalmers.dax021308.ecosystem.model.agent.WolfAgent;
+import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
@@ -18,16 +19,14 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class WolfPopulation extends AbstractPopulation {
 	
-	
 	private double maxSpeed;
 	private double visionRange;
-	
-	
 
 	public WolfPopulation(String name, Dimension gridDimension,
 			int initPopulationSize, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange) {
 		super(name, gridDimension);
+		
 		this.visionRange = visionRange;
 		agents = initializePopulation(initPopulationSize, gridDimension, color,
 				maxSpeed, maxAcceleration, visionRange);
@@ -36,8 +35,10 @@ public class WolfPopulation extends AbstractPopulation {
 	private List<IAgent> initializePopulation(int populationSize,
 			Dimension gridDimension, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange) {
+		
 		List<IAgent> newAgents = new ArrayList<IAgent>(populationSize);
 		addNeutralPopulation(this);
+		
 		for (int i = 0; i < populationSize; i++) {
 			Position randPos = new Position(gridDimension.getWidth()
 					* Math.random(), gridDimension.getHeight() * Math.random());

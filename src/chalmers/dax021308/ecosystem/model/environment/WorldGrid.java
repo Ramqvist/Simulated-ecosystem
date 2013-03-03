@@ -12,6 +12,9 @@ import chalmers.dax021308.ecosystem.model.util.Position;
  * WorldGrid contains a grid with agents to simplify the locating
  * of other agents in the vicinity of a particular agent. This can be
  * used for e.g. collision detection. The class is thread safe.
+ * <p>Tip for use: (1) add agents to grid, (2) get agents at desired position,
+ * (3) do something with the agent, (4) update the position for every
+ * agent involved. 
  * @author Albin
  */
 public class WorldGrid {

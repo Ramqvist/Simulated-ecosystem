@@ -19,17 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.jfree.text.G2TextMeasurer;
-
-
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
-import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
-import chalmers.dax021308.ecosystem.model.population.DeerPopulation;
-import chalmers.dax021308.ecosystem.model.population.DummyPredatorPopulation;
-import chalmers.dax021308.ecosystem.model.population.DummyPreyPopulation;
-import chalmers.dax021308.ecosystem.model.population.PigPopulation;
-import chalmers.dax021308.ecosystem.model.population.WolfPopulation;
-import chalmers.dax021308.ecosystem.model.population.GrassPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.population.RabbitPopulation;
 import chalmers.dax021308.ecosystem.model.util.Log;
@@ -201,9 +191,14 @@ public class EcoWorld {
 
 	private List<IPopulation> createInitialPopulations(Dimension dim) {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
-		IPopulation rabbits = new RabbitPopulation(1000, dim);
+		IPopulation rabbits = new RabbitPopulation(1000, dim, "Rabbits", Color.lightGray, 10, 2, 1);
+		IPopulation badRabbits = new RabbitPopulation(100, dim, "Bad Rabbits", Color.red, 10, 3, 1);
 		rabbits.addNeutralPopulation(rabbits);
+		rabbits.addPredator(badRabbits);
+		badRabbits.addNeutralPopulation(badRabbits);
+		badRabbits.addPrey(rabbits);
 		populations.add(rabbits);
+		populations.add(badRabbits);
 		
 
 //		IPopulation prey = new DummyPreyPopulation(dim, 500, Color.blue, 2.2, 2, 250);
@@ -213,7 +208,7 @@ public class EcoWorld {
 //		IPopulation prey = new PigPopulation("Filthy Pigs", dim, 100, Color.pink, 2.0, 1.5, 225);
 //		IPopulation predator = new WolfPopulation("Wolves", dim, 10, Color.red, 2.5, 0.75,275);
 //		IPopulation grass = new GrassPopulation("Grass", dim, 500, Color.green, 1, 1, 0, 1500);
-//		
+		
 //		prey.addPredator(predator);
 //		prey.addPrey(grass);
 //		predator.addPrey(prey);
