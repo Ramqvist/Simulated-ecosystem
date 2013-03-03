@@ -21,6 +21,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.jfree.text.G2TextMeasurer;
 
+import sun.awt.windows.WWindowPeer;
+
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.DeerPopulation;
@@ -156,7 +158,7 @@ public class EcoWorld {
 			recordedSimulation = new ArrayList<List<IPopulation>>(numIterations);
 		}
 		
-//		worldGrid = new WorldGrid(d.height, d.width);
+		worldGrid = new WorldGrid(d, 4);
 
 		/* Uncomment to test ticking functionality */
 		// this.env = new Environment(mOnFinishListener);
@@ -200,27 +202,26 @@ public class EcoWorld {
 
 	private List<IPopulation> createInitialPopulations(Dimension dim) {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
-		//IPopulation rabbits = new RabbitPopulation(300, dim);
-		//rabbits.addPrey(rabbits);
-		//populations.add(rabbits);
+		IPopulation rabbits = new RabbitPopulation(300, dim);
+		rabbits.addPrey(rabbits);
+		populations.add(rabbits);
 		
 
 //		IPopulation prey = new DummyPreyPopulation(dim, 500, Color.blue, 2.2, 2, 250);
 //		IPopulation predator = new DummyPredatorPopulation(dim, 10, Color.red, 2.5, 0.75,275);
 		
 		
-		IPopulation prey = new DeerPopulation("Deers", dim, 100, Color.blue, 2.2, 2, 250);
+//		IPopulation prey = new DeerPopulation("Deers", dim, 100, Color.blue, 2.2, 2, 250);
 //		IPopulation prey = new PigPopulation("Filthy Pigs", dim, 100, Color.pink, 2.0, 1.5, 225);
-		IPopulation predator = new WolfPopulation("Wolves", dim, 10, Color.red, 2.5, 0.75,275);
-		IPopulation grass = new GrassPopulation("Grass", dim, 500, Color.green, 1, 1, 0, 1500);
-
-		
-		prey.addPredator(predator);
-		prey.addPrey(grass);
-		predator.addPrey(prey);
-		populations.add(prey);
-		populations.add(predator);
-		populations.add(grass);
+//		IPopulation predator = new WolfPopulation("Wolves", dim, 10, Color.red, 2.5, 0.75,275);
+//		IPopulation grass = new GrassPopulation("Grass", dim, 500, Color.green, 1, 1, 0, 1500);
+//		
+//		prey.addPredator(predator);
+//		prey.addPrey(grass);
+//		predator.addPrey(prey);
+//		populations.add(prey);
+//		populations.add(predator);
+//		populations.add(grass);
 		return populations;
 	}
 
