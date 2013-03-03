@@ -67,5 +67,7 @@ public interface IPopulation extends Cloneable {
 	 * @return clone a population. Uses {@link AbstractAgent#cloneAgent()}
 	 */
 	public IPopulation clonePopulation();
+
+	public String toBinaryString();
 	
 }

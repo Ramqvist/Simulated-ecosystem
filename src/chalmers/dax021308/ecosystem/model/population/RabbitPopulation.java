@@ -133,4 +133,10 @@ public class RabbitPopulation implements IPopulation {
 			}
 		};
 	}
+
+
+	@Override
+	public String toBinaryString() {
+		return null;
+	}
 }

@@ -128,4 +128,14 @@ public abstract class AbstractPopulation implements IPopulation {
 			}
 		};
 	}
+
+	public static IPopulation createFromFile() {
+		return null;
+	}
+	
+	@Override
+	public String toBinaryString() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

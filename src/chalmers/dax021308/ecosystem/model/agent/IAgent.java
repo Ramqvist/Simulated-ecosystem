@@ -91,4 +91,6 @@ public interface IAgent extends Cloneable {
 	 */
 	public IAgent cloneAgent() throws CloneNotSupportedException;
 
+	public String toBinaryString();
+
 }

@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.jfree.text.G2TextMeasurer;
 
+import chalmers.dax021308.ecosystem.model.agent.AbstractAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.DeerPopulation;
@@ -406,11 +407,8 @@ public class EcoWorld {
 			FileInputStream fileStream = new FileInputStream(f);
 			Charset utf8 = Charset.forName("UTF-8");     
 			BufferedReader br = new BufferedReader(new InputStreamReader(fileStream, utf8));
-			String input = br.readLine();
-			while(input != null) {
-				input = br.readLine();
-				handleInput(input);
-			}
+			List<List<IPopulation>> readInput = parseFile(br);
+
 			br.close();
 			fileStream.close();
 		} catch (IOException e) {
@@ -420,22 +418,46 @@ public class EcoWorld {
 		return false;
 	}
 	
-	/**
-	 * Handles the input and parses it to the correct value.
-	 * @param input
-	 */
-	private void handleInput(String input) {
-		// TODO: Implement parser
+	private List<List<IPopulation>> parseFile(BufferedReader br) {
 		String frameDivider = "FRAME";
 		String populationDivider = "POPULATION";
 		String agentDivider = "AGENT";
-		if(input.startsWith(frameDivider)) {
-			//Add the population-list to the record
-		} else if(input.startsWith(populationDivider)) {
-			//Create new population
-		} else if(input.startsWith(agentDivider)) {
-			//Parse agent and add it to the last population.
+		
+		List<List<IPopulation>> result = new ArrayList<List<IPopulation>>();
+		
+		List<IPopulation> currentFrame = null;
+		IPopulation currentPop = null;
+		
+		String input = null;
+		try {
+			input = br.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		while(input != null) {
+			try {
+				input = br.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			if(input.startsWith(frameDivider)) {
+				if(currentFrame != null) {
+					result.add(currentFrame);
+				}
+				currentFrame = new ArrayList<IPopulation>();
+			} else if(input.startsWith(populationDivider)) {
+				if(currentPop != null) {
+					currentFrame.add(currentPop);
+				}
+				currentPop = AbstractPopulation.createFromFile();
+			} else if(input.startsWith(agentDivider)) {
+				if(currentPop != null) {
+					IAgent newIAgent = AbstractAgent.createFromFile(input); 
+					currentPop.getAgents().add(newIAgent);
+				}
+			}
+		}
+		return result;
 	}
 
 	/**
@@ -469,9 +491,9 @@ public class EcoWorld {
 		for(List<IPopulation> popList : record) {
 			pw.println(frameDivider);
 			for(IPopulation p : popList) {
-				pw.println(populationDivider + ';' /*+ p.toBinaryString()*/ );
+				pw.println(populationDivider + ';' + p.toBinaryString() );
 				for(IAgent a : p.getAgents()) {
-					pw.println(agentDivider + ';' /*+a.toBinaryString() */);
+					pw.println(agentDivider + ';' + a.toBinaryString());
 				}
 			}
 		}
