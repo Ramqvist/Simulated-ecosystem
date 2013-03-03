@@ -191,14 +191,9 @@ public class EcoWorld {
 
 	private List<IPopulation> createInitialPopulations(Dimension dim) {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
-		IPopulation rabbits = new RabbitPopulation(1000, dim, "Rabbits", Color.lightGray, 10, 2, 1);
-		IPopulation badRabbits = new RabbitPopulation(100, dim, "Bad Rabbits", Color.red, 10, 3, 1);
+		IPopulation rabbits = new RabbitPopulation(5000, dim, "Rabbits", Color.lightGray, 10, 40, 5);
 		rabbits.addNeutralPopulation(rabbits);
-		rabbits.addPredator(badRabbits);
-		badRabbits.addNeutralPopulation(badRabbits);
-		badRabbits.addPrey(rabbits);
 		populations.add(rabbits);
-		populations.add(badRabbits);
 		
 
 //		IPopulation prey = new DummyPreyPopulation(dim, 500, Color.blue, 2.2, 2, 250);
