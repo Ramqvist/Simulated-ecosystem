@@ -19,11 +19,14 @@ import java.awt.event.ActionEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
+import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+
 /**
  * The view that holds the parameters that can be changed during a simulation.
  * A panel that is part of the frame that holds the entire application.
  * 
- * Lots of thing here should be done in a separate class ParameterController //Erik
+ * Lots of thing here should be done in a separate class ParameterController. //Erik
+ * Added methods to be called. //Erik
  * 
  * @author Hanna
  *
@@ -50,6 +53,7 @@ public class ParameterView extends JPanel implements IView {
 		delayOn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//DELAY ON
+				//Method to be run: EcoWorld.setRunWithoutTimer(true);
 				System.out.println("delay on");
 			}
 		});
@@ -60,6 +64,7 @@ public class ParameterView extends JPanel implements IView {
 		delayOff.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//DELAY OFF
+				//Method to be run: EcoWorld.setRunWithoutTimer(false);
 				System.out.println("delay off");
 			}
 		});
@@ -76,6 +81,7 @@ public class ParameterView extends JPanel implements IView {
 			public void stateChanged(ChangeEvent e) {
 				if (!sliderDelayLength.getValueIsAdjusting()) {  //Checks that the slider is fixed, i.e. not adjusting
 					//SET DELAY LENGTH
+					//Method to be run: EcoWorld.adjustTickRate(newTickRate);
 					System.out.println("delay length set");
 				}
 			}
@@ -90,11 +96,12 @@ public class ParameterView extends JPanel implements IView {
 		lblPopulationGrowthRate.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		add(lblPopulationGrowthRate);
 		
-		final JSlider sliderPopulationGrowthRate = new JSlider(); //Vilket spann?
+		final JSlider sliderPopulationGrowthRate = new JSlider(); //Vilket spann? Oklart behövs tas upp på möte. //Erik
 		sliderPopulationGrowthRate.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!sliderPopulationGrowthRate.getValueIsAdjusting()) {  //Checks that the slider is fixed, i.e. not adjusting
 					//SET POPULATION GROWTH RATE
+					//TODO: No method for this yet, needs implementation.
 					System.out.println("population growth rate set");
 				}
 			}
@@ -109,11 +116,12 @@ public class ParameterView extends JPanel implements IView {
 		lblPredatorEatingRate.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		add(lblPredatorEatingRate);
 		
-		final JSlider sliderEatingRate = new JSlider(); //Vilket spann?
+		final JSlider sliderEatingRate = new JSlider(); //Vilket spann? Oklart behövs tas upp på möte. //Erik
 		sliderEatingRate.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (!sliderEatingRate.getValueIsAdjusting()) {  //Checks that the slider is fixed, i.e. not adjusting
 					//SET EATING RATE
+					//TODO: No method for this yet, needs implementation.
 					System.out.println("eating rate set");
 				}
 			}
