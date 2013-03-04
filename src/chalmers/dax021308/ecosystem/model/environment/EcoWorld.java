@@ -282,7 +282,7 @@ public class EcoWorld {
 	 * <P>
 	 * Uses internal {@link TimerHandler} for smooth playing.
 	 */
-	public void playRecordedSimulation() {
+	public void playRecordedSimulation(final List<List<IPopulation>> recordedSim) {
 		if(!recordSimulation) {
 			throw new IllegalStateException("No simulation has been recorded");
 		}
@@ -290,9 +290,9 @@ public class EcoWorld {
 		t.start(17, new OnTickUpdate() {
 			@Override
 			public void onTick() {
-				if(recordedSimulation.size() > 0) {
-					List<IPopulation> popList = recordedSimulation.get(0);
-					recordedSimulation.remove(0);
+				if(recordedSim.size() > 0) {
+					List<IPopulation> popList = recordedSim.get(0);
+					recordedSim.remove(0);
 					observers.firePropertyChange(EVENT_TICK, Collections.emptyList(), popList);
 					t.start(17, this);
 				} else {
@@ -336,7 +336,7 @@ public class EcoWorld {
 			startIterationTime = System.currentTimeMillis();
 		} else {
 			stop();
-			playRecordedSimulation();
+			playRecordedSimulation(recordedSimulation);
 		}
 	}
 	
