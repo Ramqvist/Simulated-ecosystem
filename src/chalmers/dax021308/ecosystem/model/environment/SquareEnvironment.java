@@ -49,8 +49,13 @@ public class SquareEnvironment implements IEnvironment {
 		this.populations = populations;
 		this.obstacles = obstacles;
 		this.mListener = listener;
+		
+		//Create one Worker for each population.
 		this.workPool = Executors.newFixedThreadPool(populations.size());
+		//Create the list of executing tasks, for barrier synchronization.
 		this.futures = new ArrayList<Future<Runnable>>();
+		
+		//Create the worker objects. (Reusable for memory and performance.)
 		this.popWorkers = new PopulationWorker[populations.size()];
 		for(int i = 0; i < popWorkers.length ; i++) {
 			popWorkers[i] = new PopulationWorker();
@@ -67,12 +72,15 @@ public class SquareEnvironment implements IEnvironment {
 	 * Updates each population and then informs EcoWorld once it's finished
 	 */
 	public void run() {
+
+        //Assign objects to workers.
 		for(int i = 0 ; i < populations.size(); i ++) {
 			popWorkers[i].p = populations.get(i);
 			Future f = workPool.submit(popWorkers[i]);
 	        futures.add(f);
 		}
 
+		//Barrier synchronization here. Thread will wait for workers to finish execution.
         for (Future<Runnable> fut : futures)
         {
            try {
@@ -85,12 +93,15 @@ public class SquareEnvironment implements IEnvironment {
         }
         futures.clear();
 
+        //Assign objects to workers.
 		for(int i = 0 ; i < populations.size(); i ++) {
 			finWorkers[i].p = populations.get(i);
 			Future f = workPool.submit(finWorkers[i]);
 	        futures.add(f);
 		}
 
+
+		//Barrier synchronization here. Thread will wait for workers to finish execution.
         for (Future<Runnable> fut : futures)
         {
            try {
@@ -102,10 +113,7 @@ public class SquareEnvironment implements IEnvironment {
 		}
         }
 
-        //Update all the positions, i.e. position = nextPosition.
-		//for (int i = 0; i < populations.size(); i++)
-		//	populations.get(i).removeAgentsFromRemoveList();
-		
+
 		// Callback function called to inform EcoWorld that the current update
 		// is run
 		mListener.onFinish(populations, obstacles);
@@ -116,6 +124,7 @@ public class SquareEnvironment implements IEnvironment {
 		
 		@Override
 		public void run() {
+			//Calculate one iteration. But only calculate it!
 			p.update();
 		}
 	}
@@ -127,7 +136,10 @@ public class SquareEnvironment implements IEnvironment {
 		
 		@Override
 		public void run() {
+			//Remove agents that has been marked as remove.
 			p.removeAgentsFromRemoveList();
+
+	        //Update all the positions, i.e. position = nextPosition.
 			p.updatePositions();
 		}
 	}
