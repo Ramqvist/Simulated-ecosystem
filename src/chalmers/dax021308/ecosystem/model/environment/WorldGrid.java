@@ -15,6 +15,9 @@ import chalmers.dax021308.ecosystem.model.util.Position;
  * <p>Tip for use: (1) add agents to grid, (2) get agents at desired position,
  * (3) do something with the agent, (4) update the position for every
  * agent involved. 
+ * 
+ * Samtliga lock.release() skall göras i ett finally block //Erik
+ * Källa: http://docs.oracle.com/javase/1.5.0/docs/api/java/util/concurrent/locks/Lock.html
  * @author Albin
  */
 public class WorldGrid {
