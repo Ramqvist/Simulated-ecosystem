@@ -51,12 +51,13 @@ public class MainWindow extends JFrame implements IView {
 	public MainWindow(EcoWorld model) {
 		setTitle("Simulated Ecosystem");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 513, 416);
+		setBounds(100, 100, 613, 516);
 		
 		//OpenGL 
-		Dimension d = new Dimension(500, 500);
+		Dimension d = new Dimension(800, 600);
 		openGL = new OpenGLSimulationView(model, d, true);
 		openGL.init();
+		openGL.setSize(d);
 		//
 		controlView = new ControlView(model);
 		graphView1 = new GraphPopulationAmountView(model);
@@ -112,8 +113,9 @@ public class MainWindow extends JFrame implements IView {
 		setContentPane(contentPane);
 		
 		//simulationPanel.add(openGL);
-		simulationPanel.setSize(50, 50);
-		simulationPanel.add(new JButton("Hej"));
+		simulationPanel.setSize(d);
+		simulationPanel.add(openGL);
+		openGL.setSize(new Dimension(500, 500));
 		simulationPanel.setBackground(Color.RED);
 		left.add(simulationPanel, BorderLayout.CENTER);
 		left.add(controlView, BorderLayout.SOUTH);  

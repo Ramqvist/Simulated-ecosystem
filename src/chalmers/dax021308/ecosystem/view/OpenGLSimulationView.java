@@ -64,13 +64,8 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 	 * Create the panel.
 	 */
 	public OpenGLSimulationView(EcoWorld model, Dimension size, boolean showFPS) {
-		frame = new JFrame("OpenGL Simulation View");
 		this.size = size;
 		model.addObserver(this);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-		frame.add(this);
-		frame.setSize(size);
 		
 		//setVisible(true);
 		//setSize(size);

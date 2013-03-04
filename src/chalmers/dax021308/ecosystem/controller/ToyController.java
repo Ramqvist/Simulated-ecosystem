@@ -27,7 +27,7 @@ public class ToyController implements IController {
 
 	@Override
 	public void init() {
-		Dimension d = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension d = new Dimension(800, 600);
 		d.height = d.height - 40;
 		
 		int tickDelay = 16;
