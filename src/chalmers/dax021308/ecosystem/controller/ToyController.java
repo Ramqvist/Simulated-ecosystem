@@ -2,6 +2,7 @@ package chalmers.dax021308.ecosystem.controller;
 
 
 import chalmers.dax021308.ecosystem.view.AWTSimulationView;
+import chalmers.dax021308.ecosystem.view.HeatMapView;
 import chalmers.dax021308.ecosystem.view.MainWindow;
 import chalmers.dax021308.ecosystem.view.OpenGLSimulationView;
 
@@ -18,6 +19,7 @@ public class ToyController implements IController {
 
 	private EcoWorld model;
 	private MainWindow window;
+	private HeatMapView heatMap;
 
 	public ToyController() {
 		init();
@@ -49,6 +51,9 @@ public class ToyController implements IController {
 	
 		this.window = new MainWindow(model);
 		window.setVisible(true);
+		
+		this.heatMap = new HeatMapView(model, f, new Dimension(600,600), 15);
+		heatMap.setVisible(true);
 	}
 
 	@Override
