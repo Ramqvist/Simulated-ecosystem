@@ -147,7 +147,7 @@ public class EcoWorld {
 			recordedSimulation = new ArrayList<List<IPopulation>>(numIterations);
 		}
 		
-		worldGrid = new WorldGrid(d, 100);
+		worldGrid = new WorldGrid(d, 40);
 
 		/* Uncomment to test ticking functionality */
 		// this.env = new Environment(mOnFinishListener);
@@ -191,7 +191,7 @@ public class EcoWorld {
 
 	private List<IPopulation> createInitialPopulations(Dimension dim) {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
-		IPopulation rabbits = new RabbitPopulation(100, dim, "Rabbits", Color.lightGray, 10, 40, 5);
+		IPopulation rabbits = new RabbitPopulation(500, dim, "Rabbits", Color.lightGray, 10, 50, 5);
 		rabbits.addNeutralPopulation(rabbits);
 		populations.add(rabbits);
 		

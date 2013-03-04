@@ -48,13 +48,6 @@ public class WorldGrid {
 			}
 			grid.add(temp);
 		}
-		
-//		System.out.println("Dim: "+dimension.height + ", "+dimension.width);
-//		System.out.println("Rows: "+rows);
-//		System.out.println("Cols: "+columns);
-//		System.out.println("Height: "+grid.size());
-//		System.out.println("Width: "+grid.get(0).size());
-//		System.out.println("Depth: "+grid.get(0).get(0).size());
 	}
 	
 	/**
@@ -101,6 +94,7 @@ public class WorldGrid {
 	 * @param newPosition - the new {@link Position} of the agent.
 	 * @return true if the position was updated, otherwise false.
 	 */
+	//Need to verify that this shit works!!!
 	public boolean updatePosition(IAgent agent, Position oldPosition, Position newPosition) {
 		try {
 			lock.acquire();
@@ -124,28 +118,39 @@ public class WorldGrid {
 		}
 	}
 	
-	private List<IAgent> get(Position p) {
-		int row = (int)(p.getY() / scale);
-		int col = (int)(p.getX() / scale);
-		return grid.get(row).get(col);
-	}
-	
 	/**
-	 * @param positions - {@link List} of {@link Position}s
-	 * @return A {@link List} with {@link List}s of {@link IAgent}s for the {@link Position}s in positions.
+	 * @param center - The {@link Position} of the current {@link IAgent}. 
+	 * @param visionRange - The vision range of the {@link IAgent}.
+	 * @return The surrounding {@link IAgent}s within the vision range.
 	 */
-	public List<List<IAgent>> get(List<Position> positions) {
+	public List<List<IAgent>> get(Position center, double visionRange) {
 		try {
 			lock.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
+		int range = (int)Math.pow((visionRange / scale), 2);
 		List<List<IAgent>> result = new ArrayList<List<IAgent>>();
-		for (int i = 0; i < positions.size(); i++) {
-			if (!result.contains(get(positions.get(i)))) {
-				result.add(get(positions.get(i)));
+		int row = (int)(center.getY() / scale);
+		int col = (int)(center.getX() / scale);
+		
+		
+//		for (int i = row - range; i < row + range; i++) {
+//			for (int j = col - range; j < col + range; j++) {
+//				if (i >= 0 && i < rows && j >= 0 && j < columns) {
+//					result.add(grid.get(i).get(j));
+//				}
+//			}
+//		}
+		
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				result.add(grid.get(i).get(j));
 			}
 		}
+		
+//		System.out.println(result.size());
 		lock.release();
 		return result;
 	}
