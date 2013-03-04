@@ -259,7 +259,7 @@ public class EcoWorld {
 	public void stop() {
 		if(!shouldRun.get()) {
 			shouldRun.set(false);
-			executor.shutdown();
+			executor.shutdownNow();
 			timer.stop();
 			numUpdates = 0;
 			Log.i("EcoWorld stopped.");
