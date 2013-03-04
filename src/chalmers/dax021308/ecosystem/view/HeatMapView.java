@@ -45,6 +45,7 @@ public class HeatMapView extends GLCanvas implements IView {
 	private static final long serialVersionUID = 1585638837620985591L;
 	private List<IPopulation> newPops = new ArrayList<IPopulation>();
 	private int[][] heatMap;
+	private boolean[][] visited;
 	int heatMapWidth;
 	int heatMapHeight;
 	private double samplingConstant;
@@ -53,17 +54,20 @@ public class HeatMapView extends GLCanvas implements IView {
 	private Dimension grid;
 	private JFrame frame;
 	private JOGLListener glListener;
+	private String populationName;
 	//private GLCanvas canvas;
 	
 	/**
 	 * Create the panel.
 	 */
-	public HeatMapView(EcoWorld model, Dimension grid, Dimension windowSize, double samplingConstant) {
+	public HeatMapView(EcoWorld model, Dimension grid, Dimension windowSize, double samplingConstant, String populationName) {
 		this.grid = grid;
 		this.samplingConstant = samplingConstant;
+		this.populationName = populationName;
 		heatMapWidth = (int)(grid.getWidth()/samplingConstant+1);
 		heatMapHeight = (int)(grid.getHeight()/samplingConstant+1);
 		heatMap = new int[heatMapWidth][heatMapHeight];
+		visited = new boolean[heatMapWidth][heatMapHeight];
 		model.addObserver(this);
 		
 		
@@ -153,27 +157,35 @@ public class HeatMapView extends GLCanvas implements IView {
                  * in the heat map. It then adds 1 to that box to indicate that an agent visited
                  * that box in this iteration.
                  */
+                visited = new boolean[heatMapWidth][heatMapHeight];
                 int popSize = newPops.size();
           		for(int i = 0; i < popSize; i ++) {
-        			List<IAgent> agents = newPops.get(i).getAgents();
-        			int size = agents.size();
-        			IAgent a;
-        			Position pos;
-        			int intPosX;
-        			int intPosY;
-        			for(int j = 0; j < size; j++) {
-        				a = agents.get(j);
-        				pos = a.getPosition();
-        				intPosX = (int)(pos.getX()/samplingConstant);
-    					intPosY = (int)(pos.getY()/samplingConstant);
-    					//System.out.println("("+intPosX+","+intPosY+")");
-    					heatMap[intPosX][intPosY]++;
-    					if(heatMap[intPosX][intPosY]>maxVisited){
-    						maxVisited = heatMap[intPosX][intPosY];
-    					} else if(heatMap[intPosX][intPosY]<minVisited){
-    						minVisited = heatMap[intPosX][intPosY];
-    					}
-                    }
+          			if(newPops.get(i).getName().equals(populationName)){
+	        			List<IAgent> agents = newPops.get(i).getAgents();
+	        			int size = agents.size();
+	        			IAgent a;
+	        			Position pos;
+	        			int intPosX;
+	        			int intPosY;
+	        			for(int j = 0; j < size; j++) {
+	        				a = agents.get(j);
+	        				pos = a.getPosition();
+	        				intPosX = (int)(pos.getX()/samplingConstant);
+	    					intPosY = (int)(pos.getY()/samplingConstant);
+	    					
+	    					if(!visited[intPosX][intPosY]){
+	    						heatMap[intPosX][intPosY]++;
+	    						visited[intPosX][intPosY]=true;
+	    					}
+	    						
+	    					if(heatMap[intPosX][intPosY]>maxVisited){
+	    						maxVisited = heatMap[intPosX][intPosY];
+	    						System.out.println(maxVisited);
+	    					} else if(heatMap[intPosX][intPosY]<minVisited){
+	    						minVisited = heatMap[intPosX][intPosY];
+	    					}
+	                    }
+          			}
         		}  
           		
                 //Background drawing

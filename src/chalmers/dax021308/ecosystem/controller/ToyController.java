@@ -52,7 +52,7 @@ public class ToyController implements IController {
 		this.window = new MainWindow(model);
 		window.setVisible(true);
 		
-		this.heatMap = new HeatMapView(model, f, new Dimension(600,600), 15);
+		this.heatMap = new HeatMapView(model, f, new Dimension(500,500), 20, "Deers");
 		heatMap.setVisible(true);
 	}
 
