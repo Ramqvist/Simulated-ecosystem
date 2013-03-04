@@ -235,29 +235,37 @@ public class EcoWorld {
 
 	/**
 	 * Start the EcoWorld simulation program.
+	 * <p>
+	 * If already started {@link IllegalStateException} will be thrown.
 	 * 
 	 */
-	public void start() {
-		executor = Executors.newSingleThreadExecutor();
-		this.timer = new TimerHandler();
-		shouldRun.set(true);
-		scheduleEnvironmentUpdate();
-		Log.i("EcoWorld started.");
-		if(recordSimulation) {
-			observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
+	public void start() throws IllegalStateException{
+		if(!shouldRun.get()) {
+			executor = Executors.newSingleThreadExecutor();
+			this.timer = new TimerHandler();
+			shouldRun.set(true);
+			scheduleEnvironmentUpdate();
+			Log.i("EcoWorld started.");
+			if(recordSimulation) {
+				observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
+			} else {
+				observers.firePropertyChange(EVENT_START, null, null);
+			}
 		} else {
-			observers.firePropertyChange(EVENT_START, null, null);
+			 throw new IllegalStateException("EcoWorld already started.");
 		}
 	}
 
 	/**
 	 * Stops the scheduling algorithms.
 	 * <p>
-	 * Warning! Will not affect ongoing execution!
-	 * 
+	 * Warning! WILL affect ongoing execution!
+	 * <p>
+	 * If already stopped {@link IllegalStateException} will be thrown.	
+	 *  
 	 */
-	public void stop() {
-		if(!shouldRun.get()) {
+	public void stop() throws IllegalStateException {
+		if(shouldRun.get()) {
 			shouldRun.set(false);
 			executor.shutdownNow();
 			timer.stop();
@@ -274,19 +282,20 @@ public class EcoWorld {
 	//			}
 				observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
 			}
+		} else {
+			 throw new IllegalStateException("EcoWorld already stopped");
 		}
 	}
 	
+	
 	/**
-	 * Plays the recorded simulation (if any), otherwise throws {@link IllegalArgumentException}.
+	 * Plays the recorded simulation (if any).
 	 * <P>
 	 * Uses internal {@link TimerHandler} for smooth playing.
 	 */
 	public void playRecordedSimulation(final List<List<IPopulation>> recordedSim) {
-		if(!recordSimulation) {
-			throw new IllegalStateException("No simulation has been recorded");
-		}
 		final TimerHandler t = new TimerHandler();
+		
 		t.start(17, new OnTickUpdate() {
 			@Override
 			public void onTick() {
@@ -303,22 +312,12 @@ public class EcoWorld {
 		});
 	}
 
-	/**
-	 * Forces the ongoing execution to stop!
-	 * <p>
-	 * Warning! Untested method, might not work.
-	 * 
-	 */
-	public void forceStop() {
-		shouldRun.set(false);
-		executor.shutdownNow();
-		timer.stop();
-		numUpdates = 0;
-		Log.i("EcoWorld stopped.");
-	}
+
 
 	/**
 	 * Starts the {@link TimerHandler} and executes one Environment iteration.
+	 * <p>
+	 * (Gets the ball running.)
 	 */
 	private void scheduleEnvironmentUpdate() {
 		if (numIterations-- > 0) {
@@ -336,7 +335,9 @@ public class EcoWorld {
 			startIterationTime = System.currentTimeMillis();
 		} else {
 			stop();
-			playRecordedSimulation(recordedSimulation);
+			if(recordSimulation) {
+				playRecordedSimulation(recordedSimulation);
+			}
 		}
 	}
 	
@@ -396,13 +397,24 @@ public class EcoWorld {
 	}
 	
 	/**
+	 * Plays the loaded simulation, or throws {@link IllegalStateException} if not any recording is loaded.
+	 */
+	public void playRecentLoadedSimulation() throws IllegalStateException {
+		if(recordedSimulation != null && !recordedSimulation.isEmpty()) {
+			playRecordedSimulation(recordedSimulation);
+		} else {
+			throw new IllegalStateException("No recording loaded");
+		}
+	}
+	
+	/**
 	 * Reads the recording from the given filePath.
 	 * <p>
 	 * Untested!
 	 * @param filePath
 	 * @return True if success, otherwise false.
 	 */
-	private boolean readRecordFromDisk(String filePath) {
+	public boolean readRecordFromDisk(String filePath) {
 		String frameDivider = "FRAME";
 		String populationDivider = "POPULATION";
 		String agentDivider = "AGENT";
@@ -418,7 +430,7 @@ public class EcoWorld {
 			Charset utf8 = Charset.forName("UTF-8");     
 			BufferedReader br = new BufferedReader(new InputStreamReader(fileStream, utf8));
 			List<List<IPopulation>> readInput = parseFile(br);
-
+			recordedSimulation = readInput;
 			br.close();
 			fileStream.close();
 		} catch (IOException e) {
@@ -479,7 +491,7 @@ public class EcoWorld {
 	 * @param filePath
 	 * @return
 	 */
-	private boolean dumpRecordToDisk(List<List<IPopulation>> record, String filePath) {
+	public boolean dumpRecordToDisk(List<List<IPopulation>> record, String filePath) {
 		String frameDivider = "FRAME";
 		String populationDivider = "POPULATION";
 		String agentDivider = "AGENT";

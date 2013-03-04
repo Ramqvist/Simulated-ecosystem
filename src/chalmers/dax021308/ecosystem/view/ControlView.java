@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.util.Log;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -29,7 +30,11 @@ public class ControlView extends JPanel {
 		btnStart.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ew.start();
+				try {
+					ew.start();
+				} catch (IllegalStateException ex) {
+					Log.v("EcoWorld already stopped");
+				}
 			}
 		});
 		setLayout(new MigLayout("", "[63px][61px][69px]", "[25px]"));
@@ -38,8 +43,11 @@ public class ControlView extends JPanel {
 		JButton btnStop = new JButton("Stop");
 		btnStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ew.stop();
-				ew.forceStop();
+				try {
+					ew.stop();
+				} catch (IllegalStateException ex) {
+					Log.v("EcoWorld already stopped");
+				}
 			}
 		});
 		btnStop.setFont(new Font("Tahoma", Font.PLAIN, 14));
