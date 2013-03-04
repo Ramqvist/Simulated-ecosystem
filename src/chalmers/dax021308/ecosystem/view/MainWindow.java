@@ -31,7 +31,7 @@ import java.awt.event.ActionEvent;
  */
 
 public class MainWindow extends JFrame implements IView {
-
+	private static final long serialVersionUID = -8023060073777907757L;
 	private JPanel contentPane;
 	private ParameterView parameterView = new ParameterView(); 
 	private ControlView controlView;
@@ -55,7 +55,7 @@ public class MainWindow extends JFrame implements IView {
 		this.setExtendedState(MAXIMIZED_BOTH);
 		
 		//OpenGL   
-	    Dimension d = new Dimension(800, 600);
+	    Dimension d = new Dimension(900, 800);
 		openGL = new OpenGLSimulationView(model, d, true);
 		openGL.init();
 		openGL.setSize(d);
@@ -94,6 +94,7 @@ public class MainWindow extends JFrame implements IView {
 		menuBar.add(mnSettings);
 		
 		JMenuItem mntmSimulationSettings = new JMenuItem("Simulation settings");
+		//Only this in this class should be in the Controller
 		mntmSimulationSettings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				smv.setVisible(true);

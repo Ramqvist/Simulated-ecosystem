@@ -38,7 +38,6 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public class AWTSimulationView extends JPanel implements IView {
 	
 	private static final long serialVersionUID = 1585638837620985591L;
-	private JFrame frame;
 	private List<IPopulation> newPops;
 	private List<IObstacle> newObs;
 	private Random ran = new Random();
@@ -54,11 +53,6 @@ public class AWTSimulationView extends JPanel implements IView {
 	 */
 	public AWTSimulationView(EcoWorld model, Dimension size, boolean showFPS) {
 		model.addObserver(this);
-		frame = new JFrame("AWT Simulation View");
-		frame.add(this);
-		frame.setSize(size);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
 		this.setBackground(Color.white);
 		gridDimension = size;
 		this.showFPS = showFPS;
@@ -223,8 +217,8 @@ public class AWTSimulationView extends JPanel implements IView {
 		g2.setColor(Color.black);
 		int xLeft = 0;
 		int xRight = (int)gridDimension.getWidth();
-		int yBot = (int)(frame.getSize().getHeight());
-		int yTop = (int)(frame.getSize().getHeight())-(int)gridDimension.getHeight();
+		int yBot = (int)(getHeight());
+		int yTop = (int)(getHeight())-(int)gridDimension.getHeight();
 		g2.drawLine(xLeft, yBot, 
 				   xLeft, yTop);
 		g2.drawLine(xLeft, yTop, 

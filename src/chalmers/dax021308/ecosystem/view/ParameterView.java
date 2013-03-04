@@ -23,11 +23,14 @@ import javax.swing.event.ChangeEvent;
  * The view that holds the parameters that can be changed during a simulation.
  * A panel that is part of the frame that holds the entire application.
  * 
+ * Lots of thing here should be done in a separate class ParameterController //Erik
+ * 
  * @author Hanna
  *
  */
 
 public class ParameterView extends JPanel implements IView {
+	private static final long serialVersionUID = -4258629187312881582L;
 	private final ButtonGroup shapeButtonGroup = new ButtonGroup();
 	private final ButtonGroup obstacleButtonGroup = new ButtonGroup();
 	private final ButtonGroup delayButtonGroup = new ButtonGroup();
