@@ -36,8 +36,8 @@ public class RabbitAgent extends AbstractAgent {
 
 		Position oldPosition = position;
 		double length = velocity.getNorm();
-		Vector neutralForce = getNeutralForce1(neutral);
-//		Vector neutralForce = getNeutralForce2();
+//		Vector neutralForce = getNeutralForce1(neutral);
+		Vector neutralForce = getNeutralForce2(dim);
 		changeDirection();
 		nextPosition = position.addVector(velocity.add(getEnvironmentForce(dim)).add(neutralForce));
 		velocity = velocity.toUnitVector().multiply(length);
@@ -60,18 +60,23 @@ public class RabbitAgent extends AbstractAgent {
 	//Without grid
 	private Vector getNeutralForce1(List<IPopulation> neutral) {
 		Vector neutralForce = new Vector();
-		
 		for (int i = 0; i < neutral.size(); i++) {
 			List<IAgent> agents = neutral.get(i).getAgents();
-			for (int j = 0; j < agents.size(); j++) {
-				if (this != agents.get(j)) {
-					Position pos = agents.get(j).getPosition();
-					double distance = position.getDistance(pos);
-					if (distance <= visionRange && distance != 0) {
-						Vector v = new Vector(position, pos);
-						v.multiply(1 / (v.getNorm() * distance));
-						neutralForce.add(v);
-					}
+			neutralForce.add(getForceFromAgents(agents));
+		}
+		return neutralForce;
+	}
+	
+	private Vector getForceFromAgents(List<IAgent> agents) {
+		Vector neutralForce = new Vector();
+		for (int j = 0; j < agents.size(); j++) {
+			if (this != agents.get(j)) {
+				Position pos = agents.get(j).getPosition();
+				double distance = position.getDistance(pos);
+				if (distance <= visionRange && distance != 0) {
+					Vector v = new Vector(position, pos);
+					v.multiply(1 / (v.getNorm() * distance));
+					neutralForce.add(v);
 				}
 			}
 		}
@@ -81,10 +86,53 @@ public class RabbitAgent extends AbstractAgent {
 		return neutralForce;
 	}
 	
-	private Vector getNeutralForce2() {
+	
+	//With grid.
+	private Vector getNeutralForce2(Dimension dim) {
+		List<Position> positions = new ArrayList<Position>();
+		int x1 = (int)(position.getX() - velocity.getNorm());
+		int y1 = (int)(position.getY() - velocity.getNorm());
+		int x2 = (int)(position.getX() + velocity.getNorm());
+		int y2 = (int)(position.getY() + velocity.getNorm());
+		int scale = EcoWorld.worldGrid.getScale();
+		System.out.println("asdf");
 		
+		//Add scale??
+		for (int x = x1; x <= x2; x+= scale) {
+			for (int y = y1; y <= y2; y+= scale) {
+				if (x >= 0 && x <= dim.width && y >= 0 && y <= dim.height) {
+					Position p = new Position(x, y);
+					if (position.getDistance(p) <= visionRange) {
+						positions.add(p);
+					}
+				}
+			}
+		}
 		
+		List<List<IAgent>> agents = EcoWorld.worldGrid.get(positions);
+		Vector neutralForce = new Vector();
+		for (int i = 0; i < agents.size(); i++) {
+			neutralForce.add(getForceFromAgents(agents.get(i)));
+		}
 		
-		return null;
+		return neutralForce;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
