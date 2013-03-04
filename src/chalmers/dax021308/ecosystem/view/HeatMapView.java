@@ -37,7 +37,7 @@ import chalmers.dax021308.ecosystem.model.util.Position;
  * <p>
  * For Javadoc add the Jogl Javadoc jar as Javadoc refernce to the selected JOGL jar.
  * <p>
- * @author Erik Ramqvist
+ * @author Original class OpelGLSimulationView by Erik Ramqvist. Copied and modified into a heat map by Sebastian Anerud.
  *
  */
 public class HeatMapView extends GLCanvas implements IView {
@@ -71,7 +71,7 @@ public class HeatMapView extends GLCanvas implements IView {
 		model.addObserver(this);
 		
 		
-		frame = new JFrame("(" + heatMapWidth+ "," +
+		frame = new JFrame("Heat map truncated into dimensions: (" + heatMapWidth+ "," +
 				heatMapHeight + ")");
 		frame.add(this);
 		frame.setSize(windowSize);
@@ -133,16 +133,11 @@ public class HeatMapView extends GLCanvas implements IView {
 	 */
     private class JOGLListener implements GLEventListener {
     	
-    		//Number of edges in each created circle.
-    		private final double VERTEXES_PER_CIRCLE = 6;
-    		private final double PI_TIMES_TWO        = 2*Math.PI;
-        	private final double increment           = PI_TIMES_TWO/VERTEXES_PER_CIRCLE;
-        	private final float  COLOR_FACTOR        = (1.0f/255);
-        	
         	GL gl = getGL();
     		
         	/**
-        	 * Called each frame to redraw all the 3D elements.
+        	 * @author Sebastian. Credit to Erik for original class.
+        	 * Called each time the model updates itself.
         	 * 
         	 */
             @Override
@@ -155,8 +150,10 @@ public class HeatMapView extends GLCanvas implements IView {
                 /*
                  * Loops through all agents and truncates their positions to the correct box
                  * in the heat map. It then adds 1 to that box to indicate that an agent visited
-                 * that box in this iteration.
+                 * that box in this iteration. A pixel can only get +1 per iteration to prevent
+                 * the corners to dominate too much.
                  */
+                minVisited = Integer.MAX_VALUE;
                 visited = new boolean[heatMapWidth][heatMapHeight];
                 int popSize = newPops.size();
           		for(int i = 0; i < popSize; i ++) {
@@ -180,32 +177,43 @@ public class HeatMapView extends GLCanvas implements IView {
 	    						
 	    					if(heatMap[intPosX][intPosY]>maxVisited){
 	    						maxVisited = heatMap[intPosX][intPosY];
-	    						System.out.println(maxVisited);
-	    					} else if(heatMap[intPosX][intPosY]<minVisited){
-	    						minVisited = heatMap[intPosX][intPosY];
-	    					}
+	    					} 
 	                    }
           			}
-        		}  
+        		} 
           		
-                //Background drawing
-                //Color of the background.
-                gl.glColor4f(1, 1, 1, 1);
-          		gl.glBegin(GL.GL_POLYGON);
-          		gl.glVertex2d(0, 0);
-          		gl.glVertex2d(0, frameHeight);
-          		gl.glVertex2d(frameWidth, frameHeight);
-          		gl.glVertex2d(frameWidth, 0);
-          		gl.glEnd();
-          		    
+          		/*
+          		 * Check which pixel is visited the least.
+          		 * Must be able to do in a better way?
+          		 */
+          		for(int j=0;j<heatMapHeight;j++){
+          			for(int i=0;i<heatMapWidth;i++){
+          				if(heatMap[i][j]<minVisited){
+    						minVisited = heatMap[i][j];
+    					} 
+          			}
+          		}	
+          		System.out.println(minVisited);	
+          		
           		/*
           		 * Draw the heat map.
           		 */
-          		
-          		for(int j=0;j<grid.getHeight()/samplingConstant;j++){
-          			for(int i=0;i<grid.getWidth()/samplingConstant;i++){
-          				double value = ((double)((double)(heatMap[i][j]-minVisited))/((double)maxVisited));
+          		for(int j=0;j<heatMapHeight;j++){
+          			for(int i=0;i<heatMapWidth;i++){
           				
+          				/*
+          				 * "value" is a value between 0 and 1 and is based on where a pixel lies on the scale between
+          				 * minVisited and maxVisited. If a pixel has minVisited visits, it gets value 0. If a pixel has
+          				 * maxVisited visits, it gets value 1.
+          				 */
+          				double value = ((double)((double)(heatMap[i][j]-minVisited))/((double)(maxVisited-minVisited)));
+          				
+          				/*
+          				 * Below does the following re-scaling of colors:
+          				 * If 0 <= value < 0.5 the color is 0 <= red < 255 and green = 255.
+          				 * If value = 0.5, the color is red = 255 and green = 255.
+          				 * If 0.5 < value <= 1, the color is red = 255 and 255 > green >= 0.
+          				 */
           				double red = 1;
           				double green = 1;
           				
@@ -221,18 +229,17 @@ public class HeatMapView extends GLCanvas implements IView {
                   		/*
                   		 * Create a box with for corners at the right positions
                   		 */
+                  		double xBotLeft = ((double)i)*frameWidth/(double)heatMapWidth;
+                  		double yBotLeft = frameHeight - ((double)j)*frameHeight/(double)heatMapHeight;
                   		
-                  		double xBotLeft = ((double)i)*samplingConstant*frameWidth/grid.getWidth();
-                  		double yBotLeft = frameHeight - ((double)j)*samplingConstant*frameHeight/grid.getHeight();
-                  		
-                  		double xBotRight = ((double)(i+1))*samplingConstant*frameWidth/grid.getWidth();
+                  		double xBotRight = ((double)(i+1))*frameWidth/(double)heatMapWidth;
                   		double yBotRight = yBotLeft;
                   		
                   		double xTopLeft = xBotLeft;
-                  		double yTopLeft = frameHeight - ((double)(j+1))*samplingConstant*frameHeight/grid.getHeight();
+                  		double yTopLeft = frameHeight - ((double)(j+1))*frameHeight/(double)heatMapHeight;
                   		
-                  		double xTopRight = ((double)(i+1))*samplingConstant*frameWidth/grid.getWidth();
-                  		double yTopRight = frameHeight - ((double)(j+1))*samplingConstant*frameHeight/grid.getHeight();
+                  		double xTopRight = xBotRight;
+                  		double yTopRight = yTopLeft;
                   		
                   		gl.glVertex2d(xBotLeft, yBotLeft);
                   		gl.glVertex2d(xTopLeft, yTopLeft);
@@ -253,11 +260,6 @@ public class HeatMapView extends GLCanvas implements IView {
         		/* End Information print. */
             }
             
-        	public double getNorm(double x, double y){
-        		return Math.sqrt((x*x)+(y*y));
-        	}
-
- 
             @Override
             public void init(GLAutoDrawable drawable) {
                     System.out.println("INIT CALLED");
