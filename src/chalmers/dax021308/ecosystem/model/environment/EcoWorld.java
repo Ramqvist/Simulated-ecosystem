@@ -324,13 +324,14 @@ public class EcoWorld {
 			if (!runWithoutTimer) {
 				timer.start(tickTime, onTickListener);
 			}
+			StringBuffer sb = new StringBuffer("---- Simulation model Update ---- Number of updates: ");
+			sb.append(++numUpdates);
 			if(startIterationTime != 0) {
-				Log.v("---- Simulation model Update ---- Number of updates: "
-						+ ++numUpdates + " - Iteration time:" + 0.000001*elapsedTime + " ns.");
-			} else {
-				Log.v("---- Simulation model Update ---- Number of updates: "
-					+ ++numUpdates);
-			}
+				sb.append(" - Iteration time:" );
+				sb.append((long) (0.000001*elapsedTime));
+				sb.append(" ms.");
+			} 
+			Log.v(sb.toString());
 			executor.execute(env);
 			startIterationTime = System.nanoTime();
 		} else {
