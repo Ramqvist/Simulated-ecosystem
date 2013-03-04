@@ -39,6 +39,7 @@ public class ToyController implements IController {
 //		this.model = new EcoWorld(d);
 		
 		//Uncomment to start model.
+		model.start();
 		
 		//OpenGL 
 		//OpenGLSimulationView simView = new OpenGLSimulationView(model, d, true);
