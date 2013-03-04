@@ -161,10 +161,6 @@ public class EcoWorld {
 			recordedSimulation = new ArrayList<List<IPopulation>>(numIterations);
 		}
 
-		/* Uncomment to test ticking functionality */
-		// this.env = new Environment(mOnFinishListener);
-
-		/* Use SquareEnvironment instead. */
 		this.env = new SquareEnvironment(createInitialPopulations(d),
 				readObsticlesFromFile(), mOnFinishListener, d.height, d.width);
 
@@ -272,14 +268,6 @@ public class EcoWorld {
 			numUpdates = 0;
 			Log.i("EcoWorld stopped.");
 			if(recordSimulation) {
-	//			for(List<IPopulation> list : recordedSimulation) {
-	//				for(IPopulation pop : list) {
-	//					Log.v("Population: " + pop);
-	//					for(IAgent a : pop.getAgents()) {
-	//						Log.v("Population: " + pop.toString() + " Agent:" + a.toString());
-	//					}
-	//				}
-	//			}
 				observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
 			}
 		} else {

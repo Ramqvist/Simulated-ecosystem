@@ -1,6 +1,6 @@
 package chalmers.dax021308.ecosystem.main;
 
-import chalmers.dax021308.ecosystem.controller.ToyController;
+import chalmers.dax021308.ecosystem.controller.WindowController;
 
 /**
  * Starter class for the Ecosystem program.
@@ -10,6 +10,6 @@ import chalmers.dax021308.ecosystem.controller.ToyController;
 public class EcosystemInitializer {
 	
 	public static void main(String[] args) {
-		new ToyController();
+		new WindowController();
 	}
 }

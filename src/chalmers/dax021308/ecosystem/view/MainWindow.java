@@ -18,7 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
 
-import chalmers.dax021308.ecosystem.controller.ToyController;
+import chalmers.dax021308.ecosystem.controller.WindowController;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 
 import java.awt.event.ActionEvent;

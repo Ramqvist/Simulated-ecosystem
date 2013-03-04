@@ -15,13 +15,13 @@ import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
  * 
  * @author Henrik Ernstsson
  */
-public class ToyController implements IController {
+public class WindowController implements IController {
 
 	private EcoWorld model;
 	private MainWindow window;
 	private HeatMapView heatMap;
 
-	public ToyController() {
+	public WindowController() {
 		init();
 	}
 
