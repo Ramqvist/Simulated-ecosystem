@@ -67,8 +67,6 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 		yAxis.setAxisTitle(new AxisTitle(yAxisTitle));
 		yAxis.setRangePolicy(new RangePolicyMinimumViewport(rangeY)); 
 		yAxis.setMinorTickSpacing(50);
-		
-		
 	}
 
 	@Override

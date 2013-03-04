@@ -1,7 +1,6 @@
 package chalmers.dax021308.ecosystem.controller;
 
 
-//import chalmers.dax021308.ecosystem.view.GraphPopulationAmountView;
 import chalmers.dax021308.ecosystem.view.AWTSimulationView;
 import chalmers.dax021308.ecosystem.view.MainWindow;
 import chalmers.dax021308.ecosystem.view.OpenGLSimulationView;
@@ -18,7 +17,6 @@ import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 public class ToyController implements IController {
 
 	private EcoWorld model;
-	//private GraphPopulationAmountView graphView;
 	private MainWindow window;
 
 	public ToyController() {
@@ -27,16 +25,17 @@ public class ToyController implements IController {
 
 	@Override
 	public void init() {
-		Dimension d = new Dimension(800, 600);
-		d.height = d.height - 40;
 		
 		int tickDelay = 16;
 		int numIterations = Integer.MAX_VALUE;
 		boolean recordSimulation = false;
+		
+		Dimension d = new Dimension(800, 600);
+		d.height = d.height - 40;
 		Dimension f = new Dimension(d.width-16, d.height-39);
 		
 		this.model = new EcoWorld(f, tickDelay, numIterations, recordSimulation);
-		//Uncommend below to run without delay.
+		//Uncomment below to run without delay.
 //		this.model = new EcoWorld(d);
 		
 		//Uncomment to start model.
@@ -47,11 +46,7 @@ public class ToyController implements IController {
 		//Java AWT
 //		AWTSimulationView simView = new AWTSimulationView(model, d, true);
 		//simView.init();
-		
-		//this.graphView = new GraphPopulationAmountView(model);
-		//graphView.init();
-		
-		
+	
 		this.window = new MainWindow(model);
 		window.setVisible(true);
 	}
