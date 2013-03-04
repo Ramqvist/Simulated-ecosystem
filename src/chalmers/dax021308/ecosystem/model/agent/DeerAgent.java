@@ -73,9 +73,14 @@ public class DeerAgent extends AbstractAgent {
 		 * --> scale it to maxAcceleration, but keep the correct direction of
 		 * the acceleration.
 		 */
+		double randX = -RANDOM_FORCE_MAGNITUDE+ 2*RANDOM_FORCE_MAGNITUDE*Math.random();
+		double randY = -RANDOM_FORCE_MAGNITUDE+ 2*RANDOM_FORCE_MAGNITUDE*Math.random();
+		Vector randomForce = new Vector(randX, randY);
 		Vector acceleration = environmentForce.multiply(100)
 				.add(predatorForce.multiply(3))
-				.add(separationForce.multiply(10).add(preyForce));
+				.add(separationForce.multiply(10))
+				.add(preyForce)
+				.add(randomForce);
 		double accelerationNorm = acceleration.getNorm();
 		if (accelerationNorm > maxAcceleration) {
 			acceleration.multiply(maxAcceleration / accelerationNorm);
