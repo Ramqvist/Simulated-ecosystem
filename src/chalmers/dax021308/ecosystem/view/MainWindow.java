@@ -2,6 +2,7 @@ package chalmers.dax021308.ecosystem.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -17,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
 
+import chalmers.dax021308.ecosystem.controller.ToyController;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 
 import java.awt.event.ActionEvent;
@@ -39,8 +41,8 @@ public class MainWindow extends JFrame implements IView {
 	private SettingsMenuView smv = new SettingsMenuView(this);
 	private AWTSimulationView awt;
 	private OpenGLSimulationView openGL;
-	//private GraphView graphView1 = new GraphView();  //Måste ta in en ekomodell, + är jframe nu
-	//private GraphView graphView2 = new GraphView();  //Måste ta in en ekomodell, + är jframe nu
+	private GraphPopulationAmountView graphView1;  //Mï¿½ste ta in en ekomodell, + ï¿½r jframe nu
+	//private GraphView graphView2 = new GraphView();  //Mï¿½ste ta in en ekomodell, + ï¿½r jframe nu
 	
 
 	/**
@@ -51,7 +53,13 @@ public class MainWindow extends JFrame implements IView {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 513, 416);
 		
+		//OpenGL 
+		Dimension d = new Dimension(500, 500);
+		openGL = new OpenGLSimulationView(model, d, true);
+		openGL.init();
+		//
 		controlView = new ControlView(model);
+		graphView1 = new GraphPopulationAmountView(model);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -103,12 +111,15 @@ public class MainWindow extends JFrame implements IView {
 		gbc.anchor = GridBagConstraints.PAGE_START;
 		setContentPane(contentPane);
 		
+		//simulationPanel.add(openGL);
 		simulationPanel.setSize(50, 50);
 		simulationPanel.add(new JButton("Hej"));
 		simulationPanel.setBackground(Color.RED);
 		left.add(simulationPanel, BorderLayout.CENTER);
 		left.add(controlView, BorderLayout.SOUTH);  
 		right.add(parameterView, gbc);
+		//graphView1.setSize(200, 200); // L added
+		right.add(graphView1, gbc); // L added
 		right.setBackground(Color.BLUE);
 		parameterView.setBackground(Color.GREEN);
 		

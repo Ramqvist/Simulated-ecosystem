@@ -71,6 +71,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
         frame.setVisible(true);
 		frame.add(this);
 		frame.setSize(size);
+		
 		//setVisible(true);
 		//setSize(size);
 

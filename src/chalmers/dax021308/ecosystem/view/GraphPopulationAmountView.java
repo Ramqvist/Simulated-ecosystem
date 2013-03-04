@@ -23,17 +23,19 @@ import info.monitorenter.util.Range;
 /**
  * 
  * @author Loanne
+ * 
  * Shows population amount over time.
  * However, might not yet work for populations added after
  * simulation start. Will fix later if this should be possible.
  */
-public class GraphPopulationAmountView implements IGraphView {
+public class GraphPopulationAmountView extends Chart2D implements IView {
 
-	private String name = "Population amount";
-	private JFrame frame; // TODO temporary. 
-	private Chart2D chart = new Chart2D();
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	//private Chart2D chart = new Chart2D();
 	private List<ITrace2D> traces = new ArrayList<ITrace2D>();
-	private long m_starttime = System.currentTimeMillis();
 	private ColorIterator colors = new ColorIterator();
 	
 	// Values for axis. More values are set in init()
@@ -46,16 +48,8 @@ public class GraphPopulationAmountView implements IGraphView {
 	private int nIterationsPassed = 0;
 
 	public GraphPopulationAmountView(EcoWorld model) {
-		initJFrame(); // TODO temporary
-		model.addObserver(this);  
-	}
-
-	private void initJFrame(){
-		// TODO temporary stuff. Should just be a JPanel.
-		frame = new JFrame(name);    
-		this.frame.setSize(500, 500);
-		this.frame.getContentPane().add(chart);
-		this.frame.setVisible(true);
+		model.addObserver(this);
+		init();
 	}
 
 	@Override
@@ -64,15 +58,17 @@ public class GraphPopulationAmountView implements IGraphView {
 		// Set how many different colored traces possible.
 		this.colors.setSteps(10);
 
-		xAxis = (IAxis<IAxisScalePolicy>)chart.getAxisX(); 
+		xAxis = (IAxis<IAxisScalePolicy>)getAxisX(); 
 		xAxis.setAxisTitle(new AxisTitle(xAxisTitle));
 		xAxis.setRangePolicy(new RangePolicyMinimumViewport(rangeX)); 
 		xAxis.setMinorTickSpacing(2000);
 
-		yAxis = (IAxis<IAxisScalePolicy>)chart.getAxisY(); 
+		yAxis = (IAxis<IAxisScalePolicy>)getAxisY();
 		yAxis.setAxisTitle(new AxisTitle(yAxisTitle));
 		yAxis.setRangePolicy(new RangePolicyMinimumViewport(rangeY)); 
 		yAxis.setMinorTickSpacing(50);
+		
+		
 	}
 
 	@Override
@@ -81,7 +77,6 @@ public class GraphPopulationAmountView implements IGraphView {
 		String eventName = event.getPropertyName();
 		if(eventName == EcoWorld.EVENT_STOP) {
 			//Model has stopped. Maybe hide view?
-			//frame.setVisible(false);
 		} else if(eventName == EcoWorld.EVENT_TICK) {
 
 			if(event.getNewValue() instanceof List<?>) {
@@ -119,7 +114,8 @@ public class GraphPopulationAmountView implements IGraphView {
 
 			newTrace.setColor(colors.next());
 			traces.add(newTrace);
-			chart.addTrace(newTrace);	
+			//chart.addTrace(newTrace);	
+			this.addTrace(newTrace);	
 		}
 	}
 
