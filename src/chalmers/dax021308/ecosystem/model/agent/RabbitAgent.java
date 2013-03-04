@@ -20,7 +20,7 @@ public class RabbitAgent extends AbstractAgent {
 	}
 
 	@Override
-	public List<IAgent> reproduce(IAgent agent) {
+	public List<IAgent> reproduce(IAgent agent, int populationSize) {
 		List<IAgent> kids = new LinkedList<IAgent>();
 		if (Math.random() < 0.0001 && gender == Gender.FEMALE) {
 			if (Math.random() > 0.5) {

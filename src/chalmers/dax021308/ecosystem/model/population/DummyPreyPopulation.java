@@ -24,9 +24,9 @@ public class DummyPreyPopulation extends AbstractPopulation {
 		agents = agentList;
 	}
 
-	public DummyPreyPopulation(String name, Dimension gridDimension, int initPopulationSize, Color color, 
+	public DummyPreyPopulation(Dimension gridDimension, int initPopulationSize, Color color, 
 			double maxSpeed, double maxAcceleration,double visionRange){
-		super(name, gridDimension);
+		super("Simple Prey", gridDimension);
 		this.visionRange = visionRange;
 		agents = initializePopulation(initPopulationSize, gridDimension, color, maxSpeed, maxAcceleration, visionRange);
 	}

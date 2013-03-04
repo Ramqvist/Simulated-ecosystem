@@ -2,6 +2,7 @@ package chalmers.dax021308.ecosystem.model.agent;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.LinkedList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
@@ -22,12 +23,60 @@ public class SimplePredatorAgent extends AbstractAgent {
 	}
 
 	@Override
+	public List<IAgent> reproduce(IAgent agent, int populationSize) {
+		return new LinkedList<IAgent>();
+	}
+
+	/**
+	 * @author Sebastian/Henrik
+	 */
+	private Vector getPreyForce(List<IPopulation> preys) {
+		/* 
+		 * "Prey Force" is AT THE MOMENT defined as the sum of the vectors pointing away from 
+		 * all the preys in vision, weighted by the inverse of the distance to the preys, 
+		 * then normalized to have unit norm. 
+		 * Can be interpreted as the average sum of forces that the agent feels, weighted
+		 * by how close the source of the force is.
+		 */
+		Vector preyForce = new Vector(0, 0);
+		int nVisiblePreys = 0;
+		for (IPopulation pop : preys) {
+			for (IAgent a : pop.getAgents()) {
+				Position p = a.getPosition();
+				double distance = getPosition().getDistance(p);
+				if (distance <= visionRange) {
+					/*
+					 * Create a vector that points towards the prey.
+					 */
+					Vector newForce = new Vector(p, getPosition());
+					
+					/*
+					 * Add this vector to the prey force, with proportion to how close the prey is.
+					 * Closer preys will affect the force more than those far away. 
+					 */
+					double norm = newForce.getNorm();
+					preyForce.add(newForce.multiply(1/(norm*distance)));
+					nVisiblePreys++;
+				 }
+			}
+		}
+
+		if (nVisiblePreys == 0) { //No preys near --> Be unaffected
+			preyForce.setVector(0,0);
+		} else { //Else set the force depending on visible preys and normalize it to maxAcceleration.
+			double norm = preyForce.getNorm();
+			preyForce.multiply(maxAcceleration/norm);
+		}
+		return preyForce;
+	}
+
+	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
-			List<IPopulation> preys, List<IPopulation> neutral,Dimension gridDimension) {
+			List<IPopulation> preys, List<IPopulation> neutral, Dimension dim) {
 		Vector preyForce = getPreyForce(preys);
 		Vector separationForce = getSeparationForce(neutral);
 		//Vector separationForce = new Vector();
-		Vector environmentForce = getEnvironmentForce(gridDimension);
+		Vector environmentForce = getEnvironmentForce(dim);
 		
 		/*
 		 * Sum the forces from walls, predators and neutral to form the acceleration force.
@@ -47,7 +96,7 @@ public class SimplePredatorAgent extends AbstractAgent {
 		 * they will eventually stop.
 		 * If speed exceeds maxSpeed --> scale it to maxSpeed, but keep the correct direction.
 		 */
-		Vector newVelocity = this.getVelocity().add(acceleration);
+		Vector newVelocity = this.getVelocity().add(acceleration).multiply(VELOCITY_DECAY);
 		double speed = newVelocity.getNorm();
 		if(speed > maxSpeed){
 			newVelocity.multiply(maxSpeed/speed); 
@@ -55,62 +104,6 @@ public class SimplePredatorAgent extends AbstractAgent {
 		
 		this.setVelocity(newVelocity);
 		nextPosition = Position.positionPlusVector(position,velocity);
-	}
-
-	@Override
-	public List<IAgent> reproduce(IAgent agent) {
-		// TODO Auto-generated method stub
-		System.err.println("ERROR IN REPRODUCE METHOD, METHOD UNDEFINED");
-		return null;
-	}
-
-	/**
-	 * @author Sebastian/Henrik
-	 */
-	private Vector getPreyForce(List<IPopulation> preys) {
-		/* 
-		 * "Prey Force" is AT THE MOMENT defined as the sum of the vectors pointing away from 
-		 * all the preys in vision, weighted by the inverse of the distance to the preys, 
-		 * then normalized to have unit norm. 
-		 * Can be interpreted as the average sum of forces that the agent feels, weighted
-		 * by how close the source of the force is.
-		 */
-		Vector preyForce = new Vector(0, 0);
-		int nVisiblePreys = 0;
-		for (IPopulation pop : preys) {
-			List<IAgent> agents = pop.getAgents();
-			for (int i=0;i<pop.getAgents().size();i++) {
-				IAgent a = agents.get(i);
-				Position p = a.getPosition();
-				double distance = getPosition().getDistance(p);
-				if (distance <= visionRange) {
-					if(distance <= INTERACTION_RANGE) {
-						pop.getAgents().remove(i);
-					} else {
-					/*
-					 * Create a vector that points towards the prey.
-					 */
-					Vector newForce = new Vector(p, getPosition());
-					
-					/*
-					 * Add this vector to the prey force, with proportion to how close the prey is.
-					 * Closer preys will affect the force more than those far away. 
-					 */
-					double norm = newForce.getNorm();
-					preyForce.add(newForce.multiply(1/(norm*distance)));
-					nVisiblePreys++;
-					}
-				 }
-			}
-		}
-
-		if (nVisiblePreys == 0) { //No preys near --> Be unaffected
-			preyForce.setVector(0,0);
-		} else { //Else set the force depending on visible preys and normalize it to maxAcceleration.
-			double norm = preyForce.getNorm();
-			preyForce.multiply(maxAcceleration/norm);
-		}
-		return preyForce;
 	}
 	
 }

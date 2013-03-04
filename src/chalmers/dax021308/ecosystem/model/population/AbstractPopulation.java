@@ -15,9 +15,10 @@ import chalmers.dax021308.ecosystem.model.agent.IAgent;
 public abstract class AbstractPopulation implements IPopulation {
 	protected List<IAgent> agents;
 	protected Dimension gridDimension;
-	private List<IPopulation> preys;
-	private List<IPopulation> predators;
-	private List<IPopulation> neutral;
+	protected int capacity = Integer.MAX_VALUE;
+	protected List<IPopulation> preys;
+	protected List<IPopulation> predators;
+	protected List<IPopulation> neutral;
 	private String name;
 
 	public AbstractPopulation() {
@@ -32,6 +33,11 @@ public abstract class AbstractPopulation implements IPopulation {
 		this.gridDimension = gridDimension;
 	}
 
+	public AbstractPopulation(String name, Dimension gridDimension, int capacity) {
+		this(name, gridDimension);
+		this.capacity = capacity;
+	}
+	
 	/**
 	 * Clone constructor.
 	 * <p>
@@ -55,15 +61,22 @@ public abstract class AbstractPopulation implements IPopulation {
 			}
 		}
 	}
-
 	@Override
 	public void update() {
 		for (IAgent a : agents) {
 			a.calculateNextPosition(predators, preys, neutral, gridDimension);
 		}
+		List<IAgent> kids = new ArrayList<IAgent>();
+		int populationSize = agents.size();
 		for (IAgent a : agents) {
 			a.updatePosition();
+			List<IAgent> spawn = a.reproduce(null,populationSize);
+			if (spawn != null) {
+				kids.addAll(spawn);
+			}
 		}
+		if (kids != null)
+			agents.addAll(kids);
 	}
 
 	@Override
@@ -114,5 +127,31 @@ public abstract class AbstractPopulation implements IPopulation {
 				return 0;
 			}
 		};
+	}
+
+	public static IPopulation createFromFile(String input) {
+		String[] inputArray = input.split(";");
+		String name = inputArray[0];
+		Dimension dim = new Dimension(Integer.parseInt(inputArray[1]), Integer.parseInt(inputArray[2]));
+		int cap = Integer.parseInt(inputArray[3]);
+		return new AbstractPopulation(name, dim, cap) {
+			@Override
+			public double calculateFitness(IAgent agent) {
+				return 0;
+			}
+		};
+	}
+	
+	@Override
+	public String toBinaryString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(name);
+		sb.append(';');
+		sb.append(gridDimension.width);
+		sb.append(';');
+		sb.append(gridDimension.height);
+		sb.append(';');
+		sb.append(capacity);
+		return null;
 	}
 }

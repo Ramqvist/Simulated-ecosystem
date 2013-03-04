@@ -21,10 +21,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.jfree.text.G2TextMeasurer;
 
+import chalmers.dax021308.ecosystem.model.agent.AbstractAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
-import chalmers.dax021308.ecosystem.model.population.DummyPreyPopulation;
+import chalmers.dax021308.ecosystem.model.population.DeerPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPredatorPopulation;
+import chalmers.dax021308.ecosystem.model.population.DummyPreyPopulation;
+import chalmers.dax021308.ecosystem.model.population.PigPopulation;
+import chalmers.dax021308.ecosystem.model.population.WolfPopulation;
 import chalmers.dax021308.ecosystem.model.population.GrassPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.population.RabbitPopulation;
@@ -54,8 +58,8 @@ public class EcoWorld {
 	/* 								   */
 	
 	private AtomicBoolean environmentFinished = new AtomicBoolean(false);
-	private AtomicBoolean timerFinished = new AtomicBoolean(false);
-	private AtomicBoolean shouldRun = new AtomicBoolean(false);
+	private AtomicBoolean timerFinished       = new AtomicBoolean(false);
+	private AtomicBoolean shouldRun           = new AtomicBoolean(false);
 	private boolean runWithoutTimer;
 	private boolean recordSimulation;
 	
@@ -64,6 +68,9 @@ public class EcoWorld {
 	private IEnvironment env;
 	private int tickTime;
 	private PropertyChangeSupport observers;
+	
+	private long startIterationTime;
+	private long elapsedTime;
 	
 	/**
 	 * Each list in the list contains one snapshot of frame;
@@ -76,12 +83,14 @@ public class EcoWorld {
 	private Object syncObject = new Object();
 	private int numUpdates = 0;
 	private Dimension d;
-	private static final int NUM_THREAD = 1;
-	private ExecutorService executor = Executors.newFixedThreadPool(NUM_THREAD);
+	//private static final int NUM_THREAD = 1;
+	private ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	private OnFinishListener mOnFinishListener = new OnFinishListener() {
+
 		@Override
 		public void onFinish(List<IPopulation> popList, List<IObstacle> obsList) {
+			elapsedTime = System.currentTimeMillis() - startIterationTime;
 			// Fire state changed to observers, notify there has been an update.
 			if(recordSimulation) {
 				recordedSimulation.add(clonePopulationList(popList));
@@ -143,7 +152,7 @@ public class EcoWorld {
 		this.d = d;
 		this.recordSimulation = recordSimulation;
 		if(recordSimulation) {
-			recordedSimulation = new ArrayList<List<IPopulation>>(1000);
+			recordedSimulation = new ArrayList<List<IPopulation>>(numIterations);
 		}
 
 		/* Uncomment to test ticking functionality */
@@ -192,9 +201,16 @@ public class EcoWorld {
 		//rabbits.addPrey(rabbits);
 		//populations.add(rabbits);
 		
-		IPopulation prey = new DummyPreyPopulation("Deers", dim, 300, Color.red, 1.5, 1, 250);
-		IPopulation predator = new DummyPredatorPopulation("Wolves", dim,5, Color.green, 2, 0.5,275);
-		IPopulation grass = new GrassPopulation("Grass", dim, 1000, Color.DARK_GRAY, 1, 1, 0);
+
+//		IPopulation prey = new DummyPreyPopulation(dim, 500, Color.blue, 2.2, 2, 250);
+//		IPopulation predator = new DummyPredatorPopulation(dim, 10, Color.red, 2.5, 0.75,275);
+		
+		
+		IPopulation prey = new DeerPopulation("Deers", dim, 100, Color.blue, 2.2, 2, 250);
+//		IPopulation prey = new PigPopulation("Filthy Pigs", dim, 100, Color.pink, 2.0, 1.5, 225);
+		IPopulation predator = new WolfPopulation("Wolves", dim, 10, Color.red, 2.5, 0.75,275);
+		IPopulation grass = new GrassPopulation("Grass", dim, 500, Color.green, 1, 1, 0, 1500);
+
 		
 		prey.addPredator(predator);
 		prey.addPrey(grass);
@@ -299,9 +315,15 @@ public class EcoWorld {
 			if (!runWithoutTimer) {
 				timer.start(tickTime, onTickListener);
 			}
-			Log.v("---- Simulation model Update ---- Number of updates: "
+			if(startIterationTime != 0) {
+				Log.v("---- Simulation model Update ---- Number of updates: "
+						+ ++numUpdates + " - Iteration time:" + elapsedTime);
+			} else {
+				Log.v("---- Simulation model Update ---- Number of updates: "
 					+ ++numUpdates);
+			}
 			executor.execute(env);
+			startIterationTime = System.currentTimeMillis();
 		} else {
 			stop();
 			playRecordedSimulation();
@@ -385,11 +407,8 @@ public class EcoWorld {
 			FileInputStream fileStream = new FileInputStream(f);
 			Charset utf8 = Charset.forName("UTF-8");     
 			BufferedReader br = new BufferedReader(new InputStreamReader(fileStream, utf8));
-			String input = br.readLine();
-			while(input != null) {
-				input = br.readLine();
-				handleInput(input);
-			}
+			List<List<IPopulation>> readInput = parseFile(br);
+
 			br.close();
 			fileStream.close();
 		} catch (IOException e) {
@@ -399,22 +418,48 @@ public class EcoWorld {
 		return false;
 	}
 	
-	/**
-	 * Handles the input and parses it to the correct value.
-	 * @param input
-	 */
-	private void handleInput(String input) {
-		// TODO: Implement parser
+	private List<List<IPopulation>> parseFile(BufferedReader br) {
 		String frameDivider = "FRAME";
 		String populationDivider = "POPULATION";
 		String agentDivider = "AGENT";
-		if(input.startsWith(frameDivider)) {
-			//Add the population-list to the record
-		} else if(input.startsWith(populationDivider)) {
-			//Create new population
-		} else if(input.startsWith(agentDivider)) {
-			//Parse agent and add it to the last population.
+		
+		List<List<IPopulation>> result = new ArrayList<List<IPopulation>>();
+		
+		List<IPopulation> currentFrame = null;
+		IPopulation currentPop = null;
+		
+		String input = null;
+		try {
+			input = br.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		while(input != null) {
+			try {
+				input = br.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			if(input.startsWith(frameDivider)) {
+				if(currentFrame != null) {
+					result.add(currentFrame);
+				}
+				currentFrame = new ArrayList<IPopulation>();
+			} else if(input.startsWith(populationDivider)) {
+				if(currentPop != null) {
+					currentFrame.add(currentPop);
+				}
+				String [] inputArr = input.split(";", 2);
+				currentPop = AbstractPopulation.createFromFile(inputArr[1]);
+			} else if(input.startsWith(agentDivider)) {
+				if(currentPop != null) {
+					String [] inputArr = input.split(";", 2);
+					IAgent newIAgent = AbstractAgent.createFromFile(inputArr[1]); 
+					currentPop.getAgents().add(newIAgent);
+				}
+			}
+		}
+		return result;
 	}
 
 	/**
@@ -448,9 +493,9 @@ public class EcoWorld {
 		for(List<IPopulation> popList : record) {
 			pw.println(frameDivider);
 			for(IPopulation p : popList) {
-				pw.println(populationDivider + ';' /*+ p.toBinaryString()*/ );
+				pw.println(populationDivider + ';' + p.toBinaryString() );
 				for(IAgent a : p.getAgents()) {
-					pw.println(agentDivider + ';' /*+a.toBinaryString() */);
+					pw.println(agentDivider + ';' + a.toBinaryString());
 				}
 			}
 		}

@@ -76,7 +76,7 @@ public interface IAgent extends Cloneable {
 	 * @param agent - The IAgent which this IAgent will reproduce with.
 	 * @return A list of IAgents if the reproduction was successful, otherwise null.
 	 */
-	public List<IAgent> reproduce(IAgent agent);
+	public List<IAgent> reproduce(IAgent agent, int populationSize);
 	
 	/**
 	 * @return The gender of the IAgent specified by some enum. Returns null if genderless.
@@ -90,4 +90,7 @@ public interface IAgent extends Cloneable {
 	 * @throws CloneNotSupportedException 
 	 */
 	public IAgent cloneAgent() throws CloneNotSupportedException;
+
+	public String toBinaryString();
+
 }
