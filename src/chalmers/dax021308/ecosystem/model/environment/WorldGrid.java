@@ -124,19 +124,9 @@ public class WorldGrid {
 		}
 	}
 	
-	/**
-	 * @param p - the {@link Position} that will be checked.
-	 * @return A {@link List} of {@link IAgent}s at {@link Position} p.
-	 */
-	public List<IAgent> get(Position p) {
-		try {
-			lock.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+	private List<IAgent> get(Position p) {
 		int row = (int)(p.getY() / scale);
 		int col = (int)(p.getX() / scale);
-		lock.release();
 		return grid.get(row).get(col);
 	}
 	
@@ -151,7 +141,6 @@ public class WorldGrid {
 			e.printStackTrace();
 		}
 		List<List<IAgent>> result = new ArrayList<List<IAgent>>();
-		
 		for (int i = 0; i < positions.size(); i++) {
 			if (!result.contains(get(positions.get(i)))) {
 				result.add(get(positions.get(i)));

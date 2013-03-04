@@ -34,6 +34,8 @@ public class RabbitAgent extends AbstractAgent {
 	public void calculateNextPosition(List<IPopulation> predators,
 			List<IPopulation> preys, List<IPopulation> neutral, Dimension dim) {
 
+		double before = System.nanoTime();
+		
 		Position oldPosition = position;
 		double length = velocity.getNorm();
 //		Vector neutralForce = getNeutralForce1(neutral);
@@ -42,6 +44,9 @@ public class RabbitAgent extends AbstractAgent {
 		nextPosition = position.addVector(velocity.add(getEnvironmentForce(dim)).add(neutralForce));
 		velocity = velocity.toUnitVector().multiply(length);
 		EcoWorld.worldGrid.updatePosition(this, oldPosition, position);
+		
+		double after = System.nanoTime() - before;
+//		System.out.println("Time: "+(int)(after/1000) + " microsec");
 	}
 
 	//Randomly changes direction
@@ -90,31 +95,31 @@ public class RabbitAgent extends AbstractAgent {
 	//With grid.
 	private Vector getNeutralForce2(Dimension dim) {
 		List<Position> positions = new ArrayList<Position>();
-		int x1 = (int)(position.getX() - velocity.getNorm());
-		int y1 = (int)(position.getY() - velocity.getNorm());
-		int x2 = (int)(position.getX() + velocity.getNorm());
-		int y2 = (int)(position.getY() + velocity.getNorm());
+		int x1 = (int)(position.getX() - visionRange);
+		int y1 = (int)(position.getY() - visionRange);
+		int x2 = (int)(position.getX() + visionRange);
+		int y2 = (int)(position.getY() + visionRange);
 		int scale = EcoWorld.worldGrid.getScale();
-		System.out.println("asdf");
 		
 		//Add scale??
-		for (int x = x1; x <= x2; x+= scale) {
-			for (int y = y1; y <= y2; y+= scale) {
+		for (int y = y1; y <= y2; y += scale) {
+			for (int x = x1; x <= x2; x += scale) {
 				if (x >= 0 && x <= dim.width && y >= 0 && y <= dim.height) {
 					Position p = new Position(x, y);
-					if (position.getDistance(p) <= visionRange) {
-						positions.add(p);
-					}
+//					System.out.println(position + " " + p);
+					positions.add(p);
 				}
 			}
 		}
 		
+		
+		//Does not return any agents??
 		List<List<IAgent>> agents = EcoWorld.worldGrid.get(positions);
+//		System.out.println(EcoWorld.worldGrid.getSize());
 		Vector neutralForce = new Vector();
 		for (int i = 0; i < agents.size(); i++) {
 			neutralForce.add(getForceFromAgents(agents.get(i)));
 		}
-		
 		return neutralForce;
 	}
 }
