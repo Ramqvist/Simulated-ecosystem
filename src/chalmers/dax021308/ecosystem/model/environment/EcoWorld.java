@@ -84,12 +84,15 @@ public class EcoWorld {
 	private int numUpdates = 0;
 	private Dimension d;
 	//private static final int NUM_THREAD = 1;
-	private ExecutorService executor = Executors.newSingleThreadExecutor();
+	private ExecutorService executor;
 
 	private OnFinishListener mOnFinishListener = new OnFinishListener() {
 
 		@Override
 		public void onFinish(List<IPopulation> popList, List<IObstacle> obsList) {
+			if(!shouldRun.get()) {
+				return;
+			}
 			elapsedTime = System.currentTimeMillis() - startIterationTime;
 			// Fire state changed to observers, notify there has been an update.
 			if(recordSimulation) {
@@ -120,6 +123,9 @@ public class EcoWorld {
 		@Override
 		// När timer är klar.
 		public void onTick() {
+			if(!shouldRun.get()) {
+				return;
+			}
 			synchronized (syncObject) {
 				//Log.v("Timer: Finished.");
 				if (environmentFinished.get()) {
@@ -232,6 +238,8 @@ public class EcoWorld {
 	 * 
 	 */
 	public void start() {
+		executor = Executors.newSingleThreadExecutor();
+		this.timer = new TimerHandler();
 		shouldRun.set(true);
 		scheduleEnvironmentUpdate();
 		Log.i("EcoWorld started.");
@@ -249,21 +257,23 @@ public class EcoWorld {
 	 * 
 	 */
 	public void stop() {
-		shouldRun.set(false);
-		executor.shutdown();
-		timer.stop();
-		numUpdates = 0;
-		Log.i("EcoWorld stopped.");
-		if(recordSimulation) {
-//			for(List<IPopulation> list : recordedSimulation) {
-//				for(IPopulation pop : list) {
-//					Log.v("Population: " + pop);
-//					for(IAgent a : pop.getAgents()) {
-//						Log.v("Population: " + pop.toString() + " Agent:" + a.toString());
-//					}
-//				}
-//			}
-			observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
+		if(!shouldRun.get()) {
+			shouldRun.set(false);
+			executor.shutdown();
+			timer.stop();
+			numUpdates = 0;
+			Log.i("EcoWorld stopped.");
+			if(recordSimulation) {
+	//			for(List<IPopulation> list : recordedSimulation) {
+	//				for(IPopulation pop : list) {
+	//					Log.v("Population: " + pop);
+	//					for(IAgent a : pop.getAgents()) {
+	//						Log.v("Population: " + pop.toString() + " Agent:" + a.toString());
+	//					}
+	//				}
+	//			}
+				observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
+			}
 		}
 	}
 	
