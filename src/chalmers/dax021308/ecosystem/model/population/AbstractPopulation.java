@@ -19,14 +19,16 @@ public abstract class AbstractPopulation implements IPopulation {
 	protected List<IPopulation> preys;
 	protected List<IPopulation> predators;
 	protected List<IPopulation> neutral;
+	protected List<IAgent> removeList;
 	private String name;
 
 	public AbstractPopulation() {
 		preys = new ArrayList<IPopulation>();
 		predators = new ArrayList<IPopulation>();
 		neutral = new ArrayList<IPopulation>();
+		removeList = new ArrayList<IAgent>();
 	}
-
+	
 	public AbstractPopulation(String name, Dimension gridDimension) {
 		this();
 		this.name = name;
@@ -66,17 +68,6 @@ public abstract class AbstractPopulation implements IPopulation {
 		for (IAgent a : agents) {
 			a.calculateNextPosition(predators, preys, neutral, gridDimension);
 		}
-		List<IAgent> kids = new ArrayList<IAgent>();
-		int populationSize = agents.size();
-		for (IAgent a : agents) {
-			a.updatePosition();
-			List<IAgent> spawn = a.reproduce(null,populationSize);
-			if (spawn != null) {
-				kids.addAll(spawn);
-			}
-		}
-		if (kids != null)
-			agents.addAll(kids);
 	}
 
 	@Override
@@ -126,6 +117,8 @@ public abstract class AbstractPopulation implements IPopulation {
 			public double calculateFitness(IAgent agent) {
 				return 0;
 			}
+
+
 		};
 	}
 
@@ -153,5 +146,40 @@ public abstract class AbstractPopulation implements IPopulation {
 		sb.append(';');
 		sb.append(capacity);
 		return null;
+	}
+	
+	@Override
+	public void updatePositions() {
+		List<IAgent> kids = new ArrayList<IAgent>();
+		int populationSize = agents.size();
+		for (IAgent a : agents) {
+			a.updatePosition();
+			List<IAgent> spawn = a.reproduce(null,populationSize);
+			if (spawn != null) {
+				kids.addAll(spawn);
+			}
+		}
+		if (kids != null)
+			agents.addAll(kids);
+	}
+	
+	/**
+	 * Cleares out the agents in the removeList.
+	 * <p>
+	 * Warning! Use only when no other thread is iterating of the agentlist.
+	 */
+	public void removeAgentsFromRemoveList() {
+		IAgent a;
+		for(int i = 0 ; i < removeList.size() ; i++)  {
+			a = removeList.get(i);
+			agents.remove(a);
+		}
+		removeList.clear();
+	}
+
+
+	@Override
+	public synchronized void addToRemoveList(IAgent a) {
+		removeList.add(a);
 	}
 }

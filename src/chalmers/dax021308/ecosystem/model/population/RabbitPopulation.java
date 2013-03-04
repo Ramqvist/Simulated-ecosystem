@@ -139,4 +139,20 @@ public class RabbitPopulation implements IPopulation {
 	public String toBinaryString() {
 		return null;
 	}
+	
+	public void removeAgentsFromRemoveList() {
+		
+	}
+
+
+	@Override
+	public void addToRemoveList(IAgent a) {
+		
+	}
+
+
+	@Override
+	public void updatePositions() {
+		
+	}
 }

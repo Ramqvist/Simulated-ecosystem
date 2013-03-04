@@ -70,4 +70,18 @@ public interface IPopulation extends Cloneable {
 
 	public String toBinaryString();
 	
+	/**
+	 * Removes the listed agents from the remove list.
+	 */
+	public void removeAgentsFromRemoveList();
+
+	/**
+	 * Add this agent to the remove list, a list of agents that are to be removed next iteration.
+	 * <p>
+	 * Warning! This is suppose to be a thread-safe method!
+	 */
+	public void addToRemoveList(IAgent a);
+
+	public void updatePositions();
+	
 }
