@@ -93,7 +93,7 @@ public class EcoWorld {
 			if(!shouldRun.get()) {
 				return;
 			}
-			elapsedTime = System.currentTimeMillis() - startIterationTime;
+			elapsedTime = System.nanoTime() - startIterationTime;
 			// Fire state changed to observers, notify there has been an update.
 			if(recordSimulation) {
 				recordedSimulation.add(clonePopulationList(popList));
@@ -326,13 +326,13 @@ public class EcoWorld {
 			}
 			if(startIterationTime != 0) {
 				Log.v("---- Simulation model Update ---- Number of updates: "
-						+ ++numUpdates + " - Iteration time:" + elapsedTime);
+						+ ++numUpdates + " - Iteration time:" + 0.000001*elapsedTime + " ns.");
 			} else {
 				Log.v("---- Simulation model Update ---- Number of updates: "
 					+ ++numUpdates);
 			}
 			executor.execute(env);
-			startIterationTime = System.currentTimeMillis();
+			startIterationTime = System.nanoTime();
 		} else {
 			stop();
 			if(recordSimulation) {
