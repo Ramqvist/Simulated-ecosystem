@@ -52,8 +52,8 @@ public class WindowController implements IController {
 		this.window = new MainWindow(model);
 		window.setVisible(true);
 		
-		this.heatMap = new HeatMapView(model, f, new Dimension(500,500), 8, "Deers");
-		heatMap.setVisible(true);
+//		this.heatMap = new HeatMapView(model, f, new Dimension(500,500), 8, "Deers");
+//		heatMap.setVisible(true);
 	}
 
 	@Override

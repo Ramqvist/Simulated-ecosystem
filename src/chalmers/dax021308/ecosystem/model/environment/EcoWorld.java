@@ -235,7 +235,7 @@ public class EcoWorld {
 		
 		
 		if(preyModel == POP_DEER) {
-			prey = new DeerPopulation("Deers", d, preyPop, Color.blue, 2.2, 2, 200);
+			prey = new DeerPopulation("Deers", d, preyPop, Color.blue, 2.2, 2, 200, true);
 		} else if(preyModel == POP_RABBIT) {
 			prey = new RabbitPopulation(preyPop, d);
 		} else if(preyModel == POP_DUMMYPREY) {
