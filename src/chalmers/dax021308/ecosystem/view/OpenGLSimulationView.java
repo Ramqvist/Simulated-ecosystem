@@ -219,6 +219,9 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
             	
                 double frameHeight = getHeight();
                 double frameWidth  = getWidth();
+                
+                double scaleX = frameWidth / size.width;
+                double scaleY = frameHeight / size.height;
 
                 //Background drawing
                 //Color of the background.
@@ -286,9 +289,9 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
   	          			double leftLegX = legLengthX2 + bottomX;
       	          		double leftLegY = legLengthY2 + bottomY;
       	          		
-      	          		gl.glVertex2d(noseX, frameHeight - noseY);
-      	          		gl.glVertex2d(rightLegX, frameHeight - rightLegY);
-      	          		gl.glVertex2d(leftLegX, frameHeight - leftLegY);
+      	          		gl.glVertex2d(scaleX*noseX, frameHeight - scaleY*noseY);
+      	          		gl.glVertex2d(scaleX*rightLegX, frameHeight - scaleY*rightLegY);
+      	          		gl.glVertex2d(scaleX*leftLegX, frameHeight - scaleY*leftLegY);
       	          		gl.glEnd();
 	      	          	/*} else {
 	        	          	for(double angle = 0; angle < PI_TIMES_TWO; angle+=increment){

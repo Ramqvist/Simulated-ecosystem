@@ -32,7 +32,7 @@ public class WindowController implements IController {
 		int numIterations = Integer.MAX_VALUE;
 		boolean recordSimulation = false;
 		
-		Dimension d = new Dimension(800, 600);
+		Dimension d = new Dimension(1300, 1300);
 		d.height = d.height - 40;
 		Dimension f = new Dimension(d.width-16, d.height-39);
 		

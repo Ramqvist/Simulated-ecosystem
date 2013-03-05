@@ -58,10 +58,10 @@ public class MainWindow extends JFrame implements IView {
 		this.setExtendedState(MAXIMIZED_BOTH);
 		
 		//OpenGL   
-	    Dimension d = new Dimension(900, 800);
+	    Dimension d = model.getSize();
 		openGL = new OpenGLSimulationView(model, d, true);
 		openGL.init();
-		openGL.setSize(d);
+		openGL.setSize(new Dimension(980,700));
 		//
 		controlView = new ControlView(model);
 		graphView1 = new GraphPopulationAmountView(model);
@@ -121,7 +121,7 @@ public class MainWindow extends JFrame implements IView {
 //		gbc.anchor = GridBagConstraints.PAGE_START;
 		setContentPane(contentPane);
 		
-		simulationPanel.setSize(d);
+//		simulationPanel.setSize(d);
 		simulationPanel.add(openGL);
 		simulationPanel.setBackground(Color.RED);
 		left.add(simulationPanel, BorderLayout.CENTER);
