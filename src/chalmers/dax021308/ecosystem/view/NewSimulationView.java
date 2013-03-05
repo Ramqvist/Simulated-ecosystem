@@ -42,6 +42,9 @@ public class NewSimulationView {
 	private JTextField tvPreyPopSize;
 	private JTextField tvGrassPopSize;
 	private EcoWorld model;
+	private JList predList  = new JList();;
+	private JList preyList  = new JList();;
+	private JList grassList = new JList();;
 
 	/**
 	 * Create the application.
@@ -64,7 +67,7 @@ public class NewSimulationView {
 			model.setRunWithoutTimer(false);	
 			model.adjustTickRate(tickDelay);			
 		}
-		model.createInitialPopulations(Integer.parseInt(tvPredPopSize.getText()), Integer.parseInt(tvPreyPopSize.getText()), Integer.parseInt(tvGrassPopSize.getText()));
+		model.createInitialPopulations((String) predList.getSelectedValue(),Integer.parseInt(tvPredPopSize.getText()),(String)  preyList.getSelectedValue(),Integer.parseInt(tvPreyPopSize.getText()),(String)  grassList.getSelectedValue(),Integer.parseInt(tvGrassPopSize.getText()));
 		try {
 			model.start();
 		} catch (IllegalStateException e) {
@@ -121,11 +124,10 @@ public class NewSimulationView {
 			}
 		});
 		
-		JList predList = new JList();
 		predList.setValueIsAdjusting(true);
 		predList.setSelectedIndices(new int[] {3});
 		predList.setModel(new AbstractListModel() {
-			String[] values = new String[] {"SimplePredatorAgent", "WolfAgent"};
+			String[] values = EcoWorld.PRED_VALUES;
 			public int getSize() {
 				return values.length;
 			}
@@ -135,11 +137,10 @@ public class NewSimulationView {
 		});
 		predList.setSelectedIndex(0);
 		
-		JList preyList = new JList();
 		preyList.setValueIsAdjusting(true);
 		preyList.setSelectedIndices(new int[] {3});
 		preyList.setModel(new AbstractListModel() {
-			String[] values = new String[] {"SimplePreyAgent", "DeerAgent", "PigAgent", "RabbitAgent"};
+			String[] values = EcoWorld.PREY_VALUES;
 			public int getSize() {
 				return values.length;
 			}
@@ -152,11 +153,10 @@ public class NewSimulationView {
 		JLabel lblPreys = new JLabel("Preys");
 		lblPreys.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
-		JList grassList = new JList();
 		grassList.setValueIsAdjusting(true);
 		grassList.setSelectedIndices(new int[] {3});
 		grassList.setModel(new AbstractListModel() {
-			String[] values = new String[] {"GrassAgent"};
+			String[] values = EcoWorld.GRASS_VALUES;
 			public int getSize() {
 				return values.length;
 			}

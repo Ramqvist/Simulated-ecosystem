@@ -66,8 +66,8 @@ public class EcoWorld {
 	public static final String POP_WOLF      = "Wolf Population";
 	
 	/* Population array based on predator-prey model */
-	public static final String[] PREYS_VALUES = { POP_PIG, POP_RABBIT, POP_DUMMYPREY };
-	public static final String[] PRED_VALUES  = { POP_DUMMYPRED, POP_WOLF };
+	public static final String[] PREY_VALUES = { POP_DEER, POP_PIG, POP_RABBIT, POP_DUMMYPREY };
+	public static final String[] PRED_VALUES  = { POP_WOLF, POP_DUMMYPRED };
 	public static final String[] GRASS_VALUES = { POP_GRASS };
 	
 	
@@ -221,28 +221,45 @@ public class EcoWorld {
 		this(d, Integer.MAX_VALUE);
 	}
 
-	public void createInitialPopulations(int predPop, int preyPop, int grassPop) {
+	public void createInitialPopulations(String predatorModel, int predPop, String preyModel, int preyPop, String grassModel, int grassPop) throws IllegalArgumentException {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
-		//IPopulation rabbits = new RabbitPopulation(300, dim);
-		//rabbits.addPrey(rabbits);
-		//populations.add(rabbits);
+		IPopulation prey = null;
+		IPopulation pred = null;
+		IPopulation grass = null;
 
-//		IPopulation prey = new DummyPreyPopulation(d, preyPop, Color.blue, 2.2, 2, 250);
-//		IPopulation predator = new DummyPredatorPopulation(d, predPop, Color.red, 2.5, 0.75,275);
+		if(predatorModel == POP_DUMMYPRED) {
+			pred = new DummyPredatorPopulation(d, predPop, Color.red, 2.5, 0.75,275);
+		} else if(predatorModel == POP_WOLF) {
+			pred = new WolfPopulation("Wolves", d, predPop, Color.red, 2.5, 0.75,250);
+		} 
 		
 		
-		IPopulation prey = new DeerPopulation("Deers", d, preyPop, Color.blue, 2.2, 2, 200);
-//		IPopulation prey = new PigPopulation("Filthy Pigs", d, preyPop, Color.pink, 2.0, 1.5, 225);
-		IPopulation predator = new WolfPopulation("Wolves", d, predPop, Color.red, 2.5, 0.75,250);
-		IPopulation grass = new GrassPopulation("Grass", d, grassPop, Color.green, 1, 1, 0, 1500);
+		if(preyModel == POP_DEER) {
+			prey = new DeerPopulation("Deers", d, preyPop, Color.blue, 2.2, 2, 200);
+		} else if(preyModel == POP_RABBIT) {
+			prey = new RabbitPopulation(preyPop, d);
+		} else if(preyModel == POP_DUMMYPREY) {
+			prey = new DummyPreyPopulation(d, preyPop, Color.blue, 2.2, 2, 250);
+		} else if(preyModel == POP_PIG) {
+			prey = new PigPopulation("Filthy Pigs", d, preyPop, Color.pink, 2.0, 1.5, 225);
+		}
+		
+		if(grassModel == POP_GRASS) {
+			grass = new GrassPopulation("Grass", d, grassPop, Color.green, 1, 1, 0, 1500);
+		}
 
+		if(prey == null || pred == null || grass == null) {
+			throw new IllegalArgumentException("Wrong populations set.");
+		}
 		
-		prey.addPredator(predator);
+		prey.addPredator(pred);
 		prey.addPrey(grass);
-		predator.addPrey(prey);
+		
+		pred.addPrey(prey);
 		populations.add(prey);
-		populations.add(predator);
+		populations.add(pred);
 		populations.add(grass);
+		
 		this.env = new SquareEnvironment(populations, readObsticlesFromFile(), mOnFinishListener, d.height, d.width);
 	}
 
@@ -258,7 +275,30 @@ public class EcoWorld {
 	 * If already started {@link IllegalStateException} will be thrown.
 	 * 
 	 */
-	public void start() throws IllegalStateException{
+	public synchronized void start() throws IllegalStateException{
+		if(!shouldRun.get()) {
+			executor = Executors.newSingleThreadExecutor();
+			this.timer = new TimerHandler();
+			shouldRun.set(true);
+			scheduleEnvironmentUpdate();
+			Log.i("EcoWorld started.");
+			if(recordSimulation) {
+				observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
+			} else {
+				observers.firePropertyChange(EVENT_START, null, null);
+			}
+		} else {
+			 throw new IllegalStateException("EcoWorld already started.");
+		}
+	}
+	
+	/**
+	 * Start the EcoWorld simulation program.
+	 * <p>
+	 * If already started {@link IllegalStateException} will be thrown.
+	 * 
+	 */
+	public synchronized void pause() throws IllegalStateException{
 		if(!shouldRun.get()) {
 			executor = Executors.newSingleThreadExecutor();
 			this.timer = new TimerHandler();
