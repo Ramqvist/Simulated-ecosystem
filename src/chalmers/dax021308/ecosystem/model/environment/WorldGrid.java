@@ -130,7 +130,7 @@ public class WorldGrid {
 		}
 		
 		List<List<IAgent>> result = new ArrayList<List<IAgent>>();
-		int range = (int)Math.pow((visionRange / scale), 2);
+		int range = (int)(visionRange / scale);
 		int row = (int)(center.getY() / scale);
 		int col = (int)(center.getX() / scale);
 		
