@@ -11,9 +11,9 @@ import chalmers.dax021308.ecosystem.controller.IController;
  * Should hold references the all the view and the model.
  * It listens to commands from the model via. the observer pattern.
  * <p>
- * Taking in a refrence to the model in the constructor is recommended.
+ * Taking in a reference to the model in the constructor is recommended.
  * 
- * @author Hanna & Erik
+ * @author Erik
  *
  */
 public interface IView extends PropertyChangeListener {

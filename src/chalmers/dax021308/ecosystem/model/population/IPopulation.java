@@ -1,5 +1,6 @@
 package chalmers.dax021308.ecosystem.model.population;
 
+import java.awt.Color;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.AbstractAgent;
@@ -67,5 +68,23 @@ public interface IPopulation extends Cloneable {
 	 * @return clone a population. Uses {@link AbstractAgent#cloneAgent()}
 	 */
 	public IPopulation clonePopulation();
+
+	public String toBinaryString();
+	
+	/**
+	 * Removes the listed agents from the remove list.
+	 */
+	public void removeAgentsFromRemoveList();
+
+	/**
+	 * Add this agent to the remove list, a list of agents that are to be removed next iteration.
+	 * <p>
+	 * Warning! This is suppose to be a thread-safe method!
+	 */
+	public void addToRemoveList(IAgent a);
+
+	public void updatePositions();
+	
+	public Color getColor();
 	
 }

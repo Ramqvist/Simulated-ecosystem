@@ -12,12 +12,12 @@ import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
+ * The population for the grass, the lowest part of the food chain
  * 
  * @author Henrik
  * 
  */
 public class GrassPopulation extends AbstractPopulation {
-	int reproduceDelay = 0;
 
 	public GrassPopulation(String name, Dimension gridDimension,
 			int initPopulationSize, Color color, double maxSpeed,
@@ -29,6 +29,7 @@ public class GrassPopulation extends AbstractPopulation {
 
 	private List<IAgent> initializePopulation(int populationSize,
 			Dimension gridDimension, Color color, double maxSpeed, int capacity) {
+
 		List<IAgent> newAgents = new ArrayList<IAgent>(populationSize * 100);
 		for (int i = 0; i < populationSize; i++) {
 			Position randPos = new Position(gridDimension.getWidth()

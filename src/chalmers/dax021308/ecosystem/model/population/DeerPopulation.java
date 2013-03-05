@@ -50,7 +50,7 @@ public class DeerPopulation extends AbstractPopulation {
 				velocity.setVector(-maxSpeed + Math.random() * 2 * maxSpeed,
 						-maxSpeed + Math.random() * 2 * maxSpeed);
 			}
-			DeerAgent a = new DeerAgent("Big tasty", randPos,
+			DeerAgent a = new DeerAgent("Deer", randPos,
 					color, 5, 10, velocity, maxSpeed, maxAcceleration,
 					visionRange);
 			newAgents.add(a);

@@ -83,6 +83,7 @@ public interface IAgent extends Cloneable {
 	 */
 	public Gender getGender();
 
+
 	/**
 	 * Clone an agent. 
 	 * <p>
@@ -90,5 +91,7 @@ public interface IAgent extends Cloneable {
 	 * @throws CloneNotSupportedException 
 	 */
 	public IAgent cloneAgent() throws CloneNotSupportedException;
+
+	public String toBinaryString();
 
 }

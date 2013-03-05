@@ -15,6 +15,19 @@ public class RabbitAgent extends AbstractAgent {
 
 	private Position gridPosition;
 	
+	/**
+	 * 
+	 * @param position
+	 * @param name
+	 * @param color
+	 * @param width
+	 * @param height
+	 * @param velocity
+	 * @param gender
+	 * @param maxSpeed
+	 * @param visionRange
+	 * @param maxAcceleration
+	 */
 	public RabbitAgent(Position position, String name, Color color, 
 			int width, int height, Vector velocity, Gender gender,
 			double maxSpeed, double visionRange, double maxAcceleration) {

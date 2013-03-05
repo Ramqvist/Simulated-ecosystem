@@ -5,50 +5,159 @@ import javax.swing.JLabel;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JRadioButton;
 import java.awt.Font;
-import javax.swing.ButtonGroup;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-public class ParameterView extends JPanel {
+import javax.swing.ButtonGroup;
+import javax.swing.JSlider;
+import java.awt.FlowLayout;
+import javax.swing.BoxLayout;
+import java.awt.GridLayout;
+import javax.swing.SwingConstants;
+import java.awt.event.ActionEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+
+import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+
+/**
+ * The view that holds the parameters that can be changed during a simulation.
+ * A panel that is part of the frame that holds the entire application.
+ * 
+ * Lots of thing here should be done in a separate class ParameterController. //Erik
+ * Added methods to be called. //Erik
+ * 
+ * @author Hanna
+ *
+ */
+
+public class ParameterView extends JPanel implements IView {
+	private static final long serialVersionUID = -4258629187312881582L;
 	private final ButtonGroup shapeButtonGroup = new ButtonGroup();
 	private final ButtonGroup obstacleButtonGroup = new ButtonGroup();
+	private final ButtonGroup delayButtonGroup = new ButtonGroup();
 
 	/**
 	 * Create the panel.
 	 */
 	public ParameterView() {
-		setLayout(new MigLayout("", "[]", "[][][][][][][][][]"));
+		setLayout(new GridLayout(4, 3, 0, 0));
 		
-		JLabel lblShapeOfUniverse = new JLabel("Shape of Universe");
-		lblShapeOfUniverse.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		add(lblShapeOfUniverse, "cell 0 0");
+		JLabel lblDelay = new JLabel("Delay: ");
+		lblDelay.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblDelay.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		add(lblDelay);
 		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("Square");
-		shapeButtonGroup.add(rdbtnNewRadioButton);
-		add(rdbtnNewRadioButton, "cell 0 1");
+		JRadioButton delayOn = new JRadioButton("On");
+		delayOn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//DELAY ON
+				//Method to be run: EcoWorld.setRunWithoutTimer(true);
+				System.out.println("delay on");
+			}
+		});
+		delayButtonGroup.add(delayOn);
+		add(delayOn);
 		
-		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("Circle");
-		shapeButtonGroup.add(rdbtnNewRadioButton_1);
-		add(rdbtnNewRadioButton_1, "cell 0 2");
+		JRadioButton delayOff = new JRadioButton("Off");
+		delayOff.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//DELAY OFF
+				//Method to be run: EcoWorld.setRunWithoutTimer(false);
+				System.out.println("delay off");
+			}
+		});
+		delayButtonGroup.add(delayOff);
+		add(delayOff);
 		
-		JRadioButton rdbtnNewRadioButton_2 = new JRadioButton("Triangle");
-		shapeButtonGroup.add(rdbtnNewRadioButton_2);
-		add(rdbtnNewRadioButton_2, "cell 0 3");
+		JLabel lblDelayLength = new JLabel("Delay length: ");
+		lblDelayLength.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblDelayLength.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		add(lblDelayLength);
 		
-		JLabel lblObstacles = new JLabel("Obstacles");
-		lblObstacles.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		add(lblObstacles, "cell 0 5");
+		final JSlider sliderDelayLength = new JSlider(); //Vilket spann?
+		sliderDelayLength.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				if (!sliderDelayLength.getValueIsAdjusting()) {  //Checks that the slider is fixed, i.e. not adjusting
+					//SET DELAY LENGTH
+					//Method to be run: EcoWorld.adjustTickRate(newTickRate);
+					System.out.println("delay length set");
+				}
+			}
+		});
+		add(sliderDelayLength);
 		
-		JRadioButton rdbtnNewRadioButton_3 = new JRadioButton("None");
-		obstacleButtonGroup.add(rdbtnNewRadioButton_3);
-		add(rdbtnNewRadioButton_3, "cell 0 6");
+		JLabel lblNewLabel = new JLabel("");
+		add(lblNewLabel);
 		
-		JRadioButton rdbtnNewRadioButton_4 = new JRadioButton("Few");
-		obstacleButtonGroup.add(rdbtnNewRadioButton_4);
-		add(rdbtnNewRadioButton_4, "cell 0 7");
+		JLabel lblPopulationGrowthRate = new JLabel("Population growth rate: ");
+		lblPopulationGrowthRate.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblPopulationGrowthRate.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		add(lblPopulationGrowthRate);
 		
-		JRadioButton rdbtnNewRadioButton_5 = new JRadioButton("Many");
-		obstacleButtonGroup.add(rdbtnNewRadioButton_5);
-		add(rdbtnNewRadioButton_5, "cell 0 8,aligny baseline");
+		final JSlider sliderPopulationGrowthRate = new JSlider(); //Vilket spann? Oklart behövs tas upp på möte. //Erik
+		sliderPopulationGrowthRate.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				if (!sliderPopulationGrowthRate.getValueIsAdjusting()) {  //Checks that the slider is fixed, i.e. not adjusting
+					//SET POPULATION GROWTH RATE
+					//TODO: No method for this yet, needs implementation.
+					System.out.println("population growth rate set");
+				}
+			}
+		});
+		add(sliderPopulationGrowthRate);
+		
+		JLabel label = new JLabel("");
+		add(label);
+		
+		JLabel lblPredatorEatingRate = new JLabel("Predator eating rate: ");
+		lblPredatorEatingRate.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblPredatorEatingRate.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		add(lblPredatorEatingRate);
+		
+		final JSlider sliderEatingRate = new JSlider(); //Vilket spann? Oklart behövs tas upp på möte. //Erik
+		sliderEatingRate.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				if (!sliderEatingRate.getValueIsAdjusting()) {  //Checks that the slider is fixed, i.e. not adjusting
+					//SET EATING RATE
+					//TODO: No method for this yet, needs implementation.
+					System.out.println("eating rate set");
+				}
+			}
+		});
+		add(sliderEatingRate);
 
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void init() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addController(ActionListener controller) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTick() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void release() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

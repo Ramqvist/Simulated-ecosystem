@@ -12,8 +12,17 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 
 public class RabbitPopulation extends AbstractPopulation {
 
-
-	public RabbitPopulation(int popSize, Dimension d, String name, Color color,double maxSpeed, double visionRange, double maxAcceleration) {
+	/**
+	 * 
+	 * @param name
+	 * @param d
+	 * @param popSize
+	 * @param color
+	 * @param maxSpeed
+	 * @param maxAcceleration
+	 * @param visionRange
+	 */
+	public RabbitPopulation(String name, Dimension d, int popSize, Color color, double maxSpeed, double maxAcceleration, double visionRange) {
 		super(name, d);
 		agents = new ArrayList<IAgent>(popSize);
 
@@ -33,12 +42,6 @@ public class RabbitPopulation extends AbstractPopulation {
 			EcoWorld.worldGrid.add(r);
 		}
 	}
-
-	@Override
-	public void update() {
-		super.update();
-	}
-
 
 	@Override
 	public double calculateFitness(IAgent agent) {

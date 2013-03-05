@@ -44,7 +44,13 @@ public class WolfAgent extends AbstractAgent {
 		 * If the acceleration exceeds maximum acceleration --> scale it to maxAcceleration,
 		 * but keep the correct direction of the acceleration.
 		 */
-		Vector acceleration = environmentForce.multiply(100).add(preyForce).add(separationForce.multiply(10));
+		double randX = -RANDOM_FORCE_MAGNITUDE+ 2*RANDOM_FORCE_MAGNITUDE*Math.random();
+		double randY = -RANDOM_FORCE_MAGNITUDE+ 2*RANDOM_FORCE_MAGNITUDE*Math.random();
+		Vector randomForce = new Vector(randX, randY);
+		Vector acceleration = environmentForce.multiply(100)
+		.add(preyForce)
+		.add(separationForce.multiply(10))
+		.add(randomForce);
 		double accelerationNorm = acceleration.getNorm();
 		if(accelerationNorm > maxAcceleration){
 			acceleration.multiply(maxAcceleration/accelerationNorm); 
@@ -112,11 +118,9 @@ public class WolfAgent extends AbstractAgent {
 				double distance = getPosition().getDistance(p);
 				if (distance <= visionRange) {
 					if(distance <= INTERACTION_RANGE) {
-						agents.remove(i);
+						pop.addToRemoveList(a);
 						hungry = false;
 						this.energy = LIFE_LENGTH;
-						i--;
-						size--;
 					} else {
 					/*
 					 * Create a vector that points towards the prey.

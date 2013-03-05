@@ -1,6 +1,11 @@
 package chalmers.dax021308.ecosystem.model.environment;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld.OnFinishListener;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
@@ -9,7 +14,7 @@ import chalmers.dax021308.ecosystem.model.util.Position;
 /**
  * SquareEnvironment Class. Represents a environment in the shape of a square.
  * 
- * @author Henrik
+ * @author Henrik, concurrency: Erik
  * 
  */
 public class SquareEnvironment implements IEnvironment {
@@ -18,8 +23,12 @@ public class SquareEnvironment implements IEnvironment {
 	private List<IPopulation> populations;
 	private List<IObstacle> obstacles;
 	private OnFinishListener mListener;
-	private int height;
-	private int width;
+
+	/* Concurrent variables */
+	private ExecutorService workPool;
+	private List<Future<Runnable>> futures;
+	private PopulationWorker  popWorkers[];
+	private FinilizeIteration finWorkers[];
 
 	/**
 	 * 
@@ -40,8 +49,21 @@ public class SquareEnvironment implements IEnvironment {
 		this.populations = populations;
 		this.obstacles = obstacles;
 		this.mListener = listener;
-		this.height = height;
-		this.width = width;
+		
+		//Create one Worker for each population.
+		this.workPool = Executors.newFixedThreadPool(populations.size());
+		//Create the list of executing tasks, for barrier synchronization.
+		this.futures = new ArrayList<Future<Runnable>>();
+		
+		//Create the worker objects. (Reusable for memory and performance.)
+		this.popWorkers = new PopulationWorker[populations.size()];
+		for(int i = 0; i < popWorkers.length ; i++) {
+			popWorkers[i] = new PopulationWorker();
+		}
+		this.finWorkers = new FinilizeIteration[populations.size()];
+		for(int i = 0; i < finWorkers.length ; i++) {
+			finWorkers[i] = new FinilizeIteration();
+		}
 	}
 
 	@Override
@@ -50,12 +72,76 @@ public class SquareEnvironment implements IEnvironment {
 	 * Updates each population and then informs EcoWorld once it's finished
 	 */
 	public void run() {
-		for (int i = 0; i < populations.size(); i++)
-			populations.get(i).update();
+
+        //Assign objects to workers.
+		for(int i = 0 ; i < populations.size(); i ++) {
+			popWorkers[i].p = populations.get(i);
+			Future f = workPool.submit(popWorkers[i]);
+	        futures.add(f);
+		}
+
+		//Barrier synchronization here. Thread will wait for workers to finish execution.
+        for (Future<Runnable> fut : futures)
+        {
+           try {
+			fut.get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+        }
+        futures.clear();
+
+        //Assign objects to workers.
+		for(int i = 0 ; i < populations.size(); i ++) {
+			finWorkers[i].p = populations.get(i);
+			Future f = workPool.submit(finWorkers[i]);
+	        futures.add(f);
+		}
+
+
+		//Barrier synchronization here. Thread will wait for workers to finish execution.
+        for (Future<Runnable> fut : futures)
+        {
+           try {
+			fut.get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+        }
+
 
 		// Callback function called to inform EcoWorld that the current update
 		// is run
 		mListener.onFinish(populations, obstacles);
+	}
+	
+	private class PopulationWorker implements Runnable {
+		private IPopulation p;
+		
+		@Override
+		public void run() {
+			//Calculate one iteration. But only calculate it!
+			p.update();
+		}
+	}
+	
+
+	
+	private class FinilizeIteration implements Runnable {
+		private IPopulation p;
+		
+		@Override
+		public void run() {
+			//Remove agents that has been marked as remove.
+			p.removeAgentsFromRemoveList();
+
+	        //Update all the positions, i.e. position = nextPosition.
+			p.updatePositions();
+		}
 	}
 
 	@Override
