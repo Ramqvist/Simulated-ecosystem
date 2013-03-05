@@ -174,6 +174,13 @@ public abstract class AbstractAgent implements IAgent {
 		return a;
 	}
 
+	/**
+	 * A random force that the agent gets influenced by.
+	 * Can be interpreted as an estimation error that the
+	 * agent does in where to head.
+	 * @return a vector pointing approximately in the
+	 * same direction as the agents velocity.
+	 */
 	protected Vector randomForce(){
 		double randX = -RANDOM_FORCE_MAGNITUDE+ 2*RANDOM_FORCE_MAGNITUDE*Math.random();
 		double randY = -RANDOM_FORCE_MAGNITUDE+ 2*RANDOM_FORCE_MAGNITUDE*Math.random();
@@ -221,12 +228,12 @@ public abstract class AbstractAgent implements IAgent {
 					double v = Q/(norm*distance);
 					newForce.x = newForce.x * v;
 					newForce.y = newForce.y * v;
-					mutualInteractionForce.x = ( mutualInteractionForce.x + newForce.x ) * ( ran.nextDouble()  + ran.nextDouble() ); 
-					mutualInteractionForce.y = ( mutualInteractionForce.y + newForce.y ) * ( ran.nextDouble()  + ran.nextDouble() );
+					mutualInteractionForce.x = ( mutualInteractionForce.x + newForce.x ) ; 
+					mutualInteractionForce.y = ( mutualInteractionForce.y + newForce.y ) ;
 				}
 			}
 		}
-		return mutualInteractionForce;
+		return mutualInteractionForce.multiply(( ran.nextDouble()  + ran.nextDouble() ));
 	}
 
 	/**
@@ -276,9 +283,8 @@ public abstract class AbstractAgent implements IAgent {
 						double h = 10;
 						newForce.x *= h;
 						newForce.y *= h;
-						double randomSmoothFactor =  (( ran.nextDouble()  + ran.nextDouble() ) + ( ran.nextDouble()  + ran.nextDouble() ) ) / 2;
-						arrayalForce.x = ( arrayalForce.x + newForce.x ) * randomSmoothFactor;
-						arrayalForce.y = ( arrayalForce.y + newForce.y ) * randomSmoothFactor;
+						arrayalForce.x = ( arrayalForce.x + newForce.x );
+						arrayalForce.y = ( arrayalForce.y + newForce.y );
 						nAgentsInVision = nAgentsInVision + 1.0;
 					}
 				}
@@ -288,7 +294,8 @@ public abstract class AbstractAgent implements IAgent {
 			arrayalForce.x /= nAgentsInVision;
 			arrayalForce.y /= nAgentsInVision;
 		}
-		return arrayalForce;
+		double randomSmoothFactor =  (( ran.nextDouble()  + ran.nextDouble() ) + ( ran.nextDouble()  + ran.nextDouble() ) ) / 2;
+		return arrayalForce.multiply(randomSmoothFactor);
 	}
 	
 	/**
