@@ -27,6 +27,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.AbstractListModel;
 import javax.swing.JRadioButton;
+import javax.swing.ListSelectionModel;
 
 /**
  * Window for starting a new simulation.
@@ -125,6 +126,7 @@ public class NewSimulationView {
 				textfield_Iterationdelay.setText(slider_delaylength.getValue() + "");
 			}
 		});
+		predList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		predList.setValueIsAdjusting(true);
 		predList.setSelectedIndices(new int[] {3});
@@ -138,6 +140,7 @@ public class NewSimulationView {
 			}
 		});
 		predList.setSelectedIndex(0);
+		preyList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		preyList.setValueIsAdjusting(true);
 		preyList.setSelectedIndices(new int[] {3});
@@ -154,6 +157,7 @@ public class NewSimulationView {
 		
 		JLabel lblPreys = new JLabel("Preys");
 		lblPreys.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		grassList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		grassList.setValueIsAdjusting(true);
 		grassList.setSelectedIndices(new int[] {3});
