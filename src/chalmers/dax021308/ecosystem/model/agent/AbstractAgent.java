@@ -159,12 +159,6 @@ public abstract class AbstractAgent implements IAgent {
 				return Collections.emptyList();
 			}
 
-			@Override
-			public String toBinaryString() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
 		};
 		return a;
 	}
@@ -216,8 +210,8 @@ public abstract class AbstractAgent implements IAgent {
 					double v = Q/(norm*distance);
 					newForce.x = newForce.x * v;
 					newForce.y = newForce.y * v;
-					mutualInteractionForce.x = mutualInteractionForce.x + newForce.x;
-					mutualInteractionForce.y = mutualInteractionForce.y + newForce.y;
+					mutualInteractionForce.x = ( mutualInteractionForce.x + newForce.x ) * ( ran.nextDouble()  + ran.nextDouble() ); 
+					mutualInteractionForce.y = ( mutualInteractionForce.y + newForce.y ) * ( ran.nextDouble()  + ran.nextDouble() );
 				}
 			}
 		}
@@ -271,8 +265,9 @@ public abstract class AbstractAgent implements IAgent {
 						double h = 10;
 						newForce.x *= h;
 						newForce.y *= h;
-						arrayalForce.x = ( arrayalForce.x + newForce.x ) * ( ran.nextDouble()  + ran.nextDouble() );
-						arrayalForce.y = ( arrayalForce.y + newForce.y ) * ( ran.nextDouble()  + ran.nextDouble() );
+						double randomSmoothFactor =  (( ran.nextDouble()  + ran.nextDouble() ) + ( ran.nextDouble()  + ran.nextDouble() ) ) / 2;
+						arrayalForce.x = ( arrayalForce.x + newForce.x ) * randomSmoothFactor;
+						arrayalForce.y = ( arrayalForce.y + newForce.y ) * randomSmoothFactor;
 						nAgentsInVision = nAgentsInVision + 1.0;
 					}
 				}
