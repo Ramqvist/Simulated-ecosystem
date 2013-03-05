@@ -35,7 +35,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected final static double INTERACTION_RANGE = 10;
 	protected final static double WALL_CONSTANT = 2;
 	protected static final double VELOCITY_DECAY = 1;
-	protected static final double RANDOM_FORCE_MAGNITUDE = 0;
+	protected static final double RANDOM_FORCE_MAGNITUDE = 0.05;
 
 	public AbstractAgent(String name, Position p, Color c, int width,
 			int height, Vector velocity, double maxSpeed, double visionRange,
@@ -169,6 +169,12 @@ public abstract class AbstractAgent implements IAgent {
 		return a;
 	}
 
+	protected Vector randomForce(){
+		double randX = -RANDOM_FORCE_MAGNITUDE+ 2*RANDOM_FORCE_MAGNITUDE*Math.random();
+		double randY = -RANDOM_FORCE_MAGNITUDE+ 2*RANDOM_FORCE_MAGNITUDE*Math.random();
+		return new Vector(velocity.x+randX, velocity.y+randY);
+	}
+	
 	/**
 	 * @author Sebbe
 	 * The agent is influences by the mutual interaction force 
@@ -233,6 +239,7 @@ public abstract class AbstractAgent implements IAgent {
 	}
 	
 	/**
+	 * @author Sebbe
 	 * This is the force that makes neighbouring agents 
 	 * to equalize their velocities and therefore go in
 	 * the same direction. The sphere of incluence is

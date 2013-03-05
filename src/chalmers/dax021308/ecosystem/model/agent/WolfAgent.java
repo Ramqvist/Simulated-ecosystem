@@ -50,9 +50,8 @@ public class WolfAgent extends AbstractAgent {
 		 * If the acceleration exceeds maximum acceleration --> scale it to maxAcceleration,
 		 * but keep the correct direction of the acceleration.
 		 */
-		double randX = -RANDOM_FORCE_MAGNITUDE+ 2*RANDOM_FORCE_MAGNITUDE*Math.random();
-		double randY = -RANDOM_FORCE_MAGNITUDE+ 2*RANDOM_FORCE_MAGNITUDE*Math.random();
-		Vector randomForce = new Vector(randX, randY);
+		
+		Vector randomForce = randomForce();
 		Vector acceleration = environmentForce.multiply(100)
 			.add(preyForce.multiply(5))
 			.add(mutualInteractionForce)
