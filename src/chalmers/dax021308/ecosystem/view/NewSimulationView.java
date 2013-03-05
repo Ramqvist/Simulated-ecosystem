@@ -12,7 +12,6 @@ import chalmers.dax021308.ecosystem.model.util.Log;
 import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import java.awt.Window.Type;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -80,7 +79,6 @@ public class NewSimulationView {
 	private void initialize() {
 		frmSimulatedEcosystem = new JFrame();
 		frmSimulatedEcosystem.setAlwaysOnTop(true);
-		frmSimulatedEcosystem.setType(Type.POPUP);
 		frmSimulatedEcosystem.setTitle("Start new Simulation");
 		frmSimulatedEcosystem.setBounds(100, 100, 670, 579);
 		frmSimulatedEcosystem.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

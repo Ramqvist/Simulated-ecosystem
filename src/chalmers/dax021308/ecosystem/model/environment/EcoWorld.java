@@ -55,7 +55,21 @@ public class EcoWorld {
 	public static final String EVENT_PAUSE		        = "chalmers.dax021308.ecosystem.model.Ecoworld.event_pause";
 	public static final String EVENT_RECORDING_FINISHED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recordingstarted";
 	public static final String EVENT_RECORDING_STARTED  = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recordingfinished";
-	/* 								   */
+	
+	/* Population constants */
+	public static final String POP_PIG       = "Pig Population";
+	public static final String POP_RABBIT    = "Rabbit Population";
+	public static final String POP_DUMMYPREY = "Dummy Prey Population";
+	public static final String POP_DEER      = "Deer Population";
+	public static final String POP_GRASS     = "Grass Population";
+	public static final String POP_DUMMYPRED = "Dummy Predator Population";
+	public static final String POP_WOLF      = "Wolf Population";
+	
+	/* Population array based on predator-prey model */
+	public static final String[] PREYS_VALUES = { POP_PIG, POP_RABBIT, POP_DUMMYPREY };
+	public static final String[] PRED_VALUES  = { POP_DUMMYPRED, POP_WOLF };
+	public static final String[] GRASS_VALUES = { POP_GRASS };
+	
 	
 	private AtomicBoolean environmentFinished = new AtomicBoolean(false);
 	private AtomicBoolean timerFinished       = new AtomicBoolean(false);
