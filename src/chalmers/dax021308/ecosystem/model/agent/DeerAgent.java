@@ -3,7 +3,6 @@ package chalmers.dax021308.ecosystem.model.agent;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.lowagie.text.pdf.ArabicLigaturizer;
@@ -20,6 +19,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class DeerAgent extends AbstractAgent {
 
+	protected static final int LIFE_LENGTH = 1200;
 	private boolean hungry = true;
 	private static final double REPRODUCTION_RATE = 0.15;
 	
@@ -28,6 +28,7 @@ public class DeerAgent extends AbstractAgent {
 			double maxAcceleration, double visionRange) {
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
+		this.energy = LIFE_LENGTH;
 	}
 
 	@Override
@@ -123,6 +124,7 @@ public class DeerAgent extends AbstractAgent {
 						// possible
 						pop.addToRemoveList(a);
 						hungry = false;
+						energy = LIFE_LENGTH;
 					} else {
 						Vector newForce = new Vector(p, getPosition());
 						double norm = newForce.getNorm();

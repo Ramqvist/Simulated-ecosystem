@@ -20,9 +20,11 @@ public abstract class AbstractPopulation implements IPopulation {
 	protected List<IPopulation> predators;
 	protected List<IPopulation> neutral;
 	protected List<IAgent> removeList;
+	protected Color color = Color.BLACK;	// Standard color for population.
 	private String name;
-
-	public AbstractPopulation() {
+	
+	
+ 	public AbstractPopulation() {
 		preys = new ArrayList<IPopulation>();
 		predators = new ArrayList<IPopulation>();
 		neutral = new ArrayList<IPopulation>();
@@ -63,13 +65,26 @@ public abstract class AbstractPopulation implements IPopulation {
 			}
 		}
 	}
-	@Override
+	
+	/*@Override
 	public void update() {
 		for (IAgent a : agents) {
 			a.calculateNextPosition(predators, preys, neutral, gridDimension);
 		}
-	}
+	}*/
 
+	@Override
+	public void update() {
+		for (IAgent a : agents) {
+			// Remove dead agents.
+			
+			a.calculateNextPosition(predators, preys, neutral, gridDimension);
+			if(a.getEnergy()<=0){
+				agents.remove(a);
+			}
+		}
+	}
+	
 	@Override
 	public String getName() {
 		return name;
@@ -117,8 +132,6 @@ public abstract class AbstractPopulation implements IPopulation {
 			public double calculateFitness(IAgent agent) {
 				return 0;
 			}
-
-
 		};
 	}
 
@@ -164,7 +177,7 @@ public abstract class AbstractPopulation implements IPopulation {
 	}
 	
 	/**
-	 * Cleares out the agents in the removeList.
+	 * Clears out the agents in the removeList.
 	 * <p>
 	 * Warning! Use only when no other thread is iterating of the agentlist.
 	 */
@@ -182,10 +195,24 @@ public abstract class AbstractPopulation implements IPopulation {
 	public synchronized void addToRemoveList(IAgent a) {
 		removeList.add(a);
 	}
+
+	@Override
+	public void setColor(Color color){
+		this.color = color;
+	}
 	
+	/* (non-Javadoc)
+	 * @see chalmers.dax021308.ecosystem.model.population.IPopulation#getColor()
+	 */
 	@Override
 	public Color getColor() {
-		return agents.get(0).getColor();
+		return color;
 	}
 
+	/* (non-Javadoc)
+	 * @see chalmers.dax021308.ecosystem.model.population.IPopulation#getSize()
+	 */
+	public int getSize() {
+		return agents.size();
+	}
 }

@@ -19,12 +19,13 @@ public class WolfAgent extends AbstractAgent {
 	private boolean hungry = true;
 	private static final int LIFE_LENGTH = 1200;
 	private static final double REPRODUCTION_RATE = 0.1;
-	private int energy = LIFE_LENGTH;
+	//private int energy = LIFE_LENGTH;
 
 	public WolfAgent(String name, Position p, Color c, int width,
 			int height, Vector velocity, double maxSpeed,
 			double maxAcceleration, double visionRange) {
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange, maxAcceleration);
+		this.energy = LIFE_LENGTH;
 	}
 
 	public int getEnergy() {

@@ -52,10 +52,11 @@ public class WolfPopulation extends AbstractPopulation {
 					20, velocity, maxSpeed, maxAcceleration, visionRange);
 			newAgents.add(a);
 		}
+		setColor(color);
 		return newAgents;
 	}
 
-	@Override
+	/*@Override
 	public void update() {
 		super.update();
 		int size = agents.size();
@@ -68,7 +69,8 @@ public class WolfPopulation extends AbstractPopulation {
 				size--;
 			}
 		}
-	}
+	}*/
+	
 	@Override
 	public double calculateFitness(IAgent agent) {
 		// TODO Auto-generated method stub

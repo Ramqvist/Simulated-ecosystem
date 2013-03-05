@@ -85,6 +85,18 @@ public interface IPopulation extends Cloneable {
 
 	public void updatePositions();
 	
+	/**
+	 * @param color sets the color of the population.
+	 */
+	public void setColor(Color color);
+	
+	/**
+	 * @return Color of the population.
+	 */
 	public Color getColor();
 	
+	/**
+	 * @return Size of the population.
+	 */
+	public int getSize();
 }

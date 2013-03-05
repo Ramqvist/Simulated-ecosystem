@@ -83,6 +83,10 @@ public interface IAgent extends Cloneable {
 	 */
 	public Gender getGender();
 
+	/**
+	 * @return The energy of the IAgent.
+	 */
+	public int getEnergy();
 
 	/**
 	 * Clone an agent. 

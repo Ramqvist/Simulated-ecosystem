@@ -39,8 +39,8 @@ public class GrassPopulation extends AbstractPopulation {
 					velocity, maxSpeed, gridDimension, capacity);
 			newAgents.add(a);
 		}
+		setColor(color);
 		return newAgents;
-
 	}
 
 	@Override

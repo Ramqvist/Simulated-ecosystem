@@ -22,6 +22,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected int width;
 	protected int height;
 	protected int capacity;
+	
 	protected Vector velocity;
 	protected Gender gender;
 	protected double fitness;
@@ -32,6 +33,9 @@ public abstract class AbstractAgent implements IAgent {
 	protected final static double WALL_CONSTANT = 1;
 	protected static final double VELOCITY_DECAY = 1;
 	protected static final double RANDOM_FORCE_MAGNITUDE = 0;
+	
+	protected final int LIFE_LENGTH = 5000;
+	protected int energy = LIFE_LENGTH;
 
 	public AbstractAgent(String name, Position p, Color c, int width,
 			int height, Vector velocity, double maxSpeed, double visionRange,
@@ -125,6 +129,7 @@ public abstract class AbstractAgent implements IAgent {
 	@Override
 	public void updatePosition() {
 		this.position = new Position(nextPosition);
+		this.energy--;
 	}
 
 	@Override
@@ -132,6 +137,10 @@ public abstract class AbstractAgent implements IAgent {
 		return gender;
 	}
 
+	public int getEnergy() {
+		return energy;
+	}
+	
 	@Override
 	public IAgent cloneAgent() throws CloneNotSupportedException {
 		return (IAgent) clone();
