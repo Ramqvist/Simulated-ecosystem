@@ -260,6 +260,9 @@ public class EcoWorld {
 		populations.add(pred);
 		populations.add(grass);
 		
+		if(recordSimulation) {
+			recordedSimulation = new ArrayList<List<IPopulation>>(numIterations);
+		}
 		this.env = new SquareEnvironment(populations, readObsticlesFromFile(), mOnFinishListener, d.height, d.width);
 	}
 
