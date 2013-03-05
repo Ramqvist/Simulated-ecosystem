@@ -230,12 +230,12 @@ public class EcoWorld {
 		if(predatorModel == POP_DUMMYPRED) {
 			pred = new DummyPredatorPopulation(d, predPop, Color.red, 2.5, 0.75,275);
 		} else if(predatorModel == POP_WOLF) {
-			pred = new WolfPopulation("Wolves", d, predPop, Color.red, 2.5, 0.75,250);
+			pred = new WolfPopulation("Wolves", d, predPop, Color.red, 2.5, 0.5,250);
 		} 
 		
 		
 		if(preyModel == POP_DEER) {
-			prey = new DeerPopulation("Deers", d, preyPop, Color.blue, 2.2, 2, 200, true);
+			prey = new DeerPopulation("Deers", d, preyPop, Color.blue, 2.0, 2, 200, true);
 		} else if(preyModel == POP_RABBIT) {
 			prey = new RabbitPopulation(preyPop, d);
 		} else if(preyModel == POP_DUMMYPREY) {

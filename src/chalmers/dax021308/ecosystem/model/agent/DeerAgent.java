@@ -129,7 +129,7 @@ public class DeerAgent extends AbstractAgent {
 				Position p = a.getPosition();
 				double distance = getPosition().getDistance(p);
 				if (distance <= visionRange) {
-					if (distance <= INTERACTION_RANGE) {
+					if (distance <= INTERACTION_RANGE-5) {
 						// Food found, let's eat it and make some reproducing
 						// possible
 						pop.addToRemoveList(a);

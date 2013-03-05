@@ -180,11 +180,11 @@ public class NewSimulationView {
 		tvPredPopSize.setColumns(10);
 		
 		tvPreyPopSize = new JTextField();
-		tvPreyPopSize.setText("200");
+		tvPreyPopSize.setText("100");
 		tvPreyPopSize.setColumns(10);
 		
 		tvGrassPopSize = new JTextField();
-		tvGrassPopSize.setText("1000");
+		tvGrassPopSize.setText("600");
 		tvGrassPopSize.setColumns(10);
 		
 		JLabel lblInitialSize = new JLabel("Initial size");

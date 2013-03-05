@@ -30,7 +30,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected double maxAcceleration;
 	protected boolean groupBehaviour;
 	protected final static double INTERACTION_RANGE = 10;
-	protected final static double WALL_CONSTANT = 1;
+	protected final static double WALL_CONSTANT = 2;
 	protected static final double VELOCITY_DECAY = 1;
 	protected static final double RANDOM_FORCE_MAGNITUDE = 0;
 
@@ -167,21 +167,19 @@ public abstract class AbstractAgent implements IAgent {
 
 	/**
 	 * @author Sebbe
-	 * @param neutral
-	 *            the population of neutral agents that this agent should be
-	 *            separated from (not collide with).
+	 * The agent is influences by the mutual interaction force 
+	 * because it is subject to attraction and repulsion 
+	 * from other individuals that it wants to group with.
+	 * This force describes the relationship between the tendency
+	 * to steer towards other groups of agents, 
+	 * but not be to close to them either.
+	 * @param neutral the population of neutral agents.
 	 * @return a vector with the force that this agent feels from other neutral
-	 *         agents in order not to collide with them.
-	 *         <p>
-	 *         Warning! Not optimal for linked-lists, due to O(n) complexity of
-	 *         linked list get(n) method. TODO: Special method for linked list
-	 *         using collection.iterator(), hasNext() & next().
+	 * agents in that it interacts with.
 	 */
 	protected Vector mutualInteractionForce(List<IPopulation> neutral) {
-		// Allocating new object here is ok since its only 1 per method call.
-		// //Erik
-		Vector mutualInteractionForce = new Vector(0, 0);
-		// int nVisiblePredators = 0; //Unused?
+		Vector mutualInteractionForce = new Vector(0,0);
+		Vector newForce = new Vector(0,0);
 		IPopulation pop;
 		int popSize = neutral.size();
 		for (int j = 0; j < popSize; j++) {
@@ -201,9 +199,9 @@ public abstract class AbstractAgent implements IAgent {
 						} else {
 							Q = 3;
 						}
-					}
-					
-					Vector newForce = new Vector(p, this.getPosition());
+					}			
+					newForce.x = p.getX()-this.getPosition().getX();
+					newForce.y = p.getY()-this.getPosition().getY();
 					double norm = newForce.getNorm();
 					double v = Q/(norm*distance);
 					newForce.x = newForce.x * v;
@@ -216,19 +214,32 @@ public abstract class AbstractAgent implements IAgent {
 		return mutualInteractionForce;
 	}
 
+	/**
+	 * @author Sebbe
+	 * The tendency of an agent to continue moving forward with its velocity.
+	 * @return the forward thrust force.
+	 */
 	protected Vector forwardThrust(){
+		double a = 0.5;
 		double x = velocity.x;
 		double y = velocity.y;
 		double norm = velocity.getNorm();
-		Vector forwardThrust = new Vector(x/norm,y/norm);
+		Vector forwardThrust = new Vector(a*x/norm,a*y/norm);
 		return forwardThrust;
 	}
 	
+	/**
+	 * This is the force that makes neighbouring agents 
+	 * to equalize their velocities and therefore go in
+	 * the same direction. The sphere of incluence is
+	 * defined as 2*INTERACTION_RANGE at the moment.
+	 * @param neutral the population of neutral agents.
+	 * @return a vector with the force influencing the agents
+	 * to steer in the same direction as other nearby agents.
+	 */
 	protected Vector arrayalForce(List<IPopulation> neutral){
-		// Allocating new object here is ok since its only 1 per method call.
-		// //Erik
-		Vector arrayalForce = new Vector(0, 0);
-		// int nVisiblePredators = 0; //Unused?
+		Vector arrayalForce = new Vector(0,0);
+		Vector newForce = new Vector();
 		IPopulation pop;
 		int popSize = neutral.size();
 		double nAgentsInVision = 0;
@@ -243,7 +254,7 @@ public abstract class AbstractAgent implements IAgent {
 					Position p = agent.getPosition();
 					double distance = getPosition().getDistance(p);
 					if (distance <= INTERACTION_RANGE*2) {
-						Vector newForce = new Vector(); 
+						newForce.setVector(0,0);
 						newForce.add(agent.getVelocity());
 						newForce.add(velocity);
 						double h = 10;
@@ -297,28 +308,29 @@ public abstract class AbstractAgent implements IAgent {
 		/*
 		 * Only interacts with walls that are closer than INTERACTION_RANGE.
 		 */
+		double distance = 1;
 		double leftWallDistance = this.getPosition().getDistance(xWallLeft);
 		if (leftWallDistance <= INTERACTION_RANGE) {
-			xWallLeftForce = 1 / Math.pow((leftWallDistance - 1.0)
-					/ WALL_CONSTANT, 2);
+			distance = leftWallDistance/WALL_CONSTANT;
+			xWallLeftForce = 1/(distance*distance);
 		}
 
 		double rightWallDistance = this.getPosition().getDistance(xWallRight);
 		if (rightWallDistance <= INTERACTION_RANGE) {
-			xWallRightForce = -1
-					/ Math.pow((rightWallDistance - 1.0) / WALL_CONSTANT, 2);
+			distance = rightWallDistance/WALL_CONSTANT;
+			xWallRightForce = -1/(distance*distance);
 		}
 
 		double bottomWallDistance = this.getPosition().getDistance(yWallBottom);
 		if (bottomWallDistance <= INTERACTION_RANGE) {
-			yWallBottomForce = 1 / Math.pow((bottomWallDistance - 1.0)
-					/ WALL_CONSTANT, 2);
+			distance = bottomWallDistance/WALL_CONSTANT;
+			yWallBottomForce = 1/(distance*distance);
 		}
 
 		double topWallDistance = this.getPosition().getDistance(yWallTop);
 		if (topWallDistance <= INTERACTION_RANGE) {
-			yWallBottomForce = yWallTopForce = -1
-					/ Math.pow((topWallDistance - 1.0) / WALL_CONSTANT, 2);
+			distance = topWallDistance/WALL_CONSTANT;
+			yWallBottomForce = yWallTopForce = -1/(distance*distance);
 		}
 
 		/*
