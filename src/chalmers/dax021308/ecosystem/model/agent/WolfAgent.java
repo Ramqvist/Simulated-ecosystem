@@ -23,8 +23,9 @@ public class WolfAgent extends AbstractAgent {
 
 	public WolfAgent(String name, Position p, Color c, int width,
 			int height, Vector velocity, double maxSpeed,
-			double maxAcceleration, double visionRange) {
+			double maxAcceleration, double visionRange, boolean groupBehaviour) {
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange, maxAcceleration);
+		this.groupBehaviour = groupBehaviour;
 	}
 
 	public int getEnergy() {
@@ -53,7 +54,7 @@ public class WolfAgent extends AbstractAgent {
 		
 		Vector randomForce = randomForce();
 		Vector acceleration = environmentForce.multiply(100)
-			.add(preyForce.multiply(5))
+			.add(preyForce.multiply(10))
 			.add(mutualInteractionForce)
 			.add(forwardThrust)
 			.add(arrayalForce)
@@ -94,7 +95,7 @@ public class WolfAgent extends AbstractAgent {
 				double newY = this.getPosition().getY()+ySign*(1+5*Math.random());
 				Position pos = new Position(newX,newY);
 				IAgent child = new WolfAgent(name, pos, color, width, height, new Vector(velocity),
-						maxSpeed, maxAcceleration, visionRange);
+						maxSpeed, maxAcceleration, visionRange, groupBehaviour);
 				spawn.add(child);
 			} else {
 				hungry = true;

@@ -230,7 +230,7 @@ public class EcoWorld {
 		if(predatorModel == POP_DUMMYPRED) {
 			pred = new DummyPredatorPopulation(d, predPop, Color.red, 2.5, 0.75,275);
 		} else if(predatorModel == POP_WOLF) {
-			pred = new WolfPopulation("Wolves", d, predPop, Color.red, 2.5, 0.5,250);
+			pred = new WolfPopulation("Wolves", d, predPop, Color.red, 2.5, 0.8,250, true);
 		} 
 		
 		

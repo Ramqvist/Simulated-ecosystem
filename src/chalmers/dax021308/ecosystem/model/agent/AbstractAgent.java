@@ -206,7 +206,7 @@ public abstract class AbstractAgent implements IAgent {
 					double Q = 0; //Q is a function of the distance.
 					if (distance <= visionRange) {
 						if(distance <= INTERACTION_RANGE){
-							Q = -10*(INTERACTION_RANGE-distance);
+							Q = -20*(INTERACTION_RANGE-distance);
 						} else {
 							Q = 3;
 						}
@@ -269,7 +269,7 @@ public abstract class AbstractAgent implements IAgent {
 						newForce.setVector(0,0);
 						newForce.add(agent.getVelocity());
 						newForce.add(velocity);
-						double h = 10; //Scaling constant
+						double h = 6; //Scaling constant
 						newForce.x *= h;
 						newForce.y *= h;
 						arrayalForce.x = ( arrayalForce.x + newForce.x );
