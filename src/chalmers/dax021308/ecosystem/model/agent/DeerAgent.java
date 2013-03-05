@@ -25,9 +25,11 @@ public class DeerAgent extends AbstractAgent {
 	
 	public DeerAgent(String name, Position p, Color c, int width,
 			int height, Vector velocity, double maxSpeed,
-			double maxAcceleration, double visionRange) {
+			double maxAcceleration, double visionRange, boolean groupBehaviour) {
+		
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
+		this.groupBehaviour = groupBehaviour;
 	}
 
 	@Override
@@ -44,7 +46,7 @@ public class DeerAgent extends AbstractAgent {
 				double newY = this.getPosition().getY()+ySign*(1+5*Math.random());
 				Position pos = new Position(newX,newY);
 				IAgent child = new DeerAgent(name, pos, color, width, height, new Vector(velocity),
-						maxSpeed, maxAcceleration, visionRange);
+						maxSpeed, maxAcceleration, visionRange, groupBehaviour);
 				spawn.add(child);
 			} else {
 				hungry = true;
@@ -62,8 +64,15 @@ public class DeerAgent extends AbstractAgent {
 			Dimension gridDimension) {
 
 		Vector predatorForce = getPredatorForce(predators);
-		Vector separationForce = getSeparationForce(neutral);
-		// Vector separationForce = new Vector();
+		Vector mutualInteractionForce = new Vector();
+		Vector forwardThrust = new Vector();
+		Vector arrayalForce = new Vector();
+		if(groupBehaviour) {
+			mutualInteractionForce = mutualInteractionForce(neutral);
+			forwardThrust = forwardThrust();
+			arrayalForce = arrayalForce(neutral);
+		}
+		
 		Vector environmentForce = getEnvironmentForce(gridDimension);
 		Vector preyForce = getPreyForce(preys);
 
@@ -77,9 +86,11 @@ public class DeerAgent extends AbstractAgent {
 		double randY = -RANDOM_FORCE_MAGNITUDE+ 2*RANDOM_FORCE_MAGNITUDE*Math.random();
 		Vector randomForce = new Vector(randX, randY);
 		Vector acceleration = environmentForce.multiply(100)
-				.add(predatorForce.multiply(3))
-				.add(separationForce.multiply(10))
-				.add(preyForce)
+				.add(predatorForce.multiply(5))
+				.add(mutualInteractionForce)
+				.add(forwardThrust)
+				.add(arrayalForce)
+				.add(preyForce.multiply(3))
 				.add(randomForce);
 		double accelerationNorm = acceleration.getNorm();
 		if (accelerationNorm > maxAcceleration) {

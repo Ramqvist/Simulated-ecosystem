@@ -62,6 +62,7 @@ public class MainWindow extends JFrame implements IView {
 		openGL = new OpenGLSimulationView(model, d, true);
 		openGL.init();
 		openGL.setSize(new Dimension(980,700));
+		heatMap = new HeatMapView(model, d, 15, "Deers");
 		//
 		controlView = new ControlView(model);
 		graphView1 = new GraphPopulationAmountView(model);
@@ -129,6 +130,7 @@ public class MainWindow extends JFrame implements IView {
 		right.add(parameterView, BorderLayout.CENTER);
 		//graphView1.setSize(200, 200);
 		right.add(graphView1, BorderLayout.SOUTH);
+		right.add(heatMap, BorderLayout.SOUTH); 
 		right.setBackground(Color.BLUE);
 		parameterView.setBackground(Color.GREEN);
 		

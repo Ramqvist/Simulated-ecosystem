@@ -28,7 +28,8 @@ public abstract class AbstractAgent implements IAgent {
 	protected double maxSpeed;
 	protected double visionRange;
 	protected double maxAcceleration;
-	protected final static double INTERACTION_RANGE = 4;
+	protected boolean groupBehaviour;
+	protected final static double INTERACTION_RANGE = 10;
 	protected final static double WALL_CONSTANT = 1;
 	protected static final double VELOCITY_DECAY = 1;
 	protected static final double RANDOM_FORCE_MAGNITUDE = 0;
@@ -50,10 +51,12 @@ public abstract class AbstractAgent implements IAgent {
 
 	public AbstractAgent(String name, Position p, Color c, int width,
 			int height, Vector velocity, double maxSpeed, double visionRange,
-			double maxAcceleration, int capacity) {
+			double maxAcceleration, int capacity, boolean groupBehaviour) {
+		
 		this(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
 		this.capacity = capacity;
+		this.groupBehaviour = groupBehaviour;
 	}
 
 	/**
@@ -174,10 +177,10 @@ public abstract class AbstractAgent implements IAgent {
 	 *         linked list get(n) method. TODO: Special method for linked list
 	 *         using collection.iterator(), hasNext() & next().
 	 */
-	protected Vector getSeparationForce(List<IPopulation> neutral) {
+	protected Vector mutualInteractionForce(List<IPopulation> neutral) {
 		// Allocating new object here is ok since its only 1 per method call.
 		// //Erik
-		Vector separationForce = new Vector(0, 0);
+		Vector mutualInteractionForce = new Vector(0, 0);
 		// int nVisiblePredators = 0; //Unused?
 		IPopulation pop;
 		int popSize = neutral.size();
@@ -191,38 +194,75 @@ public abstract class AbstractAgent implements IAgent {
 				if (agent != this) {
 					Position p = agent.getPosition();
 					double distance = getPosition().getDistance(p);
-					if (distance <= INTERACTION_RANGE) { // If neutral is in
-															// vision range for
-															// prey
-						/*
-						 * Create a vector that points away from the neutral.
-						 * TODO: Remove the "new Vector" and replace with
-						 * doubles. This will be called alot of times. Low level
-						 * programming is crucial.
-						 */
-						Vector newForce = new Vector(this.getPosition(), p);
+					double Q = 0; //Q is a function of the distance.
+					if (distance <= visionRange) {
+						if(distance <= INTERACTION_RANGE){
+							Q = -10*(INTERACTION_RANGE-distance);
+						} else {
+							Q = 3;
+						}
+					}
+					
+					Vector newForce = new Vector(p, this.getPosition());
+					double norm = newForce.getNorm();
+					double v = Q/(norm*distance);
+					newForce.x = newForce.x * v;
+					newForce.y = newForce.y * v;
+					mutualInteractionForce.x = mutualInteractionForce.x + newForce.x;
+					mutualInteractionForce.y = mutualInteractionForce.y + newForce.y;
+				}
+			}
+		}
+		return mutualInteractionForce;
+	}
 
-						/*
-						 * Add this vector to the separation force, with
-						 * proportion to how close the neutral agent is. Closer
-						 * agents will affect the force more than those far
-						 * away.
-						 */
-						double norm = newForce.getNorm();
-						double v = 1 / (norm * distance * distance);
-						newForce.x = newForce.x * v;
-						newForce.y = newForce.y * v;
-						separationForce.x = separationForce.x + newForce.x;
-						separationForce.y = separationForce.y + newForce.y;
-
-						// nVisiblePredators++;//Unused?
+	protected Vector forwardThrust(){
+		double x = velocity.x;
+		double y = velocity.y;
+		double norm = velocity.getNorm();
+		Vector forwardThrust = new Vector(x/norm,y/norm);
+		return forwardThrust;
+	}
+	
+	protected Vector arrayalForce(List<IPopulation> neutral){
+		// Allocating new object here is ok since its only 1 per method call.
+		// //Erik
+		Vector arrayalForce = new Vector(0, 0);
+		// int nVisiblePredators = 0; //Unused?
+		IPopulation pop;
+		int popSize = neutral.size();
+		double nAgentsInVision = 0;
+		for (int j = 0; j < popSize; j++) {
+			pop = neutral.get(j);
+			int size = pop.getAgents().size();
+			List<IAgent> agents = pop.getAgents();
+			IAgent agent;
+			for (int i = 0; i < size; i++) {
+				agent = agents.get(i);
+				if (agent != this) {
+					Position p = agent.getPosition();
+					double distance = getPosition().getDistance(p);
+					if (distance <= INTERACTION_RANGE*2) {
+						Vector newForce = new Vector(); 
+						newForce.add(agent.getVelocity());
+						newForce.add(velocity);
+						double h = 10;
+						newForce.x *= h;
+						newForce.y *= h;
+						arrayalForce.x = arrayalForce.x + newForce.x;
+						arrayalForce.y = arrayalForce.y + newForce.y;
+						nAgentsInVision = nAgentsInVision + 1.0;
 					}
 				}
 			}
 		}
-		return separationForce;
+		if(nAgentsInVision>0){
+			arrayalForce.x /= nAgentsInVision;
+			arrayalForce.y /= nAgentsInVision;
+		}
+		return arrayalForce;
 	}
-
+	
 	/**
 	 * * @author Sebbe The environment force is at the moment defined as
 	 * 1/(wall-constant*(distance to wall)^2). The agents feel the forces from

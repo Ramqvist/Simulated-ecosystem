@@ -27,9 +27,11 @@ public class DeerPopulation extends AbstractPopulation {
 
 	public DeerPopulation(String name, Dimension gridDimension,
 			int initPopulationSize, Color color, double maxSpeed,
-			double maxAcceleration, double visionRange) {
+			double maxAcceleration, double visionRange, boolean groupBehaviour) {
+		
 		super(name, gridDimension);
 		this.visionRange = visionRange;
+		this.groupBehaviour = groupBehaviour;
 		agents = initializePopulation(initPopulationSize, gridDimension, color,
 				maxSpeed, maxAcceleration, visionRange);
 	}
@@ -52,7 +54,7 @@ public class DeerPopulation extends AbstractPopulation {
 			}
 			DeerAgent a = new DeerAgent("Deer", randPos,
 					color, 5, 10, velocity, maxSpeed, maxAcceleration,
-					visionRange);
+					visionRange, groupBehaviour);
 			newAgents.add(a);
 		}
 		return newAgents;

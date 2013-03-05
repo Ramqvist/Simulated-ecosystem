@@ -52,7 +52,6 @@ public class HeatMapView extends GLCanvas implements IView {
 	int maxVisited = 1;
 	int minVisited = Integer.MAX_VALUE;
 	private Dimension grid;
-	private JFrame frame;
 	private JOGLListener glListener;
 	private String populationName;
 	//private GLCanvas canvas;
@@ -60,7 +59,7 @@ public class HeatMapView extends GLCanvas implements IView {
 	/**
 	 * Create the panel.
 	 */
-	public HeatMapView(EcoWorld model, Dimension grid, Dimension windowSize, double samplingConstant, String populationName) {
+	public HeatMapView(EcoWorld model, Dimension grid, double samplingConstant, String populationName) {
 		this.grid = grid;
 		this.samplingConstant = samplingConstant;
 		this.populationName = populationName;
@@ -69,48 +68,22 @@ public class HeatMapView extends GLCanvas implements IView {
 		heatMap = new int[heatMapWidth][heatMapHeight];
 		visited = new boolean[heatMapWidth][heatMapHeight];
 		model.addObserver(this);
-		
-		
-		frame = new JFrame("Heat map truncated into dimensions: (" + heatMapWidth+ "," +
-				heatMapHeight + ")");
-		frame.add(this);
-		frame.setSize(windowSize);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-		//setVisible(true);
-		//setSize(size);
-
-        //canvas = new GLCanvas();
-        //canvas.setSize(size);
-        //canvas.addGLEventListener(new JOGLListener());
+     
 		glListener = new JOGLListener();
-		addGLEventListener(glListener);
-        //add();
-        
+		addGLEventListener(glListener);     
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
 		String eventName = event.getPropertyName();
 		if(eventName == EcoWorld.EVENT_STOP) {
-			//Model has stopped. Maybe hide view?
-			//frame.setVisible(false);
+			//TODO: DO nassing?
 		} else if(eventName == EcoWorld.EVENT_TICK) {
 			//Tick notification recived from model. Do something with the data.
 			if(event.getNewValue() instanceof List<?>) {
 				this.newPops = clonePopulationList((List<IPopulation>) event.getNewValue());
-			}
-			
-			//TODO: Call for display()
+			}	
 			repaint();
-			/*if(canvas != null) {
-				canvas.repaint();
-			}*/
-			//repaint();
-			//display();
-			//removeAll();
-			//repaint();
-			//revalidate();
 		}
 	}
 	
