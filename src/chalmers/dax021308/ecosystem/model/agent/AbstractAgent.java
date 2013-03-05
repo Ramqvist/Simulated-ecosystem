@@ -231,7 +231,7 @@ public abstract class AbstractAgent implements IAgent {
 	 * @return the forward thrust force.
 	 */
 	protected Vector forwardThrust(){
-		double a = 0.5;
+		double a = 0.5; //Scaling constant
 		double x = velocity.x;
 		double y = velocity.y;
 		double norm = velocity.getNorm();
@@ -269,7 +269,7 @@ public abstract class AbstractAgent implements IAgent {
 						newForce.setVector(0,0);
 						newForce.add(agent.getVelocity());
 						newForce.add(velocity);
-						double h = 10;
+						double h = 10; //Scaling constant
 						newForce.x *= h;
 						newForce.y *= h;
 						arrayalForce.x = ( arrayalForce.x + newForce.x );
