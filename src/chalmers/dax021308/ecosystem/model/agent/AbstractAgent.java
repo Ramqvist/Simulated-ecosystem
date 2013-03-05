@@ -163,6 +163,13 @@ public abstract class AbstractAgent implements IAgent {
 		return a;
 	}
 
+	/**
+	 * A random force that the agent gets influenced by.
+	 * Can be interpreted as an estimation error that the
+	 * agent does in where to head.
+	 * @return a vector pointing approximately in the
+	 * same direction as the agents velocity.
+	 */
 	protected Vector randomForce(){
 		double randX = -RANDOM_FORCE_MAGNITUDE+ 2*RANDOM_FORCE_MAGNITUDE*Math.random();
 		double randY = -RANDOM_FORCE_MAGNITUDE+ 2*RANDOM_FORCE_MAGNITUDE*Math.random();
