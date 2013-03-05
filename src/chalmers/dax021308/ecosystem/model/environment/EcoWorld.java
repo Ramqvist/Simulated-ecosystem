@@ -353,6 +353,10 @@ public class EcoWorld {
 	public void setRunWithoutTimer(boolean runWithoutTimer) {
 		this.runWithoutTimer = runWithoutTimer;
 	}
+	
+	public Dimension getSize() {
+		return d;
+	}
 
 	/**
 	 * Environment onFinish listener. Called when one iteration of the

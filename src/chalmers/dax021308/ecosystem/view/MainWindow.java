@@ -6,12 +6,14 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.BoxLayout;
 import javax.swing.JMenuBar;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -41,6 +43,7 @@ public class MainWindow extends JFrame implements IView {
 	private SettingsMenuView smv = new SettingsMenuView(this);
 	private AWTSimulationView awt;
 	private OpenGLSimulationView openGL;
+	private HeatMapView heatMap;
 	private GraphPopulationAmountView graphView1;  //M�ste ta in en ekomodell, + �r jframe nu
 	//private GraphView graphView2 = new GraphView();  //M�ste ta in en ekomodell, + �r jframe nu
 	
@@ -55,10 +58,10 @@ public class MainWindow extends JFrame implements IView {
 		this.setExtendedState(MAXIMIZED_BOTH);
 		
 		//OpenGL   
-	    Dimension d = new Dimension(900, 800);
+	    Dimension d = model.getSize();
 		openGL = new OpenGLSimulationView(model, d, true);
 		openGL.init();
-		openGL.setSize(d);
+		openGL.setSize(new Dimension(980,700));
 		//
 		controlView = new ControlView(model);
 		graphView1 = new GraphPopulationAmountView(model);
@@ -105,23 +108,27 @@ public class MainWindow extends JFrame implements IView {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		left.setLayout(new BorderLayout(0,0));
-		right.setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridwidth = gbc.gridheight = 1;
-		gbc.fill = GridBagConstraints.HORIZONTAL; 
-		gbc.gridy = GridBagConstraints.RELATIVE; //makes sure every new add is placed beneath the previous
-		gbc.anchor = GridBagConstraints.PAGE_START;
+		
+		/*
+		 * Quick fix...
+		 */
+		right.setLayout(new GridLayout(3,1));
+//		GridBagConstraints gbc = new GridBagConstraints();
+//		gbc.gridx = 0;
+//		gbc.gridwidth = gbc.gridheight = 1;
+//		gbc.fill = GridBagConstraints.HORIZONTAL; 
+//		gbc.gridy = GridBagConstraints.RELATIVE; //makes sure every new add is placed beneath the previous
+//		gbc.anchor = GridBagConstraints.PAGE_START;
 		setContentPane(contentPane);
 		
-		simulationPanel.setSize(d);
+//		simulationPanel.setSize(d);
 		simulationPanel.add(openGL);
 		simulationPanel.setBackground(Color.RED);
 		left.add(simulationPanel, BorderLayout.CENTER);
 		left.add(controlView, BorderLayout.SOUTH);  
-		right.add(parameterView, gbc);
+		right.add(parameterView, BorderLayout.CENTER);
 		//graphView1.setSize(200, 200);
-		right.add(graphView1, gbc);
+		right.add(graphView1, BorderLayout.SOUTH);
 		right.setBackground(Color.BLUE);
 		parameterView.setBackground(Color.GREEN);
 		
