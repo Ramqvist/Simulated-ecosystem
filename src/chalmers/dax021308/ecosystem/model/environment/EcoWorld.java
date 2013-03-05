@@ -161,13 +161,23 @@ public class EcoWorld {
 			recordedSimulation = new ArrayList<List<IPopulation>>(numIterations);
 		}
 
-		this.env = new SquareEnvironment(createInitialPopulations(d),
-				readObsticlesFromFile(), mOnFinishListener, d.height, d.width);
 
+		
 		this.runWithoutTimer = false;
 		this.numIterations = numIterations;
+		
 		this.observers = new PropertyChangeSupport(this);
 	}
+	
+	public void setRecordSimulation(boolean recordSimulation) {
+		this.recordSimulation = recordSimulation;
+	}
+	
+	
+	public synchronized void setNumIterations(int numIterations) {
+		this.numIterations = numIterations;
+	}
+
 
 	/**
 	 * Start EcoWorld WITHOUT a tick-timer.
@@ -197,21 +207,20 @@ public class EcoWorld {
 		this(d, Integer.MAX_VALUE);
 	}
 
-	private List<IPopulation> createInitialPopulations(Dimension dim) {
+	public void createInitialPopulations(int predPop, int preyPop, int grassPop) {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
 		//IPopulation rabbits = new RabbitPopulation(300, dim);
 		//rabbits.addPrey(rabbits);
 		//populations.add(rabbits);
-		
 
-//		IPopulation prey = new DummyPreyPopulation(dim, 500, Color.blue, 2.2, 2, 250);
-//		IPopulation predator = new DummyPredatorPopulation(dim, 10, Color.red, 2.5, 0.75,275);
+//		IPopulation prey = new DummyPreyPopulation(d, preyPop, Color.blue, 2.2, 2, 250);
+//		IPopulation predator = new DummyPredatorPopulation(d, predPop, Color.red, 2.5, 0.75,275);
 		
 		
-		IPopulation prey = new DeerPopulation("Deers", dim, 100, Color.blue, 2.2, 2, 200);
-//		IPopulation prey = new PigPopulation("Filthy Pigs", dim, 100, Color.pink, 2.0, 1.5, 225);
-		IPopulation predator = new WolfPopulation("Wolves", dim, 10, Color.red, 2.5, 0.75,250);
-		IPopulation grass = new GrassPopulation("Grass", dim, 500, Color.green, 1, 1, 0, 1500);
+		IPopulation prey = new DeerPopulation("Deers", d, preyPop, Color.blue, 2.2, 2, 200);
+//		IPopulation prey = new PigPopulation("Filthy Pigs", d, preyPop, Color.pink, 2.0, 1.5, 225);
+		IPopulation predator = new WolfPopulation("Wolves", d, predPop, Color.red, 2.5, 0.75,250);
+		IPopulation grass = new GrassPopulation("Grass", d, grassPop, Color.green, 1, 1, 0, 1500);
 
 		
 		prey.addPredator(predator);
@@ -220,7 +229,7 @@ public class EcoWorld {
 		populations.add(prey);
 		populations.add(predator);
 		populations.add(grass);
-		return populations;
+		this.env = new SquareEnvironment(populations, readObsticlesFromFile(), mOnFinishListener, d.height, d.width);
 	}
 
 	private List<IObstacle> readObsticlesFromFile() {

@@ -41,7 +41,7 @@ public class WindowController implements IController {
 //		this.model = new EcoWorld(d);
 		
 		//Uncomment to start model.
-		model.start();
+		//model.start();
 		
 		//OpenGL 
 		//OpenGLSimulationView simView = new OpenGLSimulationView(model, d, true);

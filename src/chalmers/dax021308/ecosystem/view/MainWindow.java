@@ -56,7 +56,7 @@ public class MainWindow extends JFrame implements IView {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 613, 516);
 		this.setExtendedState(MAXIMIZED_BOTH);
-		
+		new NewSimulationView(model);
 		//OpenGL   
 	    Dimension d = model.getSize();
 		openGL = new OpenGLSimulationView(model, d, true);
@@ -175,7 +175,5 @@ public class MainWindow extends JFrame implements IView {
 		else if(i == 1) {
 			simulationPanel.add(openGL);
 		}
-		
 	}
-
 }
