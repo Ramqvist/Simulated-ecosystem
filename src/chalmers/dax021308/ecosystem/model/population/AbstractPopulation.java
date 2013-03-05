@@ -182,4 +182,10 @@ public abstract class AbstractPopulation implements IPopulation {
 	public synchronized void addToRemoveList(IAgent a) {
 		removeList.add(a);
 	}
+	
+	@Override
+	public Color getColor() {
+		return agents.get(0).getColor();
+	}
+
 }

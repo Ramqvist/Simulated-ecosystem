@@ -13,20 +13,22 @@ import chalmers.dax021308.ecosystem.model.population.IPopulation;
 
 import info.monitorenter.gui.chart.*;
 import info.monitorenter.gui.chart.IAxis.*;
-import info.monitorenter.gui.chart.axis.scalepolicy.AxisScalePolicyManualTicks;
 import info.monitorenter.gui.chart.rangepolicies.*;
 import info.monitorenter.gui.chart.traces.Trace2DSimple;
 
-import info.monitorenter.gui.util.ColorIterator;
+//import info.monitorenter.gui.util.ColorIterator;
 import info.monitorenter.util.Range;
 
 /**
  * 
- * @author Loanne
+ * 
  * 
  * Shows population amount over time.
  * However, might not yet work for populations added after
  * simulation start. Will fix later if this should be possible.
+ * 
+ * @author Loanne
+ * 
  */
 public class GraphPopulationAmountView extends Chart2D implements IView {
 
@@ -34,9 +36,8 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	//private Chart2D chart = new Chart2D();
 	private List<ITrace2D> traces = new ArrayList<ITrace2D>();
-	private ColorIterator colors = new ColorIterator();
+	//private ColorIterator colors = new ColorIterator();
 	
 	// Values for axis. More values are set in init()
 	private IAxis<IAxisScalePolicy> xAxis;
@@ -54,9 +55,9 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 
 	@Override
 	public void init() {    
-		this.colors.setStartColor(Color.BLUE);
+		//this.colors.setStartColor(Color.BLUE);
 		// Set how many different colored traces possible.
-		this.colors.setSteps(10);
+		//this.colors.setSteps(10);
 
 		xAxis = (IAxis<IAxisScalePolicy>)getAxisX(); 
 		xAxis.setAxisTitle(new AxisTitle(xAxisTitle));
@@ -85,9 +86,8 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 					createNewTraces(newPops);
 				}
 
-				// TODO update right population trace
 				// update graph. 
-				// For the moment, this assumes that the population list doesn't change after start.
+				// this assumes that the population list doesn't change after start.
 				// 
 				for (int i = 0; i < newPops.size(); ++i) {
 					int numOfAgents = newPops.get(i).getAgents().size();
@@ -110,9 +110,8 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 			}
 			ITrace2D newTrace = new Trace2DSimple(pName); 
 
-			newTrace.setColor(colors.next());
+			newTrace.setColor(p.getColor());
 			traces.add(newTrace);
-			//chart.addTrace(newTrace);	
 			this.addTrace(newTrace);	
 		}
 	}

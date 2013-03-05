@@ -12,7 +12,7 @@ import chalmers.dax021308.ecosystem.model.util.Gender;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
-public class RabbitPopulation implements IPopulation {
+public class RabbitPopulation extends AbstractPopulation {
 
 	private List<IAgent> rabbits;
 	private String name = "Rabbits";
