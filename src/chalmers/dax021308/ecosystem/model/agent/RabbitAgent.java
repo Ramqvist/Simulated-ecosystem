@@ -39,12 +39,8 @@ public class RabbitAgent extends AbstractAgent {
 	public void calculateNextPosition(List<IPopulation> predators,
 			List<IPopulation> preys, List<IPopulation> neutral, Dimension dim) {
 
-		double before = System.nanoTime();
-		
-		Position oldPosition = position;
 		double length = velocity.getNorm();
-//		Vector neutralForce = getNeutralForce1(neutral);
-		Vector neutralForce = getNeutralForce2();
+		Vector neutralForce = getNeutralForce();
 		changeDirection();
 		nextPosition = position.addVector(velocity.add(getEnvironmentForce(dim)).add(neutralForce));
 		
@@ -64,9 +60,6 @@ public class RabbitAgent extends AbstractAgent {
 		if (EcoWorld.worldGrid.updatePosition(this, gridPosition, nextPosition)) {
 			gridPosition = nextPosition;
 		}
-		
-		double after = System.nanoTime() - before;
-//		System.out.println("Time: "+(int)(after/1000) + " microsec");
 	}
 
 	//Randomly changes direction
@@ -80,16 +73,6 @@ public class RabbitAgent extends AbstractAgent {
 			velocity = velocity.rotate(-0.1);
 			break;
 		}
-	}
-	
-	//Without grid
-	private Vector getNeutralForce1(List<IPopulation> neutral) {
-		Vector neutralForce = new Vector();
-		for (int i = 0; i < neutral.size(); i++) {
-			List<IAgent> agents = neutral.get(i).getAgents();
-			neutralForce.add(getForceFromAgents(agents));
-		}
-		return neutralForce;
 	}
 	
 	private Vector getForceFromAgents(List<IAgent> agents) {
@@ -111,9 +94,7 @@ public class RabbitAgent extends AbstractAgent {
 		return neutralForce;
 	}
 	
-	
-	//With grid.
-	private Vector getNeutralForce2() {
+	private Vector getNeutralForce() {
 		List<List<IAgent>> agents = EcoWorld.worldGrid.get(position, visionRange);
 		Vector neutralForce = new Vector();
 		for (int i = 0; i < agents.size(); i++) {

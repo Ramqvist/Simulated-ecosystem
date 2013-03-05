@@ -27,7 +27,7 @@ public class RabbitPopulation extends AbstractPopulation {
 //			}
 			RabbitAgent r = new RabbitAgent(new Position(d.getWidth()
 					* Math.random(), d.getHeight() * Math.random()), name, color,
-					20, 20, new Vector(Math.random()*2, Math.random()*2), null,
+					10, 10, new Vector(Math.random()*2, Math.random()*2), null,
 					maxSpeed, visionRange, maxAcceleration);
 			agents.add(r);
 			EcoWorld.worldGrid.add(r);

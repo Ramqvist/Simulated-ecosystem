@@ -94,7 +94,6 @@ public class WorldGrid {
 	 * @param newPosition - the new {@link Position} of the agent.
 	 * @return true if the position was updated, otherwise false.
 	 */
-	//Need to verify that this shit works!!!
 	public boolean updatePosition(IAgent agent, Position oldPosition, Position newPosition) {
 		try {
 			lock.acquire();
@@ -130,27 +129,18 @@ public class WorldGrid {
 			e.printStackTrace();
 		}
 		
-		int range = (int)Math.pow((visionRange / scale), 2);
 		List<List<IAgent>> result = new ArrayList<List<IAgent>>();
+		int range = (int)Math.pow((visionRange / scale), 2);
 		int row = (int)(center.getY() / scale);
 		int col = (int)(center.getX() / scale);
 		
-		
-//		for (int i = row - range; i < row + range; i++) {
-//			for (int j = col - range; j < col + range; j++) {
-//				if (i >= 0 && i < rows && j >= 0 && j < columns) {
-//					result.add(grid.get(i).get(j));
-//				}
-//			}
-//		}
-		
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < columns; j++) {
-				result.add(grid.get(i).get(j));
+		for (int i = row - range; i <= row + range; i++) {
+			for (int j = col - range; j <= col + range; j++) {
+				if (i >= 0 && i < rows && j >= 0 && j < columns) {
+					result.add(grid.get(i).get(j));
+				}
 			}
 		}
-		
-//		System.out.println(result.size());
 		lock.release();
 		return result;
 	}
