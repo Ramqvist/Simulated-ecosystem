@@ -293,25 +293,26 @@ public class EcoWorld {
 	}
 	
 	/**
-	 * Start the EcoWorld simulation program.
+	 * Stops the scheduling algorithms.
 	 * <p>
-	 * If already started {@link IllegalStateException} will be thrown.
-	 * 
+	 * Warning! WILL affect ongoing execution!
+	 * <p>
+	 * If already stopped {@link IllegalStateException} will be thrown.	
+	 *  
 	 */
-	public synchronized void pause() throws IllegalStateException{
-		if(!shouldRun.get()) {
-			executor = Executors.newSingleThreadExecutor();
-			this.timer = new TimerHandler();
-			shouldRun.set(true);
-			scheduleEnvironmentUpdate();
-			Log.i("EcoWorld started.");
+	public void pause() throws IllegalStateException {
+		if(shouldRun.get()) {
+			shouldRun.set(false);
+			executor.shutdownNow();
+			timer.stop();
+			numUpdates = 0;
+			Log.i("EcoWorld paused.");
+			observers.firePropertyChange(EVENT_PAUSE, null, null);
 			if(recordSimulation) {
 				observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
-			} else {
-				observers.firePropertyChange(EVENT_START, null, null);
 			}
 		} else {
-			 throw new IllegalStateException("EcoWorld already started.");
+			 throw new IllegalStateException("EcoWorld already paused.");
 		}
 	}
 
@@ -330,6 +331,7 @@ public class EcoWorld {
 			timer.stop();
 			numUpdates = 0;
 			Log.i("EcoWorld stopped.");
+			observers.firePropertyChange(EVENT_STOP, null, null);
 			if(recordSimulation) {
 				observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
 			}

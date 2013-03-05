@@ -44,7 +44,8 @@ public class NewSimulationView {
 	private EcoWorld model;
 	private JList predList  = new JList();;
 	private JList preyList  = new JList();;
-	private JList grassList = new JList();;
+	private JList grassList = new JList();
+	private JCheckBox chckbxRecordSimulation;;
 
 	/**
 	 * Create the application.
@@ -67,6 +68,7 @@ public class NewSimulationView {
 			model.setRunWithoutTimer(false);	
 			model.adjustTickRate(tickDelay);			
 		}
+		model.setRecordSimulation(chckbxRecordSimulation.isSelected());
 		model.createInitialPopulations((String) predList.getSelectedValue(),Integer.parseInt(tvPredPopSize.getText()),(String)  preyList.getSelectedValue(),Integer.parseInt(tvPreyPopSize.getText()),(String)  grassList.getSelectedValue(),Integer.parseInt(tvGrassPopSize.getText()));
 		try {
 			model.start();
@@ -84,7 +86,7 @@ public class NewSimulationView {
 		frmSimulatedEcosystem.setAlwaysOnTop(true);
 		frmSimulatedEcosystem.setTitle("Start new Simulation");
 		frmSimulatedEcosystem.setBounds(100, 100, 670, 579);
-		frmSimulatedEcosystem.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmSimulatedEcosystem.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		JButton btnRunSim = new JButton("Start new");
 		btnRunSim.addActionListener(new ActionListener() {
@@ -189,6 +191,8 @@ public class NewSimulationView {
 		
 		JRadioButton rdbtnNewRadioButton = new JRadioButton("Use OpenGLSimulationView");
 		rdbtnNewRadioButton.setSelected(true);
+		
+		chckbxRecordSimulation = new JCheckBox("Record simulation");
 		GroupLayout groupLayout = new GroupLayout(frmSimulatedEcosystem.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -210,7 +214,8 @@ public class NewSimulationView {
 													.addComponent(slider_delaylength, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 													.addPreferredGap(ComponentPlacement.RELATED)
 													.addComponent(textfield_Iterationdelay, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))
-												.addComponent(rdbtnNewRadioButton)))
+												.addComponent(rdbtnNewRadioButton)
+												.addComponent(chckbxRecordSimulation)))
 										.addComponent(tvPredPopSize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 								.addGroup(groupLayout.createSequentialGroup()
 									.addGap(324)
@@ -259,7 +264,9 @@ public class NewSimulationView {
 								.addComponent(textfield_Iterationdelay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 							.addGap(50)
 							.addComponent(rdbtnNewRadioButton)
-							.addPreferredGap(ComponentPlacement.RELATED, 318, Short.MAX_VALUE)
+							.addGap(18)
+							.addComponent(chckbxRecordSimulation)
+							.addPreferredGap(ComponentPlacement.RELATED, 277, Short.MAX_VALUE)
 							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 								.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
 								.addComponent(btnRunSim, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)))
