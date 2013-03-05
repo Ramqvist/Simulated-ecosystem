@@ -20,7 +20,9 @@ public abstract class AbstractPopulation implements IPopulation {
 	protected List<IPopulation> predators;
 	protected List<IPopulation> neutral;
 	protected List<IAgent> removeList;
+
 	protected Color color = Color.BLACK;	// Standard color for population.
+	protected boolean groupBehaviour;
 	private String name;
 	
 	
@@ -35,11 +37,13 @@ public abstract class AbstractPopulation implements IPopulation {
 		this();
 		this.name = name;
 		this.gridDimension = gridDimension;
+		this.groupBehaviour = true;
 	}
 
-	public AbstractPopulation(String name, Dimension gridDimension, int capacity) {
+	public AbstractPopulation(String name, Dimension gridDimension, int capacity, boolean groupBehaviour) {
 		this(name, gridDimension);
 		this.capacity = capacity;
+		this.groupBehaviour = groupBehaviour;
 	}
 	
 	/**
@@ -140,7 +144,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		String name = inputArray[0];
 		Dimension dim = new Dimension(Integer.parseInt(inputArray[1]), Integer.parseInt(inputArray[2]));
 		int cap = Integer.parseInt(inputArray[3]);
-		return new AbstractPopulation(name, dim, cap) {
+		return new AbstractPopulation(name, dim, cap, true) {
 			@Override
 			public double calculateFitness(IAgent agent) {
 				return 0;
@@ -213,6 +217,9 @@ public abstract class AbstractPopulation implements IPopulation {
 	 * @see chalmers.dax021308.ecosystem.model.population.IPopulation#getSize()
 	 */
 	public int getSize() {
-		return agents.size();
+		if (agents != null)
+			return agents.size();
+		else
+			return 0;
 	}
 }

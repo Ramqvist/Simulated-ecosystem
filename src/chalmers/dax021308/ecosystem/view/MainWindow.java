@@ -56,12 +56,13 @@ public class MainWindow extends JFrame implements IView {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 613, 516);
 		this.setExtendedState(MAXIMIZED_BOTH);
-		
+		new NewSimulationView(model);
 		//OpenGL   
 	    Dimension d = model.getSize();
 		openGL = new OpenGLSimulationView(model, d, true);
 		openGL.init();
 		openGL.setSize(new Dimension(980,700));
+		heatMap = new HeatMapView(model, d, 15, "Deers");
 		//
 		controlView = new ControlView(model);
 		graphView1 = new GraphPopulationAmountView(model);
@@ -129,6 +130,7 @@ public class MainWindow extends JFrame implements IView {
 		right.add(parameterView, BorderLayout.CENTER);
 		//graphView1.setSize(200, 200);
 		right.add(graphView1, BorderLayout.SOUTH);
+		right.add(heatMap, BorderLayout.SOUTH); 
 		right.setBackground(Color.BLUE);
 		parameterView.setBackground(Color.GREEN);
 		
@@ -175,7 +177,5 @@ public class MainWindow extends JFrame implements IView {
 		else if(i == 1) {
 			simulationPanel.add(openGL);
 		}
-		
 	}
-
 }

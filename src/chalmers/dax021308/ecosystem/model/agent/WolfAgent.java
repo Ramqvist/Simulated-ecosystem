@@ -36,8 +36,14 @@ public class WolfAgent extends AbstractAgent {
 	public void calculateNextPosition(List<IPopulation> predators,
 			List<IPopulation> preys, List<IPopulation> neutral,Dimension gridDimension) {
 		Vector preyForce = getPreyForce(preys);
-		Vector separationForce = getSeparationForce(neutral);
-		//Vector separationForce = new Vector();
+		Vector mutualInteractionForce = new Vector();
+		Vector forwardThrust = new Vector();
+		Vector arrayalForce = new Vector();
+		if(groupBehaviour) {
+			mutualInteractionForce = mutualInteractionForce(neutral);
+			forwardThrust = forwardThrust();
+			arrayalForce = arrayalForce(neutral);
+		}
 		Vector environmentForce = getEnvironmentForce(gridDimension);
 		
 		/*
@@ -45,13 +51,14 @@ public class WolfAgent extends AbstractAgent {
 		 * If the acceleration exceeds maximum acceleration --> scale it to maxAcceleration,
 		 * but keep the correct direction of the acceleration.
 		 */
-		double randX = -RANDOM_FORCE_MAGNITUDE+ 2*RANDOM_FORCE_MAGNITUDE*Math.random();
-		double randY = -RANDOM_FORCE_MAGNITUDE+ 2*RANDOM_FORCE_MAGNITUDE*Math.random();
-		Vector randomForce = new Vector(randX, randY);
+		
+		Vector randomForce = randomForce();
 		Vector acceleration = environmentForce.multiply(100)
-		.add(preyForce)
-		.add(separationForce.multiply(10))
-		.add(randomForce);
+			.add(preyForce.multiply(5))
+			.add(mutualInteractionForce)
+			.add(forwardThrust)
+			.add(arrayalForce)
+			.add(randomForce);
 		double accelerationNorm = acceleration.getNorm();
 		if(accelerationNorm > maxAcceleration){
 			acceleration.multiply(maxAcceleration/accelerationNorm); 
@@ -118,7 +125,7 @@ public class WolfAgent extends AbstractAgent {
 				Position p = a.getPosition();
 				double distance = getPosition().getDistance(p);
 				if (distance <= visionRange) {
-					if(distance <= INTERACTION_RANGE) {
+					if(distance <= INTERACTION_RANGE-5) {
 						pop.addToRemoveList(a);
 						hungry = false;
 						this.energy = LIFE_LENGTH;

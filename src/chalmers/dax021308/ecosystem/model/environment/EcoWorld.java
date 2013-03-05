@@ -55,7 +55,21 @@ public class EcoWorld {
 	public static final String EVENT_PAUSE		        = "chalmers.dax021308.ecosystem.model.Ecoworld.event_pause";
 	public static final String EVENT_RECORDING_FINISHED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recordingstarted";
 	public static final String EVENT_RECORDING_STARTED  = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recordingfinished";
-	/* 								   */
+	
+	/* Population constants */
+	public static final String POP_PIG       = "Pig Population";
+	public static final String POP_RABBIT    = "Rabbit Population";
+	public static final String POP_DUMMYPREY = "Dummy Prey Population";
+	public static final String POP_DEER      = "Deer Population";
+	public static final String POP_GRASS     = "Grass Population";
+	public static final String POP_DUMMYPRED = "Dummy Predator Population";
+	public static final String POP_WOLF      = "Wolf Population";
+	
+	/* Population array based on predator-prey model */
+	public static final String[] PREY_VALUES = { POP_DEER, POP_PIG, POP_RABBIT, POP_DUMMYPREY };
+	public static final String[] PRED_VALUES  = { POP_WOLF, POP_DUMMYPRED };
+	public static final String[] GRASS_VALUES = { POP_GRASS };
+	
 	
 	private AtomicBoolean environmentFinished = new AtomicBoolean(false);
 	private AtomicBoolean timerFinished       = new AtomicBoolean(false);
@@ -161,13 +175,23 @@ public class EcoWorld {
 			recordedSimulation = new ArrayList<List<IPopulation>>(numIterations);
 		}
 
-		this.env = new SquareEnvironment(createInitialPopulations(d),
-				readObsticlesFromFile(), mOnFinishListener, d.height, d.width);
 
+		
 		this.runWithoutTimer = false;
 		this.numIterations = numIterations;
+		
 		this.observers = new PropertyChangeSupport(this);
 	}
+	
+	public void setRecordSimulation(boolean recordSimulation) {
+		this.recordSimulation = recordSimulation;
+	}
+	
+	
+	public synchronized void setNumIterations(int numIterations) {
+		this.numIterations = numIterations;
+	}
+
 
 	/**
 	 * Start EcoWorld WITHOUT a tick-timer.
@@ -197,30 +221,49 @@ public class EcoWorld {
 		this(d, Integer.MAX_VALUE);
 	}
 
-	private List<IPopulation> createInitialPopulations(Dimension dim) {
+	public void createInitialPopulations(String predatorModel, int predPop, String preyModel, int preyPop, String grassModel, int grassPop) throws IllegalArgumentException {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
-		//IPopulation rabbits = new RabbitPopulation(300, dim);
-		//rabbits.addPrey(rabbits);
-		//populations.add(rabbits);
-		
+		IPopulation prey = null;
+		IPopulation pred = null;
+		IPopulation grass = null;
 
-//		IPopulation prey = new DummyPreyPopulation(dim, 500, Color.blue, 2.2, 2, 250);
-//		IPopulation predator = new DummyPredatorPopulation(dim, 10, Color.red, 2.5, 0.75,275);
+		if(predatorModel == POP_DUMMYPRED) {
+			pred = new DummyPredatorPopulation(d, predPop, Color.red, 2.5, 0.75,275);
+		} else if(predatorModel == POP_WOLF) {
+			pred = new WolfPopulation("Wolves", d, predPop, Color.red, 2.5, 0.5,250);
+		} 
 		
 		
-		IPopulation prey = new DeerPopulation("Deers", dim, 100, Color.blue, 2.2, 2, 200);
-//		IPopulation prey = new PigPopulation("Filthy Pigs", dim, 100, Color.pink, 2.0, 1.5, 225);
-		IPopulation predator = new WolfPopulation("Wolves", dim, 10, Color.red, 2.5, 0.75,250);
-		IPopulation grass = new GrassPopulation("Grass", dim, 500, Color.green, 1, 1, 0, 1500);
+		if(preyModel == POP_DEER) {
+			prey = new DeerPopulation("Deers", d, preyPop, Color.blue, 2.0, 2, 200, true);
+		} else if(preyModel == POP_RABBIT) {
+			prey = new RabbitPopulation(preyPop, d);
+		} else if(preyModel == POP_DUMMYPREY) {
+			prey = new DummyPreyPopulation(d, preyPop, Color.blue, 2.2, 2, 250);
+		} else if(preyModel == POP_PIG) {
+			prey = new PigPopulation("Filthy Pigs", d, preyPop, Color.pink, 2.0, 1.5, 225);
+		}
+		
+		if(grassModel == POP_GRASS) {
+			grass = new GrassPopulation("Grass", d, grassPop, Color.green, 1, 1, 0, 1500);
+		}
 
+		if(prey == null || pred == null || grass == null) {
+			throw new IllegalArgumentException("Wrong populations set.");
+		}
 		
-		prey.addPredator(predator);
+		prey.addPredator(pred);
 		prey.addPrey(grass);
-		predator.addPrey(prey);
+		
+		pred.addPrey(prey);
 		populations.add(prey);
-		populations.add(predator);
+		populations.add(pred);
 		populations.add(grass);
-		return populations;
+		
+		if(recordSimulation) {
+			recordedSimulation = new ArrayList<List<IPopulation>>(numIterations);
+		}
+		this.env = new SquareEnvironment(populations, readObsticlesFromFile(), mOnFinishListener, d.height, d.width);
 	}
 
 	private List<IObstacle> readObsticlesFromFile() {
@@ -235,7 +278,7 @@ public class EcoWorld {
 	 * If already started {@link IllegalStateException} will be thrown.
 	 * 
 	 */
-	public void start() throws IllegalStateException{
+	public synchronized void start() throws IllegalStateException{
 		if(!shouldRun.get()) {
 			executor = Executors.newSingleThreadExecutor();
 			this.timer = new TimerHandler();
@@ -249,6 +292,30 @@ public class EcoWorld {
 			}
 		} else {
 			 throw new IllegalStateException("EcoWorld already started.");
+		}
+	}
+	
+	/**
+	 * Stops the scheduling algorithms.
+	 * <p>
+	 * Warning! WILL affect ongoing execution!
+	 * <p>
+	 * If already stopped {@link IllegalStateException} will be thrown.	
+	 *  
+	 */
+	public void pause() throws IllegalStateException {
+		if(shouldRun.get()) {
+			shouldRun.set(false);
+			executor.shutdownNow();
+			timer.stop();
+			numUpdates = 0;
+			Log.i("EcoWorld paused.");
+			observers.firePropertyChange(EVENT_PAUSE, null, null);
+			if(recordSimulation) {
+				observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
+			}
+		} else {
+			 throw new IllegalStateException("EcoWorld already paused.");
 		}
 	}
 
@@ -267,6 +334,7 @@ public class EcoWorld {
 			timer.stop();
 			numUpdates = 0;
 			Log.i("EcoWorld stopped.");
+			observers.firePropertyChange(EVENT_STOP, null, null);
 			if(recordSimulation) {
 				observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
 			}

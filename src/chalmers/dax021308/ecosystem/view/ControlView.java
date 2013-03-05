@@ -56,6 +56,21 @@ public class ControlView extends JPanel {
 		JButton btnPause = new JButton("Pause");
 		btnPause.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(btnPause, "cell 2 0,alignx left,aligny top");
+		
+
+		JButton btnStartNew = new JButton("Start new Simulation");
+		btnStartNew.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					ew.stop();
+				} catch (IllegalStateException ex) {
+					//Don't care.
+				}
+				new NewSimulationView(ew);
+			}
+		});
+		btnStartNew.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		add(btnStartNew, "cell 1 0,alignx left,aligny top");
 
 	}
 
