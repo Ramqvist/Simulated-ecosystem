@@ -4,9 +4,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Gender;
+import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
@@ -17,6 +19,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public abstract class AbstractAgent implements IAgent {
 	protected Position position;
 	protected Position nextPosition;
+	protected Random ran;
 	protected String name;
 	protected Color color;
 	protected int width;
@@ -47,6 +50,7 @@ public abstract class AbstractAgent implements IAgent {
 		this.visionRange = visionRange;
 		this.maxAcceleration = maxAcceleration;
 		this.capacity = Integer.MAX_VALUE;
+		ran = new Random();
 	}
 
 	public AbstractAgent(String name, Position p, Color c, int width,
@@ -260,8 +264,8 @@ public abstract class AbstractAgent implements IAgent {
 						double h = 10;
 						newForce.x *= h;
 						newForce.y *= h;
-						arrayalForce.x = arrayalForce.x + newForce.x;
-						arrayalForce.y = arrayalForce.y + newForce.y;
+						arrayalForce.x = ( arrayalForce.x + newForce.x ) * ( ran.nextDouble()  + ran.nextDouble() );
+						arrayalForce.y = ( arrayalForce.y + newForce.y ) * ( ran.nextDouble()  + ran.nextDouble() );
 						nAgentsInVision = nAgentsInVision + 1.0;
 					}
 				}
