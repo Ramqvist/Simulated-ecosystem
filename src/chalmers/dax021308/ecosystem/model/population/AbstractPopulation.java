@@ -70,9 +70,38 @@ public abstract class AbstractPopulation implements IPopulation {
 			}
 		}
 	}
+	
+	/**
+	 * Override if you use linked-list as agentList
+	 */
 	@Override
 	public void update() {
-		for (IAgent a : agents) {
+		int agentSize = agents.size();
+		IAgent a;
+		for(int i = 0; i < agentSize; i++) {
+			a = agents.get(i);
+			a.calculateNextPosition(predators, preys, neutral, gridDimension);
+		}
+	}
+	
+	@Override
+	public void updateFirstHalf() {
+		int agentSize = agents.size();
+		int halfStart = agentSize / 2; 
+		IAgent a;
+		for(int i = 0; i < halfStart; i++) {
+			a = agents.get(i);
+			a.calculateNextPosition(predators, preys, neutral, gridDimension);
+		}
+	}
+	
+	@Override
+	public void updateSecondHalf() {
+		int agentSize = agents.size();
+		int halfStart = agentSize / 2; 
+		IAgent a;
+		for(int i = halfStart; i < agentSize; i++) {
+			a = agents.get(i);
 			a.calculateNextPosition(predators, preys, neutral, gridDimension);
 		}
 	}

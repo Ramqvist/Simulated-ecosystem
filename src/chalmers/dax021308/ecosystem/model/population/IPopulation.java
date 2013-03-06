@@ -87,4 +87,7 @@ public interface IPopulation extends Cloneable {
 	
 	public Color getColor();
 	
+	public void updateFirstHalf();
+	public void updateSecondHalf();
+	
 }
