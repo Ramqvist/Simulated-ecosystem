@@ -120,7 +120,7 @@ public class SquareEnvironment implements IEnvironment {
 	        futures.add(f);
 		}
 		
-		Log.v(lastSlowestPop + " Time in ms: " + (long) (0.000001*longestExecuteTime));
+		Log.v("Slowest population: " + lastSlowestPop + " Time in ms: " + (long) (0.000001*longestExecuteTime));
 
 
 		//Barrier synchronization here. Thread will wait for workers to finish execution.
@@ -155,10 +155,15 @@ public class SquareEnvironment implements IEnvironment {
 			} else {
 				if(executeFirstHalf) {
 					//Execute first half.
+					//p.updateFirstHalf();
 				} else {
-					//Execute secound half.
+					//Execute second half.
+					//p.updateSecondHalf();
 				}
 			}
+			/*if(dividePopulation) {
+			 	elapsedTime = elapsedTime * 2;
+			 */
 			long elapsedTime = System.nanoTime() - start;
 			if(elapsedTime > longestExecuteTime) {
 				longestExecuteTime = elapsedTime;
