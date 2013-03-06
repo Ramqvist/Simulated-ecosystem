@@ -83,13 +83,21 @@ public abstract class AbstractPopulation implements IPopulation {
 	}
 	
 	/**
-	 * Override if you use linked-list as agentList
+	 * Override if you use linked-list as agentList! (Default is ArrayList.)
+	 * <P>
+	 * Update the whole population, same as update(0, agents.size())M 
+	 * @param fromPos
+	 * @param toPos
 	 */
 	@Override
 	public void update() {
-		int agentSize = agents.size();
+		update(0, agents.size());
+	}
+	
+
+	public void update(int fromPos, int toPos) {
 		IAgent a;
-		for(int i = 0; i < agentSize; i++) {
+		for(int i = fromPos; i < toPos; i++) {
 			a = agents.get(i);
 			a.calculateNextPosition(predators, preys, neutral, gridDimension);
 			if(a.getEnergy()<=0){
@@ -102,28 +110,14 @@ public abstract class AbstractPopulation implements IPopulation {
 	public void updateFirstHalf() {
 		int agentSize = agents.size();
 		int halfStart = agentSize / 2; 
-		IAgent a;
-		for(int i = 0; i < halfStart; i++) {
-			a = agents.get(i);
-			a.calculateNextPosition(predators, preys, neutral, gridDimension);
-			if(a.getEnergy()<=0){
-				addToRemoveList(a);
-			}
-		}
+		update(0, halfStart);
 	}
 	
 	@Override
 	public void updateSecondHalf() {
 		int agentSize = agents.size();
 		int halfStart = agentSize / 2; 
-		IAgent a;
-		for(int i = halfStart; i < agentSize; i++) {
-			a = agents.get(i);
-			a.calculateNextPosition(predators, preys, neutral, gridDimension);
-			if(a.getEnergy()<=0){
-				addToRemoveList(a);
-			}
-		}
+		update(halfStart, agentSize);
 	}
 	
 	@Override
