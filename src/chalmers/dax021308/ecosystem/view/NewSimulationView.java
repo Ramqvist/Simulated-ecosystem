@@ -194,7 +194,7 @@ public class NewSimulationView {
 		tvPreyPopSize.setColumns(10);
 		
 		tvGrassPopSize = new JTextField();
-		tvGrassPopSize.setText("600");
+		tvGrassPopSize.setText("400");
 		tvGrassPopSize.setColumns(10);
 		
 		JLabel lblInitialSize = new JLabel("Initial size");
@@ -226,7 +226,7 @@ public class NewSimulationView {
 			}
 		});
 		sliderGrassSize.setMaximum(1200);
-		sliderGrassSize.setValue(600);
+		sliderGrassSize.setValue(400);
 		
 		final JSlider sliderPredSize = new JSlider();
 		sliderPredSize.setValue(10);

@@ -31,11 +31,11 @@ public class Stat {
 	 * @return the sample variance of the sample
 	 */
 	public static double sampleVariance(List<Integer> sample){
-		double mean = Stat.mean(sample);
 		int sampleSize = sample.size();
 		if(sampleSize<2){
 			return 0;
 		}
+		double mean = Stat.mean(sample);
 		int sum = 0;
 		for(int i=0; i<sampleSize; i++){
 			sum += (((double)sample.get(i))-mean)*(((double)sample.get(i))-mean);
