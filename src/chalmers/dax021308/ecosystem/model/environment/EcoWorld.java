@@ -46,7 +46,7 @@ import chalmers.dax021308.ecosystem.model.util.TimerHandler;
  * @author Erik Ramqvist
  * 
  */
-public class EcoWorld {
+public class EcoWorld implements IModel {
 	
 	/* Property change events constants */
 	public static final String EVENT_TICK               = "chalmers.dax021308.ecosystem.model.Ecoworld.event_tick";
@@ -484,10 +484,12 @@ public class EcoWorld {
 				List<IObstacle> obstacleList);
 	}
 
+	@Override
 	public void addObserver(PropertyChangeListener listener) {
 		observers.addPropertyChangeListener(listener);
 	}
-	
+
+	@Override
 	public void removeObserver(PropertyChangeListener listener) {
 		observers.removePropertyChangeListener(listener);
 	}

@@ -20,6 +20,7 @@ import com.sun.opengl.util.FPSAnimator;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Log;
@@ -63,7 +64,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 	/**
 	 * Create the panel.
 	 */
-	public OpenGLSimulationView(EcoWorld model, Dimension size, boolean showFPS) {
+	public OpenGLSimulationView(IModel model, Dimension size, boolean showFPS) {
 		this.size = size;
 		model.addObserver(this);
 		

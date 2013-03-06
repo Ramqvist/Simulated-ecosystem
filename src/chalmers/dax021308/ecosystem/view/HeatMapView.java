@@ -18,6 +18,7 @@ import com.sun.opengl.util.FPSAnimator;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -59,7 +60,7 @@ public class HeatMapView extends GLCanvas implements IView {
 	/**
 	 * Create the panel.
 	 */
-	public HeatMapView(EcoWorld model, Dimension grid, double samplingConstant, String populationName) {
+	public HeatMapView(IModel model, Dimension grid, double samplingConstant, String populationName) {
 		this.grid = grid;
 		this.samplingConstant = samplingConstant;
 		this.populationName = populationName;
