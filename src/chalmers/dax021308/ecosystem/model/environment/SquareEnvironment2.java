@@ -22,7 +22,10 @@ import chalmers.dax021308.ecosystem.model.util.Position;
  * @author Henrik, for concurrency: Erik Ramqvist
  * 
  */
-public class SquareEnvironment implements IEnvironment {
+public class SquareEnvironment2 implements IEnvironment {
+	
+	private static final int NUMAGENTS_PER_WORKPOOL = 200;
+	
 	// Should maybe use an abstract class Environment where suitable instance
 	// variables can be declared
 	private List<IPopulation> populations;
@@ -51,7 +54,7 @@ public class SquareEnvironment implements IEnvironment {
 	 * @param width
 	 *            The width of the environment
 	 */
-	public SquareEnvironment(List<IPopulation> populations,
+	public SquareEnvironment2(List<IPopulation> populations,
 			List<IObstacle> obstacles, OnFinishListener listener, int height,
 			int width) {
 		this.populations = populations;
@@ -82,10 +85,37 @@ public class SquareEnvironment implements IEnvironment {
 	 */
 	public void run() {
 
+        futures.clear();
         //Assign objects to workers.
 		longestExecuteTime = 0;
 		for(int i = 0 ; i < populations.size(); i ++) {
-			popWorkers[i].p = populations.get(i);
+			IPopulation p = populations.get(i);
+			int computationalFactor = 1;//p.getComputationalFactor();
+			int j = 0;
+			while(j < p.getSize()) {
+				PopulationWorker popWork = new PopulationWorker();
+				popWork.startPos = j;
+				popWork.p = p;
+				j = j + computationalFactor*NUMAGENTS_PER_WORKPOOL;
+				if(j > p.getSize()) {
+					popWork.endPos = p.getSize();							
+				} else {
+					popWork.endPos = j;					
+				}
+				Future f = workPool.submit(popWork);
+				//Log.v("Adding " + p + " to work between " + popWork.startPos + " and " + popWork.endPos + " ");
+		        futures.add(f);
+			}
+			if(computationalFactor*NUMAGENTS_PER_WORKPOOL < p.getSize()) {
+				PopulationWorker popWork = new PopulationWorker();
+				popWork.startPos = 0;
+				popWork.p = p;
+				popWork.endPos = p.getSize();
+				Future f = workPool.submit(popWork);
+				//Log.v("Adding " + p + " to work between " + popWork.startPos + " and " + popWork.endPos + " ");
+		        futures.add(f);
+			}
+			/*popWorkers[i].p = p;
 			//If this is the slowest population.
 			if(popWorkers[i].p == lastSlowestPop) {
 				popWorkers[i].dividePopulation = true;
@@ -98,7 +128,7 @@ public class SquareEnvironment implements IEnvironment {
 		        futures.add(f);
 			}
 			Future f = workPool.submit(popWorkers[i]);
-	        futures.add(f);
+	        futures.add(f);*/
 		}
 
 
@@ -144,6 +174,10 @@ public class SquareEnvironment implements IEnvironment {
 	
 	private class PopulationWorker implements Runnable {
 		private IPopulation p;
+		
+		private int startPos;
+		private int endPos;
+		
 		private boolean dividePopulation;
 		private boolean executeFirstHalf;
 		
@@ -151,7 +185,8 @@ public class SquareEnvironment implements IEnvironment {
 		public void run() {
 			//Calculate one iteration. But only calculate it!
 			long start = System.nanoTime();
-			if(!dividePopulation) {
+			p.update(startPos, endPos);
+			/*if(!dividePopulation) {
 				p.update();
 			} else {
 				if(executeFirstHalf) {
@@ -170,7 +205,7 @@ public class SquareEnvironment implements IEnvironment {
 			if(elapsedTime > longestExecuteTime) {
 				longestExecuteTime = elapsedTime;
 				lastSlowestPop = p;
-			}
+			}*/
 		}
 	}
 	

@@ -102,5 +102,7 @@ public interface IPopulation extends Cloneable {
 
 	public void updateFirstHalf();
 	public void updateSecondHalf();
+
+	public void update(int startPos, int endPos);
 	
 }
