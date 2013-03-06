@@ -3,9 +3,11 @@ package chalmers.dax021308.ecosystem.model.population;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
+import chalmers.dax021308.ecosystem.model.util.Stat;
 
 /**
  * 
@@ -20,6 +22,7 @@ public abstract class AbstractPopulation implements IPopulation {
 	protected List<IPopulation> predators;
 	protected List<IPopulation> neutral;
 	protected List<IAgent> removeList;
+	protected List<Integer> lifeLengths;
 	protected boolean groupBehaviour;
 	private String name;
 
@@ -28,6 +31,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		predators = new ArrayList<IPopulation>();
 		neutral = new ArrayList<IPopulation>();
 		removeList = new ArrayList<IAgent>();
+		lifeLengths = new LinkedList<Integer>();
 	}
 	
 	public AbstractPopulation(String name, Dimension gridDimension) {
@@ -162,8 +166,13 @@ public abstract class AbstractPopulation implements IPopulation {
 				kids.addAll(spawn);
 			}
 		}
-		if (kids != null)
+		if (kids != null) {
 			agents.addAll(kids);
+		}
+		
+//		System.out.println(name + " life length: mean = " + Stat.mean(lifeLengths) + 
+//							" | variance = " + Stat.sampleVariance(lifeLengths) + 
+//							" | sample size = " + lifeLengths.size());
 	}
 	
 	/**
@@ -175,6 +184,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		IAgent a;
 		for(int i = 0 ; i < removeList.size() ; i++)  {
 			a = removeList.get(i);
+			lifeLengths.add(a.getLifeLength());
 			agents.remove(a);
 		}
 		removeList.clear();

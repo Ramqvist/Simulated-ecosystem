@@ -22,16 +22,18 @@ public abstract class AbstractAgent implements IAgent {
 	protected Random ran;
 	protected String name;
 	protected Color color;
+	protected boolean groupBehaviour;
 	protected int width;
 	protected int height;
 	protected int capacity;
+	protected int lifeLength;
 	protected Vector velocity;
 	protected Gender gender;
 	protected double fitness;
 	protected double maxSpeed;
 	protected double visionRange;
 	protected double maxAcceleration;
-	protected boolean groupBehaviour;
+	
 	protected final static double INTERACTION_RANGE = 10;
 	protected final static double WALL_CONSTANT = 2;
 	protected static final double VELOCITY_DECAY = 1;
@@ -50,6 +52,7 @@ public abstract class AbstractAgent implements IAgent {
 		this.visionRange = visionRange;
 		this.maxAcceleration = maxAcceleration;
 		this.capacity = Integer.MAX_VALUE;
+		this.lifeLength = 0;
 		ran = new Random();
 	}
 
@@ -130,13 +133,13 @@ public abstract class AbstractAgent implements IAgent {
 	}
 
 	@Override
-	public void updatePosition() {
-		this.position = new Position(nextPosition);
-	}
-
-	@Override
 	public Gender getGender() {
 		return gender;
+	}
+	
+	@Override
+	public int getLifeLength(){
+		return this.lifeLength;
 	}
 
 	@Override
@@ -164,6 +167,17 @@ public abstract class AbstractAgent implements IAgent {
 	}
 
 	/**
+	 * Updates an agents position after all calculations for all
+	 * agents have been done.
+	 */
+	@Override
+	public void updatePosition() {
+		this.position = new Position(nextPosition);
+		this.lifeLength++;
+	}
+	
+	/**
+	 * @author Sebbe
 	 * A random force that the agent gets influenced by.
 	 * Can be interpreted as an estimation error that the
 	 * agent does in where to head.
@@ -289,7 +303,7 @@ public abstract class AbstractAgent implements IAgent {
 	
 	/**
 	 * * @author Sebbe The environment force is at the moment defined as
-	 * 1/(wall-constant*(distance to wall)^2). The agents feel the forces from
+	 * 1/((wall-constant)*(distance to wall))^2. The agents feel the forces from
 	 * the wall directly to the left, right, top and bottom.
 	 * 
 	 * @param dim

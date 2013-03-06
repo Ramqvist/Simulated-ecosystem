@@ -258,7 +258,7 @@ public class EcoWorld {
 		}
 		
 		if(grassModel == POP_GRASS) {
-			grass = new GrassPopulation("Grass", d, grassPop, Color.green, 1, 1, 0, 1500);
+			grass = new GrassPopulation("Grass", d, grassPop, Color.green, 1, 1, 0, 200);
 		}
 
 		if(prey == null || pred == null || grass == null) {

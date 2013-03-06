@@ -41,7 +41,7 @@ public class GrassAgent extends AbstractAgent {
 
 	@Override
 	public void updatePosition() {
-		// Do nothing, grass shouldn't move!
+		lifeLength++;
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class GrassAgent extends AbstractAgent {
 		if (Math.random() < REPRODUCTION_RATE * (1.0 - popSize / cap)) {
 			List<IAgent> spawn = new ArrayList<IAgent>();
 			IAgent a = new GrassAgent(name,
-					getSpawnPosition(), color, 5, 5, velocity,
+					calculateNewPosition(), color, 5, 5, velocity,
 					maxSpeed, gridDimension, capacity);
 			spawn.add(a);
 			return spawn;

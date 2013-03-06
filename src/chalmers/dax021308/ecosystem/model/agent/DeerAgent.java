@@ -57,6 +57,9 @@ public class DeerAgent extends AbstractAgent {
 
 	/**
 	 * @author Sebbe
+	 * Calculates the next position of the agent depending on
+	 * the forces that affects it. Note: The next position is 
+	 * not set until updatePosition() is called.
 	 */
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,

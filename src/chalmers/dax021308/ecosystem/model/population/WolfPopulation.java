@@ -65,12 +65,11 @@ public class WolfPopulation extends AbstractPopulation {
 		for(int i=0; i<size; i++){
 			a = (WolfAgent) agents.get(i);
 			if(a.getEnergy()<=0){
-				agents.remove(i);
-				i--;
-				size--;
+				removeList.add(a);
 			}
 		}
 	}
+	
 	@Override
 	public double calculateFitness(IAgent agent) {
 		// TODO Auto-generated method stub
