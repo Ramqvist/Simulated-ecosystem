@@ -255,13 +255,31 @@ public class NewSimulationView {
 		sliderNumMinutes.setSnapToTicks(true);
 		sliderNumMinutes.setPaintTicks(true);
 		sliderNumMinutes.setPaintLabels(true);
+		
+		JList list = new JList();
+		list.setValueIsAdjusting(true);
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list.setSelectedIndices(new int[] {3});
+		list.setModel(new AbstractListModel() {
+			String[] values = new String[] {"500 x 500", "1000 x 1000", "1500 x 1500", "2500 x 2500"};
+			public int getSize() {
+				return values.length;
+			}
+			public Object getElementAt(int index) {
+				return values[index];
+			}
+		});
+		list.setSelectedIndex(0);
+		
+		JLabel lblSimulationDimension = new JLabel("Simulation dimension");
+		lblSimulationDimension.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		GroupLayout groupLayout = new GroupLayout(frmSimulatedEcosystem.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblPrededators, GroupLayout.DEFAULT_SIZE, 643, Short.MAX_VALUE)
+						.addComponent(lblPrededators, GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblPreys, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
@@ -294,30 +312,37 @@ public class NewSimulationView {
 											.addComponent(label, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 											.addComponent(tvPreyPopSize)
 											.addComponent(sliderPreySize, GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)))))
+							.addGap(18)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addGroup(groupLayout.createSequentialGroup()
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addGroup(groupLayout.createSequentialGroup()
-											.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE)
-											.addPreferredGap(ComponentPlacement.RELATED)
-											.addComponent(btnRunSim, GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE))
-										.addGroup(groupLayout.createSequentialGroup()
-											.addComponent(sliderNumMinutes, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-											.addPreferredGap(ComponentPlacement.UNRELATED)
-											.addComponent(tvNumMinutes, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))
-										.addComponent(lblIterationDelay)
-										.addGroup(groupLayout.createSequentialGroup()
-											.addComponent(slider_delaylength, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-											.addPreferredGap(ComponentPlacement.UNRELATED)
-											.addComponent(textfield_Iterationdelay, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))
-										.addComponent(lblSimulationDuration, GroupLayout.PREFERRED_SIZE, 175, GroupLayout.PREFERRED_SIZE))
-									.addGap(5))
-								.addGroup(groupLayout.createSequentialGroup()
-									.addGap(18)
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addComponent(rdbtnNewRadioButton)
-										.addComponent(chckbxRecordSimulation))
-									.addContainerGap())))))
+									.addComponent(list, GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE)
+									.addContainerGap())
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addGroup(groupLayout.createSequentialGroup()
+										.addComponent(lblSimulationDimension, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addContainerGap())
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+											.addGroup(groupLayout.createSequentialGroup()
+												.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(btnRunSim, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))
+											.addGroup(groupLayout.createSequentialGroup()
+												.addComponent(sliderNumMinutes, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.UNRELATED)
+												.addComponent(tvNumMinutes, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))
+											.addComponent(lblIterationDelay)
+											.addGroup(groupLayout.createSequentialGroup()
+												.addComponent(slider_delaylength, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.UNRELATED)
+												.addComponent(textfield_Iterationdelay, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))
+											.addComponent(lblSimulationDuration, GroupLayout.PREFERRED_SIZE, 175, GroupLayout.PREFERRED_SIZE))
+										.addGap(5))
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+											.addComponent(rdbtnNewRadioButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+											.addComponent(chckbxRecordSimulation))
+										.addContainerGap()))))))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -374,7 +399,11 @@ public class NewSimulationView {
 									.addGap(18)
 									.addComponent(rdbtnNewRadioButton)
 									.addComponent(chckbxRecordSimulation))
-								.addComponent(tvNumMinutes, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+								.addComponent(tvNumMinutes, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(25)
+							.addComponent(lblSimulationDimension, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(list, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)))
 					.addGap(11)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
