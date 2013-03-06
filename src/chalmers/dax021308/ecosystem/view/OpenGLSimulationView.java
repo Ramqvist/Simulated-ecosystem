@@ -152,6 +152,12 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 			//removeAll();
 			//repaint();
 			//revalidate();
+		} else if(eventName == EcoWorld.EVENT_DIMENSIONCHANGED) {
+			Object o = event.getNewValue();
+			if(o instanceof Dimension) {
+				Dimension d = (Dimension) o;
+			}
+			//Handle dimension change here.
 		}
 	}
 	

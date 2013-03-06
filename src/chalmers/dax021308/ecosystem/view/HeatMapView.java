@@ -85,6 +85,12 @@ public class HeatMapView extends GLCanvas implements IView {
 				this.newPops = clonePopulationList((List<IPopulation>) event.getNewValue());
 			}	
 			repaint();
+		} else if(eventName == EcoWorld.EVENT_DIMENSIONCHANGED) {
+			Object o = event.getNewValue();
+			if(o instanceof Dimension) {
+				Dimension d = (Dimension) o;
+			}
+			//Handle dimension change here.
 		}
 	}
 	

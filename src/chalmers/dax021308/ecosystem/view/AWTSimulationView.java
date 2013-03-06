@@ -121,6 +121,12 @@ public class AWTSimulationView extends JPanel implements IView {
 				this.newObs = (List<IObstacle>) event.getOldValue();
 			}
 			repaint();
+		} else if(eventName == EcoWorld.EVENT_DIMENSIONCHANGED) {
+			Object o = event.getNewValue();
+			if(o instanceof Dimension) {
+				Dimension d = (Dimension) o;
+			}
+			//Handle dimension change here.
 		}
 	}
 	
