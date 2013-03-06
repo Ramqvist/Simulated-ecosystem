@@ -218,6 +218,19 @@ public class EcoWorld {
 	public synchronized void setSimulationDimension(Dimension d) {
 		this.d = d;
 	}
+	
+	public synchronized void setSimulationDimension(String dimConstant) {
+		if(dimConstant == DIM_XLARGE) {
+			d = D_XLARGE;
+		} else if(dimConstant == DIM_LARGE) {
+			d = D_LARGE;
+		} else if(dimConstant == DIM_MEDIUM) {
+			d = D_MEDIUM;
+		} else if(dimConstant == DIM_SMALL) {
+			d = D_SMALL;
+		}
+	}
+	
 
 
 	/**
@@ -305,7 +318,7 @@ public class EcoWorld {
 	 * If already started {@link IllegalStateException} will be thrown.
 	 * 
 	 */
-	public synchronized void start() throws IllegalStateException{
+	public synchronized void start() throws IllegalStateException {
 		if(!shouldRun.get()) {
 			executor = Executors.newSingleThreadExecutor();
 			this.timer = new TimerHandler();

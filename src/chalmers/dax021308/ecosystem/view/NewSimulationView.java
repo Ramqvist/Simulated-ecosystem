@@ -47,7 +47,8 @@ public class NewSimulationView {
 	private JList preyList  = new JList();;
 	private JList grassList = new JList();
 	private JCheckBox chckbxRecordSimulation;
-	private JTextField tvNumMinutes;;
+	private JTextField tvNumMinutes;
+	private JList listSimulationDim;;
 
 	/**
 	 * Create the application.
@@ -84,6 +85,7 @@ public class NewSimulationView {
 			Log.v("NUMITERATIONS: " + numIterations);
 			model.setNumIterations(numIterations);
 		}
+		model.setSimulationDimension((String) listSimulationDim.getSelectedValue());
 	}
 	
 
@@ -171,12 +173,11 @@ public class NewSimulationView {
 		grassList.setValueIsAdjusting(true);
 		grassList.setSelectedIndices(new int[] {3});
 		grassList.setModel(new AbstractListModel() {
-			String[] values = EcoWorld.GRASS_VALUES;
 			public int getSize() {
-				return values.length;
+				return EcoWorld.GRASS_VALUES.length;
 			}
 			public Object getElementAt(int index) {
-				return values[index];
+				return EcoWorld.GRASS_VALUES[index];
 			}
 		});
 		grassList.setSelectedIndex(0);
@@ -256,20 +257,19 @@ public class NewSimulationView {
 		sliderNumMinutes.setPaintTicks(true);
 		sliderNumMinutes.setPaintLabels(true);
 		
-		JList list = new JList();
-		list.setValueIsAdjusting(true);
-		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.setSelectedIndices(new int[] {3});
-		list.setModel(new AbstractListModel() {
-			String[] values = new String[] {"500 x 500", "1000 x 1000", "1500 x 1500", "2500 x 2500"};
+		listSimulationDim = new JList();
+		listSimulationDim.setValueIsAdjusting(true);
+		listSimulationDim.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		listSimulationDim.setSelectedIndices(new int[] {3});
+		listSimulationDim.setModel(new AbstractListModel() {
 			public int getSize() {
-				return values.length;
+				return EcoWorld.DIM_VALUES.length;
 			}
 			public Object getElementAt(int index) {
-				return values[index];
+				return EcoWorld.DIM_VALUES[index];
 			}
 		});
-		list.setSelectedIndex(0);
+		listSimulationDim.setSelectedIndex(0);
 		
 		JLabel lblSimulationDimension = new JLabel("Simulation dimension");
 		lblSimulationDimension.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -315,7 +315,7 @@ public class NewSimulationView {
 							.addGap(18)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(list, GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE)
+									.addComponent(listSimulationDim, GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE)
 									.addContainerGap())
 								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 									.addGroup(groupLayout.createSequentialGroup()
@@ -403,7 +403,7 @@ public class NewSimulationView {
 							.addGap(25)
 							.addComponent(lblSimulationDimension, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(list, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(listSimulationDim, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)))
 					.addGap(11)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
