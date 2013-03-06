@@ -64,6 +64,7 @@ public class NewSimulationView {
 	
 	private void startSimulation() {
 		model.setNumIterations(Integer.MAX_VALUE);
+		model.setSimulationDimension((String) listSimulationDim.getSelectedValue());
 		int tickDelay = Integer.parseInt(textfield_Iterationdelay.getText());
 		if(tickDelay < 1) {
 			model.setRunWithoutTimer(true);			
@@ -85,7 +86,6 @@ public class NewSimulationView {
 			Log.v("NUMITERATIONS: " + numIterations);
 			model.setNumIterations(numIterations);
 		}
-		model.setSimulationDimension((String) listSimulationDim.getSelectedValue());
 	}
 	
 
@@ -269,7 +269,7 @@ public class NewSimulationView {
 				return EcoWorld.DIM_VALUES[index];
 			}
 		});
-		listSimulationDim.setSelectedIndex(0);
+		listSimulationDim.setSelectedIndex(1);
 		
 		JLabel lblSimulationDimension = new JLabel("Simulation dimension");
 		lblSimulationDimension.setFont(new Font("Tahoma", Font.PLAIN, 14));
