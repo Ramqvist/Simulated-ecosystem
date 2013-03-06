@@ -21,6 +21,13 @@ public abstract class AbstractPopulation implements IPopulation {
 	protected List<IPopulation> preys;
 	protected List<IPopulation> predators;
 	protected List<IPopulation> neutral;
+	/**
+	 * Remove list for this Population. 
+	 * <p>
+	 * Use the method {@link IPopulation#addToRemoveList(IAgent)} for adding to this list! And not removeList.add()!
+	 * <p>
+	 * This method is used to synchronize the adding of agents, i.e. several threads can add at the same time.
+	 */
 	protected List<IAgent> removeList;
 	protected Color color = Color.BLACK;	// Standard color for population.
 	protected List<Integer> lifeLengths;
