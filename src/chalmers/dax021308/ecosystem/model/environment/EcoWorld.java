@@ -19,19 +19,17 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.jfree.text.G2TextMeasurer;
-
 import chalmers.dax021308.ecosystem.model.agent.AbstractAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.DeerPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPredatorPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPreyPopulation;
-import chalmers.dax021308.ecosystem.model.population.PigPopulation;
-import chalmers.dax021308.ecosystem.model.population.WolfPopulation;
 import chalmers.dax021308.ecosystem.model.population.GrassPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.population.PigPopulation;
 import chalmers.dax021308.ecosystem.model.population.RabbitPopulation;
+import chalmers.dax021308.ecosystem.model.population.WolfPopulation;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.TimerHandler;
 
@@ -103,6 +101,8 @@ public class EcoWorld implements IModel {
 	/* Time measurements variables */
 	private long startIterationTime;
 	private long elapsedTime;
+	
+	public static WorldGrid worldGrid;
 	
 	/**
 	 * Each list in the list contains one snapshot of frame;
@@ -198,6 +198,8 @@ public class EcoWorld implements IModel {
 				skipBoolean = true;
 			}
 		}
+		
+		worldGrid = new WorldGrid(d, 100);
 
 		this.runWithoutTimer = false;
 		this.numIterations = numIterations;
@@ -264,6 +266,7 @@ public class EcoWorld implements IModel {
 
 	public void createInitialPopulations(String predatorModel, int predPop, String preyModel, int preyPop, String grassModel, int grassPop) throws IllegalArgumentException {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
+		
 		IPopulation prey = null;
 		IPopulation pred = null;
 		IPopulation grass = null;
@@ -273,12 +276,11 @@ public class EcoWorld implements IModel {
 		} else if(predatorModel == POP_WOLF) {
 			pred = new WolfPopulation("Wolves", d, predPop, Color.red, 2.5, 0.8,250, true);
 		} 
-		
-		
+
 		if(preyModel == POP_DEER) {
 			prey = new DeerPopulation("Deers", d, preyPop, Color.blue, 2.0, 2, 200, true);
 		} else if(preyModel == POP_RABBIT) {
-			prey = new RabbitPopulation(preyPop, d);
+			prey = new RabbitPopulation("Rabbits", d, preyPop, Color.lightGray, 10, 10, 200);
 		} else if(preyModel == POP_DUMMYPREY) {
 			prey = new DummyPreyPopulation(d, preyPop, Color.blue, 2.2, 2, 250);
 		} else if(preyModel == POP_PIG) {
@@ -634,5 +636,4 @@ public class EcoWorld implements IModel {
 		pw.close();
 		return true;
 	}
-	
 }
