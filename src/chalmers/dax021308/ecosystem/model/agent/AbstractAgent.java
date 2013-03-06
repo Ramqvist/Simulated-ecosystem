@@ -136,6 +136,7 @@ public abstract class AbstractAgent implements IAgent {
 		this.fitness = fitness;
 	}
 
+	@Override
 	public Gender getGender() {
 		return gender;
 	}

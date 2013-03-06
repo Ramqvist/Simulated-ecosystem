@@ -95,7 +95,6 @@ public interface IPopulation extends Cloneable {
 	 */
 	public Color getColor();
 	
-
 	/**
 	 * @return Size of the population.
 	 */
