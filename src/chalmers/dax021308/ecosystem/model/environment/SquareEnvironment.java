@@ -9,12 +9,17 @@ import java.util.concurrent.Future;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld.OnFinishListener;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 
 /**
  * SquareEnvironment Class. Represents a environment in the shape of a square.
+ * <p>
+ * Contains workers that execute the updates of the Population in parallel.
+ * <p>
+ * The workers is represented as a seperate thread in a {@link ExecutorService}.
  * 
- * @author Henrik, concurrency: Erik
+ * @author Henrik, for concurrency: Erik Ramqvist
  * 
  */
 public class SquareEnvironment implements IEnvironment {
@@ -29,6 +34,9 @@ public class SquareEnvironment implements IEnvironment {
 	private List<Future<Runnable>> futures;
 	private PopulationWorker  popWorkers[];
 	private FinilizeIteration finWorkers[];
+	private PopulationWorker extraPopWorker;
+	private IPopulation lastSlowestPop;
+	private long longestExecuteTime;
 
 	/**
 	 * 
@@ -51,12 +59,13 @@ public class SquareEnvironment implements IEnvironment {
 		this.mListener = listener;
 		
 		//Create one Worker for each population.
-		this.workPool = Executors.newFixedThreadPool(populations.size());
+		this.workPool = Executors.newFixedThreadPool(populations.size() + 1);
 		//Create the list of executing tasks, for barrier synchronization.
 		this.futures = new ArrayList<Future<Runnable>>();
 		
 		//Create the worker objects. (Reusable for memory and performance.)
 		this.popWorkers = new PopulationWorker[populations.size()];
+		this.extraPopWorker = new PopulationWorker();
 		for(int i = 0; i < popWorkers.length ; i++) {
 			popWorkers[i] = new PopulationWorker();
 		}
@@ -74,11 +83,22 @@ public class SquareEnvironment implements IEnvironment {
 	public void run() {
 
         //Assign objects to workers.
+		longestExecuteTime = 0;
 		for(int i = 0 ; i < populations.size(); i ++) {
 			popWorkers[i].p = populations.get(i);
+			//If this is the slowest population.
+			if(popWorkers[i].p == lastSlowestPop) {
+				//popWorkers[i].dividePopulation = true;
+				extraPopWorker.dividePopulation = true;
+				extraPopWorker.p = lastSlowestPop;
+				
+				extraPopWorker.executeFirstHalf = false;
+				popWorkers[i].executeFirstHalf = true;
+			}
 			Future f = workPool.submit(popWorkers[i]);
 	        futures.add(f);
 		}
+
 
 		//Barrier synchronization here. Thread will wait for workers to finish execution.
         for (Future<Runnable> fut : futures)
@@ -99,6 +119,8 @@ public class SquareEnvironment implements IEnvironment {
 			Future f = workPool.submit(finWorkers[i]);
 	        futures.add(f);
 		}
+		
+		Log.v(lastSlowestPop + " Time in ms: " + (long) (0.000001*longestExecuteTime));
 
 
 		//Barrier synchronization here. Thread will wait for workers to finish execution.
@@ -121,11 +143,27 @@ public class SquareEnvironment implements IEnvironment {
 	
 	private class PopulationWorker implements Runnable {
 		private IPopulation p;
+		private boolean dividePopulation;
+		private boolean executeFirstHalf;
 		
 		@Override
 		public void run() {
 			//Calculate one iteration. But only calculate it!
-			p.update();
+			long start = System.nanoTime();
+			if(!dividePopulation) {
+				p.update();
+			} else {
+				if(executeFirstHalf) {
+					//Execute first half.
+				} else {
+					//Execute secound half.
+				}
+			}
+			long elapsedTime = System.nanoTime() - start;
+			if(elapsedTime > longestExecuteTime) {
+				longestExecuteTime = elapsedTime;
+				lastSlowestPop = p;
+			}
 		}
 	}
 	

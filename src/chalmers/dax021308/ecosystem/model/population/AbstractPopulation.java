@@ -190,5 +190,10 @@ public abstract class AbstractPopulation implements IPopulation {
 	public Color getColor() {
 		return agents.get(0).getColor();
 	}
+	
+	@Override
+	public String toString() {
+		return "Population name: " + name + " NumAgents:" + agents.size();
+	}
 
 }
