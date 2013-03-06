@@ -20,6 +20,7 @@ import com.sun.opengl.util.FPSAnimator;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
@@ -64,7 +65,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 	/**
 	 * Create the panel.
 	 */
-	public OpenGLSimulationView(EcoWorld model, Dimension size, boolean showFPS) {
+	public OpenGLSimulationView(IModel model, Dimension size, boolean showFPS) {
 		this.size = size;
 		model.addObserver(this);
 		
@@ -152,6 +153,11 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 			//removeAll();
 			//repaint();
 			//revalidate();
+		} else if(eventName == EcoWorld.EVENT_DIMENSIONCHANGED) {
+			Object o = event.getNewValue();
+			if(o instanceof Dimension) {
+				this.size = (Dimension) o;
+			}
 		}
 	}
 	
@@ -226,7 +232,10 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 
                 //Background drawing
                 //Color of the background.
-                gl.glColor4f(1, 1, 1, 1);
+                //white
+                //gl.glColor4f(1, 1, 1, 1);
+                //Brown
+                gl.glColor4f(1, 0.8F, 0.6F, 1);
           		gl.glBegin(GL.GL_POLYGON);
           		gl.glVertex2d(0, 0);
           		gl.glVertex2d(0, frameHeight);

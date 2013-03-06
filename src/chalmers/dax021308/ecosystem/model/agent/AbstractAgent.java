@@ -22,26 +22,25 @@ public abstract class AbstractAgent implements IAgent {
 	protected Random ran;
 	protected String name;
 	protected Color color;
+	protected boolean groupBehaviour;
 	protected int width;
 	protected int height;
 	protected int capacity;
-	
+	protected int lifeLength;
+	protected int energy = 1000; // set specific energy level in subclasses
 	protected Vector velocity;
 	protected Gender gender;
 	protected double fitness;
 	protected double maxSpeed;
 	protected double visionRange;
 	protected double maxAcceleration;
-	protected boolean groupBehaviour;
+	private boolean isAlive;
+	
 	protected final static double INTERACTION_RANGE = 10;
 	protected final static double WALL_CONSTANT = 2;
 	protected static final double VELOCITY_DECAY = 1;
 	protected static final double RANDOM_FORCE_MAGNITUDE = 0.05;
-	protected final int LIFE_LENGTH = 5000;
-	protected int energy = LIFE_LENGTH;
-
 	
-
 
 	public AbstractAgent(String name, Position p, Color c, int width,
 			int height, Vector velocity, double maxSpeed, double visionRange,
@@ -56,7 +55,9 @@ public abstract class AbstractAgent implements IAgent {
 		this.visionRange = visionRange;
 		this.maxAcceleration = maxAcceleration;
 		this.capacity = Integer.MAX_VALUE;
+		this.lifeLength = 0;
 		ran = new Random();
+		this.isAlive = true;
 	}
 
 	public AbstractAgent(String name, Position p, Color c, int width,
@@ -135,15 +136,13 @@ public abstract class AbstractAgent implements IAgent {
 		this.fitness = fitness;
 	}
 
-	@Override
-	public void updatePosition() {
-		this.position = new Position(nextPosition);
-		this.energy--;
-	}
-
-	@Override
 	public Gender getGender() {
 		return gender;
+	}
+	
+	@Override
+	public int getLifeLength(){
+		return this.lifeLength;
 	}
 
 	public int getEnergy() {
@@ -175,6 +174,17 @@ public abstract class AbstractAgent implements IAgent {
 	}
 
 	/**
+	 * Updates an agents position after all calculations for all
+	 * agents have been done.
+	 */
+	@Override
+	public void updatePosition() {
+		this.position = new Position(nextPosition);
+		this.lifeLength++;
+	}
+	
+	/**
+	 * @author Sebbe
 	 * A random force that the agent gets influenced by.
 	 * Can be interpreted as an estimation error that the
 	 * agent does in where to head.
@@ -300,7 +310,7 @@ public abstract class AbstractAgent implements IAgent {
 	
 	/**
 	 * * @author Sebbe The environment force is at the moment defined as
-	 * 1/(wall-constant*(distance to wall)^2). The agents feel the forces from
+	 * 1/((wall-constant)*(distance to wall))^2. The agents feel the forces from
 	 * the wall directly to the left, right, top and bottom.
 	 * 
 	 * @param dim
@@ -367,6 +377,22 @@ public abstract class AbstractAgent implements IAgent {
 		environmentForce.setVector(xForce, yForce);
 
 		return environmentForce;
+	}
+	
+	/**
+	 * Try to consume this agent
+	 * <p>
+	 * Return true if consumed, otherwise false.
+	 * <p>
+	 * Thread-safe
+	 */
+	@Override
+	public synchronized boolean consumeAgent() {
+		if(isAlive) {
+			isAlive = false;
+			return true;
+		}
+		return false;
 	}
 
 	/**

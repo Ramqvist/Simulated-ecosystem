@@ -67,9 +67,14 @@ public interface IAgent extends Cloneable {
 	public Vector getVelocity();
 	
 	/**
-	 * @param speed - The new velocity.
+	 * @param velocity - The new velocity.
 	 */
 	public void setVelocity(Vector velocity);
+	
+	/**
+	 * @return the life length of an agent.
+	 */
+	public int getLifeLength();
 	
 	/**
 	 * Tries to create one or more new IAgents, with data from the two provided IAgents.
@@ -95,6 +100,8 @@ public interface IAgent extends Cloneable {
 	 * @throws CloneNotSupportedException 
 	 */
 	public IAgent cloneAgent() throws CloneNotSupportedException;
+	
+	public boolean consumeAgent();
 
 	public String toBinaryString();
 

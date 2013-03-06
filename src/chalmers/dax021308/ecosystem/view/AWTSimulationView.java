@@ -21,6 +21,7 @@ import sun.misc.Cleaner;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
@@ -52,7 +53,7 @@ public class AWTSimulationView extends JPanel implements IView {
 	/**
 	 * Create the panel.
 	 */
-	public AWTSimulationView(EcoWorld model, Dimension size, boolean showFPS) {
+	public AWTSimulationView(IModel model, Dimension size, boolean showFPS) {
 		model.addObserver(this);
 		this.setBackground(Color.white);
 		gridDimension = size;
@@ -121,6 +122,11 @@ public class AWTSimulationView extends JPanel implements IView {
 				this.newObs = (List<IObstacle>) event.getOldValue();
 			}
 			repaint();
+		} else if(eventName == EcoWorld.EVENT_DIMENSIONCHANGED) {
+			Object o = event.getNewValue();
+			if(o instanceof Dimension) {
+				this.gridDimension = (Dimension) o;
+			}
 		}
 	}
 	

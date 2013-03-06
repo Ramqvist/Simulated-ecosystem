@@ -19,7 +19,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class DeerAgent extends AbstractAgent {
 
-	protected static final int LIFE_LENGTH = 1200;
+	private static final int MAX_ENERGY = 1100;
 	private boolean hungry = true;
 	private static final double REPRODUCTION_RATE = 0.15;
 	
@@ -30,7 +30,7 @@ public class DeerAgent extends AbstractAgent {
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
 
-		this.energy = LIFE_LENGTH;
+		this.energy = MAX_ENERGY;
 		this.groupBehaviour = groupBehaviour;
 
 	}
@@ -60,6 +60,9 @@ public class DeerAgent extends AbstractAgent {
 
 	/**
 	 * @author Sebbe
+	 * Calculates the next position of the agent depending on
+	 * the forces that affects it. Note: The next position is 
+	 * not set until updatePosition() is called.
 	 */
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
@@ -133,9 +136,11 @@ public class DeerAgent extends AbstractAgent {
 					if (distance <= INTERACTION_RANGE-5) {
 						// Food found, let's eat it and make some reproducing
 						// possible
-						pop.addToRemoveList(a);
-						hungry = false;
-						energy = LIFE_LENGTH;
+						if(a.consumeAgent()) {
+							pop.addToRemoveList(a);
+							hungry = false;
+							this.energy = MAX_ENERGY;
+						}
 					} else {
 						Vector newForce = new Vector(p, getPosition());
 						double norm = newForce.getNorm();
@@ -190,6 +195,15 @@ public class DeerAgent extends AbstractAgent {
 		}
 
 		return predatorForce;
+	}
+	
+	/**
+	 * This also decreases the deer's energy.
+	 */
+	@Override
+	public void updatePosition() {
+		super.updatePosition();
+		this.energy--;
 	}
 
 }

@@ -20,6 +20,7 @@ import net.miginfocom.swing.MigLayout;
  */
 
 public class ControlView extends JPanel {
+	private static final long serialVersionUID = 5134812517352174052L;
 
 	/**
 	 * Create the panel.
@@ -55,6 +56,16 @@ public class ControlView extends JPanel {
 		
 		JButton btnPause = new JButton("Pause");
 		btnPause.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnPause.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					ew.pause();
+				} catch (IllegalStateException ex) {
+					//Don't care.
+				}
+				new NewSimulationView(ew);
+			}
+		});
 		add(btnPause, "cell 2 0,alignx left,aligny top");
 		
 

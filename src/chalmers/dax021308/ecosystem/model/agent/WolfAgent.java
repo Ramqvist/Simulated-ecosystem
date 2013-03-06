@@ -17,21 +17,16 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public class WolfAgent extends AbstractAgent {
 	
 	private boolean hungry = true;
-	private static final int LIFE_LENGTH = 1200;
+	private static final int MAX_ENERGY = 1200;
 	private static final double REPRODUCTION_RATE = 0.1;
-	//private int energy = LIFE_LENGTH;
 
 	public WolfAgent(String name, Position p, Color c, int width,
 			int height, Vector velocity, double maxSpeed,
 			double maxAcceleration, double visionRange, boolean groupBehaviour) {
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange, maxAcceleration);
 
-		this.energy = LIFE_LENGTH;
+		this.energy = MAX_ENERGY;
 		this.groupBehaviour = groupBehaviour;
-	}
-
-	public int getEnergy() {
-		return energy;
 	}
 
 	@Override
@@ -128,9 +123,11 @@ public class WolfAgent extends AbstractAgent {
 				double distance = getPosition().getDistance(p);
 				if (distance <= visionRange) {
 					if(distance <= INTERACTION_RANGE-5) {
-						pop.addToRemoveList(a);
-						hungry = false;
-						this.energy = LIFE_LENGTH;
+						if(a.consumeAgent()) {
+							pop.addToRemoveList(a);
+							hungry = false;
+							this.energy = MAX_ENERGY;
+						}
 					} else {
 					/*
 					 * Create a vector that points towards the prey.
@@ -158,9 +155,12 @@ public class WolfAgent extends AbstractAgent {
 		return preyForce;
 	}
 	
+	/**
+	 * This also decreases the wolfs energy.
+	 */
 	@Override
 	public void updatePosition() {
-		this.position = new Position(nextPosition);
+		super.updatePosition();
 		this.energy--;
 	}
 }
