@@ -107,8 +107,8 @@ public class DeerAgent extends AbstractAgent {
 		 * affected by any force, they will eventually stop. If speed exceeds
 		 * maxSpeed --> scale it to maxSpeed, but keep the correct direction.
 		 */
-		Vector newVelocity = this.getVelocity().add(acceleration)
-				.multiply(VELOCITY_DECAY);
+		Vector newVelocity = Vector.addVectors(this.getVelocity(), acceleration);
+		newVelocity.multiply(VELOCITY_DECAY);
 		double speed = newVelocity.getNorm();
 		if (speed > maxSpeed) {
 			newVelocity.multiply(maxSpeed / speed);

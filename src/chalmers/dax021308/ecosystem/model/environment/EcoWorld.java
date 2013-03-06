@@ -288,7 +288,7 @@ public class EcoWorld implements IModel {
 		}
 		
 		if(grassModel == POP_GRASS) {
-			grass = new GrassPopulation("Grass", d, grassPop, Color.green, 1, 1, 0, 200);
+			grass = new GrassPopulation("Grass", d, grassPop, Color.green, 1, 1, 0, 700);
 		}
 
 		if(prey == null || pred == null || grass == null) {
@@ -299,9 +299,9 @@ public class EcoWorld implements IModel {
 		prey.addPrey(grass);
 		
 		pred.addPrey(prey);
+		populations.add(grass);
 		populations.add(prey);
 		populations.add(pred);
-		populations.add(grass);
 		
 		if(recordSimulation) {
 			recordedSimulation = new ArrayList<List<IPopulation>>(numIterations / 2);

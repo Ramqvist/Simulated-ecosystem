@@ -68,7 +68,7 @@ public class WolfAgent extends AbstractAgent {
 		 * they will eventually stop.
 		 * If speed exceeds maxSpeed --> scale it to maxSpeed, but keep the correct direction.
 		 */
-		Vector newVelocity = this.getVelocity().add(acceleration);
+		Vector newVelocity = Vector.addVectors(this.getVelocity(), acceleration);
 		double speed = newVelocity.getNorm();
 		if(speed > maxSpeed){
 			newVelocity.multiply(maxSpeed/speed); 

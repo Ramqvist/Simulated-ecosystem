@@ -145,6 +145,15 @@ public class Vector {
 		return this;
 	}
 	
+	/**
+	 * Adds two vectors and returns a new vector.
+	 * @param v1
+	 * @param v2
+	 * @return v1 + v2
+	 */
+	public static Vector addVectors(Vector v1, Vector v2){
+		return new Vector(v1.x + v2.x, v1.y += v2.y);
+	}
 	@Override
 	public String toString(){
 		return "("+this.x+","+this.y+")";
