@@ -229,6 +229,7 @@ public class EcoWorld implements IModel {
 		} else if(dimConstant == DIM_SMALL) {
 			d = D_SMALL;
 		}
+		observers.firePropertyChange(EVENT_DIMENSIONCHANGED, null, d);
 	}
 	
 
