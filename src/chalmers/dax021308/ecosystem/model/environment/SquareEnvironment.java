@@ -122,7 +122,7 @@ public class SquareEnvironment implements IEnvironment {
 	        futures.add(f);
 		}
 		
-		Log.v("Slowest population: " + lastSlowestPop + " Time in ms: " + (long) (0.000001*longestExecuteTime));
+		//Log.v("Slowest population: " + lastSlowestPop + " Time in ms: " + (long) (0.000001*longestExecuteTime));
 
 
 		//Barrier synchronization here. Thread will wait for workers to finish execution.
