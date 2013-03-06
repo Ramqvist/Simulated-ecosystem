@@ -108,7 +108,6 @@ public class SquareEnvironment implements IEnvironment {
            try {
 			fut.get();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}

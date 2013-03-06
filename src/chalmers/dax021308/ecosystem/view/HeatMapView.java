@@ -88,7 +88,11 @@ public class HeatMapView extends GLCanvas implements IView {
 		} else if(eventName == EcoWorld.EVENT_DIMENSIONCHANGED) {
 			Object o = event.getNewValue();
 			if(o instanceof Dimension) {
-				Dimension d = (Dimension) o;
+				this.grid = (Dimension) o;
+				heatMapWidth = (int)(grid.getWidth()/samplingConstant+1);
+				heatMapHeight = (int)(grid.getHeight()/samplingConstant+1);
+				heatMap = new int[heatMapWidth][heatMapHeight];
+				visited = new boolean[heatMapWidth][heatMapHeight];
 			}
 			//Handle dimension change here.
 		}
