@@ -70,19 +70,22 @@ public class EcoWorld {
 	public static final String[] PRED_VALUES  = { POP_WOLF, POP_DUMMYPRED };
 	public static final String[] GRASS_VALUES = { POP_GRASS };
 	
-	
+	/* State values */
 	private AtomicBoolean environmentFinished = new AtomicBoolean(false);
 	private AtomicBoolean timerFinished       = new AtomicBoolean(false);
 	private AtomicBoolean shouldRun           = new AtomicBoolean(false);
 	private boolean runWithoutTimer;
 	private boolean recordSimulation;
+	private boolean skipBoolean;
 	
+	/* Simulation settings */
 	private int numIterations;
 	private TimerHandler timer;
 	private IEnvironment env;
 	private int tickTime;
 	private PropertyChangeSupport observers;
 	
+	/* Time measurements variables */
 	private long startIterationTime;
 	private long elapsedTime;
 	
@@ -172,7 +175,13 @@ public class EcoWorld {
 		this.d = d;
 		this.recordSimulation = recordSimulation;
 		if(recordSimulation) {
-			recordedSimulation = new ArrayList<List<IPopulation>>(numIterations);
+			//For recording in half fps.
+			if(skipBoolean) {
+				recordedSimulation = new ArrayList<List<IPopulation>>(numIterations);
+				skipBoolean = false;
+			} else {
+				skipBoolean = true;
+			}
 		}
 
 
@@ -190,6 +199,10 @@ public class EcoWorld {
 	
 	public synchronized void setNumIterations(int numIterations) {
 		this.numIterations = numIterations;
+	}
+	
+	public synchronized void setSimulationDimension(Dimension d) {
+		this.d = d;
 	}
 
 
@@ -261,7 +274,7 @@ public class EcoWorld {
 		populations.add(grass);
 		
 		if(recordSimulation) {
-			recordedSimulation = new ArrayList<List<IPopulation>>(numIterations);
+			recordedSimulation = new ArrayList<List<IPopulation>>(numIterations / 2);
 		}
 		this.env = new SquareEnvironment(populations, readObsticlesFromFile(), mOnFinishListener, d.height, d.width);
 	}
@@ -345,7 +358,8 @@ public class EcoWorld {
 	
 	
 	/**
-	 * Plays the recorded simulation (if any).
+	 * Plays the recorded simulation (if any). 
+	 * Assumes the recording is recorded in half fps.
 	 * <P>
 	 * Uses internal {@link TimerHandler} for smooth playing.
 	 */
@@ -359,7 +373,7 @@ public class EcoWorld {
 					List<IPopulation> popList = recordedSim.get(0);
 					recordedSim.remove(0);
 					observers.firePropertyChange(EVENT_TICK, Collections.emptyList(), popList);
-					t.start(17, this);
+					t.start(32, this);
 				} else {
 					t.stop();
 					observers.firePropertyChange(EVENT_STOP, Collections.emptyList(), Collections.emptyList());
