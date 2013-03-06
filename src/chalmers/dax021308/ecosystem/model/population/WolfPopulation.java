@@ -31,6 +31,7 @@ public class WolfPopulation extends AbstractPopulation {
 		super(name, gridDimension);
 		this.visionRange = visionRange;
 		this.groupBehaviour = groupBehaviour;
+		this.color = color;
 		agents = initializePopulation(initPopulationSize, gridDimension, color,
 				maxSpeed, maxAcceleration, visionRange);
 	}
@@ -54,22 +55,8 @@ public class WolfPopulation extends AbstractPopulation {
 					20, velocity, maxSpeed, maxAcceleration, visionRange, groupBehaviour);
 			newAgents.add(a);
 		}
-		setColor(color);
 		return newAgents;
 	}
-
-	/*@Override
-	public void update() {
-		super.update();
-		int size = agents.size();
-		WolfAgent a;
-		for(int i=0; i<size; i++){
-			a = (WolfAgent) agents.get(i);
-			if(a.getEnergy()<=0){
-				addToRemoveList(a);
-			}
-		}
-	}*/
 
 	@Override
 	public double calculateFitness(IAgent agent) {

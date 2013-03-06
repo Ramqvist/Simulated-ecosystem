@@ -23,6 +23,7 @@ public class GrassPopulation extends AbstractPopulation {
 			int initPopulationSize, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange, int capacity) {
 		super(name, gridDimension);
+		this.color = color;
 		agents = initializePopulation(initPopulationSize, gridDimension, color,
 				maxSpeed, capacity);
 	}
@@ -39,7 +40,6 @@ public class GrassPopulation extends AbstractPopulation {
 					velocity, maxSpeed, gridDimension, capacity);
 			newAgents.add(a);
 		}
-		setColor(color);
 		return newAgents;
 	}
 

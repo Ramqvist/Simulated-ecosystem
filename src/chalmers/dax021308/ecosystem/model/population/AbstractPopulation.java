@@ -29,7 +29,7 @@ public abstract class AbstractPopulation implements IPopulation {
 	 * This method is used to synchronize the adding of agents, i.e. several threads can add at the same time.
 	 */
 	protected List<IAgent> removeList;
-	protected Color color = Color.BLACK;	// Standard color for population.
+	protected Color color;
 	protected List<Integer> lifeLengths;
 	protected boolean groupBehaviour;
 	private String name;
@@ -48,6 +48,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		this.name = name;
 		this.gridDimension = gridDimension;
 		this.groupBehaviour = true;
+		this.color = Color.BLACK;
 	}
 
 	public AbstractPopulation(String name, Dimension gridDimension, int capacity, boolean groupBehaviour) {
