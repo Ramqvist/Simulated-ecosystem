@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 
 import info.monitorenter.gui.chart.*;
@@ -68,21 +69,32 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 	public void propertyChange(PropertyChangeEvent event) {
 		nIterationsPassed++;
 		String eventName = event.getPropertyName();
-		if(eventName == EcoWorld.EVENT_STOP) {
-			//Model has stopped. Maybe hide view?
-		} else if(eventName == EcoWorld.EVENT_TICK) {
+		List<IPopulation> populations = null;
+		if(event.getNewValue() instanceof List<?>) {
+			populations = (List<IPopulation>) event.getNewValue();
+			populations = AbstractPopulation.clonePopulationList(populations);
+		}
+			
+		if (eventName.equals(EcoWorld.EVENT_START)) {
+			if (populations == null) {
+				// TODO bug
+				this.traces.clear();
+				this.removeAllTraces().clear();
+				this.nIterationsPassed = 0;
+			}
 
-			if(event.getNewValue() instanceof List<?>) {
+		}
+		else if(eventName.equals(EcoWorld.EVENT_STOP)) {
+		} else if(eventName.equals(EcoWorld.EVENT_TICK)) {
 
-				List<IPopulation> populations = (List<IPopulation>) event.getNewValue();
-
-				if (traces.size() != populations.size()) {
-					addTraces(populations);
+			if(populations != null) {		
+				if (this.traces.size() == 0) {
+					// initialize traces
+					initializeTraces(populations);
 				}
-
 				// update graph.
 				for (IPopulation p: populations) {
-					traces.get(p.getName()).addPoint(nIterationsPassed, p.getSize());
+					this.traces.get(p.getName()).addPoint(nIterationsPassed, p.getSize());
 				}
 			}
 		}
@@ -91,17 +103,31 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 	/*
 	 * 
 	 */
-	private void addTraces(List<IPopulation> populations){
+	private void initializeTraces(List<IPopulation> populations){
+		//_traces.clear();
+		this.removeAllTraces();
 		for (IPopulation p: populations) {		
 			String name = p.getName();	
-			if (name != null && !traces.keySet().contains(name)) {
+			if (name != null) {
 				ITrace2D newTrace = new Trace2DSimple(name); 
 				newTrace.setColor(p.getColor());
-				traces.put(name, newTrace);
+				this.traces.put(name, newTrace);
 				this.addTrace(newTrace);	
 			}
 		}
 	}
+	/*
+	private void addTraces(List<IPopulation> populations){
+		for (IPopulation p: populations) {		
+			String name = p.getName();	
+			if (name != null && !_traces.keySet().contains(name)) {
+				ITrace2D newTrace = new Trace2DSimple(name); 
+				newTrace.setColor(p.getColor());
+				_traces.put(name, newTrace);
+				this.addTrace(newTrace);	
+			}
+		}
+	}*/
 
 	@Override
 	public void addController(ActionListener controller) {

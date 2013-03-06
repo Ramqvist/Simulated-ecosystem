@@ -56,6 +56,8 @@ public abstract class AbstractPopulation implements IPopulation {
 	 */
 	public AbstractPopulation(AbstractPopulation original) {
 		this.gridDimension = original.gridDimension;
+		this.color = original.color;
+		this.groupBehaviour = original.groupBehaviour;
 		this.name = original.name;
 		preys = new ArrayList<IPopulation>();
 		predators = new ArrayList<IPopulation>();
@@ -137,6 +139,17 @@ public abstract class AbstractPopulation implements IPopulation {
 				return 0;
 			}
 		};
+	}
+	
+	/**
+	 * Clones the given list with {@link IPopulation#clonePopulation()} method.
+	 */
+	public static List<IPopulation> clonePopulationList(List<IPopulation> original) {
+		List<IPopulation> list = new ArrayList<IPopulation>(original.size());
+		for(IPopulation p : original) {
+			list.add(p.clonePopulation());
+		}
+		return list;
 	}
 
 	public static IPopulation createFromFile(String input) {
