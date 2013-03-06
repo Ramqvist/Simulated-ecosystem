@@ -124,9 +124,8 @@ public class AWTSimulationView extends JPanel implements IView {
 		} else if(eventName == EcoWorld.EVENT_DIMENSIONCHANGED) {
 			Object o = event.getNewValue();
 			if(o instanceof Dimension) {
-				Dimension d = (Dimension) o;
+				this.gridDimension = (Dimension) o;
 			}
-			//Handle dimension change here.
 		}
 	}
 	
