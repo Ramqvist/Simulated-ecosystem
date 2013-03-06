@@ -88,12 +88,14 @@ public class SquareEnvironment implements IEnvironment {
 			popWorkers[i].p = populations.get(i);
 			//If this is the slowest population.
 			if(popWorkers[i].p == lastSlowestPop) {
-				//popWorkers[i].dividePopulation = true;
+				popWorkers[i].dividePopulation = true;
 				extraPopWorker.dividePopulation = true;
 				extraPopWorker.p = lastSlowestPop;
 				
 				extraPopWorker.executeFirstHalf = false;
 				popWorkers[i].executeFirstHalf = true;
+				Future f = workPool.submit(extraPopWorker);
+		        futures.add(f);
 			}
 			Future f = workPool.submit(popWorkers[i]);
 	        futures.add(f);
@@ -155,16 +157,17 @@ public class SquareEnvironment implements IEnvironment {
 			} else {
 				if(executeFirstHalf) {
 					//Execute first half.
-					//p.updateFirstHalf();
+					p.updateFirstHalf();
 				} else {
 					//Execute second half.
-					//p.updateSecondHalf();
+					p.updateSecondHalf();
 				}
 			}
-			/*if(dividePopulation) {
-			 	elapsedTime = elapsedTime * 2;
-			 */
 			long elapsedTime = System.nanoTime() - start;
+			//Quick fix for double pop size.
+			if(dividePopulation) {
+			 	elapsedTime = elapsedTime * 2;
+			}
 			if(elapsedTime > longestExecuteTime) {
 				longestExecuteTime = elapsedTime;
 				lastSlowestPop = p;
