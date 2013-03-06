@@ -65,7 +65,7 @@ public class WolfPopulation extends AbstractPopulation {
 		for(int i=0; i<size; i++){
 			a = (WolfAgent) agents.get(i);
 			if(a.getEnergy()<=0){
-				removeList.add(a);
+				addToRemoveList(a);
 			}
 		}
 	}

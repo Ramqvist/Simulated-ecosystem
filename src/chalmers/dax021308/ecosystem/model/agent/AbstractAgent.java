@@ -33,6 +33,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected double maxSpeed;
 	protected double visionRange;
 	protected double maxAcceleration;
+	private boolean isAlive;
 	
 	protected final static double INTERACTION_RANGE = 10;
 	protected final static double WALL_CONSTANT = 2;
@@ -54,6 +55,7 @@ public abstract class AbstractAgent implements IAgent {
 		this.capacity = Integer.MAX_VALUE;
 		this.lifeLength = 0;
 		ran = new Random();
+		this.isAlive = true;
 	}
 
 	public AbstractAgent(String name, Position p, Color c, int width,
@@ -370,6 +372,22 @@ public abstract class AbstractAgent implements IAgent {
 		environmentForce.setVector(xForce, yForce);
 
 		return environmentForce;
+	}
+	
+	/**
+	 * Try to consume this agent
+	 * <p>
+	 * Return true if consumed, otherwise false.
+	 * <p>
+	 * Thread-safe
+	 */
+	@Override
+	public synchronized boolean consumeAgent() {
+		if(isAlive) {
+			isAlive = false;
+			return true;
+		}
+		return false;
 	}
 
 	/**
