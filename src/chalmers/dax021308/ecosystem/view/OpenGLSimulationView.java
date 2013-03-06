@@ -225,7 +225,10 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 
                 //Background drawing
                 //Color of the background.
-                gl.glColor4f(1, 1, 1, 1);
+                //white
+                //gl.glColor4f(1, 1, 1, 1);
+                //Brown
+                gl.glColor4f(1, 0.8F, 0.6F, 1);
           		gl.glBegin(GL.GL_POLYGON);
           		gl.glVertex2d(0, 0);
           		gl.glVertex2d(0, frameHeight);

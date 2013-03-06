@@ -70,6 +70,20 @@ public class EcoWorld {
 	public static final String[] PRED_VALUES  = { POP_WOLF, POP_DUMMYPRED };
 	public static final String[] GRASS_VALUES = { POP_GRASS };
 	
+	/* Dimension constants */
+	public static final String DIM_SMALL  = "500  x 500";
+	public static final String DIM_MEDIUM = "1000 x 1000";
+	public static final String DIM_LARGE  = "1500 x 1500";
+	public static final String DIM_XLARGE = "2200 x 2200";
+	
+	private static final Dimension D_SMALL  = new Dimension(500,  500);
+	private static final Dimension D_MEDIUM = new Dimension(1000, 1000);
+	private static final Dimension D_LARGE  = new Dimension(1500, 1500);
+	private static final Dimension D_XLARGE = new Dimension(2000, 2000);
+	
+	public static final String[] DIM_VALUES =  { DIM_SMALL, DIM_MEDIUM, DIM_LARGE, DIM_XLARGE };
+	
+	
 	/* State values */
 	private AtomicBoolean environmentFinished = new AtomicBoolean(false);
 	private AtomicBoolean timerFinished       = new AtomicBoolean(false);
@@ -204,6 +218,19 @@ public class EcoWorld {
 	public synchronized void setSimulationDimension(Dimension d) {
 		this.d = d;
 	}
+	
+	public synchronized void setSimulationDimension(String dimConstant) {
+		if(dimConstant == DIM_XLARGE) {
+			d = D_XLARGE;
+		} else if(dimConstant == DIM_LARGE) {
+			d = D_LARGE;
+		} else if(dimConstant == DIM_MEDIUM) {
+			d = D_MEDIUM;
+		} else if(dimConstant == DIM_SMALL) {
+			d = D_SMALL;
+		}
+	}
+	
 
 
 	/**
@@ -291,23 +318,24 @@ public class EcoWorld {
 	 * If already started {@link IllegalStateException} will be thrown.
 	 * 
 	 */
-	public synchronized void start() throws IllegalStateException{
-		if(!shouldRun.get()) {
-			executor = Executors.newSingleThreadExecutor();
-			this.timer = new TimerHandler();
-			shouldRun.set(true);
-			scheduleEnvironmentUpdate();
-			Log.i("EcoWorld started.");
-			if(recordSimulation) {
-				observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
-			} else {
-				observers.firePropertyChange(EVENT_START, null, null);
+	public void start() throws IllegalStateException {
+		synchronized (syncObject) {
+				if(!shouldRun.get()) {
+					executor = Executors.newSingleThreadExecutor();
+					this.timer = new TimerHandler();
+					shouldRun.set(true);
+					scheduleEnvironmentUpdate();
+					Log.i("EcoWorld started.");
+					if(recordSimulation) {
+						observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
+					} else {
+						observers.firePropertyChange(EVENT_START, null, null);
+					}
+				} else {
+					 throw new IllegalStateException("EcoWorld already started.");
+				}
 			}
-		} else {
-			 throw new IllegalStateException("EcoWorld already started.");
 		}
-	}
-	
 	/**
 	 * Stops the scheduling algorithms.
 	 * <p>
@@ -317,18 +345,20 @@ public class EcoWorld {
 	 *  
 	 */
 	public void pause() throws IllegalStateException {
-		if(shouldRun.get()) {
-			shouldRun.set(false);
-			executor.shutdownNow();
-			timer.stop();
-			numUpdates = 0;
-			Log.i("EcoWorld paused.");
-			observers.firePropertyChange(EVENT_PAUSE, null, null);
-			if(recordSimulation) {
-				observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
+		synchronized (syncObject) {
+			if(shouldRun.get()) {
+				shouldRun.set(false);
+				executor.shutdownNow();
+				timer.stop();
+				numUpdates = 0;
+				Log.i("EcoWorld paused.");
+				observers.firePropertyChange(EVENT_PAUSE, null, null);
+				if(recordSimulation) {
+					observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
+				}
+			} else {
+				 throw new IllegalStateException("EcoWorld already paused.");
 			}
-		} else {
-			 throw new IllegalStateException("EcoWorld already paused.");
 		}
 	}
 
@@ -341,18 +371,20 @@ public class EcoWorld {
 	 *  
 	 */
 	public void stop() throws IllegalStateException {
-		if(shouldRun.get()) {
-			shouldRun.set(false);
-			executor.shutdownNow();
-			timer.stop();
-			numUpdates = 0;
-			Log.i("EcoWorld stopped.");
-			observers.firePropertyChange(EVENT_STOP, null, null);
-			if(recordSimulation) {
-				observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
+		synchronized (syncObject) {
+			if(shouldRun.get()) {
+				shouldRun.set(false);
+				executor.shutdownNow();
+				timer.stop();
+				numUpdates = 0;
+				Log.i("EcoWorld stopped.");
+				observers.firePropertyChange(EVENT_STOP, null, null);
+				if(recordSimulation) {
+					observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
+				}
+			} else {
+				 throw new IllegalStateException("EcoWorld already stopped");
 			}
-		} else {
-			 throw new IllegalStateException("EcoWorld already stopped");
 		}
 	}
 	
