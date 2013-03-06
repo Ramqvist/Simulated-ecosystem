@@ -3,9 +3,11 @@ package chalmers.dax021308.ecosystem.model.population;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
+import chalmers.dax021308.ecosystem.model.util.Stat;
 
 /**
  * 
@@ -19,15 +21,26 @@ public abstract class AbstractPopulation implements IPopulation {
 	protected List<IPopulation> preys;
 	protected List<IPopulation> predators;
 	protected List<IPopulation> neutral;
+	/**
+	 * Remove list for this Population. 
+	 * <p>
+	 * Use the method {@link IPopulation#addToRemoveList(IAgent)} for adding to this list! And not removeList.add()!
+	 * <p>
+	 * This method is used to synchronize the adding of agents, i.e. several threads can add at the same time.
+	 */
 	protected List<IAgent> removeList;
+	protected Color color = Color.BLACK;	// Standard color for population.
+	protected List<Integer> lifeLengths;
 	protected boolean groupBehaviour;
 	private String name;
-
-	public AbstractPopulation() {
+	
+	
+ 	public AbstractPopulation() {
 		preys = new ArrayList<IPopulation>();
 		predators = new ArrayList<IPopulation>();
 		neutral = new ArrayList<IPopulation>();
 		removeList = new ArrayList<IAgent>();
+		lifeLengths = new LinkedList<Integer>();
 	}
 	
 	public AbstractPopulation(String name, Dimension gridDimension) {
@@ -53,6 +66,8 @@ public abstract class AbstractPopulation implements IPopulation {
 	 */
 	public AbstractPopulation(AbstractPopulation original) {
 		this.gridDimension = original.gridDimension;
+		this.color = original.color;
+		this.groupBehaviour = original.groupBehaviour;
 		this.name = original.name;
 		preys = new ArrayList<IPopulation>();
 		predators = new ArrayList<IPopulation>();
@@ -66,13 +81,45 @@ public abstract class AbstractPopulation implements IPopulation {
 			}
 		}
 	}
+	
+	/**
+	 * Override if you use linked-list as agentList! (Default is ArrayList.)
+	 * <P>
+	 * Update the whole population, same as update(0, agents.size())M 
+	 * @param fromPos
+	 * @param toPos
+	 */
 	@Override
 	public void update() {
-		for (IAgent a : agents) {
+		update(0, agents.size());
+	}
+	
+
+	public void update(int fromPos, int toPos) {
+		IAgent a;
+		for(int i = fromPos; i < toPos; i++) {
+			a = agents.get(i);
 			a.calculateNextPosition(predators, preys, neutral, gridDimension);
+			if(a.getEnergy()<=0){
+				addToRemoveList(a);
+			}
 		}
 	}
-
+	
+	@Override
+	public void updateFirstHalf() {
+		int agentSize = agents.size();
+		int halfStart = agentSize / 2; 
+		update(0, halfStart);
+	}
+	
+	@Override
+	public void updateSecondHalf() {
+		int agentSize = agents.size();
+		int halfStart = agentSize / 2; 
+		update(halfStart, agentSize);
+	}
+	
 	@Override
 	public String getName() {
 		return name;
@@ -120,9 +167,18 @@ public abstract class AbstractPopulation implements IPopulation {
 			public double calculateFitness(IAgent agent) {
 				return 0;
 			}
-
-
 		};
+	}
+	
+	/**
+	 * Clones the given list with {@link IPopulation#clonePopulation()} method.
+	 */
+	public static List<IPopulation> clonePopulationList(List<IPopulation> original) {
+		List<IPopulation> list = new ArrayList<IPopulation>(original.size());
+		for(IPopulation p : original) {
+			list.add(p.clonePopulation());
+		}
+		return list;
 	}
 
 	public static IPopulation createFromFile(String input) {
@@ -162,12 +218,17 @@ public abstract class AbstractPopulation implements IPopulation {
 				kids.addAll(spawn);
 			}
 		}
-		if (kids != null)
+		if (kids != null) {
 			agents.addAll(kids);
+		}
+		
+//		System.out.println(name + " life length: mean = " + Stat.mean(lifeLengths) + 
+//							" | variance = " + Stat.sampleVariance(lifeLengths) + 
+//							" | sample size = " + lifeLengths.size());
 	}
 	
 	/**
-	 * Cleares out the agents in the removeList.
+	 * Clears out the agents in the removeList.
 	 * <p>
 	 * Warning! Use only when no other thread is iterating of the agentlist.
 	 */
@@ -175,6 +236,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		IAgent a;
 		for(int i = 0 ; i < removeList.size() ; i++)  {
 			a = removeList.get(i);
+			lifeLengths.add(a.getLifeLength());
 			agents.remove(a);
 		}
 		removeList.clear();
@@ -185,10 +247,32 @@ public abstract class AbstractPopulation implements IPopulation {
 	public synchronized void addToRemoveList(IAgent a) {
 		removeList.add(a);
 	}
+
+	@Override
+	public void setColor(Color color){
+		this.color = color;
+	}
 	
+	/* (non-Javadoc)
+	 * @see chalmers.dax021308.ecosystem.model.population.IPopulation#getColor()
+	 */
 	@Override
 	public Color getColor() {
-		return agents.get(0).getColor();
+		return color;
+	}
+	
+	@Override
+	public String toString() {
+		return "Population name: " + name + " NumAgents:" + agents.size();
 	}
 
+	/* (non-Javadoc)
+	 * @see chalmers.dax021308.ecosystem.model.population.IPopulation#getSize()
+	 */
+	public int getSize() {
+		if (agents != null)
+			return agents.size();
+		else
+			return 0;
+	}
 }

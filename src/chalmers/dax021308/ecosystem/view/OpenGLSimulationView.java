@@ -20,7 +20,9 @@ import com.sun.opengl.util.FPSAnimator;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.IObstacle;
+import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -63,7 +65,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 	/**
 	 * Create the panel.
 	 */
-	public OpenGLSimulationView(EcoWorld model, Dimension size, boolean showFPS) {
+	public OpenGLSimulationView(IModel model, Dimension size, boolean showFPS) {
 		this.size = size;
 		model.addObserver(this);
 		
@@ -138,7 +140,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 		} else if(eventName == EcoWorld.EVENT_TICK) {
 			//Tick notification recived from model. Do something with the data.
 			if(event.getNewValue() instanceof List<?>) {
-				this.newPops = clonePopulationList((List<IPopulation>) event.getNewValue());
+				this.newPops = AbstractPopulation.clonePopulationList((List<IPopulation>) event.getNewValue());
 			}
 			if(event.getOldValue() instanceof List<?>) {
 				this.newObs = (List<IObstacle>) event.getOldValue();
@@ -151,19 +153,24 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 			//removeAll();
 			//repaint();
 			//revalidate();
+		} else if(eventName == EcoWorld.EVENT_DIMENSIONCHANGED) {
+			Object o = event.getNewValue();
+			if(o instanceof Dimension) {
+				this.size = (Dimension) o;
+			}
 		}
 	}
 	
 	/**
 	 * Clones the given list with {@link IPopulation#clonePopulation()} method.
 	 */
-	private List<IPopulation> clonePopulationList(List<IPopulation> popList) {
+	/*private List<IPopulation> clonePopulationList(List<IPopulation> popList) {
 		List<IPopulation> list = new ArrayList<IPopulation>(popList.size());
 		for(IPopulation p : popList) {
 			list.add(p.clonePopulation());
 		}
 		return list;
-	}
+	}*/
 	
 	/**
 	 * Sets the FPS counter visible or not visible
@@ -225,7 +232,10 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 
                 //Background drawing
                 //Color of the background.
-                gl.glColor4f(1, 1, 1, 1);
+                //white
+                //gl.glColor4f(1, 1, 1, 1);
+                //Brown
+                gl.glColor4f(1, 0.8F, 0.6F, 1);
           		gl.glBegin(GL.GL_POLYGON);
           		gl.glVertex2d(0, 0);
           		gl.glVertex2d(0, frameHeight);

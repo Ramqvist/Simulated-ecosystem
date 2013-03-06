@@ -18,6 +18,8 @@ import com.sun.opengl.util.FPSAnimator;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
+import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -59,7 +61,7 @@ public class HeatMapView extends GLCanvas implements IView {
 	/**
 	 * Create the panel.
 	 */
-	public HeatMapView(EcoWorld model, Dimension grid, double samplingConstant, String populationName) {
+	public HeatMapView(IModel model, Dimension grid, double samplingConstant, String populationName) {
 		this.grid = grid;
 		this.samplingConstant = samplingConstant;
 		this.populationName = populationName;
@@ -81,21 +83,20 @@ public class HeatMapView extends GLCanvas implements IView {
 		} else if(eventName == EcoWorld.EVENT_TICK) {
 			//Tick notification recived from model. Do something with the data.
 			if(event.getNewValue() instanceof List<?>) {
-				this.newPops = clonePopulationList((List<IPopulation>) event.getNewValue());
+				this.newPops = AbstractPopulation.clonePopulationList((List<IPopulation>) event.getNewValue());
 			}	
 			repaint();
+		} else if(eventName == EcoWorld.EVENT_DIMENSIONCHANGED) {
+			Object o = event.getNewValue();
+			if(o instanceof Dimension) {
+				this.grid = (Dimension) o;
+				heatMapWidth = (int)(grid.getWidth()/samplingConstant+1);
+				heatMapHeight = (int)(grid.getHeight()/samplingConstant+1);
+				heatMap = new int[heatMapWidth][heatMapHeight];
+				visited = new boolean[heatMapWidth][heatMapHeight];
+			}
+			//Handle dimension change here.
 		}
-	}
-	
-	/**
-	 * Clones the given list with {@link IPopulation#clonePopulation()} method.
-	 */
-	private List<IPopulation> clonePopulationList(List<IPopulation> popList) {
-		List<IPopulation> list = new ArrayList<IPopulation>(popList.size());
-		for(IPopulation p : popList) {
-			list.add(p.clonePopulation());
-		}
-		return list;
 	}
 	
 	/**
@@ -166,7 +167,7 @@ public class HeatMapView extends GLCanvas implements IView {
     					} 
           			}
           		}	
-          		System.out.println(minVisited);	
+          		//System.out.println(minVisited);	
           		
           		/*
           		 * Draw the heat map.

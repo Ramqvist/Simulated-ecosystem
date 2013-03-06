@@ -3,7 +3,6 @@ package chalmers.dax021308.ecosystem.model.agent;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.lowagie.text.pdf.ArabicLigaturizer;
@@ -20,6 +19,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class DeerAgent extends AbstractAgent {
 
+	private static final int MAX_ENERGY = 1100;
 	private boolean hungry = true;
 	private static final double REPRODUCTION_RATE = 0.15;
 	
@@ -29,7 +29,10 @@ public class DeerAgent extends AbstractAgent {
 		
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
+
+		this.energy = MAX_ENERGY;
 		this.groupBehaviour = groupBehaviour;
+
 	}
 
 	@Override
@@ -57,6 +60,9 @@ public class DeerAgent extends AbstractAgent {
 
 	/**
 	 * @author Sebbe
+	 * Calculates the next position of the agent depending on
+	 * the forces that affects it. Note: The next position is 
+	 * not set until updatePosition() is called.
 	 */
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
@@ -82,9 +88,7 @@ public class DeerAgent extends AbstractAgent {
 		 * --> scale it to maxAcceleration, but keep the correct direction of
 		 * the acceleration.
 		 */
-		double randX = -RANDOM_FORCE_MAGNITUDE+ 2*RANDOM_FORCE_MAGNITUDE*Math.random();
-		double randY = -RANDOM_FORCE_MAGNITUDE+ 2*RANDOM_FORCE_MAGNITUDE*Math.random();
-		Vector randomForce = new Vector(randX, randY);
+		Vector randomForce = randomForce();
 		Vector acceleration = environmentForce.multiply(100)
 				.add(predatorForce.multiply(5))
 				.add(mutualInteractionForce)
@@ -129,11 +133,14 @@ public class DeerAgent extends AbstractAgent {
 				Position p = a.getPosition();
 				double distance = getPosition().getDistance(p);
 				if (distance <= visionRange) {
-					if (distance <= INTERACTION_RANGE) {
+					if (distance <= INTERACTION_RANGE-5) {
 						// Food found, let's eat it and make some reproducing
 						// possible
-						pop.addToRemoveList(a);
-						hungry = false;
+						if(a.consumeAgent()) {
+							pop.addToRemoveList(a);
+							hungry = false;
+							this.energy = MAX_ENERGY;
+						}
 					} else {
 						Vector newForce = new Vector(p, getPosition());
 						double norm = newForce.getNorm();
@@ -188,6 +195,15 @@ public class DeerAgent extends AbstractAgent {
 		}
 
 		return predatorForce;
+	}
+	
+	/**
+	 * This also decreases the deer's energy.
+	 */
+	@Override
+	public void updatePosition() {
+		super.updatePosition();
+		this.energy--;
 	}
 
 }

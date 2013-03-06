@@ -1,14 +1,13 @@
 package chalmers.dax021308.ecosystem.view;
 
-import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import javax.swing.JFrame;
+import java.util.Map;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 
 import info.monitorenter.gui.chart.*;
@@ -23,7 +22,7 @@ import info.monitorenter.util.Range;
  * 
  * 
  * 
- * Shows population amount over time.
+ * Shows population amount over iterations.
  * However, might not yet work for populations added after
  * simulation start. Will fix later if this should be possible.
  * 
@@ -32,11 +31,7 @@ import info.monitorenter.util.Range;
  */
 public class GraphPopulationAmountView extends Chart2D implements IView {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private List<ITrace2D> traces = new ArrayList<ITrace2D>();
+	private Map<String,ITrace2D> traces = new HashMap<String,ITrace2D>();
 	//private ColorIterator colors = new ColorIterator();
 	
 	// Values for axis. More values are set in init()
@@ -74,47 +69,59 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 	public void propertyChange(PropertyChangeEvent event) {
 		nIterationsPassed++;
 		String eventName = event.getPropertyName();
-		if(eventName == EcoWorld.EVENT_STOP) {
-			//Model has stopped. Maybe hide view?
-		} else if(eventName == EcoWorld.EVENT_TICK) {
+		List<IPopulation> populations = null;
+		if(event.getNewValue() instanceof List<?>) {
+			populations = (List<IPopulation>) event.getNewValue();
+			populations = AbstractPopulation.clonePopulationList(populations);
+		}
+			
+		if (eventName.equals(EcoWorld.EVENT_START)) {
+		}
+		else if(eventName.equals(EcoWorld.EVENT_STOP)) {
+			this.traces.clear();
+			this.removeAllTraces().clear();
+			this.nIterationsPassed = 0;
+		} else if(eventName.equals(EcoWorld.EVENT_TICK)) {
 
-			if(event.getNewValue() instanceof List<?>) {
-
-				List<IPopulation> newPops = (List<IPopulation>) event.getNewValue();
-
-				if (traces.size() == 0) {
-					createNewTraces(newPops);
+			if(populations != null) {		
+				if (this.traces.size() == 0) {
+					// initialize traces
+					initializeTraces(populations);
 				}
-
-				// update graph. 
-				// this assumes that the population list doesn't change after start.
-				// 
-				for (int i = 0; i < newPops.size(); ++i) {
-					int numOfAgents = newPops.get(i).getAgents().size();
-					traces.get(i).addPoint(nIterationsPassed, numOfAgents);					
-				}	
+				// update graph.
+				for (IPopulation p: populations) {
+					this.traces.get(p.getName()).addPoint(nIterationsPassed, p.getSize());
+				}
 			}
 		}
 	}
 
-	private void createNewTraces(List<IPopulation> newPops){
-		// used for naming, in case a population doesn't have a name.
-		int popNum = 0; 
-
-		for (IPopulation p: newPops) {		
-			String pName = p.getName();	
-			// if a population is unnamed.
-			++popNum;
-			if (pName == null) {
-				pName = "Population " + popNum; 
+	/*
+	 * 
+	 */
+	private void initializeTraces(List<IPopulation> populations){
+		for (IPopulation p: populations) {		
+			String name = p.getName();	
+			if (name != null) {
+				ITrace2D newTrace = new Trace2DSimple(name); 
+				newTrace.setColor(p.getColor());
+				this.traces.put(name, newTrace);
+				this.addTrace(newTrace);	
 			}
-			ITrace2D newTrace = new Trace2DSimple(pName); 
-
-			newTrace.setColor(p.getColor());
-			traces.add(newTrace);
-			this.addTrace(newTrace);	
 		}
 	}
+	/*
+	private void addTraces(List<IPopulation> populations){
+		for (IPopulation p: populations) {		
+			String name = p.getName();	
+			if (name != null && !_traces.keySet().contains(name)) {
+				ITrace2D newTrace = new Trace2DSimple(name); 
+				newTrace.setColor(p.getColor());
+				_traces.put(name, newTrace);
+				this.addTrace(newTrace);	
+			}
+		}
+	}*/
 
 	@Override
 	public void addController(ActionListener controller) {

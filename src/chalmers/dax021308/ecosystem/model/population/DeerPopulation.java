@@ -3,7 +3,6 @@ package chalmers.dax021308.ecosystem.model.population;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
@@ -57,6 +56,7 @@ public class DeerPopulation extends AbstractPopulation {
 					visionRange, groupBehaviour);
 			newAgents.add(a);
 		}
+		setColor(color);
 		return newAgents;
 	}
 
@@ -65,4 +65,5 @@ public class DeerPopulation extends AbstractPopulation {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
 }
