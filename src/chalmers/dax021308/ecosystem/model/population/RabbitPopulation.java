@@ -24,6 +24,7 @@ public class RabbitPopulation extends AbstractPopulation {
 	 */
 	public RabbitPopulation(String name, Dimension d, int popSize, Color color, double maxSpeed, double maxAcceleration, double visionRange) {
 		super(name, d);
+		this.color = color;
 		agents = new ArrayList<IAgent>(popSize);
 
 		for (int i = 0; i < popSize; i++) {
