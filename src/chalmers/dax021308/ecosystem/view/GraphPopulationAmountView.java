@@ -76,15 +76,11 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 		}
 			
 		if (eventName.equals(EcoWorld.EVENT_START)) {
-			if (populations == null) {
-				// TODO bug
-				this.traces.clear();
-				this.removeAllTraces().clear();
-				this.nIterationsPassed = 0;
-			}
-
 		}
 		else if(eventName.equals(EcoWorld.EVENT_STOP)) {
+			this.traces.clear();
+			this.removeAllTraces().clear();
+			this.nIterationsPassed = 0;
 		} else if(eventName.equals(EcoWorld.EVENT_TICK)) {
 
 			if(populations != null) {		
@@ -104,8 +100,6 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 	 * 
 	 */
 	private void initializeTraces(List<IPopulation> populations){
-		//_traces.clear();
-		this.removeAllTraces();
 		for (IPopulation p: populations) {		
 			String name = p.getName();	
 			if (name != null) {

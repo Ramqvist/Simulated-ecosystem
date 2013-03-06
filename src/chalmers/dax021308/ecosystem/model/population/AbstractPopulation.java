@@ -72,13 +72,6 @@ public abstract class AbstractPopulation implements IPopulation {
 		}
 	}
 	
-	/*@Override
-	public void update() {
-		for (IAgent a : agents) {
-			a.calculateNextPosition(predators, preys, neutral, gridDimension);
-		}
-	}*/
-
 	@Override
 	public void update() {
 		for (IAgent a : agents) {
@@ -86,7 +79,7 @@ public abstract class AbstractPopulation implements IPopulation {
 			
 			a.calculateNextPosition(predators, preys, neutral, gridDimension);
 			if(a.getEnergy()<=0){
-				agents.remove(a);
+				agents.remove(a); // TODO not thread safe, use addToRemoveList?
 			}
 		}
 	}

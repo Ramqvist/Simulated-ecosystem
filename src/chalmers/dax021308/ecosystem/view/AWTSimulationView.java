@@ -22,6 +22,7 @@ import sun.misc.Cleaner;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IObstacle;
+import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -114,7 +115,7 @@ public class AWTSimulationView extends JPanel implements IView {
 		} else if(eventName == EcoWorld.EVENT_TICK) {
 			//Tick notification recived from model. Do something with the data.
 			if(event.getNewValue() instanceof List<?>) {
-				this.newPops = clonePopulationList((List<IPopulation>) event.getNewValue());
+				this.newPops = AbstractPopulation.clonePopulationList((List<IPopulation>) event.getNewValue());
 			}
 			if(event.getOldValue() instanceof List<?>) {
 				this.newObs = (List<IObstacle>) event.getOldValue();
@@ -241,13 +242,13 @@ public class AWTSimulationView extends JPanel implements IView {
 	/**
 	 * Clones the given list with {@link IPopulation#clonePopulation()} method.
 	 */
-	private List<IPopulation> clonePopulationList(List<IPopulation> popList) {
+	/*private List<IPopulation> clonePopulationList(List<IPopulation> popList) {
 		List<IPopulation> list = new ArrayList<IPopulation>(popList.size());
 		for(IPopulation p : popList) {
 			list.add(p.clonePopulation());
 		}
 		return list;
-	}
+	}*/
 	
 	/**
 	 * Sets the FPS counter visible or not visible
