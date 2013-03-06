@@ -26,9 +26,11 @@ public class WolfPopulation extends AbstractPopulation {
 
 	public WolfPopulation(String name, Dimension gridDimension,
 			int initPopulationSize, Color color, double maxSpeed,
-			double maxAcceleration, double visionRange) {
+			double maxAcceleration, double visionRange, boolean groupBehaviour) {
+		
 		super(name, gridDimension);
 		this.visionRange = visionRange;
+		this.groupBehaviour = groupBehaviour;
 		agents = initializePopulation(initPopulationSize, gridDimension, color,
 				maxSpeed, maxAcceleration, visionRange);
 	}
@@ -49,7 +51,7 @@ public class WolfPopulation extends AbstractPopulation {
 						-maxSpeed + Math.random() * 2 * maxSpeed);
 			}
 			IAgent a = new WolfAgent("Big Hungry", randPos, color, 10,
-					20, velocity, maxSpeed, maxAcceleration, visionRange);
+					20, velocity, maxSpeed, maxAcceleration, visionRange, groupBehaviour);
 			newAgents.add(a);
 		}
 		setColor(color);

@@ -217,7 +217,7 @@ public abstract class AbstractAgent implements IAgent {
 					double Q = 0; //Q is a function of the distance.
 					if (distance <= visionRange) {
 						if(distance <= INTERACTION_RANGE){
-							Q = -10*(INTERACTION_RANGE-distance);
+							Q = -20*(INTERACTION_RANGE-distance);
 						} else {
 							Q = 3;
 						}
@@ -242,7 +242,7 @@ public abstract class AbstractAgent implements IAgent {
 	 * @return the forward thrust force.
 	 */
 	protected Vector forwardThrust(){
-		double a = 0.5;
+		double a = 0.5; //Scaling constant
 		double x = velocity.x;
 		double y = velocity.y;
 		double norm = velocity.getNorm();
@@ -280,7 +280,7 @@ public abstract class AbstractAgent implements IAgent {
 						newForce.setVector(0,0);
 						newForce.add(agent.getVelocity());
 						newForce.add(velocity);
-						double h = 10;
+						double h = 6; //Scaling constant
 						newForce.x *= h;
 						newForce.y *= h;
 						arrayalForce.x = ( arrayalForce.x + newForce.x );

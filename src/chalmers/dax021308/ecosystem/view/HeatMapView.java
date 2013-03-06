@@ -166,7 +166,7 @@ public class HeatMapView extends GLCanvas implements IView {
     					} 
           			}
           		}	
-          		System.out.println(minVisited);	
+          		//System.out.println(minVisited);	
           		
           		/*
           		 * Draw the heat map.
