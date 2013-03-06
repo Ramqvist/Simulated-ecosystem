@@ -48,7 +48,7 @@ public class NewSimulationView {
 	private JList grassList = new JList();
 	private JCheckBox chckbxRecordSimulation;
 	private JTextField tvNumMinutes;
-	private JList listSimulationDim;;
+	private JList listSimulationDim;
 
 	/**
 	 * Create the application.
