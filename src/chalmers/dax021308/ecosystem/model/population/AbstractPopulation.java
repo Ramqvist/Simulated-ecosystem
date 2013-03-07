@@ -100,10 +100,11 @@ public abstract class AbstractPopulation implements IPopulation {
 		IAgent a;
 		for(int i = fromPos; i < toPos; i++) {
 			a = agents.get(i);
-			a.calculateNextPosition(predators, preys, neutral, gridDimension);
+			
 			if(a.getEnergy()<=0){
 				addToRemoveList(a);
 			}
+			else a.calculateNextPosition(predators, preys, neutral, gridDimension);
 		}
 	}
 	
