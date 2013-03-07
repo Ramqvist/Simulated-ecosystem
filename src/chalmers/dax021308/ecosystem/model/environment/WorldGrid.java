@@ -25,14 +25,31 @@ public class WorldGrid {
 	private Dimension dimension;
 	private int scale;
 	private Semaphore lock;
+	public static WorldGrid worldGrid; 
 	
 	/**
-	 * Creates a new WorldGrid.
-	 * @param dim - the {@link Dimension} which the grid will cover.
-	 * @param scale - the scale of the grid. The grid becomes smaller for larger values. 
-	 * If scale % 2 != 0 weird things will happen.
+	 * The first instance will be empty, call init() to set up.
+	 * @return An instance of WorldGrid.
 	 */
-	public WorldGrid(Dimension dim, int scale) {
+	public static WorldGrid getInstance() {
+		if (worldGrid != null) {
+			return worldGrid;
+		} else {
+			worldGrid = new WorldGrid();
+			return worldGrid;
+		}
+	}
+	
+	private WorldGrid() {
+		
+	}
+	
+	/**
+	 * Initializes the singleton. Only call this once.
+	 * @param dim - The {@link Dimension} the grid will cover. 
+	 * @param scale - The scale of the grid. scale % 2 == 0 must be true.
+	 */
+	public void init(Dimension dim, int scale) {
 		lock = new Semaphore(1);
 		dimension = dim;
 		this.scale = scale;
@@ -48,6 +65,7 @@ public class WorldGrid {
 			}
 			grid.add(temp);
 		}
+		
 	}
 	
 	/**

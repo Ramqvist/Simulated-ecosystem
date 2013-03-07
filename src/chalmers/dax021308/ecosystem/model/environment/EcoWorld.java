@@ -102,8 +102,6 @@ public class EcoWorld implements IModel {
 	private long startIterationTime;
 	private long elapsedTime;
 	
-	public static WorldGrid worldGrid;
-	
 	/**
 	 * Each list in the list contains one snapshot of frame;
 	 */
@@ -199,7 +197,7 @@ public class EcoWorld implements IModel {
 			}
 		}
 		
-		worldGrid = new WorldGrid(d, 100);
+		WorldGrid.getInstance().init(d, 100);
 
 		this.runWithoutTimer = false;
 		this.numIterations = numIterations;

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.agent.RabbitAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.environment.WorldGrid;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
@@ -39,7 +40,7 @@ public class RabbitPopulation extends AbstractPopulation {
 					10, 10, new Vector(Math.random()*2, Math.random()*2), null,
 					maxSpeed, visionRange, maxAcceleration);
 			agents.add(r);
-			EcoWorld.worldGrid.add(r);
+			WorldGrid.getInstance().add(r);
 		}
 	}
 
