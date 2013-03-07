@@ -5,8 +5,9 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.agent.DeerAgentGrid;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
-import chalmers.dax021308.ecosystem.model.agent.DeerAgent;
+import chalmers.dax021308.ecosystem.model.environment.WorldGrid;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
@@ -15,16 +16,16 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  * @author Sebastian
  * 
  */
-public class DeerPopulation extends AbstractPopulation {
+public class DeerPopulationGrid extends AbstractPopulation {
 
 	private double maxSpeed;
 	private double visionRange;
 
-	public DeerPopulation(List<IAgent> agentList) {
+	public DeerPopulationGrid(List<IAgent> agentList) {
 		agents = agentList;
 	}
 
-	public DeerPopulation(String name, Dimension gridDimension,
+	public DeerPopulationGrid(String name, Dimension gridDimension,
 			int initPopulationSize, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange, boolean groupBehaviour) {
 		
@@ -38,6 +39,8 @@ public class DeerPopulation extends AbstractPopulation {
 	private List<IAgent> initializePopulation(int populationSize,
 			Dimension gridDimension, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange) {
+		
+		WorldGrid wg = WorldGrid.getInstance();
 		List<IAgent> newAgents = new ArrayList<IAgent>(populationSize);
 		addNeutralPopulation(this);
 		for (int i = 0; i < populationSize; i++) {
@@ -51,10 +54,11 @@ public class DeerPopulation extends AbstractPopulation {
 				velocity.setVector(-maxSpeed + Math.random() * 2 * maxSpeed,
 						-maxSpeed + Math.random() * 2 * maxSpeed);
 			}
-			IAgent a = new DeerAgent("Deer", randPos,
+			IAgent a = new DeerAgentGrid("Deer", randPos,
 					color, 5, 10, velocity, maxSpeed, maxAcceleration,
 					visionRange, groupBehaviour);
 			newAgents.add(a);
+			wg.add(a);
 		}
 		setColor(color);
 		return newAgents;

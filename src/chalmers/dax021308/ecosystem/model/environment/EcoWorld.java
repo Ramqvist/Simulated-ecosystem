@@ -23,13 +23,16 @@ import chalmers.dax021308.ecosystem.model.agent.AbstractAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.DeerPopulation;
+import chalmers.dax021308.ecosystem.model.population.DeerPopulationGrid;
 import chalmers.dax021308.ecosystem.model.population.DummyPredatorPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPreyPopulation;
 import chalmers.dax021308.ecosystem.model.population.GrassPopulation;
+import chalmers.dax021308.ecosystem.model.population.GrassPopulationGrid;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.population.PigPopulation;
 import chalmers.dax021308.ecosystem.model.population.RabbitPopulation;
 import chalmers.dax021308.ecosystem.model.population.WolfPopulation;
+import chalmers.dax021308.ecosystem.model.population.WolfPopulationGrid;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.TimerHandler;
 
@@ -61,14 +64,17 @@ public class EcoWorld implements IModel {
 	public static final String POP_RABBIT    = "Rabbit Population";
 	public static final String POP_DUMMYPREY = "Dummy Prey Population";
 	public static final String POP_DEER      = "Deer Population";
+	public static final String POP_DEER_GRID = "Deer Population Grid";
 	public static final String POP_GRASS     = "Grass Population";
+	public static final String POP_GRASS_GRID= "Grass Population Grid";
 	public static final String POP_DUMMYPRED = "Dummy Predator Population";
 	public static final String POP_WOLF      = "Wolf Population";
+	public static final String POP_WOLF_GRID = "Wolf Population Grid";
 	
 	/* Population array based on predator-prey model */
-	public static final String[] PREY_VALUES = { POP_DEER, POP_PIG, POP_RABBIT, POP_DUMMYPREY };
-	public static final String[] PRED_VALUES  = { POP_WOLF, POP_DUMMYPRED };
-	public static final String[] GRASS_VALUES = { POP_GRASS };
+	public static final String[] PREY_VALUES = { POP_DEER, POP_DEER_GRID, POP_PIG, POP_RABBIT, POP_DUMMYPREY };
+	public static final String[] PRED_VALUES  = { POP_WOLF, POP_WOLF_GRID, POP_DUMMYPRED };
+	public static final String[] GRASS_VALUES = { POP_GRASS, POP_GRASS_GRID};
 	
 	/* Dimension constants */
 	public static final String DIM_SMALL  = "500  x 500";
@@ -199,7 +205,7 @@ public class EcoWorld implements IModel {
 			}
 		}
 		
-		WorldGrid.getInstance().init(d, 100);
+		WorldGrid.getInstance().init(d, 20);
 
 		this.runWithoutTimer = false;
 		this.numIterations = numIterations;
@@ -219,7 +225,7 @@ public class EcoWorld implements IModel {
 	public synchronized void setSimulationDimension(Dimension d) {
 		this.d = d;
 		observers.firePropertyChange(EVENT_DIMENSIONCHANGED, null, d);
-		WorldGrid.getInstance().init(d, 100);
+		WorldGrid.getInstance().init(d, 20);
 	}
 	
 	public synchronized void setSimulationDimension(String dimConstant) {
@@ -233,7 +239,7 @@ public class EcoWorld implements IModel {
 			d = D_SMALL;
 		}
 		observers.firePropertyChange(EVENT_DIMENSIONCHANGED, null, d);
-		WorldGrid.getInstance().init(d, 100);
+		WorldGrid.getInstance().init(d, 20);
 	}
 	
 
@@ -277,10 +283,14 @@ public class EcoWorld implements IModel {
 			pred = new DummyPredatorPopulation(d, predPop, Color.red, 2.5, 0.75,275);
 		} else if(predatorModel == POP_WOLF) {
 			pred = new WolfPopulation("Wolves", d, predPop, Color.red, 2.5, 0.8,250, true);
-		} 
+		} else if(predatorModel == POP_WOLF_GRID) {
+			pred = new WolfPopulationGrid("Wolves", d, predPop, Color.red, 2.5, 0.8,250, true);
+		}
 
 		if(preyModel == POP_DEER) {
 			prey = new DeerPopulation("Deers", d, preyPop, Color.blue, 2.0, 2, 200, true);
+		} else if(preyModel == POP_DEER_GRID) {
+			prey = new DeerPopulationGrid("Deers", d, preyPop, Color.blue, 2.0, 2, 200, true);
 		} else if(preyModel == POP_RABBIT) {
 			prey = new RabbitPopulation("Rabbits", d, preyPop, Color.lightGray, 10, 10, 200);
 		} else if(preyModel == POP_DUMMYPREY) {
@@ -291,6 +301,8 @@ public class EcoWorld implements IModel {
 		
 		if(grassModel == POP_GRASS) {
 			grass = new GrassPopulation("Grass", d, grassPop, Color.green, 1, 1, 0, 700);
+		} else if (grassModel == POP_GRASS_GRID) {
+			grass = new GrassPopulationGrid("Grass", d, grassPop, Color.green, 1, 1, 0, 700);
 		}
 
 		if(prey == null || pred == null || grass == null) {
