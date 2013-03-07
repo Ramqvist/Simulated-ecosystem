@@ -48,5 +48,10 @@ public class GrassPopulation extends AbstractPopulation {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
+	@Override
+	public double getComputationalFactor() {
+		return 25;
+	}
 
 }

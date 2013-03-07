@@ -275,4 +275,9 @@ public abstract class AbstractPopulation implements IPopulation {
 		else
 			return 0;
 	}
+	
+	@Override
+	public double getComputationalFactor() {
+		return 1;
+	}
 }
