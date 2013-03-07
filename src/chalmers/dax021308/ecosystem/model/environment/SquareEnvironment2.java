@@ -56,13 +56,13 @@ public class SquareEnvironment2 implements IEnvironment {
 	 */
 	public SquareEnvironment2(List<IPopulation> populations,
 			List<IObstacle> obstacles, OnFinishListener listener, int height,
-			int width) {
+			int width, int numThreads) {
 		this.populations = populations;
 		this.obstacles = obstacles;
 		this.mListener = listener;
 		
 		//Create one Worker for each population.
-		this.workPool = Executors.newFixedThreadPool(4);
+		this.workPool = Executors.newFixedThreadPool(numThreads);
 		//Create the list of executing tasks, for barrier synchronization.
 		this.futures = new ArrayList<Future<Runnable>>();
 		

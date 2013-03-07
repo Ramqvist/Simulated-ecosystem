@@ -170,6 +170,7 @@ public class EcoWorld implements IModel {
 			}
 		}
 	};
+	private int numThreads;
 	
 
 	/**
@@ -304,13 +305,21 @@ public class EcoWorld implements IModel {
 		if(recordSimulation) {
 			recordedSimulation = new ArrayList<List<IPopulation>>(numIterations / 2);
 		}
-		this.env = new SquareEnvironment2(populations, readObsticlesFromFile(), mOnFinishListener, d.height, d.width);
+		this.env = new SquareEnvironment2(populations, readObsticlesFromFile(), mOnFinishListener, d.height, d.width, numThreads);
 	}
 
 	private List<IObstacle> readObsticlesFromFile() {
 		List<IObstacle> obsList = new ArrayList<IObstacle>();
 		obsList.add(new Obstacle("Obstacle.txt"));
 		return obsList;
+	}
+	
+	public void setNumThreads(int numThreads) {
+		this.numThreads = numThreads;
+	}
+	
+	public int getNumThreads() {
+		return numThreads;
 	}
 
 	/**
