@@ -51,7 +51,7 @@ public class GrassAgent extends AbstractAgent {
 		if (Math.random() < REPRODUCTION_RATE * (1.0 - popSize / cap)) {
 			List<IAgent> spawn = new ArrayList<IAgent>();
 			IAgent a = new GrassAgent(name,
-					calculateNewPosition(), color, 5, 5, velocity,
+					getRandomSpawnPosition(), color, 5, 5, velocity,
 					maxSpeed, gridDimension, capacity);
 			spawn.add(a);
 			return spawn;
@@ -98,9 +98,7 @@ public class GrassAgent extends AbstractAgent {
 	 *            the initial position
 	 * @return a 'legit' position, aka one that is inside the view
 	 */
-	private Position calculateNewPosition() {
-		// random position
-		// TODO Remove when getSpawnPosition works
+	private Position getRandomSpawnPosition() {
 		Position pos = new Position(gridDimension.getWidth() * Math.random(),
 				gridDimension.getHeight() * Math.random());
 		return pos;

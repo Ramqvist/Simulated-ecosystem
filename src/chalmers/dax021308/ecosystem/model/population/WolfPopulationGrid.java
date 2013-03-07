@@ -37,7 +37,6 @@ public class WolfPopulationGrid extends AbstractPopulation {
 			Dimension gridDimension, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange) {
 		
-		WorldGrid wg = WorldGrid.getInstance();
 		List<IAgent> newAgents = new ArrayList<IAgent>(populationSize);
 		addNeutralPopulation(this);
 		

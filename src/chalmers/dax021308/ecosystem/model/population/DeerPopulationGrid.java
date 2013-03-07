@@ -40,7 +40,6 @@ public class DeerPopulationGrid extends AbstractPopulation {
 			Dimension gridDimension, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange) {
 		
-		WorldGrid wg = WorldGrid.getInstance();
 		List<IAgent> newAgents = new ArrayList<IAgent>(populationSize);
 		addNeutralPopulation(this);
 		for (int i = 0; i < populationSize; i++) {

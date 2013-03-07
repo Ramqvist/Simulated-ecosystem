@@ -86,6 +86,16 @@ public class WorldGrid {
 	}
 	
 	/**
+	 * Adds agents from a list to the world grid
+	 * @param agents - the list of {@link IAgent}s to be added.
+	 */
+	public void addAll(List<IAgent> agents) {
+		for(IAgent a: agents){
+			this.add(a);
+		}
+	}
+	
+	/**
 	 * Removes and agent from the grid.
 	 * @param agent - the {@link IAgent} to be removed.
 	 */

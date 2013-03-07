@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
+import chalmers.dax021308.ecosystem.model.environment.WorldGrid;
 import chalmers.dax021308.ecosystem.model.util.Stat;
 
 /**
@@ -21,6 +22,7 @@ public abstract class AbstractPopulation implements IPopulation {
 	protected List<IPopulation> preys;
 	protected List<IPopulation> predators;
 	protected List<IPopulation> neutral;
+	protected WorldGrid wg;
 	/**
 	 * Remove list for this Population. 
 	 * <p>
@@ -41,6 +43,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		neutral = new ArrayList<IPopulation>();
 		removeList = new ArrayList<IAgent>();
 		lifeLengths = new LinkedList<Integer>();
+		wg = WorldGrid.getInstance();
 	}
 	
 	public AbstractPopulation(String name, Dimension gridDimension) {
@@ -220,6 +223,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		}
 		if (kids != null) {
 			agents.addAll(kids);
+			wg.addAll(kids);
 		}
 		
 //		System.out.println(name + " life length: mean = " + Stat.mean(lifeLengths) + 
@@ -238,6 +242,7 @@ public abstract class AbstractPopulation implements IPopulation {
 			a = removeList.get(i);
 			lifeLengths.add(a.getLifeLength());
 			agents.remove(a);
+			wg.remove(a);
 		}
 		removeList.clear();
 	}
