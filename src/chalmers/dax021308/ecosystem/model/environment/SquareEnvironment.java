@@ -97,6 +97,7 @@ public class SquareEnvironment implements IEnvironment {
 				Future f = workPool.submit(extraPopWorker);
 		        futures.add(f);
 			}
+			popWorkers[i].dividePopulation = false;
 			Future f = workPool.submit(popWorkers[i]);
 	        futures.add(f);
 		}
