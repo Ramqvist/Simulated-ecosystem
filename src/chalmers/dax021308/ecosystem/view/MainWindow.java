@@ -62,7 +62,7 @@ public class MainWindow extends JFrame implements IView {
 		openGL = new OpenGLSimulationView(model, d, true);
 		openGL.init();
 		openGL.setSize(new Dimension(980,700));
-		heatMap = new HeatMapView(model, d, 8, "Deers");
+		heatMap = new HeatMapView(model, d, 100, "Deers");
 		//
 		controlView = new ControlView(model);
 		graphView1 = new GraphPopulationAmountView(model);
