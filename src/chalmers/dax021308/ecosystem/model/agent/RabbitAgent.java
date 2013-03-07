@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.environment.WorldGrid;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Gender;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -43,7 +44,7 @@ public class RabbitAgent extends AbstractAgent {
 		if (Math.random() < 0.0001) {
 			RabbitAgent r = new RabbitAgent(new Position(position), name, color, width, height, new Vector(velocity), null, maxSpeed, visionRange, maxAcceleration);
 			kids.add(r);
-			EcoWorld.worldGrid.add(r);
+			WorldGrid.getInstance().add(r);
 		}
 		return kids;
 	}
@@ -70,7 +71,7 @@ public class RabbitAgent extends AbstractAgent {
 		}
 		
 		velocity = velocity.toUnitVector().multiply(length);
-		if (EcoWorld.worldGrid.updatePosition(this, gridPosition, nextPosition)) {
+		if (WorldGrid.getInstance().updatePosition(this, gridPosition, nextPosition)) {
 			gridPosition = nextPosition;
 		}
 	}
@@ -108,7 +109,7 @@ public class RabbitAgent extends AbstractAgent {
 	}
 	
 	private Vector getNeutralForce() {
-		List<List<IAgent>> agents = EcoWorld.worldGrid.get(position, visionRange);
+		List<List<IAgent>> agents = WorldGrid.getInstance().get(position, visionRange);
 		Vector neutralForce = new Vector();
 		for (int i = 0; i < agents.size(); i++) {
 			neutralForce.add(getForceFromAgents(agents.get(i)));
