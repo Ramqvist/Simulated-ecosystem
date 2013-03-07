@@ -74,14 +74,14 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 			populations = (List<IPopulation>) event.getNewValue();
 			populations = AbstractPopulation.clonePopulationList(populations);
 		}
-			
-		if (eventName.equals(EcoWorld.EVENT_START)) {
+		//Du kan ha "==" då strängarna som tas in är public static final. "==" är snabbare än equals() //Erik
+		if (eventName == EcoWorld.EVENT_START) {
 		}
-		else if(eventName.equals(EcoWorld.EVENT_STOP)) {
+		else if(eventName == EcoWorld.EVENT_STOP) {
 			this.traces.clear();
 			this.removeAllTraces().clear();
 			this.nIterationsPassed = 0;
-		} else if(eventName.equals(EcoWorld.EVENT_TICK)) {
+		} else if(eventName == EcoWorld.EVENT_TICK) {
 
 			if(populations != null) {		
 				if (this.traces.size() == 0) {
