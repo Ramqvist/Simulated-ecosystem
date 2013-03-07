@@ -15,7 +15,7 @@ import chalmers.dax021308.ecosystem.model.util.Position;
  */
 public class Obstacle implements IObstacle {
 
-	private List<Pair<Integer, Integer>>[] obstacles;
+	private List<Pair<Integer>>[] obstacles;
 
 	public Obstacle(String filename) {
 		this.obstacles = fileToObstacle(filename);
@@ -46,9 +46,9 @@ public class Obstacle implements IObstacle {
 	 * @return an array containing lists with start/stop x-values for the
 	 *         obstacle.
 	 */
-	private List<Pair<Integer, Integer>>[] fileToSolidObstacle(String filePath) {
+	private List<Pair<Integer>>[] fileToSolidObstacle(String filePath) {
 		// not sure of how to parameterize this one correctly
-		List<Pair<Integer, Integer>>[] obs = new List[1000];
+		List<Pair<Integer>>[] obs = new List[1000];
 		try {
 			FileInputStream fstream = new FileInputStream(filePath);
 			// Get the object of DataInputStream
@@ -70,7 +70,7 @@ public class Obstacle implements IObstacle {
 							// either end of entire obstacle or just this part
 							// of the obstacle
 							lastPos = i;
-							obs[yPos].add(new Pair<Integer, Integer>(startPos,
+							obs[yPos].add(new Pair<Integer>(startPos,
 									lastPos));
 							started = false;
 						}
@@ -92,9 +92,9 @@ public class Obstacle implements IObstacle {
 	 * @return an array containing lists with start/stop x-values for the
 	 *         obstacle.
 	 */
-	private List<Pair<Integer, Integer>>[] fileToObstacle(String filePath) {
+	private List<Pair<Integer>>[] fileToObstacle(String filePath) {
 		// TODO: How to do here correct???
-		List<Pair<Integer, Integer>>[] o = new List[1000]; // TODO: The number
+		List<Pair<Integer>>[] o = new List[1000]; // TODO: The number
 															// 1000 is probably
 															// wrong. This
 															// number should be
@@ -109,7 +109,7 @@ public class Obstacle implements IObstacle {
 
 			// Read line by line (every y-position)
 			while ((line = br.readLine()) != null) {
-				List<Pair<Integer, Integer>> pl = new ArrayList<Pair<Integer, Integer>>();
+				List<Pair<Integer>> pl = new ArrayList<Pair<Integer>>();
 				boolean started = false; // If first position of obstacle has
 											// been found or not.
 				int lastPos = -1;
@@ -128,12 +128,12 @@ public class Obstacle implements IObstacle {
 																	// start
 																	// after it.
 							lastPos = i;
-							pl.add(new Pair<Integer, Integer>(startPos, lastPos));
+							pl.add(new Pair<Integer>(startPos, lastPos));
 							started = false;
 						} else if (i == line.length() - 1) { // End of last
 																// obstacle
 							lastPos = i;
-							pl.add(new Pair<Integer, Integer>(startPos, lastPos));
+							pl.add(new Pair<Integer>(startPos, lastPos));
 							started = false;
 						}
 					}

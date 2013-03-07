@@ -5,18 +5,18 @@ package chalmers.dax021308.ecosystem.model.util;
  * 
  * @author Henrik
  * 
- * @param <startNumber>
+ * @param <T>
  *            The first item of the pair
- * @param <endNumber>
+ * @param <T>
  *            The second item of the pair
  */
 // Helps the Obstacle class for creating pairs of start
 // and end positions on a line for where the obstacle begins and ends
-public class Pair<startNumber, endNumber> {
-	private startNumber start;
-	private endNumber end;
+public class Pair<T> {
+	private T start;
+	private T end;
 
-	public Pair(startNumber start, endNumber end) {
+	public Pair(T start, T end) {
 		this.start = start;
 		this.end = end;
 	}
@@ -26,7 +26,7 @@ public class Pair<startNumber, endNumber> {
 	 * 
 	 * @return the first item of the pair is returned
 	 */
-	public startNumber getStart() {
+	public T getStart() {
 		return start;
 	}
 
@@ -35,7 +35,7 @@ public class Pair<startNumber, endNumber> {
 	 * 
 	 * @return the second item of the pair is returned
 	 */
-	public endNumber getEnd() {
+	public T getEnd() {
 		return end;
 	}
 
@@ -45,7 +45,7 @@ public class Pair<startNumber, endNumber> {
 	 * @param start
 	 *            the item to be set
 	 */
-	public void setStart(startNumber start) {
+	public void setStart(T start) {
 		this.start = start;
 	}
 
@@ -55,7 +55,7 @@ public class Pair<startNumber, endNumber> {
 	 * @param start
 	 *            the item to be set
 	 */
-	public void setEnd(endNumber end) {
+	public void setEnd(T end) {
 		this.end = end;
 	}
 	
