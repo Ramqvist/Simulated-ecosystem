@@ -73,7 +73,7 @@ public class EcoWorld implements IModel {
 	public static final String DIM_SMALL  = "500  x 500";
 	public static final String DIM_MEDIUM = "1000 x 1000";
 	public static final String DIM_LARGE  = "1500 x 1500";
-	public static final String DIM_XLARGE = "2200 x 2200";
+	public static final String DIM_XLARGE = "2000 x 2000";
 	
 	private static final Dimension D_SMALL  = new Dimension(500,  500);
 	private static final Dimension D_MEDIUM = new Dimension(1000, 1000);
