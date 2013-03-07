@@ -179,7 +179,7 @@ public class WorldGrid {
 		return scale;
 	}
 	
-	public int getSize() {
+	public int getNumberOfAgents() {
 		try {
 			lock.acquire();
 		} catch (InterruptedException e) {
@@ -189,9 +189,7 @@ public class WorldGrid {
 		int sum = 0;
 		for (int i = 0; i < grid.size(); i++) {
 			for (int j = 0; j < grid.get(i).size(); j++) {
-				for (int k = 0; k < grid.get(i).get(j).size(); k++) {
-					sum++;
-				}
+				sum += grid.get(i).get(j).size();
 			}
 		}
 		lock.release();
