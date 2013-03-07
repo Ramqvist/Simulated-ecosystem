@@ -85,7 +85,7 @@ public class NewSimulationView {
 				model.setRunWithoutTimer(true);			
 			} else {
 				model.setRunWithoutTimer(false);	
-				model.adjustTickRate(tickDelay);			
+				model.setDelayLength(tickDelay);			
 			}
 			if(checkBoxLimitIterations.isSelected()) {
 				int iterations = Integer.parseInt(tvNumIterations.getText());

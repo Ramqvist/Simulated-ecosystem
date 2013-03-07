@@ -54,6 +54,7 @@ public class EcoWorld implements IModel {
 	public static final String EVENT_RECORDING_FINISHED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recordingstarted";
 	public static final String EVENT_RECORDING_STARTED  = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recordingfinished";
 	public static final String EVENT_DIMENSIONCHANGED   = "chalmers.dax021308.ecosystem.model.Ecoworld.event_dimensionchanged";
+	public static final String EVENT_DELAY_CHANGED      = "chalmers.dax021308.ecosystem.model.Ecoworld.event_delaychanged";
 	
 	/* Population constants */
 	public static final String POP_PIG       = "Pig Population";
@@ -218,6 +219,7 @@ public class EcoWorld implements IModel {
 	public synchronized void setSimulationDimension(Dimension d) {
 		this.d = d;
 		observers.firePropertyChange(EVENT_DIMENSIONCHANGED, null, d);
+		WorldGrid.getInstance().init(d, 100);
 	}
 	
 	public synchronized void setSimulationDimension(String dimConstant) {
@@ -231,6 +233,7 @@ public class EcoWorld implements IModel {
 			d = D_SMALL;
 		}
 		observers.firePropertyChange(EVENT_DIMENSIONCHANGED, null, d);
+		WorldGrid.getInstance().init(d, 100);
 	}
 	
 
@@ -460,8 +463,11 @@ public class EcoWorld implements IModel {
 	 * 
 	 * @param newTickRate
 	 */
-	public void adjustTickRate(int newTickRate) {
-		this.tickTime = newTickRate;
+	public void setDelayLength(int newDelay) {
+		synchronized (syncObject) {
+			this.tickTime = newDelay;			
+		}
+		observers.firePropertyChange(EVENT_DELAY_CHANGED, null, newDelay);
 	}
 
 	/**
