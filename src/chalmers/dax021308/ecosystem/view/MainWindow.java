@@ -65,7 +65,7 @@ public class MainWindow extends JFrame implements IView {
 		openGL = new OpenGLSimulationView(model, d, true);
 		openGL.init();
 		//openGL.setSize(new Dimension(980,700));
-		heatMap = new HeatMapView(model, d, 100, "Deers");
+		heatMap = new HeatMapView(model, d, 11, "Deers");
 		parameterView = new ParameterView(model);
 		//
 		controlView = new ControlView(model);
