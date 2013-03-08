@@ -17,6 +17,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -139,6 +140,7 @@ public class NewSimulationView {
 		frmSimulatedEcosystem.setResizable(false);
 		frmSimulatedEcosystem.setAlwaysOnTop(true);
 		frmSimulatedEcosystem.setTitle("Start new Simulation");
+		frmSimulatedEcosystem.setIconImage(new ImageIcon("res/Simulated ecosystem icon.png").getImage());
 		frmSimulatedEcosystem.setBounds(100, 100, 638, 663);
 		frmSimulatedEcosystem.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
