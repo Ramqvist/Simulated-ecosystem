@@ -54,6 +54,8 @@ public class NewSimulationView {
 	private JRadioButton rdbtn2Threads;
 	private JRadioButton rdbtn4Threads;
 	private JRadioButton rdbtn8Threads;
+	private JRadioButton rdbtnSquare;
+	private JRadioButton rdbtnCircle;
 
 	/**
 	 * Create the application.
@@ -101,7 +103,12 @@ public class NewSimulationView {
 			model.setRecordSimulation(chckbxRecordSimulation.isSelected());
 			// Should the shape really be set here?
 			// TODO fix an input value for shape and not just a squareshape
-			String shape = model.SHAPE_CIRCLE;
+			String shape = null;
+			if(rdbtnCircle.isSelected()) {
+				shape = EcoWorld.SHAPE_CIRCLE;
+			} else {
+				shape = EcoWorld.SHAPE_SQUARE;
+			}
 			model.createInitialPopulations(
 					(String) predList.getSelectedValue(),
 					Integer.parseInt(tvPredPopSize.getText()),
@@ -128,7 +135,7 @@ public class NewSimulationView {
 		frmSimulatedEcosystem.setResizable(false);
 		frmSimulatedEcosystem.setAlwaysOnTop(true);
 		frmSimulatedEcosystem.setTitle("Start new Simulation");
-		frmSimulatedEcosystem.setBounds(100, 100, 621, 628);
+		frmSimulatedEcosystem.setBounds(100, 100, 638, 663);
 		frmSimulatedEcosystem.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		JButton btnRunSim = new JButton("Start new");
@@ -341,6 +348,7 @@ public class NewSimulationView {
 			public void actionPerformed(ActionEvent arg0) {
 				rdbtn4Threads.setSelected(false);
 				rdbtn8Threads.setSelected(false);
+				rdbtn2Threads.setSelected(true);
 			}
 		});
 
@@ -350,6 +358,7 @@ public class NewSimulationView {
 			public void actionPerformed(ActionEvent arg0) {
 				rdbtn2Threads.setSelected(false);
 				rdbtn8Threads.setSelected(false);
+				rdbtn4Threads.setSelected(true);
 			}
 		});
 		rdbtn8Threads = new JRadioButton("8 threads");
@@ -357,527 +366,202 @@ public class NewSimulationView {
 			public void actionPerformed(ActionEvent arg0) {
 				rdbtn2Threads.setSelected(false);
 				rdbtn4Threads.setSelected(false);
+				rdbtn8Threads.setSelected(true);
+			}
+		});
+		
+		JLabel lblNewLabel_1 = new JLabel("Simulation shape");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		
+		rdbtnSquare = new JRadioButton("Square");
+		rdbtnSquare.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				rdbtnCircle.setSelected(false);
+				rdbtnSquare.setSelected(true);
+			}
+		});
+		
+		rdbtnCircle = new JRadioButton("Circle");
+		rdbtnCircle.setSelected(true);
+		rdbtnCircle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				rdbtnCircle.setSelected(true);
+				rdbtnSquare.setSelected(false);
 			}
 		});
 		GroupLayout groupLayout = new GroupLayout(
 				frmSimulatedEcosystem.getContentPane());
-		groupLayout
-				.setHorizontalGroup(groupLayout
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								groupLayout
-										.createSequentialGroup()
-										.addContainerGap()
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addComponent(
-																lblPrededators,
-																GroupLayout.DEFAULT_SIZE,
-																605,
-																Short.MAX_VALUE)
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addGroup(
-																				groupLayout
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addComponent(
-																								lblPreys,
-																								GroupLayout.PREFERRED_SIZE,
-																								74,
-																								GroupLayout.PREFERRED_SIZE)
-																						.addGroup(
-																								groupLayout
-																										.createParallelGroup(
-																												Alignment.LEADING)
-																										.addGroup(
-																												groupLayout
-																														.createSequentialGroup()
-																														.addComponent(
-																																grassList,
-																																GroupLayout.PREFERRED_SIZE,
-																																118,
-																																GroupLayout.PREFERRED_SIZE)
-																														.addGap(18)
-																														.addGroup(
-																																groupLayout
-																																		.createParallelGroup(
-																																				Alignment.LEADING)
-																																		.addComponent(
-																																				sliderGrassSize,
-																																				GroupLayout.PREFERRED_SIZE,
-																																				100,
-																																				GroupLayout.PREFERRED_SIZE)
-																																		.addGroup(
-																																				groupLayout
-																																						.createParallelGroup(
-																																								Alignment.LEADING,
-																																								false)
-																																						.addGroup(
-																																								groupLayout
-																																										.createSequentialGroup()
-																																										.addPreferredGap(
-																																												ComponentPlacement.RELATED)
-																																										.addComponent(
-																																												label_1,
-																																												GroupLayout.DEFAULT_SIZE,
-																																												GroupLayout.DEFAULT_SIZE,
-																																												Short.MAX_VALUE))
-																																						.addComponent(
-																																								tvGrassPopSize,
-																																								GroupLayout.PREFERRED_SIZE,
-																																								GroupLayout.DEFAULT_SIZE,
-																																								GroupLayout.PREFERRED_SIZE))))
-																										.addComponent(
-																												lblVegatablePopulation,
-																												GroupLayout.PREFERRED_SIZE,
-																												155,
-																												GroupLayout.PREFERRED_SIZE)
-																										.addGroup(
-																												groupLayout
-																														.createSequentialGroup()
-																														.addComponent(
-																																predList,
-																																GroupLayout.PREFERRED_SIZE,
-																																118,
-																																GroupLayout.PREFERRED_SIZE)
-																														.addPreferredGap(
-																																ComponentPlacement.RELATED)
-																														.addGroup(
-																																groupLayout
-																																		.createParallelGroup(
-																																				Alignment.LEADING)
-																																		.addComponent(
-																																				lblInitialSize,
-																																				GroupLayout.DEFAULT_SIZE,
-																																				112,
-																																				Short.MAX_VALUE)
-																																		.addGroup(
-																																				groupLayout
-																																						.createSequentialGroup()
-																																						.addGroup(
-																																								groupLayout
-																																										.createParallelGroup(
-																																												Alignment.TRAILING,
-																																												false)
-																																										.addComponent(
-																																												sliderPredSize,
-																																												Alignment.LEADING,
-																																												0,
-																																												0,
-																																												Short.MAX_VALUE)
-																																										.addComponent(
-																																												tvPredPopSize,
-																																												Alignment.LEADING,
-																																												GroupLayout.DEFAULT_SIZE,
-																																												97,
-																																												Short.MAX_VALUE))
-																																						.addPreferredGap(
-																																								ComponentPlacement.RELATED))))
-																										.addGroup(
-																												groupLayout
-																														.createSequentialGroup()
-																														.addComponent(
-																																preyList,
-																																GroupLayout.PREFERRED_SIZE,
-																																118,
-																																GroupLayout.PREFERRED_SIZE)
-																														.addPreferredGap(
-																																ComponentPlacement.RELATED)
-																														.addGroup(
-																																groupLayout
-																																		.createParallelGroup(
-																																				Alignment.LEADING)
-																																		.addComponent(
-																																				sliderPreySize,
-																																				0,
-																																				0,
-																																				Short.MAX_VALUE)
-																																		.addGroup(
-																																				groupLayout
-																																						.createSequentialGroup()
-																																						.addComponent(
-																																								label)
-																																						.addPreferredGap(
-																																								ComponentPlacement.RELATED,
-																																								26,
-																																								Short.MAX_VALUE))
-																																		.addComponent(
-																																				tvPreyPopSize)))))
-																		.addGap(18)
-																		.addGroup(
-																				groupLayout
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addGroup(
-																								groupLayout
-																										.createSequentialGroup()
-																										.addComponent(
-																												rdbtnNewRadioButton)
-																										.addContainerGap())
-																						.addGroup(
-																								groupLayout
-																										.createSequentialGroup()
-																										.addComponent(
-																												checkBoxLimitIterations,
-																												GroupLayout.PREFERRED_SIZE,
-																												255,
-																												GroupLayout.PREFERRED_SIZE)
-																										.addContainerGap())
-																						.addGroup(
-																								groupLayout
-																										.createParallelGroup(
-																												Alignment.LEADING)
-																										.addGroup(
-																												groupLayout
-																														.createSequentialGroup()
-																														.addGroup(
-																																groupLayout
-																																		.createParallelGroup(
-																																				Alignment.LEADING)
-																																		.addGroup(
-																																				groupLayout
-																																						.createSequentialGroup()
-																																						.addComponent(
-																																								sliderNumIterations,
-																																								GroupLayout.PREFERRED_SIZE,
-																																								GroupLayout.DEFAULT_SIZE,
-																																								GroupLayout.PREFERRED_SIZE)
-																																						.addPreferredGap(
-																																								ComponentPlacement.UNRELATED)
-																																						.addComponent(
-																																								tvNumIterations,
-																																								GroupLayout.PREFERRED_SIZE,
-																																								57,
-																																								GroupLayout.PREFERRED_SIZE))
-																																		.addComponent(
-																																				lblSimulationIteration,
-																																				GroupLayout.PREFERRED_SIZE,
-																																				175,
-																																				GroupLayout.PREFERRED_SIZE)
-																																		.addComponent(
-																																				chckbxRecordSimulation))
-																														.addContainerGap())
-																										.addGroup(
-																												groupLayout
-																														.createParallelGroup(
-																																Alignment.LEADING)
-																														.addGroup(
-																																groupLayout
-																																		.createSequentialGroup()
-																																		.addComponent(
-																																				lblSimulationDimension,
-																																				GroupLayout.DEFAULT_SIZE,
-																																				341,
-																																				Short.MAX_VALUE)
-																																		.addContainerGap())
-																														.addGroup(
-																																groupLayout
-																																		.createSequentialGroup()
-																																		.addComponent(
-																																				listSimulationDim,
-																																				GroupLayout.PREFERRED_SIZE,
-																																				199,
-																																				GroupLayout.PREFERRED_SIZE)
-																																		.addContainerGap())
-																														.addGroup(
-																																groupLayout
-																																		.createSequentialGroup()
-																																		.addGroup(
-																																				groupLayout
-																																						.createParallelGroup(
-																																								Alignment.LEADING)
-																																						.addGroup(
-																																								groupLayout
-																																										.createSequentialGroup()
-																																										.addComponent(
-																																												btnCancel,
-																																												GroupLayout.PREFERRED_SIZE,
-																																												140,
-																																												GroupLayout.PREFERRED_SIZE)
-																																										.addPreferredGap(
-																																												ComponentPlacement.RELATED)
-																																										.addComponent(
-																																												btnRunSim,
-																																												GroupLayout.DEFAULT_SIZE,
-																																												200,
-																																												Short.MAX_VALUE))
-																																						.addComponent(
-																																								lblIterationDelay)
-																																						.addGroup(
-																																								groupLayout
-																																										.createParallelGroup(
-																																												Alignment.LEADING,
-																																												false)
-																																										.addComponent(
-																																												lblNewLabel,
-																																												GroupLayout.DEFAULT_SIZE,
-																																												GroupLayout.DEFAULT_SIZE,
-																																												Short.MAX_VALUE)
-																																										.addGroup(
-																																												groupLayout
-																																														.createSequentialGroup()
-																																														.addComponent(
-																																																slider_delaylength,
-																																																GroupLayout.PREFERRED_SIZE,
-																																																GroupLayout.DEFAULT_SIZE,
-																																																GroupLayout.PREFERRED_SIZE)
-																																														.addPreferredGap(
-																																																ComponentPlacement.UNRELATED)
-																																														.addComponent(
-																																																textfield_Iterationdelay,
-																																																GroupLayout.PREFERRED_SIZE,
-																																																57,
-																																																GroupLayout.PREFERRED_SIZE))))
-																																		.addGap(5))))
-																						.addGroup(
-																								groupLayout
-																										.createSequentialGroup()
-																										.addGroup(
-																												groupLayout
-																														.createParallelGroup(
-																																Alignment.TRAILING,
-																																false)
-																														.addComponent(
-																																rdbtn2Threads,
-																																Alignment.LEADING,
-																																GroupLayout.DEFAULT_SIZE,
-																																GroupLayout.DEFAULT_SIZE,
-																																Short.MAX_VALUE)
-																														.addComponent(
-																																rdbtn8Threads,
-																																Alignment.LEADING,
-																																GroupLayout.DEFAULT_SIZE,
-																																GroupLayout.DEFAULT_SIZE,
-																																Short.MAX_VALUE)
-																														.addComponent(
-																																rdbtn4Threads,
-																																Alignment.LEADING,
-																																GroupLayout.DEFAULT_SIZE,
-																																93,
-																																Short.MAX_VALUE))
-																										.addContainerGap()))))));
-		groupLayout
-				.setVerticalGroup(groupLayout
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								groupLayout
-										.createSequentialGroup()
-										.addContainerGap()
-										.addComponent(lblPrededators)
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addGroup(
-																				groupLayout
-																						.createParallelGroup(
-																								Alignment.BASELINE)
-																						.addComponent(
-																								predList,
-																								GroupLayout.PREFERRED_SIZE,
-																								104,
-																								GroupLayout.PREFERRED_SIZE)
-																						.addGroup(
-																								groupLayout
-																										.createSequentialGroup()
-																										.addComponent(
-																												lblInitialSize)
-																										.addPreferredGap(
-																												ComponentPlacement.RELATED)
-																										.addComponent(
-																												tvPredPopSize,
-																												GroupLayout.PREFERRED_SIZE,
-																												GroupLayout.DEFAULT_SIZE,
-																												GroupLayout.PREFERRED_SIZE)
-																										.addPreferredGap(
-																												ComponentPlacement.RELATED)
-																										.addComponent(
-																												sliderPredSize,
-																												GroupLayout.PREFERRED_SIZE,
-																												GroupLayout.DEFAULT_SIZE,
-																												GroupLayout.PREFERRED_SIZE)))
-																		.addGap(37)
-																		.addComponent(
-																				lblPreys,
-																				GroupLayout.PREFERRED_SIZE,
-																				17,
-																				GroupLayout.PREFERRED_SIZE))
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addComponent(
-																				lblIterationDelay)
-																		.addGap(6)
-																		.addGroup(
-																				groupLayout
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addComponent(
-																								slider_delaylength,
-																								GroupLayout.PREFERRED_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.PREFERRED_SIZE)
-																						.addComponent(
-																								textfield_Iterationdelay,
-																								GroupLayout.PREFERRED_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.PREFERRED_SIZE))
-																		.addGap(18)
-																		.addComponent(
-																				lblNewLabel)
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED)
-																		.addComponent(
-																				rdbtn2Threads)
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED)
-																		.addComponent(
-																				rdbtn4Threads)
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED)
-																		.addComponent(
-																				rdbtn8Threads)))
-										.addGap(6)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																groupLayout
-																		.createParallelGroup(
-																				Alignment.BASELINE)
-																		.addComponent(
-																				preyList,
-																				GroupLayout.PREFERRED_SIZE,
-																				104,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGroup(
-																				groupLayout
-																						.createSequentialGroup()
-																						.addComponent(
-																								label)
-																						.addGap(1)
-																						.addComponent(
-																								tvPreyPopSize,
-																								GroupLayout.PREFERRED_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.PREFERRED_SIZE)
-																						.addGap(2)
-																						.addComponent(
-																								sliderPreySize,
-																								GroupLayout.PREFERRED_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.PREFERRED_SIZE)))
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED)
-																		.addComponent(
-																				rdbtnNewRadioButton)
-																		.addGap(27)
-																		.addComponent(
-																				checkBoxLimitIterations)
-																		.addPreferredGap(
-																				ComponentPlacement.UNRELATED)
-																		.addComponent(
-																				lblSimulationIteration)
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED)
-																		.addGroup(
-																				groupLayout
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addComponent(
-																								sliderNumIterations,
-																								GroupLayout.PREFERRED_SIZE,
-																								31,
-																								GroupLayout.PREFERRED_SIZE)
-																						.addComponent(
-																								tvNumIterations,
-																								GroupLayout.PREFERRED_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.PREFERRED_SIZE))))
-										.addGap(38)
-										.addComponent(chckbxRecordSimulation)
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblPrededators, GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblPreys, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addGroup(groupLayout.createSequentialGroup()
+										.addComponent(grassList, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
 										.addGap(18)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.BASELINE)
-														.addComponent(
-																lblVegatablePopulation,
-																GroupLayout.PREFERRED_SIZE,
-																17,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																lblSimulationDimension,
-																GroupLayout.PREFERRED_SIZE,
-																17,
-																GroupLayout.PREFERRED_SIZE))
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																groupLayout
-																		.createSequentialGroup()
-																		.addGap(20)
-																		.addComponent(
-																				tvGrassPopSize,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addPreferredGap(
-																				ComponentPlacement.UNRELATED)
-																		.addComponent(
-																				sliderGrassSize,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE))
-														.addGroup(
-																groupLayout
-																		.createParallelGroup(
-																				Alignment.BASELINE)
-																		.addComponent(
-																				grassList,
-																				GroupLayout.PREFERRED_SIZE,
-																				104,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addComponent(
-																				label_1)
-																		.addComponent(
-																				listSimulationDim,
-																				GroupLayout.PREFERRED_SIZE,
-																				105,
-																				GroupLayout.PREFERRED_SIZE)))
-										.addGap(11)
-										.addGroup(
-												groupLayout
-														.createParallelGroup(
-																Alignment.BASELINE)
-														.addComponent(
-																btnCancel,
-																GroupLayout.PREFERRED_SIZE,
-																31,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																btnRunSim,
-																GroupLayout.PREFERRED_SIZE,
-																30,
-																GroupLayout.PREFERRED_SIZE))
-										.addContainerGap()));
+										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+											.addComponent(sliderGrassSize, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+											.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+												.addGroup(groupLayout.createSequentialGroup()
+													.addPreferredGap(ComponentPlacement.RELATED)
+													.addComponent(label_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+												.addComponent(tvGrassPopSize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+									.addComponent(lblVegatablePopulation, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)
+									.addGroup(groupLayout.createSequentialGroup()
+										.addComponent(predList, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+											.addComponent(lblInitialSize, GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
+											.addGroup(groupLayout.createSequentialGroup()
+												.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+													.addComponent(sliderPredSize, Alignment.LEADING, 0, 0, Short.MAX_VALUE)
+													.addComponent(tvPredPopSize, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE))
+												.addPreferredGap(ComponentPlacement.RELATED))))
+									.addGroup(groupLayout.createSequentialGroup()
+										.addComponent(preyList, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+											.addComponent(sliderPreySize, 0, 0, Short.MAX_VALUE)
+											.addGroup(groupLayout.createSequentialGroup()
+												.addComponent(label)
+												.addPreferredGap(ComponentPlacement.RELATED, 65, Short.MAX_VALUE))
+											.addComponent(tvPreyPopSize, 112, 112, 112)))))
+							.addGap(18)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(checkBoxLimitIterations, GroupLayout.PREFERRED_SIZE, 255, GroupLayout.PREFERRED_SIZE)
+										.addGroup(groupLayout.createSequentialGroup()
+											.addComponent(sliderNumIterations, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.UNRELATED)
+											.addComponent(tvNumIterations, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))
+										.addComponent(lblSimulationIteration, GroupLayout.PREFERRED_SIZE, 175, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblNewLabel_1)
+										.addComponent(rdbtnSquare)
+										.addComponent(rdbtnCircle))
+									.addContainerGap())
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addGroup(groupLayout.createSequentialGroup()
+										.addComponent(rdbtnNewRadioButton)
+										.addContainerGap())
+									.addGroup(groupLayout.createSequentialGroup()
+										.addComponent(lblSimulationDimension, GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
+										.addContainerGap())
+									.addGroup(groupLayout.createSequentialGroup()
+										.addComponent(listSimulationDim, GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE)
+										.addContainerGap())
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+											.addGroup(groupLayout.createSequentialGroup()
+												.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(btnRunSim, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))
+											.addComponent(lblIterationDelay)
+											.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+												.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+												.addGroup(groupLayout.createSequentialGroup()
+													.addComponent(slider_delaylength, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+													.addPreferredGap(ComponentPlacement.UNRELATED)
+													.addComponent(textfield_Iterationdelay, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))))
+										.addGap(5))
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+											.addComponent(rdbtn2Threads, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+											.addComponent(rdbtn8Threads, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+											.addComponent(rdbtn4Threads, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE))
+										.addContainerGap())
+									.addGroup(groupLayout.createSequentialGroup()
+										.addComponent(chckbxRecordSimulation)
+										.addContainerGap()))))))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblPrededators)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(predList, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(lblInitialSize)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(tvPredPopSize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(sliderPredSize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+							.addGap(37)
+							.addComponent(lblPreys, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblIterationDelay)
+							.addGap(6)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(slider_delaylength, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(textfield_Iterationdelay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addComponent(lblNewLabel)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(rdbtn2Threads)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(rdbtn4Threads)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(rdbtn8Threads)))
+					.addGap(6)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(preyList, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
+							.addGroup(groupLayout.createSequentialGroup()
+								.addComponent(label)
+								.addGap(1)
+								.addComponent(tvPreyPopSize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(2)
+								.addComponent(sliderPreySize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(rdbtnNewRadioButton)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(checkBoxLimitIterations)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(lblSimulationIteration)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(sliderNumIterations, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(lblNewLabel_1))
+								.addComponent(tvNumIterations, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(rdbtnSquare)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(rdbtnCircle)
+					.addGap(27)
+					.addComponent(chckbxRecordSimulation)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblVegatablePopulation, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblSimulationDimension, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(20)
+							.addComponent(tvGrassPopSize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(sliderGrassSize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(grassList, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
+							.addComponent(label_1)
+							.addComponent(listSimulationDim, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)))
+					.addGap(11)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnRunSim, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
+		);
 		frmSimulatedEcosystem.getContentPane().setLayout(groupLayout);
 	}
 }
