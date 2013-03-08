@@ -20,6 +20,8 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
 
+import com.lowagie.text.pdf.PRAcroForm;
+
 import chalmers.dax021308.ecosystem.controller.WindowController;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 
@@ -35,7 +37,7 @@ import java.awt.event.ActionEvent;
 public class MainWindow extends JFrame implements IView {
 	private static final long serialVersionUID = -8023060073777907757L;
 	private JPanel contentPane;
-	private ParameterView parameterView = new ParameterView(); 
+	private ParameterView parameterView; 
 	private ControlView controlView;
 	private JPanel simulationPanel = new JPanel();
 	private JPanel left = new JPanel();
@@ -63,6 +65,7 @@ public class MainWindow extends JFrame implements IView {
 		openGL.init();
 		openGL.setSize(new Dimension(980,700));
 		heatMap = new HeatMapView(model, d, 100, "Deers");
+		parameterView = new ParameterView(model);
 		//
 		controlView = new ControlView(model);
 		graphView1 = new GraphPopulationAmountView(model);
