@@ -61,6 +61,7 @@ public class EcoWorld implements IModel {
 	public static final String EVENT_RECORDING_STARTED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recordingfinished";
 	public static final String EVENT_DIMENSIONCHANGED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_dimensionchanged";
 	public static final String EVENT_DELAY_CHANGED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_delaychanged";
+	public static final String EVENT_SHAPE_CHANGED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_shape_changed";
 
 	/* Shape Constants */
 	public static final String SHAPE_SQUARE = "Square Shape";
@@ -293,8 +294,10 @@ public class EcoWorld implements IModel {
 		IShape shape = null;
 		if (shapeModel == SHAPE_SQUARE) {
 			shape = new SquareShape();
+			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
 		} else if (shapeModel == SHAPE_CIRCLE) {
 			shape = new CircleShape();
+			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
 		}
 		if (predatorModel == POP_DUMMYPRED) {
 			pred = new DummyPredatorPopulation(d, predPop, Color.red, 2.5,

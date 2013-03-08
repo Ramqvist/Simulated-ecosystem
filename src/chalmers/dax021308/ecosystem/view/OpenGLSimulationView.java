@@ -24,6 +24,8 @@ import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.util.CircleShape;
+import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
@@ -61,6 +63,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 	private JFrame frame;
 	private JOGLListener glListener;
 	//private GLCanvas canvas;
+	private IShape shape;
 	
 	/**
 	 * Create the panel.
@@ -158,6 +161,11 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 			if(o instanceof Dimension) {
 				this.size = (Dimension) o;
 			}
+		} else if(eventName == EcoWorld.EVENT_SHAPE_CHANGED) {
+			Object o = event.getNewValue();
+			if(o instanceof IShape) {
+				this.shape = (IShape) o;
+			}
 		}
 	}
 	
@@ -230,11 +238,6 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
                 double scaleX = frameWidth / size.width;
                 double scaleY = frameHeight / size.height;
 
-                //Background drawing
-                //Color of the background.
-                //white
-                //gl.glColor4f(1, 1, 1, 1);
-                //Brown
                 gl.glColor4f(1, 0.8F, 0.6F, 1);
           		gl.glBegin(GL.GL_POLYGON);
           		gl.glVertex2d(0, 0);
@@ -242,6 +245,22 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
           		gl.glVertex2d(frameWidth, frameHeight);
           		gl.glVertex2d(frameWidth, 0);
           		gl.glEnd();
+          		
+          		if(shape != null && shape instanceof CircleShape) {
+          				double increment = 2*Math.PI/50;
+		                double cx = frameWidth / 2;
+		                double cy = frameHeight/ 2;
+		                double radius = frameWidth / 2;
+		                gl.glColor4f(0.5F, 0.4F, 0.3F, 1);
+		          	for(double angle = 0; angle < 2*Math.PI; angle+=increment){
+		          		gl.glBegin(GL.GL_POLYGON);
+		          		gl.glVertex2d(cx, cy);
+		          		gl.glVertex2d(cx + Math.cos(angle)* radius, cy + Math.sin(angle)*radius);
+		          		gl.glVertex2d(cx + Math.cos(angle + increment)*radius, cy + Math.sin(angle + increment)*radius);
+		          		gl.glEnd();
+		          	}
+          		}
+	          	
           		int popSize = newPops.size();
           		for(int i = 0; i < popSize; i ++) {
         			List<IAgent> agents = newPops.get(i).getAgents();
