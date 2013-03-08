@@ -250,14 +250,13 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
           				double increment = 2*Math.PI/50;
 		                double cx = frameWidth / 2;
 		                double cy = frameHeight/ 2;
-		                double radius;
+		                double radius = cy;
 		                gl.glColor3d(0.545098, 0.270588, 0.0745098);
 		          	for(double angle = 0; angle < 2*Math.PI; angle+=increment){
-		          		radius = (frameWidth / 2) + Math.cos(angle) * ( (frameHeight - frameWidth ) / 2);
 		          		gl.glLineWidth(2.5F);
 		          		gl.glBegin(GL.GL_LINES); 
-//		          		gl.glVertex2d(cx, cy);
 		          		gl.glVertex2d(cx + Math.cos(angle)* radius, cy + Math.sin(angle)*radius);
+		          		radius = (frameWidth / 2) + Math.abs(Math.sin(angle+increment) * ( (frameHeight - frameWidth ) / 2));
 		          		gl.glVertex2d(cx + Math.cos(angle + increment)*radius, cy + Math.sin(angle + increment)*radius);
 		          		gl.glEnd();
 		          	}
