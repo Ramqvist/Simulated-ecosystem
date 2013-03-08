@@ -238,7 +238,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
                 double scaleX = frameWidth / size.width;
                 double scaleY = frameHeight / size.height;
 
-                gl.glColor4f(1, 0.8F, 0.6F, 1);
+                gl.glColor3d(0.9, 0.9, 0.9);
           		gl.glBegin(GL.GL_POLYGON);
           		gl.glVertex2d(0, 0);
           		gl.glVertex2d(0, frameHeight);
@@ -250,11 +250,12 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
           				double increment = 2*Math.PI/50;
 		                double cx = frameWidth / 2;
 		                double cy = frameHeight/ 2;
-		                double radius = frameWidth / 2;
-		                gl.glColor4f(0.5F, 0.4F, 0.3F, 1);
+		                double radius = frameHeight / 2;
+		                gl.glColor3d(0.545098, 0.270588, 0.0745098);
 		          	for(double angle = 0; angle < 2*Math.PI; angle+=increment){
-		          		gl.glBegin(GL.GL_POLYGON);
-		          		gl.glVertex2d(cx, cy);
+		          		gl.glLineWidth(2.5F);
+		          		gl.glBegin(GL.GL_LINES);
+//		          		gl.glVertex2d(cx, cy);
 		          		gl.glVertex2d(cx + Math.cos(angle)* radius, cy + Math.sin(angle)*radius);
 		          		gl.glVertex2d(cx + Math.cos(angle + increment)*radius, cy + Math.sin(angle + increment)*radius);
 		          		gl.glEnd();
@@ -351,16 +352,16 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
  
             @Override
             public void init(GLAutoDrawable drawable) {
-                    System.out.println("INIT CALLED");
+//                    System.out.println("INIT CALLED");
                     //Projection mode is for setting camera
                 	gl.glMatrixMode(GL.GL_PROJECTION);
                   //This will set the camera for orthographic projection and allow 2D view
                   //Our projection will be on 400 X 400 screen
                     gl.glLoadIdentity();
-                    Log.v("getWidth(): " + getWidth());
-                    Log.v("getHeight(): " + getHeight());
-                    Log.v("size.width: " + size.width);
-                    Log.v("size.height: " + size.height);
+//                    Log.v("getWidth(): " + getWidth());
+//                    Log.v("getHeight(): " + getHeight());
+//                    Log.v("size.width: " + size.width);
+//                    Log.v("size.height: " + size.height);
                     gl.glOrtho(0, getWidth(), getHeight(), 0, 0, 1);
                   //Modelview is for drawing
                     gl.glMatrixMode(GL.GL_MODELVIEW);
