@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JMenuBar;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -56,6 +57,7 @@ public class MainWindow extends JFrame implements IView {
 	 */
 	public MainWindow(EcoWorld model) {
 		setTitle("Simulated Ecosystem");
+		setIconImage(new ImageIcon("res/Simulated ecosystem icon.png").getImage());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 613, 516);
 		this.setExtendedState(MAXIMIZED_BOTH);
