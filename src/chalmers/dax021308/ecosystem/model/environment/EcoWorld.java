@@ -33,7 +33,10 @@ import chalmers.dax021308.ecosystem.model.population.PigPopulation;
 import chalmers.dax021308.ecosystem.model.population.RabbitPopulation;
 import chalmers.dax021308.ecosystem.model.population.WolfPopulation;
 import chalmers.dax021308.ecosystem.model.population.WolfPopulationGrid;
+import chalmers.dax021308.ecosystem.model.util.CircleShape;
+import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Log;
+import chalmers.dax021308.ecosystem.model.util.SquareShape;
 import chalmers.dax021308.ecosystem.model.util.TimerHandler;
 
 /**
@@ -48,67 +51,73 @@ import chalmers.dax021308.ecosystem.model.util.TimerHandler;
  * 
  */
 public class EcoWorld implements IModel {
-	
+
 	/* Property change events constants */
-	public static final String EVENT_TICK               = "chalmers.dax021308.ecosystem.model.Ecoworld.event_tick";
-	public static final String EVENT_STOP               = "chalmers.dax021308.ecosystem.model.Ecoworld.event_stop";
-	public static final String EVENT_START              = "chalmers.dax021308.ecosystem.model.Ecoworld.event_start";
-	public static final String EVENT_PAUSE		        = "chalmers.dax021308.ecosystem.model.Ecoworld.event_pause";
+	public static final String EVENT_TICK = "chalmers.dax021308.ecosystem.model.Ecoworld.event_tick";
+	public static final String EVENT_STOP = "chalmers.dax021308.ecosystem.model.Ecoworld.event_stop";
+	public static final String EVENT_START = "chalmers.dax021308.ecosystem.model.Ecoworld.event_start";
+	public static final String EVENT_PAUSE = "chalmers.dax021308.ecosystem.model.Ecoworld.event_pause";
 	public static final String EVENT_RECORDING_FINISHED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recordingstarted";
-	public static final String EVENT_RECORDING_STARTED  = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recordingfinished";
-	public static final String EVENT_DIMENSIONCHANGED   = "chalmers.dax021308.ecosystem.model.Ecoworld.event_dimensionchanged";
-	public static final String EVENT_DELAY_CHANGED      = "chalmers.dax021308.ecosystem.model.Ecoworld.event_delaychanged";
-	
+	public static final String EVENT_RECORDING_STARTED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recordingfinished";
+	public static final String EVENT_DIMENSIONCHANGED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_dimensionchanged";
+	public static final String EVENT_DELAY_CHANGED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_delaychanged";
+
+	/* Shape Constants */
+	public static final String SHAPE_SQUARE = "Square Shape";
+	public static final String SHAPE_CIRCLE = "Circle Shape";
+
 	/* Population constants */
-	public static final String POP_PIG       = "Pig Population";
-	public static final String POP_RABBIT    = "Rabbit Population";
+	public static final String POP_PIG = "Pig Population";
+	public static final String POP_RABBIT = "Rabbit Population";
 	public static final String POP_DUMMYPREY = "Dummy Prey Population";
-	public static final String POP_DEER      = "Deer Population";
+	public static final String POP_DEER = "Deer Population";
 	public static final String POP_DEER_GRID = "Deer Population Grid";
-	public static final String POP_GRASS     = "Grass Population";
-	public static final String POP_GRASS_GRID= "Grass Population Grid";
+	public static final String POP_GRASS = "Grass Population";
+	public static final String POP_GRASS_GRID = "Grass Population Grid";
 	public static final String POP_DUMMYPRED = "Dummy Predator Population";
-	public static final String POP_WOLF      = "Wolf Population";
+	public static final String POP_WOLF = "Wolf Population";
 	public static final String POP_WOLF_GRID = "Wolf Population Grid";
-	
+
 	/* Population array based on predator-prey model */
-	public static final String[] PREY_VALUES = { POP_DEER, POP_DEER_GRID, POP_PIG, POP_RABBIT, POP_DUMMYPREY };
-	public static final String[] PRED_VALUES  = { POP_WOLF, POP_WOLF_GRID, POP_DUMMYPRED };
-	public static final String[] GRASS_VALUES = { POP_GRASS, POP_GRASS_GRID};
-	
+	public static final String[] PREY_VALUES = { POP_DEER, POP_DEER_GRID,
+			POP_PIG, POP_RABBIT, POP_DUMMYPREY };
+	public static final String[] PRED_VALUES = { POP_WOLF, POP_WOLF_GRID,
+			POP_DUMMYPRED };
+	public static final String[] GRASS_VALUES = { POP_GRASS, POP_GRASS_GRID };
+
 	/* Dimension constants */
-	public static final String DIM_SMALL  = "500  x 500";
+	public static final String DIM_SMALL = "500  x 500";
 	public static final String DIM_MEDIUM = "1000 x 1000";
-	public static final String DIM_LARGE  = "1500 x 1500";
+	public static final String DIM_LARGE = "1500 x 1500";
 	public static final String DIM_XLARGE = "2000 x 2000";
-	
-	private static final Dimension D_SMALL  = new Dimension(500,  500);
+
+	private static final Dimension D_SMALL = new Dimension(500, 500);
 	private static final Dimension D_MEDIUM = new Dimension(1000, 1000);
-	private static final Dimension D_LARGE  = new Dimension(1500, 1500);
+	private static final Dimension D_LARGE = new Dimension(1500, 1500);
 	private static final Dimension D_XLARGE = new Dimension(2000, 2000);
-	
-	public static final String[] DIM_VALUES =  { DIM_SMALL, DIM_MEDIUM, DIM_LARGE, DIM_XLARGE };
-	
-	
+
+	public static final String[] DIM_VALUES = { DIM_SMALL, DIM_MEDIUM,
+			DIM_LARGE, DIM_XLARGE };
+
 	/* State values */
 	private AtomicBoolean environmentFinished = new AtomicBoolean(false);
-	private AtomicBoolean timerFinished       = new AtomicBoolean(false);
-	private AtomicBoolean shouldRun           = new AtomicBoolean(false);
+	private AtomicBoolean timerFinished = new AtomicBoolean(false);
+	private AtomicBoolean shouldRun = new AtomicBoolean(false);
 	private boolean runWithoutTimer;
 	private boolean recordSimulation;
 	private boolean skipBoolean;
-	
+
 	/* Simulation settings */
 	private int numIterations;
 	private TimerHandler timer;
 	private IEnvironment env;
 	private int tickTime;
 	private PropertyChangeSupport observers;
-	
+
 	/* Time measurements variables */
 	private long startIterationTime;
 	private long elapsedTime;
-	
+
 	/**
 	 * Each list in the list contains one snapshot of frame;
 	 */
@@ -120,35 +129,35 @@ public class EcoWorld implements IModel {
 	private Object syncObject = new Object();
 	private int numUpdates = 0;
 	private Dimension d;
-	//private static final int NUM_THREAD = 1;
+	// private static final int NUM_THREAD = 1;
 	private ExecutorService executor;
 
 	private OnFinishListener mOnFinishListener = new OnFinishListener() {
 
 		@Override
 		public void onFinish(List<IPopulation> popList, List<IObstacle> obsList) {
-			if(!shouldRun.get()) {
+			if (!shouldRun.get()) {
 				return;
 			}
 			elapsedTime = System.nanoTime() - startIterationTime;
 			// Fire state changed to observers, notify there has been an update.
-			if(recordSimulation) {
+			if (recordSimulation) {
 				recordedSimulation.add(clonePopulationList(popList));
 			} else {
 				observers.firePropertyChange(EVENT_TICK, obsList, popList);
 			}
 			if (runWithoutTimer) {
-				scheduleEnvironmentUpdate();		
+				scheduleEnvironmentUpdate();
 			} else {
 				synchronized (syncObject) {
-					//Log.v("Environment: Finished.");
+					// Log.v("Environment: Finished.");
 					if (timerFinished.get()) {
-						//Log.v("Environment: Timer is finished, doing Environment update");
+						// Log.v("Environment: Timer is finished, doing Environment update");
 						environmentFinished.set(false);
 						timerFinished.set(false);
 						scheduleEnvironmentUpdate();
 					} else {
-						//Log.v("Environment: Timer NOT finished, waiting...");
+						// Log.v("Environment: Timer NOT finished, waiting...");
 						environmentFinished.set(true);
 					}
 				}
@@ -160,25 +169,24 @@ public class EcoWorld implements IModel {
 		@Override
 		// När timer är klar.
 		public void onTick() {
-			if(!shouldRun.get()) {
+			if (!shouldRun.get()) {
 				return;
 			}
 			synchronized (syncObject) {
-				//Log.v("Timer: Finished.");
+				// Log.v("Timer: Finished.");
 				if (environmentFinished.get()) {
-					//Log.v("Timer: Environment is finished, doing Environment update");
+					// Log.v("Timer: Environment is finished, doing Environment update");
 					timerFinished.set(false);
 					environmentFinished.set(false);
 					scheduleEnvironmentUpdate();
 				} else {
-					//Log.v("Timer: Environment NOT finished, waiting...");
+					// Log.v("Timer: Environment NOT finished, waiting...");
 					timerFinished.set(true);
 				}
 			}
 		}
 	};
 	private int numThreads;
-	
 
 	/**
 	 * Start EcoWorld with a tick-timer.
@@ -187,62 +195,62 @@ public class EcoWorld implements IModel {
 	 *            Minimum time it will take for one tick to complete.
 	 * @param numIterations
 	 *            Number of iterations before the program finishes.
-	 *            
-	 * @param d Dimension of the simulation.
+	 * 
+	 * @param d
+	 *            Dimension of the simulation.
 	 */
-	public EcoWorld(Dimension d, int tickTime, int numIterations, boolean recordSimulation) {
+	public EcoWorld(Dimension d, int tickTime, int numIterations,
+			boolean recordSimulation) {
 		this.tickTime = tickTime;
 		this.timer = new TimerHandler();
 		this.d = d;
 		this.recordSimulation = recordSimulation;
-		if(recordSimulation) {
-			//For recording in half fps.
-			if(skipBoolean) {
-				recordedSimulation = new ArrayList<List<IPopulation>>(numIterations);
+		if (recordSimulation) {
+			// For recording in half fps.
+			if (skipBoolean) {
+				recordedSimulation = new ArrayList<List<IPopulation>>(
+						numIterations);
 				skipBoolean = false;
 			} else {
 				skipBoolean = true;
 			}
 		}
-		
+
 		WorldGrid.getInstance().init(d, 20);
 
 		this.runWithoutTimer = false;
 		this.numIterations = numIterations;
-		
+
 		this.observers = new PropertyChangeSupport(this);
 	}
-	
+
 	public void setRecordSimulation(boolean recordSimulation) {
 		this.recordSimulation = recordSimulation;
 	}
-	
-	
+
 	public synchronized void setNumIterations(int numIterations) {
 		this.numIterations = numIterations;
 	}
-	
+
 	public synchronized void setSimulationDimension(Dimension d) {
 		this.d = d;
 		observers.firePropertyChange(EVENT_DIMENSIONCHANGED, null, d);
 		WorldGrid.getInstance().init(d, 20);
 	}
-	
+
 	public synchronized void setSimulationDimension(String dimConstant) {
-		if(dimConstant == DIM_XLARGE) {
+		if (dimConstant == DIM_XLARGE) {
 			d = D_XLARGE;
-		} else if(dimConstant == DIM_LARGE) {
+		} else if (dimConstant == DIM_LARGE) {
 			d = D_LARGE;
-		} else if(dimConstant == DIM_MEDIUM) {
+		} else if (dimConstant == DIM_MEDIUM) {
 			d = D_MEDIUM;
-		} else if(dimConstant == DIM_SMALL) {
+		} else if (dimConstant == DIM_SMALL) {
 			d = D_SMALL;
 		}
 		observers.firePropertyChange(EVENT_DIMENSIONCHANGED, null, d);
 		WorldGrid.getInstance().init(d, 20);
 	}
-	
-
 
 	/**
 	 * Start EcoWorld WITHOUT a tick-timer.
@@ -251,8 +259,9 @@ public class EcoWorld implements IModel {
 	 * 
 	 * @param numIterations
 	 *            Number of iterations before the program finishes.
-	 *            
-	 * @param d Dimension of the simulation.
+	 * 
+	 * @param d
+	 *            Dimension of the simulation.
 	 */
 	public EcoWorld(Dimension d, int numIterations) {
 		this(d, 0, numIterations, false);
@@ -264,63 +273,82 @@ public class EcoWorld implements IModel {
 	 * <p>
 	 * EcoWorld simulation will run as fast as it can, without delays. For a
 	 * very long time.
-	 *            
-	 * @param d Dimension of the simulation.
+	 * 
+	 * @param d
+	 *            Dimension of the simulation.
 	 * 
 	 */
 	public EcoWorld(Dimension d) {
 		this(d, Integer.MAX_VALUE);
 	}
 
-	public void createInitialPopulations(String predatorModel, int predPop, String preyModel, int preyPop, String grassModel, int grassPop) throws IllegalArgumentException {
+	public void createInitialPopulations(String predatorModel, int predPop,
+			String preyModel, int preyPop, String grassModel, int grassPop,
+			String shapeModel) throws IllegalArgumentException {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
-		
+
 		IPopulation prey = null;
 		IPopulation pred = null;
 		IPopulation grass = null;
-
-		if(predatorModel == POP_DUMMYPRED) {
-			pred = new DummyPredatorPopulation(d, predPop, Color.red, 2.5, 0.75,275);
-		} else if(predatorModel == POP_WOLF) {
-			pred = new WolfPopulation("Wolves", d, predPop, Color.red, 2.5, 0.8,250, true);
-		} else if(predatorModel == POP_WOLF_GRID) {
-			pred = new WolfPopulationGrid("Wolves", d, predPop, Color.red, 2.5, 0.8,250, true);
+		IShape shape = null;
+		if (shapeModel == SHAPE_SQUARE) {
+			shape = new SquareShape();
+		} else if (shapeModel == SHAPE_CIRCLE) {
+			shape = new CircleShape();
+		}
+		if (predatorModel == POP_DUMMYPRED) {
+			pred = new DummyPredatorPopulation(d, predPop, Color.red, 2.5,
+					0.75, 275, shape);
+		} else if (predatorModel == POP_WOLF) {
+			pred = new WolfPopulation("Wolves", d, predPop, Color.red, 2.5,
+					0.8, 250, true, shape);
+		} else if (predatorModel == POP_WOLF_GRID) {
+			pred = new WolfPopulationGrid("Wolves", d, predPop, Color.red, 2.5,
+					0.8, 250, true, shape);
 		}
 
-		if(preyModel == POP_DEER) {
-			prey = new DeerPopulation("Deers", d, preyPop, Color.blue, 2.0, 2, 200, true);
-		} else if(preyModel == POP_DEER_GRID) {
-			prey = new DeerPopulationGrid("Deers", d, preyPop, Color.blue, 2.0, 2, 200, true);
-		} else if(preyModel == POP_RABBIT) {
-			prey = new RabbitPopulation("Rabbits", d, preyPop, Color.lightGray, 10, 10, 200);
-		} else if(preyModel == POP_DUMMYPREY) {
-			prey = new DummyPreyPopulation(d, preyPop, Color.blue, 2.2, 2, 250);
-		} else if(preyModel == POP_PIG) {
-			prey = new PigPopulation("Filthy Pigs", d, preyPop, Color.pink, 2.0, 1.5, 225);
+		if (preyModel == POP_DEER) {
+			prey = new DeerPopulation("Deers", d, preyPop, Color.blue, 2.0, 2,
+					200, true, shape);
+		} else if (preyModel == POP_DEER_GRID) {
+			prey = new DeerPopulationGrid("Deers", d, preyPop, Color.blue, 2.0,
+					2, 200, true, shape);
+		} else if (preyModel == POP_RABBIT) {
+			prey = new RabbitPopulation("Rabbits", d, preyPop, Color.lightGray,
+					10, 10, 200, shape);
+		} else if (preyModel == POP_DUMMYPREY) {
+			prey = new DummyPreyPopulation(d, preyPop, Color.blue, 2.2, 2, 250, shape);
+		} else if (preyModel == POP_PIG) {
+			prey = new PigPopulation("Filthy Pigs", d, preyPop, Color.pink,
+					2.0, 1.5, 225, shape);
 		}
-		
-		if(grassModel == POP_GRASS) {
-			grass = new GrassPopulation("Grass", d, grassPop, Color.green, 1, 1, 0, 700);
+
+		if (grassModel == POP_GRASS) {
+			grass = new GrassPopulation("Grass", d, grassPop, Color.green, 1,
+					1, 0, 700, shape);
 		} else if (grassModel == POP_GRASS_GRID) {
-			grass = new GrassPopulationGrid("Grass", d, grassPop, Color.green, 1, 1, 0, 700);
+			grass = new GrassPopulationGrid("Grass", d, grassPop, Color.green,
+					1, 1, 0, 700, shape);
 		}
 
-		if(prey == null || pred == null || grass == null) {
+		if (prey == null || pred == null || grass == null || shape == null) {
 			throw new IllegalArgumentException("Wrong populations set.");
 		}
-		
+
 		prey.addPredator(pred);
 		prey.addPrey(grass);
-		
+
 		pred.addPrey(prey);
 		populations.add(grass);
 		populations.add(prey);
 		populations.add(pred);
-		
-		if(recordSimulation) {
-			recordedSimulation = new ArrayList<List<IPopulation>>(numIterations / 2);
+
+		if (recordSimulation) {
+			recordedSimulation = new ArrayList<List<IPopulation>>(
+					numIterations / 2);
 		}
-		this.env = new SquareEnvironment2(populations, readObsticlesFromFile(), mOnFinishListener, d.height, d.width, numThreads);
+		this.env = new SquareEnvironment2(populations, readObsticlesFromFile(),
+				mOnFinishListener, d.height, d.width, numThreads);
 	}
 
 	private List<IObstacle> readObsticlesFromFile() {
@@ -328,11 +356,11 @@ public class EcoWorld implements IModel {
 		obsList.add(new Obstacle("Obstacle.txt"));
 		return obsList;
 	}
-	
+
 	public void setNumThreads(int numThreads) {
 		this.numThreads = numThreads;
 	}
-	
+
 	public int getNumThreads() {
 		return numThreads;
 	}
@@ -345,44 +373,47 @@ public class EcoWorld implements IModel {
 	 */
 	public void start() throws IllegalStateException {
 		synchronized (syncObject) {
-				if(!shouldRun.get()) {
-					executor = Executors.newSingleThreadExecutor();
-					this.timer = new TimerHandler();
-					shouldRun.set(true);
-					scheduleEnvironmentUpdate();
-					Log.i("EcoWorld started.");
-					if(recordSimulation) {
-						observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
-					} else {
-						observers.firePropertyChange(EVENT_START, null, null);
-					}
+			if (!shouldRun.get()) {
+				executor = Executors.newSingleThreadExecutor();
+				this.timer = new TimerHandler();
+				shouldRun.set(true);
+				scheduleEnvironmentUpdate();
+				Log.i("EcoWorld started.");
+				if (recordSimulation) {
+					observers.firePropertyChange(EVENT_RECORDING_FINISHED,
+							null, null);
 				} else {
-					 throw new IllegalStateException("EcoWorld already started.");
+					observers.firePropertyChange(EVENT_START, null, null);
 				}
+			} else {
+				throw new IllegalStateException("EcoWorld already started.");
 			}
 		}
+	}
+
 	/**
 	 * Stops the scheduling algorithms.
 	 * <p>
 	 * Warning! WILL affect ongoing execution!
 	 * <p>
-	 * If already stopped {@link IllegalStateException} will be thrown.	
-	 *  
+	 * If already stopped {@link IllegalStateException} will be thrown.
+	 * 
 	 */
 	public void pause() throws IllegalStateException {
 		synchronized (syncObject) {
-			if(shouldRun.get()) {
+			if (shouldRun.get()) {
 				shouldRun.set(false);
 				executor.shutdownNow();
 				timer.stop();
 				numUpdates = 0;
 				Log.i("EcoWorld paused.");
 				observers.firePropertyChange(EVENT_PAUSE, null, null);
-				if(recordSimulation) {
-					observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
+				if (recordSimulation) {
+					observers.firePropertyChange(EVENT_RECORDING_FINISHED,
+							null, null);
 				}
 			} else {
-				 throw new IllegalStateException("EcoWorld already paused.");
+				throw new IllegalStateException("EcoWorld already paused.");
 			}
 		}
 	}
@@ -392,54 +423,54 @@ public class EcoWorld implements IModel {
 	 * <p>
 	 * Warning! WILL affect ongoing execution!
 	 * <p>
-	 * If already stopped {@link IllegalStateException} will be thrown.	
-	 *  
+	 * If already stopped {@link IllegalStateException} will be thrown.
+	 * 
 	 */
 	public void stop() throws IllegalStateException {
 		synchronized (syncObject) {
-			if(shouldRun.get()) {
+			if (shouldRun.get()) {
 				shouldRun.set(false);
 				executor.shutdownNow();
 				timer.stop();
 				numUpdates = 0;
 				Log.i("EcoWorld stopped.");
 				observers.firePropertyChange(EVENT_STOP, null, null);
-				if(recordSimulation) {
-					observers.firePropertyChange(EVENT_RECORDING_FINISHED, null, null);
+				if (recordSimulation) {
+					observers.firePropertyChange(EVENT_RECORDING_FINISHED,
+							null, null);
 				}
 			} else {
-				 throw new IllegalStateException("EcoWorld already stopped");
+				throw new IllegalStateException("EcoWorld already stopped");
 			}
 		}
 	}
-	
-	
+
 	/**
-	 * Plays the recorded simulation (if any). 
-	 * Assumes the recording is recorded in half fps.
+	 * Plays the recorded simulation (if any). Assumes the recording is recorded
+	 * in half fps.
 	 * <P>
 	 * Uses internal {@link TimerHandler} for smooth playing.
 	 */
 	public void playRecordedSimulation(final List<List<IPopulation>> recordedSim) {
 		final TimerHandler t = new TimerHandler();
-		
+
 		t.start(17, new OnTickUpdate() {
 			@Override
 			public void onTick() {
-				if(recordedSim.size() > 0) {
+				if (recordedSim.size() > 0) {
 					List<IPopulation> popList = recordedSim.get(0);
 					recordedSim.remove(0);
-					observers.firePropertyChange(EVENT_TICK, Collections.emptyList(), popList);
+					observers.firePropertyChange(EVENT_TICK,
+							Collections.emptyList(), popList);
 					t.start(32, this);
 				} else {
 					t.stop();
-					observers.firePropertyChange(EVENT_STOP, Collections.emptyList(), Collections.emptyList());
+					observers.firePropertyChange(EVENT_STOP,
+							Collections.emptyList(), Collections.emptyList());
 				}
 			}
 		});
 	}
-
-
 
 	/**
 	 * Starts the {@link TimerHandler} and executes one Environment iteration.
@@ -451,24 +482,25 @@ public class EcoWorld implements IModel {
 			if (!runWithoutTimer) {
 				timer.start(tickTime, onTickListener);
 			}
-			StringBuffer sb = new StringBuffer("---- Simulation model Update ---- Number of updates: ");
+			StringBuffer sb = new StringBuffer(
+					"---- Simulation model Update ---- Number of updates: ");
 			sb.append(++numUpdates);
-			if(startIterationTime != 0) {
-				sb.append(" - Iteration time:" );
-				sb.append((long) (0.000001*elapsedTime));
+			if (startIterationTime != 0) {
+				sb.append(" - Iteration time:");
+				sb.append((long) (0.000001 * elapsedTime));
 				sb.append(" ms.");
-			} 
+			}
 			Log.v(sb.toString());
 			executor.execute(env);
 			startIterationTime = System.nanoTime();
 		} else {
 			stop();
-			if(recordSimulation) {
+			if (recordSimulation) {
 				playRecordedSimulation(recordedSimulation);
 			}
 		}
 	}
-	
+
 	/**
 	 * Adjust the tick rate of the next iteration. The currently executing
 	 * iteration will not be affected.
@@ -477,7 +509,7 @@ public class EcoWorld implements IModel {
 	 */
 	public void setDelayLength(int newDelay) {
 		synchronized (syncObject) {
-			this.tickTime = newDelay;			
+			this.tickTime = newDelay;
 		}
 		observers.firePropertyChange(EVENT_DELAY_CHANGED, null, newDelay);
 	}
@@ -495,7 +527,7 @@ public class EcoWorld implements IModel {
 	public void setRunWithoutTimer(boolean runWithoutTimer) {
 		this.runWithoutTimer = runWithoutTimer;
 	}
-	
+
 	public Dimension getSize() {
 		return d;
 	}
@@ -521,33 +553,35 @@ public class EcoWorld implements IModel {
 	public void removeObserver(PropertyChangeListener listener) {
 		observers.removePropertyChangeListener(listener);
 	}
-	
+
 	/**
 	 * Clones the given list with {@link IPopulation#clonePopulation()} method.
 	 */
 	private List<IPopulation> clonePopulationList(List<IPopulation> popList) {
 		List<IPopulation> list = new ArrayList<IPopulation>(popList.size());
-		for(IPopulation p : popList) {
+		for (IPopulation p : popList) {
 			list.add(p.clonePopulation());
 		}
 		return list;
 	}
-	
+
 	/**
-	 * Plays the loaded simulation, or throws {@link IllegalStateException} if not any recording is loaded.
+	 * Plays the loaded simulation, or throws {@link IllegalStateException} if
+	 * not any recording is loaded.
 	 */
 	public void playRecentLoadedSimulation() throws IllegalStateException {
-		if(recordedSimulation != null && !recordedSimulation.isEmpty()) {
+		if (recordedSimulation != null && !recordedSimulation.isEmpty()) {
 			playRecordedSimulation(recordedSimulation);
 		} else {
 			throw new IllegalStateException("No recording loaded");
 		}
 	}
-	
+
 	/**
 	 * Reads the recording from the given filePath.
 	 * <p>
 	 * Untested!
+	 * 
 	 * @param filePath
 	 * @return True if success, otherwise false.
 	 */
@@ -556,16 +590,17 @@ public class EcoWorld implements IModel {
 		String populationDivider = "POPULATION";
 		String agentDivider = "AGENT";
 		File f = new File(filePath);
-		if(!f.exists()) {
+		if (!f.exists()) {
 			return false;
 		}
-		if(!f.canRead()) {
+		if (!f.canRead()) {
 			return false;
 		}
 		try {
 			FileInputStream fileStream = new FileInputStream(f);
-			Charset utf8 = Charset.forName("UTF-8");     
-			BufferedReader br = new BufferedReader(new InputStreamReader(fileStream, utf8));
+			Charset utf8 = Charset.forName("UTF-8");
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					fileStream, utf8));
 			List<List<IPopulation>> readInput = parseFile(br);
 			recordedSimulation = readInput;
 			br.close();
@@ -576,44 +611,45 @@ public class EcoWorld implements IModel {
 		}
 		return false;
 	}
-	
+
 	private List<List<IPopulation>> parseFile(BufferedReader br) {
 		String frameDivider = "FRAME";
 		String populationDivider = "POPULATION";
 		String agentDivider = "AGENT";
-		
+
 		List<List<IPopulation>> result = new ArrayList<List<IPopulation>>();
-		
+
 		List<IPopulation> currentFrame = null;
 		IPopulation currentPop = null;
-		
+
 		String input = null;
 		try {
 			input = br.readLine();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		while(input != null) {
+		while (input != null) {
 			try {
 				input = br.readLine();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			if(input.startsWith(frameDivider)) {
-				if(currentFrame != null) {
+			if (input.startsWith(frameDivider)) {
+				if (currentFrame != null) {
 					result.add(currentFrame);
 				}
 				currentFrame = new ArrayList<IPopulation>();
-			} else if(input.startsWith(populationDivider)) {
-				if(currentPop != null) {
+			} else if (input.startsWith(populationDivider)) {
+				if (currentPop != null) {
 					currentFrame.add(currentPop);
 				}
-				String [] inputArr = input.split(";", 2);
+				String[] inputArr = input.split(";", 2);
 				currentPop = AbstractPopulation.createFromFile(inputArr[1]);
-			} else if(input.startsWith(agentDivider)) {
-				if(currentPop != null) {
-					String [] inputArr = input.split(";", 2);
-					IAgent newIAgent = AbstractAgent.createFromFile(inputArr[1]); 
+			} else if (input.startsWith(agentDivider)) {
+				if (currentPop != null) {
+					String[] inputArr = input.split(";", 2);
+					IAgent newIAgent = AbstractAgent
+							.createFromFile(inputArr[1]);
 					currentPop.getAgents().add(newIAgent);
 				}
 			}
@@ -628,14 +664,15 @@ public class EcoWorld implements IModel {
 	 * @param filePath
 	 * @return
 	 */
-	public boolean dumpRecordToDisk(List<List<IPopulation>> record, String filePath) {
+	public boolean dumpRecordToDisk(List<List<IPopulation>> record,
+			String filePath) {
 		String frameDivider = "FRAME";
 		String populationDivider = "POPULATION";
 		String agentDivider = "AGENT";
 		File f = new File(filePath);
-		if(f.exists()) {
+		if (f.exists()) {
 			f.delete();
-		} 
+		}
 		try {
 			f.createNewFile();
 		} catch (IOException e) {
@@ -649,11 +686,11 @@ public class EcoWorld implements IModel {
 			e.printStackTrace();
 			return false;
 		}
-		for(List<IPopulation> popList : record) {
+		for (List<IPopulation> popList : record) {
 			pw.println(frameDivider);
-			for(IPopulation p : popList) {
-				pw.println(populationDivider + ';' + p.toBinaryString() );
-				for(IAgent a : p.getAgents()) {
+			for (IPopulation p : popList) {
+				pw.println(populationDivider + ';' + p.toBinaryString());
+				for (IAgent a : p.getAgents()) {
 					pw.println(agentDivider + ';' + a.toBinaryString());
 				}
 			}

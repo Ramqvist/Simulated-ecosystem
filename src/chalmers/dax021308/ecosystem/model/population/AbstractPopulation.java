@@ -8,6 +8,8 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.WorldGrid;
+import chalmers.dax021308.ecosystem.model.util.IShape;
+import chalmers.dax021308.ecosystem.model.util.SquareShape;
 import chalmers.dax021308.ecosystem.model.util.Stat;
 
 /**
@@ -23,6 +25,7 @@ public abstract class AbstractPopulation implements IPopulation {
 	protected List<IPopulation> predators;
 	protected List<IPopulation> neutral;
 	protected WorldGrid wg;
+	protected IShape shape;
 	/**
 	 * Remove list for this Population. 
 	 * <p>
@@ -46,15 +49,16 @@ public abstract class AbstractPopulation implements IPopulation {
 		wg = WorldGrid.getInstance();
 	}
 	
-	public AbstractPopulation(String name, Dimension gridDimension) {
+	public AbstractPopulation(String name, Dimension gridDimension, IShape shape) {
 		this();
 		this.name = name;
 		this.gridDimension = gridDimension;
 		this.groupBehaviour = true;
+		this.shape = shape;
 	}
 
-	public AbstractPopulation(String name, Dimension gridDimension, int capacity, boolean groupBehaviour) {
-		this(name, gridDimension);
+	public AbstractPopulation(String name, Dimension gridDimension, int capacity, boolean groupBehaviour, IShape shape) {
+		this(name, gridDimension, shape);
 		this.capacity = capacity;
 		this.groupBehaviour = groupBehaviour;
 	}
@@ -72,6 +76,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		this.color = original.color;
 		this.groupBehaviour = original.groupBehaviour;
 		this.name = original.name;
+		this.shape = original.shape;
 		preys = new ArrayList<IPopulation>();
 		predators = new ArrayList<IPopulation>();
 		neutral = new ArrayList<IPopulation>();
@@ -102,7 +107,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		IAgent a;
 		for(int i = fromPos; i < toPos; i++) {
 			a = agents.get(i);
-			a.calculateNextPosition(predators, preys, neutral, gridDimension);
+			a.calculateNextPosition(predators, preys, neutral, gridDimension, shape);
 			if(a.getEnergy()<=0){
 				addToRemoveList(a);
 			}
@@ -189,7 +194,9 @@ public abstract class AbstractPopulation implements IPopulation {
 		String name = inputArray[0];
 		Dimension dim = new Dimension(Integer.parseInt(inputArray[1]), Integer.parseInt(inputArray[2]));
 		int cap = Integer.parseInt(inputArray[3]);
-		return new AbstractPopulation(name, dim, cap, true) {
+		// TODO Fix proper shape from file
+				IShape shape = new SquareShape();
+		return new AbstractPopulation(name, dim, cap, true, shape) {
 			@Override
 			public double calculateFitness(IAgent agent) {
 				return 0;

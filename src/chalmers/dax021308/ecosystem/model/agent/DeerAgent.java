@@ -9,6 +9,7 @@ import com.lowagie.text.pdf.ArabicLigaturizer;
 
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Gender;
+import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
@@ -67,7 +68,7 @@ public class DeerAgent extends AbstractAgent {
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
 			List<IPopulation> preys, List<IPopulation> neutral,
-			Dimension gridDimension) {
+			Dimension gridDimension, IShape shape) {
 
 		Vector predatorForce = getPredatorForce(predators);
 		Vector mutualInteractionForce = new Vector();
@@ -79,7 +80,7 @@ public class DeerAgent extends AbstractAgent {
 			arrayalForce = arrayalForce(neutral);
 		}
 		
-		Vector environmentForce = getEnvironmentForce(gridDimension);
+		Vector environmentForce = getEnvironmentForce(gridDimension, shape);
 		Vector preyForce = getPreyForce(preys);
 
 		/*
