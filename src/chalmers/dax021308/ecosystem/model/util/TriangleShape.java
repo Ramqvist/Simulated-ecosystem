@@ -15,15 +15,15 @@ public class TriangleShape implements IShape {
 	@Override
 	public Position getXWallLeft(Dimension dim, Position p) {
 		double angle = Math.atan(dim.getWidth() / 2 / dim.getHeight());
-		double xPos = p.getY() * Math.tan(angle);
+		double xPos = dim.getWidth()/2.0-(dim.getHeight()-p.getY())* Math.tan(angle);
 		return new Position(xPos, p.getY());
 	}
 
 	@Override
 	public Position getXWallRight(Dimension dim, Position p) {
 		double angle = Math.atan(dim.getWidth() / 2 / dim.getHeight());
-		double xPos = p.getY() * Math.tan(angle);
-		return new Position(dim.getWidth() - xPos / 2, p.getY());
+		double xPos = dim.getWidth()/2.0+(dim.getHeight()-p.getY())* Math.tan(angle);
+		return new Position(xPos, p.getY());
 	}
 
 	@Override

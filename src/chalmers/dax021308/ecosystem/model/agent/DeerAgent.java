@@ -90,7 +90,7 @@ public class DeerAgent extends AbstractAgent {
 		 * the acceleration.
 		 */
 		Vector randomForce = randomForce();
-		Vector acceleration = environmentForce.multiply(100)
+		Vector acceleration = environmentForce.multiply(1000)
 				.add(predatorForce.multiply(5))
 				.add(mutualInteractionForce)
 				.add(forwardThrust)

@@ -51,7 +51,7 @@ public class WolfAgent extends AbstractAgent {
 		 */
 		
 		Vector randomForce = randomForce();
-		Vector acceleration = environmentForce.multiply(100)
+		Vector acceleration = environmentForce.multiply(1000)
 			.add(preyForce.multiply(10))
 			.add(mutualInteractionForce)
 			.add(forwardThrust)

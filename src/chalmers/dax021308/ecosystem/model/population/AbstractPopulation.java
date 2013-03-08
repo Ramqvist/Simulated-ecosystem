@@ -285,7 +285,6 @@ public abstract class AbstractPopulation implements IPopulation {
 			a = removeList.get(i);
 			lifeLengths.add(a.getLifeLength());
 			agents.remove(a);
-			wg.remove(a);
 		}
 		removeList.clear();
 	}
