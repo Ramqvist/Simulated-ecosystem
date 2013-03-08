@@ -91,11 +91,11 @@ public class DeerAgentGrid extends AbstractAgent {
 		 */
 		Vector randomForce = randomForce();
 		Vector acceleration = environmentForce.multiply(100)
-				.add(predatorForce.multiply(5))
+				.add(predatorForce.multiply(10))
 				.add(mutualInteractionForce)
 				.add(forwardThrust)
 				.add(arrayalForce)
-				.add(preyForce.multiply(3))
+				.add(preyForce.multiply(8))
 				.add(randomForce);
 		double accelerationNorm = acceleration.getNorm();
 		if (accelerationNorm > maxAcceleration) {

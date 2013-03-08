@@ -300,13 +300,13 @@ public class EcoWorld implements IModel {
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
 		}
 		if (predatorModel == POP_DUMMYPRED) {
-			pred = new DummyPredatorPopulation(d, predPop, Color.red, 2.5,
+			pred = new DummyPredatorPopulation(d, predPop, Color.red, 3,
 					0.75, 275, shape);
 		} else if (predatorModel == POP_WOLF) {
-			pred = new WolfPopulation("Wolves", d, predPop, Color.red, 2.5,
+			pred = new WolfPopulation("Wolves", d, predPop, Color.red, 3,
 					0.8, 250, true, shape);
 		} else if (predatorModel == POP_WOLF_GRID) {
-			pred = new WolfPopulationGrid("Wolves", d, predPop, Color.red, 2.5,
+			pred = new WolfPopulationGrid("Wolves", d, predPop, Color.red, 3,
 					0.8, 250, true, shape);
 		}
 
@@ -328,10 +328,10 @@ public class EcoWorld implements IModel {
 
 		if (grassModel == POP_GRASS) {
 			grass = new GrassPopulation("Grass", d, grassPop, Color.green, 1,
-					1, 0, 700, shape);
+					1, 0, 1500, shape);
 		} else if (grassModel == POP_GRASS_GRID) {
 			grass = new GrassPopulationGrid("Grass", d, grassPop, Color.green,
-					1, 1, 0, 700, shape);
+					1, 1, 0, 1500, shape);
 		}
 
 		if (prey == null || pred == null || grass == null || shape == null) {
