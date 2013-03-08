@@ -135,8 +135,8 @@ public class MainWindow extends JFrame implements IView {
 		//graphView1.setSize(200, 200);
 		right.add(graphView1, BorderLayout.SOUTH);
 		right.add(heatMap, BorderLayout.SOUTH); 
-		right.setBackground(Color.BLUE);
-		parameterView.setBackground(Color.GREEN);
+//		right.setBackground(Color.BLUE);
+//		parameterView.setBackground(Color.GREEN);
 		
 		contentPane.add(left, BorderLayout.CENTER);
 		contentPane.add(right, BorderLayout.EAST);
