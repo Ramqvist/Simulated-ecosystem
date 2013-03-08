@@ -43,9 +43,10 @@ public class TriangleShape implements IShape {
 
 	@Override
 	public Position getRandomPosition(Dimension dim) {
-		// Doing some magic with barycentric positions to calculate the random
-		// position inside the circle
-		// No idea if actually working or not
+		// Doing some magic with Barycentric positions to calculate the random
+		// position inside the triangle. Basically it goes a random distance
+		// towards both corners, but makes sure we don't end outside the
+		// triangle
 		double r = Math.random();
 		double s = Math.random();
 		Vector top = new Vector(dim.getWidth() / 2, dim.getHeight());
@@ -54,8 +55,8 @@ public class TriangleShape implements IShape {
 			r = 1 - r;
 			s = 1 - s;
 		}
-		return new Position().addVector(top.multiply(r))
-				.addVector(right.multiply(s));
+		return new Position().addVector(top.multiply(r)).addVector(
+				right.multiply(s));
 	}
 
 }

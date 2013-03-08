@@ -8,7 +8,6 @@ import java.awt.Dimension;
  * 
  */
 public interface IShape {
-	public String getShape();
 
 	public Position getXWallLeft(Dimension dim, Position p);
 
@@ -26,4 +25,12 @@ public interface IShape {
 	 * @return returns the random position created
 	 */
 	public Position getRandomPosition(Dimension dim);
+
+	/**
+	 * Gets the 'name' of the shape, the String name it is defined as in the
+	 * EcoWorld class
+	 * 
+	 * @return The String name for the shape
+	 */
+	public String getShape();
 }

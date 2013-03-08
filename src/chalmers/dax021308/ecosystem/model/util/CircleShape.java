@@ -15,8 +15,8 @@ public class CircleShape implements IShape {
 	@Override
 	public Position getXWallLeft(Dimension dim, Position p) {
 		// Using trigonometry to get the X position where the current Y position
-		// hits the side, only "magic" is converting the positions so they start
-		// in the middle of the circle and then back.
+		// hits the side, only "magic" is converting the positions so they
+		// originate in the middle of the circle, and then back again.
 		double radius = dim.getHeight() / 2;
 		double angle = Math.asin((p.getY() - radius) / radius);
 		double xPos = radius * Math.cos(angle);
@@ -52,14 +52,19 @@ public class CircleShape implements IShape {
 
 	@Override
 	public Position getRandomPosition(Dimension dim) {
-		// Create a random position by starting from the mid and then adding a
-		// vector which length is specified by a random x and y position in a
-		// random direction
-		Position pos = new Position(dim.width / 2, dim.height / 2);
-		Double angle = Math.random() * Math.PI * 2;
-		double xPos = Math.cos(angle) * dim.width / 2 * Math.random();
-		double yPos = Math.sin(angle) * dim.height / 2 * Math.random();
-		pos.addVector(new Vector(xPos, yPos));
+		// Create a random position, and make sure it lies inside the circle.
+		// Doesn't loop too many times, since only pi/4 of the square area is
+		// outside the circle. Should also only be used during creation of
+		// agents and thus doesn't really impact the runtime speed.
+		Position pos;
+		do {
+			pos = new Position(dim.getWidth() * Math.random(), dim.getHeight()
+					* Math.random());
+		} while ((Double.compare(pos.getX(), getXWallLeft(dim, pos).getX())
+				+ Double.compare(getXWallRight(dim, pos).getX(), pos.getX())
+				+ Double.compare(pos.getY(), getYWallBottom(dim, pos).getY()) + Double
+					.compare(getYWallTop(dim, pos).getY(), pos.getY())) != 4);
+
 		return pos;
 	}
 
