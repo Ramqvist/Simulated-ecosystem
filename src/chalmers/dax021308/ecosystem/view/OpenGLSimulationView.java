@@ -28,6 +28,7 @@ import chalmers.dax021308.ecosystem.model.util.CircleShape;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
+import chalmers.dax021308.ecosystem.model.util.SquareShape;
 import chalmers.dax021308.ecosystem.model.util.TriangleShape;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
@@ -270,6 +271,31 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 	          		gl.glLineWidth(2.5F);
 	          		gl.glBegin(GL.GL_LINES); 
 	          		gl.glVertex2d(frameWidth/2.0, 0);
+	          		gl.glVertex2d(frameWidth, frameHeight);
+	          		gl.glEnd();
+	          		
+	          		gl.glLineWidth(2.5F);
+	          		gl.glBegin(GL.GL_LINES); 
+	          		gl.glVertex2d(frameWidth, frameHeight);
+	          		gl.glVertex2d(0, frameHeight);
+	          		gl.glEnd();
+          		} else if (shape != null && shape instanceof SquareShape){
+          			gl.glColor3d(0.545098, 0.270588, 0.0745098);
+          			gl.glLineWidth(2.5F);
+	          		gl.glBegin(GL.GL_LINES); 
+	          		gl.glVertex2d(0, 0);
+	          		gl.glVertex2d(frameWidth, 0);
+	          		gl.glEnd();
+	          		
+	          		gl.glLineWidth(2.5F);
+	          		gl.glBegin(GL.GL_LINES); 
+	          		gl.glVertex2d(0, 0);
+	          		gl.glVertex2d(0, frameHeight);
+	          		gl.glEnd();
+	          		
+	          		gl.glLineWidth(2.5F);
+	          		gl.glBegin(GL.GL_LINES); 
+	          		gl.glVertex2d(frameWidth, 0);
 	          		gl.glVertex2d(frameWidth, frameHeight);
 	          		gl.glEnd();
 	          		
