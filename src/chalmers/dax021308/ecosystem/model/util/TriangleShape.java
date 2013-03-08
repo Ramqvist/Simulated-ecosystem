@@ -15,14 +15,14 @@ public class TriangleShape implements IShape {
 	@Override
 	public Position getXWallLeft(Dimension dim, Position p) {
 		double angle = Math.atan(dim.getWidth() / 2 / dim.getHeight());
-		double xPos = p.getY() / Math.tan(angle);
+		double xPos = p.getY() * Math.tan(angle);
 		return new Position(xPos, p.getY());
 	}
 
 	@Override
 	public Position getXWallRight(Dimension dim, Position p) {
 		double angle = Math.atan(dim.getWidth() / 2 / dim.getHeight());
-		double xPos = p.getY() / Math.tan(angle);
+		double xPos = p.getY() * Math.tan(angle);
 		return new Position(dim.getWidth() - xPos / 2, p.getY());
 	}
 
@@ -37,7 +37,7 @@ public class TriangleShape implements IShape {
 		if (p.getX() > dim.getWidth() / 2)
 			midAdjustedX = dim.getWidth() - p.getX();
 		double angle = Math.atan(dim.getWidth() / 2 / dim.getHeight());
-		double yPos = midAdjustedX * Math.tan(angle);
+		double yPos = midAdjustedX / Math.tan(angle);
 		return new Position(p.getX(), yPos);
 	}
 
@@ -45,18 +45,18 @@ public class TriangleShape implements IShape {
 	public Position getRandomPosition(Dimension dim) {
 		// Doing some magic with Barycentric positions to calculate the random
 		// position inside the triangle. Basically it goes a random distance
-		// towards both corners, but makes sure we don't end outside the
+		// towards both corners, but makes sure we don't end up outside the
 		// triangle
-		double r = Math.random();
-		double s = Math.random();
+		double topDirection = Math.random();
+		double rightDirection = Math.random();
 		Vector top = new Vector(dim.getWidth() / 2, dim.getHeight());
 		Vector right = new Vector(dim.getWidth(), 0);
-		if (r + s >= 1) {
-			r = 1 - r;
-			s = 1 - s;
+		if (topDirection + rightDirection >= 1) {
+			topDirection = 1 - topDirection;
+			rightDirection = 1 - rightDirection;
 		}
-		return new Position().addVector(top.multiply(r)).addVector(
-				right.multiply(s));
+		return new Position().addVector(top.multiply(topDirection)).addVector(
+				right.multiply(rightDirection));
 	}
 
 }
