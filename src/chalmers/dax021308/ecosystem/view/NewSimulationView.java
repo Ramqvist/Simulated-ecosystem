@@ -56,6 +56,8 @@ public class NewSimulationView {
 	private JRadioButton rdbtn8Threads;
 	private JRadioButton rdbtnSquare;
 	private JRadioButton rdbtnCircle;
+	private JRadioButton rdbtnTriangle;
+
 
 	/**
 	 * Create the application.
@@ -106,8 +108,10 @@ public class NewSimulationView {
 			String shape = null;
 			if(rdbtnCircle.isSelected()) {
 				shape = EcoWorld.SHAPE_CIRCLE;
-			} else {
+			} else if (rdbtnSquare.isSelected()){
 				shape = EcoWorld.SHAPE_SQUARE;
+			} else {
+				shape = EcoWorld.SHAPE_TRIANGLE;
 			}
 			model.createInitialPopulations(
 					(String) predList.getSelectedValue(),
@@ -378,6 +382,7 @@ public class NewSimulationView {
 			public void actionPerformed(ActionEvent arg0) {
 				rdbtnCircle.setSelected(false);
 				rdbtnSquare.setSelected(true);
+				rdbtnTriangle.setSelected(false);
 			}
 		});
 		
@@ -387,6 +392,16 @@ public class NewSimulationView {
 			public void actionPerformed(ActionEvent arg0) {
 				rdbtnCircle.setSelected(true);
 				rdbtnSquare.setSelected(false);
+				rdbtnTriangle.setSelected(false);
+			}
+		});
+		
+		rdbtnTriangle = new JRadioButton("Triangle");
+		rdbtnTriangle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				rdbtnCircle.setSelected(false);
+				rdbtnSquare.setSelected(false);
+				rdbtnTriangle.setSelected(true);
 			}
 		});
 		GroupLayout groupLayout = new GroupLayout(
@@ -444,6 +459,7 @@ public class NewSimulationView {
 										.addComponent(lblNewLabel_1)
 										.addComponent(rdbtnSquare)
 										.addComponent(rdbtnCircle))
+										.addComponent(rdbtnTriangle)
 									.addContainerGap())
 								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 									.addGroup(groupLayout.createSequentialGroup()
@@ -539,6 +555,8 @@ public class NewSimulationView {
 					.addComponent(rdbtnSquare)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(rdbtnCircle)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(rdbtnTriangle)
 					.addGap(27)
 					.addComponent(chckbxRecordSimulation)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
