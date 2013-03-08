@@ -38,6 +38,7 @@ import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.SquareShape;
 import chalmers.dax021308.ecosystem.model.util.TimerHandler;
+import chalmers.dax021308.ecosystem.model.util.TriangleShape;
 
 /**
  * Ecosystem main class.
@@ -66,6 +67,7 @@ public class EcoWorld implements IModel {
 	/* Shape Constants */
 	public static final String SHAPE_SQUARE = "Square Shape";
 	public static final String SHAPE_CIRCLE = "Circle Shape";
+	public static final String SHAPE_TRIANGLE = "Triangle Shape";
 
 	/* Population constants */
 	public static final String POP_PIG = "Pig Population";
@@ -297,6 +299,9 @@ public class EcoWorld implements IModel {
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
 		} else if (shapeModel == SHAPE_CIRCLE) {
 			shape = new CircleShape();
+			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
+		}else if (shapeModel == SHAPE_TRIANGLE){
+			shape = new TriangleShape();
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
 		}
 		if (predatorModel == POP_DUMMYPRED) {
