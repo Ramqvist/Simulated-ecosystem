@@ -8,6 +8,8 @@ import java.awt.Dimension;
  * 
  */
 public interface IShape {
+	public String getShape();
+
 	public Position getXWallLeft(Dimension dim, Position p);
 
 	public Position getXWallRight(Dimension dim, Position p);

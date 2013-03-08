@@ -7,15 +7,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
+import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.WorldGrid;
+import chalmers.dax021308.ecosystem.model.util.CircleShape;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.SquareShape;
 import chalmers.dax021308.ecosystem.model.util.Stat;
 
 /**
  * 
- * @author Henrik
- * Abstract class for handling the dummy methods
+ * @author Henrik Abstract class for handling the dummy methods
  */
 public abstract class AbstractPopulation implements IPopulation {
 	protected List<IAgent> agents;
@@ -27,20 +28,21 @@ public abstract class AbstractPopulation implements IPopulation {
 	protected WorldGrid wg;
 	protected IShape shape;
 	/**
-	 * Remove list for this Population. 
+	 * Remove list for this Population.
 	 * <p>
-	 * Use the method {@link IPopulation#addToRemoveList(IAgent)} for adding to this list! And not removeList.add()!
+	 * Use the method {@link IPopulation#addToRemoveList(IAgent)} for adding to
+	 * this list! And not removeList.add()!
 	 * <p>
-	 * This method is used to synchronize the adding of agents, i.e. several threads can add at the same time.
+	 * This method is used to synchronize the adding of agents, i.e. several
+	 * threads can add at the same time.
 	 */
 	protected List<IAgent> removeList;
-	protected Color color = Color.BLACK;	// Standard color for population.
+	protected Color color = Color.BLACK; // Standard color for population.
 	protected List<Integer> lifeLengths;
 	protected boolean groupBehaviour;
 	private String name;
-	
-	
- 	public AbstractPopulation() {
+
+	public AbstractPopulation() {
 		preys = new ArrayList<IPopulation>();
 		predators = new ArrayList<IPopulation>();
 		neutral = new ArrayList<IPopulation>();
@@ -48,7 +50,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		lifeLengths = new LinkedList<Integer>();
 		wg = WorldGrid.getInstance();
 	}
-	
+
 	public AbstractPopulation(String name, Dimension gridDimension, IShape shape) {
 		this();
 		this.name = name;
@@ -57,12 +59,13 @@ public abstract class AbstractPopulation implements IPopulation {
 		this.shape = shape;
 	}
 
-	public AbstractPopulation(String name, Dimension gridDimension, int capacity, boolean groupBehaviour, IShape shape) {
+	public AbstractPopulation(String name, Dimension gridDimension,
+			int capacity, boolean groupBehaviour, IShape shape) {
 		this(name, gridDimension, shape);
 		this.capacity = capacity;
 		this.groupBehaviour = groupBehaviour;
 	}
-	
+
 	/**
 	 * Clone constructor.
 	 * <p>
@@ -89,11 +92,12 @@ public abstract class AbstractPopulation implements IPopulation {
 			}
 		}
 	}
-	
+
 	/**
 	 * Override if you use linked-list as agentList! (Default is ArrayList.)
 	 * <P>
-	 * Update the whole population, same as update(0, agents.size())M 
+	 * Update the whole population, same as update(0, agents.size())M
+	 * 
 	 * @param fromPos
 	 * @param toPos
 	 */
@@ -101,33 +105,33 @@ public abstract class AbstractPopulation implements IPopulation {
 	public void update() {
 		update(0, agents.size());
 	}
-	
 
 	public void update(int fromPos, int toPos) {
 		IAgent a;
-		for(int i = fromPos; i < toPos; i++) {
+		for (int i = fromPos; i < toPos; i++) {
 			a = agents.get(i);
-			a.calculateNextPosition(predators, preys, neutral, gridDimension, shape);
-			if(a.getEnergy()<=0){
+			a.calculateNextPosition(predators, preys, neutral, gridDimension,
+					shape);
+			if (a.getEnergy() <= 0) {
 				addToRemoveList(a);
 			}
 		}
 	}
-	
+
 	@Override
 	public void updateFirstHalf() {
 		int agentSize = agents.size();
-		int halfStart = agentSize / 2; 
+		int halfStart = agentSize / 2;
 		update(0, halfStart);
 	}
-	
+
 	@Override
 	public void updateSecondHalf() {
 		int agentSize = agents.size();
-		int halfStart = agentSize / 2; 
+		int halfStart = agentSize / 2;
 		update(halfStart, agentSize);
 	}
-	
+
 	@Override
 	public String getName() {
 		return name;
@@ -177,13 +181,14 @@ public abstract class AbstractPopulation implements IPopulation {
 			}
 		};
 	}
-	
+
 	/**
 	 * Clones the given list with {@link IPopulation#clonePopulation()} method.
 	 */
-	public static List<IPopulation> clonePopulationList(List<IPopulation> original) {
+	public static List<IPopulation> clonePopulationList(
+			List<IPopulation> original) {
 		List<IPopulation> list = new ArrayList<IPopulation>(original.size());
-		for(IPopulation p : original) {
+		for (IPopulation p : original) {
 			list.add(p.clonePopulation());
 		}
 		return list;
@@ -192,10 +197,19 @@ public abstract class AbstractPopulation implements IPopulation {
 	public static IPopulation createFromFile(String input) {
 		String[] inputArray = input.split(";");
 		String name = inputArray[0];
-		Dimension dim = new Dimension(Integer.parseInt(inputArray[1]), Integer.parseInt(inputArray[2]));
+		Dimension dim = new Dimension(Integer.parseInt(inputArray[1]),
+				Integer.parseInt(inputArray[2]));
 		int cap = Integer.parseInt(inputArray[3]);
-		// TODO Fix proper shape from file
-				IShape shape = new SquareShape();
+		String shapeModel = inputArray[4];
+		IShape shape = null;
+		if (shapeModel == EcoWorld.SHAPE_SQUARE) {
+			shape = new SquareShape();
+		} else if (shapeModel == EcoWorld.SHAPE_CIRCLE) {
+			shape = new CircleShape();
+		}
+		if (shape == null)
+			throw new IllegalArgumentException("Illegal Shape from file.");
+		
 		return new AbstractPopulation(name, dim, cap, true, shape) {
 			@Override
 			public double calculateFitness(IAgent agent) {
@@ -203,7 +217,7 @@ public abstract class AbstractPopulation implements IPopulation {
 			}
 		};
 	}
-	
+
 	@Override
 	public String toBinaryString() {
 		StringBuffer sb = new StringBuffer();
@@ -214,16 +228,18 @@ public abstract class AbstractPopulation implements IPopulation {
 		sb.append(gridDimension.height);
 		sb.append(';');
 		sb.append(capacity);
+		sb.append(';');
+		sb.append(shape.getShape());
 		return null;
 	}
-	
+
 	@Override
 	public void updatePositions() {
 		List<IAgent> kids = new ArrayList<IAgent>();
 		int populationSize = agents.size();
 		for (IAgent a : agents) {
 			a.updatePosition();
-			List<IAgent> spawn = a.reproduce(null,populationSize);
+			List<IAgent> spawn = a.reproduce(null, populationSize);
 			if (spawn != null) {
 				kids.addAll(spawn);
 			}
@@ -232,12 +248,13 @@ public abstract class AbstractPopulation implements IPopulation {
 			agents.addAll(kids);
 			wg.addAll(kids);
 		}
-		
-//		System.out.println(name + " life length: mean = " + Stat.mean(lifeLengths) + 
-//							" | variance = " + Stat.sampleVariance(lifeLengths) + 
-//							" | sample size = " + lifeLengths.size());
+
+		// System.out.println(name + " life length: mean = " +
+		// Stat.mean(lifeLengths) +
+		// " | variance = " + Stat.sampleVariance(lifeLengths) +
+		// " | sample size = " + lifeLengths.size());
 	}
-	
+
 	/**
 	 * Clears out the agents in the removeList.
 	 * <p>
@@ -245,7 +262,7 @@ public abstract class AbstractPopulation implements IPopulation {
 	 */
 	public void removeAgentsFromRemoveList() {
 		IAgent a;
-		for(int i = 0 ; i < removeList.size() ; i++)  {
+		for (int i = 0; i < removeList.size(); i++) {
 			a = removeList.get(i);
 			lifeLengths.add(a.getLifeLength());
 			agents.remove(a);
@@ -254,31 +271,34 @@ public abstract class AbstractPopulation implements IPopulation {
 		removeList.clear();
 	}
 
-
 	@Override
 	public synchronized void addToRemoveList(IAgent a) {
 		removeList.add(a);
 	}
 
 	@Override
-	public void setColor(Color color){
+	public void setColor(Color color) {
 		this.color = color;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see chalmers.dax021308.ecosystem.model.population.IPopulation#getColor()
 	 */
 	@Override
 	public Color getColor() {
 		return color;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Population name: " + name + " NumAgents:" + agents.size();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see chalmers.dax021308.ecosystem.model.population.IPopulation#getSize()
 	 */
 	public int getSize() {
@@ -287,7 +307,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		else
 			return 0;
 	}
-	
+
 	@Override
 	public double getComputationalFactor() {
 		return 1;

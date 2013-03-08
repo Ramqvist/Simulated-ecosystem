@@ -2,12 +2,15 @@ package chalmers.dax021308.ecosystem.model.util;
 
 import java.awt.Dimension;
 
+import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+
 /**
  * 
  * @author Henrik
  * 
  */
 public class CircleShape implements IShape {
+	private final String name = EcoWorld.SHAPE_CIRCLE;
 
 	@Override
 	public Position getXWallLeft(Dimension dim, Position p) {
@@ -44,7 +47,8 @@ public class CircleShape implements IShape {
 		double radius = dim.getHeight() / 2;
 		double angle = Math.acos((p.getX() - radius) / radius);
 		double yPos = radius * Math.sin(angle);
-		return new Position(p.getX(), radius + yPos);	}
+		return new Position(p.getX(), radius + yPos);
+	}
 
 	@Override
 	public Position getRandomPosition(Dimension dim) {
@@ -59,4 +63,8 @@ public class CircleShape implements IShape {
 		return pos;
 	}
 
+	@Override
+	public String getShape() {
+		return name;
+	}
 }
