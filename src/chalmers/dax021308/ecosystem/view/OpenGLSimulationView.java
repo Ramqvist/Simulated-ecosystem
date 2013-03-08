@@ -232,8 +232,8 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
             	increaseUpdateValue();
             	long start = System.currentTimeMillis();
             	
-                double frameHeight = getHeight();
-                double frameWidth  = getWidth();
+                double frameHeight = (double)getHeight();
+                double frameWidth  = (double)getWidth();
                 
                 double scaleX = frameWidth / size.width;
                 double scaleY = frameHeight / size.height;
@@ -250,7 +250,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
           				double increment = 2.0*Math.PI/50.0;
 		                double cx = frameWidth / 2.0;
 		                double cy = frameHeight/ 2.0;
-		                double radius = cy;
+		                double radius = cx;
 		                gl.glColor3d(0.545098, 0.270588, 0.0745098);
 		          	for(double angle = 0; angle < 2.0*Math.PI; angle+=increment){
 		          		gl.glLineWidth(2.5F);
