@@ -43,9 +43,11 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 	private String xAxisTitle = "Iterations";
 	private String yAxisTitle = "Population amount";
 	private int nIterationsPassed = 0;
+	private int updateFrequency = 10; // every ten iteration.
 
-	public GraphPopulationAmountView(IModel model) {
+	public GraphPopulationAmountView(IModel model, int updateFrequency) {
 		model.addObserver(this);
+		this.updateFrequency = updateFrequency;
 		init();
 	}
 
@@ -78,7 +80,8 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 			this.removeAllTraces().clear();
 			this.nIterationsPassed = 0;
 		} else if(eventName == EcoWorld.EVENT_TICK) {
-
+			if (nIterationsPassed % updateFrequency != 0)
+				return;
 			if(populations != null) {		
 				if (this.getTraces().size() == 0) {
 					// initialize traces
@@ -106,7 +109,7 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 		for (IPopulation p: populations) {		
 			String name = p.getName();	
 			if (name != null) {
-				newTrace = new Trace2DSorted(); 
+				newTrace = new Trace2DSorted();
 				newTrace.setName(name);
 				newTrace.setColor(p.getColor());
 				this.addTrace(newTrace);
