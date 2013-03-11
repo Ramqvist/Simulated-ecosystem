@@ -2,7 +2,9 @@ package chalmers.dax021308.ecosystem.view;
 
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -32,9 +34,6 @@ import info.monitorenter.util.Range;
  */
 public class GraphPopulationAmountView extends Chart2D implements IView {
 
-	private Map<String,ITrace2D> traces = new HashMap<String,ITrace2D>();
-	//private ColorIterator colors = new ColorIterator();
-	
 	// Values for axis. More values are set in init()
 	private IAxis<IAxisScalePolicy> xAxis;
 	private IAxis<IAxisScalePolicy> yAxis;
@@ -51,10 +50,6 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 
 	@Override
 	public void init() {    
-		//this.colors.setStartColor(Color.BLUE);
-		// Set how many different colored traces possible.
-		//this.colors.setSteps(10);
-
 		xAxis = (IAxis<IAxisScalePolicy>)getAxisX(); 
 		xAxis.setAxisTitle(new AxisTitle(xAxisTitle));
 		xAxis.setRangePolicy(new RangePolicyMinimumViewport(rangeX)); 
@@ -79,19 +74,22 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 		if (eventName == EcoWorld.EVENT_START) {
 		}
 		else if(eventName == EcoWorld.EVENT_STOP) {
-			this.traces.clear();
 			this.removeAllTraces().clear();
 			this.nIterationsPassed = 0;
 		} else if(eventName == EcoWorld.EVENT_TICK) {
 
 			if(populations != null) {		
-				if (this.traces.size() == 0) {
+				if (this.getTraces().size() == 0) {
 					// initialize traces
 					initializeTraces(populations);
 				}
+				
 				// update graph.
+				Iterator<ITrace2D> it = this.getTraces().iterator();
 				for (IPopulation p: populations) {
-					this.traces.get(p.getName()).addPoint(nIterationsPassed, p.getSize());
+					if (it.hasNext()) {
+						((ITrace2D) it.next()).addPoint(nIterationsPassed, p.getSize());
+					}
 				}
 			}
 		}
@@ -106,8 +104,7 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 			if (name != null) {
 				ITrace2D newTrace = new Trace2DSimple(name); 
 				newTrace.setColor(p.getColor());
-				this.traces.put(name, newTrace);
-				this.addTrace(newTrace);	
+				this.addTrace(newTrace);
 			}
 		}
 	}
