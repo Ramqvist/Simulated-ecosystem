@@ -29,6 +29,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected int capacity;
 	protected int lifeLength;
 	protected int energy = 1000; // set specific energy level in subclasses
+	protected int trophicLevel;
 	protected Vector velocity;
 	protected Gender gender;
 	protected double fitness;
@@ -148,6 +149,11 @@ public abstract class AbstractAgent implements IAgent {
 
 	public int getEnergy() {
 		return energy;
+	}
+	
+	@Override
+	public int getTrophicLevel() {
+		return trophicLevel;
 	}
 
 	@Override
