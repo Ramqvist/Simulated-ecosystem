@@ -50,7 +50,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  * @author Erik Ramqvist
  *
  */
-public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Component) */ implements IView {
+public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AWT.Component) */ implements IView {
 	
 	private static final long serialVersionUID = 1585638837620985591L;
 	private List<IPopulation> newPops = new ArrayList<IPopulation>();
@@ -62,7 +62,6 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Compone
 	private int newFps;
 	private Object fpsSync = new Object();
 	private Dimension size;
-	private JFrame frame;
 	private JOGLListener glListener;
 	//private GLCanvas canvas;
 	private IShape shape;
