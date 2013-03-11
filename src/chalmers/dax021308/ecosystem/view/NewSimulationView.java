@@ -58,6 +58,9 @@ public class NewSimulationView {
 	private JRadioButton rdbtnSquare;
 	private JRadioButton rdbtnCircle;
 	private JRadioButton rdbtnTriangle;
+	private JTextField tfCustomWidth;
+	private JTextField tfCustomHeight;
+	private JCheckBox chckbxCustomSize;
 
 
 	/**
@@ -78,8 +81,13 @@ public class NewSimulationView {
 	private void startSimulation() {
 		try {
 			model.setNumIterations(Integer.MAX_VALUE);
-			model.setSimulationDimension((String) listSimulationDim
-					.getSelectedValue());
+			if(chckbxCustomSize.isSelected()) {
+				int width = Integer.parseInt(tfCustomWidth.getText());
+				int height = Integer.parseInt(tfCustomHeight.getText());
+				model.setSimulationDimension(new Dimension(width, height));
+			} else {
+				model.setSimulationDimension((String) listSimulationDim.getSelectedValue());
+			}
 			int tickDelay = Integer
 					.parseInt(textfield_Iterationdelay.getText());
 
@@ -137,11 +145,11 @@ public class NewSimulationView {
 	 */
 	private void initialize() {
 		frmSimulatedEcosystem = new JFrame();
-		frmSimulatedEcosystem.setResizable(false);
 		frmSimulatedEcosystem.setAlwaysOnTop(true);
+		frmSimulatedEcosystem.setResizable(false);
 		frmSimulatedEcosystem.setTitle("Start new Simulation");
 		frmSimulatedEcosystem.setIconImage(new ImageIcon("res/Simulated ecosystem icon.png").getImage());
-		frmSimulatedEcosystem.setBounds(100, 100, 638, 663);
+		frmSimulatedEcosystem.setBounds(100, 100, 729, 724);
 		frmSimulatedEcosystem.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		JButton btnRunSim = new JButton("Start new");
@@ -406,6 +414,43 @@ public class NewSimulationView {
 				rdbtnTriangle.setSelected(true);
 			}
 		});
+		tfCustomWidth = new JTextField();
+		tfCustomWidth.setEnabled(false);
+		tfCustomWidth.setText("750");
+		tfCustomWidth.setColumns(10);
+		
+		final JLabel lblWidth = new JLabel("Width");
+		lblWidth.setEnabled(false);
+		
+		final JLabel lblHeigh = new JLabel("Height");
+		lblHeigh.setEnabled(false);
+		
+		tfCustomHeight = new JTextField();
+		tfCustomHeight.setEnabled(false);
+		tfCustomHeight.setText("750");
+		tfCustomHeight.setColumns(10);
+		
+		chckbxCustomSize = new JCheckBox("Custom size");
+		chckbxCustomSize.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(chckbxCustomSize.isSelected()) {
+					listSimulationDim.setEnabled(false);
+					lblWidth.setEnabled(true);
+					lblHeigh.setEnabled(true);
+					tfCustomWidth.setEnabled(true);
+					tfCustomHeight.setEnabled(true);
+				} else {
+					listSimulationDim.setEnabled(true);		
+					lblWidth.setEnabled(false);
+					lblHeigh.setEnabled(false);		
+					tfCustomWidth.setEnabled(false);
+					tfCustomHeight.setEnabled(false);
+					
+				}
+			}
+		});
+		chckbxCustomSize.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		
 		GroupLayout groupLayout = new GroupLayout(
 				frmSimulatedEcosystem.getContentPane());
 		groupLayout.setHorizontalGroup(
@@ -413,70 +458,66 @@ public class NewSimulationView {
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblPrededators, GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
+						.addComponent(lblPrededators, GroupLayout.DEFAULT_SIZE, 713, Short.MAX_VALUE)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblPreys, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
 								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 									.addGroup(groupLayout.createSequentialGroup()
-										.addComponent(grassList, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
-										.addGap(18)
+										.addGap(2)
+										.addComponent(grassList, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
 										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 											.addComponent(sliderGrassSize, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
 											.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-												.addGroup(groupLayout.createSequentialGroup()
-													.addPreferredGap(ComponentPlacement.RELATED)
-													.addComponent(label_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+												.addComponent(label_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 												.addComponent(tvGrassPopSize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
 									.addComponent(lblVegatablePopulation, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)
 									.addGroup(groupLayout.createSequentialGroup()
-										.addComponent(predList, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
+										.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+											.addComponent(preyList, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+											.addComponent(predList, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 										.addPreferredGap(ComponentPlacement.RELATED)
 										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addComponent(lblInitialSize, GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+											.addComponent(lblInitialSize, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
 											.addGroup(groupLayout.createSequentialGroup()
 												.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
 													.addComponent(sliderPredSize, Alignment.LEADING, 0, 0, Short.MAX_VALUE)
 													.addComponent(tvPredPopSize, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE))
-												.addPreferredGap(ComponentPlacement.RELATED))))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addComponent(preyList, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+												.addPreferredGap(ComponentPlacement.RELATED))
 											.addComponent(sliderPreySize, 0, 0, Short.MAX_VALUE)
 											.addGroup(groupLayout.createSequentialGroup()
 												.addComponent(label)
-												.addPreferredGap(ComponentPlacement.RELATED, 74, Short.MAX_VALUE))
+												.addPreferredGap(ComponentPlacement.RELATED, 108, Short.MAX_VALUE))
 											.addComponent(tvPreyPopSize, 112, 112, 112)))))
 							.addGap(18)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(checkBoxLimitIterations, GroupLayout.PREFERRED_SIZE, 255, GroupLayout.PREFERRED_SIZE)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addComponent(sliderNumIterations, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.UNRELATED)
-										.addComponent(tvNumIterations, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))
-									.addComponent(lblSimulationIteration, GroupLayout.PREFERRED_SIZE, 175, GroupLayout.PREFERRED_SIZE)
-									.addComponent(lblNewLabel_1)
-									.addComponent(rdbtnSquare)
-									.addComponent(rdbtnCircle)
-									.addComponent(rdbtnTriangle))
+								.addComponent(checkBoxLimitIterations, GroupLayout.PREFERRED_SIZE, 255, GroupLayout.PREFERRED_SIZE)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(sliderNumIterations, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(tvNumIterations, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))
+								.addComponent(lblSimulationIteration, GroupLayout.PREFERRED_SIZE, 175, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblNewLabel_1)
+								.addComponent(rdbtnSquare)
+								.addComponent(rdbtnCircle)
+								.addComponent(rdbtnTriangle)
 								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 									.addGroup(groupLayout.createSequentialGroup()
 										.addComponent(rdbtnNewRadioButton)
 										.addContainerGap())
 									.addGroup(groupLayout.createSequentialGroup()
-										.addComponent(lblSimulationDimension, GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
-										.addContainerGap())
-									.addGroup(groupLayout.createSequentialGroup()
 										.addComponent(listSimulationDim, GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE)
-										.addContainerGap())
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+											.addComponent(lblHeigh, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
+											.addComponent(chckbxCustomSize)
+											.addComponent(tfCustomWidth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+											.addComponent(lblWidth, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
+											.addComponent(tfCustomHeight, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+										.addGap(84))
 									.addGroup(groupLayout.createSequentialGroup()
 										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addGroup(groupLayout.createSequentialGroup()
-												.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(btnRunSim, GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE))
 											.addComponent(lblIterationDelay)
 											.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
 												.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -493,6 +534,14 @@ public class NewSimulationView {
 										.addContainerGap())
 									.addGroup(groupLayout.createSequentialGroup()
 										.addComponent(chckbxRecordSimulation)
+										.addContainerGap())
+									.addGroup(groupLayout.createSequentialGroup()
+										.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(btnRunSim, GroupLayout.PREFERRED_SIZE, 218, GroupLayout.PREFERRED_SIZE)
+										.addContainerGap())
+									.addGroup(groupLayout.createSequentialGroup()
+										.addComponent(lblSimulationDimension, GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
 										.addContainerGap()))))))
 		);
 		groupLayout.setVerticalGroup(
@@ -533,9 +582,9 @@ public class NewSimulationView {
 							.addComponent(preyList, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
 							.addGroup(groupLayout.createSequentialGroup()
 								.addComponent(label)
-								.addGap(1)
-								.addComponent(tvPreyPopSize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(2)
+								.addComponent(tvPreyPopSize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(1)
 								.addComponent(sliderPreySize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED)
@@ -560,25 +609,39 @@ public class NewSimulationView {
 					.addGap(27)
 					.addComponent(chckbxRecordSimulation)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblVegatablePopulation, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblSimulationDimension, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
+					.addComponent(lblVegatablePopulation, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblSimulationDimension, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
+								.addComponent(chckbxCustomSize))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(listSimulationDim, GroupLayout.PREFERRED_SIZE, 126, GroupLayout.PREFERRED_SIZE)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addGroup(groupLayout.createSequentialGroup()
+											.addComponent(lblWidth)
+											.addGap(3)
+											.addComponent(tfCustomWidth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+										.addGroup(groupLayout.createSequentialGroup()
+											.addGap(55)
+											.addComponent(lblHeigh)))
+									.addGap(3)
+									.addComponent(tfCustomHeight, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnRunSim, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)))
+						.addComponent(grassList, GroupLayout.PREFERRED_SIZE, 123, GroupLayout.PREFERRED_SIZE)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(20)
 							.addComponent(tvGrassPopSize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(sliderGrassSize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-							.addComponent(grassList, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
-							.addComponent(label_1)
-							.addComponent(listSimulationDim, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)))
-					.addGap(11)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnRunSim, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap())
+						.addComponent(label_1))
+					.addGap(21))
 		);
 		frmSimulatedEcosystem.getContentPane().setLayout(groupLayout);
 	}
