@@ -32,8 +32,6 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  * 
  */
 public class PigPopulation extends AbstractPopulation {
-
-	private Color color;
 	private double visionRange;
 	private double maxSpeed;
 	private Random ran;

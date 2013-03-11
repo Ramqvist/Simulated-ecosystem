@@ -332,10 +332,10 @@ public class EcoWorld implements IModel {
 		}
 
 		if (grassModel == POP_GRASS) {
-			grass = new GrassPopulation("Grass", d, grassPop, Color.green, 1,
+			grass = new GrassPopulation("Grass", d, grassPop, new Color(69,139,00), 1,
 					1, 0, 1500, shape);
 		} else if (grassModel == POP_GRASS_GRID) {
-			grass = new GrassPopulationGrid("Grass", d, grassPop, Color.green,
+			grass = new GrassPopulationGrid("Grass", d, grassPop, new Color(69,139,00),
 					1, 1, 0, 1500, shape);
 		}
 

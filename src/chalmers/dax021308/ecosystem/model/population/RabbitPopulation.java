@@ -28,6 +28,7 @@ public class RabbitPopulation extends AbstractPopulation {
 			double maxSpeed, double maxAcceleration, double visionRange,
 			IShape shape) {
 		super(name, d, shape);
+
 		agents = new ArrayList<IAgent>(popSize);
 
 		for (int i = 0; i < popSize; i++) {

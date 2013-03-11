@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 
@@ -43,7 +44,7 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 	private String yAxisTitle = "Population amount";
 	private int nIterationsPassed = 0;
 
-	public GraphPopulationAmountView(EcoWorld model) {
+	public GraphPopulationAmountView(IModel model) {
 		model.addObserver(this);
 		init();
 	}
@@ -62,7 +63,7 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 		yAxis = (IAxis<IAxisScalePolicy>)getAxisY();
 		yAxis.setAxisTitle(new AxisTitle(yAxisTitle));
 		yAxis.setRangePolicy(new RangePolicyMinimumViewport(rangeY)); 
-		yAxis.setMinorTickSpacing(50);
+		yAxis.setMinorTickSpacing(100);
 	}
 
 	@Override
@@ -74,7 +75,7 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 			populations = (List<IPopulation>) event.getNewValue();
 			populations = AbstractPopulation.clonePopulationList(populations);
 		}
-		//Du kan ha "==" då strängarna som tas in är public static final. "==" är snabbare än equals() //Erik
+		//Du kan ha "==" dï¿½ strï¿½ngarna som tas in ï¿½r public static final. "==" ï¿½r snabbare ï¿½n equals() //Erik
 		if (eventName == EcoWorld.EVENT_START) {
 		}
 		else if(eventName == EcoWorld.EVENT_STOP) {
@@ -110,18 +111,6 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 			}
 		}
 	}
-	/*
-	private void addTraces(List<IPopulation> populations){
-		for (IPopulation p: populations) {		
-			String name = p.getName();	
-			if (name != null && !_traces.keySet().contains(name)) {
-				ITrace2D newTrace = new Trace2DSimple(name); 
-				newTrace.setColor(p.getColor());
-				_traces.put(name, newTrace);
-				this.addTrace(newTrace);	
-			}
-		}
-	}*/
 
 	@Override
 	public void addController(ActionListener controller) {
@@ -137,23 +126,5 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 	public void release() {
 		// TODO Auto-generated method stub	
 	}
-	
-	/* TODO I don't know if we want this
-	public void setRangeX(double min, double max) {
-		this.rangeX.setMin(min);
-		this.rangeX.setMax(max);	
-		xAxis.setRangePolicy(new RangePolicyMinimumViewport(rangeX));
-	}
-
-	public void setRangeY(double min, double max) {
-		this.rangeY.setMin(min);
-		this.rangeY.setMax(max);
-		yAxis.setRangePolicy(new RangePolicyMinimumViewport(rangeY));
-	}
-	 */
-
-
-
-
 }
 

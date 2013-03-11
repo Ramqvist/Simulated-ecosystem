@@ -37,7 +37,9 @@ public abstract class AbstractPopulation implements IPopulation {
 	 * threads can add at the same time.
 	 */
 	protected List<IAgent> removeList;
+
 	protected Color color = Color.BLACK; // Standard color for population.
+
 	protected List<Integer> lifeLengths;
 	protected boolean groupBehaviour;
 	private String name;
@@ -56,7 +58,9 @@ public abstract class AbstractPopulation implements IPopulation {
 		this.name = name;
 		this.gridDimension = gridDimension;
 		this.groupBehaviour = true;
+
 		this.shape = shape;
+
 	}
 
 	public AbstractPopulation(String name, Dimension gridDimension,

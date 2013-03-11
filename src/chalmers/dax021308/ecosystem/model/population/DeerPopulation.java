@@ -32,6 +32,7 @@ public class DeerPopulation extends AbstractPopulation {
 		super(name, gridDimension, shape);
 		this.visionRange = visionRange;
 		this.groupBehaviour = groupBehaviour;
+		this.color = color;
 		agents = initializePopulation(initPopulationSize, gridDimension, color,
 				maxSpeed, maxAcceleration, visionRange);
 	}
@@ -56,7 +57,6 @@ public class DeerPopulation extends AbstractPopulation {
 					visionRange, groupBehaviour);
 			newAgents.add(a);
 		}
-		setColor(color);
 		return newAgents;
 	}
 

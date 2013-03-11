@@ -32,6 +32,7 @@ public class WolfPopulation extends AbstractPopulation {
 
 		this.visionRange = visionRange;
 		this.groupBehaviour = groupBehaviour;
+		this.color = color;
 		agents = initializePopulation(initPopulationSize, gridDimension, color,
 				maxSpeed, maxAcceleration, visionRange);
 	}
@@ -58,7 +59,6 @@ public class WolfPopulation extends AbstractPopulation {
 					groupBehaviour);
 			newAgents.add(a);
 		}
-		setColor(color);
 		return newAgents;
 	}
 
