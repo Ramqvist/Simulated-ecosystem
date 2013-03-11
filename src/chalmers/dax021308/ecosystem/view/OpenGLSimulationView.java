@@ -50,7 +50,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  * @author Erik Ramqvist
  *
  */
-public class OpenGLSimulationView extends GLCanvas implements IView {
+public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Component) */ implements IView {
 	
 	private static final long serialVersionUID = 1585638837620985591L;
 	private List<IPopulation> newPops = new ArrayList<IPopulation>();
@@ -139,10 +139,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
 		String eventName = event.getPropertyName();
-		if(eventName == EcoWorld.EVENT_STOP) {
-			//Model has stopped. Maybe hide view?
-			//frame.setVisible(false);
-		} else if(eventName == EcoWorld.EVENT_TICK) {
+		if(eventName == EcoWorld.EVENT_TICK) {
 			//Tick notification recived from model. Do something with the data.
 			if(event.getNewValue() instanceof List<?>) {
 				this.newPops = (List<IPopulation>) event.getNewValue();
@@ -150,14 +147,13 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 			if(event.getOldValue() instanceof List<?>) {
 				this.newObs = (List<IObstacle>) event.getOldValue();
 			}
-			/*if(canvas != null) {
-				canvas.repaint();
-			}*/
 			//repaint();
 			//display();
 			//removeAll();
-			//repaint();
-			//revalidate();
+			repaint();
+		} else if(eventName == EcoWorld.EVENT_STOP) {
+			//Model has stopped. Maybe hide view?
+			//frame.setVisible(false);
 		} else if(eventName == EcoWorld.EVENT_DIMENSIONCHANGED) {
 			Object o = event.getNewValue();
 			if(o instanceof Dimension) {
