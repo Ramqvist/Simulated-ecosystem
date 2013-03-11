@@ -19,7 +19,8 @@ import chalmers.dax021308.ecosystem.model.util.Position;
  * 
  * <p>
  * Concurrent version of WorldGrid, with better concurrency support. 
- * Several readers are allowed. But only 1 writer. 
+ * This improves fairness and minimized starvation.
+ * <p>
  * The algorithm is from Concurrent Control with "Readers" and "Writers" P.J. Courtois,* F. H, 1971
  * http://cs.nyu.edu/~lerner/spring10/MCP-S10-Read04-ReadersWriters.pdf
  * //Erik
@@ -95,10 +96,10 @@ public class WorldGridConcurrent {
 		try {
 			mutex1.acquire();
 		} catch (InterruptedException e) {e.printStackTrace();}
-				numReaders--;
-				if(numReaders == 0) {
-					w.release();
-				}
+			numReaders--;
+			if(numReaders == 0) {
+				w.release();
+			}
 			mutex1.release();
 	}
 	
