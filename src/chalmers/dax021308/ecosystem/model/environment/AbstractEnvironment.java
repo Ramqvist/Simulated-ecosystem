@@ -13,7 +13,7 @@ import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 
 /**
- * SquareEnvironment Class. Represents a environment in the shape of a square.
+ * AbstractEnvironment Class. Represents an environment of unspecified shape
  * <p>
  * Contains workers that execute the updates of the Population in parallel.
  * <p>
@@ -22,10 +22,7 @@ import chalmers.dax021308.ecosystem.model.util.Position;
  * @author Henrik, for concurrency: Erik Ramqvist
  * 
  */
-public class SquareEnvironment2 implements IEnvironment {
-	
-	private static final int NUMAGENTS_PER_WORKPOOL = 300;
-	
+public abstract class AbstractEnvironment implements IEnvironment {
 	// Should maybe use an abstract class Environment where suitable instance
 	// variables can be declared
 	private List<IPopulation> populations;
@@ -54,15 +51,15 @@ public class SquareEnvironment2 implements IEnvironment {
 	 * @param width
 	 *            The width of the environment
 	 */
-	public SquareEnvironment2(List<IPopulation> populations,
+	public AbstractEnvironment(List<IPopulation> populations,
 			List<IObstacle> obstacles, OnFinishListener listener, int height,
-			int width, int numThreads) {
+			int width) {
 		this.populations = populations;
 		this.obstacles = obstacles;
 		this.mListener = listener;
 		
 		//Create one Worker for each population.
-		this.workPool = Executors.newFixedThreadPool(numThreads);
+		this.workPool = Executors.newFixedThreadPool(populations.size() + 1);
 		//Create the list of executing tasks, for barrier synchronization.
 		this.futures = new ArrayList<Future<Runnable>>();
 		
@@ -85,29 +82,24 @@ public class SquareEnvironment2 implements IEnvironment {
 	 */
 	public void run() {
 
-        futures.clear();
         //Assign objects to workers.
 		longestExecuteTime = 0;
 		for(int i = 0 ; i < populations.size(); i ++) {
-			IPopulation p = populations.get(i);
-			double computationalFactor = p.getComputationalFactor();
-			int j = 0;
-			
-			while(j < p.getSize()) {
-				PopulationWorker popWork = new PopulationWorker();
-				popWork.startPos = j;
-				popWork.p = p;
-				j = (int) (j + computationalFactor*NUMAGENTS_PER_WORKPOOL);
-				if(j > p.getSize()) {
-					popWork.endPos = p.getSize();							
-				} else {
-					popWork.endPos = j;					
-				}
-				Future f = workPool.submit(popWork);
-				//Log.v("Adding " + p + " to work between " + popWork.startPos + " and " + popWork.endPos + " ");
+			popWorkers[i].p = populations.get(i);
+			//If this is the slowest population.
+			if(popWorkers[i].p == lastSlowestPop) {
+				popWorkers[i].dividePopulation = true;
+				extraPopWorker.dividePopulation = true;
+				extraPopWorker.p = lastSlowestPop;
+				
+				extraPopWorker.executeFirstHalf = false;
+				popWorkers[i].executeFirstHalf = true;
+				Future f = workPool.submit(extraPopWorker);
 		        futures.add(f);
 			}
-
+			popWorkers[i].dividePopulation = false;
+			Future f = workPool.submit(popWorkers[i]);
+	        futures.add(f);
 		}
 
 
@@ -153,15 +145,33 @@ public class SquareEnvironment2 implements IEnvironment {
 	
 	private class PopulationWorker implements Runnable {
 		private IPopulation p;
-		
-		private int startPos;
-		private int endPos;
-		
+		private boolean dividePopulation;
+		private boolean executeFirstHalf;
 		
 		@Override
 		public void run() {
 			//Calculate one iteration. But only calculate it!
-			p.update(startPos, endPos);
+			long start = System.nanoTime();
+			if(!dividePopulation) {
+				p.update();
+			} else {
+				if(executeFirstHalf) {
+					//Execute first half.
+					p.updateFirstHalf();
+				} else {
+					//Execute second half.
+					p.updateSecondHalf();
+				}
+			}
+			long elapsedTime = System.nanoTime() - start;
+			//Quick fix for double pop size.
+			if(dividePopulation) {
+			 	elapsedTime = elapsedTime * 2;
+			}
+			if(elapsedTime > longestExecuteTime) {
+				longestExecuteTime = elapsedTime;
+				lastSlowestPop = p;
+			}
 		}
 	}
 	
@@ -201,4 +211,5 @@ public class SquareEnvironment2 implements IEnvironment {
 		// it is free
 		return true;
 	}
+
 }

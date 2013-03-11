@@ -24,8 +24,12 @@ import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.util.CircleShape;
+import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
+import chalmers.dax021308.ecosystem.model.util.SquareShape;
+import chalmers.dax021308.ecosystem.model.util.TriangleShape;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
@@ -61,6 +65,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 	private JFrame frame;
 	private JOGLListener glListener;
 	//private GLCanvas canvas;
+	private IShape shape;
 	
 	/**
 	 * Create the panel.
@@ -158,6 +163,11 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 			if(o instanceof Dimension) {
 				this.size = (Dimension) o;
 			}
+		} else if(eventName == EcoWorld.EVENT_SHAPE_CHANGED) {
+			Object o = event.getNewValue();
+			if(o instanceof IShape) {
+				this.shape = (IShape) o;
+			}
 		}
 	}
 	
@@ -224,24 +234,78 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
             	increaseUpdateValue();
             	long start = System.currentTimeMillis();
             	
-                double frameHeight = getHeight();
-                double frameWidth  = getWidth();
+                double frameHeight = (double)getHeight();
+                double frameWidth  = (double)getWidth();
                 
                 double scaleX = frameWidth / size.width;
                 double scaleY = frameHeight / size.height;
 
-                //Background drawing
-                //Color of the background.
-                //white
-                //gl.glColor4f(1, 1, 1, 1);
-                //Brown
-                gl.glColor4f(1, 0.8F, 0.6F, 1);
+                gl.glColor3d(0.9, 0.9, 0.9);
           		gl.glBegin(GL.GL_POLYGON);
           		gl.glVertex2d(0, 0);
           		gl.glVertex2d(0, frameHeight);
           		gl.glVertex2d(frameWidth, frameHeight);
           		gl.glVertex2d(frameWidth, 0);
           		gl.glEnd();
+          		
+          		if(shape != null && shape instanceof CircleShape) {
+          				double increment = 2.0*Math.PI/50.0;
+		                double cx = frameWidth / 2.0;
+		                double cy = frameHeight/ 2.0;
+		                gl.glColor3d(0.545098, 0.270588, 0.0745098);
+		          	for(double angle = 0; angle < 2.0*Math.PI; angle+=increment){
+		          		gl.glLineWidth(2.5F);
+		          		gl.glBegin(GL.GL_LINES); 
+		          		gl.glVertex2d(cx*(1+Math.cos(angle)), cy*(1+Math.sin(angle)));
+		          		gl.glVertex2d(cx*(1+Math.cos(angle+increment)), cy*(1+Math.sin(angle+increment)));
+		          		gl.glEnd();
+		          	}
+          		} else if (shape != null && shape instanceof TriangleShape){
+          			gl.glColor3d(0.545098, 0.270588, 0.0745098);
+          			gl.glLineWidth(2.5F);
+	          		gl.glBegin(GL.GL_LINES); 
+	          		gl.glVertex2d(0, frameHeight);
+	          		gl.glVertex2d(frameWidth/2.0, 0);
+	          		gl.glEnd();
+	          		
+	          		gl.glLineWidth(2.5F);
+	          		gl.glBegin(GL.GL_LINES); 
+	          		gl.glVertex2d(frameWidth/2.0, 0);
+	          		gl.glVertex2d(frameWidth, frameHeight);
+	          		gl.glEnd();
+	          		
+	          		gl.glLineWidth(2.5F);
+	          		gl.glBegin(GL.GL_LINES); 
+	          		gl.glVertex2d(frameWidth, frameHeight);
+	          		gl.glVertex2d(0, frameHeight);
+	          		gl.glEnd();
+          		} else if (shape != null && shape instanceof SquareShape){
+          			gl.glColor3d(0.545098, 0.270588, 0.0745098);
+          			gl.glLineWidth(2.5F);
+	          		gl.glBegin(GL.GL_LINES); 
+	          		gl.glVertex2d(0, 0);
+	          		gl.glVertex2d(frameWidth, 0);
+	          		gl.glEnd();
+	          		
+	          		gl.glLineWidth(2.5F);
+	          		gl.glBegin(GL.GL_LINES); 
+	          		gl.glVertex2d(0, 0);
+	          		gl.glVertex2d(0, frameHeight);
+	          		gl.glEnd();
+	          		
+	          		gl.glLineWidth(2.5F);
+	          		gl.glBegin(GL.GL_LINES); 
+	          		gl.glVertex2d(frameWidth, 0);
+	          		gl.glVertex2d(frameWidth, frameHeight);
+	          		gl.glEnd();
+	          		
+	          		gl.glLineWidth(2.5F);
+	          		gl.glBegin(GL.GL_LINES); 
+	          		gl.glVertex2d(frameWidth, frameHeight);
+	          		gl.glVertex2d(0, frameHeight);
+	          		gl.glEnd();
+          		}
+	          	
           		int popSize = newPops.size();
           		for(int i = 0; i < popSize; i ++) {
         			List<IAgent> agents = newPops.get(i).getAgents();
@@ -332,16 +396,16 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
  
             @Override
             public void init(GLAutoDrawable drawable) {
-                    System.out.println("INIT CALLED");
+//                    System.out.println("INIT CALLED");
                     //Projection mode is for setting camera
                 	gl.glMatrixMode(GL.GL_PROJECTION);
                   //This will set the camera for orthographic projection and allow 2D view
                   //Our projection will be on 400 X 400 screen
                     gl.glLoadIdentity();
-                    Log.v("getWidth(): " + getWidth());
-                    Log.v("getHeight(): " + getHeight());
-                    Log.v("size.width: " + size.width);
-                    Log.v("size.height: " + size.height);
+//                    Log.v("getWidth(): " + getWidth());
+//                    Log.v("getHeight(): " + getHeight());
+//                    Log.v("size.width: " + size.width);
+//                    Log.v("size.height: " + size.height);
                     gl.glOrtho(0, getWidth(), getHeight(), 0, 0, 1);
                   //Modelview is for drawing
                     gl.glMatrixMode(GL.GL_MODELVIEW);

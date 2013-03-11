@@ -63,7 +63,7 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 		yAxis = (IAxis<IAxisScalePolicy>)getAxisY();
 		yAxis.setAxisTitle(new AxisTitle(yAxisTitle));
 		yAxis.setRangePolicy(new RangePolicyMinimumViewport(rangeY)); 
-		yAxis.setMinorTickSpacing(50);
+		yAxis.setMinorTickSpacing(100);
 	}
 
 	@Override
@@ -75,14 +75,14 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 			populations = (List<IPopulation>) event.getNewValue();
 			populations = AbstractPopulation.clonePopulationList(populations);
 		}
-			
-		if (eventName.equals(EcoWorld.EVENT_START)) {
+		//Du kan ha "==" d� str�ngarna som tas in �r public static final. "==" �r snabbare �n equals() //Erik
+		if (eventName == EcoWorld.EVENT_START) {
 		}
-		else if(eventName.equals(EcoWorld.EVENT_STOP)) {
+		else if(eventName == EcoWorld.EVENT_STOP) {
 			this.traces.clear();
 			this.removeAllTraces().clear();
 			this.nIterationsPassed = 0;
-		} else if(eventName.equals(EcoWorld.EVENT_TICK)) {
+		} else if(eventName == EcoWorld.EVENT_TICK) {
 
 			if(populations != null) {		
 				if (this.traces.size() == 0) {

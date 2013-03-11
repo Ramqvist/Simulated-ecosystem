@@ -3,7 +3,6 @@ package chalmers.dax021308.ecosystem.model.population;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.GrassAgent;
@@ -18,14 +17,12 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  * @author Henrik
  * 
  */
-public class GrassPopulation extends AbstractPopulation {
+public class GrassPopulationGrid extends AbstractPopulation {
 
-	public GrassPopulation(String name, Dimension gridDimension,
+	public GrassPopulationGrid(String name, Dimension gridDimension,
 			int initPopulationSize, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange, int capacity, IShape shape) {
 		super(name, gridDimension, shape);
-
-		this.color = color;
 		agents = initializePopulation(initPopulationSize, gridDimension, color,
 				maxSpeed, capacity);
 	}
@@ -40,7 +37,9 @@ public class GrassPopulation extends AbstractPopulation {
 			IAgent a = new GrassAgent(getName(), randPos, color, 5, 5,
 					velocity, maxSpeed, gridDimension, capacity, shape);
 			newAgents.add(a);
+			wg.add(a);
 		}
+		setColor(color);
 		return newAgents;
 	}
 

@@ -14,14 +14,18 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JMenuBar;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
 
+import com.lowagie.text.pdf.PRAcroForm;
+
 import chalmers.dax021308.ecosystem.controller.WindowController;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.util.Log;
 
 import java.awt.event.ActionEvent;
 
@@ -35,9 +39,9 @@ import java.awt.event.ActionEvent;
 public class MainWindow extends JFrame implements IView {
 	private static final long serialVersionUID = -8023060073777907757L;
 	private JPanel contentPane;
-	private ParameterView parameterView = new ParameterView(); 
+	private ParameterView parameterView; 
 	private ControlView controlView;
-	private JPanel simulationPanel = new JPanel();
+//	private JPanel simulationPanel = new JPanel();
 	private JPanel left = new JPanel();
 	private JPanel right = new JPanel();
 	private SettingsMenuView smv = new SettingsMenuView(this);
@@ -53,6 +57,7 @@ public class MainWindow extends JFrame implements IView {
 	 */
 	public MainWindow(EcoWorld model) {
 		setTitle("Simulated Ecosystem");
+		setIconImage(new ImageIcon("res/Simulated ecosystem icon.png").getImage());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 613, 516);
 		this.setExtendedState(MAXIMIZED_BOTH);
@@ -61,8 +66,9 @@ public class MainWindow extends JFrame implements IView {
 	    Dimension d = model.getSize();
 		openGL = new OpenGLSimulationView(model, d, true);
 		openGL.init();
-		openGL.setSize(new Dimension(980,700));
-		heatMap = new HeatMapView(model, d, 100, "Deers");
+		//openGL.setSize(new Dimension(980,700));
+		heatMap = new HeatMapView(model, d, 11, "Deers");
+		parameterView = new ParameterView(model);
 		//
 		controlView = new ControlView(model);
 		graphView1 = new GraphPopulationAmountView(model);
@@ -123,16 +129,16 @@ public class MainWindow extends JFrame implements IView {
 		setContentPane(contentPane);
 		
 //		simulationPanel.setSize(d);
-		simulationPanel.add(openGL);
-		simulationPanel.setBackground(Color.RED);
-		left.add(simulationPanel, BorderLayout.CENTER);
+		//simulationPanel.add(openGL);
+//		simulationPanel.setBackground(Color.RED);
+		left.add(openGL, BorderLayout.CENTER);
 		left.add(controlView, BorderLayout.SOUTH);  
 		right.add(parameterView, BorderLayout.CENTER);
 		//graphView1.setSize(200, 200);
 		right.add(graphView1, BorderLayout.SOUTH);
 		right.add(heatMap, BorderLayout.SOUTH); 
-		right.setBackground(Color.BLUE);
-		parameterView.setBackground(Color.GREEN);
+//		right.setBackground(Color.BLUE);
+//		parameterView.setBackground(Color.GREEN);
 		
 		contentPane.add(left, BorderLayout.CENTER);
 		contentPane.add(right, BorderLayout.EAST);
@@ -172,10 +178,10 @@ public class MainWindow extends JFrame implements IView {
 	
 	public void setSimulationPanel(int i) {
 		if(i == 0) {
-			simulationPanel.add(awt);
+//			simulationPanel.add(awt);
 		}
 		else if(i == 1) {
-			simulationPanel.add(openGL);
+//			simulationPanel.add(openGL);
 		}
 	}
 }

@@ -38,7 +38,7 @@ public class ControlView extends JPanel {
 				}
 			}
 		});
-		setLayout(new MigLayout("", "[63px][61px][69px]", "[25px]"));
+		setLayout(new MigLayout("", "[63px][61px][69px][][][]", "[25px]"));
 		add(btnStart, "cell 0 0,alignx left,aligny top");
 		
 		JButton btnStop = new JButton("Stop");
@@ -51,8 +51,6 @@ public class ControlView extends JPanel {
 				}
 			}
 		});
-		btnStop.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		add(btnStop, "cell 1 0,alignx left,aligny top");
 		
 		JButton btnPause = new JButton("Pause");
 		btnPause.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -63,10 +61,11 @@ public class ControlView extends JPanel {
 				} catch (IllegalStateException ex) {
 					//Don't care.
 				}
-				new NewSimulationView(ew);
 			}
 		});
-		add(btnPause, "cell 2 0,alignx left,aligny top");
+		add(btnPause, "flowx,cell 1 0,alignx left,aligny top");
+		btnStop.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		add(btnStop, "cell 1 0,alignx left,aligny top");
 		
 
 		JButton btnStartNew = new JButton("Start new Simulation");
@@ -81,7 +80,7 @@ public class ControlView extends JPanel {
 			}
 		});
 		btnStartNew.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		add(btnStartNew, "cell 1 0,alignx left,aligny top");
+		add(btnStartNew, "cell 5 0,alignx left,aligny top");
 
 	}
 

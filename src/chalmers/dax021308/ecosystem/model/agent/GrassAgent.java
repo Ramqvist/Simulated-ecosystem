@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
@@ -17,25 +18,29 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class GrassAgent extends AbstractAgent {
 	private final Dimension gridDimension;
+	private final IShape shape;
 	private static final double REPRODUCTION_RATE = 0.002;
 
 	public GrassAgent(String name, Position pos, Color color, int width,
 			int height, Vector velocity, double maxSpeed,
-			Dimension gridDimension) {
+			Dimension gridDimension, IShape shape) {
 		super(name, pos, color, width, height, velocity, maxSpeed, 0, 0);
 		this.gridDimension = gridDimension;
+		this.shape = shape;
 	}
 
 	public GrassAgent(String name, Position pos, Color color, int width,
 			int height, Vector velocity, double maxSpeed,
-			Dimension gridDimension, int capacity) {
-		this(name, pos, color, width, height, velocity, maxSpeed, gridDimension);
+			Dimension gridDimension, int capacity, IShape shape) {
+		this(name, pos, color, width, height, velocity, maxSpeed,
+				gridDimension, shape);
 		this.capacity = capacity;
 	}
 
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
-			List<IPopulation> preys, List<IPopulation> neutral, Dimension dim) {
+			List<IPopulation> preys, List<IPopulation> neutral, Dimension dim,
+			IShape shape) {
 		// Do nothing, grass shouldn't move!
 	}
 
@@ -51,8 +56,8 @@ public class GrassAgent extends AbstractAgent {
 		if (Math.random() < REPRODUCTION_RATE * (1.0 - popSize / cap)) {
 			List<IAgent> spawn = new ArrayList<IAgent>();
 			IAgent a = new GrassAgent(name,
-					calculateNewPosition(), color, 5, 5, velocity,
-					maxSpeed, gridDimension, capacity);
+					shape.getRandomPosition(gridDimension), color, 5, 5,
+					velocity, maxSpeed, gridDimension, capacity, shape);
 			spawn.add(a);
 			return spawn;
 		}
@@ -89,20 +94,5 @@ public class GrassAgent extends AbstractAgent {
 	private boolean legitPos(Position pos) {
 		return (pos.getX() > 0 && pos.getX() < gridDimension.getWidth()
 				&& pos.getY() > 0 && pos.getY() < gridDimension.getHeight());
-	}
-
-	/**
-	 * Finds a new position close to the current position
-	 * 
-	 * @param p
-	 *            the initial position
-	 * @return a 'legit' position, aka one that is inside the view
-	 */
-	private Position calculateNewPosition() {
-		// random position
-		// TODO Remove when getSpawnPosition works
-		Position pos = new Position(gridDimension.getWidth() * Math.random(),
-				gridDimension.getHeight() * Math.random());
-		return pos;
 	}
 }

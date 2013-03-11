@@ -5,10 +5,8 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lowagie.text.pdf.ArabicLigaturizer;
-
+import chalmers.dax021308.ecosystem.model.environment.WorldGrid;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
-import chalmers.dax021308.ecosystem.model.util.Gender;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
@@ -18,13 +16,14 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  * 
  * @author Albin
  */
-public class DeerAgent extends AbstractAgent {
+public class DeerAgentGrid extends AbstractAgent {
 
 	private static final int MAX_ENERGY = 1100;
 	private boolean hungry = true;
 	private static final double REPRODUCTION_RATE = 0.15;
+	private WorldGrid wg;
 	
-	public DeerAgent(String name, Position p, Color c, int width,
+	public DeerAgentGrid(String name, Position p, Color c, int width,
 			int height, Vector velocity, double maxSpeed,
 			double maxAcceleration, double visionRange, boolean groupBehaviour) {
 		
@@ -33,6 +32,7 @@ public class DeerAgent extends AbstractAgent {
 
 		this.energy = MAX_ENERGY;
 		this.groupBehaviour = groupBehaviour;
+		wg = WorldGrid.getInstance();
 
 	}
 
@@ -49,7 +49,7 @@ public class DeerAgent extends AbstractAgent {
 				double newX = this.getPosition().getX()+xSign*(1+5*Math.random());
 				double newY = this.getPosition().getY()+ySign*(1+5*Math.random());
 				Position pos = new Position(newX,newY);
-				IAgent child = new DeerAgent(name, pos, color, width, height, new Vector(velocity),
+				IAgent child = new DeerAgentGrid(name, pos, color, width, height, new Vector(velocity),
 						maxSpeed, maxAcceleration, visionRange, groupBehaviour);
 				spawn.add(child);
 			} else {
@@ -90,12 +90,12 @@ public class DeerAgent extends AbstractAgent {
 		 * the acceleration.
 		 */
 		Vector randomForce = randomForce();
-		Vector acceleration = environmentForce.multiply(1000)
-				.add(predatorForce.multiply(5))
+		Vector acceleration = environmentForce.multiply(100)
+				.add(predatorForce.multiply(10))
 				.add(mutualInteractionForce)
 				.add(forwardThrust)
 				.add(arrayalForce)
-				.add(preyForce.multiply(3))
+				.add(preyForce.multiply(8))
 				.add(randomForce);
 		double accelerationNorm = acceleration.getNorm();
 		if (accelerationNorm > maxAcceleration) {
@@ -203,6 +203,11 @@ public class DeerAgent extends AbstractAgent {
 	 */
 	@Override
 	public void updatePosition() {
+		/*
+		 * Worldgrid has to be updated before super.update(), otherwise:
+		 * this.position.equals(this.nextPosition) == true
+		 */
+		wg.updatePosition(this, this.position, this.nextPosition);
 		super.updatePosition();
 		this.energy--;
 	}

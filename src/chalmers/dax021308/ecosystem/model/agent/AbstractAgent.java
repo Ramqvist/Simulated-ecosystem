@@ -8,6 +8,7 @@ import java.util.Random;
 
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Gender;
+import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
@@ -35,12 +36,11 @@ public abstract class AbstractAgent implements IAgent {
 	protected double visionRange;
 	protected double maxAcceleration;
 	private boolean isAlive;
-	
+
 	protected final static double INTERACTION_RANGE = 10;
 	protected final static double WALL_CONSTANT = 2;
 	protected static final double VELOCITY_DECAY = 1;
 	protected static final double RANDOM_FORCE_MAGNITUDE = 0.05;
-	
 
 	public AbstractAgent(String name, Position p, Color c, int width,
 			int height, Vector velocity, double maxSpeed, double visionRange,
@@ -63,7 +63,7 @@ public abstract class AbstractAgent implements IAgent {
 	public AbstractAgent(String name, Position p, Color c, int width,
 			int height, Vector velocity, double maxSpeed, double visionRange,
 			double maxAcceleration, int capacity, boolean groupBehaviour) {
-		
+
 		this(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
 		this.capacity = capacity;
@@ -140,16 +140,16 @@ public abstract class AbstractAgent implements IAgent {
 	public Gender getGender() {
 		return gender;
 	}
-	
+
 	@Override
-	public int getLifeLength(){
+	public int getLifeLength() {
 		return this.lifeLength;
 	}
 
 	public int getEnergy() {
 		return energy;
 	}
-	
+
 	@Override
 	public IAgent cloneAgent() throws CloneNotSupportedException {
 		return (IAgent) clone();
@@ -162,7 +162,7 @@ public abstract class AbstractAgent implements IAgent {
 			@Override
 			public void calculateNextPosition(List<IPopulation> predators,
 					List<IPopulation> preys, List<IPopulation> neutral,
-					Dimension dim) {
+					Dimension dim, IShape shape) {
 			}
 
 			@Override
@@ -175,44 +175,44 @@ public abstract class AbstractAgent implements IAgent {
 	}
 
 	/**
-	 * Updates an agents position after all calculations for all
-	 * agents have been done.
+	 * Updates an agents position after all calculations for all agents have
+	 * been done.
 	 */
 	@Override
 	public void updatePosition() {
 		this.position = new Position(nextPosition);
 		this.lifeLength++;
 	}
-	
+
 	/**
-	 * @author Sebbe
-	 * A random force that the agent gets influenced by.
-	 * Can be interpreted as an estimation error that the
-	 * agent does in where to head.
-	 * @return a vector pointing approximately in the
-	 * same direction as the agents velocity.
+	 * @author Sebbe A random force that the agent gets influenced by. Can be
+	 *         interpreted as an estimation error that the agent does in where
+	 *         to head.
+	 * @return a vector pointing approximately in the same direction as the
+	 *         agents velocity.
 	 */
-	protected Vector randomForce(){
-		double randX = -RANDOM_FORCE_MAGNITUDE+ 2*RANDOM_FORCE_MAGNITUDE*Math.random();
-		double randY = -RANDOM_FORCE_MAGNITUDE+ 2*RANDOM_FORCE_MAGNITUDE*Math.random();
-		return new Vector(velocity.x+randX, velocity.y+randY);
+	protected Vector randomForce() {
+		double randX = -RANDOM_FORCE_MAGNITUDE + 2 * RANDOM_FORCE_MAGNITUDE
+				* Math.random();
+		double randY = -RANDOM_FORCE_MAGNITUDE + 2 * RANDOM_FORCE_MAGNITUDE
+				* Math.random();
+		return new Vector(velocity.x + randX, velocity.y + randY);
 	}
-	
+
 	/**
-	 * @author Sebbe
-	 * The agent is influences by the mutual interaction force 
-	 * because it is subject to attraction and repulsion 
-	 * from other individuals that it wants to group with.
-	 * This force describes the relationship between the tendency
-	 * to steer towards other groups of agents, 
-	 * but not be to close to them either.
-	 * @param neutral the population of neutral agents.
+	 * @author Sebbe The agent is influences by the mutual interaction force
+	 *         because it is subject to attraction and repulsion from other
+	 *         individuals that it wants to group with. This force describes the
+	 *         relationship between the tendency to steer towards other groups
+	 *         of agents, but not be to close to them either.
+	 * @param neutral
+	 *            the population of neutral agents.
 	 * @return a vector with the force that this agent feels from other neutral
-	 * agents in that it interacts with.
+	 *         agents in that it interacts with.
 	 */
 	protected Vector mutualInteractionForce(List<IPopulation> neutral) {
-		Vector mutualInteractionForce = new Vector(0,0);
-		Vector newForce = new Vector(0,0);
+		Vector mutualInteractionForce = new Vector(0, 0);
+		Vector newForce = new Vector(0, 0);
 		IPopulation pop;
 		int popSize = neutral.size();
 		for (int j = 0; j < popSize; j++) {
@@ -225,54 +225,55 @@ public abstract class AbstractAgent implements IAgent {
 				if (agent != this) {
 					Position p = agent.getPosition();
 					double distance = getPosition().getDistance(p);
-					double Q = 0; //Q is a function of the distance.
+					double Q = 0; // Q is a function of the distance.
 					if (distance <= visionRange) {
-						if(distance <= INTERACTION_RANGE){
-							Q = -20*(INTERACTION_RANGE-distance);
+						if (distance <= INTERACTION_RANGE) {
+							Q = -20 * (INTERACTION_RANGE - distance);
 						} else {
-							Q = 2;
+							Q = 1;
 						}
-					}			
-					newForce.x = p.getX()-this.getPosition().getX();
-					newForce.y = p.getY()-this.getPosition().getY();
+					}
+					newForce.x = p.getX() - this.getPosition().getX();
+					newForce.y = p.getY() - this.getPosition().getY();
 					double norm = newForce.getNorm();
-					double v = Q/(norm*distance);
+					double v = Q / (norm * distance);
 					newForce.x = newForce.x * v;
 					newForce.y = newForce.y * v;
-					mutualInteractionForce.x = ( mutualInteractionForce.x + newForce.x ) ; 
-					mutualInteractionForce.y = ( mutualInteractionForce.y + newForce.y ) ;
+					mutualInteractionForce.x = (mutualInteractionForce.x + newForce.x);
+					mutualInteractionForce.y = (mutualInteractionForce.y + newForce.y);
 				}
 			}
 		}
-		return mutualInteractionForce.multiply(( ran.nextDouble()  + ran.nextDouble() ));
+		return mutualInteractionForce.multiply((ran.nextDouble() + ran
+				.nextDouble()));
 	}
 
 	/**
-	 * @author Sebbe
-	 * The tendency of an agent to continue moving forward with its velocity.
+	 * @author Sebbe The tendency of an agent to continue moving forward with
+	 *         its velocity.
 	 * @return the forward thrust force.
 	 */
-	protected Vector forwardThrust(){
-		double a = 0.2; //Scaling constant
+	protected Vector forwardThrust() {
+		double a = 0.1; // Scaling constant
 		double x = velocity.x;
 		double y = velocity.y;
 		double norm = velocity.getNorm();
-		Vector forwardThrust = new Vector(a*x/norm,a*y/norm);
+		Vector forwardThrust = new Vector(a * x / norm, a * y / norm);
 		return forwardThrust;
 	}
-	
+
 	/**
-	 * @author Sebbe
-	 * This is the force that makes neighbouring agents 
-	 * to equalize their velocities and therefore go in
-	 * the same direction. The sphere of incluence is
-	 * defined as 2*INTERACTION_RANGE at the moment.
-	 * @param neutral the population of neutral agents.
-	 * @return a vector with the force influencing the agents
-	 * to steer in the same direction as other nearby agents.
+	 * @author Sebbe This is the force that makes neighbouring agents to
+	 *         equalize their velocities and therefore go in the same direction.
+	 *         The sphere of incluence is defined as 2*INTERACTION_RANGE at the
+	 *         moment.
+	 * @param neutral
+	 *            the population of neutral agents.
+	 * @return a vector with the force influencing the agents to steer in the
+	 *         same direction as other nearby agents.
 	 */
-	protected Vector arrayalForce(List<IPopulation> neutral){
-		Vector arrayalForce = new Vector(0,0);
+	protected Vector arrayalForce(List<IPopulation> neutral) {
+		Vector arrayalForce = new Vector(0, 0);
 		Vector newForce = new Vector();
 		IPopulation pop;
 		int popSize = neutral.size();
@@ -287,28 +288,29 @@ public abstract class AbstractAgent implements IAgent {
 				if (agent != this) {
 					Position p = agent.getPosition();
 					double distance = getPosition().getDistance(p);
-					if (distance <= INTERACTION_RANGE*2) {
-						newForce.setVector(0,0);
+					if (distance <= INTERACTION_RANGE * 2) {
+						newForce.setVector(0, 0);
 						newForce.add(agent.getVelocity());
 						newForce.add(velocity);
-						double h = 5; //Scaling constant
+						double h = 4; // Scaling constant
 						newForce.x *= h;
 						newForce.y *= h;
-						arrayalForce.x = ( arrayalForce.x + newForce.x );
-						arrayalForce.y = ( arrayalForce.y + newForce.y );
+						arrayalForce.x = (arrayalForce.x + newForce.x);
+						arrayalForce.y = (arrayalForce.y + newForce.y);
 						nAgentsInVision = nAgentsInVision + 1.0;
 					}
 				}
 			}
 		}
-		if(nAgentsInVision>0){
+		if (nAgentsInVision > 0) {
 			arrayalForce.x /= nAgentsInVision;
 			arrayalForce.y /= nAgentsInVision;
 		}
-		double randomSmoothFactor =  (( ran.nextDouble()  + ran.nextDouble() ) + ( ran.nextDouble()  + ran.nextDouble() ) ) / 2;
+		double randomSmoothFactor = ((ran.nextDouble() + ran.nextDouble()) + (ran
+				.nextDouble() + ran.nextDouble())) / 2;
 		return arrayalForce.multiply(randomSmoothFactor);
 	}
-	
+
 	/**
 	 * * @author Sebbe The environment force is at the moment defined as
 	 * 1/((wall-constant)*(distance to wall))^2. The agents feel the forces from
@@ -318,16 +320,14 @@ public abstract class AbstractAgent implements IAgent {
 	 *            The dimensions of the rectangular environment.
 	 * @return A vector with the force that an agent feel from its environment.
 	 */
-	protected Vector getEnvironmentForce(Dimension dim) {
+	protected Vector getEnvironmentForce(Dimension dim, IShape shape) {
 		/*
 		 * The positions below is just an orthogonal projection on to the walls.
 		 */
-		Position xWallLeft = new Position(0, this.getPosition().getY());
-		Position xWallRight = new Position(dim.getWidth(), this.getPosition()
-				.getY());
-		Position yWallBottom = new Position(this.getPosition().getX(), 0);
-		Position yWallTop = new Position(this.getPosition().getX(),
-				dim.getHeight());
+		Position xWallLeft = shape.getXWallLeft(dim, position);
+		Position xWallRight = shape.getXWallRight(dim, position);
+		Position yWallBottom = shape.getYWallBottom(dim, position);
+		Position yWallTop = shape.getYWallTop(dim, position);
 
 		/*
 		 * There is a "-1" in the equation just to make it more unlikely that
@@ -346,26 +346,26 @@ public abstract class AbstractAgent implements IAgent {
 		double distance = 1;
 		double leftWallDistance = this.getPosition().getDistance(xWallLeft);
 		if (leftWallDistance <= INTERACTION_RANGE) {
-			distance = leftWallDistance/WALL_CONSTANT;
-			xWallLeftForce = 1/(distance*distance);
+			distance = leftWallDistance / WALL_CONSTANT;
+			xWallLeftForce = 1 / (distance * distance);
 		}
 
 		double rightWallDistance = this.getPosition().getDistance(xWallRight);
 		if (rightWallDistance <= INTERACTION_RANGE) {
-			distance = rightWallDistance/WALL_CONSTANT;
-			xWallRightForce = -1/(distance*distance);
+			distance = rightWallDistance / WALL_CONSTANT;
+			xWallRightForce = -1 / (distance * distance);
 		}
 
 		double bottomWallDistance = this.getPosition().getDistance(yWallBottom);
 		if (bottomWallDistance <= INTERACTION_RANGE) {
-			distance = bottomWallDistance/WALL_CONSTANT;
-			yWallBottomForce = 1/(distance*distance);
+			distance = bottomWallDistance / WALL_CONSTANT;
+			yWallBottomForce = 1 / (distance * distance);
 		}
 
 		double topWallDistance = this.getPosition().getDistance(yWallTop);
 		if (topWallDistance <= INTERACTION_RANGE) {
-			distance = topWallDistance/WALL_CONSTANT;
-			yWallBottomForce = yWallTopForce = -1/(distance*distance);
+			distance = topWallDistance / WALL_CONSTANT;
+			yWallBottomForce = yWallTopForce = -1 / (distance * distance);
 		}
 
 		/*
@@ -379,7 +379,7 @@ public abstract class AbstractAgent implements IAgent {
 
 		return environmentForce;
 	}
-	
+
 	/**
 	 * Try to consume this agent
 	 * <p>
@@ -389,7 +389,7 @@ public abstract class AbstractAgent implements IAgent {
 	 */
 	@Override
 	public synchronized boolean consumeAgent() {
-		if(isAlive) {
+		if (isAlive) {
 			isAlive = false;
 			return true;
 		}
@@ -428,7 +428,7 @@ public abstract class AbstractAgent implements IAgent {
 			@Override
 			public void calculateNextPosition(List<IPopulation> predators,
 					List<IPopulation> preys, List<IPopulation> neutral,
-					Dimension dim) {
+					Dimension dim, IShape shape) {
 
 			}
 		};

@@ -7,6 +7,7 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Gender;
+import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
@@ -70,11 +71,11 @@ public class SimplePreyAgent extends AbstractAgent {
 
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
-			List<IPopulation> preys, List<IPopulation> neutral, Dimension dim) {
+			List<IPopulation> preys, List<IPopulation> neutral, Dimension dim, IShape shape) {
 		Vector predatorForce = getPredatorForce(predators);
 //		Vector separationForce = getSeparationForce(neutral);
 		Vector separationForce = new Vector();
-		Vector environmentForce = getEnvironmentForce(dim);
+		Vector environmentForce = getEnvironmentForce(dim, shape);
 		
 		/*
 		 * Sum the forces from walls, predators and neutral to form the acceleration force.

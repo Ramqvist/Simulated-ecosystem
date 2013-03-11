@@ -9,6 +9,7 @@ import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.agent.DeerAgent;
 import chalmers.dax021308.ecosystem.model.agent.WolfAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
@@ -18,16 +19,17 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  * 
  */
 public class WolfPopulation extends AbstractPopulation {
-	
+
 	private double maxSpeed;
 	private double visionRange;
 
 	public WolfPopulation(String name, Dimension gridDimension,
 			int initPopulationSize, Color color, double maxSpeed,
-			double maxAcceleration, double visionRange, boolean groupBehaviour) {
-		
-		super(name, gridDimension);
-		
+			double maxAcceleration, double visionRange, boolean groupBehaviour,
+			IShape shape) {
+
+		super(name, gridDimension, shape);
+
 		this.visionRange = visionRange;
 		this.groupBehaviour = groupBehaviour;
 		this.color = color;
@@ -38,26 +40,33 @@ public class WolfPopulation extends AbstractPopulation {
 	private List<IAgent> initializePopulation(int populationSize,
 			Dimension gridDimension, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange) {
-		
+
 		List<IAgent> newAgents = new ArrayList<IAgent>(populationSize);
 		addNeutralPopulation(this);
-		
+
 		for (int i = 0; i < populationSize; i++) {
-			Position randPos = new Position(gridDimension.getWidth()
-					* Math.random(), gridDimension.getHeight() * Math.random());
+			Position randPos = shape.getRandomPosition(gridDimension);
 			Vector velocity = new Vector(maxSpeed, maxSpeed);
-			
-			//Create a random vector (uniformly) inside a circle with radius maxSpeed.
+
+			// Create a random vector (uniformly) inside a circle with radius
+			// maxSpeed.
 			while (velocity.getNorm() > maxSpeed) {
 				velocity.setVector(-maxSpeed + Math.random() * 2 * maxSpeed,
 						-maxSpeed + Math.random() * 2 * maxSpeed);
 			}
-			IAgent a = new WolfAgent("Big Hungry", randPos, color, 10,
-					20, velocity, maxSpeed, maxAcceleration, visionRange, groupBehaviour);
+			IAgent a = new WolfAgent("Big Hungry", randPos, color, 10, 20,
+					velocity, maxSpeed, maxAcceleration, visionRange,
+					groupBehaviour);
 			newAgents.add(a);
 		}
 		return newAgents;
 	}
+
+	/*
+	 * @Override public void update() { super.update(); int size =
+	 * agents.size(); WolfAgent a; for(int i=0; i<size; i++){ a = (WolfAgent)
+	 * agents.get(i); if(a.getEnergy()<=0){ addToRemoveList(a); } } }
+	 */
 
 	@Override
 	public double calculateFitness(IAgent agent) {

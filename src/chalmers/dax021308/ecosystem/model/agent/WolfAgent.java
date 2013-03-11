@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
@@ -17,8 +18,8 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public class WolfAgent extends AbstractAgent {
 	
 	private boolean hungry = true;
-	private static final int MAX_ENERGY = 1200;
-	private static final double REPRODUCTION_RATE = 0.1;
+	private static final int MAX_ENERGY = 1300;
+	private static final double REPRODUCTION_RATE = 0.15;
 
 	public WolfAgent(String name, Position p, Color c, int width,
 			int height, Vector velocity, double maxSpeed,
@@ -31,7 +32,7 @@ public class WolfAgent extends AbstractAgent {
 
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
-			List<IPopulation> preys, List<IPopulation> neutral,Dimension gridDimension) {
+			List<IPopulation> preys, List<IPopulation> neutral,Dimension gridDimension, IShape shape) {
 		Vector preyForce = getPreyForce(preys);
 		Vector mutualInteractionForce = new Vector();
 		Vector forwardThrust = new Vector();
@@ -41,7 +42,7 @@ public class WolfAgent extends AbstractAgent {
 			forwardThrust = forwardThrust();
 			arrayalForce = arrayalForce(neutral);
 		}
-		Vector environmentForce = getEnvironmentForce(gridDimension);
+		Vector environmentForce = getEnvironmentForce(gridDimension, shape);
 		
 		/*
 		 * Sum the forces from walls, predators and neutral to form the acceleration force.
@@ -50,7 +51,7 @@ public class WolfAgent extends AbstractAgent {
 		 */
 		
 		Vector randomForce = randomForce();
-		Vector acceleration = environmentForce.multiply(100)
+		Vector acceleration = environmentForce.multiply(1000)
 			.add(preyForce.multiply(10))
 			.add(mutualInteractionForce)
 			.add(forwardThrust)
