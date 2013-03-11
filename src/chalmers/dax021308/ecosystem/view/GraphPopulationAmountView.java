@@ -17,6 +17,7 @@ import info.monitorenter.gui.chart.*;
 import info.monitorenter.gui.chart.IAxis.*;
 import info.monitorenter.gui.chart.rangepolicies.*;
 import info.monitorenter.gui.chart.traces.Trace2DSimple;
+import info.monitorenter.gui.chart.traces.Trace2DSorted;
 
 //import info.monitorenter.gui.util.ColorIterator;
 import info.monitorenter.util.Range;
@@ -90,6 +91,8 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 					if (it.hasNext()) {
 						((ITrace2D) it.next()).addPoint(nIterationsPassed, p.getSize());
 					}
+					else
+						return;
 				}
 			}
 		}
@@ -99,10 +102,12 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 	 * 
 	 */
 	private void initializeTraces(List<IPopulation> populations){
+		ITrace2D newTrace;
 		for (IPopulation p: populations) {		
 			String name = p.getName();	
 			if (name != null) {
-				ITrace2D newTrace = new Trace2DSimple(name); 
+				newTrace = new Trace2DSorted(); 
+				newTrace.setName(name);
 				newTrace.setColor(p.getColor());
 				this.addTrace(newTrace);
 			}
