@@ -149,7 +149,7 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
 			//repaint();
 			//display();
 			//removeAll();
-			repaint();
+			//repaint();
 		} else if(eventName == EcoWorld.EVENT_STOP) {
 			//Model has stopped. Maybe hide view?
 			//frame.setVisible(false);
