@@ -48,64 +48,64 @@ import chalmers.dax021308.ecosystem.model.util.TriangleShape;
  * <p>
  * Use the proper constructor for the wanted behavior of EcoWorld.
  * 
+ * 
  * @author Erik Ramqvist
  * 
  */
 public class EcoWorld implements IModel {
 
+	//Please don't auto-indent this class, thanks.
+	
 	/* Property change events constants */
-	public static final String EVENT_TICK = "chalmers.dax021308.ecosystem.model.Ecoworld.event_tick";
-	public static final String EVENT_STOP = "chalmers.dax021308.ecosystem.model.Ecoworld.event_stop";
-	public static final String EVENT_START = "chalmers.dax021308.ecosystem.model.Ecoworld.event_start";
-	public static final String EVENT_PAUSE = "chalmers.dax021308.ecosystem.model.Ecoworld.event_pause";
+	public static final String EVENT_TICK               = "chalmers.dax021308.ecosystem.model.Ecoworld.event_tick";
+	public static final String EVENT_STOP               = "chalmers.dax021308.ecosystem.model.Ecoworld.event_stop";
+	public static final String EVENT_START              = "chalmers.dax021308.ecosystem.model.Ecoworld.event_start";
+	public static final String EVENT_PAUSE              = "chalmers.dax021308.ecosystem.model.Ecoworld.event_pause";
 	public static final String EVENT_RECORDING_FINISHED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recordingstarted";
-	public static final String EVENT_RECORDING_STARTED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recordingfinished";
-	public static final String EVENT_DIMENSIONCHANGED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_dimensionchanged";
-	public static final String EVENT_DELAY_CHANGED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_delaychanged";
-	public static final String EVENT_SHAPE_CHANGED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_shape_changed";
+	public static final String EVENT_RECORDING_STARTED  = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recordingfinished";
+	public static final String EVENT_DIMENSIONCHANGED   = "chalmers.dax021308.ecosystem.model.Ecoworld.event_dimensionchanged";
+	public static final String EVENT_DELAY_CHANGED      = "chalmers.dax021308.ecosystem.model.Ecoworld.event_delaychanged";
+	public static final String EVENT_SHAPE_CHANGED      = "chalmers.dax021308.ecosystem.model.Ecoworld.event_shape_changed";
 
 	/* Shape Constants */
-	public static final String SHAPE_SQUARE = "Square Shape";
-	public static final String SHAPE_CIRCLE = "Circle Shape";
+	public static final String SHAPE_SQUARE   = "Square Shape";
+	public static final String SHAPE_CIRCLE   = "Circle Shape";
 	public static final String SHAPE_TRIANGLE = "Triangle Shape";
 
 	/* Population constants */
-	public static final String POP_PIG = "Pig Population";
-	public static final String POP_RABBIT = "Rabbit Population";
-	public static final String POP_DUMMYPREY = "Dummy Prey Population";
-	public static final String POP_DEER = "Deer Population";
-	public static final String POP_DEER_GRID = "Deer Population Grid";
-	public static final String POP_GRASS = "Grass Population";
+	public static final String POP_PIG        = "Pig Population";
+	public static final String POP_RABBIT     = "Rabbit Population";
+	public static final String POP_DUMMYPREY  = "Dummy Prey Population";
+	public static final String POP_DEER       = "Deer Population";
+	public static final String POP_DEER_GRID  = "Deer Population Grid";
+	public static final String POP_GRASS      = "Grass Population";
 	public static final String POP_GRASS_GRID = "Grass Population Grid";
-	public static final String POP_DUMMYPRED = "Dummy Predator Population";
-	public static final String POP_WOLF = "Wolf Population";
-	public static final String POP_WOLF_GRID = "Wolf Population Grid";
+	public static final String POP_DUMMYPRED  = "Dummy Predator Population";
+	public static final String POP_WOLF       = "Wolf Population";
+	public static final String POP_WOLF_GRID  = "Wolf Population Grid";
 
 	/* Population array based on predator-prey model */
-	public static final String[] PREY_VALUES = { POP_DEER, POP_DEER_GRID,
-			POP_PIG, POP_RABBIT, POP_DUMMYPREY };
-	public static final String[] PRED_VALUES = { POP_WOLF, POP_WOLF_GRID,
-			POP_DUMMYPRED };
+	public static final String[] PREY_VALUES  = { POP_DEER, POP_DEER_GRID, POP_PIG, POP_RABBIT, POP_DUMMYPREY };
+	public static final String[] PRED_VALUES  = { POP_WOLF, POP_WOLF_GRID, POP_DUMMYPRED };
 	public static final String[] GRASS_VALUES = { POP_GRASS, POP_GRASS_GRID };
 
 	/* Dimension constants */
-	public static final String DIM_SMALL = "500  x 500";
+	public static final String DIM_SMALL  = "500  x 500";
 	public static final String DIM_MEDIUM = "1000 x 1000";
-	public static final String DIM_LARGE = "1500 x 1500";
+	public static final String DIM_LARGE  = "1500 x 1500";
 	public static final String DIM_XLARGE = "2000 x 2000";
 
-	private static final Dimension D_SMALL = new Dimension(500, 500);
+	private static final Dimension D_SMALL  = new Dimension(500, 500);
 	private static final Dimension D_MEDIUM = new Dimension(1000, 1000);
-	private static final Dimension D_LARGE = new Dimension(1500, 1500);
+	private static final Dimension D_LARGE  = new Dimension(1500, 1500);
 	private static final Dimension D_XLARGE = new Dimension(2000, 2000);
 
-	public static final String[] DIM_VALUES = { DIM_SMALL, DIM_MEDIUM,
-			DIM_LARGE, DIM_XLARGE };
+	public static final String[] DIM_VALUES = { DIM_SMALL, DIM_MEDIUM, DIM_LARGE, DIM_XLARGE };
 
-	/* State values */
+	/* State variables */
 	private AtomicBoolean environmentFinished = new AtomicBoolean(false);
-	private AtomicBoolean timerFinished = new AtomicBoolean(false);
-	private AtomicBoolean shouldRun = new AtomicBoolean(false);
+	private AtomicBoolean timerFinished       = new AtomicBoolean(false);
+	private AtomicBoolean shouldRun           = new AtomicBoolean(false);
 	private boolean runWithoutTimer;
 	private boolean recordSimulation;
 	private boolean skipBoolean;
