@@ -84,7 +84,7 @@ public class EcoWorld implements IModel {
 	public static final String POP_WOLF       = "Wolf Population";
 	public static final String POP_WOLF_GRID  = "Wolf Population Grid";
 
-	/* Population array based on predator-prey model */
+	/* Population array based on predator-prey model, the view uses these values. */
 	public static final String[] PREY_VALUES  = { POP_DEER, POP_DEER_GRID, POP_PIG, POP_RABBIT, POP_DUMMYPREY };
 	public static final String[] PRED_VALUES  = { POP_WOLF, POP_WOLF_GRID, POP_DUMMYPRED };
 	public static final String[] GRASS_VALUES = { POP_GRASS, POP_GRASS_GRID };
@@ -117,7 +117,7 @@ public class EcoWorld implements IModel {
 	private int tickTime;
 	private PropertyChangeSupport observers;
 
-	/* Time measurements variables */
+	/* Time measurements variables (in ns).*/
 	private long startIterationTime;
 	private long elapsedTime;
 
@@ -132,7 +132,6 @@ public class EcoWorld implements IModel {
 	private Object syncObject = new Object();
 	private int numUpdates = 0;
 	private Dimension d;
-	// private static final int NUM_THREAD = 1;
 	private ExecutorService executor;
 
 	private OnFinishListener mOnFinishListener = new OnFinishListener() {
@@ -588,7 +587,7 @@ public class EcoWorld implements IModel {
 	/**
 	 * Reads the recording from the given filePath.
 	 * <p>
-	 * Untested!
+	 * Untested! Unfinished!
 	 * 
 	 * @param filePath
 	 * @return True if success, otherwise false.
@@ -620,6 +619,13 @@ public class EcoWorld implements IModel {
 		return false;
 	}
 
+	/**
+	 * Helper method for readRecordFromDisk.
+	 * 
+	 * Unfinished! Untested!
+	 * @param br
+	 * @return
+	 */
 	private List<List<IPopulation>> parseFile(BufferedReader br) {
 		String frameDivider = "FRAME";
 		String populationDivider = "POPULATION";
@@ -667,6 +673,8 @@ public class EcoWorld implements IModel {
 
 	/**
 	 * Saves the given recording to the filePath
+	 * 
+	 * Unfinished! Untested!
 	 * 
 	 * @param record
 	 * @param filePath
