@@ -117,4 +117,8 @@ public interface IAgent extends Cloneable {
 
 	public String toBinaryString();
 
+	/**
+	 * @return Trophic level of the agent.
+	 */
+	public int getTrophicLevel();
 }
