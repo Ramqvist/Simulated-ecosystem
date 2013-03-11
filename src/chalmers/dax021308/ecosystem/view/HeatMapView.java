@@ -75,6 +75,7 @@ public class HeatMapView extends GLCanvas implements IView {
 		addGLEventListener(glListener);     
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
 		String eventName = event.getPropertyName();
@@ -83,7 +84,7 @@ public class HeatMapView extends GLCanvas implements IView {
 		} else if(eventName == EcoWorld.EVENT_TICK) {
 			//Tick notification recived from model. Do something with the data.
 			if(event.getNewValue() instanceof List<?>) {
-				this.newPops = AbstractPopulation.clonePopulationList((List<IPopulation>) event.getNewValue());
+				this.newPops = (List<IPopulation>) event.getNewValue();
 			}	
 			repaint();
 		} else if(eventName == EcoWorld.EVENT_DIMENSIONCHANGED) {

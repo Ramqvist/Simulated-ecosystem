@@ -145,7 +145,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 		} else if(eventName == EcoWorld.EVENT_TICK) {
 			//Tick notification recived from model. Do something with the data.
 			if(event.getNewValue() instanceof List<?>) {
-				this.newPops = AbstractPopulation.clonePopulationList((List<IPopulation>) event.getNewValue());
+				this.newPops = (List<IPopulation>) event.getNewValue();
 			}
 			if(event.getOldValue() instanceof List<?>) {
 				this.newObs = (List<IObstacle>) event.getOldValue();
@@ -171,16 +171,6 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 		}
 	}
 	
-	/**
-	 * Clones the given list with {@link IPopulation#clonePopulation()} method.
-	 */
-	/*private List<IPopulation> clonePopulationList(List<IPopulation> popList) {
-		List<IPopulation> list = new ArrayList<IPopulation>(popList.size());
-		for(IPopulation p : popList) {
-			list.add(p.clonePopulation());
-		}
-		return list;
-	}*/
 	
 	/**
 	 * Sets the FPS counter visible or not visible
@@ -218,9 +208,6 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
     private class JOGLListener implements GLEventListener {
     	
     		//Number of edges in each created circle.
-    		private final double VERTEXES_PER_CIRCLE = 6;
-    		private final double PI_TIMES_TWO        = 2*Math.PI;
-        	private final double increment           = PI_TIMES_TWO/VERTEXES_PER_CIRCLE;
         	private final float  COLOR_FACTOR        = (1.0f/255);
         	
         	GL gl = getGL();

@@ -146,7 +146,8 @@ public class EcoWorld implements IModel {
 			if (recordSimulation) {
 				recordedSimulation.add(clonePopulationList(popList));
 			} else {
-				observers.firePropertyChange(EVENT_TICK, obsList, popList);
+				//Send out the new cloned population list and obsticle list.
+				observers.firePropertyChange(EVENT_TICK, obsList, clonePopulationList(popList));
 			}
 			if (runWithoutTimer) {
 				scheduleEnvironmentUpdate();

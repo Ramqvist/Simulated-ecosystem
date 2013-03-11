@@ -66,13 +66,14 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
+		//nIterationsPassed ska bara ökas när du får in EVENT_TICK. Då modellen kan skicka ut andra notifikationer än modeluppdateringar.
 		nIterationsPassed++;
 		String eventName = event.getPropertyName();
 		List<IPopulation> populations = null;
+		//Detta behövs bara hämtas och kollas när du får in EVENT_TICK. (Kika i OpenGLSimulationView.) //Erik
 		if(event.getNewValue() instanceof List<?>) {
 			populations = (List<IPopulation>) event.getNewValue();
-			populations = AbstractPopulation.clonePopulationList(populations);
-		}
+		} 
 		//Du kan ha "==" dï¿½ strï¿½ngarna som tas in ï¿½r public static final. "==" ï¿½r snabbare ï¿½n equals() //Erik
 		if (eventName == EcoWorld.EVENT_START) {
 		}
