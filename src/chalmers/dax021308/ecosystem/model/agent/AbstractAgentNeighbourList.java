@@ -217,10 +217,11 @@ public abstract class AbstractAgentNeighbourList implements IAgent {
 	 */
 	public void updateNeighbourList(List<IPopulation> neutral, List<IPopulation> prey, List<IPopulation> pred) {	
 		neighbourCounter++;
-		if(neighbourCounter != NEIGHBOURS_UPDATE_THRESHOLD) {
+		if(neighbourCounter > NEIGHBOURS_UPDATE_THRESHOLD) {
 			//Don't update just yet.
 			return;
 		}
+		neighbourCounter = 0;
 		preyNeighbours    = new LinkedList<IAgent>();
 		predNeighbours    = new LinkedList<IAgent>();
 		neutralNeighbours = new LinkedList<IAgent>();
