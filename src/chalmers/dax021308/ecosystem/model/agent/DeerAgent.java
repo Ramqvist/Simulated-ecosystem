@@ -140,7 +140,7 @@ public class DeerAgent extends AbstractAgent {
 						if(a.consumeAgent()) {
 							pop.addToRemoveList(a);
 							hungry = false;
-							this.energy = MAX_ENERGY;
+							energy = MAX_ENERGY;
 						}
 					} else {
 						Vector newForce = new Vector(p, getPosition());

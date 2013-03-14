@@ -189,7 +189,9 @@ public abstract class AbstractPopulation implements IPopulation {
 	/**
 	 * Clones the given list with {@link IPopulation#clonePopulation()} method.
 	 * <p>
-	 * @deprecated Use clonePopulationListWithRecycledList, instead to reduce unnecessary heap-allocations.
+	 * 
+	 * @deprecated Use clonePopulationListWithRecycledList, instead to reduce
+	 *             unnecessary heap-allocations.
 	 */
 	@Deprecated
 	public static List<IPopulation> clonePopulationList(
@@ -200,14 +202,16 @@ public abstract class AbstractPopulation implements IPopulation {
 		}
 		return list;
 	}
-	
+
 	/**
 	 * Copies the information from the source to the recycled one.
+	 * 
 	 * @param recycled
 	 * @param source
 	 */
-	public static void clonePopulationListWithRecycledList(List<IPopulation> recycled, List<IPopulation> source) {
-		if(recycled == null) {
+	public static void clonePopulationListWithRecycledList(
+			List<IPopulation> recycled, List<IPopulation> source) {
+		if (recycled == null) {
 			throw new NullPointerException("recycled list is null");
 		}
 		int i = 0;
@@ -232,7 +236,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		}
 		if (shape == null)
 			throw new IllegalArgumentException("Illegal Shape from file.");
-		
+
 		return new AbstractPopulation(name, dim, cap, true, shape) {
 			@Override
 			public double calculateFitness(IAgent agent) {

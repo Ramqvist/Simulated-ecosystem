@@ -127,7 +127,7 @@ public class WolfAgent extends AbstractAgent {
 						if(a.consumeAgent()) {
 							pop.addToRemoveList(a);
 							hungry = false;
-							this.energy = MAX_ENERGY;
+							energy  = MAX_ENERGY;
 						}
 					} else {
 					/*

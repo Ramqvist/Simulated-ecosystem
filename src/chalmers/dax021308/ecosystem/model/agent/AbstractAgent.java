@@ -269,7 +269,7 @@ public abstract class AbstractAgent implements IAgent {
 	}
 
 	/**
-	 * @author Sebbe This is the force that makes neighbouring agents to
+	 * @author Sebbe This is the force that makes neighboring agents to
 	 *         equalize their velocities and therefore go in the same direction.
 	 *         The sphere of incluence is defined as 2*INTERACTION_RANGE at the
 	 *         moment.
