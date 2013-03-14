@@ -19,7 +19,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public class GrassAgent extends AbstractAgent {
 	private final Dimension gridDimension;
 	private final IShape shape;
-	private static final double REPRODUCTION_RATE = 0.002;
+	private static final double REPRODUCTION_RATE = 0.001;
 
 	public GrassAgent(String name, Position pos, Color color, int width,
 			int height, Vector velocity, double maxSpeed,

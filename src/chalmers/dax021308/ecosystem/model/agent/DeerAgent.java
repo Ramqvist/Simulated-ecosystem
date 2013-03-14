@@ -22,9 +22,9 @@ public class DeerAgent extends AbstractAgent {
 
 	private static final int MAX_ENERGY = 1100;
 	private boolean hungry = true;
-	private static final double REPRODUCTION_RATE = 0.15;
+	private static final double REPRODUCTION_RATE = 0.80;
 	private int digesting = 0;
-	private static final int DIGESTION_TIME = 40;
+	private static final int DIGESTION_TIME = 80;
 	
 	public DeerAgent(String name, Position p, Color c, int width,
 			int height, Vector velocity, double maxSpeed,
@@ -147,7 +147,9 @@ public class DeerAgent extends AbstractAgent {
 						if(a.consumeAgent()) {
 							pop.addToRemoveList(a);
 							hungry = false;
-							this.energy = MAX_ENERGY;
+							energy += 500;
+							if(energy>MAX_ENERGY)
+								energy = MAX_ENERGY;
 							digesting = DIGESTION_TIME;
 						}
 					} else {
