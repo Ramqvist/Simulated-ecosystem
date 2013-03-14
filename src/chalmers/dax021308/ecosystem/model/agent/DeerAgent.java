@@ -22,7 +22,9 @@ public class DeerAgent extends AbstractAgent {
 
 	private static final int MAX_ENERGY = 1100;
 	private boolean hungry = true;
-	private static final double REPRODUCTION_RATE = 0.15;
+	private static final double REPRODUCTION_RATE = 0.80;
+	private int digesting = 0;
+	private static final int DIGESTION_TIME = 80;
 	
 	public DeerAgent(String name, Position p, Color c, int width,
 			int height, Vector velocity, double maxSpeed,
@@ -95,7 +97,7 @@ public class DeerAgent extends AbstractAgent {
 				.add(mutualInteractionForce)
 				.add(forwardThrust)
 				.add(arrayalForce)
-				.add(preyForce.multiply(3))
+				.add(preyForce.multiply(5*(1-energy/MAX_ENERGY)))
 				.add(randomForce);
 		double accelerationNorm = acceleration.getNorm();
 		if (accelerationNorm > maxAcceleration) {
@@ -116,7 +118,12 @@ public class DeerAgent extends AbstractAgent {
 		}
 
 		this.setVelocity(newVelocity);
+		
 		nextPosition = Position.positionPlusVector(position, velocity);
+		if(digesting > 0){
+			nextPosition = position;
+			digesting--;
+		}
 	}
 
 	/**
@@ -140,7 +147,14 @@ public class DeerAgent extends AbstractAgent {
 						if(a.consumeAgent()) {
 							pop.addToRemoveList(a);
 							hungry = false;
+<<<<<<< HEAD
 							energy = MAX_ENERGY;
+=======
+							energy += 500;
+							if(energy>MAX_ENERGY)
+								energy = MAX_ENERGY;
+							digesting = DIGESTION_TIME;
+>>>>>>> 7d990602154a13c3580f3071c9b74f62c8a454a1
 						}
 					} else {
 						Vector newForce = new Vector(p, getPosition());
