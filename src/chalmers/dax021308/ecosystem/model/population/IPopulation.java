@@ -107,6 +107,4 @@ public interface IPopulation extends Cloneable {
 
 	public double getComputationalFactor();
 
-	public void removeDeadAgents();
-	
 }

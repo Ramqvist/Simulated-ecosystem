@@ -172,7 +172,6 @@ public class SquareEnvironment2 implements IEnvironment {
 		
 		@Override
 		public void run() {
-			p.removeDeadAgents();
 			//Remove agents that has been marked as remove.
 			p.removeAgentsFromRemoveList();
 

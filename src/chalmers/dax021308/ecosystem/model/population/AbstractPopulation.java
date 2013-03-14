@@ -118,7 +118,7 @@ public abstract class AbstractPopulation implements IPopulation {
 			a = agents.get(i);
 			a.calculateNextPosition(predators, preys, neutral, gridDimension,
 					shape);
-			if (a.getEnergy() <= 0) {
+			if (a.getEnergy() <= 0 || !a.isAlive()) {
 				addToRemoveList(a);
 			}
 		}
@@ -195,7 +195,6 @@ public abstract class AbstractPopulation implements IPopulation {
 	 * @deprecated Use clonePopulationListWithRecycledList, instead to reduce
 	 *             unnecessary heap-allocations.
 	 */
-	@Deprecated
 	public static List<IPopulation> clonePopulationList(
 			List<IPopulation> original) {
 		List<IPopulation> list = new ArrayList<IPopulation>(original.size());
@@ -302,16 +301,6 @@ public abstract class AbstractPopulation implements IPopulation {
 	@Override
 	public synchronized void addToRemoveList(IAgent a) {
 		removeList.add(a);
-	}
-	
-	@Override
-	public void removeDeadAgents() {
-		for(int i = 0;i < agents.size() ; i++) {
-			IAgent a = agents.get(i);
-			if(!a.isAlive()) {
-				addToRemoveList(a);
-			}
-		}
 	}
 
 	@Override
