@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import sun.management.resources.agent;
+
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.WorldGrid;
@@ -300,6 +302,16 @@ public abstract class AbstractPopulation implements IPopulation {
 	@Override
 	public synchronized void addToRemoveList(IAgent a) {
 		removeList.add(a);
+	}
+	
+	@Override
+	public void removeDeadAgents() {
+		for(int i = 0;i < agents.size() ; i++) {
+			IAgent a = agents.get(i);
+			if(!a.isAlive()) {
+				addToRemoveList(a);
+			}
+		}
 	}
 
 	@Override

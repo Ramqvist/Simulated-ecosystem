@@ -74,7 +74,9 @@ public abstract class AbstractAgent implements IAgent {
 		preyNeighbours    = new LinkedList<IAgent>();
 		predNeighbours    = new LinkedList<IAgent>();
 		neutralNeighbours = new LinkedList<IAgent>();
-		neighbourCounter = 0;
+		
+		//To update the first time.
+		neighbourCounter = NEIGHBOURS_UPDATE_THRESHOLD;
 	}
 
 	public AbstractAgent(String name, Position p, Color c, int width,
@@ -216,8 +218,7 @@ public abstract class AbstractAgent implements IAgent {
 	 * @author Erik 
 	 */
 	public void updateNeighbourList(List<IPopulation> neutral, List<IPopulation> prey, List<IPopulation> pred) {	
-		neighbourCounter++;
-		if(neighbourCounter > NEIGHBOURS_UPDATE_THRESHOLD) {
+		if(neighbourCounter++ < NEIGHBOURS_UPDATE_THRESHOLD) {
 			//Don't update just yet.
 			return;
 		}
@@ -444,6 +445,11 @@ public abstract class AbstractAgent implements IAgent {
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public boolean isAlive() {
+		return isAlive;
 	}
 
 	/**

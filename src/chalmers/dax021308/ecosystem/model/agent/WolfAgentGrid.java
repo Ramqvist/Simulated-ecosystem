@@ -43,9 +43,9 @@ public class WolfAgentGrid extends AbstractAgent {
 		Vector forwardThrust = new Vector();
 		Vector arrayalForce = new Vector();
 		if (groupBehaviour) {
-			mutualInteractionForce = mutualInteractionForce(neutral);
+			mutualInteractionForce = mutualInteractionForce();
 			forwardThrust = forwardThrust();
-			arrayalForce = arrayalForce(neutral);
+			arrayalForce = arrayalForce();
 		}
 		Vector environmentForce = getEnvironmentForce(gridDimension, shape);
 

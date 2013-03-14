@@ -35,14 +35,17 @@ public class WolfAgent extends AbstractAgent {
 	public void calculateNextPosition(List<IPopulation> predators,
 			List<IPopulation> preys, List<IPopulation> neutral,
 			Dimension gridDimension, IShape shape) {
+		
+		updateNeighbourList(neutral, preys, predators);
+		
 		Vector preyForce = getPreyForce(preys);
 		Vector mutualInteractionForce = new Vector();
 		Vector forwardThrust = new Vector();
 		Vector arrayalForce = new Vector();
 		if (groupBehaviour) {
-			mutualInteractionForce = mutualInteractionForce(neutral);
+			mutualInteractionForce = mutualInteractionForce();
 			forwardThrust = forwardThrust();
-			arrayalForce = arrayalForce(neutral);
+			arrayalForce = arrayalForce();
 		}
 		Vector environmentForce = getEnvironmentForce(gridDimension, shape);
 
