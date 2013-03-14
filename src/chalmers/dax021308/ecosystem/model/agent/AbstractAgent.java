@@ -42,11 +42,11 @@ public abstract class AbstractAgent implements IAgent {
 	private boolean isAlive;
 	
 	/* Neighbour list module variables */
-	private List<IAgent> preyNeighbours;
-	private List<IAgent> predNeighbours;
-	private List<IAgent> neutralNeighbours;
+	protected List<IAgent> preyNeighbours;
+	protected List<IAgent> predNeighbours;
+	protected List<IAgent> neutralNeighbours;
 	private int neighbourCounter;
-	private final static int NEIGHBOURS_UPDATE_THRESHOLD = 10;
+	private static final int NEIGHBOURS_UPDATE_THRESHOLD = 10;
 
 	protected final static double INTERACTION_RANGE = 10;
 	protected final static double WALL_CONSTANT = 2;
