@@ -2,6 +2,7 @@ package chalmers.dax021308.ecosystem.model.agent;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -71,9 +72,9 @@ public abstract class AbstractAgent implements IAgent {
 		this.isAlive = true;
 		
 		/* LinkedList for fast changing of Agents, consider ArrayList for less memory */
-		preyNeighbours    = new LinkedList<IAgent>();
-		predNeighbours    = new LinkedList<IAgent>();
-		neutralNeighbours = new LinkedList<IAgent>();
+		preyNeighbours    = new ArrayList<IAgent>(256);
+		predNeighbours    = new ArrayList<IAgent>(256);
+		neutralNeighbours = new ArrayList<IAgent>(256);
 		
 		//To update the first time.
 		neighbourCounter = NEIGHBOURS_UPDATE_THRESHOLD;
@@ -231,7 +232,7 @@ public abstract class AbstractAgent implements IAgent {
 			//Don't update just yet.
 			return;
 		}
-//		Log.v("Updating Neighbourlist!");
+//		Log.v("Updating Neighbourlist! Agent: " + toString());
 		neighbourCounter = 0;
 		
 		for(IPopulation p : neutral) {
