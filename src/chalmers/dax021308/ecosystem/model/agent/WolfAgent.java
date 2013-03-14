@@ -133,14 +133,10 @@ public class WolfAgent extends AbstractAgent {
 						if(a.consumeAgent()) {
 							pop.addToRemoveList(a);
 							hungry = false;
-<<<<<<< HEAD
-							energy  = MAX_ENERGY;
-=======
 							energy += a.getEnergy();
 							if (energy > MAX_ENERGY)
 								energy = MAX_ENERGY;
 							digesting = DIGESTION_TIME;
->>>>>>> 7d990602154a13c3580f3071c9b74f62c8a454a1
 						}
 					} else {
 					/*
