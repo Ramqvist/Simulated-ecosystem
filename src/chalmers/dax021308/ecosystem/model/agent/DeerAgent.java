@@ -72,7 +72,8 @@ public class DeerAgent extends AbstractAgent {
 			List<IPopulation> preys, List<IPopulation> neutral,
 			Dimension gridDimension, IShape shape) {
 
-		Vector predatorForce = getPredatorForce(predators);
+		updateNeighbourList(neutral, preys, predators);
+		Vector predatorForce = getPredatorForce();
 		Vector mutualInteractionForce = new Vector();
 		Vector forwardThrust = new Vector();
 		Vector arrayalForce = new Vector();
@@ -83,7 +84,7 @@ public class DeerAgent extends AbstractAgent {
 		}
 
 		Vector environmentForce = getEnvironmentForce(gridDimension, shape);
-		Vector preyForce = getPreyForce(preys);
+		Vector preyForce = getPreyForce();
 
 		/*
 		 * Sum the forces from walls, predators and neutral to form the
@@ -126,28 +127,25 @@ public class DeerAgent extends AbstractAgent {
 	 *            The list of preys to eat
 	 * @return returns The force the preys attracts the agent with
 	 */
-	private Vector getPreyForce(List<IPopulation> preys) {
+	private Vector getPreyForce() {
 		Vector preyForce = new Vector(0, 0);
-		for (IPopulation pop : preys) {
-			List<IAgent> agents = pop.getAgents();
-			for (int i = 0; i < pop.getAgents().size(); i++) {
-				IAgent a = agents.get(i);
-				Position p = a.getPosition();
-				double distance = getPosition().getDistance(p);
-				if (distance <= visionRange) {
-					if (distance <= INTERACTION_RANGE - 5) {
-						// Food found, let's eat it and make some reproducing
-						// possible
-						if (a.consumeAgent()) {
-							pop.addToRemoveList(a);
-							hungry = false;
-							energy = MAX_ENERGY;
-						}
-					} else {
-						Vector newForce = new Vector(p, getPosition());
-						double norm = newForce.getNorm();
-						preyForce.add(newForce.multiply(1 / (norm * distance)));
+		int preySize = preyNeighbours.size();
+		for (int i = 0; i < preySize; i++) {
+			IAgent a = preyNeighbours.get(i);
+			Position p = a.getPosition();
+			double distance = getPosition().getDistance(p);
+			if (distance <= visionRange) {
+				if (distance <= INTERACTION_RANGE - 5) {
+					// Food found, let's eat it and make some reproducing
+					// possible
+					if (a.consumeAgent()) {
+						hungry = false;
+						energy = MAX_ENERGY;
 					}
+				} else {
+					Vector newForce = new Vector(p, getPosition());
+					double norm = newForce.getNorm();
+					preyForce.add(newForce.multiply(1 / (norm * distance)));
 				}
 			}
 		}
@@ -162,29 +160,30 @@ public class DeerAgent extends AbstractAgent {
 	 *         the agent feels, weighted by how close the source of the force
 	 *         is.
 	 */
-	private Vector getPredatorForce(List<IPopulation> predators) {
+	private Vector getPredatorForce() {
 		Vector predatorForce = new Vector(0, 0);
 		int nVisiblePredators = 0;
-		for (IPopulation pop : predators) {
-			for (IAgent predator : pop.getAgents()) {
-				Position p = predator.getPosition();
-				double distance = getPosition().getDistance(p);
-				if (distance <= visionRange) { // If predator is in vision range
-												// for prey
-					/*
-					 * Create a vector that points away from the predator.
-					 */
-					Vector newForce = new Vector(this.getPosition(), p);
+		int predSize = predNeighbours.size();
+		IAgent predator;
+		for (int i = 0; i < predSize; i++) {
+			predator = predNeighbours.get(i);
+			Position p = predator.getPosition();
+			double distance = getPosition().getDistance(p);
+			if (distance <= visionRange) { // If predator is in vision range
+											// for prey
+				/*
+				 * Create a vector that points away from the predator.
+				 */
+				Vector newForce = new Vector(this.getPosition(), p);
 
-					/*
-					 * Add this vector to the predator force, with proportion to
-					 * how close the predator is. Closer predators will affect
-					 * the force more than those far away.
-					 */
-					double norm = newForce.getNorm();
-					predatorForce.add(newForce.multiply(1 / (norm * distance)));
-					nVisiblePredators++;
-				}
+				/*
+				 * Add this vector to the predator force, with proportion to
+				 * how close the predator is. Closer predators will affect
+				 * the force more than those far away.
+				 */
+				double norm = newForce.getNorm();
+				predatorForce.add(newForce.multiply(1 / (norm * distance)));
+				nVisiblePredators++;
 			}
 		}
 
