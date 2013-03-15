@@ -2,7 +2,9 @@ package chalmers.dax021308.ecosystem.model.agent;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -14,6 +16,8 @@ import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
+ * 
+ * AbstractAgent with neighbourlist.
  * 
  * @author Henrik Abstract class for handling the dummy methods
  */
@@ -37,6 +41,13 @@ public abstract class AbstractAgent implements IAgent {
 	protected double visionRange;
 	protected double maxAcceleration;
 	private boolean isAlive;
+	
+	/* Neighbour list module variables */
+	protected List<IAgent> preyNeighbours;
+	protected List<IAgent> predNeighbours;
+	protected List<IAgent> neutralNeighbours;
+	private int neighbourCounter;
+	private static final int NEIGHBOURS_UPDATE_THRESHOLD = 10;
 
 	protected final static double INTERACTION_RANGE = 10;
 	protected final static double WALL_CONSTANT = 2;
@@ -59,6 +70,14 @@ public abstract class AbstractAgent implements IAgent {
 		this.lifeLength = 0;
 		ran = new Random();
 		this.isAlive = true;
+		
+		/* LinkedList for fast changing of Agents, consider ArrayList for less memory */
+		preyNeighbours    = new ArrayList<IAgent>(256);
+		predNeighbours    = new ArrayList<IAgent>(256);
+		neutralNeighbours = new ArrayList<IAgent>(256);
+		
+		//To update the first time.
+		neighbourCounter = ran.nextInt(NEIGHBOURS_UPDATE_THRESHOLD);
 	}
 
 	public AbstractAgent(String name, Position p, Color c, int width,
@@ -89,6 +108,15 @@ public abstract class AbstractAgent implements IAgent {
 		this.color = color;
 		this.width = width;
 		this.height = height;
+
+		
+		/* LinkedList for fast changing of Agents, consider ArrayList for less memory */
+		preyNeighbours    = new LinkedList<IAgent>();
+		predNeighbours    = new LinkedList<IAgent>();
+		neutralNeighbours = new LinkedList<IAgent>();
+		
+		//To update the first time.
+		neighbourCounter = NEIGHBOURS_UPDATE_THRESHOLD;
 	}
 
 	@Override
@@ -189,6 +217,55 @@ public abstract class AbstractAgent implements IAgent {
 		this.position = new Position(nextPosition);
 		this.lifeLength++;
 	}
+	
+	/**
+	 * Update the neighbourlist, should be done once in a while.
+	 * <p>
+	 * Warning, heavy computation!
+	 * 
+	 * Needs optimizations.
+	 * 
+	 * @author Erik 
+	 */
+	public void updateNeighbourList(List<IPopulation> neutral, List<IPopulation> prey, List<IPopulation> pred) {	
+		if(neighbourCounter++ < NEIGHBOURS_UPDATE_THRESHOLD) {
+			//Don't update just yet.
+			return;
+		}
+//		Log.v("Updating Neighbourlist! Agent: " + toString());
+		neighbourCounter = 0;
+//		neutralNeighbours = new ArrayList<IAgent>(2*neutralNeighbours.size());
+//		predNeighbours = new ArrayList<IAgent>(2*predNeighbours.size());
+//		preyNeighbours = new ArrayList<IAgent>(2*preyNeighbours.size());
+
+		neutralNeighbours.clear();
+		predNeighbours.clear();
+		preyNeighbours.clear();
+		
+		for(IPopulation p : neutral) {
+			for(IAgent a : p.getAgents()) {
+				if (a.getPosition().getDistance(position) <= visionRange) {
+					neutralNeighbours.add(a);
+				}
+			}
+		}
+		
+		for(IPopulation p : prey) {
+			for(IAgent a : p.getAgents()) {
+				if (a.getPosition().getDistance(position) <= visionRange) {
+					preyNeighbours.add(a);
+				}
+			}
+		}
+		
+		for(IPopulation p : pred) {
+			for(IAgent a : p.getAgents()) {
+				if (a.getPosition().getDistance(position) <= visionRange) {
+					predNeighbours.add(a);
+				}
+			}
+		}
+	}
 
 	/**
 	 * @author Sebbe A random force that the agent gets influenced by. Can be
@@ -216,28 +293,21 @@ public abstract class AbstractAgent implements IAgent {
 	 * @return a vector with the force that this agent feels from other neutral
 	 *         agents in that it interacts with.
 	 */
-	protected Vector mutualInteractionForce(List<IPopulation> neutral) {
+	protected Vector mutualInteractionForce() {
 		Vector mutualInteractionForce = new Vector(0, 0);
 		Vector newForce = new Vector(0, 0);
-		IPopulation pop;
-		int popSize = neutral.size();
-		for (int j = 0; j < popSize; j++) {
-			pop = neutral.get(j);
-			int size = pop.getAgents().size();
-			List<IAgent> agents = pop.getAgents();
 			IAgent agent;
+			int size = neutralNeighbours.size();
 			for (int i = 0; i < size; i++) {
-				agent = agents.get(i);
+				agent = neutralNeighbours.get(i);
 				if (agent != this) {
 					Position p = agent.getPosition();
 					double distance = getPosition().getDistance(p);
 					double Q = 0; // Q is a function of the distance.
-					if (distance <= visionRange) {
-						if (distance <= INTERACTION_RANGE) {
-							Q = -20 * (INTERACTION_RANGE - distance);
-						} else {
-							Q = 1;
-						}
+					if (distance <= INTERACTION_RANGE) {
+						Q = -20 * (INTERACTION_RANGE - distance);
+					} else {
+						Q = 1;
 					}
 					newForce.x = p.getX() - this.getPosition().getX();
 					newForce.y = p.getY() - this.getPosition().getY();
@@ -249,7 +319,6 @@ public abstract class AbstractAgent implements IAgent {
 					mutualInteractionForce.y = (mutualInteractionForce.y + newForce.y);
 				}
 			}
-		}
 		return mutualInteractionForce.multiply((ran.nextDouble() + ran
 				.nextDouble()));
 	}
@@ -269,7 +338,7 @@ public abstract class AbstractAgent implements IAgent {
 	}
 
 	/**
-	 * @author Sebbe This is the force that makes neighboring agents to
+	 * @author Sebbe This is the force that makes neighbouring agents to
 	 *         equalize their velocities and therefore go in the same direction.
 	 *         The sphere of incluence is defined as 2*INTERACTION_RANGE at the
 	 *         moment.
@@ -278,33 +347,27 @@ public abstract class AbstractAgent implements IAgent {
 	 * @return a vector with the force influencing the agents to steer in the
 	 *         same direction as other nearby agents.
 	 */
-	protected Vector arrayalForce(List<IPopulation> neutral) {
+	protected Vector arrayalForce() {
 		Vector arrayalForce = new Vector(0, 0);
 		Vector newForce = new Vector();
-		IPopulation pop;
-		int popSize = neutral.size();
 		double nAgentsInVision = 0;
-		for (int j = 0; j < popSize; j++) {
-			pop = neutral.get(j);
-			int size = pop.getAgents().size();
-			List<IAgent> agents = pop.getAgents();
-			IAgent agent;
-			for (int i = 0; i < size; i++) {
-				agent = agents.get(i);
-				if (agent != this) {
-					Position p = agent.getPosition();
-					double distance = getPosition().getDistance(p);
-					if (distance <= INTERACTION_RANGE * 2) {
-						newForce.setVector(0, 0);
-						newForce.add(agent.getVelocity());
-						newForce.add(velocity);
-						double h = 4; // Scaling constant
-						newForce.x *= h;
-						newForce.y *= h;
-						arrayalForce.x = (arrayalForce.x + newForce.x);
-						arrayalForce.y = (arrayalForce.y + newForce.y);
-						nAgentsInVision = nAgentsInVision + 1.0;
-					}
+		int size = neutralNeighbours.size();
+		IAgent agent;
+		for (int i = 0; i < size; i++) {
+			agent = neutralNeighbours.get(i);
+			if (agent != this) {
+				Position p = agent.getPosition();
+				double distance = getPosition().getDistance(p);
+				if (distance <= INTERACTION_RANGE * 2) {
+					newForce.setVector(0, 0);
+					newForce.add(agent.getVelocity());
+					newForce.add(velocity);
+					double h = 4; // Scaling constant
+					newForce.x *= h;
+					newForce.y *= h;
+					arrayalForce.x = (arrayalForce.x + newForce.x);
+					arrayalForce.y = (arrayalForce.y + newForce.y);
+					nAgentsInVision = nAgentsInVision + 1.0;
 				}
 			}
 		}
@@ -400,6 +463,11 @@ public abstract class AbstractAgent implements IAgent {
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public boolean isAlive() {
+		return isAlive;
 	}
 
 	/**
