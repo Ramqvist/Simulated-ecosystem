@@ -234,7 +234,14 @@ public abstract class AbstractAgent implements IAgent {
 		}
 //		Log.v("Updating Neighbourlist! Agent: " + toString());
 		neighbourCounter = 0;
-		neutralNeighbours = new ArrayList<IAgent>(2*neutralNeighbours.size());
+//		neutralNeighbours = new ArrayList<IAgent>(2*neutralNeighbours.size());
+//		predNeighbours = new ArrayList<IAgent>(2*predNeighbours.size());
+//		preyNeighbours = new ArrayList<IAgent>(2*preyNeighbours.size());
+
+		neutralNeighbours.clear();
+		predNeighbours.clear();
+		preyNeighbours.clear();
+		
 		for(IPopulation p : neutral) {
 			for(IAgent a : p.getAgents()) {
 				if (a.getPosition().getDistance(position) <= visionRange) {
@@ -243,7 +250,6 @@ public abstract class AbstractAgent implements IAgent {
 			}
 		}
 		
-		preyNeighbours = new ArrayList<IAgent>(2*preyNeighbours.size());
 		for(IPopulation p : prey) {
 			for(IAgent a : p.getAgents()) {
 				if (a.getPosition().getDistance(position) <= visionRange) {
@@ -252,7 +258,6 @@ public abstract class AbstractAgent implements IAgent {
 			}
 		}
 		
-		predNeighbours = new ArrayList<IAgent>(2*predNeighbours.size());
 		for(IPopulation p : pred) {
 			for(IAgent a : p.getAgents()) {
 				if (a.getPosition().getDistance(position) <= visionRange) {
