@@ -36,6 +36,7 @@ import chalmers.dax021308.ecosystem.model.population.WolfPopulationGrid;
 import chalmers.dax021308.ecosystem.model.util.CircleShape;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Log;
+import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.SquareShape;
 import chalmers.dax021308.ecosystem.model.util.Stat;
 import chalmers.dax021308.ecosystem.model.util.TimerHandler;
@@ -363,7 +364,7 @@ public class EcoWorld implements IModel {
 
 	private List<IObstacle> readObsticlesFromFile() {
 		List<IObstacle> obsList = new ArrayList<IObstacle>();
-		obsList.add(new Obstacle("Obstacle.txt"));
+		obsList.add(new EllipticalObstacle(0,0, new Position()));
 		return obsList;
 	}
 

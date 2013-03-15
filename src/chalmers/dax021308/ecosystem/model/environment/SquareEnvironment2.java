@@ -193,9 +193,9 @@ public class SquareEnvironment2 implements IEnvironment {
 		 */
 
 		// for each obstacle, check if the position p lies inside any obstacle
-		for (int i = 0; i < obstacles.size(); i++)
-			if (obstacles.get(i).insideObstacle(p))
-				return false;
+//		for (int i = 0; i < obstacles.size(); i++)
+//			if (obstacles.get(i).insideObstacle(p))
+//				return false;
 
 		// If there is neither a population nor an obstacle at position p, then
 		// it is free
