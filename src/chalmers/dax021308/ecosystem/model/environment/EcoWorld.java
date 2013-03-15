@@ -36,7 +36,9 @@ import chalmers.dax021308.ecosystem.model.population.WolfPopulationGrid;
 import chalmers.dax021308.ecosystem.model.util.CircleShape;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Log;
+import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.SquareShape;
+import chalmers.dax021308.ecosystem.model.util.Stat;
 import chalmers.dax021308.ecosystem.model.util.TimerHandler;
 import chalmers.dax021308.ecosystem.model.util.TriangleShape;
 
@@ -120,6 +122,7 @@ public class EcoWorld implements IModel {
 	/* Time measurements variables (in ns).*/
 	private long startIterationTime;
 	private long elapsedTime;
+	private ArrayList<Integer> recordedTime = new ArrayList<Integer>(512);
 
 	/**
 	 * Each list in the list contains one snapshot of frame;
@@ -361,7 +364,7 @@ public class EcoWorld implements IModel {
 
 	private List<IObstacle> readObsticlesFromFile() {
 		List<IObstacle> obsList = new ArrayList<IObstacle>();
-		obsList.add(new Obstacle("Obstacle.txt"));
+		obsList.add(new EllipticalObstacle(0,0, new Position()));
 		return obsList;
 	}
 
@@ -497,6 +500,11 @@ public class EcoWorld implements IModel {
 				sb.append(" - Iteration time:");
 				sb.append((long) (0.000001 * elapsedTime));
 				sb.append(" ms.");
+				recordedTime.add((int) (0.000001 * elapsedTime));
+				sb.append(" mean value: ");
+				sb.append(Stat.mean(recordedTime));
+				sb.append(" sample variance: ");
+				sb.append(Stat.sampleVariance(recordedTime));
 			}
 			Log.v(sb.toString());
 			executor.execute(env);

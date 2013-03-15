@@ -31,7 +31,7 @@ public class SimplePredatorAgent extends AbstractAgent {
 	/**
 	 * @author Sebastian/Henrik
 	 */
-	private Vector getPreyForce(List<IPopulation> preys) {
+	private Vector getPreyForce() {
 		/* 
 		 * "Prey Force" is AT THE MOMENT defined as the sum of the vectors pointing away from 
 		 * all the preys in vision, weighted by the inverse of the distance to the preys, 
@@ -41,25 +41,23 @@ public class SimplePredatorAgent extends AbstractAgent {
 		 */
 		Vector preyForce = new Vector(0, 0);
 		int nVisiblePreys = 0;
-		for (IPopulation pop : preys) {
-			for (IAgent a : pop.getAgents()) {
-				Position p = a.getPosition();
-				double distance = getPosition().getDistance(p);
-				if (distance <= visionRange) {
-					/*
-					 * Create a vector that points towards the prey.
-					 */
-					Vector newForce = new Vector(p, getPosition());
-					
-					/*
-					 * Add this vector to the prey force, with proportion to how close the prey is.
-					 * Closer preys will affect the force more than those far away. 
-					 */
-					double norm = newForce.getNorm();
-					preyForce.add(newForce.multiply(1/(norm*distance)));
-					nVisiblePreys++;
-				 }
-			}
+		for (IAgent a : preyNeighbours) {
+			Position p = a.getPosition();
+			double distance = getPosition().getDistance(p);
+			if (distance <= visionRange) {
+				/*
+				 * Create a vector that points towards the prey.
+				 */
+				Vector newForce = new Vector(p, getPosition());
+				
+				/*
+				 * Add this vector to the prey force, with proportion to how close the prey is.
+				 * Closer preys will affect the force more than those far away. 
+				 */
+				double norm = newForce.getNorm();
+				preyForce.add(newForce.multiply(1/(norm*distance)));
+				nVisiblePreys++;
+			 }
 		}
 
 		if (nVisiblePreys == 0) { //No preys near --> Be unaffected
@@ -74,8 +72,11 @@ public class SimplePredatorAgent extends AbstractAgent {
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
 			List<IPopulation> preys, List<IPopulation> neutral, Dimension dim, IShape shape) {
-		Vector preyForce = getPreyForce(preys);
-		Vector separationForce = mutualInteractionForce(neutral);
+		
+		updateNeighbourList(neutral, preys, predators);
+		
+		Vector preyForce = getPreyForce();
+		Vector separationForce = mutualInteractionForce();
 		//Vector separationForce = new Vector();
 		Vector environmentForce = getEnvironmentForce(dim, shape);
 		

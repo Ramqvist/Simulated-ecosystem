@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import sun.management.resources.agent;
+
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.WorldGrid;
@@ -116,7 +118,7 @@ public abstract class AbstractPopulation implements IPopulation {
 			a = agents.get(i);
 			a.calculateNextPosition(predators, preys, neutral, gridDimension,
 					shape);
-			if (a.getEnergy() <= 0) {
+			if (a.getEnergy() <= 0 || !a.isAlive()) {
 				addToRemoveList(a);
 			}
 		}
@@ -193,7 +195,6 @@ public abstract class AbstractPopulation implements IPopulation {
 	 * @deprecated Use clonePopulationListWithRecycledList, instead to reduce
 	 *             unnecessary heap-allocations.
 	 */
-	@Deprecated
 	public static List<IPopulation> clonePopulationList(
 			List<IPopulation> original) {
 		List<IPopulation> list = new ArrayList<IPopulation>(original.size());

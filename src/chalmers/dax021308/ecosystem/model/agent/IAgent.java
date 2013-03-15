@@ -121,4 +121,6 @@ public interface IAgent extends Cloneable {
 	 * @return Trophic level of the agent.
 	 */
 	public int getTrophicLevel();
+
+	public boolean isAlive();
 }

@@ -13,15 +13,14 @@ import chalmers.dax021308.ecosystem.model.util.Position;
  * @author Henrik
  * 
  */
-public class Obstacle implements IObstacle {
+public class ObstacleOld {
 
 	private List<Pair<Integer>>[] obstacles;
 
-	public Obstacle(String filename) {
+	public ObstacleOld(String filename) {
 		this.obstacles = fileToObstacle(filename);
 	}
 
-	@Override
 	public boolean insideObstacle(Position p) {
 		// Looks in the correct row, and checks if position p lies between the
 		// start and end for any pair, if so it returns true
