@@ -77,7 +77,7 @@ public abstract class AbstractAgent implements IAgent {
 		neutralNeighbours = new ArrayList<IAgent>(256);
 		
 		//To update the first time.
-		neighbourCounter = NEIGHBOURS_UPDATE_THRESHOLD;
+		neighbourCounter = ran.nextInt(NEIGHBOURS_UPDATE_THRESHOLD);
 	}
 
 	public AbstractAgent(String name, Position p, Color c, int width,
@@ -234,37 +234,29 @@ public abstract class AbstractAgent implements IAgent {
 		}
 //		Log.v("Updating Neighbourlist! Agent: " + toString());
 		neighbourCounter = 0;
-		
+		neutralNeighbours = new ArrayList<IAgent>(2*neutralNeighbours.size());
 		for(IPopulation p : neutral) {
 			for(IAgent a : p.getAgents()) {
 				if (a.getPosition().getDistance(position) <= visionRange) {
-					if(!neutralNeighbours.contains(a)) {
-						neutralNeighbours.add(a);
-					}
-				} else if(neutralNeighbours.contains(a)) {
-					neutralNeighbours.remove(a);
+					neutralNeighbours.add(a);
 				}
 			}
 		}
+		
+		preyNeighbours = new ArrayList<IAgent>(2*preyNeighbours.size());
 		for(IPopulation p : prey) {
 			for(IAgent a : p.getAgents()) {
 				if (a.getPosition().getDistance(position) <= visionRange) {
-					if(!neutralNeighbours.contains(a)) {
-						neutralNeighbours.add(a);
-					}
-				} else if(neutralNeighbours.contains(a)) {
-					neutralNeighbours.remove(a);
+					preyNeighbours.add(a);
 				}
 			}
 		}
+		
+		predNeighbours = new ArrayList<IAgent>(2*predNeighbours.size());
 		for(IPopulation p : pred) {
 			for(IAgent a : p.getAgents()) {
 				if (a.getPosition().getDistance(position) <= visionRange) {
-					if(!neutralNeighbours.contains(a)) {
-						neutralNeighbours.add(a);
-					}
-				} else if(neutralNeighbours.contains(a)) {
-					neutralNeighbours.remove(a);
+					predNeighbours.add(a);
 				}
 			}
 		}

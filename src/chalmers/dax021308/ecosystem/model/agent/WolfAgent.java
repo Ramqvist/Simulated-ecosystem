@@ -38,7 +38,7 @@ public class WolfAgent extends AbstractAgent {
 		
 		updateNeighbourList(neutral, preys, predators);
 		
-		Vector preyForce = getPreyForce(preys);
+		Vector preyForce = getPreyForce();
 		Vector mutualInteractionForce = new Vector();
 		Vector forwardThrust = new Vector();
 		Vector arrayalForce = new Vector();
@@ -111,7 +111,7 @@ public class WolfAgent extends AbstractAgent {
 	/**
 	 * @author Sebastian/Henrik
 	 */
-	private Vector getPreyForce(List<IPopulation> preys) {
+	private Vector getPreyForce() {
 		/*
 		 * "Prey Force" is AT THE MOMENT defined as the sum of the vectors
 		 * pointing away from all the preys in vision, weighted by the inverse
@@ -120,47 +120,40 @@ public class WolfAgent extends AbstractAgent {
 		 * weighted by how close the source of the force is.
 		 */
 		Vector preyForce = new Vector(0, 0);
-		int nVisiblePreys = 0;
-		for (IPopulation pop : preys) {
-			List<IAgent> agents = pop.getAgents();
-			int size = agents.size();
-			for (int i = 0; i < size; i++) {
-				IAgent a = agents.get(i);
-				Position p = a.getPosition();
-				double distance = getPosition().getDistance(p);
-				if (distance <= visionRange) {
-					if (distance <= INTERACTION_RANGE - 5) {
-						if (a.consumeAgent()) {
-							pop.addToRemoveList(a);
-							hungry = false;
-							energy = MAX_ENERGY;
-						}
-					} else {
-						/*
-						 * Create a vector that points towards the prey.
-						 */
-						Vector newForce = new Vector(p, getPosition());
-
-						/*
-						 * Add this vector to the prey force, with proportion to
-						 * how close the prey is. Closer preys will affect the
-						 * force more than those far away.
-						 */
-						double norm = newForce.getNorm();
-						preyForce.add(newForce.multiply(1 / (norm * distance)));
-						nVisiblePreys++;
+		
+		int preySize = preyNeighbours.size();
+		for (int i = 0; i < preySize; i++) {
+			IAgent a = preyNeighbours.get(i);
+			Position p = a.getPosition();
+			double distance = getPosition().getDistance(p);
+			if (distance <= visionRange) {
+				if (distance <= INTERACTION_RANGE - 5) {
+					if (a.consumeAgent()) {
+						hungry = false;
+						energy = MAX_ENERGY;
 					}
+				} else {
+					/*
+					 * Create a vector that points towards the prey.
+					 */
+					Vector newForce = new Vector(p, getPosition());
+
+					/*
+					 * Add this vector to the prey force, with proportion to
+					 * how close the prey is. Closer preys will affect the
+					 * force more than those far away.
+					 */
+					double norm = newForce.getNorm();
+					preyForce.add(newForce.multiply(1 / (norm * distance)));
 				}
 			}
 		}
 
-		if (nVisiblePreys == 0) { // No preys near --> Be unaffected
-			preyForce.setVector(0, 0);
-		} else { // Else set the force depending on visible preys and normalize
-					// it to maxAcceleration.
-			double norm = preyForce.getNorm();
+		double norm = preyForce.getNorm();
+		if (norm != 0) { 
 			preyForce.multiply(maxAcceleration / norm);
 		}
+		
 		return preyForce;
 	}
 

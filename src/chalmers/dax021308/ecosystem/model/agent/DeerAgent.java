@@ -94,7 +94,8 @@ public class DeerAgent extends AbstractAgent {
 		 */
 		Vector randomForce = randomForce();
 		Vector acceleration = environmentForce.multiply(1000)
-				.add(predatorForce.multiply(5)).add(mutualInteractionForce)
+				.add(predatorForce.multiply(5))
+				.add(mutualInteractionForce)
 				.add(forwardThrust).add(arrayalForce)
 				.add(preyForce.multiply(5 * (1 - energy / MAX_ENERGY)))
 				.add(randomForce);
@@ -149,6 +150,12 @@ public class DeerAgent extends AbstractAgent {
 				}
 			}
 		}
+		
+		double norm = preyForce.getNorm();
+		if (norm != 0) { 
+			preyForce.multiply(maxAcceleration / norm);
+		}
+		
 		return preyForce;
 	}
 
