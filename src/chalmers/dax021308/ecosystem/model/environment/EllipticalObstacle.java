@@ -34,8 +34,9 @@ public class EllipticalObstacle extends AbstractObstacle{
 		for(double i=0; i<nStep; i++){
 			elipPos = new Position(width*Math.cos(startAngle+i*step), height*Math.sin(startAngle+i*step));
 			if(elipPos.getDistance(agentPos)<bestPos.getDistance(agentPos)){
-				bestPos = elipPos;
+				nextBestPos = bestPos;
 				nextBestI = bestI;
+				bestPos = elipPos;
 				bestI = i;
 			} else if (elipPos.getDistance(agentPos) < nextBestPos.getDistance(agentPos)) {
 				nextBestPos = elipPos;

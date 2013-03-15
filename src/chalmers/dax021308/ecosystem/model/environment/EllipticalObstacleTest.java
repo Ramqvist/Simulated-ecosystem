@@ -18,7 +18,7 @@ public class EllipticalObstacleTest extends JPanel {
 	
 		EllipticalObstacleTest test = new EllipticalObstacleTest();
 		positions = new ArrayList<Position>();
-		EllipticalObstacle eo = new EllipticalObstacle(100, 50, new Position(200,200));
+		EllipticalObstacle eo = new EllipticalObstacle(100, 50, new Position(250,250));
 		for (int i=0; i<500;i++){
 			Position pos = new Position(i,0);
 			positions.add(eo.closestBoundary(pos));
@@ -28,11 +28,11 @@ public class EllipticalObstacleTest extends JPanel {
 			positions.add(eo.closestBoundary(pos));
 		}
 		for (int i=0; i<500;i++){
-			Position pos = new Position(i,500);
+			Position pos = new Position(500-i,500);
 			positions.add(eo.closestBoundary(pos));
 		}
 		for (int i=0; i<500;i++){
-			Position pos = new Position(0,i);
+			Position pos = new Position(0,500-i);
 			positions.add(eo.closestBoundary(pos));
 		}
 		Frame frame = new Frame();
@@ -49,7 +49,7 @@ public class EllipticalObstacleTest extends JPanel {
 		for(int i=0; i < positions.size(); i++){
 			Position p = positions.get(i);
 			g.drawOval((int)p.getX(), (int)p.getY(), 1, 1);
-			System.out.println(p);
+//			System.out.println(p);
 		}
 	}
 
