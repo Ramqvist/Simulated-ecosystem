@@ -99,9 +99,9 @@ public class WolfAgent extends AbstractAgent {
 				double xSign = Math.signum(-1 + 2 * Math.random());
 				double ySign = Math.signum(-1 + 2 * Math.random());
 				double newX = this.getPosition().getX() + xSign
-						* (1 + 5 * Math.random());
+						* (0.001 + 0.001 * Math.random());
 				double newY = this.getPosition().getY() + ySign
-						* (1 + 5 * Math.random());
+						* (0.001 + 0.001 * Math.random());
 				Position pos = new Position(newX, newY);
 				IAgent child = new WolfAgent(name, pos, color, width, height,
 						new Vector(velocity), maxSpeed, maxAcceleration,

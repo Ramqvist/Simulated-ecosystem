@@ -5,8 +5,8 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 
 public class EllipticalObstacle extends AbstractObstacle{
 	
-	private static double e;
-	private static double nStep;
+	private static double e = 0.01;
+	private static double nStep = 6;
 	
 	public EllipticalObstacle(double width, double height, Position position){
 		this.position = position;
@@ -14,17 +14,17 @@ public class EllipticalObstacle extends AbstractObstacle{
 		this.height = height;
 	}
 	@Override
+	/**
+	 * Returns the closes point on the ellipse boundary to a given point p.
+	 */
 	public Position closestBoundary(Position p) {
 		Position agentPos = new Position(p.getX()-this.position.getX(), p.getY()-this.position.getY());
 		
-		e = 0.01;
-		nStep = 6;
 		Position bestPos = recursiveBoundarySearch(agentPos, 0, Math.PI/2, 1);
 		
 //		nStep = 700;	
 //		Position bestPos = bruteBoundarySearch(agentPos);
 
-		
 		bestPos.setPosition(bestPos.getX()+this.position.getX(), bestPos.getY()+this.position.getY());
 		return bestPos;
 	}
@@ -67,6 +67,7 @@ public class EllipticalObstacle extends AbstractObstacle{
 		}
 		return bestPos;
 	}
+	
 	@Override
 	public boolean isInObstacle(Position p) {
 		if(p.getY() < position.getY()+height && p.getY() > position.getY()-height){
