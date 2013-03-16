@@ -8,6 +8,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import com.amd.aparapi.Kernel;
+import com.amd.aparapi.Range;
+
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Gender;
 import chalmers.dax021308.ecosystem.model.util.IShape;
@@ -294,34 +297,38 @@ public abstract class AbstractAgent implements IAgent {
 	 *         agents in that it interacts with.
 	 */
 	protected Vector mutualInteractionForce() {
-		Vector mutualInteractionForce = new Vector(0, 0);
-		Vector newForce = new Vector(0, 0);
-			IAgent agent;
-			int size = neutralNeighbours.size();
-			for (int i = 0; i < size; i++) {
-				agent = neutralNeighbours.get(i);
-				if (agent != this) {
-					Position p = agent.getPosition();
-					double distance = getPosition().getDistance(p);
-					double Q = 0; // Q is a function of the distance.
-					if (distance <= INTERACTION_RANGE) {
-						Q = -20 * (INTERACTION_RANGE - distance);
-					} else {
-						Q = 1;
-					}
-					newForce.x = p.getX() - this.getPosition().getX();
-					newForce.y = p.getY() - this.getPosition().getY();
-					double norm = newForce.getNorm();
-					double v = Q / (norm * distance);
-					newForce.x = newForce.x * v;
-					newForce.y = newForce.y * v;
-					mutualInteractionForce.x = (mutualInteractionForce.x + newForce.x);
-					mutualInteractionForce.y = (mutualInteractionForce.y + newForce.y);
-				}
+
+		final int size = neutralNeighbours.size();
+		if(size == 0) {
+			return Vector.EmptyVector();
+		}
+		IAgent agent;
+		MutualInteractionForceKernel kernel = new MutualInteractionForceKernel(size, (float) INTERACTION_RANGE, (float) getPosition().getX(),(float)  getPosition().getY());
+		for (int i = 0; i < size; i++) {
+			agent = neutralNeighbours.get(i);
+			if (agent != AbstractAgent.this) {
+				Position p = agent.getPosition();
+				kernel.xPosArray[i] = (float) p.getX();
+				kernel.yPosArray[i] = (float) p.getY();
 			}
+		}
+
+		Range range = Range.create(size);
+		kernel.execute(range);
+		double mutualInteractionForceX = 0;
+		double mutualInteractionForceY = 0;
+		for (int i = 0; i < size; i++) {
+			mutualInteractionForceX = mutualInteractionForceX + kernel.xResult[i];
+			mutualInteractionForceY = mutualInteractionForceY + kernel.yResult[i];
+		}
+		final Vector mutualInteractionForce = new Vector(mutualInteractionForceX, mutualInteractionForceY);
+//		System.out.println("Execution mode = "+kernel.getExecutionMode());
+	    kernel.dispose();
 		return mutualInteractionForce.multiply((ran.nextDouble() + ran
 				.nextDouble()));
 	}
+	
+
 
 	/**
 	 * @author Sebbe The tendency of an agent to continue moving forward with

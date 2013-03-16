@@ -158,4 +158,8 @@ public class Vector {
 	public String toString(){
 		return "("+this.x+","+this.y+")";
 	}
+
+	public static Vector EmptyVector() {
+		return new Vector(0,0);
+	}
 }
