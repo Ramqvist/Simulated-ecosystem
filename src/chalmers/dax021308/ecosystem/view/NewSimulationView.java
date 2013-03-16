@@ -90,7 +90,7 @@ public class NewSimulationView {
 	 */
 	private void initialize() {
 		frmSimulatedEcosystem = new JFrame();
-		frmSimulatedEcosystem.setAlwaysOnTop(true);
+//		frmSimulatedEcosystem.setAlwaysOnTop(true);
 		frmSimulatedEcosystem.setResizable(false);
 		frmSimulatedEcosystem.setTitle("Start new Simulation");
 		frmSimulatedEcosystem.setIconImage(new ImageIcon("res/Simulated ecosystem icon.png").getImage());
