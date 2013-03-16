@@ -20,8 +20,10 @@ import com.sun.opengl.util.FPSAnimator;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.environment.EllipticalObstacle;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.IObstacle;
+import chalmers.dax021308.ecosystem.model.environment.RectangularObstacle;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.CircleShape;
@@ -292,18 +294,40 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
           		 * Draw Obstacles
           		 */
           		for(IObstacle o: newObs){
-          			double increment = 2.0*Math.PI/50.0;
-	                double w = frameWidth*o.getWidth()/size.width;
-	                double h = frameHeight*o.getHeight()/size.height;
-	                double x = frameWidth*o.getPosition().getX()/size.width;
-	                double y = frameHeight*o.getPosition().getY()/size.height;
-	                gl.glColor3d(0.545098, 0.270588, 0.0745098);
-	                gl.glLineWidth(2.5F);
-	          		gl.glBegin(GL.GL_POLYGON); 
-		          	for(double angle = 0; angle < 2.0*Math.PI; angle+=increment){
-		          		gl.glVertex2d(x + w*Math.cos(angle),frameHeight - (y + h*Math.sin(angle)));
-		          	}
-		          	gl.glEnd();
+          			if(o != null && o instanceof EllipticalObstacle){
+          				double increment = 2.0*Math.PI/50.0;
+    	                double w = frameWidth*o.getWidth()/size.width;
+    	                double h = frameHeight*o.getHeight()/size.height;
+    	                double x = frameWidth*o.getPosition().getX()/size.width;
+    	                double y = frameHeight*o.getPosition().getY()/size.height;
+    	                gl.glColor3d(0.545098, 0.270588, 0.0745098);
+    	                gl.glLineWidth(2.5F);
+    	          		gl.glBegin(GL.GL_POLYGON); 
+    		          	for(double angle = 0; angle < 2.0*Math.PI; angle+=increment){
+    		          		gl.glVertex2d(x + w*Math.cos(angle),frameHeight - (y + h*Math.sin(angle)));
+    		          	}
+    		          	gl.glEnd();
+          			} else if (o != null && o instanceof RectangularObstacle){
+          				double x = o.getPosition().getX();
+          				double y = o.getPosition().getY();
+          				double w = o.getWidth();
+          				double h = o.getHeight();
+          				gl.glLineWidth(2.5F);
+    	          		gl.glBegin(GL.GL_POLYGON); 
+    	          		gl.glVertex2d(frameWidth*(o.getPosition().getX()-w)/size.width, 
+    	          				frameHeight*(o.getPosition().getY()-h)/size.height);
+    	          		
+    	          		gl.glVertex2d(frameWidth*(o.getPosition().getX()+w)/size.width, 
+    	          				frameHeight*(o.getPosition().getY()-h)/size.height);
+    	          		
+    	          		gl.glVertex2d(frameWidth*(o.getPosition().getX()+w)/size.width, 
+    	          				frameHeight*(o.getPosition().getY()+h)/size.height);
+    	          		
+    	          		gl.glVertex2d(frameWidth*(o.getPosition().getX()-w)/size.width, 
+    	          				frameHeight*(o.getPosition().getY()+h)/size.height);
+    	          		gl.glEnd();
+          			}
+          			
           		}
           		
           		int popSize = newPops.size();

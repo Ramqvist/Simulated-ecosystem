@@ -300,9 +300,13 @@ public class EcoWorld implements IModel {
 		 * Creating obstacles here for test. This should be done in a proper way later.
 		 */
 		List<IObstacle> obstacles = new ArrayList<IObstacle>();
-		obstacles.add(new EllipticalObstacle(50, 150, new Position(500,600)));
-		obstacles.add(new EllipticalObstacle(60, 60, new Position(450,450)));
-		obstacles.add(new EllipticalObstacle(60, 60, new Position(550,450)));
+		obstacles.add(new RectangularObstacle(20, 200, new Position(320,500)));
+		obstacles.add(new RectangularObstacle(20, 60, new Position(680,400)));
+		obstacles.add(new RectangularObstacle(20, 60, new Position(680,600)));
+		obstacles.add(new RectangularObstacle(200, 20, new Position(500,320)));
+		obstacles.add(new RectangularObstacle(200, 20, new Position(500,680)));
+		obstacles.add(new EllipticalObstacle(50, 50, new Position(500,500)));
+		
 
 		IPopulation prey = null;
 		IPopulation pred = null;

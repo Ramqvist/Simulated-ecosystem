@@ -79,16 +79,5 @@ public class EllipticalObstacle extends AbstractObstacle{
 		}
 		return false;
 	}
-	@Override
-	public double getWidth() {
-		return width;
-	}
-	@Override
-	public double getHeight() {
-		return height;
-	}
-	@Override
-	public Position getPosition() {
-		return new Position(position);
-	}
+	
 }

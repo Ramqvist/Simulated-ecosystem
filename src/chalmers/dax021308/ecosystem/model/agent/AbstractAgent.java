@@ -54,7 +54,7 @@ public abstract class AbstractAgent implements IAgent {
 
 	protected final static double INTERACTION_RANGE = 10;
 	protected final static double ENVIRONMENT_CONSTANT = 2000;
-	protected final static double OBSTACLE_CONSTANT = 1000000;
+	protected final static double OBSTACLE_CONSTANT = 10000000;
 	protected static final double VELOCITY_DECAY = 1;
 	protected static final double RANDOM_FORCE_MAGNITUDE = 0.05;
 
