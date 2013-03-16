@@ -17,7 +17,7 @@ public class EllipticalObstacle extends AbstractObstacle{
 	public Position closestBoundary(Position p) {
 		Position agentPos = new Position(p.getX()-this.position.getX(), p.getY()-this.position.getY());
 		
-		e = 0.1;
+		e = 0.01;
 		nStep = 6;
 		Position bestPos = recursiveBoundarySearch(agentPos, 0, Math.PI/2, 1);
 		
