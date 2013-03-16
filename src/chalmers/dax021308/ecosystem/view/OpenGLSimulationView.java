@@ -315,16 +315,16 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
           				gl.glLineWidth(2.5F);
     	          		gl.glBegin(GL.GL_POLYGON); 
     	          		gl.glVertex2d(frameWidth*(o.getPosition().getX()-w)/size.width, 
-    	          				frameHeight*(o.getPosition().getY()-h)/size.height);
+    	          				frameHeight - frameHeight*(o.getPosition().getY()-h)/size.height);
     	          		
     	          		gl.glVertex2d(frameWidth*(o.getPosition().getX()+w)/size.width, 
-    	          				frameHeight*(o.getPosition().getY()-h)/size.height);
+    	          				frameHeight - frameHeight*(o.getPosition().getY()-h)/size.height);
     	          		
     	          		gl.glVertex2d(frameWidth*(o.getPosition().getX()+w)/size.width, 
-    	          				frameHeight*(o.getPosition().getY()+h)/size.height);
+    	          				frameHeight - frameHeight*(o.getPosition().getY()+h)/size.height);
     	          		
     	          		gl.glVertex2d(frameWidth*(o.getPosition().getX()-w)/size.width, 
-    	          				frameHeight*(o.getPosition().getY()+h)/size.height);
+    	          				frameHeight - frameHeight*(o.getPosition().getY()+h)/size.height);
     	          		gl.glEnd();
           			}
           			
