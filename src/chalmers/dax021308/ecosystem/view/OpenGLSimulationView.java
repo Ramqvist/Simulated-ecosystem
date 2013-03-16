@@ -380,7 +380,28 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
             public void init(GLAutoDrawable drawable) {
             		GL gl = drawable.getGL();
 //                    System.out.println("INIT CALLED");
+
+            }
+            
+           /**
+            * Called by the drawable during the first repaint after the component has been resized. The
+            * client can update the viewport and view volume of the window appropriately, for example by a
+            * call to GL.glViewport(int, int, int, int); note that for convenience the component has
+            * already called GL.glViewport(int, int, int, int)(x, y, width, height) when this method is
+            * called, so the client may not have to do anything in this method.
+		    *
+		    * @param gLDrawable The GLDrawable object.
+		    * @param x The X Coordinate of the viewport rectangle.
+		    * @param y The Y coordinate of the viewport rectanble.
+		    * @param width The new width of the window.
+		    * @param height The new height of the window.
+		    */
+            @Override
+            public void reshape(GLAutoDrawable drawable, int arg1, int arg2, int arg3,
+                            int arg4) {
+                    //System.out.println("RESHAPE CALLED Frame size:" + getSize().toString());
                     //Projection mode is for setting camera
+            		GL gl = drawable.getGL();
                 	gl.glMatrixMode(GL.GL_PROJECTION);
                   //This will set the camera for orthographic projection and allow 2D view
                   //Our projection will be on 400 X 400 screen
@@ -406,26 +427,6 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
                     gl.glLoadIdentity();
                   //After this we start the drawing of object  
                   //We want to draw a triangle which is a type of polygon
-            }
-            
-           /**
-            * Called by the drawable during the first repaint after the component has been resized. The
-            * client can update the viewport and view volume of the window appropriately, for example by a
-            * call to GL.glViewport(int, int, int, int); note that for convenience the component has
-            * already called GL.glViewport(int, int, int, int)(x, y, width, height) when this method is
-            * called, so the client may not have to do anything in this method.
-		    *
-		    * @param gLDrawable The GLDrawable object.
-		    * @param x The X Coordinate of the viewport rectangle.
-		    * @param y The Y coordinate of the viewport rectanble.
-		    * @param width The new width of the window.
-		    * @param height The new height of the window.
-		    */
-            @Override
-            public void reshape(GLAutoDrawable arg0, int arg1, int arg2, int arg3,
-                            int arg4) {
-                    System.out.println("RESHAPE CALLED Frame size:" + getSize().toString());
-                    init(arg0);
  
             }
 

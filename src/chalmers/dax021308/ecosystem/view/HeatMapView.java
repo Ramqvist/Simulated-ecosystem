@@ -237,33 +237,7 @@ public class HeatMapView extends GLCanvas implements IView {
             
             @Override
             public void init(GLAutoDrawable drawable) {
-                    System.out.println("INIT CALLED");
-                    //Projection mode is for setting camera
-                	gl.glMatrixMode(GL.GL_PROJECTION);
-                  //This will set the camera for orthographic projection and allow 2D view
-                  //Our projection will be on 400 X 400 screen
-                    gl.glLoadIdentity();
-                    Log.v("getWidth(): " + getWidth());
-                    Log.v("getHeight(): " + getHeight());
-                    Log.v("size.width: " + grid.width);
-                    Log.v("size.height: " + grid.height);
-                    gl.glOrtho(0, getWidth(), getHeight(), 0, 0, 1);
-                  //Modelview is for drawing
-                    gl.glMatrixMode(GL.GL_MODELVIEW);
-                  //Depth is disabled because we are drawing in 2D
-                    gl.glDisable(GL.GL_DEPTH_TEST);
-                  //Setting the clear color (in this case black)
-                  //and clearing the buffer with this set clear color
-                    gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);  
-                    gl.glClear(GL.GL_COLOR_BUFFER_BIT);
-                  //This defines how to blend when a transparent graphics
-                  //is placed over another (here we have blended colors of
-                  //two consecutively overlapping graphic objects)
-                    gl.glBlendFunc (GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
-                    gl.glEnable (GL.GL_BLEND);
-                    gl.glLoadIdentity();
-                  //After this we start the drawing of object  
-                  //We want to draw a triangle which is a type of polygon
+//                    System.out.println("INIT CALLED");
             }
             
            /**
@@ -280,12 +254,21 @@ public class HeatMapView extends GLCanvas implements IView {
 		    * @param height The new height of the window.
 		    */
             @Override
-            public void reshape(GLAutoDrawable arg0, int arg1, int arg2, int arg3,
-                            int arg4) {
-                    System.out.println("RESHAPE CALLED");
- 
+            public void reshape(GLAutoDrawable drawable, int arg1, int arg2, int arg3,
+                    int arg4) {
+    		GL gl = drawable.getGL();
+        	gl.glMatrixMode(GL.GL_PROJECTION);
+            gl.glLoadIdentity();
+            gl.glOrtho(0, getWidth(), getHeight(), 0, 0, 1);
+            gl.glMatrixMode(GL.GL_MODELVIEW);
+            gl.glDisable(GL.GL_DEPTH_TEST);
+            gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);  
+            gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+            gl.glBlendFunc (GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+            gl.glEnable (GL.GL_BLEND);
+            gl.glLoadIdentity();
             }
-
+            
 			@Override
 			public void displayChanged(GLAutoDrawable arg0, boolean arg1,
 					boolean arg2) {
