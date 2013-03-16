@@ -21,6 +21,7 @@ import net.miginfocom.swing.MigLayout;
 
 public class ControlView extends JPanel {
 	private static final long serialVersionUID = 5134812517352174052L;
+	public JButton btnStartNew;
 
 	/**
 	 * Create the panel.
@@ -68,17 +69,7 @@ public class ControlView extends JPanel {
 		add(btnStop, "cell 1 0,alignx left,aligny top");
 		
 
-		JButton btnStartNew = new JButton("Start new Simulation");
-		btnStartNew.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					ew.stop();
-				} catch (IllegalStateException ex) {
-					//Don't care.
-				}
-				new NewSimulationView(ew);
-			}
-		});
+		btnStartNew = new JButton("Start new Simulation");
 		btnStartNew.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(btnStartNew, "cell 5 0,alignx left,aligny top");
 

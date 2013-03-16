@@ -1,5 +1,7 @@
 package chalmers.dax021308.ecosystem.controller;
 
+import chalmers.dax021308.ecosystem.model.environment.IModel;
+
 /**
  * IController inteface.
  * 
@@ -16,4 +18,9 @@ public interface IController {
 	 * Releases all the resources held by this Controller.
 	 */
 	public void release();
+	
+	/**
+	 * Set the model used by this model.
+	 */
+	public void setModel(IModel m);
 }

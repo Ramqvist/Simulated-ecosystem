@@ -2,7 +2,7 @@ package chalmers.dax021308.ecosystem.main;
 
 import javax.swing.UIManager;
 
-import chalmers.dax021308.ecosystem.controller.WindowController;
+import chalmers.dax021308.ecosystem.controller.MainWindowController;
 
 /**
  * Starter class for the Ecosystem program.
@@ -19,6 +19,6 @@ public class EcosystemInitializer {
 			e.printStackTrace();
 		}
 		
-		new WindowController();
+		new MainWindowController();
 	}
 }

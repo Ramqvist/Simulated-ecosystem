@@ -205,7 +205,6 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
     		//Number of edges in each created circle.
         	private final float  COLOR_FACTOR        = (1.0f/255);
         	
-        	GL gl = getGL();
     		
         	/**
         	 * Called each frame to redraw all the 3D elements.
@@ -213,6 +212,7 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
         	 */
             @Override
             public void display(GLAutoDrawable drawable) {
+            	GL gl = drawable.getGL();
             	increaseUpdateValue();
             	long start = System.currentTimeMillis();
             	
@@ -378,6 +378,7 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
  
             @Override
             public void init(GLAutoDrawable drawable) {
+            		GL gl = drawable.getGL();
 //                    System.out.println("INIT CALLED");
                     //Projection mode is for setting camera
                 	gl.glMatrixMode(GL.GL_PROJECTION);
@@ -423,7 +424,8 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
             @Override
             public void reshape(GLAutoDrawable arg0, int arg1, int arg2, int arg3,
                             int arg4) {
-                    System.out.println("RESHAPE CALLED");
+                    System.out.println("RESHAPE CALLED Frame size:" + getSize().toString());
+                    init(arg0);
  
             }
 

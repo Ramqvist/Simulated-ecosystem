@@ -23,7 +23,7 @@ import javax.swing.JMenu;
 
 import com.lowagie.text.pdf.PRAcroForm;
 
-import chalmers.dax021308.ecosystem.controller.WindowController;
+import chalmers.dax021308.ecosystem.controller.MainWindowController;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.util.Log;
 
@@ -61,9 +61,9 @@ public class MainWindow extends JFrame implements IView {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 613, 516);
 		this.setExtendedState(MAXIMIZED_BOTH);
-		new NewSimulationView(model);
 		//OpenGL   
 	    Dimension d = model.getSize();
+	    System.out.println(d);
 		openGL = new OpenGLSimulationView(model, d, true);
 		openGL.init();
 		//openGL.setSize(new Dimension(980,700));
@@ -131,7 +131,7 @@ public class MainWindow extends JFrame implements IView {
 //		simulationPanel.setSize(d);
 		//simulationPanel.add(openGL);
 //		simulationPanel.setBackground(Color.RED);
-		left.add(openGL, BorderLayout.CENTER);
+		left.add(openGL);
 		left.add(controlView, BorderLayout.SOUTH);  
 		right.add(parameterView, BorderLayout.CENTER);
 		//graphView1.setSize(200, 200);
@@ -183,5 +183,9 @@ public class MainWindow extends JFrame implements IView {
 		else if(i == 1) {
 //			simulationPanel.add(openGL);
 		}
+	}
+
+	public void setBtnStartNewSimWindowActionListener(ActionListener a) {
+		controlView.btnStartNew.addActionListener(a);		
 	}
 }

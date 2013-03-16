@@ -39,28 +39,29 @@ import javax.swing.ListSelectionModel;
  */
 public class NewSimulationView {
 
-	private JFrame frmSimulatedEcosystem;
-	private JTextField textfield_Iterationdelay;
-	private JTextField tvPredPopSize;
-	private JTextField tvPreyPopSize;
-	private JTextField tvGrassPopSize;
-	private EcoWorld model;
-	private JList predList = new JList();;
-	private JList preyList = new JList();;
-	private JList grassList = new JList();
-	private JCheckBox chckbxRecordSimulation;
-	private JTextField tvNumIterations;
-	private JList listSimulationDim;
-	private JCheckBox checkBoxLimitIterations;
-	private JRadioButton rdbtn2Threads;
-	private JRadioButton rdbtn4Threads;
-	private JRadioButton rdbtn8Threads;
-	private JRadioButton rdbtnSquare;
-	private JRadioButton rdbtnCircle;
-	private JRadioButton rdbtnTriangle;
-	private JTextField tfCustomWidth;
-	private JTextField tfCustomHeight;
-	private JCheckBox chckbxCustomSize;
+	public JFrame frmSimulatedEcosystem;
+	public JTextField textfield_Iterationdelay;
+	public JTextField tvPredPopSize;
+	public JTextField tvPreyPopSize;
+	public JTextField tvGrassPopSize;
+	public EcoWorld model;
+	public JList predList = new JList();;
+	public JList preyList = new JList();;
+	public JList grassList = new JList();
+	public JCheckBox chckbxRecordSimulation;
+	public JTextField tvNumIterations;
+	public JList listSimulationDim;
+	public JCheckBox checkBoxLimitIterations;
+	public JRadioButton rdbtn2Threads;
+	public JRadioButton rdbtn4Threads;
+	public JRadioButton rdbtn8Threads;
+	public JRadioButton rdbtnSquare;
+	public JRadioButton rdbtnCircle;
+	public JRadioButton rdbtnTriangle;
+	public JTextField tfCustomWidth;
+	public JTextField tfCustomHeight;
+	public JCheckBox chckbxCustomSize;
+	public JButton btnRunSim;
 
 
 	/**
@@ -78,66 +79,10 @@ public class NewSimulationView {
 		frmSimulatedEcosystem.setVisible(true);
 	}
 
-	private void startSimulation() {
-		try {
-			model.setNumIterations(Integer.MAX_VALUE);
-			if(chckbxCustomSize.isSelected()) {
-				int width = Integer.parseInt(tfCustomWidth.getText());
-				int height = Integer.parseInt(tfCustomHeight.getText());
-				model.setSimulationDimension(new Dimension(width, height));
-			} else {
-				model.setSimulationDimension((String) listSimulationDim.getSelectedValue());
-			}
-			int tickDelay = Integer
-					.parseInt(textfield_Iterationdelay.getText());
-
-			if (rdbtn2Threads.isSelected()) {
-				model.setNumThreads(2);
-			} else if (rdbtn4Threads.isSelected()) {
-				model.setNumThreads(4);
-			} else {
-				model.setNumThreads(8);
-			}
-
-			if (tickDelay < 1) {
-				model.setRunWithoutTimer(true);
-			} else {
-				model.setRunWithoutTimer(false);
-				model.setDelayLength(tickDelay);
-			}
-			if (checkBoxLimitIterations.isSelected()) {
-				int iterations = Integer.parseInt(tvNumIterations.getText());
-				model.setNumIterations(iterations);
-			} else {
-				model.setNumIterations(Integer.MAX_VALUE);
-			}
-			model.setRecordSimulation(chckbxRecordSimulation.isSelected());
-			// Should the shape really be set here?
-			// TODO fix an input value for shape and not just a squareshape
-			String shape = null;
-			if(rdbtnCircle.isSelected()) {
-				shape = EcoWorld.SHAPE_CIRCLE;
-			} else if (rdbtnSquare.isSelected()){
-				shape = EcoWorld.SHAPE_SQUARE;
-			} else {
-				shape = EcoWorld.SHAPE_TRIANGLE;
-			}
-			model.createInitialPopulations(
-					(String) predList.getSelectedValue(),
-					Integer.parseInt(tvPredPopSize.getText()),
-					(String) preyList.getSelectedValue(),
-					Integer.parseInt(tvPreyPopSize.getText()),
-					(String) grassList.getSelectedValue(),
-					Integer.parseInt(tvGrassPopSize.getText()), shape);
-			try {
-				model.start();
-			} catch (IllegalStateException e) {
-				Log.v(e.toString());
-			}
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(frmSimulatedEcosystem,
-					"Something didnt go quite well there. Have some coffee.");
-		}
+	
+	public void showErrorMessage() {
+		JOptionPane.showMessageDialog(frmSimulatedEcosystem,
+				"Something didnt go quite well there. Have some coffee.");
 	}
 
 	/**
@@ -152,14 +97,8 @@ public class NewSimulationView {
 		frmSimulatedEcosystem.setBounds(100, 100, 729, 724);
 		frmSimulatedEcosystem.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		JButton btnRunSim = new JButton("Start new");
-		btnRunSim.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				startSimulation();
-				frmSimulatedEcosystem.dispose();
-			}
-		});
+		btnRunSim = new JButton("Start new");
+		
 
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
@@ -644,5 +583,15 @@ public class NewSimulationView {
 					.addGap(21))
 		);
 		frmSimulatedEcosystem.getContentPane().setLayout(groupLayout);
+	}
+
+
+	public void hide() {
+		frmSimulatedEcosystem.setVisible(false);
+	}
+
+
+	public void show() {
+		frmSimulatedEcosystem.setVisible(true);
 	}
 }

@@ -225,25 +225,30 @@ public abstract class AbstractPopulation implements IPopulation {
 	public static IPopulation createFromFile(String input) {
 		String[] inputArray = input.split(";");
 		String name = inputArray[0];
-		Dimension dim = new Dimension(Integer.parseInt(inputArray[1]),
-				Integer.parseInt(inputArray[2]));
-		int cap = Integer.parseInt(inputArray[3]);
-		String shapeModel = inputArray[4];
-		IShape shape = null;
-		if (shapeModel == EcoWorld.SHAPE_SQUARE) {
-			shape = new SquareShape();
-		} else if (shapeModel == EcoWorld.SHAPE_CIRCLE) {
-			shape = new CircleShape();
-		}
-		if (shape == null)
-			throw new IllegalArgumentException("Illegal Shape from file.");
+		Color c = new Color(Integer.parseInt(inputArray[1]),
+				Integer.parseInt(inputArray[2]),
+				Integer.parseInt(inputArray[3]));
+//		Dimension dim = new Dimension(Integer.parseInt(inputArray[1]),
+//				Integer.parseInt(inputArray[2]));
+//		int cap = Integer.parseInt(inputArray[3]);
+//		String shapeModel = inputArray[4];
+//		IShape shape = null;
+//		if (shapeModel == EcoWorld.SHAPE_SQUARE) {
+//			shape = new SquareShape();
+//		} else if (shapeModel == EcoWorld.SHAPE_CIRCLE) {
+//			shape = new CircleShape();
+//		}
+//		if (shape == null)
+//			throw new IllegalArgumentException("Illegal Shape from file.");
 
-		return new AbstractPopulation(name, dim, cap, true, shape) {
+		IPopulation created = new AbstractPopulation(name, null, 0, true, null) {
 			@Override
 			public double calculateFitness(IAgent agent) {
 				return 0;
 			}
 		};
+		created.setColor(c);
+		return created;
 	}
 
 	@Override
@@ -251,11 +256,17 @@ public abstract class AbstractPopulation implements IPopulation {
 		StringBuffer sb = new StringBuffer();
 		sb.append(name);
 		sb.append(';');
-		sb.append(gridDimension.width);
+		sb.append(color.getRed());
 		sb.append(';');
-		sb.append(gridDimension.height);
+		sb.append(color.getGreen());
 		sb.append(';');
-		sb.append(capacity);
+		sb.append(color.getBlue());
+//		sb.append(';');
+//		sb.append(gridDimension.width);
+//		sb.append(';');
+//		sb.append(gridDimension.height);
+//		sb.append(';');
+//		sb.append(capacity);
 		sb.append(';');
 		sb.append(shape.getShape());
 		return null;

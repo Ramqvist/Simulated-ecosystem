@@ -24,6 +24,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public abstract class AbstractAgent implements IAgent {
 	protected Position position;
 	protected Position nextPosition;
+	protected Position reUsedPosition;
 	protected Random ran;
 	protected String name;
 	protected Color color;
@@ -214,7 +215,8 @@ public abstract class AbstractAgent implements IAgent {
 	 */
 	@Override
 	public void updatePosition() {
-		this.position = new Position(nextPosition);
+		this.reUsedPosition = position;
+		this.position = nextPosition;
 		this.lifeLength++;
 	}
 	
