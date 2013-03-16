@@ -118,6 +118,7 @@ public class EcoWorld implements IModel {
 	private IEnvironment env;
 	private int tickTime;
 	private PropertyChangeSupport observers;
+	private List<IPopulation> recycledPopulationList;
 
 	/* Time measurements variables (in ns).*/
 	private long startIterationTime;
@@ -139,6 +140,7 @@ public class EcoWorld implements IModel {
 
 	private OnFinishListener mOnFinishListener = new OnFinishListener() {
 
+
 		@Override
 		public void onFinish(List<IPopulation> popList, List<IObstacle> obsList) {
 			if (!shouldRun.get()) {
@@ -147,10 +149,11 @@ public class EcoWorld implements IModel {
 			elapsedTime = System.nanoTime() - startIterationTime;
 			// Fire state changed to observers, notify there has been an update.
 			if (recordSimulation) {
-				recordedSimulation.add(clonePopulationList(popList));
+				recordedSimulation.add(AbstractPopulation.clonePopulationList(popList));
 			} else {
 				//Send out the new cloned population list and obsticle list.
-				observers.firePropertyChange(EVENT_TICK, obsList, clonePopulationList(popList));
+				recycledPopulationList = AbstractPopulation.clonePopulationListWithRecycledList(recycledPopulationList, popList);
+				observers.firePropertyChange(EVENT_TICK, obsList, AbstractPopulation.clonePopulationList(popList));
 			}
 			if (runWithoutTimer) {
 				scheduleEnvironmentUpdate();
@@ -570,16 +573,6 @@ public class EcoWorld implements IModel {
 		observers.removePropertyChangeListener(listener);
 	}
 
-	/**
-	 * Clones the given list with {@link IPopulation#clonePopulation()} method.
-	 */
-	private List<IPopulation> clonePopulationList(List<IPopulation> popList) {
-		List<IPopulation> list = new ArrayList<IPopulation>(popList.size());
-		for (IPopulation p : popList) {
-			list.add(p.clonePopulation());
-		}
-		return list;
-	}
 
 	/**
 	 * Plays the loaded simulation, or throws {@link IllegalStateException} if

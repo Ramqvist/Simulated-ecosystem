@@ -192,7 +192,7 @@ public abstract class AbstractPopulation implements IPopulation {
 	 * Clones the given list with {@link IPopulation#clonePopulation()} method.
 	 * <p>
 	 * 
-	 * @deprecated Use clonePopulationListWithRecycledList, instead to reduce
+	 * Use {@link #clonePopulationListWithRecycledList}, instead to reduce
 	 *             unnecessary heap-allocations.
 	 */
 	public static List<IPopulation> clonePopulationList(
@@ -206,20 +206,20 @@ public abstract class AbstractPopulation implements IPopulation {
 
 	/**
 	 * Copies the information from the source to the recycled one.
+	 * <p>
+	 * Creates a new copy if recycled == null.
 	 * 
 	 * @param recycled
 	 * @param source
 	 */
-	public static void clonePopulationListWithRecycledList(
+	public static List<IPopulation> clonePopulationListWithRecycledList(
 			List<IPopulation> recycled, List<IPopulation> source) {
 		if (recycled == null) {
-			throw new NullPointerException("recycled list is null");
+			return clonePopulationList(source);
 		}
-		int i = 0;
-		for (IPopulation p : source) {
-			recycled.set(i, p);
-			i++;
-		}
+		recycled.clear();
+		recycled.addAll(source);
+		return recycled;
 	}
 
 	public static IPopulation createFromFile(String input) {
