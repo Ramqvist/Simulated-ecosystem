@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.environment.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -34,7 +35,7 @@ public class WolfAgent extends AbstractAgent {
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
 			List<IPopulation> preys, List<IPopulation> neutral,
-			Dimension gridDimension, IShape shape) {
+			Dimension gridDimension, IShape shape, List<IObstacle> obstacles) {
 		
 		updateNeighbourList(neutral, preys, predators);
 		
@@ -48,6 +49,7 @@ public class WolfAgent extends AbstractAgent {
 			arrayalForce = arrayalForce();
 		}
 		Vector environmentForce = getEnvironmentForce(gridDimension, shape);
+		Vector obstacleForce = getObstacleForce(obstacles);
 
 		/*
 		 * Sum the forces from walls, predators and neutral to form the
@@ -57,9 +59,13 @@ public class WolfAgent extends AbstractAgent {
 		 */
 
 		Vector randomForce = randomForce();
-		Vector acceleration = environmentForce.multiply(1000)
-				.add(preyForce.multiply(10)).add(mutualInteractionForce)
-				.add(forwardThrust).add(arrayalForce).add(randomForce);
+		Vector acceleration = environmentForce
+				.add(obstacleForce)
+				.add(preyForce.multiply(10))
+				.add(mutualInteractionForce)
+				.add(forwardThrust)
+				.add(arrayalForce)
+				.add(randomForce);
 		double accelerationNorm = acceleration.getNorm();
 		if (accelerationNorm > maxAcceleration) {
 			acceleration.multiply(maxAcceleration / accelerationNorm);

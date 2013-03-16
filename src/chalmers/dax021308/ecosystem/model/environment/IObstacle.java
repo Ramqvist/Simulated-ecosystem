@@ -13,4 +13,12 @@ public interface IObstacle {
 
 	
 	public Position closestBoundary(Position p);
+	
+	public boolean isInObstacle(Position p);
+	
+	public double getWidth();
+	
+	public double getHeight();
+	
+	public Position getPosition();
 }

@@ -10,9 +10,11 @@ import sun.management.resources.agent;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.environment.IObstacle;
 import chalmers.dax021308.ecosystem.model.environment.WorldGrid;
 import chalmers.dax021308.ecosystem.model.util.CircleShape;
 import chalmers.dax021308.ecosystem.model.util.IShape;
+import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.SquareShape;
 import chalmers.dax021308.ecosystem.model.util.Stat;
 
@@ -29,6 +31,7 @@ public abstract class AbstractPopulation implements IPopulation {
 	protected List<IPopulation> neutral;
 	protected WorldGrid wg;
 	protected IShape shape;
+	protected List<IObstacle> obstacles;
 	/**
 	 * Remove list for this Population.
 	 * <p>
@@ -55,19 +58,19 @@ public abstract class AbstractPopulation implements IPopulation {
 		wg = WorldGrid.getInstance();
 	}
 
-	public AbstractPopulation(String name, Dimension gridDimension, IShape shape) {
+	public AbstractPopulation(String name, Dimension gridDimension, IShape shape, List<IObstacle> obstacles) {
 		this();
 		this.name = name;
 		this.gridDimension = gridDimension;
 		this.groupBehaviour = true;
-
+		this.obstacles = obstacles;
 		this.shape = shape;
 
 	}
 
 	public AbstractPopulation(String name, Dimension gridDimension,
-			int capacity, boolean groupBehaviour, IShape shape) {
-		this(name, gridDimension, shape);
+			int capacity, boolean groupBehaviour, IShape shape, List<IObstacle> obstacles) {
+		this(name, gridDimension, shape, obstacles);
 		this.capacity = capacity;
 		this.groupBehaviour = groupBehaviour;
 	}
@@ -117,11 +120,26 @@ public abstract class AbstractPopulation implements IPopulation {
 		for (int i = fromPos; i < toPos; i++) {
 			a = agents.get(i);
 			a.calculateNextPosition(predators, preys, neutral, gridDimension,
-					shape);
+					shape, obstacles);
 			if (a.getEnergy() <= 0 || !a.isAlive()) {
 				addToRemoveList(a);
 			}
 		}
+	}
+	
+	protected Position getRandomPosition(){
+		boolean validPos = false;
+		Position pos = new Position();
+		while(!validPos){
+			validPos = true;
+			pos = shape.getRandomPosition(gridDimension);
+			for(IObstacle o: obstacles){
+				if(o.isInObstacle(pos)){
+					validPos = false;
+				}
+			}		
+		}
+		return pos;
 	}
 
 	@Override
@@ -241,7 +259,7 @@ public abstract class AbstractPopulation implements IPopulation {
 //		if (shape == null)
 //			throw new IllegalArgumentException("Illegal Shape from file.");
 
-		IPopulation created = new AbstractPopulation(name, null, 0, true, null) {
+		IPopulation created = new AbstractPopulation(name, null, 0, true, null, null) {
 			@Override
 			public double calculateFitness(IAgent agent) {
 				return 0;

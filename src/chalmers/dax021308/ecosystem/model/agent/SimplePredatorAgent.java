@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.util.LinkedList;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.environment.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -71,7 +72,7 @@ public class SimplePredatorAgent extends AbstractAgent {
 
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
-			List<IPopulation> preys, List<IPopulation> neutral, Dimension dim, IShape shape) {
+			List<IPopulation> preys, List<IPopulation> neutral, Dimension dim, IShape shape, List<IObstacle> obstacles) {
 		
 		updateNeighbourList(neutral, preys, predators);
 		

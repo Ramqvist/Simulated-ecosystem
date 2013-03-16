@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import chalmers.dax021308.ecosystem.model.environment.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Gender;
 import chalmers.dax021308.ecosystem.model.util.IShape;
@@ -47,11 +48,13 @@ public abstract class AbstractAgent implements IAgent {
 	protected List<IAgent> preyNeighbours;
 	protected List<IAgent> predNeighbours;
 	protected List<IAgent> neutralNeighbours;
+	protected List<IObstacle> obstacles;
 	private int neighbourCounter;
 	private static final int NEIGHBOURS_UPDATE_THRESHOLD = 10;
 
 	protected final static double INTERACTION_RANGE = 10;
-	protected final static double WALL_CONSTANT = 2;
+	protected final static double ENVIRONMENT_CONSTANT = 2000;
+	protected final static double OBSTACLE_CONSTANT = 1000000;
 	protected static final double VELOCITY_DECAY = 1;
 	protected static final double RANDOM_FORCE_MAGNITUDE = 0.05;
 
@@ -197,7 +200,7 @@ public abstract class AbstractAgent implements IAgent {
 			@Override
 			public void calculateNextPosition(List<IPopulation> predators,
 					List<IPopulation> preys, List<IPopulation> neutral,
-					Dimension dim, IShape shape) {
+					Dimension dim, IShape shape, List<IObstacle> obstacles) {
 			}
 
 			@Override
@@ -417,26 +420,22 @@ public abstract class AbstractAgent implements IAgent {
 		double distance = 1;
 		double leftWallDistance = this.getPosition().getDistance(xWallLeft);
 		if (leftWallDistance <= INTERACTION_RANGE) {
-			distance = leftWallDistance / WALL_CONSTANT;
-			xWallLeftForce = 1 / (distance * distance);
+			xWallLeftForce = 1 / (leftWallDistance * leftWallDistance);
 		}
 
 		double rightWallDistance = this.getPosition().getDistance(xWallRight);
 		if (rightWallDistance <= INTERACTION_RANGE) {
-			distance = rightWallDistance / WALL_CONSTANT;
-			xWallRightForce = -1 / (distance * distance);
+			xWallRightForce = -1 / (rightWallDistance * rightWallDistance);
 		}
 
 		double bottomWallDistance = this.getPosition().getDistance(yWallBottom);
 		if (bottomWallDistance <= INTERACTION_RANGE) {
-			distance = bottomWallDistance / WALL_CONSTANT;
-			yWallBottomForce = 1 / (distance * distance);
+			yWallBottomForce = 1 / (bottomWallDistance * bottomWallDistance);
 		}
 
 		double topWallDistance = this.getPosition().getDistance(yWallTop);
 		if (topWallDistance <= INTERACTION_RANGE) {
-			distance = topWallDistance / WALL_CONSTANT;
-			yWallBottomForce = yWallTopForce = -1 / (distance * distance);
+			yWallBottomForce = yWallTopForce = -1 / (topWallDistance * topWallDistance);
 		}
 
 		/*
@@ -448,7 +447,22 @@ public abstract class AbstractAgent implements IAgent {
 		double yForce = (yWallBottomForce + yWallTopForce);
 		environmentForce.setVector(xForce, yForce);
 
-		return environmentForce;
+		return environmentForce.multiply(ENVIRONMENT_CONSTANT);
+	}
+	
+	@Override
+	public Vector getObstacleForce(List<IObstacle> obstacles){
+		Vector obstacleForce = new Vector();
+		for(IObstacle o: obstacles){
+			Position obstaclePos = o.closestBoundary(this.position);
+			double distance = position.getDistance(obstaclePos);
+			if(distance <= INTERACTION_RANGE){
+				Vector singleForce = new Vector(position, obstaclePos);
+				singleForce.toUnitVector().multiply(1/(distance*distance));
+				obstacleForce.add(singleForce);
+			}
+		}
+		return obstacleForce.multiply(OBSTACLE_CONSTANT);
 	}
 
 	/**
@@ -504,7 +518,7 @@ public abstract class AbstractAgent implements IAgent {
 			@Override
 			public void calculateNextPosition(List<IPopulation> predators,
 					List<IPopulation> preys, List<IPopulation> neutral,
-					Dimension dim, IShape shape) {
+					Dimension dim, IShape shape, List<IObstacle> obstacles) {
 
 			}
 		};

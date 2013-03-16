@@ -231,10 +231,10 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
           		gl.glEnd();
           		
           		if(shape != null && shape instanceof CircleShape) {
-          				double increment = 2.0*Math.PI/50.0;
-		                double cx = frameWidth / 2.0;
-		                double cy = frameHeight/ 2.0;
-		                gl.glColor3d(0.545098, 0.270588, 0.0745098);
+      				double increment = 2.0*Math.PI/50.0;
+	                double cx = frameWidth / 2.0;
+	                double cy = frameHeight/ 2.0;
+	                gl.glColor3d(0.545098, 0.270588, 0.0745098);
 		          	for(double angle = 0; angle < 2.0*Math.PI; angle+=increment){
 		          		gl.glLineWidth(2.5F);
 		          		gl.glBegin(GL.GL_LINES); 
@@ -288,6 +288,24 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
 	          		gl.glEnd();
           		}
 	          	
+          		/*
+          		 * Draw Obstacles
+          		 */
+          		for(IObstacle o: newObs){
+          			double increment = 2.0*Math.PI/50.0;
+	                double w = frameWidth*o.getWidth()/size.width;
+	                double h = frameHeight*o.getHeight()/size.height;
+	                double x = frameWidth*o.getPosition().getX()/size.width;
+	                double y = frameHeight*o.getPosition().getY()/size.height;
+	                gl.glColor3d(0.545098, 0.270588, 0.0745098);
+	                gl.glLineWidth(2.5F);
+	          		gl.glBegin(GL.GL_POLYGON); 
+		          	for(double angle = 0; angle < 2.0*Math.PI; angle+=increment){
+		          		gl.glVertex2d(x + w*Math.cos(angle),frameHeight - (y + h*Math.sin(angle)));
+		          	}
+		          	gl.glEnd();
+          		}
+          		
           		int popSize = newPops.size();
           		for(int i = 0; i < popSize; i ++) {
         			List<IAgent> agents = newPops.get(i).getAgents();

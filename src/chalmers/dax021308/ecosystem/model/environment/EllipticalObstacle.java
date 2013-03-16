@@ -6,7 +6,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public class EllipticalObstacle extends AbstractObstacle{
 	
 	private static final double e = 0.001;
-	private static final double nStep = 100;
+	private static final double nStep = 300;
 	
 	public EllipticalObstacle(double width, double height, Position position){
 		this.position = position;
@@ -62,5 +62,28 @@ public class EllipticalObstacle extends AbstractObstacle{
 			return recursiveBoundarySearch(agentPos, distance, startAngle+b*step, direction*(step/nStep));
 		}
 		
+	}
+	@Override
+	public boolean isInObstacle(Position p) {
+		if(p.getY() < position.getY()+height && p.getY() > position.getY()-height){
+			double y = p.getY()-position.getY();
+			double x = width*Math.sqrt(1-(y*y)/(height*height));
+			if(p.getX() < position.getX()+x && p.getX() > position.getX()-x) {
+				return true;
+			}
+		}
+		return false;
+	}
+	@Override
+	public double getWidth() {
+		return width;
+	}
+	@Override
+	public double getHeight() {
+		return height;
+	}
+	@Override
+	public Position getPosition() {
+		return new Position(position);
 	}
 }

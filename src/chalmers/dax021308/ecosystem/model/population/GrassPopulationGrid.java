@@ -22,7 +22,7 @@ public class GrassPopulationGrid extends AbstractPopulation {
 	public GrassPopulationGrid(String name, Dimension gridDimension,
 			int initPopulationSize, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange, int capacity, IShape shape) {
-		super(name, gridDimension, shape);
+		super(name, gridDimension, shape, null);
 		agents = initializePopulation(initPopulationSize, gridDimension, color,
 				maxSpeed, capacity);
 	}

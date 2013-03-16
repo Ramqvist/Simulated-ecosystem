@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.environment.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Gender;
 import chalmers.dax021308.ecosystem.model.util.IShape;
@@ -28,7 +29,7 @@ public interface IAgent extends Cloneable {
 	 */
 	public void calculateNextPosition(List<IPopulation> predators,
 			List<IPopulation> preys, List<IPopulation> neutral, Dimension dim,
-			IShape shape);
+			IShape shape, List<IObstacle> obstacles);
 
 	/**
 	 * Updates the position of the IAgent
@@ -123,4 +124,6 @@ public interface IAgent extends Cloneable {
 	public int getTrophicLevel();
 
 	public boolean isAlive();
+	
+	public Vector getObstacleForce(List<IObstacle> obstacles);
 }

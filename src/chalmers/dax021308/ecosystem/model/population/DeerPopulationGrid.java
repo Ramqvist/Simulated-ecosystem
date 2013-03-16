@@ -30,7 +30,7 @@ public class DeerPopulationGrid extends AbstractPopulation {
 			int initPopulationSize, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange, boolean groupBehaviour, IShape shape) {
 		
-		super(name, gridDimension, shape);
+		super(name, gridDimension, shape, null);
 		this.visionRange = visionRange;
 		this.groupBehaviour = groupBehaviour;
 		agents = initializePopulation(initPopulationSize, gridDimension, color,

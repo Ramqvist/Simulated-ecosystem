@@ -27,7 +27,7 @@ public class RabbitPopulation extends AbstractPopulation {
 	public RabbitPopulation(String name, Dimension d, int popSize, Color color,
 			double maxSpeed, double maxAcceleration, double visionRange,
 			IShape shape) {
-		super(name, d, shape);
+		super(name, d, shape, null);
 
 		agents = new ArrayList<IAgent>(popSize);
 

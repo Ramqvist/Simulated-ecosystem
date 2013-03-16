@@ -44,7 +44,7 @@ public class PigPopulation extends AbstractPopulation {
 	public PigPopulation(String name, Dimension gridDimension,
 			int initPopulationSize, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange, IShape shape) {
-		super(name, gridDimension, shape);
+		super(name, gridDimension, shape, null);
 		this.color = color;
 		this.visionRange = visionRange;
 		this.maxSpeed = maxSpeed;
@@ -86,7 +86,7 @@ public class PigPopulation extends AbstractPopulation {
 		PigAgent a;
 		for (int i = 0; i < populationSize; i++) {
 			agents.get(i).calculateNextPosition(predators, preys, neutral,
-					gridDimension, shape);
+					gridDimension, shape, null);
 		}
 		seperationForceList.clear();
 		List<IAgent> kids = new ArrayList<IAgent>();

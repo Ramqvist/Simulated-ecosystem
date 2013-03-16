@@ -295,6 +295,14 @@ public class EcoWorld implements IModel {
 			String preyModel, int preyPop, String grassModel, int grassPop,
 			String shapeModel) throws IllegalArgumentException {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
+		
+		/*
+		 * Creating obstacles here for test. This should be done in a proper way later.
+		 */
+		List<IObstacle> obstacles = new ArrayList<IObstacle>();
+		obstacles.add(new EllipticalObstacle(50, 150, new Position(500,600)));
+		obstacles.add(new EllipticalObstacle(60, 60, new Position(450,450)));
+		obstacles.add(new EllipticalObstacle(60, 60, new Position(550,450)));
 
 		IPopulation prey = null;
 		IPopulation pred = null;
@@ -315,7 +323,7 @@ public class EcoWorld implements IModel {
 					0.75, 275, shape);
 		} else if (predatorModel == POP_WOLF) {
 			pred = new WolfPopulation("Wolves", d, predPop, Color.red, 3,
-					0.8, 250, true, shape);
+					0.8, 250, true, shape, obstacles);
 		} else if (predatorModel == POP_WOLF_GRID) {
 			pred = new WolfPopulationGrid("Wolves", d, predPop, Color.red, 3,
 					0.8, 250, true, shape);
@@ -323,7 +331,7 @@ public class EcoWorld implements IModel {
 
 		if (preyModel == POP_DEER) {
 			prey = new DeerPopulation("Deers", d, preyPop, Color.blue, 2.0, 2,
-					200, true, shape);
+					200, true, shape, obstacles);
 		} else if (preyModel == POP_DEER_GRID) {
 			prey = new DeerPopulationGrid("Deers", d, preyPop, Color.blue, 2.0,
 					2, 200, true, shape);
@@ -339,7 +347,7 @@ public class EcoWorld implements IModel {
 
 		if (grassModel == POP_GRASS) {
 			grass = new GrassPopulation("Grass", d, grassPop, new Color(69,139,00), 1,
-					1, 0, 1500, shape);
+					1, 0, 1500, shape, obstacles);
 		} else if (grassModel == POP_GRASS_GRID) {
 			grass = new GrassPopulationGrid("Grass", d, grassPop, new Color(69,139,00),
 					1, 1, 0, 1500, shape);
@@ -361,7 +369,7 @@ public class EcoWorld implements IModel {
 			recordedSimulation = new ArrayList<List<IPopulation>>(
 					numIterations / 2);
 		}
-		this.env = new SquareEnvironment2(populations, readObsticlesFromFile(),
+		this.env = new SquareEnvironment2(populations, obstacles,
 				mOnFinishListener, d.height, d.width, numThreads);
 	}
 

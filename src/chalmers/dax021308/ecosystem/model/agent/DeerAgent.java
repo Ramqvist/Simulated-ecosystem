@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.lowagie.text.pdf.ArabicLigaturizer;
 
+import chalmers.dax021308.ecosystem.model.environment.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Gender;
 import chalmers.dax021308.ecosystem.model.util.IShape;
@@ -70,7 +71,7 @@ public class DeerAgent extends AbstractAgent {
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
 			List<IPopulation> preys, List<IPopulation> neutral,
-			Dimension gridDimension, IShape shape) {
+			Dimension gridDimension, IShape shape, List<IObstacle> obstacles) {
 
 		updateNeighbourList(neutral, preys, predators);
 		Vector predatorForce = getPredatorForce();
@@ -84,6 +85,7 @@ public class DeerAgent extends AbstractAgent {
 		}
 
 		Vector environmentForce = getEnvironmentForce(gridDimension, shape);
+		Vector obstacleForce = getObstacleForce(obstacles);
 		Vector preyForce = getPreyForce();
 
 		/*
@@ -93,7 +95,8 @@ public class DeerAgent extends AbstractAgent {
 		 * the acceleration.
 		 */
 		Vector randomForce = randomForce();
-		Vector acceleration = environmentForce.multiply(1000)
+		Vector acceleration = environmentForce
+				.add(obstacleForce)
 				.add(predatorForce.multiply(5))
 				.add(mutualInteractionForce)
 				.add(forwardThrust).add(arrayalForce)

@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.environment.IObstacle;
 import chalmers.dax021308.ecosystem.model.environment.WorldGrid;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.IShape;
@@ -68,7 +69,7 @@ public class DeerAgentGrid extends AbstractAgent {
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
 			List<IPopulation> preys, List<IPopulation> neutral,
-			Dimension gridDimension, IShape shape) {
+			Dimension gridDimension, IShape shape, List<IObstacle> obstacles) {
 		updateNeighbourList(neutral, preys, predators);
 		
 		Vector predatorForce = getPredatorForce(predators);

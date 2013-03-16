@@ -9,6 +9,7 @@ import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.agent.DeerAgent;
 import chalmers.dax021308.ecosystem.model.agent.WolfAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.environment.IObstacle;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
@@ -26,9 +27,9 @@ public class WolfPopulation extends AbstractPopulation {
 	public WolfPopulation(String name, Dimension gridDimension,
 			int initPopulationSize, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange, boolean groupBehaviour,
-			IShape shape) {
+			IShape shape, List<IObstacle> obstacles) {
 
-		super(name, gridDimension, shape);
+		super(name, gridDimension, shape, obstacles);
 
 		this.visionRange = visionRange;
 		this.groupBehaviour = groupBehaviour;
@@ -45,7 +46,7 @@ public class WolfPopulation extends AbstractPopulation {
 		addNeutralPopulation(this);
 
 		for (int i = 0; i < populationSize; i++) {
-			Position randPos = shape.getRandomPosition(gridDimension);
+			Position randPos = getRandomPosition();
 			Vector velocity = new Vector(maxSpeed, maxSpeed);
 
 			// Create a random vector (uniformly) inside a circle with radius
