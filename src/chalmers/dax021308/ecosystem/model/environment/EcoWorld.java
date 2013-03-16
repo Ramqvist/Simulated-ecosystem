@@ -152,7 +152,7 @@ public class EcoWorld implements IModel {
 				recordedSimulation.add(AbstractPopulation.clonePopulationList(popList));
 			} else {
 				//Send out the new cloned population list and obsticle list.
-				recycledPopulationList = AbstractPopulation.clonePopulationListWithRecycledList(recycledPopulationList, popList);
+//				recycledPopulationList = AbstractPopulation.clonePopulationListWithRecycledList(recycledPopulationList, popList);
 				observers.firePropertyChange(EVENT_TICK, obsList, AbstractPopulation.clonePopulationList(popList));
 			}
 			if (runWithoutTimer) {

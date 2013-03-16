@@ -81,14 +81,14 @@ public abstract class AbstractPopulation implements IPopulation {
 	 *            the AbstractPopulation to clone
 	 */
 	public AbstractPopulation(AbstractPopulation original) {
-		this.gridDimension = original.gridDimension;
+//		this.gridDimension = original.gridDimension;
 		this.color = original.color;
-		this.groupBehaviour = original.groupBehaviour;
+//		this.groupBehaviour = original.groupBehaviour;
 		this.name = original.name;
-		this.shape = original.shape;
-		preys = new ArrayList<IPopulation>();
-		predators = new ArrayList<IPopulation>();
-		neutral = new ArrayList<IPopulation>();
+//		this.shape = original.shape;
+//		preys = new ArrayList<IPopulation>();
+//		predators = new ArrayList<IPopulation>();
+//		neutral = new ArrayList<IPopulation>();
 		agents = new ArrayList<IAgent>();
 		for (IAgent a : original.agents) {
 			try {
@@ -102,7 +102,7 @@ public abstract class AbstractPopulation implements IPopulation {
 	/**
 	 * Override if you use linked-list as agentList! (Default is ArrayList.)
 	 * <P>
-	 * Update the whole population, same as update(0, agents.size())M
+	 * Update the whole population, same as update(0, agents.size())
 	 * 
 	 * @param fromPos
 	 * @param toPos
