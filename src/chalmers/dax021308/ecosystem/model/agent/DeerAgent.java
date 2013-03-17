@@ -20,11 +20,13 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class DeerAgent extends AbstractAgent {
 
-	private static final int MAX_ENERGY = 1100;
+	private static final int MAX_ENERGY = 3000;
 	private boolean hungry = true;
 	private static final double REPRODUCTION_RATE = 0.80;
 	private int digesting = 0;
 	private static final int DIGESTION_TIME = 80;
+	private static final int ENERGY_GAIN = 50;
+	private boolean alone;
 	
 	public DeerAgent(String name, Position p, Color c, int width,
 			int height, Vector velocity, double maxSpeed,
@@ -120,9 +122,13 @@ public class DeerAgent extends AbstractAgent {
 		this.setVelocity(newVelocity);
 		
 		nextPosition = Position.positionPlusVector(position, velocity);
-		if(digesting > 0){
+		//Eat some food if there's time for it
+		if(digesting > 0 && alone){
 			nextPosition = position;
 			digesting--;
+			energy += ENERGY_GAIN;
+			if(energy>MAX_ENERGY)
+				energy = MAX_ENERGY;
 		}
 	}
 
@@ -147,9 +153,6 @@ public class DeerAgent extends AbstractAgent {
 						if(a.consumeAgent()) {
 							pop.addToRemoveList(a);
 							hungry = false;
-							energy += 500;
-							if(energy>MAX_ENERGY)
-								energy = MAX_ENERGY;
 							digesting = DIGESTION_TIME;
 
 						}
@@ -200,10 +203,12 @@ public class DeerAgent extends AbstractAgent {
 
 		if (nVisiblePredators == 0) { // No predators near --> Be unaffected
 			predatorForce.setVector(0, 0);
+			alone = true;
 		} else { // Else set the force depending on visible predators and
 					// normalize it to maxAcceleration.
 			double norm = predatorForce.getNorm();
 			predatorForce.multiply(maxAcceleration / norm);
+			alone = false;
 		}
 
 		return predatorForce;

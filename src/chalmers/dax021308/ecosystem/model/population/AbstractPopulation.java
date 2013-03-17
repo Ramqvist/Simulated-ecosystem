@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.agent.DeerAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.WorldGrid;
@@ -116,7 +117,7 @@ public abstract class AbstractPopulation implements IPopulation {
 			a = agents.get(i);
 			a.calculateNextPosition(predators, preys, neutral, gridDimension,
 					shape);
-			if (a.getEnergy() <= 0) {
+			if (a.timeToDie()) {
 				addToRemoveList(a);
 			}
 		}
@@ -289,9 +290,11 @@ public abstract class AbstractPopulation implements IPopulation {
 	 */
 	public void removeAgentsFromRemoveList() {
 		IAgent a;
+		DeerAgent da;
 		for (int i = 0; i < removeList.size(); i++) {
 			a = removeList.get(i);
 			lifeLengths.add(a.getLifeLength());
+				
 			agents.remove(a);
 		}
 		removeList.clear();
