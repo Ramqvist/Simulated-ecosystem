@@ -192,6 +192,12 @@ public abstract class AbstractAgentNeighbourList implements IAgent {
 				return Collections.emptyList();
 			}
 
+			@Override
+			public boolean timeToDie() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
 		};
 		return a;
 	}
@@ -480,6 +486,12 @@ public abstract class AbstractAgentNeighbourList implements IAgent {
 					List<IPopulation> preys, List<IPopulation> neutral,
 					Dimension dim, IShape shape) {
 
+			}
+
+			@Override
+			public boolean timeToDie() {
+				// TODO Auto-generated method stub
+				return false;
 			}
 		};
 		return ab;

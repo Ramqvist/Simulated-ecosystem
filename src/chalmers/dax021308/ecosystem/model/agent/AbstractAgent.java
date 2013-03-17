@@ -147,10 +147,6 @@ public abstract class AbstractAgent implements IAgent {
 		return this.lifeLength;
 	}
 
-	public int getEnergy() {
-		return energy;
-	}
-	
 	@Override
 	public int getTrophicLevel() {
 		return trophicLevel;
@@ -176,9 +172,22 @@ public abstract class AbstractAgent implements IAgent {
 				return Collections.emptyList();
 			}
 
+			@Override
+			public boolean timeToDie() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
 		};
 		return a;
+		
 	}
+	
+	@Override
+	public boolean timeToDie(){
+		return false;
+	}
+
 
 	/**
 	 * Updates an agents position after all calculations for all agents have
@@ -436,6 +445,12 @@ public abstract class AbstractAgent implements IAgent {
 					List<IPopulation> preys, List<IPopulation> neutral,
 					Dimension dim, IShape shape) {
 
+			}
+
+			@Override
+			public boolean timeToDie() {
+				// TODO Auto-generated method stub
+				return false;
 			}
 		};
 		return ab;

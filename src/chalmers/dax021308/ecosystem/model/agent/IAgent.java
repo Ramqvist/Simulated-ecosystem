@@ -100,11 +100,6 @@ public interface IAgent extends Cloneable {
 	public Gender getGender();
 
 	/**
-	 * @return The energy of the IAgent.
-	 */
-	public int getEnergy();
-
-	/**
 	 * Clone an agent.
 	 * <p>
 	 * Returns a reference to a new agent with the values of the calling one.
@@ -121,4 +116,6 @@ public interface IAgent extends Cloneable {
 	 * @return Trophic level of the agent.
 	 */
 	public int getTrophicLevel();
+
+	public boolean timeToDie();
 }
