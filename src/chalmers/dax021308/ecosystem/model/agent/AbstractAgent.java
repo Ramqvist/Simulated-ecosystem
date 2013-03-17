@@ -303,7 +303,7 @@ public abstract class AbstractAgent implements IAgent {
 			return Vector.EmptyVector();
 		}
 		IAgent agent;
-		MutualInteractionForceKernel kernel = new MutualInteractionForceKernel(size, (float) INTERACTION_RANGE, (float) getPosition().getX(),(float)  getPosition().getY());
+		MutualInteractionForceKernel kernel = new MutualInteractionForceKernel(size, INTERACTION_RANGE, getPosition().getX(), getPosition().getY());
 		for (int i = 0; i < size; i++) {
 			agent = neutralNeighbours.get(i);
 			if (agent != AbstractAgent.this) {
@@ -320,9 +320,11 @@ public abstract class AbstractAgent implements IAgent {
 		for (int i = 0; i < size; i++) {
 			mutualInteractionForceX = mutualInteractionForceX + kernel.xResult[i];
 			mutualInteractionForceY = mutualInteractionForceY + kernel.yResult[i];
+//			Log.v(kernel.xResult[i] + " " + kernel.yResult[i]);
 		}
 		final Vector mutualInteractionForce = new Vector(mutualInteractionForceX, mutualInteractionForceY);
 //		System.out.println("Execution mode = "+kernel.getExecutionMode());
+		//   -Dcom.amd.aparapi.enableShowGeneratedOpenCL=true
 	    kernel.dispose();
 		return mutualInteractionForce.multiply((ran.nextDouble() + ran
 				.nextDouble()));
