@@ -89,7 +89,6 @@ public class NewSimulationController implements IController {
 			} else {
 				shape = EcoWorld.SHAPE_TRIANGLE;
 			}
-			String obstacle = (String) view.obstacleList.getSelectedValue();
 			model.createInitialPopulations(
 					(String) view.predList.getSelectedValue(),
 					Integer.parseInt(view.tvPredPopSize.getText()),
@@ -97,7 +96,7 @@ public class NewSimulationController implements IController {
 					Integer.parseInt(view.tvPreyPopSize.getText()),
 					(String) view.grassList.getSelectedValue(),
 					Integer.parseInt(view.tvGrassPopSize.getText()), shape, 
-					model.ELLIPTICAL_OBSTACLE);
+					(String) view.obstacleList.getSelectedValue());
 			try {
 				model.start();
 			} catch (IllegalStateException e) {

@@ -398,6 +398,15 @@ public class NewSimulationView {
 		obstacleList.setValueIsAdjusting(true);
 		obstacleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		obstacleList.setSelectedIndices(new int[] {3});
+		obstacleList.setModel(new AbstractListModel() {
+			public int getSize() {
+				return EcoWorld.OBSTACLE_VALUES.length;
+			}
+
+			public Object getElementAt(int index) {
+				return EcoWorld.OBSTACLE_VALUES[index];
+			}
+		});
 		obstacleList.setSelectedIndex(0);
 		
 		GroupLayout groupLayout = new GroupLayout(
