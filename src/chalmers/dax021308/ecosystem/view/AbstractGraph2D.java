@@ -13,6 +13,14 @@ import info.monitorenter.gui.chart.IAxis.AxisTitle;
 import info.monitorenter.gui.chart.rangepolicies.RangePolicyMinimumViewport;
 import info.monitorenter.util.Range;
 
+/**
+ * 
+ * 
+ * Abstract class for graphs.
+ *
+ * @author Loanne Berggren
+ * 
+ */
 public abstract class AbstractGraph2D extends Chart2D implements IView{
 	// Values for axis. More values are set in init()
 	protected IAxis<IAxisScalePolicy> xAxis;
