@@ -47,6 +47,11 @@ public class NewSimulationController implements IController {
 	
 	private void startSimulation() {
 		try {
+			try {
+				model.stop();
+			} catch (IllegalStateException e) {
+				
+			}
 			model.setNumIterations(Integer.MAX_VALUE);
 			if(view.chckbxCustomSize.isSelected()) {
 				int width = Integer.parseInt(view.tfCustomWidth.getText());
