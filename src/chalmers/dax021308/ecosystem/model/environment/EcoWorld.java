@@ -92,9 +92,11 @@ public class EcoWorld implements IModel {
 	public static final String[] PRED_VALUES  = { POP_WOLF, POP_WOLF_GRID, POP_DUMMYPRED };
 	public static final String[] GRASS_VALUES = { POP_GRASS, POP_GRASS_GRID };
 	
+	/*Obstacle constants */
 	public static final String RECTANGULAR_OBSTACLE = "Rectangular obstacle";
-	public static final String ELLIPTICAL_OBSTACLE = "Elliptical obstacle"; 
-	public static final String[] OBSTACLE_VALUES = {RECTANGULAR_OBSTACLE, ELLIPTICAL_OBSTACLE};
+	public static final String ELLIPTICAL_OBSTACLE = "Elliptical obstacle";
+	public static final String NO_OBSTACLE = "No obstacle";
+	public static final String[] OBSTACLE_VALUES = {NO_OBSTACLE, RECTANGULAR_OBSTACLE, ELLIPTICAL_OBSTACLE};
 	
 	/* Dimension constants */
 	public static final String DIM_SMALL  = "500  x 500";
@@ -314,10 +316,13 @@ public class EcoWorld implements IModel {
 		IPopulation grass = null;
 		IShape shape = null;
 		
+		
 		if(Obstacle == ELLIPTICAL_OBSTACLE){
-			obstacles.add(new EllipticalObstacle(200, 150, new Position(500,500)));
+			obstacles.add(new EllipticalObstacle(d.getWidth()*0.2, d.getWidth()*0.15, 
+					new Position(d.getWidth()/2,d.getHeight()/2)));
 		} else if (Obstacle == RECTANGULAR_OBSTACLE) {
-			obstacles.add(new RectangularObstacle(200, 150, new Position(320,500)));
+			obstacles.add(new RectangularObstacle(d.getWidth()*0.2, d.getWidth()*0.15, 
+					new Position(d.getWidth()/2,d.getHeight()/2)));
 		}
 		
 		if (shapeModel == SHAPE_SQUARE) {
