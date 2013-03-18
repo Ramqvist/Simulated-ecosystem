@@ -68,7 +68,8 @@ public class EcoWorld implements IModel {
 	public static final String EVENT_DIMENSIONCHANGED   = "chalmers.dax021308.ecosystem.model.Ecoworld.event_dimensionchanged";
 	public static final String EVENT_DELAY_CHANGED      = "chalmers.dax021308.ecosystem.model.Ecoworld.event_delaychanged";
 	public static final String EVENT_SHAPE_CHANGED      = "chalmers.dax021308.ecosystem.model.Ecoworld.event_shape_changed";
-
+	public static final String EVENT_ITERATION_FINISHED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_iterationfinished";
+	
 	/* Shape Constants */
 	public static final String SHAPE_SQUARE   = "Square Shape";
 	public static final String SHAPE_CIRCLE   = "Circle Shape";
@@ -151,9 +152,10 @@ public class EcoWorld implements IModel {
 			if (recordSimulation) {
 				recordedSimulation.add(AbstractPopulation.clonePopulationList(popList));
 			} else {
-				//Send out the new cloned population list and obsticle list.
+				//Send out the new cloned population list and obstacle list.
 //				recycledPopulationList = AbstractPopulation.clonePopulationListWithRecycledList(recycledPopulationList, popList);
 				observers.firePropertyChange(EVENT_TICK, obsList, AbstractPopulation.clonePopulationList(popList));
+				observers.firePropertyChange(EVENT_ITERATION_FINISHED, null, elapsedTime);
 			}
 			if (runWithoutTimer) {
 				scheduleEnvironmentUpdate();

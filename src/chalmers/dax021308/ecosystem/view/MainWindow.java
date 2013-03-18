@@ -48,8 +48,8 @@ public class MainWindow extends JFrame implements IView {
 	private AWTSimulationView awt;
 	private OpenGLSimulationView openGL;
 	private HeatMapView heatMap;
-	private GraphPopulationAmountView graphView1;  //M�ste ta in en ekomodell, + �r jframe nu
-	//private GraphView graphView2 = new GraphView();  //M�ste ta in en ekomodell, + �r jframe nu
+	private AbstractGraph2D graphView1;
+	private AbstractGraph2D graphView2;
 	
 
 	/**
@@ -72,6 +72,7 @@ public class MainWindow extends JFrame implements IView {
 		//
 		controlView = new ControlView(model);
 		graphView1 = new GraphPopulationAmountView(model, 10);
+		graphView2 = new IterationTimeGraph(model, 2);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -120,6 +121,8 @@ public class MainWindow extends JFrame implements IView {
 		 * Quick fix...
 		 */
 		right.setLayout(new GridLayout(3,1));
+		right.setMinimumSize(new Dimension(500, 400));
+		right.setPreferredSize(new Dimension(500, 400));
 //		GridBagConstraints gbc = new GridBagConstraints();
 //		gbc.gridx = 0;
 //		gbc.gridwidth = gbc.gridheight = 1;
@@ -133,10 +136,12 @@ public class MainWindow extends JFrame implements IView {
 //		simulationPanel.setBackground(Color.RED);
 		left.add(openGL);
 		left.add(controlView, BorderLayout.SOUTH);  
-		right.add(parameterView, BorderLayout.CENTER);
-		//graphView1.setSize(200, 200);
-		right.add(graphView1, BorderLayout.SOUTH);
-		right.add(heatMap, BorderLayout.SOUTH); 
+		//right.add(parameterView, BorderLayout.CENTER);
+		//graphView1.setMinimumSize(new Dimension(500, 400));
+		//graphView1.setPreferredSize(new Dimension(500, 400));
+		right.add(graphView2, BorderLayout.CENTER); // during development.
+		right.add(graphView1, BorderLayout.CENTER);
+		right.add(heatMap, BorderLayout.CENTER); 
 //		right.setBackground(Color.BLUE);
 //		parameterView.setBackground(Color.GREEN);
 		

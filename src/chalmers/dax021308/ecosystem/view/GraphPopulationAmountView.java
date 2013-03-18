@@ -1,5 +1,6 @@
 package chalmers.dax021308.ecosystem.view;
 
+import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
@@ -27,79 +28,24 @@ import info.monitorenter.util.Range;
  * 
  * 
  * Shows population amount over iterations.
- * However, might not yet work for populations added after
- * simulation start. Will fix later if this should be possible.
  * 
- * @author Loanne
+ * @author Loanne Berggren
  * 
  */
-public class GraphPopulationAmountView extends Chart2D implements IView {
-
-	// Values for axis. More values are set in init()
-	private IAxis<IAxisScalePolicy> xAxis;
-	private IAxis<IAxisScalePolicy> yAxis;
-	private Range rangeX = new Range(0, 1000);
-	private Range rangeY = new Range(0, 500);
-	private String xAxisTitle = "Iterations";
-	private String yAxisTitle = "Population amount";
-	private int nIterationsPassed = 0;
-	private int updateFrequency = 10; // every ten iteration.
+public class GraphPopulationAmountView extends AbstractGraph2D {
 
 	public GraphPopulationAmountView(IModel model, int updateFrequency) {
-		model.addObserver(this);
-		this.updateFrequency = updateFrequency;
+		super(model, updateFrequency, "Iterations", "Population amount");
 		init();
 	}
 
 	@Override
 	public void init() {    
-		xAxis = (IAxis<IAxisScalePolicy>)getAxisX(); 
-		xAxis.setAxisTitle(new AxisTitle(xAxisTitle));
-		xAxis.setRangePolicy(new RangePolicyMinimumViewport(rangeX)); 
+		this.rangeX = new Range(0, 1000);
+		this.rangeY = new Range(0, 500);
+		super.init();
 		xAxis.setMinorTickSpacing(2000);
-
-		yAxis = (IAxis<IAxisScalePolicy>)getAxisY();
-		yAxis.setAxisTitle(new AxisTitle(yAxisTitle));
-		yAxis.setRangePolicy(new RangePolicyMinimumViewport(rangeY)); 
 		yAxis.setMinorTickSpacing(100);
-	}
-
-	@Override
-	public void propertyChange(PropertyChangeEvent event) {
-		//nIterationsPassed ska bara ökas när du får in EVENT_TICK. Då modellen kan skicka ut andra notifikationer än modeluppdateringar.
-		nIterationsPassed++;
-		String eventName = event.getPropertyName();
-		List<IPopulation> populations = null;
-		//Detta behövs bara hämtas och kollas när du får in EVENT_TICK. (Kika i OpenGLSimulationView.) //Erik
-		if(event.getNewValue() instanceof List<?>) {
-			populations = (List<IPopulation>) event.getNewValue();
-		} 
-		//Du kan ha "==" dï¿½ strï¿½ngarna som tas in ï¿½r public static final. "==" ï¿½r snabbare ï¿½n equals() //Erik
-		if (eventName == EcoWorld.EVENT_START) {
-		}
-		else if(eventName == EcoWorld.EVENT_STOP) {
-			this.removeAllTraces().clear();
-			this.nIterationsPassed = 0;
-		} else if(eventName == EcoWorld.EVENT_TICK) {
-			if (nIterationsPassed % updateFrequency != 0)
-				return;
-			if(populations != null) {		
-				if (this.getTraces().size() == 0) {
-					// initialize traces
-					initializeTraces(populations);
-				}
-				
-				// update graph.
-				Iterator<ITrace2D> it = this.getTraces().iterator();
-				for (IPopulation p: populations) {
-					if (it.hasNext()) {
-						((ITrace2D) it.next()).addPoint(nIterationsPassed, p.getSize());
-					}
-					else
-						return;
-				}
-			}
-		}
 	}
 
 	/*
@@ -130,7 +76,58 @@ public class GraphPopulationAmountView extends Chart2D implements IView {
 
 	@Override
 	public void release() {
-		// TODO Auto-generated method stub	
+		this.removeAllTraces().clear();
+		this.removeAll();
+	}
+	
+	@Override
+	protected void onStop(Object object){
+		this.removeAllTraces().clear();
+		this.nIterationsPassed = 0;
+	}
+	@Override
+	public void onTick(Object object) {
+		if (nIterationsPassed % updateFrequency != 0)
+			return;
+		List<IPopulation> populations = null;
+		
+		if(!(object instanceof List<?>)) {
+			return;
+		} 
+		
+		populations = (List<IPopulation>) object;
+		if(populations != null) {		
+			if (this.getTraces().size() == 0) {
+				// initialize traces
+				initializeTraces(populations);
+			}
+			updateGraph(populations);
+		}
+		
+	}
+	/*
+	 * update graph
+	 */
+	private void updateGraph(List<IPopulation> populations){
+		Iterator<ITrace2D> it = this.getTraces().iterator();
+		for (IPopulation p: populations) {
+			if (it.hasNext()) {
+				((ITrace2D) it.next()).addPoint(nIterationsPassed, p.getSize());
+			}
+			else
+				return;
+		}
+	}
+
+	@Override
+	protected void onStart(Object object) {
+		// Nothing special
+		
+	}
+
+	@Override
+	protected void onPause(Object object) {
+		// Nothing
 	}
 }
 
