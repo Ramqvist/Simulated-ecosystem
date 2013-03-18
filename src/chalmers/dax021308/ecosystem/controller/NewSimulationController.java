@@ -89,6 +89,7 @@ public class NewSimulationController implements IController {
 			} else {
 				shape = EcoWorld.SHAPE_TRIANGLE;
 			}
+			String obstacle = (String) view.obstacleList.getSelectedValue();
 			model.createInitialPopulations(
 					(String) view.predList.getSelectedValue(),
 					Integer.parseInt(view.tvPredPopSize.getText()),
