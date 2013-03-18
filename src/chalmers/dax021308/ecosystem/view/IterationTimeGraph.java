@@ -44,8 +44,7 @@ public class IterationTimeGraph extends AbstractGraph2D {
 
 	@Override
 	protected void onStart(Object object){	
-		this.iterationTimeTrace.removeAllPoints();
-		this.nIterationsPassed = 0;
+		// Nothing
 	}
 
 	@Override

@@ -68,6 +68,12 @@ public class PopulationAmountGraph extends AbstractGraph2D {
 	}
 	
 	@Override
+	protected void onStart(Object object) {
+		// Nothing
+		
+	}
+	
+	@Override
 	protected void onStop(Object object){
 		this.removeAllTraces().clear();
 		this.nIterationsPassed = 0;
@@ -106,11 +112,7 @@ public class PopulationAmountGraph extends AbstractGraph2D {
 		}
 	}
 
-	@Override
-	protected void onStart(Object object) {
-		// Nothing
-		
-	}
+
 
 	@Override
 	protected void onPause(Object object) {
