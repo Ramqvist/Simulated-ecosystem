@@ -20,12 +20,12 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class DeerAgent extends AbstractAgent {
 
-	private static final int MAX_ENERGY = 3000;
+	private static final int MAX_ENERGY = 2000;
 	private boolean hungry = true;
 	private static final double REPRODUCTION_RATE = 0.80;
 	private int digesting = 0;
-	private static final int DIGESTION_TIME = 80;
-	private static final int ENERGY_GAIN = 50;
+	private static final int DIGESTION_TIME = 70;
+	private static final int ENERGY_GAIN = 30;
 	private boolean alone;
 	
 	public DeerAgent(String name, Position p, Color c, int width,

@@ -174,8 +174,7 @@ public abstract class AbstractAgent implements IAgent {
 
 			@Override
 			public boolean timeToDie() {
-				// TODO Auto-generated method stub
-				return false;
+				return energy >= 0;
 			}
 
 		};
