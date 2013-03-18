@@ -63,12 +63,12 @@ public class EcoWorld implements IModel {
 	public static final String EVENT_STOP               = "chalmers.dax021308.ecosystem.model.Ecoworld.event_stop";
 	public static final String EVENT_START              = "chalmers.dax021308.ecosystem.model.Ecoworld.event_start";
 	public static final String EVENT_PAUSE              = "chalmers.dax021308.ecosystem.model.Ecoworld.event_pause";
-	public static final String EVENT_RECORDING_FINISHED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recordingstarted";
-	public static final String EVENT_RECORDING_STARTED  = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recordingfinished";
-	public static final String EVENT_DIMENSIONCHANGED   = "chalmers.dax021308.ecosystem.model.Ecoworld.event_dimensionchanged";
-	public static final String EVENT_DELAY_CHANGED      = "chalmers.dax021308.ecosystem.model.Ecoworld.event_delaychanged";
+	public static final String EVENT_RECORDING_FINISHED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recording_started";
+	public static final String EVENT_RECORDING_STARTED  = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recording_finished";
+	public static final String EVENT_DIMENSIONCHANGED   = "chalmers.dax021308.ecosystem.model.Ecoworld.event_dimension_changed";
+	public static final String EVENT_DELAY_CHANGED      = "chalmers.dax021308.ecosystem.model.Ecoworld.event_delay_changed";
 	public static final String EVENT_SHAPE_CHANGED      = "chalmers.dax021308.ecosystem.model.Ecoworld.event_shape_changed";
-	public static final String EVENT_ITERATION_FINISHED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_iterationfinished";
+	public static final String EVENT_ITERATION_FINISHED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_iteration_finished";
 	
 	/* Shape Constants */
 	public static final String SHAPE_SQUARE   = "Square Shape";
@@ -112,9 +112,9 @@ public class EcoWorld implements IModel {
 	public static final String[] DIM_VALUES = { DIM_SMALL, DIM_MEDIUM, DIM_LARGE, DIM_XLARGE };
 
 	/* State variables */
-	private AtomicBoolean environmentFinished = new AtomicBoolean(false);
-	private AtomicBoolean timerFinished       = new AtomicBoolean(false);
-	private AtomicBoolean shouldRun           = new AtomicBoolean(false);
+	private boolean environmentFinished = false;
+	private boolean timerFinished       = false;
+	private boolean shouldRun           = false;
 	private boolean runWithoutTimer;
 	private boolean recordSimulation;
 	private boolean skipBoolean;
@@ -138,7 +138,7 @@ public class EcoWorld implements IModel {
 	private List<List<IPopulation>> recordedSimulation;
 	/**
 	 * Simple object, used for synchronizing the {@link TimerHandler} and the
-	 * {@link IEnvironment} {@link OnFinishListener}
+	 * {@link IEnvironment} {@link OnFinishListener}. This object makes the change of state done in mutual exclusion.
 	 */
 	private Object syncObject = new Object();
 	private int numUpdates = 0;
@@ -150,7 +150,7 @@ public class EcoWorld implements IModel {
 
 		@Override
 		public void onFinish(List<IPopulation> popList, List<IObstacle> obsList) {
-			if (!shouldRun.get()) {
+			if (!shouldRun) {
 				return;
 			}
 			elapsedTime = System.nanoTime() - startIterationTime;
@@ -168,14 +168,14 @@ public class EcoWorld implements IModel {
 			} else {
 				synchronized (syncObject) {
 					// Log.v("Environment: Finished.");
-					if (timerFinished.get()) {
+					if (timerFinished) {
 						// Log.v("Environment: Timer is finished, doing Environment update");
-						environmentFinished.set(false);
-						timerFinished.set(false);
+						environmentFinished = false;
+						timerFinished = false;
 						scheduleEnvironmentUpdate();
 					} else {
 						// Log.v("Environment: Timer NOT finished, waiting...");
-						environmentFinished.set(true);
+						environmentFinished = true;
 					}
 				}
 			}
@@ -186,19 +186,19 @@ public class EcoWorld implements IModel {
 		@Override
 		// När timer är klar.
 		public void onTick() {
-			if (!shouldRun.get()) {
+			if (!shouldRun) {
 				return;
 			}
 			synchronized (syncObject) {
 				// Log.v("Timer: Finished.");
-				if (environmentFinished.get()) {
+				if (environmentFinished) {
 					// Log.v("Timer: Environment is finished, doing Environment update");
-					timerFinished.set(false);
-					environmentFinished.set(false);
+					timerFinished = false;
+					environmentFinished = false;
 					scheduleEnvironmentUpdate();
 				} else {
 					// Log.v("Timer: Environment NOT finished, waiting...");
-					timerFinished.set(true);
+					timerFinished = true;
 				}
 			}
 		}
@@ -412,10 +412,10 @@ public class EcoWorld implements IModel {
 	 */
 	public void start() throws IllegalStateException {
 		synchronized (syncObject) {
-			if (!shouldRun.get()) {
+			if (!shouldRun) {
 				executor = Executors.newSingleThreadExecutor();
 				this.timer = new TimerHandler();
-				shouldRun.set(true);
+				shouldRun = true;
 				scheduleEnvironmentUpdate();
 				Log.i("EcoWorld started.");
 				if (recordSimulation) {
@@ -440,8 +440,8 @@ public class EcoWorld implements IModel {
 	 */
 	public void pause() throws IllegalStateException {
 		synchronized (syncObject) {
-			if (shouldRun.get()) {
-				shouldRun.set(false);
+			if (shouldRun) {
+				shouldRun = false;
 				executor.shutdownNow();
 				timer.stop();
 				numUpdates = 0;
@@ -467,8 +467,8 @@ public class EcoWorld implements IModel {
 	 */
 	public void stop() throws IllegalStateException {
 		synchronized (syncObject) {
-			if (shouldRun.get()) {
-				shouldRun.set(false);
+			if (shouldRun) {
+				shouldRun = false;
 				executor.shutdownNow();
 				timer.stop();
 				numUpdates = 0;
