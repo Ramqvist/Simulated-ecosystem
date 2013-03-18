@@ -95,7 +95,8 @@ public class NewSimulationController implements IController {
 					(String) view.preyList.getSelectedValue(),
 					Integer.parseInt(view.tvPreyPopSize.getText()),
 					(String) view.grassList.getSelectedValue(),
-					Integer.parseInt(view.tvGrassPopSize.getText()), shape);
+					Integer.parseInt(view.tvGrassPopSize.getText()), shape, 
+					model.ELLIPTICAL_OBSTACLE);
 			try {
 				model.start();
 			} catch (IllegalStateException e) {

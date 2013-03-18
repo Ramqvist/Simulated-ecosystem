@@ -91,7 +91,11 @@ public class EcoWorld implements IModel {
 	public static final String[] PREY_VALUES  = { POP_DEER, POP_DEER_GRID, POP_PIG, POP_RABBIT, POP_DUMMYPREY };
 	public static final String[] PRED_VALUES  = { POP_WOLF, POP_WOLF_GRID, POP_DUMMYPRED };
 	public static final String[] GRASS_VALUES = { POP_GRASS, POP_GRASS_GRID };
-
+	
+	public static final String RECTANGULAR_OBSTACLE = "Rectangular obstacle";
+	public static final String ELLIPTICAL_OBSTACLE = "Elliptical obstacle"; 
+	public static final String[] OBSTACLE_VALUES = {RECTANGULAR_OBSTACLE, ELLIPTICAL_OBSTACLE};
+	
 	/* Dimension constants */
 	public static final String DIM_SMALL  = "500  x 500";
 	public static final String DIM_MEDIUM = "1000 x 1000";
@@ -295,25 +299,27 @@ public class EcoWorld implements IModel {
 
 	public void createInitialPopulations(String predatorModel, int predPop,
 			String preyModel, int preyPop, String grassModel, int grassPop,
-			String shapeModel) throws IllegalArgumentException {
+			String shapeModel, String Obstacle) throws IllegalArgumentException {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
 		
 		/*
 		 * Creating obstacles here for test. This should be done in a proper way later.
 		 */
 		List<IObstacle> obstacles = new ArrayList<IObstacle>();
-		obstacles.add(new RectangularObstacle(20, 200, new Position(320,500)));
-		obstacles.add(new RectangularObstacle(20, 60, new Position(680,400)));
-		obstacles.add(new RectangularObstacle(20, 60, new Position(680,600)));
-		obstacles.add(new RectangularObstacle(200, 20, new Position(500,320)));
-		obstacles.add(new RectangularObstacle(200, 20, new Position(500,680)));
-		obstacles.add(new EllipticalObstacle(50, 50, new Position(500,500)));
+		
 		
 
 		IPopulation prey = null;
 		IPopulation pred = null;
 		IPopulation grass = null;
 		IShape shape = null;
+		
+		if(Obstacle == ELLIPTICAL_OBSTACLE){
+			obstacles.add(new EllipticalObstacle(200, 150, new Position(500,500)));
+		} else if (Obstacle == RECTANGULAR_OBSTACLE) {
+			obstacles.add(new RectangularObstacle(200, 150, new Position(320,500)));
+		}
+		
 		if (shapeModel == SHAPE_SQUARE) {
 			shape = new SquareShape();
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
