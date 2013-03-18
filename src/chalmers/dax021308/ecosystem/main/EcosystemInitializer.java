@@ -13,11 +13,11 @@ public class EcosystemInitializer {
 	
 	
 	public static void main(String[] args) {
-		/*try {
+		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch(Exception e) {
 			e.printStackTrace();
-		}*/
+		}
 		
 		new MainWindowController();
 	}
