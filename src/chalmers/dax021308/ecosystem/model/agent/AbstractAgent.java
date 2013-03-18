@@ -297,24 +297,34 @@ public abstract class AbstractAgent implements IAgent {
 	 *         agents in that it interacts with.
 	 */
 	protected Vector mutualInteractionForce() {
-
+		long time = System.nanoTime();
+		Vector result = mutualInteractionForceGPU();
+		time = (long) (0.000001 * time - System.nanoTime());
+		return result;
+	}
+	protected Vector mutualInteractionForceGPU() {
 		final int size = neutralNeighbours.size();
 		if(size == 0) {
 			return Vector.EmptyVector();
 		}
 		IAgent agent;
-		MutualInteractionForceKernel kernel = new MutualInteractionForceKernel(size, INTERACTION_RANGE, getPosition().getX(), getPosition().getY());
+		double[] xPosArray = new double[size];
+		double[] yPosArray = new double[size];
+	
 		for (int i = 0; i < size; i++) {
 			agent = neutralNeighbours.get(i);
 			if (agent != AbstractAgent.this) {
 				Position p = agent.getPosition();
-				kernel.xPosArray[i] = (float) p.getX();
-				kernel.yPosArray[i] = (float) p.getY();
+				xPosArray[i] = p.getX();
+				yPosArray[i] = p.getY();
 			}
-		}
-
+		}	
+		MutualInteractionForceKernel kernel = new MutualInteractionForceKernel(size, INTERACTION_RANGE, getPosition().getX(), getPosition().getY(), xPosArray, yPosArray);
+		//kernel.getExecutionTime()
+		kernel.setExecutionMode(Kernel.EXECUTION_MODE.GPU); // force GPU-mode
 		Range range = Range.create(size);
 		kernel.execute(range);
+		Log.v("Elapsed time: " + kernel.getConversionTime());
 		double mutualInteractionForceX = 0;
 		double mutualInteractionForceY = 0;
 		for (int i = 0; i < size; i++) {
@@ -323,11 +333,63 @@ public abstract class AbstractAgent implements IAgent {
 //			Log.v(kernel.xResult[i] + " " + kernel.yResult[i]);
 		}
 		final Vector mutualInteractionForce = new Vector(mutualInteractionForceX, mutualInteractionForceY);
-//		System.out.println("Execution mode = "+kernel.getExecutionMode());
+		System.out.println("Execution mode = "+kernel.getExecutionMode());
 		//   -Dcom.amd.aparapi.enableShowGeneratedOpenCL=true
 	    kernel.dispose();
-		return mutualInteractionForce.multiply((ran.nextDouble() + ran
-				.nextDouble()));
+		return mutualInteractionForce.multiply((ran.nextDouble() + ran.nextDouble()));
+	}
+	
+	protected Vector mutualInteractionForceCPU() {
+
+		final int size = neutralNeighbours.size();
+		if(size == 0) {
+			return Vector.EmptyVector();
+		}
+		IAgent agent;
+		double[] xPosArray = new double[size];
+		double[] yPosArray = new double[size];
+	
+		for (int i = 0; i < size; i++) {
+			agent = neutralNeighbours.get(i);
+			if (agent != AbstractAgent.this) {
+				Position p = agent.getPosition();
+				xPosArray[i] = p.getX();
+				yPosArray[i] = p.getY();
+			}
+		}	
+		double mutualInteractionForceX = 0;
+		double mutualInteractionForceY = 0;
+		double myPosX = getPosition().getX();
+		double myPosY = getPosition().getY();
+		for (int i = 0; i < size; i++) {
+			double newForceX = 0;
+			double newForceY = 0;
+			double xAgentPosition = xPosArray[i];
+			double yAgentPosition = yPosArray[i];
+			double v = 0;
+			double norm = 0;
+			double distance = 0;
+			double dX = myPosX - xAgentPosition;
+			double dY = myPosY - yAgentPosition;
+			
+			distance = Math.sqrt(Math.pow(dX, 2.0) + Math.pow(dY, 2.0));
+			double Q = 0; // Q is a function of the distance.
+			if (distance <= INTERACTION_RANGE) {
+				Q = -20.0 * (INTERACTION_RANGE - distance);
+			} else {
+				Q = 1.0;
+			}	
+			newForceX = xAgentPosition - myPosX;
+			newForceY = yAgentPosition - myPosY;
+			norm = Math.sqrt((newForceX*newForceX)+(newForceY*newForceY));
+			v = Q / (norm * distance);
+			newForceX = newForceX * v;
+			newForceY = newForceY * v;
+			mutualInteractionForceX = mutualInteractionForceX + newForceX;
+			mutualInteractionForceX = mutualInteractionForceY + newForceY;
+		}
+		final Vector mutualInteractionForce = new Vector(mutualInteractionForceX, mutualInteractionForceY);
+		return mutualInteractionForce.multiply((ran.nextDouble() + ran.nextDouble()));
 	}
 	
 
