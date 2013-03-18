@@ -72,7 +72,7 @@ public class MainWindow extends JFrame implements IView {
 		//
 		controlView = new ControlView(model);
 		graphView1 = new PopulationAmountGraph(model, 10);
-		graphView2 = new IterationTimeGraph(model, 2);
+		graphView2 = new IterationTimeGraph(model, 10);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
