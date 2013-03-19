@@ -1,11 +1,6 @@
 package chalmers.dax021308.ecosystem.controller;
 
 
-import chalmers.dax021308.ecosystem.view.AWTSimulationView;
-import chalmers.dax021308.ecosystem.view.HeatMapView;
-import chalmers.dax021308.ecosystem.view.MainWindow;
-import chalmers.dax021308.ecosystem.view.OpenGLSimulationView;
-
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +8,7 @@ import java.awt.event.ActionListener;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.util.Log;
+import chalmers.dax021308.ecosystem.view.MainWindow;
 
 /**
  * Controller class

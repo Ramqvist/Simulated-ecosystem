@@ -3,7 +3,6 @@ package chalmers.dax021308.ecosystem.model.util;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld.OnTickUpdate;
 
 /**

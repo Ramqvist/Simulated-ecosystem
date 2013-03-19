@@ -60,11 +60,4 @@ public class DeerPopulation extends AbstractPopulation {
 		}
 		return newAgents;
 	}
-
-	@Override
-	public double calculateFitness(IAgent agent) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 }

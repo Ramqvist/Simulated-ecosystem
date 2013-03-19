@@ -131,7 +131,7 @@ public class WolfAgentGrid extends AbstractAgent {
 				double distance = getPosition().getDistance(p);
 				if (distance <= visionRange) {
 					if (distance <= INTERACTION_RANGE - 5) {
-						if (a.consumeAgent()) {
+						if (a.tryConsumeAgent()) {
 							pop.addToRemoveList(a);
 							hungry = false;
 							this.energy = MAX_ENERGY;

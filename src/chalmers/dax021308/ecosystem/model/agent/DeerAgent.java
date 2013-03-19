@@ -5,18 +5,14 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lowagie.text.pdf.ArabicLigaturizer;
-
 import chalmers.dax021308.ecosystem.model.environment.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
-import chalmers.dax021308.ecosystem.model.util.Gender;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
  * A basic implementation of the IAgent interface.
- * 
  * @author Albin
  */
 public class DeerAgent extends AbstractAgent {
@@ -64,9 +60,10 @@ public class DeerAgent extends AbstractAgent {
 	}
 
 	/**
-	 * @author Sebbe Calculates the next position of the agent depending on the
-	 *         forces that affects it. Note: The next position is not set until
-	 *         updatePosition() is called.
+	 * Calculates the next position of the agent depending on the
+	 * forces that affects it. Note: The next position is not set until
+	 * updatePosition() is called.
+	 * @author Sebbe
 	 */
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
@@ -126,10 +123,9 @@ public class DeerAgent extends AbstractAgent {
 	}
 
 	/**
-	 * @author Henrik
-	 * @param preys
-	 *            The list of preys to eat
+	 * @param preys - The list of preys to eat
 	 * @return returns The force the preys attracts the agent with
+	 * @author Henrik
 	 */
 	private Vector getPreyForce() {
 		Vector preyForce = new Vector(0, 0);
@@ -142,7 +138,7 @@ public class DeerAgent extends AbstractAgent {
 				if (distance <= INTERACTION_RANGE - 5) {
 					// Food found, let's eat it and make some reproducing
 					// possible
-					if (a.consumeAgent()) {
+					if (a.tryConsumeAgent()) {
 						hungry = false;
 						energy = MAX_ENERGY;
 					}
@@ -158,17 +154,16 @@ public class DeerAgent extends AbstractAgent {
 		if (norm != 0) { 
 			preyForce.multiply(maxAcceleration / norm);
 		}
-		
 		return preyForce;
 	}
 
 	/**
-	 * @author Sebbe "Predator Force" is defined as the sum of the vectors
-	 *         pointing away from all the predators in vision, weighted by the
-	 *         inverse of the distance to the predators, then normalized to have
-	 *         unit norm. Can be interpreted as the average sum of forces that
-	 *         the agent feels, weighted by how close the source of the force
-	 *         is.
+	 * "Predator Force" is defined as the sum of the vectors
+	 * pointing away from all the predators in vision, weighted by the
+	 * inverse of the distance to the predators, then normalized to have
+	 * unit norm. Can be interpreted as the average sum of forces that
+	 * the agent feels, weighted by how close the source of the force is.
+	 * @author Sebbe
 	 */
 	private Vector getPredatorForce() {
 		Vector predatorForce = new Vector(0, 0);
@@ -216,5 +211,4 @@ public class DeerAgent extends AbstractAgent {
 		super.updatePosition();
 		this.energy--;
 	}
-
 }

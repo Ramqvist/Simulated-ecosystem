@@ -73,8 +73,7 @@ public interface IAgent extends Cloneable {
 	public Vector getVelocity();
 
 	/**
-	 * @param velocity
-	 *            - The new velocity.
+	 * @param velocity - The new velocity.
 	 */
 	public void setVelocity(Vector velocity);
 
@@ -86,9 +85,7 @@ public interface IAgent extends Cloneable {
 	/**
 	 * Tries to create one or more new IAgents, with data from the two provided
 	 * IAgents.
-	 * 
-	 * @param agent
-	 *            - The IAgent which this IAgent will reproduce with.
+	 * @param agent - The IAgent which this IAgent will reproduce with.
 	 * @return A list of IAgents if the reproduction was successful, otherwise
 	 *         null.
 	 */
@@ -107,14 +104,16 @@ public interface IAgent extends Cloneable {
 
 	/**
 	 * Clone an agent.
-	 * <p>
-	 * Returns a reference to a new agent with the values of the calling one.
-	 * 
+	 * @return A reference to a new agent with the values of the calling one.
 	 * @throws CloneNotSupportedException
 	 */
 	public IAgent cloneAgent() throws CloneNotSupportedException;
 
-	public boolean consumeAgent();
+	/**
+	 * Try to consume this agent.
+	 * @return True if consumed, otherwise false.
+	 */
+	public boolean tryConsumeAgent();
 
 	public String toBinaryString();
 
@@ -123,6 +122,10 @@ public interface IAgent extends Cloneable {
 	 */
 	public int getTrophicLevel();
 
+	/**
+	 * Checks whether this agent is alive or not.
+	 * @return True if alive, otherwise false.
+	 */
 	public boolean isAlive();
 	
 	public Vector getObstacleForce(List<IObstacle> obstacles);

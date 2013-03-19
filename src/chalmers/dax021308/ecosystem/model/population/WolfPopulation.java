@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
-import chalmers.dax021308.ecosystem.model.agent.DeerAgent;
 import chalmers.dax021308.ecosystem.model.agent.WolfAgent;
-import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IObstacle;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -68,10 +66,4 @@ public class WolfPopulation extends AbstractPopulation {
 	 * agents.size(); WolfAgent a; for(int i=0; i<size; i++){ a = (WolfAgent)
 	 * agents.get(i); if(a.getEnergy()<=0){ addToRemoveList(a); } } }
 	 */
-
-	@Override
-	public double calculateFitness(IAgent agent) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 }

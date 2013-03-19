@@ -9,7 +9,6 @@ import java.util.concurrent.Future;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld.OnFinishListener;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
-import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 
 /**

@@ -12,14 +12,11 @@ import chalmers.dax021308.ecosystem.model.environment.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Gender;
 import chalmers.dax021308.ecosystem.model.util.IShape;
-import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
- * 
  * AbstractAgent with neighbourlist.
- * 
  * @author Henrik Abstract class for handling the dummy methods
  */
 public abstract class AbstractAgent implements IAgent {
@@ -95,9 +92,8 @@ public abstract class AbstractAgent implements IAgent {
 	}
 
 	/**
-	 * Clone constructed. Use this to create a copy.
-	 * 
-	 * @param a
+	 * Clone constructor. Use this to create a copy.
+	 * @param a - The agent to clone.
 	 */
 	public AbstractAgent(AbstractAgent a) {
 		this(a.name, new Position(a.position), a.color, a.width, a.height,
@@ -112,7 +108,6 @@ public abstract class AbstractAgent implements IAgent {
 		this.color = color;
 		this.width = width;
 		this.height = height;
-
 		
 		/* LinkedList for fast changing of Agents, consider ArrayList for less memory */
 		preyNeighbours    = new LinkedList<IAgent>();
@@ -179,6 +174,7 @@ public abstract class AbstractAgent implements IAgent {
 		return this.lifeLength;
 	}
 
+	@Override
 	public int getEnergy() {
 		return energy;
 	}
@@ -224,12 +220,12 @@ public abstract class AbstractAgent implements IAgent {
 	}
 	
 	/**
-	 * Update the neighbourlist, should be done once in a while.
-	 * <p>
-	 * Warning, heavy computation!
-	 * 
+	 * Update the neighbourlist, should be done once in a while. 
+	 * <p> Warning, heavy computation!
 	 * Needs optimizations.
-	 * 
+	 * @param neutral
+	 * @param prey
+	 * @param pred
 	 * @author Erik 
 	 */
 	public void updateNeighbourList(List<IPopulation> neutral, List<IPopulation> prey, List<IPopulation> pred) {	
@@ -273,11 +269,12 @@ public abstract class AbstractAgent implements IAgent {
 	}
 
 	/**
-	 * @author Sebbe A random force that the agent gets influenced by. Can be
-	 *         interpreted as an estimation error that the agent does in where
-	 *         to head.
-	 * @return a vector pointing approximately in the same direction as the
-	 *         agents velocity.
+	 * A random force that the agent gets influenced by. Can be
+	 * interpreted as an estimation error that the agent does in where
+	 * to head.
+	 * @return A vector pointing approximately in the same direction as the
+	 * agents velocity.
+	 * @author Sebbe
 	 */
 	protected Vector randomForce() {
 		double randX = -RANDOM_FORCE_MAGNITUDE + 2 * RANDOM_FORCE_MAGNITUDE
@@ -288,15 +285,15 @@ public abstract class AbstractAgent implements IAgent {
 	}
 
 	/**
-	 * @author Sebbe The agent is influences by the mutual interaction force
-	 *         because it is subject to attraction and repulsion from other
-	 *         individuals that it wants to group with. This force describes the
-	 *         relationship between the tendency to steer towards other groups
-	 *         of agents, but not be to close to them either.
-	 * @param neutral
-	 *            the population of neutral agents.
-	 * @return a vector with the force that this agent feels from other neutral
-	 *         agents in that it interacts with.
+	 * The agent is influences by the mutual interaction force
+	 * because it is subject to attraction and repulsion from other
+	 * individuals that it wants to group with. This force describes the
+	 * relationship between the tendency to steer towards other groups
+	 * of agents, but not be to close to them either.
+	 * @param neutral - The population of neutral agents.
+	 * @return A vector with the force that this agent feels from other neutral
+	 * agents in that it interacts with.
+	 * @author Sebbe
 	 */
 	protected Vector mutualInteractionForce() {
 		Vector mutualInteractionForce = new Vector(0, 0);
@@ -329,9 +326,10 @@ public abstract class AbstractAgent implements IAgent {
 	}
 
 	/**
-	 * @author Sebbe The tendency of an agent to continue moving forward with
-	 *         its velocity.
-	 * @return the forward thrust force.
+	 * The tendency of an agent to continue moving forward with
+	 * its velocity.
+	 * @return The forward thrust force.
+	 * @author Sebbe
 	 */
 	protected Vector forwardThrust() {
 		double a = 0.1; // Scaling constant
@@ -343,14 +341,14 @@ public abstract class AbstractAgent implements IAgent {
 	}
 
 	/**
-	 * @author Sebbe This is the force that makes neighbouring agents to
-	 *         equalize their velocities and therefore go in the same direction.
-	 *         The sphere of incluence is defined as 2*INTERACTION_RANGE at the
-	 *         moment.
-	 * @param neutral
-	 *            the population of neutral agents.
+	 * This is the force that makes neighbouring agents to
+	 * equalize their velocities and therefore go in the same direction.
+	 * The sphere of incluence is defined as 2*INTERACTION_RANGE at the
+	 * moment.
+	 * @param neutral - The population of neutral agents.
 	 * @return a vector with the force influencing the agents to steer in the
-	 *         same direction as other nearby agents.
+	 * same direction as other nearby agents.
+	 * @author Sebbe
 	 */
 	protected Vector arrayalForce() {
 		Vector arrayalForce = new Vector(0, 0);
@@ -386,13 +384,12 @@ public abstract class AbstractAgent implements IAgent {
 	}
 
 	/**
-	 * * @author Sebbe The environment force is at the moment defined as
+	 * The environment force is at the moment defined as
 	 * 1/((wall-constant)*(distance to wall))^2. The agents feel the forces from
 	 * the wall directly to the left, right, top and bottom.
-	 * 
-	 * @param dim
-	 *            The dimensions of the rectangular environment.
+	 * @param dim - The dimensions of the rectangular environment.
 	 * @return A vector with the force that an agent feel from its environment.
+	 * @author Sebbe
 	 */
 	protected Vector getEnvironmentForce(Dimension dim, IShape shape) {
 		/*
@@ -465,15 +462,8 @@ public abstract class AbstractAgent implements IAgent {
 		return obstacleForce.multiply(OBSTACLE_CONSTANT);
 	}
 
-	/**
-	 * Try to consume this agent
-	 * <p>
-	 * Return true if consumed, otherwise false.
-	 * <p>
-	 * Thread-safe
-	 */
 	@Override
-	public synchronized boolean consumeAgent() {
+	public synchronized boolean tryConsumeAgent() {
 		if (isAlive) {
 			isAlive = false;
 			return true;
@@ -488,7 +478,6 @@ public abstract class AbstractAgent implements IAgent {
 
 	/**
 	 * Create a new IAgent from the raw parameters.
-	 * 
 	 * @return
 	 */
 	public static IAgent createFromFile(String input) {
@@ -555,5 +544,4 @@ public abstract class AbstractAgent implements IAgent {
 		sb.append(maxAcceleration);
 		return sb.toString();
 	}
-
 }

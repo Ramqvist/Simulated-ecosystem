@@ -1,35 +1,30 @@
 package chalmers.dax021308.ecosystem.view;
 
-import java.awt.EventQueue;
-import java.awt.Toolkit;
-
-import javax.swing.JFrame;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
-import chalmers.dax021308.ecosystem.model.util.Log;
-
 import java.awt.Dimension;
-import javax.swing.JPanel;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.AbstractListModel;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JToggleButton;
-import javax.swing.JCheckBox;
+import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.AbstractListModel;
-import javax.swing.JRadioButton;
-import javax.swing.ListSelectionModel;
+
+import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 
 /**
  * Window for starting a new simulation.

@@ -42,12 +42,6 @@ public class GrassPopulationGrid extends AbstractPopulation {
 		setColor(color);
 		return newAgents;
 	}
-
-	@Override
-	public double calculateFitness(IAgent agent) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 	
 	@Override
 	public double getComputationalFactor() {

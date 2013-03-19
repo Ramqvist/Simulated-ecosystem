@@ -1,27 +1,15 @@
 package chalmers.dax021308.ecosystem.view;
 
-import java.awt.Color;
+import info.monitorenter.gui.chart.ITrace2D;
+import info.monitorenter.gui.chart.traces.Trace2DSorted;
+import info.monitorenter.util.Range;
+
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
-import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
-
-import info.monitorenter.gui.chart.*;
-import info.monitorenter.gui.chart.IAxis.*;
-import info.monitorenter.gui.chart.rangepolicies.*;
-import info.monitorenter.gui.chart.traces.Trace2DSimple;
-import info.monitorenter.gui.chart.traces.Trace2DSorted;
-
-//import info.monitorenter.gui.util.ColorIterator;
-import info.monitorenter.util.Range;
 
 /**
  * 

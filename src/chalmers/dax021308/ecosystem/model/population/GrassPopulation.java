@@ -3,7 +3,6 @@ package chalmers.dax021308.ecosystem.model.population;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.GrassAgent;
@@ -43,12 +42,6 @@ public class GrassPopulation extends AbstractPopulation {
 			newAgents.add(a);
 		}
 		return newAgents;
-	}
-
-	@Override
-	public double calculateFitness(IAgent agent) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 	
 	@Override

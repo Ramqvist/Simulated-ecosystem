@@ -6,17 +6,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import sun.management.resources.agent;
-
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
-import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IObstacle;
 import chalmers.dax021308.ecosystem.model.environment.WorldGrid;
-import chalmers.dax021308.ecosystem.model.util.CircleShape;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
-import chalmers.dax021308.ecosystem.model.util.SquareShape;
-import chalmers.dax021308.ecosystem.model.util.Stat;
 
 /**
  * 
@@ -32,6 +26,7 @@ public abstract class AbstractPopulation implements IPopulation {
 	protected WorldGrid wg;
 	protected IShape shape;
 	protected List<IObstacle> obstacles;
+	
 	/**
 	 * Remove list for this Population.
 	 * <p>
@@ -76,12 +71,8 @@ public abstract class AbstractPopulation implements IPopulation {
 	}
 
 	/**
-	 * Clone constructor.
-	 * <p>
-	 * Use only for cloning.
-	 * 
-	 * @param original
-	 *            the AbstractPopulation to clone
+	 * Clone constructor. Use only for cloning.
+	 * @param original - The AbstractPopulation to clone
 	 */
 	public AbstractPopulation(AbstractPopulation original) {
 //		this.gridDimension = original.gridDimension;
@@ -104,9 +95,7 @@ public abstract class AbstractPopulation implements IPopulation {
 
 	/**
 	 * Override if you use linked-list as agentList! (Default is ArrayList.)
-	 * <P>
 	 * Update the whole population, same as update(0, agents.size())
-	 * 
 	 * @param fromPos
 	 * @param toPos
 	 */
@@ -198,20 +187,14 @@ public abstract class AbstractPopulation implements IPopulation {
 
 	@Override
 	public IPopulation clonePopulation() {
-		return new AbstractPopulation(this) {
-			@Override
-			public double calculateFitness(IAgent agent) {
-				return 0;
-			}
-		};
+		return new AbstractPopulation(this) {};
 	}
 
 	/**
 	 * Clones the given list with {@link IPopulation#clonePopulation()} method.
-	 * <p>
-	 * 
 	 * Use {@link #clonePopulationListWithRecycledList}, instead to reduce
-	 *             unnecessary heap-allocations.
+	 * unnecessary heap-allocations.
+	 * @param original
 	 */
 	public static List<IPopulation> clonePopulationList(
 			List<IPopulation> original) {
@@ -224,9 +207,7 @@ public abstract class AbstractPopulation implements IPopulation {
 
 	/**
 	 * Copies the information from the source to the recycled one.
-	 * <p>
 	 * Creates a new copy if recycled == null.
-	 * 
 	 * @param recycled
 	 * @param source
 	 */
@@ -259,12 +240,7 @@ public abstract class AbstractPopulation implements IPopulation {
 //		if (shape == null)
 //			throw new IllegalArgumentException("Illegal Shape from file.");
 
-		IPopulation created = new AbstractPopulation(name, null, 0, true, null, null) {
-			@Override
-			public double calculateFitness(IAgent agent) {
-				return 0;
-			}
-		};
+		IPopulation created = new AbstractPopulation(name, null, 0, true, null, null) {};
 		created.setColor(c);
 		return created;
 	}
@@ -314,7 +290,6 @@ public abstract class AbstractPopulation implements IPopulation {
 
 	/**
 	 * Clears out the agents in the removeList.
-	 * <p>
 	 * Warning! Use only when no other thread is iterating of the agentlist.
 	 */
 	public void removeAgentsFromRemoveList() {

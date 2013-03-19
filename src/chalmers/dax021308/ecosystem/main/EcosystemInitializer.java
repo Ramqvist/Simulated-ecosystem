@@ -1,7 +1,5 @@
 package chalmers.dax021308.ecosystem.main;
 
-import javax.swing.UIManager;
-
 import chalmers.dax021308.ecosystem.controller.MainWindowController;
 
 /**

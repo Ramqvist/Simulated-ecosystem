@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
-import chalmers.dax021308.ecosystem.model.agent.SimplePreyAgent;
 import chalmers.dax021308.ecosystem.model.agent.SimplePredatorAgent;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -54,11 +53,5 @@ public class DummyPredatorPopulation extends AbstractPopulation {
 			newAgents.add(a);
 		}
 		return newAgents;
-	}
-
-	@Override
-	public double calculateFitness(IAgent agent) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 }

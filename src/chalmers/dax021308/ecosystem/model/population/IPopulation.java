@@ -8,7 +8,6 @@ import chalmers.dax021308.ecosystem.model.agent.IAgent;
 
 /**
  * Describes the general configuration of an arbitrary population.
- * 
  * @author Albin
  */
 public interface IPopulation extends Cloneable {
@@ -17,12 +16,6 @@ public interface IPopulation extends Cloneable {
 	 * Handles things that should be updated regularly. 
 	 */
 	public void update();
-	
-	/**
-	 * @param agent - The IAgent for which the fitness will be calculated.
-	 * @return The fitness for the provided IAgent.
-	 */
-	public double calculateFitness(IAgent agent);
 	
 	/**
 	 * @return The name of the population.
@@ -78,7 +71,6 @@ public interface IPopulation extends Cloneable {
 
 	/**
 	 * Add this agent to the remove list, a list of agents that are to be removed next iteration.
-	 * <p>
 	 * Warning! This is suppose to be a thread-safe method!
 	 */
 	public void addToRemoveList(IAgent a);

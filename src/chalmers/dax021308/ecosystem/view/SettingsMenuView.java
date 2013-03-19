@@ -1,31 +1,21 @@
 package chalmers.dax021308.ecosystem.view;
 
-import java.awt.EventQueue;
-
-/**
- * A window that can be reached from the MainWindow menu. 
- * Contains all settings that can be set before starting a simulation.
- * 
- * @author Hanna 
- *
- */
-
-import javax.swing.JFrame;
-import net.miginfocom.swing.MigLayout;
-import javax.swing.JLabel;
 import java.awt.Font;
-import javax.swing.JRadioButton;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JRadioButton;
 import javax.swing.JSlider;
-import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
-import javax.swing.JButton;
+import javax.swing.event.ChangeListener;
+
+import net.miginfocom.swing.MigLayout;
 
 public class SettingsMenuView extends JFrame {
 	private final ButtonGroup shapeButtonGroup = new ButtonGroup();

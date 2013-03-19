@@ -139,7 +139,7 @@ public class DeerAgentGrid extends AbstractAgent {
 					if (distance <= INTERACTION_RANGE-5) {
 						// Food found, let's eat it and make some reproducing
 						// possible
-						if(a.consumeAgent()) {
+						if(a.tryConsumeAgent()) {
 							pop.addToRemoveList(a);
 							hungry = false;
 							this.energy = MAX_ENERGY;

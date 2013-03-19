@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import chalmers.dax021308.ecosystem.model.agent.AbstractAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
@@ -30,7 +29,6 @@ import chalmers.dax021308.ecosystem.model.population.GrassPopulation;
 import chalmers.dax021308.ecosystem.model.population.GrassPopulationGrid;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.population.PigPopulation;
-import chalmers.dax021308.ecosystem.model.population.RabbitPopulation;
 import chalmers.dax021308.ecosystem.model.population.WolfPopulation;
 import chalmers.dax021308.ecosystem.model.population.WolfPopulationGrid;
 import chalmers.dax021308.ecosystem.model.util.CircleShape;
@@ -77,7 +75,6 @@ public class EcoWorld implements IModel {
 
 	/* Population constants */
 	public static final String POP_PIG        = "Pig Population";
-	public static final String POP_RABBIT     = "Rabbit Population";
 	public static final String POP_DUMMYPREY  = "Dummy Prey Population";
 	public static final String POP_DEER       = "Deer Population";
 	public static final String POP_DEER_GRID  = "Deer Population Grid";
@@ -88,7 +85,7 @@ public class EcoWorld implements IModel {
 	public static final String POP_WOLF_GRID  = "Wolf Population Grid";
 
 	/* Population array based on predator-prey model, the view uses these values. */
-	public static final String[] PREY_VALUES  = { POP_DEER, POP_DEER_GRID, POP_PIG, POP_RABBIT, POP_DUMMYPREY };
+	public static final String[] PREY_VALUES  = { POP_DEER, POP_DEER_GRID, POP_PIG, POP_DUMMYPREY };
 	public static final String[] PRED_VALUES  = { POP_WOLF, POP_WOLF_GRID, POP_DUMMYPRED };
 	public static final String[] GRASS_VALUES = { POP_GRASS, POP_GRASS_GRID };
 	
@@ -352,9 +349,6 @@ public class EcoWorld implements IModel {
 		} else if (preyModel == POP_DEER_GRID) {
 			prey = new DeerPopulationGrid("Deers", d, preyPop, Color.blue, 2.0,
 					2, 200, true, shape);
-		} else if (preyModel == POP_RABBIT) {
-			prey = new RabbitPopulation("Rabbits", d, preyPop, Color.lightGray,
-					10, 10, 200, shape);
 		} else if (preyModel == POP_DUMMYPREY) {
 			prey = new DummyPreyPopulation(d, preyPop, Color.blue, 2.2, 2, 250, shape);
 		} else if (preyModel == POP_PIG) {

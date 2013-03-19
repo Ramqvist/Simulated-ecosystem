@@ -1,27 +1,23 @@
 package chalmers.dax021308.ecosystem.view;
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import net.miginfocom.swing.MigLayout;
-import javax.swing.JRadioButton;
 import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JSlider;
-import java.awt.FlowLayout;
-import javax.swing.BoxLayout;
-import java.awt.GridLayout;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import java.awt.event.ActionEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
-import javax.swing.JTextField;
-import javax.swing.JButton;
 
 /**
  * The view that holds the parameters that can be changed during a simulation.

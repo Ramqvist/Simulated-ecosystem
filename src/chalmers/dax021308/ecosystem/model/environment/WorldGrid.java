@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
-import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 
 /**

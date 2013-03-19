@@ -13,9 +13,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
  * Simple grass, lowest part of the food chain
- * 
  * @author Henrik
- * 
  */
 public class GrassAgent extends AbstractAgent {
 	private final Dimension gridDimension;
@@ -68,7 +66,6 @@ public class GrassAgent extends AbstractAgent {
 
 	/**
 	 * Finds a new position close to the current position
-	 * 
 	 * @return The position found
 	 */
 	private Position getSpawnPosition() {
@@ -86,10 +83,8 @@ public class GrassAgent extends AbstractAgent {
 	}
 
 	/**
-	 * Checks if a Position is legit, i.e it is inside the view
-	 * 
-	 * @param pos
-	 *            the Position to check
+	 * Checks if a Position is legit, i.e it is inside the view.
+	 * @param pos - The Position to check.
 	 * @return True if pos lies inside the view, otherwise returns false
 	 */
 	private boolean legitPos(Position pos) {

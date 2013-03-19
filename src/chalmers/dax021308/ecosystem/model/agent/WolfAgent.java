@@ -12,7 +12,6 @@ import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
- * 
  * @author Henrik Its purpose is simply to hunt down the SimpleAgent (or any
  *         other agent) in a simple way
  */
@@ -134,7 +133,7 @@ public class WolfAgent extends AbstractAgent {
 			double distance = getPosition().getDistance(p);
 			if (distance <= visionRange) {
 				if (distance <= INTERACTION_RANGE - 5) {
-					if (a.consumeAgent()) {
+					if (a.tryConsumeAgent()) {
 						hungry = false;
 						energy = MAX_ENERGY;
 					}

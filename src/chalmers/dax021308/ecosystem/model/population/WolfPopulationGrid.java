@@ -7,7 +7,6 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.agent.WolfAgentGrid;
-import chalmers.dax021308.ecosystem.model.environment.WorldGrid;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
@@ -57,11 +56,5 @@ public class WolfPopulationGrid extends AbstractPopulation {
 		}
 		setColor(color);
 		return newAgents;
-	}
-
-	@Override
-	public double calculateFitness(IAgent agent) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 }

@@ -3,21 +3,13 @@ package chalmers.dax021308.ecosystem.model.population;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
-import com.sun.org.apache.bcel.internal.generic.ISHL;
-
-import sun.font.CreatedFontTracker;
-
-import chalmers.dax021308.ecosystem.model.agent.DeerAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.agent.PigAgent;
 import chalmers.dax021308.ecosystem.model.util.IShape;
-import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
@@ -73,11 +65,6 @@ public class PigPopulation extends AbstractPopulation {
 					maxAcceleration, ran, seperationForceList);
 			agents.add(newPig);
 		}
-	}
-
-	@Override
-	public double calculateFitness(IAgent agent) {
-		return 0;
 	}
 
 	@Override

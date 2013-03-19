@@ -13,10 +13,6 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
-import javax.swing.JFrame;
-
-import com.sun.opengl.util.FPSAnimator;
-
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
@@ -24,15 +20,14 @@ import chalmers.dax021308.ecosystem.model.environment.EllipticalObstacle;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.IObstacle;
 import chalmers.dax021308.ecosystem.model.environment.RectangularObstacle;
-import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.CircleShape;
 import chalmers.dax021308.ecosystem.model.util.IShape;
-import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.SquareShape;
 import chalmers.dax021308.ecosystem.model.util.TriangleShape;
-import chalmers.dax021308.ecosystem.model.util.Vector;
+
+import com.sun.opengl.util.FPSAnimator;
 
 /**
  * OpenGL version of SimulationView.
