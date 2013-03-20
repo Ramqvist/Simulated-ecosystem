@@ -54,13 +54,7 @@ public class NewSimulationController implements IController {
 				
 			}
 			model.setNumIterations(Integer.MAX_VALUE);
-			if(view.chckbxCustomSize.isSelected()) {
-				int width = Integer.parseInt(view.tfCustomWidth.getText());
-				int height = Integer.parseInt(view.tfCustomHeight.getText());
-				model.setSimulationDimension(new Dimension(width, height));
-			} else {
-				model.setSimulationDimension((String) view.listSimulationDim.getSelectedValue());
-			}
+
 			int tickDelay = Integer
 					.parseInt(view.textfield_Iterationdelay.getText());
 
@@ -103,6 +97,13 @@ public class NewSimulationController implements IController {
 					(String) view.grassList.getSelectedValue(),
 					Integer.parseInt(view.tvGrassPopSize.getText()), shape, 
 					(String) view.obstacleList.getSelectedValue());
+			if(view.chckbxCustomSize.isSelected()) {
+				int width = Integer.parseInt(view.tfCustomWidth.getText());
+				int height = Integer.parseInt(view.tfCustomHeight.getText());
+				s.setSimulationDimension(new Dimension(width, height));
+			} else {
+				s.setSimulationDimension((String) view.listSimulationDim.getSelectedValue());
+			}
 			model.loadSimulationSettings(s);
 			try {
 				model.start();

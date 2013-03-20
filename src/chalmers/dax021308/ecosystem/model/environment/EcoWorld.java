@@ -246,13 +246,13 @@ public class EcoWorld implements IModel {
 		this.numIterations = numIterations;
 	}
 
-	public synchronized void setSimulationDimension(Dimension d) {
+	private synchronized void setSimulationDimension(Dimension d) {
 		this.d = d;
 		observers.firePropertyChange(EVENT_DIMENSIONCHANGED, null, d);
 		WorldGrid.getInstance().init(d, 20);
 	}
 
-	public synchronized void setSimulationDimension(String dimConstant) {
+	private synchronized void setSimulationDimension(String dimConstant) {
 		if (dimConstant == DIM_XLARGE) {
 			d = D_XLARGE;
 		} else if (dimConstant == DIM_LARGE) {
@@ -297,12 +297,18 @@ public class EcoWorld implements IModel {
 	}
 
 	public void loadSimulationSettings(SimulationSettings s) throws IllegalArgumentException {
-		List<IPopulation> populations = new ArrayList<IPopulation>();
+		if(s.getSimDimension() == null && s.getSimDimensionConstant() != null) {
+			setSimulationDimension(s.getSimDimensionConstant());
+		} else if(s.getSimDimension() != null && s.getSimDimensionConstant() == null) {
+			setSimulationDimension(s.getSimDimension());
+		}
 		
+		List<IPopulation> populations = new ArrayList<IPopulation>();
 		/*
 		 * Creating obstacles here for test. This should be done in a proper way later.
 		 */
 		List<IObstacle> obstacles = new ArrayList<IObstacle>();
+		
 		
 		
 
