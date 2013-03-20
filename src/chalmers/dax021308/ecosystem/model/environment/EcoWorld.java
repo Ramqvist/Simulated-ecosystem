@@ -20,25 +20,8 @@ import java.util.concurrent.Executors;
 
 import chalmers.dax021308.ecosystem.model.agent.AbstractAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
-import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
-import chalmers.dax021308.ecosystem.model.population.DeerPopulation;
-import chalmers.dax021308.ecosystem.model.population.DeerPopulationGrid;
-import chalmers.dax021308.ecosystem.model.population.DummyPredatorPopulation;
-import chalmers.dax021308.ecosystem.model.population.DummyPreyPopulation;
-import chalmers.dax021308.ecosystem.model.population.GrassPopulation;
-import chalmers.dax021308.ecosystem.model.population.GrassPopulationGrid;
-import chalmers.dax021308.ecosystem.model.population.IPopulation;
-import chalmers.dax021308.ecosystem.model.population.PigPopulation;
-import chalmers.dax021308.ecosystem.model.population.WolfPopulation;
-import chalmers.dax021308.ecosystem.model.population.WolfPopulationGrid;
-import chalmers.dax021308.ecosystem.model.util.CircleShape;
-import chalmers.dax021308.ecosystem.model.util.IShape;
-import chalmers.dax021308.ecosystem.model.util.Log;
-import chalmers.dax021308.ecosystem.model.util.Position;
-import chalmers.dax021308.ecosystem.model.util.SquareShape;
-import chalmers.dax021308.ecosystem.model.util.Stat;
-import chalmers.dax021308.ecosystem.model.util.TimerHandler;
-import chalmers.dax021308.ecosystem.model.util.TriangleShape;
+import chalmers.dax021308.ecosystem.model.population.*;
+import chalmers.dax021308.ecosystem.model.util.*;
 
 /**
  * Ecosystem main class.
