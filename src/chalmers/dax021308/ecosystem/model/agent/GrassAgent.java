@@ -19,7 +19,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public class GrassAgent extends AbstractAgent {
 	private final Dimension gridDimension;
 	private final IShape shape;
-	private static final double REPRODUCTION_RATE = 0.001;
+	private static final double REPRODUCTION_RATE = 0.002;
 
 	public GrassAgent(String name, Position pos, Color color, int width,
 			int height, Vector velocity, double maxSpeed,
@@ -27,6 +27,7 @@ public class GrassAgent extends AbstractAgent {
 		super(name, pos, color, width, height, velocity, maxSpeed, 0, 0);
 		this.gridDimension = gridDimension;
 		this.shape = shape;
+		MAX_LIFE_LENGTH = 2500;
 	}
 
 	public GrassAgent(String name, Position pos, Color color, int width,
@@ -46,6 +47,7 @@ public class GrassAgent extends AbstractAgent {
 
 	@Override
 	public void updatePosition() {
+		// Grass shouldn't move, so just make it one iteration older
 		lifeLength++;
 	}
 
@@ -56,7 +58,7 @@ public class GrassAgent extends AbstractAgent {
 		if (Math.random() < REPRODUCTION_RATE * (1.0 - popSize / cap)) {
 			List<IAgent> spawn = new ArrayList<IAgent>();
 			IAgent a = new GrassAgent(name,
-					shape.getRandomPosition(gridDimension), color, 5, 5,
+					getSpawnPosition(), color, 5, 5,
 					velocity, maxSpeed, gridDimension, capacity, shape);
 			spawn.add(a);
 			return spawn;
@@ -71,17 +73,7 @@ public class GrassAgent extends AbstractAgent {
 	 * @return The position found
 	 */
 	private Position getSpawnPosition() {
-		Position pos;
-		Vector v = new Vector(5, 0);
-		// Find a position which lies 5 pixels away from the current position in
-		// a random direction
-		do {
-			pos = new Position(position);
-			v.rotate(Math.random() * 2 * Math.PI);
-			pos.addVector(v);
-
-		} while (!legitPos(pos));
-		return pos;
+		return shape.getRandomPosition(gridDimension);
 	}
 
 	/**

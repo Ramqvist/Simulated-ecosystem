@@ -19,15 +19,16 @@ public class WolfAgent extends AbstractAgent {
 	
 	private boolean hungry = true;
 	private static final int MAX_ENERGY = 1300;
-	private static final double REPRODUCTION_RATE = 0.15;
+	private static final double REPRODUCTION_RATE = 0.1;
 	private int digesting = 0;
 	private static final int DIGESTION_TIME = 80;
+	private static final int ENERGY_GAIN = 15;
 
 	public WolfAgent(String name, Position p, Color c, int width,
 			int height, Vector velocity, double maxSpeed,
 			double maxAcceleration, double visionRange, boolean groupBehaviour) {
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange, maxAcceleration);
-
+		MAX_LIFE_LENGTH = 2000;
 		this.energy = MAX_ENERGY;
 		this.groupBehaviour = groupBehaviour;
 	}
@@ -80,6 +81,9 @@ public class WolfAgent extends AbstractAgent {
 		this.setVelocity(newVelocity);
 		nextPosition = Position.positionPlusVector(position,velocity);
 		if(digesting > 0){
+			energy += ENERGY_GAIN;
+			if (energy > MAX_ENERGY)
+				energy = MAX_ENERGY;
 			nextPosition = position;
 			digesting--;
 		}
@@ -91,8 +95,8 @@ public class WolfAgent extends AbstractAgent {
 			return null;
 		else {
 			List<IAgent> spawn = new ArrayList<IAgent>();
+			hungry = true;
 			if (Math.random() < REPRODUCTION_RATE) {
-				hungry = true;
 				double xSign = Math.signum(-1+2*Math.random());
 				double ySign = Math.signum(-1+2*Math.random());
 				double newX = this.getPosition().getX()+xSign*(1+5*Math.random());
@@ -101,8 +105,6 @@ public class WolfAgent extends AbstractAgent {
 				IAgent child = new WolfAgent(name, pos, color, width, height, new Vector(velocity),
 						maxSpeed, maxAcceleration, visionRange, groupBehaviour);
 				spawn.add(child);
-			} else {
-				hungry = true;
 			}
 			return spawn;
 		}
@@ -133,9 +135,6 @@ public class WolfAgent extends AbstractAgent {
 						if(a.consumeAgent()) {
 							pop.addToRemoveList(a);
 							hungry = false;
-							energy += 300;
-							if (energy > MAX_ENERGY)
-								energy = MAX_ENERGY;
 							digesting = DIGESTION_TIME;
 						}
 					} else {

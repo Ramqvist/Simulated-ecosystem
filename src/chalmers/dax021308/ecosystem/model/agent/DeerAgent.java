@@ -20,18 +20,18 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class DeerAgent extends AbstractAgent {
 
-	private static final int MAX_ENERGY = 2000;
+	private static final int MAX_ENERGY = 800;
 	private boolean hungry = true;
-	private static final double REPRODUCTION_RATE = 0.80;
+	private static final double REPRODUCTION_RATE = 0.30;
 	private int digesting = 0;
-	private static final int DIGESTION_TIME = 70;
+	private static final int DIGESTION_TIME = 25;
 	private static final int ENERGY_GAIN = 30;
 	private boolean alone;
-	
-	public DeerAgent(String name, Position p, Color c, int width,
-			int height, Vector velocity, double maxSpeed,
-			double maxAcceleration, double visionRange, boolean groupBehaviour) {
-		
+
+	public DeerAgent(String name, Position p, Color c, int width, int height,
+			Vector velocity, double maxSpeed, double maxAcceleration,
+			double visionRange, boolean groupBehaviour) {
+
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
 
@@ -46,28 +46,28 @@ public class DeerAgent extends AbstractAgent {
 			return null;
 		else {
 			List<IAgent> spawn = new ArrayList<IAgent>();
+			hungry = true;
 			if (Math.random() < REPRODUCTION_RATE) {
-				hungry = true;
-				double xSign = Math.signum(-1+2*Math.random());
-				double ySign = Math.signum(-1+2*Math.random());
-				double newX = this.getPosition().getX()+xSign*(1+5*Math.random());
-				double newY = this.getPosition().getY()+ySign*(1+5*Math.random());
-				Position pos = new Position(newX,newY);
-				IAgent child = new DeerAgent(name, pos, color, width, height, new Vector(velocity),
-						maxSpeed, maxAcceleration, visionRange, groupBehaviour);
+				double xSign = Math.signum(-1 + 2 * Math.random());
+				double ySign = Math.signum(-1 + 2 * Math.random());
+				double newX = this.getPosition().getX() + xSign
+						* (1 + 5 * Math.random());
+				double newY = this.getPosition().getY() + ySign
+						* (1 + 5 * Math.random());
+				Position pos = new Position(newX, newY);
+				IAgent child = new DeerAgent(name, pos, color, width, height,
+						new Vector(velocity), maxSpeed, maxAcceleration,
+						visionRange, groupBehaviour);
 				spawn.add(child);
-			} else {
-				hungry = true;
 			}
 			return spawn;
 		}
 	}
 
 	/**
-	 * @author Sebbe
-	 * Calculates the next position of the agent depending on
-	 * the forces that affects it. Note: The next position is 
-	 * not set until updatePosition() is called.
+	 * @author Sebbe Calculates the next position of the agent depending on the
+	 *         forces that affects it. Note: The next position is not set until
+	 *         updatePosition() is called.
 	 */
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
@@ -78,12 +78,12 @@ public class DeerAgent extends AbstractAgent {
 		Vector mutualInteractionForce = new Vector();
 		Vector forwardThrust = new Vector();
 		Vector arrayalForce = new Vector();
-		if(groupBehaviour) {
+		if (groupBehaviour) {
 			mutualInteractionForce = mutualInteractionForce(neutral);
 			forwardThrust = forwardThrust();
 			arrayalForce = arrayalForce(neutral);
 		}
-		
+
 		Vector environmentForce = getEnvironmentForce(gridDimension, shape);
 		Vector preyForce = getPreyForce(preys);
 
@@ -95,11 +95,9 @@ public class DeerAgent extends AbstractAgent {
 		 */
 		Vector randomForce = randomForce();
 		Vector acceleration = environmentForce.multiply(1000)
-				.add(predatorForce.multiply(5))
-				.add(mutualInteractionForce)
-				.add(forwardThrust)
-				.add(arrayalForce)
-				.add(preyForce.multiply(5*(1-energy/MAX_ENERGY)))
+				.add(predatorForce.multiply(5)).add(mutualInteractionForce)
+				.add(forwardThrust).add(arrayalForce)
+				.add(preyForce.multiply(5 * (1 - energy / MAX_ENERGY)))
 				.add(randomForce);
 		double accelerationNorm = acceleration.getNorm();
 		if (accelerationNorm > maxAcceleration) {
@@ -112,7 +110,8 @@ public class DeerAgent extends AbstractAgent {
 		 * affected by any force, they will eventually stop. If speed exceeds
 		 * maxSpeed --> scale it to maxSpeed, but keep the correct direction.
 		 */
-		Vector newVelocity = Vector.addVectors(this.getVelocity(), acceleration);
+		Vector newVelocity = Vector
+				.addVectors(this.getVelocity(), acceleration);
 		newVelocity.multiply(VELOCITY_DECAY);
 		double speed = newVelocity.getNorm();
 		if (speed > maxSpeed) {
@@ -120,14 +119,14 @@ public class DeerAgent extends AbstractAgent {
 		}
 
 		this.setVelocity(newVelocity);
-		
+
 		nextPosition = Position.positionPlusVector(position, velocity);
-		//Eat some food if there's time for it
-		if(digesting > 0 && alone){
+		// Eat some food if there's time for it
+		if (digesting > 0 && alone) {
 			nextPosition = position;
 			digesting--;
 			energy += ENERGY_GAIN;
-			if(energy>MAX_ENERGY)
+			if (energy > MAX_ENERGY)
 				energy = MAX_ENERGY;
 		}
 	}
@@ -147,10 +146,10 @@ public class DeerAgent extends AbstractAgent {
 				Position p = a.getPosition();
 				double distance = getPosition().getDistance(p);
 				if (distance <= visionRange) {
-					if (distance <= INTERACTION_RANGE-5) {
+					if (distance <= INTERACTION_RANGE - 5) {
 						// Food found, let's eat it and make some reproducing
 						// possible
-						if(a.consumeAgent()) {
+						if (a.consumeAgent()) {
 							pop.addToRemoveList(a);
 							hungry = false;
 							digesting = DIGESTION_TIME;
@@ -213,7 +212,7 @@ public class DeerAgent extends AbstractAgent {
 
 		return predatorForce;
 	}
-	
+
 	/**
 	 * This also decreases the deer's energy.
 	 */

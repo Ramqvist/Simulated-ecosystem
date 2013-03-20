@@ -43,4 +43,10 @@ public class SquareShape implements IShape {
 		return name;
 	}
 
+	@Override
+	public boolean isInside(Dimension dim, Position p) {
+		return p.getX() > 0 && p.getX() < dim.getWidth() && p.getY() > 0
+				&& p.getY() > dim.getHeight();
+	}
+
 }

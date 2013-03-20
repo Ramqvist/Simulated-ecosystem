@@ -59,4 +59,10 @@ public class TriangleShape implements IShape {
 				right.multiply(rightDirection));
 	}
 
+	@Override
+	public boolean isInside(Dimension dim, Position p) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

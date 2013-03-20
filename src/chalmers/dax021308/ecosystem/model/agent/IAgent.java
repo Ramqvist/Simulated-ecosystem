@@ -117,5 +117,5 @@ public interface IAgent extends Cloneable {
 	 */
 	public int getTrophicLevel();
 
-	public boolean timeToDie();
+	public boolean isItTimeToDie();
 }

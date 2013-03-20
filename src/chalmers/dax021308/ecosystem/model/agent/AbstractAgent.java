@@ -28,6 +28,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected int height;
 	protected int capacity;
 	protected int lifeLength;
+	protected static int MAX_LIFE_LENGTH = 1500; // set specific life length in subclasses
 	protected int energy = 1000; // set specific energy level in subclasses
 	protected int trophicLevel;
 	protected Vector velocity;
@@ -173,8 +174,8 @@ public abstract class AbstractAgent implements IAgent {
 			}
 
 			@Override
-			public boolean timeToDie() {
-				return energy >= 0;
+			public boolean isItTimeToDie() {
+				return false;
 			}
 
 		};
@@ -183,8 +184,8 @@ public abstract class AbstractAgent implements IAgent {
 	}
 	
 	@Override
-	public boolean timeToDie(){
-		return false;
+	public boolean isItTimeToDie(){
+		return energy <= 0 || lifeLength >= MAX_LIFE_LENGTH;
 	}
 
 
@@ -447,7 +448,7 @@ public abstract class AbstractAgent implements IAgent {
 			}
 
 			@Override
-			public boolean timeToDie() {
+			public boolean isItTimeToDie() {
 				// TODO Auto-generated method stub
 				return false;
 			}

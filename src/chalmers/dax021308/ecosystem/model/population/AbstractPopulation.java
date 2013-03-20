@@ -117,7 +117,7 @@ public abstract class AbstractPopulation implements IPopulation {
 			a = agents.get(i);
 			a.calculateNextPosition(predators, preys, neutral, gridDimension,
 					shape);
-			if (a.timeToDie()) {
+			if (a.isItTimeToDie()) {
 				addToRemoveList(a);
 			}
 		}

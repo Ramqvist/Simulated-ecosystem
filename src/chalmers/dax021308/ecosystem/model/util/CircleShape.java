@@ -72,4 +72,10 @@ public class CircleShape implements IShape {
 	public String getShape() {
 		return name;
 	}
+
+	@Override
+	public boolean isInside(Dimension dim, Position p) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

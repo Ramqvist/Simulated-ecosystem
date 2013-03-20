@@ -193,7 +193,7 @@ public abstract class AbstractAgentNeighbourList implements IAgent {
 			}
 
 			@Override
-			public boolean timeToDie() {
+			public boolean isItTimeToDie() {
 				// TODO Auto-generated method stub
 				return false;
 			}
@@ -489,7 +489,7 @@ public abstract class AbstractAgentNeighbourList implements IAgent {
 			}
 
 			@Override
-			public boolean timeToDie() {
+			public boolean isItTimeToDie() {
 				// TODO Auto-generated method stub
 				return false;
 			}

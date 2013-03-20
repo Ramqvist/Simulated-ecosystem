@@ -18,6 +18,18 @@ public interface IShape {
 	public Position getYWallTop(Dimension dim, Position p);
 
 	/**
+	 * Checks whether or not
+	 * 
+	 * @param dim
+	 *            The dimension to be checked
+	 * @param p
+	 *            The position to be checked
+	 * @return returns True if the position lies inside the shape of specified
+	 *         dimension, otherwise returns False
+	 */
+	public boolean isInside(Dimension dim, Position p);
+
+	/**
 	 * Creates a random position inside the shape
 	 * 
 	 * @param dim
