@@ -201,7 +201,7 @@ public abstract class AbstractAgent implements IAgent {
 			}
 
 			@Override
-			public List<IAgent> reproduce(IAgent agent, int populationSize) {
+			public List<IAgent> reproduce(IAgent agent, int populationSize, List<IObstacle> obstacles) {
 				return Collections.emptyList();
 			}
 
@@ -501,7 +501,7 @@ public abstract class AbstractAgent implements IAgent {
 				maxSpeed, visionRange, maxAcceleration) {
 
 			@Override
-			public List<IAgent> reproduce(IAgent agent, int populationSize) {
+			public List<IAgent> reproduce(IAgent agent, int populationSize, List<IObstacle> obstacles) {
 				return null;
 			}
 

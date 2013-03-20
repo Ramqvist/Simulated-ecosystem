@@ -312,7 +312,7 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
           				gl.glColor3d((double)c.getRed()/(double)255, (double)c.getGreen()/(double)255, (double)c.getBlue()/(double)255);
           				gl.glLineWidth(2.5F);
     	          		gl.glBegin(GL.GL_POLYGON); 
-    	          		gl.glVertex2d(frameWidth*(x-w)/size.width, 
+    	          		gl.glVertex2d(frameWidth*(x-w)/size.width,
     	          				frameHeight - frameHeight*(y-h)/size.height);
     	          		
     	          		gl.glVertex2d(frameWidth*(x+w)/size.width, 

@@ -272,7 +272,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		int populationSize = agents.size();
 		for (IAgent a : agents) {
 			a.updatePosition();
-			List<IAgent> spawn = a.reproduce(null, populationSize);
+			List<IAgent> spawn = a.reproduce(null, populationSize, obstacles);
 			if (spawn != null) {
 				kids.addAll(spawn);
 			}

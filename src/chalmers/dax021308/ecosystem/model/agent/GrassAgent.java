@@ -49,13 +49,23 @@ public class GrassAgent extends AbstractAgent {
 	}
 
 	@Override
-	public List<IAgent> reproduce(IAgent agent, int populationSize) {
+	public List<IAgent> reproduce(IAgent agent, int populationSize, List<IObstacle> obstacles) {
 		double popSize = (double) populationSize;
 		double cap = (double) capacity;
 		if (Math.random() < REPRODUCTION_RATE * (1.0 - popSize / cap)) {
 			List<IAgent> spawn = new ArrayList<IAgent>();
-			IAgent a = new GrassAgent(name,
-					shape.getRandomPosition(gridDimension), color, 5, 5,
+			Position p = new Position();
+			boolean validPos = false;
+			while(!validPos){
+				p = shape.getRandomPosition(gridDimension);
+				validPos = true;
+				for(IObstacle o: obstacles){
+					if(o.isInObstacle(p)){
+						validPos = false;
+					}
+				}
+			}
+			IAgent a = new GrassAgent(name, p, color, 5, 5,
 					velocity, maxSpeed, gridDimension, capacity, shape);
 			spawn.add(a);
 			return spawn;
