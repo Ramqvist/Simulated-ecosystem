@@ -296,9 +296,7 @@ public class EcoWorld implements IModel {
 		this(d, Integer.MAX_VALUE);
 	}
 
-	public void createInitialPopulations(String predatorModel, int predPop,
-			String preyModel, int preyPop, String grassModel, int grassPop,
-			String shapeModel, String Obstacle) throws IllegalArgumentException {
+	public void loadSimulationSettings(SimulationSettings s) throws IllegalArgumentException {
 		List<IPopulation> populations = new ArrayList<IPopulation>();
 		
 		/*
@@ -314,53 +312,53 @@ public class EcoWorld implements IModel {
 		IShape shape = null;
 		
 		
-		if(Obstacle == ELLIPTICAL_OBSTACLE){
+		if(s.getObstacle() == ELLIPTICAL_OBSTACLE){
 			obstacles.add(new EllipticalObstacle(d.getWidth()*0.2, d.getHeight()*0.15, 
 					new Position(d.getWidth()/2,d.getHeight()/2),new Color(0, 128, 255)));
-		} else if (Obstacle == RECTANGULAR_OBSTACLE) {
+		} else if (s.getObstacle() == RECTANGULAR_OBSTACLE) {
 			obstacles.add(new RectangularObstacle(d.getWidth()*0.1, d.getHeight()*0.02, 
 					new Position(d.getWidth()/2,d.getHeight()/2),new Color(0, 128, 255)));
 		}
 		
-		if (shapeModel == SHAPE_SQUARE) {
+		if (s.getShapeModel() == SHAPE_SQUARE) {
 			shape = new SquareShape();
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
-		} else if (shapeModel == SHAPE_CIRCLE) {
+		} else if (s.getShapeModel() == SHAPE_CIRCLE) {
 			shape = new CircleShape();
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
-		}else if (shapeModel == SHAPE_TRIANGLE){
+		}else if (s.getShapeModel() == SHAPE_TRIANGLE){
 			shape = new TriangleShape();
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
 		}
-		if (predatorModel == POP_DUMMYPRED) {
-			pred = new DummyPredatorPopulation(d, predPop, Color.red, 3,
+		if (s.getPredatorModel() == POP_DUMMYPRED) {
+			pred = new DummyPredatorPopulation(d, s.getPredPopSize(), Color.red, 3,
 					0.75, 275, shape);
-		} else if (predatorModel == POP_WOLF) {
-			pred = new WolfPopulation("Wolves", d, predPop, Color.red, 3,
+		} else if (s.getPredatorModel() == POP_WOLF) {
+			pred = new WolfPopulation("Wolves", d, s.getPredPopSize(), Color.red, 3,
 					0.8, 250, true, shape, obstacles);
-		} else if (predatorModel == POP_WOLF_GRID) {
-			pred = new WolfPopulationGrid("Wolves", d, predPop, Color.red, 3,
+		} else if (s.getPredatorModel() == POP_WOLF_GRID) {
+			pred = new WolfPopulationGrid("Wolves", d, s.getPredPopSize(), Color.red, 3,
 					0.8, 250, true, shape);
 		}
 
-		if (preyModel == POP_DEER) {
-			prey = new DeerPopulation("Deers", d, preyPop, Color.blue, 2.0, 2,
+		if (s.getPreyModel() == POP_DEER) {
+			prey = new DeerPopulation("Deers", d, s.getPreyPopSize(), Color.blue, 2.0, 2,
 					200, true, shape, obstacles);
-		} else if (preyModel == POP_DEER_GRID) {
-			prey = new DeerPopulationGrid("Deers", d, preyPop, Color.blue, 2.0,
+		} else if (s.getPreyModel() == POP_DEER_GRID) {
+			prey = new DeerPopulationGrid("Deers", d, s.getPreyPopSize(), Color.blue, 2.0,
 					2, 200, true, shape);
-		} else if (preyModel == POP_DUMMYPREY) {
-			prey = new DummyPreyPopulation(d, preyPop, Color.blue, 2.2, 2, 250, shape);
-		} else if (preyModel == POP_PIG) {
-			prey = new PigPopulation("Filthy Pigs", d, preyPop, Color.pink,
+		} else if (s.getPreyModel() == POP_DUMMYPREY) {
+			prey = new DummyPreyPopulation(d, s.getPreyPopSize(), Color.blue, 2.2, 2, 250, shape);
+		} else if (s.getPreyModel() == POP_PIG) {
+			prey = new PigPopulation("Filthy Pigs", d, s.getPreyPopSize(), Color.pink,
 					2.0, 1.5, 225, shape);
 		}
 
-		if (grassModel == POP_GRASS) {
-			grass = new GrassPopulation("Grass", d, grassPop, new Color(69,139,00), 1,
+		if (s.getGrassModel() == POP_GRASS) {
+			grass = new GrassPopulation("Grass", d, s.getGrassPopSize(), new Color(69,139,00), 1,
 					1, 0, 1500, shape, obstacles);
-		} else if (grassModel == POP_GRASS_GRID) {
-			grass = new GrassPopulationGrid("Grass", d, grassPop, new Color(69,139,00),
+		} else if (s.getGrassModel() == POP_GRASS_GRID) {
+			grass = new GrassPopulationGrid("Grass", d, s.getGrassPopSize(), new Color(69,139,00),
 					1, 1, 0, 1500, shape);
 		}
 

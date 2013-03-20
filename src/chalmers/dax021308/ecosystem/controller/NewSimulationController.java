@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
+import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.NewSimulationView;
 
@@ -94,7 +95,7 @@ public class NewSimulationController implements IController {
 			} else {
 				shape = EcoWorld.SHAPE_TRIANGLE;
 			}
-			model.createInitialPopulations(
+			SimulationSettings s = new SimulationSettings(
 					(String) view.predList.getSelectedValue(),
 					Integer.parseInt(view.tvPredPopSize.getText()),
 					(String) view.preyList.getSelectedValue(),
@@ -102,6 +103,7 @@ public class NewSimulationController implements IController {
 					(String) view.grassList.getSelectedValue(),
 					Integer.parseInt(view.tvGrassPopSize.getText()), shape, 
 					(String) view.obstacleList.getSelectedValue());
+			model.loadSimulationSettings(s);
 			try {
 				model.start();
 			} catch (IllegalStateException e) {
