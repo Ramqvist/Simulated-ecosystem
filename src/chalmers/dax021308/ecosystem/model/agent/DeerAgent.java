@@ -73,61 +73,62 @@ public class DeerAgent extends AbstractAgent {
 	public void calculateNextPosition(List<IPopulation> predators,
 			List<IPopulation> preys, List<IPopulation> neutral,
 			Dimension gridDimension, IShape shape) {
-
-		Vector predatorForce = getPredatorForce(predators);
-		Vector mutualInteractionForce = new Vector();
-		Vector forwardThrust = new Vector();
-		Vector arrayalForce = new Vector();
-		if (groupBehaviour) {
-			mutualInteractionForce = mutualInteractionForce(neutral);
-			forwardThrust = forwardThrust();
-			arrayalForce = arrayalForce(neutral);
-		}
-
-		Vector environmentForce = getEnvironmentForce(gridDimension, shape);
-		Vector preyForce = getPreyForce(preys);
-
-		/*
-		 * Sum the forces from walls, predators and neutral to form the
-		 * acceleration force. If the acceleration exceeds maximum acceleration
-		 * --> scale it to maxAcceleration, but keep the correct direction of
-		 * the acceleration.
-		 */
-		Vector randomForce = randomForce();
-		Vector acceleration = environmentForce.multiply(1000)
-				.add(predatorForce.multiply(5)).add(mutualInteractionForce)
-				.add(forwardThrust).add(arrayalForce)
-				.add(preyForce.multiply(5 * (1 - energy / MAX_ENERGY)))
-				.add(randomForce);
-		double accelerationNorm = acceleration.getNorm();
-		if (accelerationNorm > maxAcceleration) {
-			acceleration.multiply(maxAcceleration / accelerationNorm);
-		}
-
-		/*
-		 * The new velocity is then just: v(t+dt) = (v(t)+a(t+1)*dt)*decay,
-		 * where dt = 1 in this case. There is a decay that says if they are not
-		 * affected by any force, they will eventually stop. If speed exceeds
-		 * maxSpeed --> scale it to maxSpeed, but keep the correct direction.
-		 */
-		Vector newVelocity = Vector
-				.addVectors(this.getVelocity(), acceleration);
-		newVelocity.multiply(VELOCITY_DECAY);
-		double speed = newVelocity.getNorm();
-		if (speed > maxSpeed) {
-			newVelocity.multiply(maxSpeed / speed);
-		}
-
-		this.setVelocity(newVelocity);
-
-		nextPosition = Position.positionPlusVector(position, velocity);
 		// Eat some food if there's time for it
 		if (digesting > 0 && alone) {
-			nextPosition = position;
 			digesting--;
 			energy += ENERGY_GAIN;
 			if (energy > MAX_ENERGY)
 				energy = MAX_ENERGY;
+		} else {
+			//otherwise calculate next position
+			Vector predatorForce = getPredatorForce(predators);
+			Vector mutualInteractionForce = new Vector();
+			Vector forwardThrust = new Vector();
+			Vector arrayalForce = new Vector();
+			if (groupBehaviour) {
+				mutualInteractionForce = mutualInteractionForce(neutral);
+				forwardThrust = forwardThrust();
+				arrayalForce = arrayalForce(neutral);
+			}
+
+			Vector environmentForce = getEnvironmentForce(gridDimension, shape);
+			Vector preyForce = getPreyForce(preys);
+
+			/*
+			 * Sum the forces from walls, predators and neutral to form the
+			 * acceleration force. If the acceleration exceeds maximum
+			 * acceleration --> scale it to maxAcceleration, but keep the
+			 * correct direction of the acceleration.
+			 */
+			Vector randomForce = randomForce();
+			Vector acceleration = environmentForce.multiply(1000)
+					.add(predatorForce.multiply(5)).add(mutualInteractionForce)
+					.add(forwardThrust).add(arrayalForce)
+					.add(preyForce.multiply(5 * (1 - energy / MAX_ENERGY)))
+					.add(randomForce);
+			double accelerationNorm = acceleration.getNorm();
+			if (accelerationNorm > maxAcceleration) {
+				acceleration.multiply(maxAcceleration / accelerationNorm);
+			}
+
+			/*
+			 * The new velocity is then just: v(t+dt) = (v(t)+a(t+1)*dt)*decay,
+			 * where dt = 1 in this case. There is a decay that says if they are
+			 * not affected by any force, they will eventually stop. If speed
+			 * exceeds maxSpeed --> scale it to maxSpeed, but keep the correct
+			 * direction.
+			 */
+			Vector newVelocity = Vector.addVectors(this.getVelocity(),
+					acceleration);
+			newVelocity.multiply(VELOCITY_DECAY);
+			double speed = newVelocity.getNorm();
+			if (speed > maxSpeed) {
+				newVelocity.multiply(maxSpeed / speed);
+			}
+
+			this.setVelocity(newVelocity);
+
+			nextPosition = Position.positionPlusVector(position, velocity);
 		}
 	}
 

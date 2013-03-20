@@ -16,18 +16,19 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  *         other agent) in a simple way
  */
 public class WolfAgent extends AbstractAgent {
-	
+
 	private boolean hungry = true;
 	private static final int MAX_ENERGY = 1300;
-	private static final double REPRODUCTION_RATE = 0.1;
+	private static final double REPRODUCTION_RATE = 0.12;
 	private int digesting = 0;
-	private static final int DIGESTION_TIME = 80;
-	private static final int ENERGY_GAIN = 15;
+	private static final int DIGESTION_TIME = 60;
+	private static final int ENERGY_GAIN = 20;
 
-	public WolfAgent(String name, Position p, Color c, int width,
-			int height, Vector velocity, double maxSpeed,
-			double maxAcceleration, double visionRange, boolean groupBehaviour) {
-		super(name, p, c, width, height, velocity, maxSpeed, visionRange, maxAcceleration);
+	public WolfAgent(String name, Position p, Color c, int width, int height,
+			Vector velocity, double maxSpeed, double maxAcceleration,
+			double visionRange, boolean groupBehaviour) {
+		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
+				maxAcceleration);
 		MAX_LIFE_LENGTH = 2000;
 		this.energy = MAX_ENERGY;
 		this.groupBehaviour = groupBehaviour;
@@ -35,57 +36,57 @@ public class WolfAgent extends AbstractAgent {
 
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
-			List<IPopulation> preys, List<IPopulation> neutral,Dimension gridDimension, IShape shape) {
-		Vector preyForce = getPreyForce(preys);
-		Vector mutualInteractionForce = new Vector();
-		Vector forwardThrust = new Vector();
-		Vector arrayalForce = new Vector();
-		if(groupBehaviour) {
-			mutualInteractionForce = mutualInteractionForce(neutral);
-			forwardThrust = forwardThrust();
-			arrayalForce = arrayalForce(neutral);
-		}
-		Vector environmentForce = getEnvironmentForce(gridDimension, shape);
-		
-		/*
-		 * Sum the forces from walls, predators and neutral to form the acceleration force.
-		 * If the acceleration exceeds maximum acceleration --> scale it to maxAcceleration,
-		 * but keep the correct direction of the acceleration.
-		 */
-		
-		Vector randomForce = randomForce();
-		Vector acceleration = environmentForce.multiply(1000)
-			.add(preyForce.multiply(10))
-			.add(mutualInteractionForce)
-			.add(forwardThrust)
-			.add(arrayalForce)
-			.add(randomForce);
-		double accelerationNorm = acceleration.getNorm();
-		if(accelerationNorm > maxAcceleration){
-			acceleration.multiply(maxAcceleration/accelerationNorm); 
-		}
-		
-		/*
-		 * The new velocity is then just:
-		 * v(t+dt) = (v(t)+a(t+1)*dt)*decay, where dt = 1 in this case.
-		 * There is a decay that says if they are not affected by any force,
-		 * they will eventually stop.
-		 * If speed exceeds maxSpeed --> scale it to maxSpeed, but keep the correct direction.
-		 */
-		Vector newVelocity = Vector.addVectors(this.getVelocity(), acceleration);
-		double speed = newVelocity.getNorm();
-		if(speed > maxSpeed){
-			newVelocity.multiply(maxSpeed/speed); 
-		}
-		
-		this.setVelocity(newVelocity);
-		nextPosition = Position.positionPlusVector(position,velocity);
-		if(digesting > 0){
+			List<IPopulation> preys, List<IPopulation> neutral,
+			Dimension gridDimension, IShape shape) {
+		if (digesting > 0) {
 			energy += ENERGY_GAIN;
 			if (energy > MAX_ENERGY)
 				energy = MAX_ENERGY;
-			nextPosition = position;
 			digesting--;
+		} else {
+			Vector preyForce = getPreyForce(preys);
+			Vector mutualInteractionForce = new Vector();
+			Vector forwardThrust = new Vector();
+			Vector arrayalForce = new Vector();
+			if (groupBehaviour) {
+				mutualInteractionForce = mutualInteractionForce(neutral);
+				forwardThrust = forwardThrust();
+				arrayalForce = arrayalForce(neutral);
+			}
+			Vector environmentForce = getEnvironmentForce(gridDimension, shape);
+
+			/*
+			 * Sum the forces from walls, predators and neutral to form the
+			 * acceleration force. If the acceleration exceeds maximum
+			 * acceleration --> scale it to maxAcceleration, but keep the
+			 * correct direction of the acceleration.
+			 */
+
+			Vector randomForce = randomForce();
+			Vector acceleration = environmentForce.multiply(1000)
+					.add(preyForce.multiply(10)).add(mutualInteractionForce)
+					.add(forwardThrust).add(arrayalForce).add(randomForce);
+			double accelerationNorm = acceleration.getNorm();
+			if (accelerationNorm > maxAcceleration) {
+				acceleration.multiply(maxAcceleration / accelerationNorm);
+			}
+
+			/*
+			 * The new velocity is then just: v(t+dt) = (v(t)+a(t+1)*dt)*decay,
+			 * where dt = 1 in this case. There is a decay that says if they are
+			 * not affected by any force, they will eventually stop. If speed
+			 * exceeds maxSpeed --> scale it to maxSpeed, but keep the correct
+			 * direction.
+			 */
+			Vector newVelocity = Vector.addVectors(this.getVelocity(),
+					acceleration);
+			double speed = newVelocity.getNorm();
+			if (speed > maxSpeed) {
+				newVelocity.multiply(maxSpeed / speed);
+			}
+
+			this.setVelocity(newVelocity);
+			nextPosition = Position.positionPlusVector(position, velocity);
 		}
 	}
 
@@ -97,13 +98,16 @@ public class WolfAgent extends AbstractAgent {
 			List<IAgent> spawn = new ArrayList<IAgent>();
 			hungry = true;
 			if (Math.random() < REPRODUCTION_RATE) {
-				double xSign = Math.signum(-1+2*Math.random());
-				double ySign = Math.signum(-1+2*Math.random());
-				double newX = this.getPosition().getX()+xSign*(1+5*Math.random());
-				double newY = this.getPosition().getY()+ySign*(1+5*Math.random());
-				Position pos = new Position(newX,newY);
-				IAgent child = new WolfAgent(name, pos, color, width, height, new Vector(velocity),
-						maxSpeed, maxAcceleration, visionRange, groupBehaviour);
+				double xSign = Math.signum(-1 + 2 * Math.random());
+				double ySign = Math.signum(-1 + 2 * Math.random());
+				double newX = this.getPosition().getX() + xSign
+						* (1 + 5 * Math.random());
+				double newY = this.getPosition().getY() + ySign
+						* (1 + 5 * Math.random());
+				Position pos = new Position(newX, newY);
+				IAgent child = new WolfAgent(name, pos, color, width, height,
+						new Vector(velocity), maxSpeed, maxAcceleration,
+						visionRange, groupBehaviour);
 				spawn.add(child);
 			}
 			return spawn;
@@ -114,56 +118,58 @@ public class WolfAgent extends AbstractAgent {
 	 * @author Sebastian/Henrik
 	 */
 	private Vector getPreyForce(List<IPopulation> preys) {
-		/* 
-		 * "Prey Force" is AT THE MOMENT defined as the sum of the vectors pointing away from 
-		 * all the preys in vision, weighted by the inverse of the distance to the preys, 
-		 * then normalized to have unit norm. 
-		 * Can be interpreted as the average sum of forces that the agent feels, weighted
-		 * by how close the source of the force is.
+		/*
+		 * "Prey Force" is AT THE MOMENT defined as the sum of the vectors
+		 * pointing away from all the preys in vision, weighted by the inverse
+		 * of the distance to the preys, then normalized to have unit norm. Can
+		 * be interpreted as the average sum of forces that the agent feels,
+		 * weighted by how close the source of the force is.
 		 */
 		Vector preyForce = new Vector(0, 0);
 		int nVisiblePreys = 0;
 		for (IPopulation pop : preys) {
 			List<IAgent> agents = pop.getAgents();
 			int size = agents.size();
-			for (int i=0;i<size;i++) {
+			for (int i = 0; i < size; i++) {
 				IAgent a = agents.get(i);
 				Position p = a.getPosition();
 				double distance = getPosition().getDistance(p);
 				if (distance <= visionRange) {
-					if(distance <= INTERACTION_RANGE-5) {
-						if(a.consumeAgent()) {
+					if (distance <= INTERACTION_RANGE - 5) {
+						if (a.consumeAgent()) {
 							pop.addToRemoveList(a);
 							hungry = false;
 							digesting = DIGESTION_TIME;
 						}
 					} else {
-					/*
-					 * Create a vector that points towards the prey.
-					 */
-					Vector newForce = new Vector(p, getPosition());
-					
-					/*
-					 * Add this vector to the prey force, with proportion to how close the prey is.
-					 * Closer preys will affect the force more than those far away. 
-					 */
-					double norm = newForce.getNorm();
-					preyForce.add(newForce.multiply(1/(norm*distance)));
-					nVisiblePreys++;
+						/*
+						 * Create a vector that points towards the prey.
+						 */
+						Vector newForce = new Vector(p, getPosition());
+
+						/*
+						 * Add this vector to the prey force, with proportion to
+						 * how close the prey is. Closer preys will affect the
+						 * force more than those far away.
+						 */
+						double norm = newForce.getNorm();
+						preyForce.add(newForce.multiply(1 / (norm * distance)));
+						nVisiblePreys++;
 					}
-				 }
+				}
 			}
 		}
 
-		if (nVisiblePreys == 0) { //No preys near --> Be unaffected
-			preyForce.setVector(0,0);
-		} else { //Else set the force depending on visible preys and normalize it to maxAcceleration.
+		if (nVisiblePreys == 0) { // No preys near --> Be unaffected
+			preyForce.setVector(0, 0);
+		} else { // Else set the force depending on visible preys and normalize
+					// it to maxAcceleration.
 			double norm = preyForce.getNorm();
-			preyForce.multiply(maxAcceleration/norm);
+			preyForce.multiply(maxAcceleration / norm);
 		}
 		return preyForce;
 	}
-	
+
 	/**
 	 * This also decreases the wolfs energy.
 	 */
