@@ -335,7 +335,7 @@ public class EcoWorld implements IModel {
 			recordedSimulation = new ArrayList<List<IPopulation>>(
 					numIterations / 2);
 		}
-		this.env = new SquareEnvironment2(populations, obstacles,
+		this.env = new EnvironmentScheduler(populations, obstacles,
 				mOnFinishListener, d.height, d.width, numThreads);
 	}
 

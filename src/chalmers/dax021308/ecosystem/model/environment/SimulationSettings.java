@@ -5,7 +5,7 @@ import java.awt.Dimension;
 /**
  * Container class for various simulation settings.
  * 
- * @author Erik
+ * @author Erik Ramqvist
  *
  */
 public class SimulationSettings {
