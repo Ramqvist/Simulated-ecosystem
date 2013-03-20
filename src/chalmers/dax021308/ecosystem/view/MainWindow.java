@@ -16,6 +16,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.view.chart.AbstractGraph2D;
+import chalmers.dax021308.ecosystem.view.chart.IterationTimeGraph;
+import chalmers.dax021308.ecosystem.view.chart.PopulationAmountGraph;
 
 /**
  * The view that holds the entire application.
