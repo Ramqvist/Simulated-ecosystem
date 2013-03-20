@@ -46,6 +46,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected List<IAgent> preyNeighbours;
 	protected List<IAgent> predNeighbours;
 	protected List<IAgent> neutralNeighbours;
+	
 	protected List<IObstacle> obstacles;
 	private int neighbourCounter;
 	private static final int NEIGHBOURS_UPDATE_THRESHOLD = 10;

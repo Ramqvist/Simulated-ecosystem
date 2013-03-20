@@ -40,8 +40,8 @@ public class NewSimulationView {
 	public JTextField tvPreyPopSize;
 	public JTextField tvGrassPopSize;
 	public EcoWorld model;
-	public JList predList = new JList();;
-	public JList preyList = new JList();;
+	public JList predList = new JList();
+	public JList preyList = new JList();
 	public JList grassList = new JList();
 	public JCheckBox chckbxRecordSimulation;
 	public JTextField tvNumIterations;
@@ -90,7 +90,7 @@ public class NewSimulationView {
 		frmSimulatedEcosystem.setResizable(false);
 		frmSimulatedEcosystem.setTitle("Start new Simulation");
 		frmSimulatedEcosystem.setIconImage(new ImageIcon("res/Simulated ecosystem icon.png").getImage());
-		frmSimulatedEcosystem.setBounds(100, 100, 729, 670);
+		frmSimulatedEcosystem.setBounds(100, 100, 729, 697);
 		frmSimulatedEcosystem.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		btnRunSim = new JButton("Start new");
