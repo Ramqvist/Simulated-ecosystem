@@ -7,10 +7,13 @@ public class ApatapiTest {
 	public ApatapiTest() {
 		double[] xPos = new double[15];
 		double[] yPos = new double[15];
-		MutualInteractionForceKernel kernel = new MutualInteractionForceKernel(100, 140, 1.1, 1.1, xPos, yPos);
-		kernel.execute(15);
-		System.out.println(kernel.getConversionTime());
-		System.out.println(kernel.getExecutionTime());
+		TestKernel kernel = new TestKernel();
+		kernel.execute(5);
+		System.out.println("Conversion time: " + kernel.getConversionTime());
+		System.out.println("Execution time: " + kernel.getExecutionTime());
+		System.out.println("Net time: " + (kernel.getExecutionTime() - kernel.getConversionTime()) );
+		
+		System.out.println("Execution mode: " + kernel.getExecutionMode() );
 	}
 	
 	public static void main(String[] args) {
@@ -22,12 +25,7 @@ public class ApatapiTest {
 		@Override
 		public void run() {
 			float x = 5 * 5 * 5;
-			x = 5 * 5 * 5 * x;
-			x = 5 * 5 * 5 * x * 0.05F;
-			x = 5 * 5 * 5 * x * 0.05F;
-			x = 5 * 5 * 5 * x * 0.05F;
-			x = 5 * 5 * 5 * x * 0.05F;
-			x = 5 * 5 * 5 * x * 0.05F;
+			sin(x);
 		}
 		
 	}
