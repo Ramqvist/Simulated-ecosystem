@@ -133,7 +133,7 @@ public class WolfAgent extends AbstractAgent {
 			Position p = a.getPosition();
 			double distance = getPosition().getDistance(p);
 			if (distance <= visionRange) {
-				if (distance <= INTERACTION_RANGE - 5) {
+				if (distance <= EATING_RANGE) {
 					if (a.tryConsumeAgent()) {
 						hungry = false;
 						energy = MAX_ENERGY;

@@ -51,6 +51,8 @@ public abstract class AbstractAgent implements IAgent {
 	private static final int NEIGHBOURS_UPDATE_THRESHOLD = 10;
 
 	protected final static double INTERACTION_RANGE = 10;
+	protected final static double EATING_RANGE = 4;
+	protected final static double FOCUS_RANGE = 100;
 	protected final static double ENVIRONMENT_CONSTANT = 200;
 	protected final static double OBSTACLE_CONSTANT = 100;
 	protected static final double VELOCITY_DECAY = 1;
