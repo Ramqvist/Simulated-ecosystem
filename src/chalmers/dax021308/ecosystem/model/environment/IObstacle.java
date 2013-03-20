@@ -1,5 +1,7 @@
 package chalmers.dax021308.ecosystem.model.environment;
 
+import java.awt.Color;
+
 import chalmers.dax021308.ecosystem.model.util.Position;
 
 /**
@@ -20,4 +22,6 @@ public interface IObstacle {
 	public double getHeight();
 	
 	public Position getPosition();
+	
+	public Color getColor();
 }

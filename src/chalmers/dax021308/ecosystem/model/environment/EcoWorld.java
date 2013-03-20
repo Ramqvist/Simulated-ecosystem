@@ -316,10 +316,10 @@ public class EcoWorld implements IModel {
 		
 		if(Obstacle == ELLIPTICAL_OBSTACLE){
 			obstacles.add(new EllipticalObstacle(d.getWidth()*0.2, d.getHeight()*0.15, 
-					new Position(d.getWidth()/2,d.getHeight()/2)));
+					new Position(d.getWidth()/2,d.getHeight()/2),new Color(0, 128, 255)));
 		} else if (Obstacle == RECTANGULAR_OBSTACLE) {
 			obstacles.add(new RectangularObstacle(d.getWidth()*0.1, d.getHeight()*0.02, 
-					new Position(d.getWidth()/2,d.getHeight()/2)));
+					new Position(d.getWidth()/2,d.getHeight()/2),new Color(0, 128, 255)));
 		}
 		
 		if (shapeModel == SHAPE_SQUARE) {
@@ -386,7 +386,7 @@ public class EcoWorld implements IModel {
 
 	private List<IObstacle> readObsticlesFromFile() {
 		List<IObstacle> obsList = new ArrayList<IObstacle>();
-		obsList.add(new EllipticalObstacle(0,0, new Position()));
+		obsList.add(new EllipticalObstacle(0,0, new Position(), Color.black));
 		return obsList;
 	}
 

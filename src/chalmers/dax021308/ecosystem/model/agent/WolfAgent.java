@@ -18,6 +18,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public class WolfAgent extends AbstractAgent {
 
 	private boolean hungry = true;
+	private boolean willFocusPreys = true;
 	private static final int MAX_ENERGY = 1300;
 	private static final double REPRODUCTION_RATE = 0.15;
 

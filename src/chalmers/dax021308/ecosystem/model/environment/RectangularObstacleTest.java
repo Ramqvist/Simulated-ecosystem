@@ -1,5 +1,6 @@
 package chalmers.dax021308.ecosystem.model.environment;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -18,7 +19,7 @@ public class RectangularObstacleTest extends JPanel {
 	
 		RectangularObstacleTest test = new RectangularObstacleTest();
 		positions = new ArrayList<Position>();
-		IObstacle eo = new RectangularObstacle(200, 50, new Position(500,500));
+		IObstacle eo = new RectangularObstacle(200, 50, new Position(500,500), Color.blue);
 		
 //		for(double t=0;t<2*Math.PI;t = t + 2*Math.PI/1000) {
 //			positions.add(new Position(250+100*Math.cos(t), 250+50*Math.sin(t)));

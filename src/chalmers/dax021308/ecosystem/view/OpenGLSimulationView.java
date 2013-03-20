@@ -295,7 +295,8 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
     	                double h = frameHeight*o.getHeight()/size.height;
     	                double x = frameWidth*o.getPosition().getX()/size.width;
     	                double y = frameHeight*o.getPosition().getY()/size.height;
-    	                gl.glColor3d(0.545098, 0.270588, 0.0745098);
+    	                Color c = o.getColor();
+    	                gl.glColor3d((double)c.getRed()/(double)255, (double)c.getGreen()/(double)255, (double)c.getBlue()/(double)255);
     	                gl.glLineWidth(2.5F);
     	          		gl.glBegin(GL.GL_POLYGON); 
     		          	for(double angle = 0; angle < 2.0*Math.PI; angle+=increment){
@@ -307,6 +308,8 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
           				double y = o.getPosition().getY();
           				double w = o.getWidth();
           				double h = o.getHeight();
+          				Color c = o.getColor();
+          				gl.glColor3d((double)c.getRed()/(double)255, (double)c.getGreen()/(double)255, (double)c.getBlue()/(double)255);
           				gl.glLineWidth(2.5F);
     	          		gl.glBegin(GL.GL_POLYGON); 
     	          		gl.glVertex2d(frameWidth*(x-w)/size.width, 
