@@ -9,12 +9,57 @@ import java.awt.Dimension;
  *
  */
 public class SimulationSettings {
+	
+	/* Static presets profiles */
 	public static final SimulationSettings DEFAULT;
 	public static final SimulationSettings LARGESIM;
 	
+	
+	/* Shape Constants */
+	public static final String SHAPE_SQUARE   = "Square Shape";
+	public static final String SHAPE_CIRCLE   = "Circle Shape";
+	public static final String SHAPE_TRIANGLE = "Triangle Shape";
+
+	/* Population constants */
+	public static final String POP_PIG        = "Pig Population";
+	public static final String POP_DUMMYPREY  = "Dummy Prey Population";
+	public static final String POP_DEER       = "Deer Population";
+	public static final String POP_DEER_GRID  = "Deer Population Grid";
+	public static final String POP_GRASS      = "Grass Population";
+	public static final String POP_GRASS_GRID = "Grass Population Grid";
+	public static final String POP_DUMMYPRED  = "Dummy Predator Population";
+	public static final String POP_WOLF       = "Wolf Population";
+	public static final String POP_WOLF_GRID  = "Wolf Population Grid";
+
+	/* Population array based on predator-prey model, the view uses these values. */
+	public static final String[] PREY_VALUES  = { POP_DEER, POP_DEER_GRID, POP_PIG, POP_DUMMYPREY };
+	public static final String[] PRED_VALUES  = { POP_WOLF, POP_WOLF_GRID, POP_DUMMYPRED };
+	public static final String[] GRASS_VALUES = { POP_GRASS, POP_GRASS_GRID };
+	
+	/*Obstacle constants */
+	public static final String RECTANGULAR_OBSTACLE = "Rectangular obstacle";
+	public static final String ELLIPTICAL_OBSTACLE = "Elliptical obstacle";
+	public static final String NO_OBSTACLE = "No obstacle";
+	public static final String[] OBSTACLE_VALUES = {NO_OBSTACLE, RECTANGULAR_OBSTACLE, ELLIPTICAL_OBSTACLE};
+	
+	/* Dimension constants */
+	public static final String DIM_SMALL  = "500  x 500";
+	public static final String DIM_MEDIUM = "1000 x 1000";
+	public static final String DIM_LARGE  = "1500 x 1500";
+	public static final String DIM_XLARGE = "2000 x 2000";
+
+	public static final Dimension D_SMALL  = new Dimension(500, 500);
+	public static final Dimension D_MEDIUM = new Dimension(1000, 1000);
+	public static final Dimension D_LARGE  = new Dimension(1500, 1500);
+	public static final Dimension D_XLARGE = new Dimension(2000, 2000);
+
+	public static final String[] DIM_VALUES = { DIM_SMALL, DIM_MEDIUM, DIM_LARGE, DIM_XLARGE };
+	
 	static {
-		DEFAULT = new SimulationSettings(EcoWorld.POP_WOLF, 10, EcoWorld.POP_DEER, 100, EcoWorld.POP_GRASS, 400, EcoWorld.SHAPE_SQUARE, EcoWorld.ELLIPTICAL_OBSTACLE);
-		LARGESIM = new SimulationSettings(EcoWorld.POP_WOLF, 100, EcoWorld.POP_DEER, 1000, EcoWorld.POP_GRASS, 4000, EcoWorld.SHAPE_SQUARE, EcoWorld.NO_OBSTACLE);
+		DEFAULT = new SimulationSettings(POP_WOLF, 10, POP_DEER, 100, POP_GRASS, 400, SHAPE_SQUARE, ELLIPTICAL_OBSTACLE, 4);
+		DEFAULT.setSimulationDimension(new Dimension(1000, 1000));
+		LARGESIM = new SimulationSettings(POP_WOLF, 100, POP_DEER, 1000, POP_GRASS, 4000, SHAPE_SQUARE, NO_OBSTACLE, 4);
+		LARGESIM.setSimulationDimension(new Dimension(2200, 2200));
 	}
 	
 	private String predatorModel;
@@ -27,8 +72,9 @@ public class SimulationSettings {
 	private String obstacle;
 	private Dimension simDimension;
 	private String simDimensionConstant;
+	private int numThreads;
 
-	public SimulationSettings(String predatorModel, int predPopSize, String preyModel, int preyPopSize, String grassModel, int grassPopSize, String shapeModel, String obstacle) {
+	public SimulationSettings(String predatorModel, int predPopSize, String preyModel, int preyPopSize, String grassModel, int grassPopSize, String shapeModel, String obstacle, int numThreads) {
 		this.predatorModel = predatorModel;
 		this.predPopSize = predPopSize;
 		this.preyModel = preyModel;
@@ -37,6 +83,7 @@ public class SimulationSettings {
 		this.grassPopSize = grassPopSize;
 		this.shapeModel = shapeModel;
 		this.obstacle = obstacle;
+		this.numThreads = numThreads;
 	}
 	
 	public void setSimulationDimension(Dimension d) {
@@ -118,6 +165,14 @@ public class SimulationSettings {
 
 	public void setObstacle(String obstacle) {
 		this.obstacle = obstacle;
+	}
+
+	public void setNumThreads(int numThreads) {
+		this.numThreads = numThreads;
+	}
+
+	public int getNumThreads() {
+		return numThreads;
 	}
 	
 	

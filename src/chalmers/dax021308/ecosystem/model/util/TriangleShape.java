@@ -3,9 +3,10 @@ package chalmers.dax021308.ecosystem.model.util;
 import java.awt.Dimension;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 
 public class TriangleShape implements IShape {
-	private final String name = EcoWorld.SHAPE_TRIANGLE;
+	private final String name = SimulationSettings.SHAPE_TRIANGLE;
 
 	@Override
 	public String getShape() {

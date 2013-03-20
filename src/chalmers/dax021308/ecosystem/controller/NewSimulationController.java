@@ -10,9 +10,18 @@ import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.NewSimulationView;
 
+/**
+ * Controller class for {@link NewSimulationView}.
+ * 
+ * @author Erik
+ *
+ */
 public class NewSimulationController implements IController {
 	private EcoWorld model;
 	private NewSimulationView view;
+	/**
+	 * ActionListener for start new simulation button.
+	 */
 	private ActionListener onStartButtonListener = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -46,6 +55,10 @@ public class NewSimulationController implements IController {
 		}
 	}
 	
+	/**
+	 * Loads settings from the view and into {@link EcoWorld} and starts it.
+	 * 
+	 */
 	private void startSimulation() {
 		try {
 			try {
@@ -57,13 +70,13 @@ public class NewSimulationController implements IController {
 
 			int tickDelay = Integer
 					.parseInt(view.textfield_Iterationdelay.getText());
-
+			int numThreads;
 			if (view.rdbtn2Threads.isSelected()) {
-				model.setNumThreads(2);
+				numThreads = 2;
 			} else if (view.rdbtn4Threads.isSelected()) {
-				model.setNumThreads(4);
+				numThreads = 4;
 			} else {
-				model.setNumThreads(8);
+				numThreads = 8;
 			}
 
 			if (tickDelay < 1) {
@@ -80,14 +93,14 @@ public class NewSimulationController implements IController {
 			}
 			model.setRecordSimulation(view.chckbxRecordSimulation.isSelected());
 			// Should the shape really be set here?
-			// TODO fix an input value for shape and not just a squareshape
+			// TODO fix an input value for shape and not just a square shape.
 			String shape = null;
 			if(view.rdbtnCircle.isSelected()) {
-				shape = EcoWorld.SHAPE_CIRCLE;
+				shape = SimulationSettings.SHAPE_CIRCLE;
 			} else if (view.rdbtnSquare.isSelected()){
-				shape = EcoWorld.SHAPE_SQUARE;
+				shape = SimulationSettings.SHAPE_SQUARE;
 			} else {
-				shape = EcoWorld.SHAPE_TRIANGLE;
+				shape = SimulationSettings.SHAPE_TRIANGLE;
 			}
 			SimulationSettings s = new SimulationSettings(
 					(String) view.predList.getSelectedValue(),
@@ -96,7 +109,7 @@ public class NewSimulationController implements IController {
 					Integer.parseInt(view.tvPreyPopSize.getText()),
 					(String) view.grassList.getSelectedValue(),
 					Integer.parseInt(view.tvGrassPopSize.getText()), shape, 
-					(String) view.obstacleList.getSelectedValue());
+					(String) view.obstacleList.getSelectedValue(), numThreads);
 			if(view.chckbxCustomSize.isSelected()) {
 				int width = Integer.parseInt(view.tfCustomWidth.getText());
 				int height = Integer.parseInt(view.tfCustomHeight.getText());

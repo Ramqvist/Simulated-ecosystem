@@ -3,6 +3,7 @@ package chalmers.dax021308.ecosystem.model.util;
 import java.awt.Dimension;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 
 /**
  * 
@@ -10,7 +11,7 @@ import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
  * 
  */
 public class CircleShape implements IShape {
-	private final String name = EcoWorld.SHAPE_CIRCLE;
+	private final String name = SimulationSettings.SHAPE_CIRCLE;
 
 	@Override
 	public Position getXWallLeft(Dimension dim, Position p) {
