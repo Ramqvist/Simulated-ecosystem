@@ -58,9 +58,7 @@ public class WolfAgent extends AbstractAgent {
 		 */
 
 		Vector randomForce = randomForce();
-		Vector acceleration = environmentForce
-				.add(obstacleForce)
-				.add(preyForce.multiply(10))
+		Vector acceleration = preyForce.multiply(10)
 				.add(mutualInteractionForce)
 				.add(forwardThrust)
 				.add(arrayalForce)
@@ -70,6 +68,8 @@ public class WolfAgent extends AbstractAgent {
 			acceleration.multiply(maxAcceleration / accelerationNorm);
 		}
 
+		acceleration.add(environmentForce).add(obstacleForce);
+		
 		/*
 		 * The new velocity is then just: v(t+dt) = (v(t)+a(t+1)*dt)*decay,
 		 * where dt = 1 in this case. There is a decay that says if they are not

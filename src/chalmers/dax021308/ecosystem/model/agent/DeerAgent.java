@@ -92,9 +92,7 @@ public class DeerAgent extends AbstractAgent {
 		 * the acceleration.
 		 */
 		Vector randomForce = randomForce();
-		Vector acceleration = environmentForce
-				.add(obstacleForce)
-				.add(predatorForce.multiply(5))
+		Vector acceleration = predatorForce.multiply(5)
 				.add(mutualInteractionForce)
 				.add(forwardThrust).add(arrayalForce)
 				.add(preyForce.multiply(5 * (1 - energy / MAX_ENERGY)))
@@ -104,6 +102,8 @@ public class DeerAgent extends AbstractAgent {
 			acceleration.multiply(maxAcceleration / accelerationNorm);
 		}
 
+		acceleration.add(environmentForce).add(obstacleForce);
+		
 		/*
 		 * The new velocity is then just: v(t+dt) = (v(t)+a(t+1)*dt)*decay,
 		 * where dt = 1 in this case. There is a decay that says if they are not

@@ -315,10 +315,10 @@ public class EcoWorld implements IModel {
 		
 		
 		if(Obstacle == ELLIPTICAL_OBSTACLE){
-			obstacles.add(new EllipticalObstacle(d.getWidth()*0.2, d.getWidth()*0.15, 
+			obstacles.add(new EllipticalObstacle(d.getWidth()*0.2, d.getHeight()*0.15, 
 					new Position(d.getWidth()/2,d.getHeight()/2)));
 		} else if (Obstacle == RECTANGULAR_OBSTACLE) {
-			obstacles.add(new RectangularObstacle(d.getWidth()*0.2, d.getWidth()*0.15, 
+			obstacles.add(new RectangularObstacle(d.getWidth()*0.1, d.getHeight()*0.02, 
 					new Position(d.getWidth()/2,d.getHeight()/2)));
 		}
 		

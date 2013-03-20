@@ -39,6 +39,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected double maxSpeed;
 	protected double visionRange;
 	protected double maxAcceleration;
+	protected IAgent focusedPrey;
 	private boolean isAlive;
 	
 	/* Neighbour list module variables */
@@ -50,8 +51,8 @@ public abstract class AbstractAgent implements IAgent {
 	private static final int NEIGHBOURS_UPDATE_THRESHOLD = 10;
 
 	protected final static double INTERACTION_RANGE = 10;
-	protected final static double ENVIRONMENT_CONSTANT = 2000;
-	protected final static double OBSTACLE_CONSTANT = 10000000;
+	protected final static double ENVIRONMENT_CONSTANT = 200;
+	protected final static double OBSTACLE_CONSTANT = 100;
 	protected static final double VELOCITY_DECAY = 1;
 	protected static final double RANDOM_FORCE_MAGNITUDE = 0.05;
 
