@@ -80,6 +80,7 @@ public class DeerAgent extends AbstractAgent {
 			if (energy > MAX_ENERGY)
 				energy = MAX_ENERGY;
 		} else {
+			digesting = 0;
 			//otherwise calculate next position
 			Vector predatorForce = getPredatorForce(predators);
 			Vector mutualInteractionForce = new Vector();

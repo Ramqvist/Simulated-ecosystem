@@ -18,7 +18,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public class WolfAgent extends AbstractAgent {
 
 	private boolean hungry = true;
-	private static final int MAX_ENERGY = 1300;
+	private static final int MAX_ENERGY = 1200;
 	private static final double REPRODUCTION_RATE = 0.12;
 	private int digesting = 0;
 	private static final int DIGESTION_TIME = 60;
@@ -29,7 +29,7 @@ public class WolfAgent extends AbstractAgent {
 			double visionRange, boolean groupBehaviour) {
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
-		MAX_LIFE_LENGTH = 2000;
+		MAX_LIFE_LENGTH = 2500;
 		this.energy = MAX_ENERGY;
 		this.groupBehaviour = groupBehaviour;
 	}
@@ -44,6 +44,7 @@ public class WolfAgent extends AbstractAgent {
 				energy = MAX_ENERGY;
 			digesting--;
 		} else {
+			digesting = 0;
 			Vector preyForce = getPreyForce(preys);
 			Vector mutualInteractionForce = new Vector();
 			Vector forwardThrust = new Vector();
