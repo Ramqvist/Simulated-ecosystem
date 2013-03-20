@@ -2,17 +2,18 @@ package chalmers.dax021308.ecosystem.model.agent;
 
 import java.util.List;
 
+import com.amd.aparapi.Device;
 import com.amd.aparapi.Kernel;
 import com.amd.aparapi.ProfileInfo;
 
 public class ApatapiTest {
 	
 	public ApatapiTest() {
-		final double[] plus = new double[655360];
+		final double[] plus = new double[1];
 		for(int i = 0; i < plus.length ; i++) {
 			plus[i] = Math.random();
 		}
-		final double[] result = new double[655360];
+		final double[] result = new double[1];
 		Kernel kernel = new Kernel() {
 			@Override
 			public void run() {
@@ -29,10 +30,14 @@ public class ApatapiTest {
 		System.out.println("Execution time: " + kernel.getExecutionTime());
 		System.out.println("Execution mode: " + kernel.getExecutionMode() );
 		List<ProfileInfo> profileInfoList = kernel.getProfileInfo();
-		System.out.println(profileInfoList);
 		for (ProfileInfo profileInfo : profileInfoList) {
 		    System.out.println(profileInfo);
-		}
+		}	
+		
+		System.out.println(Device.best());
+		System.out.println(Device.firstCPU());
+
+		System.out.println(Device.firstGPU());
 
 		System.out.println("Net time GPU: " + (kernel.getExecutionTime() - kernel.getConversionTime()) );
 		
