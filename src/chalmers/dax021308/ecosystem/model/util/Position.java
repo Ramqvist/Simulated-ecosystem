@@ -22,6 +22,7 @@ public class Position {
 
 	/**
 	 * Clone a position. Returning a new Position with the value of this one.
+	 * 
 	 * @return
 	 */
 	public Position(Position p) {
@@ -51,12 +52,14 @@ public class Position {
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	/**
 	 * Adds a vector to current position.
-	 * @param v vector to add.
+	 * 
+	 * @param v
+	 *            vector to add.
 	 */
-	public Position addVector(Vector v){
+	public Position addVector(Vector v) {
 		this.x += v.getX();
 		this.y += v.getY();
 		return this;
@@ -64,13 +67,17 @@ public class Position {
 
 	/**
 	 * Adds a vector to a position and returns the new position.
-	 * @param p the position
-	 * @param v the vector
+	 * 
+	 * @param p
+	 *            the position
+	 * @param v
+	 *            the vector
 	 * @return a position p+v.
 	 */
 	public static Position positionPlusVector(Position p, Vector v) {
-		return new Position(p.x+v.getX(),p.y+v.getY());
+		return new Position(p.x + v.getX(), p.y + v.getY());
 	}
+
 	public boolean equals(Object o) {
 		if (o instanceof Position) {
 			return ((Position) o).x == x && ((Position) o).y == y;
@@ -78,9 +85,9 @@ public class Position {
 			return false;
 		}
 	}
-	
+
 	@Override
-	public String toString(){
-		return "("+this.x+","+this.y+")";
+	public String toString() {
+		return "(" + this.x + "," + this.y + ")";
 	}
 }
