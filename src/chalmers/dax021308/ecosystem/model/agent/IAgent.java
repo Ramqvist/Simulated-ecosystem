@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.List;
 
-import chalmers.dax021308.ecosystem.model.environment.IObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Gender;
 import chalmers.dax021308.ecosystem.model.util.IShape;

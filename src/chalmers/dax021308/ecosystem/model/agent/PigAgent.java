@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.util.List;
 import java.util.Random;
 
-import chalmers.dax021308.ecosystem.model.environment.IObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;

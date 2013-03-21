@@ -16,10 +16,10 @@ import javax.media.opengl.GLEventListener;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
-import chalmers.dax021308.ecosystem.model.environment.EllipticalObstacle;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
-import chalmers.dax021308.ecosystem.model.environment.IObstacle;
-import chalmers.dax021308.ecosystem.model.environment.RectangularObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.EllipticalObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.RectangularObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.CircleShape;
 import chalmers.dax021308.ecosystem.model.util.IShape;

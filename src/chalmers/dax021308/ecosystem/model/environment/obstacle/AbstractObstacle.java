@@ -1,4 +1,4 @@
-package chalmers.dax021308.ecosystem.model.environment;
+package chalmers.dax021308.ecosystem.model.environment.obstacle;
 
 import java.awt.Color;
 

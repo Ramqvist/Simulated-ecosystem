@@ -1,4 +1,4 @@
-package chalmers.dax021308.ecosystem.model.environment;
+package chalmers.dax021308.ecosystem.model.environment.obstacle;
 
 import java.io.*;
 import java.util.ArrayList;

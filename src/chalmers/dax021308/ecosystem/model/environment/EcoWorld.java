@@ -20,6 +20,9 @@ import java.util.concurrent.Executors;
 
 import chalmers.dax021308.ecosystem.model.agent.AbstractAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.EllipticalObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.RectangularObstacle;
 import chalmers.dax021308.ecosystem.model.population.*;
 import chalmers.dax021308.ecosystem.model.util.*;
 

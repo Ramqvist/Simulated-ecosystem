@@ -3,6 +3,7 @@ package chalmers.dax021308.ecosystem.model.environment;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld.OnFinishListener;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.DoublePair;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -10,6 +11,8 @@ import chalmers.dax021308.ecosystem.model.util.Position;
 /**
  * 
  * @author Henrik Class for handling circular environments
+ * 
+ * TODO: Remove class?
  */
 public class CircleEnvironment extends EnvironmentScheduler {
 	// Class probably uselss
