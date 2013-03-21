@@ -47,9 +47,10 @@ public class Position {
 		setPosition(p.x, p.y);
 	}
 
-	public void setPosition(double x, double y) {
+	public Position setPosition(double x, double y) {
 		this.x = x;
 		this.y = y;
+		return Position.this;
 	}
 	
 	/**
