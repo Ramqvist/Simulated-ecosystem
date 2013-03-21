@@ -3,6 +3,8 @@ package chalmers.dax021308.ecosystem.view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.beans.PropertyChangeEvent;
@@ -65,6 +67,8 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
 	private JOGLListener glListener;
 	//private GLCanvas canvas;
 	private IShape shape;
+	private boolean isZoomed;
+	private MouseEvent lastZoomEvent;
 	
 	/**
 	 * Create the panel.
@@ -84,12 +88,51 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
 		addMouseWheelListener(new MouseWheelListener() {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
+				lastZoomEvent = null;
 				if(e.getWheelRotation() < 0) {
 					glListener.zoomIn();
 				} else {
 					glListener.zoomOut();
 				}
 				e.consume();
+			}
+		});
+		addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				glListener.clearZoom();
+				if(isZoomed) {
+					isZoomed = false;
+					lastZoomEvent = null;
+				} else {
+					lastZoomEvent = e;
+					isZoomed = true;
+				}
 			}
 		});
 		FPSAnimator animator = new FPSAnimator(this, 60);
@@ -225,7 +268,26 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
             @Override
             public void display(GLAutoDrawable drawable) {
             	GL gl = drawable.getGL();
-                gl.glViewport(-zoomValue, -zoomValue, getWidth()+zoomValue*2, getHeight()+zoomValue*2);
+        		if(lastZoomEvent != null) {
+        			int pointOfInterestX = lastZoomEvent.getX();
+        			int pointOfInterestY = lastZoomEvent.getY();
+        			int zoomLevel = 3;
+            		
+            		gl.glViewport(0, 0, getWidth(), getWidth());
+            		gl.glMatrixMode(GL.GL_PROJECTION);
+            		gl.glLoadIdentity();
+            		 double left = (0 - pointOfInterestX) / zoomLevel + pointOfInterestX;
+            		 double right = (getWidth() - pointOfInterestX) / zoomLevel + pointOfInterestX;
+            		 double bottom = (getWidth() - pointOfInterestY) / zoomLevel + pointOfInterestY;
+            		 double top = (0 - pointOfInterestY) / zoomLevel + pointOfInterestY;
+            		 gl.glOrtho(left, right, bottom, top, -1, 1);
+        		} else {
+            		gl.glViewport(-zoomValue, -zoomValue, getWidth()+zoomValue*2, getHeight()+zoomValue*2);
+            		gl.glMatrixMode(GL.GL_PROJECTION);
+            		gl.glLoadIdentity();
+        			gl.glOrtho(0, getWidth(), getHeight(), 0, 0, 1);
+        		}
+
        
             	increaseUpdateValue();
             	long start = System.currentTimeMillis();
@@ -428,12 +490,15 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
         		/* End Information print. */
             }
             
-        	public void zoomOut() {
+        	public void clearZoom() {
+    			zoomValue = 0;
+			}
+
+			public void zoomOut() {
         		zoomValue = zoomValue - 20;
         		if(zoomValue < 0) {
         			zoomValue = 0;
         		}
-        		updateViewPort();
 			}
         	
         	private void updateViewPort() {
@@ -470,7 +535,6 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
 
 			public void zoomIn() {
         		zoomValue = zoomValue + 20;
-        		updateViewPort();
 			}
 
 			public double getNorm(double x, double y){
