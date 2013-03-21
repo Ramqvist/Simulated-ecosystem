@@ -15,14 +15,16 @@ public class TriangleShape implements IShape {
 	@Override
 	public Position getXWallLeft(Dimension dim, Position p) {
 		double angle = Math.atan(dim.getWidth() / 2 / dim.getHeight());
-		double xPos = dim.getWidth()/2.0-(dim.getHeight()-p.getY())* Math.tan(angle);
+		double xPos = dim.getWidth() / 2.0 - (dim.getHeight() - p.getY())
+				* Math.tan(angle);
 		return new Position(xPos, p.getY());
 	}
 
 	@Override
 	public Position getXWallRight(Dimension dim, Position p) {
 		double angle = Math.atan(dim.getWidth() / 2 / dim.getHeight());
-		double xPos = dim.getWidth()/2.0+(dim.getHeight()-p.getY())* Math.tan(angle);
+		double xPos = dim.getWidth() / 2.0 + (dim.getHeight() - p.getY())
+				* Math.tan(angle);
 		return new Position(xPos, p.getY());
 	}
 
@@ -61,8 +63,11 @@ public class TriangleShape implements IShape {
 
 	@Override
 	public boolean isInside(Dimension dim, Position p) {
-		// TODO Auto-generated method stub
-		return false;
+		// if the position is not above or below, or outside of the left or
+		// right 'wall' of the triangle, then it lies inside the shape
+		return p.getY() > 0 && p.getY() < dim.getHeight()
+				&& p.getX() > getXWallLeft(dim, p).getX()
+				&& p.getX() < getXWallRight(dim, p).getX();
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.util.CircleShape;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
@@ -57,8 +58,7 @@ public class GrassAgent extends AbstractAgent {
 		double cap = (double) capacity;
 		if (Math.random() < REPRODUCTION_RATE * (1.0 - popSize / cap)) {
 			List<IAgent> spawn = new ArrayList<IAgent>();
-			IAgent a = new GrassAgent(name,
-					getSpawnPosition(), color, 5, 5,
+			IAgent a = new GrassAgent(name, getSpawnPosition(), color, 5, 5,
 					velocity, maxSpeed, gridDimension, capacity, shape);
 			spawn.add(a);
 			return spawn;
@@ -73,7 +73,15 @@ public class GrassAgent extends AbstractAgent {
 	 * @return The position found
 	 */
 	private Position getSpawnPosition() {
-		return shape.getRandomPosition(gridDimension);
+		// create a random position which lies within 50 pixels of the
+		// current position, and if it lies inside the shape, return it.
+		Position p;
+		Vector v = new Vector(Math.random() * 50, 0);
+		do {
+			v.rotate(Math.random() * Math.PI * 2);
+			p = Position.positionPlusVector(position, v);
+		} while (!shape.isInside(gridDimension, p));
+		return p;
 	}
 
 	/**
