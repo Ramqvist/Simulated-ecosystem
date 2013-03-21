@@ -1,5 +1,7 @@
 package chalmers.dax021308.ecosystem.main;
 
+import javax.swing.UIManager;
+
 import chalmers.dax021308.ecosystem.controller.MainWindowController;
 
 /**
@@ -11,11 +13,11 @@ public class EcosystemInitializer {
 	
 	
 	public static void main(String[] args) {
-		/*try {
+		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch(Exception e) {
 			e.printStackTrace();
-		}*/
+		}
 		
 		new MainWindowController();
 	}

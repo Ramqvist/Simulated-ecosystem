@@ -52,7 +52,7 @@ import com.sun.opengl.util.FPSAnimator;
  * @author Erik Ramqvist
  *
  */
-public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AWT.Component) */ implements IView {
+public class OpenGLSimulationView extends GLCanvas /* (GLCanvas extends Java.AWT.Component) */ implements IView {
 	
 	private static final long serialVersionUID = 1585638837620985591L;
 	private List<IPopulation> newPops = new ArrayList<IPopulation>();
@@ -259,6 +259,10 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
     		//Number of edges in each created circle.
         	private final float  COLOR_FACTOR        = (1.0f/255);
         	private int zoomValue = 0;
+        	private int currentScrollZoom = 0;
+        	private int currentZoomX = getWidth() / 2;
+        	private int currentZoomY = getHeight() / 2;
+        	private int ZOOM_ACCELERATION = 10;
         	
     		
         	/**
@@ -269,6 +273,23 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
             public void display(GLAutoDrawable drawable) {
             	GL gl = drawable.getGL();
         		if(lastZoomEvent != null) {
+        			/*int pointOfInterestX = 0;
+        			if(currentZoomX == lastZoomEvent.getX()) {
+        				pointOfInterestX = lastZoomEvent.getX();
+        			} else if(currentZoomX < lastZoomEvent.getX()) {
+        				pointOfInterestX++;
+        			} else if(currentZoomX > lastZoomEvent.getX()) {
+        				pointOfInterestX--;
+        			}
+        			int pointOfInterestY = 0;
+        			if(currentZoomY == lastZoomEvent.getY()) {
+        				pointOfInterestY = lastZoomEvent.getY();
+        			} else if(currentZoomY < lastZoomEvent.getY()) {
+        				pointOfInterestY++;
+        			} else if(currentZoomY > lastZoomEvent.getY()) {
+        				pointOfInterestY--;
+        			}*/
+        			
         			int pointOfInterestX = lastZoomEvent.getX();
         			int pointOfInterestY = lastZoomEvent.getY();
         			int zoomLevel = 3;
@@ -282,7 +303,14 @@ public class OpenGLSimulationView extends GLCanvas /*/ (GLCanvas extends Java.AW
             		 double top = (0 - pointOfInterestY) / zoomLevel + pointOfInterestY;
             		 gl.glOrtho(left, right, bottom, top, -1, 1);
         		} else {
-            		gl.glViewport(-zoomValue, -zoomValue, getWidth()+zoomValue*2, getHeight()+zoomValue*2);
+        			if(currentScrollZoom == zoomValue) {
+        				currentScrollZoom = zoomValue;
+        			} else if(currentScrollZoom < zoomValue) {
+        				currentScrollZoom += ZOOM_ACCELERATION;
+        			} else if(currentScrollZoom > zoomValue) {
+        				currentScrollZoom -= ZOOM_ACCELERATION;
+        			}
+            		gl.glViewport(-currentScrollZoom, -currentScrollZoom, getWidth()+currentScrollZoom*2, getHeight()+currentScrollZoom*2);
             		gl.glMatrixMode(GL.GL_PROJECTION);
             		gl.glLoadIdentity();
         			gl.glOrtho(0, getWidth(), getHeight(), 0, 0, 1);
