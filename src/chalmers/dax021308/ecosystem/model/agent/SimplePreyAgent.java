@@ -23,7 +23,7 @@ public class SimplePreyAgent extends AbstractAgent {
 	}
 	
 	@Override
-	public List<IAgent> reproduce(IAgent agent, int populationSize) {
+	public List<IAgent> reproduce(IAgent agent, int populationSize, Dimension gridDimension) {
 		return new LinkedList<IAgent>();
 	}
 		

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
-import chalmers.dax021308.ecosystem.model.util.CircleShape;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
@@ -18,25 +17,16 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  * 
  */
 public class GrassAgent extends AbstractAgent {
-	private final Dimension gridDimension;
 	private final IShape shape;
 	private static final double REPRODUCTION_RATE = 0.003;
 
 	public GrassAgent(String name, Position pos, Color color, int width,
-			int height, Vector velocity, double maxSpeed,
-			Dimension gridDimension, IShape shape) {
+			int height, Vector velocity, double maxSpeed, int capacity,
+			IShape shape) {
 		super(name, pos, color, width, height, velocity, maxSpeed, 0, 0);
-		this.gridDimension = gridDimension;
+		this.capacity = capacity;
 		this.shape = shape;
 		MAX_LIFE_LENGTH = 2500;
-	}
-
-	public GrassAgent(String name, Position pos, Color color, int width,
-			int height, Vector velocity, double maxSpeed,
-			Dimension gridDimension, int capacity, IShape shape) {
-		this(name, pos, color, width, height, velocity, maxSpeed,
-				gridDimension, shape);
-		this.capacity = capacity;
 	}
 
 	@Override
@@ -53,13 +43,14 @@ public class GrassAgent extends AbstractAgent {
 	}
 
 	@Override
-	public List<IAgent> reproduce(IAgent agent, int populationSize) {
+	public List<IAgent> reproduce(IAgent agent, int populationSize,
+			Dimension gridDimension) {
 		double popSize = (double) populationSize;
 		double cap = (double) capacity;
 		if (Math.random() < REPRODUCTION_RATE * (1.0 - popSize / cap)) {
 			List<IAgent> spawn = new ArrayList<IAgent>();
-			IAgent a = new GrassAgent(name, getSpawnPosition(), color, 5, 5,
-					velocity, maxSpeed, gridDimension, capacity, shape);
+			IAgent a = new GrassAgent(name, getSpawnPosition(gridDimension),
+					color, 5, 5, velocity, maxSpeed, capacity, shape);
 			spawn.add(a);
 			return spawn;
 		}
@@ -70,9 +61,12 @@ public class GrassAgent extends AbstractAgent {
 	/**
 	 * Finds a new position close to the current position
 	 * 
+	 * @param gridDimension
+	 *            TODO
+	 * 
 	 * @return The position found
 	 */
-	private Position getSpawnPosition() {
+	private Position getSpawnPosition(Dimension gridDimension) {
 		// create a random position which lies within 50 pixels of the
 		// current position, and if it lies inside the shape, return it.
 		Position p;
@@ -82,17 +76,5 @@ public class GrassAgent extends AbstractAgent {
 			p = Position.positionPlusVector(position, v);
 		} while (!shape.isInside(gridDimension, p));
 		return p;
-	}
-
-	/**
-	 * Checks if a Position is legit, i.e it is inside the view
-	 * 
-	 * @param pos
-	 *            the Position to check
-	 * @return True if pos lies inside the view, otherwise returns false
-	 */
-	private boolean legitPos(Position pos) {
-		return (pos.getX() > 0 && pos.getX() < gridDimension.getWidth()
-				&& pos.getY() > 0 && pos.getY() < gridDimension.getHeight());
 	}
 }

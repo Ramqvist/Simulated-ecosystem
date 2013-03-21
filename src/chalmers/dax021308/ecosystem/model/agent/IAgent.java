@@ -88,10 +88,11 @@ public interface IAgent extends Cloneable {
 	 * 
 	 * @param agent
 	 *            - The IAgent which this IAgent will reproduce with.
+	 * @param gridDimension TODO
 	 * @return A list of IAgents if the reproduction was successful, otherwise
 	 *         null.
 	 */
-	public List<IAgent> reproduce(IAgent agent, int populationSize);
+	public List<IAgent> reproduce(IAgent agent, int populationSize, Dimension gridDimension);
 
 	/**
 	 * @return The gender of the IAgent specified by some enum. Returns null if

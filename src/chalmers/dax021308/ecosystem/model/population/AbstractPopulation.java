@@ -267,12 +267,17 @@ public abstract class AbstractPopulation implements IPopulation {
 		int populationSize = agents.size();
 		for (IAgent a : agents) {
 			a.updatePosition();
-			List<IAgent> spawn = a.reproduce(null, populationSize);
+			List<IAgent> spawn = a.reproduce(null, populationSize, gridDimension);
 			if (spawn != null) {
 				kids.addAll(spawn);
 			}
 		}
 		if (kids != null) {
+			//Maybe the most sense is just to make the kids move
+			for (IAgent a : kids){
+				a.calculateNextPosition(predators, preys, neutral, gridDimension, shape);
+				a.updatePosition();
+			}
 			agents.addAll(kids);
 			wg.addAll(kids);
 		}

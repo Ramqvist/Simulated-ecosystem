@@ -41,7 +41,7 @@ public class DeerAgent extends AbstractAgent {
 	}
 
 	@Override
-	public List<IAgent> reproduce(IAgent agent, int populationSize) {
+	public List<IAgent> reproduce(IAgent agent, int populationSize, Dimension gridDimension) {
 		if (hungry)
 			return null;
 		else {
@@ -81,7 +81,7 @@ public class DeerAgent extends AbstractAgent {
 				energy = MAX_ENERGY;
 		} else {
 			digesting = 0;
-			//otherwise calculate next position
+			// otherwise calculate next position
 			Vector predatorForce = getPredatorForce(predators);
 			Vector mutualInteractionForce = new Vector();
 			Vector forwardThrust = new Vector();
@@ -141,26 +141,31 @@ public class DeerAgent extends AbstractAgent {
 	 */
 	private Vector getPreyForce(List<IPopulation> preys) {
 		Vector preyForce = new Vector(0, 0);
-		for (IPopulation pop : preys) {
-			List<IAgent> agents = pop.getAgents();
-			for (int i = 0; i < pop.getAgents().size(); i++) {
-				IAgent a = agents.get(i);
-				Position p = a.getPosition();
-				double distance = getPosition().getDistance(p);
-				if (distance <= visionRange) {
-					if (distance <= INTERACTION_RANGE - 5) {
-						// Food found, let's eat it and make some reproducing
-						// possible
-						if (a.consumeAgent()) {
-							pop.addToRemoveList(a);
-							hungry = false;
-							digesting = DIGESTION_TIME;
+		// If the Agent is not hungry enough, don't waste time looking for food
+		if (energy / MAX_ENERGY < 0.5) {
+			for (IPopulation pop : preys) {
+				List<IAgent> agents = pop.getAgents();
+				for (int i = 0; i < pop.getAgents().size(); i++) {
+					IAgent a = agents.get(i);
+					Position p = a.getPosition();
+					double distance = getPosition().getDistance(p);
+					if (distance <= visionRange) {
+						if (distance <= INTERACTION_RANGE - 5) {
+							// Food found, let's eat it and make some
+							// reproducing
+							// possible
+							if (a.consumeAgent()) {
+								pop.addToRemoveList(a);
+								hungry = false;
+								digesting = DIGESTION_TIME;
 
+							}
+						} else {
+							Vector newForce = new Vector(p, getPosition());
+							double norm = newForce.getNorm();
+							preyForce.add(newForce
+									.multiply(1 / (norm * distance)));
 						}
-					} else {
-						Vector newForce = new Vector(p, getPosition());
-						double norm = newForce.getNorm();
-						preyForce.add(newForce.multiply(1 / (norm * distance)));
 					}
 				}
 			}

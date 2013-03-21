@@ -92,7 +92,7 @@ public class WolfAgent extends AbstractAgent {
 	}
 
 	@Override
-	public List<IAgent> reproduce(IAgent agent, int populationSize) {
+	public List<IAgent> reproduce(IAgent agent, int populationSize, Dimension gridDimension) {
 		if (hungry)
 			return null;
 		else {
@@ -127,46 +127,51 @@ public class WolfAgent extends AbstractAgent {
 		 * weighted by how close the source of the force is.
 		 */
 		Vector preyForce = new Vector(0, 0);
-		int nVisiblePreys = 0;
-		for (IPopulation pop : preys) {
-			List<IAgent> agents = pop.getAgents();
-			int size = agents.size();
-			for (int i = 0; i < size; i++) {
-				IAgent a = agents.get(i);
-				Position p = a.getPosition();
-				double distance = getPosition().getDistance(p);
-				if (distance <= visionRange) {
-					if (distance <= INTERACTION_RANGE - 5) {
-						if (a.consumeAgent()) {
-							pop.addToRemoveList(a);
-							hungry = false;
-							digesting = DIGESTION_TIME;
-						}
-					} else {
-						/*
-						 * Create a vector that points towards the prey.
-						 */
-						Vector newForce = new Vector(p, getPosition());
+		// If the Agent is not hungry enough, don't waste time looking for food
+		if (energy / MAX_ENERGY < 0.5) {
+			int nVisiblePreys = 0;
+			for (IPopulation pop : preys) {
+				List<IAgent> agents = pop.getAgents();
+				int size = agents.size();
+				for (int i = 0; i < size; i++) {
+					IAgent a = agents.get(i);
+					Position p = a.getPosition();
+					double distance = getPosition().getDistance(p);
+					if (distance <= visionRange) {
+						if (distance <= INTERACTION_RANGE - 5) {
+							if (a.consumeAgent()) {
+								pop.addToRemoveList(a);
+								hungry = false;
+								digesting = DIGESTION_TIME;
+							}
+						} else {
+							/*
+							 * Create a vector that points towards the prey.
+							 */
+							Vector newForce = new Vector(p, getPosition());
 
-						/*
-						 * Add this vector to the prey force, with proportion to
-						 * how close the prey is. Closer preys will affect the
-						 * force more than those far away.
-						 */
-						double norm = newForce.getNorm();
-						preyForce.add(newForce.multiply(1 / (norm * distance)));
-						nVisiblePreys++;
+							/*
+							 * Add this vector to the prey force, with
+							 * proportion to how close the prey is. Closer preys
+							 * will affect the force more than those far away.
+							 */
+							double norm = newForce.getNorm();
+							preyForce.add(newForce
+									.multiply(1 / (norm * distance)));
+							nVisiblePreys++;
+						}
 					}
 				}
 			}
-		}
 
-		if (nVisiblePreys == 0) { // No preys near --> Be unaffected
-			preyForce.setVector(0, 0);
-		} else { // Else set the force depending on visible preys and normalize
-					// it to maxAcceleration.
-			double norm = preyForce.getNorm();
-			preyForce.multiply(maxAcceleration / norm);
+			if (nVisiblePreys == 0) { // No preys near --> Be unaffected
+				preyForce.setVector(0, 0);
+			} else { // Else set the force depending on visible preys and
+						// normalize
+						// it to maxAcceleration.
+				double norm = preyForce.getNorm();
+				preyForce.multiply(maxAcceleration / norm);
+			}
 		}
 		return preyForce;
 	}

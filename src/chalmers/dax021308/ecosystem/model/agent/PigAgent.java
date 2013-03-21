@@ -312,7 +312,7 @@ public class PigAgent extends AbstractAgent {
 	}
 
 	@Override
-	public List<IAgent> reproduce(IAgent agent, int populationSize) {
+	public List<IAgent> reproduce(IAgent agent, int populationSize, Dimension gridDimension) {
 		return null;
 	}
 

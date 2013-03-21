@@ -38,7 +38,7 @@ public class GrassPopulation extends AbstractPopulation {
 			Position randPos = shape.getRandomPosition(gridDimension);
 			Vector velocity = new Vector(maxSpeed, maxSpeed);
 			IAgent a = new GrassAgent(getName(), randPos, color, 5, 5,
-					velocity, maxSpeed, gridDimension, capacity, shape);
+					velocity, maxSpeed, capacity, shape);
 			newAgents.add(a);
 		}
 		return newAgents;
