@@ -7,8 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
-import chalmers.dax021308.ecosystem.model.environment.IObstacle;
 import chalmers.dax021308.ecosystem.model.environment.WorldGrid;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
 
@@ -272,7 +272,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		int populationSize = agents.size();
 		for (IAgent a : agents) {
 			a.updatePosition();
-			List<IAgent> spawn = a.reproduce(null, populationSize);
+			List<IAgent> spawn = a.reproduce(null, populationSize, obstacles);
 			if (spawn != null) {
 				kids.addAll(spawn);
 			}

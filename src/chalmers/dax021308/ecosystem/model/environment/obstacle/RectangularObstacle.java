@@ -1,4 +1,6 @@
-package chalmers.dax021308.ecosystem.model.environment;
+package chalmers.dax021308.ecosystem.model.environment.obstacle;
+
+import java.awt.Color;
 
 import chalmers.dax021308.ecosystem.model.util.Position;
 
@@ -8,10 +10,11 @@ public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 	private static double e = 0.01;
 	private static double angleLimit;
 
-	public RectangularObstacle(double width, double height, Position position){
+	public RectangularObstacle(double width, double height, Position position, Color color){
 		this.position = position;
 		this.width = width;
 		this.height = height;
+		this.color = color;
 		angleLimit = Math.atan(height/width);
 	}
 	
@@ -64,6 +67,11 @@ public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public Color getColor() {
+		return color;
 	}
 
 }

@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import chalmers.dax021308.ecosystem.model.environment.IObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Gender;
 import chalmers.dax021308.ecosystem.model.util.IShape;
@@ -52,6 +52,8 @@ public abstract class AbstractAgent implements IAgent {
 	private static final int NEIGHBOURS_UPDATE_THRESHOLD = 10;
 
 	protected final static double INTERACTION_RANGE = 10;
+	protected final static double EATING_RANGE = 4;
+	protected final static double FOCUS_RANGE = 100;
 	protected final static double ENVIRONMENT_CONSTANT = 200;
 	protected final static double OBSTACLE_CONSTANT = 100;
 	protected static final double VELOCITY_DECAY = 1;
@@ -202,7 +204,7 @@ public abstract class AbstractAgent implements IAgent {
 			}
 
 			@Override
-			public List<IAgent> reproduce(IAgent agent, int populationSize) {
+			public List<IAgent> reproduce(IAgent agent, int populationSize, List<IObstacle> obstacles) {
 				return Collections.emptyList();
 			}
 
@@ -502,7 +504,7 @@ public abstract class AbstractAgent implements IAgent {
 				maxSpeed, visionRange, maxAcceleration) {
 
 			@Override
-			public List<IAgent> reproduce(IAgent agent, int populationSize) {
+			public List<IAgent> reproduce(IAgent agent, int populationSize, List<IObstacle> obstacles) {
 				return null;
 			}
 

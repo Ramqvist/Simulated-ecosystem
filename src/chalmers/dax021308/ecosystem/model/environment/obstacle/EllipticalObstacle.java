@@ -1,4 +1,6 @@
-package chalmers.dax021308.ecosystem.model.environment;
+package chalmers.dax021308.ecosystem.model.environment.obstacle;
+
+import java.awt.Color;
 
 import chalmers.dax021308.ecosystem.model.util.Position;
 
@@ -7,10 +9,11 @@ public class EllipticalObstacle extends AbstractObstacle{
 	private static double e = 0.01;
 	private static double nStep = 6;
 	
-	public EllipticalObstacle(double width, double height, Position position){
+	public EllipticalObstacle(double width, double height, Position position, Color color){
 		this.position = position;
 		this.width = width;
 		this.height = height;
+		this.color = color;
 	}
 	@Override
 	/**
@@ -77,6 +80,10 @@ public class EllipticalObstacle extends AbstractObstacle{
 			}
 		}
 		return false;
+	}
+	@Override
+	public Color getColor() {
+		return color;
 	}
 	
 }

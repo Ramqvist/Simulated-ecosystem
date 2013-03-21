@@ -25,6 +25,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 
 /**
  * Window for starting a new simulation.
@@ -130,7 +131,7 @@ public class NewSimulationView {
 		predList.setValueIsAdjusting(true);
 		predList.setSelectedIndices(new int[] { 3 });
 		predList.setModel(new AbstractListModel() {
-			String[] values = EcoWorld.PRED_VALUES;
+			String[] values = SimulationSettings.PRED_VALUES;
 
 			public int getSize() {
 				return values.length;
@@ -146,7 +147,7 @@ public class NewSimulationView {
 		preyList.setValueIsAdjusting(true);
 		preyList.setSelectedIndices(new int[] { 3 });
 		preyList.setModel(new AbstractListModel() {
-			String[] values = EcoWorld.PREY_VALUES;
+			String[] values = SimulationSettings.PREY_VALUES;
 
 			public int getSize() {
 				return values.length;
@@ -166,11 +167,11 @@ public class NewSimulationView {
 		grassList.setSelectedIndices(new int[] { 3 });
 		grassList.setModel(new AbstractListModel() {
 			public int getSize() {
-				return EcoWorld.GRASS_VALUES.length;
+				return SimulationSettings.GRASS_VALUES.length;
 			}
 
 			public Object getElementAt(int index) {
-				return EcoWorld.GRASS_VALUES[index];
+				return SimulationSettings.GRASS_VALUES[index];
 			}
 		});
 		grassList.setSelectedIndex(0);
@@ -256,11 +257,11 @@ public class NewSimulationView {
 		listSimulationDim.setSelectedIndices(new int[] { 3 });
 		listSimulationDim.setModel(new AbstractListModel() {
 			public int getSize() {
-				return EcoWorld.DIM_VALUES.length;
+				return SimulationSettings.DIM_VALUES.length;
 			}
 
 			public Object getElementAt(int index) {
-				return EcoWorld.DIM_VALUES[index];
+				return SimulationSettings.DIM_VALUES[index];
 			}
 		});
 		listSimulationDim.setSelectedIndex(1);
@@ -391,11 +392,11 @@ public class NewSimulationView {
 		obstacleList.setSelectedIndices(new int[] {3});
 		obstacleList.setModel(new AbstractListModel() {
 			public int getSize() {
-				return EcoWorld.OBSTACLE_VALUES.length;
+				return SimulationSettings.OBSTACLE_VALUES.length;
 			}
 
 			public Object getElementAt(int index) {
-				return EcoWorld.OBSTACLE_VALUES[index];
+				return SimulationSettings.OBSTACLE_VALUES[index];
 			}
 		});
 		obstacleList.setSelectedIndex(0);

@@ -1,4 +1,4 @@
-package chalmers.dax021308.ecosystem.view;
+package chalmers.dax021308.ecosystem.view.chart;
 
 import java.awt.Color;
 import chalmers.dax021308.ecosystem.model.environment.IModel;

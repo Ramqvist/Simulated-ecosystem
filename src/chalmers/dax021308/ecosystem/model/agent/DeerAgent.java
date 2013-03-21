@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
-import chalmers.dax021308.ecosystem.model.environment.IObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -34,7 +34,7 @@ public class DeerAgent extends AbstractAgent {
 	}
 
 	@Override
-	public List<IAgent> reproduce(IAgent agent, int populationSize) {
+	public List<IAgent> reproduce(IAgent agent, int populationSize, List<IObstacle> obstacles) {
 		if (hungry)
 			return null;
 		else {
@@ -119,7 +119,13 @@ public class DeerAgent extends AbstractAgent {
 		}
 
 		this.setVelocity(newVelocity);
-		nextPosition = Position.positionPlusVector(position, velocity);
+		
+		/* Reusing the same position object, for less heap allocations. */
+		if(reUsedPosition == null) {
+			nextPosition = Position.positionPlusVector(position, velocity);
+		} else {
+			nextPosition = reUsedPosition.setPosition(position.getX() + velocity.x, position.getY() + velocity.y);
+		}
 	}
 
 	/**
@@ -135,7 +141,7 @@ public class DeerAgent extends AbstractAgent {
 			Position p = a.getPosition();
 			double distance = getPosition().getDistance(p);
 			if (distance <= visionRange) {
-				if (distance <= INTERACTION_RANGE - 5) {
+				if (distance <= EATING_RANGE) {
 					// Food found, let's eat it and make some reproducing
 					// possible
 					if (a.tryConsumeAgent()) {

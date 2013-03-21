@@ -1,10 +1,11 @@
-package chalmers.dax021308.ecosystem.view;
+package chalmers.dax021308.ecosystem.view.chart;
 
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
+import chalmers.dax021308.ecosystem.view.IView;
 
 import info.monitorenter.gui.chart.Chart2D;
 import info.monitorenter.gui.chart.IAxis;
@@ -32,18 +33,13 @@ public abstract class AbstractGraph2D extends Chart2D implements IView{
 	protected int nIterationsPassed = 0;
 	protected int updateFrequency = 10; // every tenth iteration.
 	
-	public AbstractGraph2D (IModel model, int updateFrequency){
+	public AbstractGraph2D (IModel model, int updateFrequency, String xTitle, String yTitle){
 		model.addObserver(this);
 		this.updateFrequency = updateFrequency;
-		xAxisTitle = "X";
-		yAxisTitle = "Y";
-		rangeX = new Range(0, 1000);
-		rangeY = new Range(0, 15);
-	}
-	public AbstractGraph2D (IModel model, int updateFrequency, String xTitle, String yTitle){
-		this(model, updateFrequency);
 		this.xAxisTitle = xTitle;
 		this.yAxisTitle = yTitle;
+		rangeX = new Range(0, 1000);
+		rangeY = new Range(0, 15);
 	}
 	
 	@Override

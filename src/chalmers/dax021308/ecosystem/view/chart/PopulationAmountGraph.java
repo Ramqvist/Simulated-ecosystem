@@ -1,15 +1,14 @@
-package chalmers.dax021308.ecosystem.view;
-
-import info.monitorenter.gui.chart.ITrace2D;
-import info.monitorenter.gui.chart.traces.Trace2DSorted;
-import info.monitorenter.util.Range;
+package chalmers.dax021308.ecosystem.view.chart;
 
 import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.List;
-
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+
+import info.monitorenter.gui.chart.*;
+import info.monitorenter.gui.chart.traces.Trace2DSorted;
+import info.monitorenter.util.Range;
 
 /**
  * 
@@ -20,9 +19,9 @@ import chalmers.dax021308.ecosystem.model.population.IPopulation;
  * @author Loanne Berggren
  * 
  */
-public class GraphPopulationAmountView extends AbstractGraph2D {
+public class PopulationAmountGraph extends AbstractGraph2D {
 
-	public GraphPopulationAmountView(IModel model, int updateFrequency) {
+	public PopulationAmountGraph(IModel model, int updateFrequency) {
 		super(model, updateFrequency, "Iterations", "Population amount");
 		init();
 	}
@@ -69,6 +68,12 @@ public class GraphPopulationAmountView extends AbstractGraph2D {
 	}
 	
 	@Override
+	protected void onStart(Object object) {
+		// Nothing
+		
+	}
+	
+	@Override
 	protected void onStop(Object object){
 		this.removeAllTraces().clear();
 		this.nIterationsPassed = 0;
@@ -94,7 +99,7 @@ public class GraphPopulationAmountView extends AbstractGraph2D {
 		
 	}
 	/*
-	 * update graph
+	 * update points for each population.
 	 */
 	private void updateGraph(List<IPopulation> populations){
 		Iterator<ITrace2D> it = this.getTraces().iterator();
@@ -107,11 +112,7 @@ public class GraphPopulationAmountView extends AbstractGraph2D {
 		}
 	}
 
-	@Override
-	protected void onStart(Object object) {
-		// Nothing special
-		
-	}
+
 
 	@Override
 	protected void onPause(Object object) {

@@ -20,25 +20,11 @@ import java.util.concurrent.Executors;
 
 import chalmers.dax021308.ecosystem.model.agent.AbstractAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
-import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
-import chalmers.dax021308.ecosystem.model.population.DeerPopulation;
-import chalmers.dax021308.ecosystem.model.population.DeerPopulationGrid;
-import chalmers.dax021308.ecosystem.model.population.DummyPredatorPopulation;
-import chalmers.dax021308.ecosystem.model.population.DummyPreyPopulation;
-import chalmers.dax021308.ecosystem.model.population.GrassPopulation;
-import chalmers.dax021308.ecosystem.model.population.GrassPopulationGrid;
-import chalmers.dax021308.ecosystem.model.population.IPopulation;
-import chalmers.dax021308.ecosystem.model.population.PigPopulation;
-import chalmers.dax021308.ecosystem.model.population.WolfPopulation;
-import chalmers.dax021308.ecosystem.model.population.WolfPopulationGrid;
-import chalmers.dax021308.ecosystem.model.util.CircleShape;
-import chalmers.dax021308.ecosystem.model.util.IShape;
-import chalmers.dax021308.ecosystem.model.util.Log;
-import chalmers.dax021308.ecosystem.model.util.Position;
-import chalmers.dax021308.ecosystem.model.util.SquareShape;
-import chalmers.dax021308.ecosystem.model.util.Stat;
-import chalmers.dax021308.ecosystem.model.util.TimerHandler;
-import chalmers.dax021308.ecosystem.model.util.TriangleShape;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.EllipticalObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.RectangularObstacle;
+import chalmers.dax021308.ecosystem.model.population.*;
+import chalmers.dax021308.ecosystem.model.util.*;
 
 /**
  * Ecosystem main class.
@@ -67,46 +53,7 @@ public class EcoWorld implements IModel {
 	public static final String EVENT_DELAY_CHANGED      = "chalmers.dax021308.ecosystem.model.Ecoworld.event_delay_changed";
 	public static final String EVENT_SHAPE_CHANGED      = "chalmers.dax021308.ecosystem.model.Ecoworld.event_shape_changed";
 	public static final String EVENT_ITERATION_FINISHED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_iteration_finished";
-	
-	/* Shape Constants */
-	public static final String SHAPE_SQUARE   = "Square Shape";
-	public static final String SHAPE_CIRCLE   = "Circle Shape";
-	public static final String SHAPE_TRIANGLE = "Triangle Shape";
 
-	/* Population constants */
-	public static final String POP_PIG        = "Pig Population";
-	public static final String POP_DUMMYPREY  = "Dummy Prey Population";
-	public static final String POP_DEER       = "Deer Population";
-	public static final String POP_DEER_GRID  = "Deer Population Grid";
-	public static final String POP_GRASS      = "Grass Population";
-	public static final String POP_GRASS_GRID = "Grass Population Grid";
-	public static final String POP_DUMMYPRED  = "Dummy Predator Population";
-	public static final String POP_WOLF       = "Wolf Population";
-	public static final String POP_WOLF_GRID  = "Wolf Population Grid";
-
-	/* Population array based on predator-prey model, the view uses these values. */
-	public static final String[] PREY_VALUES  = { POP_DEER, POP_DEER_GRID, POP_PIG, POP_DUMMYPREY };
-	public static final String[] PRED_VALUES  = { POP_WOLF, POP_WOLF_GRID, POP_DUMMYPRED };
-	public static final String[] GRASS_VALUES = { POP_GRASS, POP_GRASS_GRID };
-	
-	/*Obstacle constants */
-	public static final String RECTANGULAR_OBSTACLE = "Rectangular obstacle";
-	public static final String ELLIPTICAL_OBSTACLE = "Elliptical obstacle";
-	public static final String NO_OBSTACLE = "No obstacle";
-	public static final String[] OBSTACLE_VALUES = {NO_OBSTACLE, RECTANGULAR_OBSTACLE, ELLIPTICAL_OBSTACLE};
-	
-	/* Dimension constants */
-	public static final String DIM_SMALL  = "500  x 500";
-	public static final String DIM_MEDIUM = "1000 x 1000";
-	public static final String DIM_LARGE  = "1500 x 1500";
-	public static final String DIM_XLARGE = "2000 x 2000";
-
-	private static final Dimension D_SMALL  = new Dimension(500, 500);
-	private static final Dimension D_MEDIUM = new Dimension(1000, 1000);
-	private static final Dimension D_LARGE  = new Dimension(1500, 1500);
-	private static final Dimension D_XLARGE = new Dimension(2000, 2000);
-
-	public static final String[] DIM_VALUES = { DIM_SMALL, DIM_MEDIUM, DIM_LARGE, DIM_XLARGE };
 
 	/* State variables */
 	private boolean environmentFinished = false;
@@ -246,21 +193,21 @@ public class EcoWorld implements IModel {
 		this.numIterations = numIterations;
 	}
 
-	public synchronized void setSimulationDimension(Dimension d) {
+	private synchronized void setSimulationDimension(Dimension d) {
 		this.d = d;
 		observers.firePropertyChange(EVENT_DIMENSIONCHANGED, null, d);
 		WorldGrid.getInstance().init(d, 20);
 	}
 
-	public synchronized void setSimulationDimension(String dimConstant) {
-		if (dimConstant == DIM_XLARGE) {
-			d = D_XLARGE;
-		} else if (dimConstant == DIM_LARGE) {
-			d = D_LARGE;
-		} else if (dimConstant == DIM_MEDIUM) {
-			d = D_MEDIUM;
-		} else if (dimConstant == DIM_SMALL) {
-			d = D_SMALL;
+	private synchronized void setSimulationDimension(String dimConstant) {
+		if (dimConstant == SimulationSettings.DIM_XLARGE) {
+			d = SimulationSettings.D_XLARGE;
+		} else if (dimConstant == SimulationSettings.DIM_LARGE) {
+			d = SimulationSettings.D_LARGE;
+		} else if (dimConstant == SimulationSettings.DIM_MEDIUM) {
+			d = SimulationSettings.D_MEDIUM;
+		} else if (dimConstant == SimulationSettings.DIM_SMALL) {
+			d = SimulationSettings.D_SMALL;
 		}
 		observers.firePropertyChange(EVENT_DIMENSIONCHANGED, null, d);
 		WorldGrid.getInstance().init(d, 20);
@@ -296,17 +243,28 @@ public class EcoWorld implements IModel {
 		this(d, Integer.MAX_VALUE);
 	}
 
-	public void createInitialPopulations(String predatorModel, int predPop,
-			String preyModel, int preyPop, String grassModel, int grassPop,
-			String shapeModel, String Obstacle) throws IllegalArgumentException {
-		List<IPopulation> populations = new ArrayList<IPopulation>();
+	/**
+	 * Load a {@link SimulationSettings} into EcoWorld.
+	 * <p>
+	 * The simulation should be stopped before loading.
+	 * 
+	 * @param s
+	 * @throws IllegalArgumentException
+	 */
+	public void loadSimulationSettings(SimulationSettings s) throws IllegalArgumentException {
+		if(s.getSimDimension() == null && s.getSimDimensionConstant() != null) {
+			setSimulationDimension(s.getSimDimensionConstant());
+		} else if(s.getSimDimension() != null && s.getSimDimensionConstant() == null) {
+			setSimulationDimension(s.getSimDimension());
+		}
 		
+		List<IPopulation> populations = new ArrayList<IPopulation>();
 		/*
 		 * Creating obstacles here for test. This should be done in a proper way later.
 		 */
 		List<IObstacle> obstacles = new ArrayList<IObstacle>();
 		
-		
+		this.numThreads = s.getNumThreads();
 
 		IPopulation prey = null;
 		IPopulation pred = null;
@@ -314,53 +272,53 @@ public class EcoWorld implements IModel {
 		IShape shape = null;
 		
 		
-		if(Obstacle == ELLIPTICAL_OBSTACLE){
+		if(s.getObstacle() == SimulationSettings.ELLIPTICAL_OBSTACLE){
 			obstacles.add(new EllipticalObstacle(d.getWidth()*0.2, d.getHeight()*0.15, 
-					new Position(d.getWidth()/2,d.getHeight()/2)));
-		} else if (Obstacle == RECTANGULAR_OBSTACLE) {
+					new Position(d.getWidth()/2,d.getHeight()/2),new Color(0, 128, 255)));
+		} else if (s.getObstacle() == SimulationSettings.RECTANGULAR_OBSTACLE) {
 			obstacles.add(new RectangularObstacle(d.getWidth()*0.1, d.getHeight()*0.02, 
-					new Position(d.getWidth()/2,d.getHeight()/2)));
+					new Position(d.getWidth()/2,d.getHeight()/2),new Color(0, 128, 255)));
 		}
 		
-		if (shapeModel == SHAPE_SQUARE) {
+		if (s.getShapeModel() == SimulationSettings.SHAPE_SQUARE) {
 			shape = new SquareShape();
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
-		} else if (shapeModel == SHAPE_CIRCLE) {
+		} else if (s.getShapeModel() == SimulationSettings.SHAPE_CIRCLE) {
 			shape = new CircleShape();
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
-		}else if (shapeModel == SHAPE_TRIANGLE){
+		}else if (s.getShapeModel() == SimulationSettings.SHAPE_TRIANGLE){
 			shape = new TriangleShape();
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
 		}
-		if (predatorModel == POP_DUMMYPRED) {
-			pred = new DummyPredatorPopulation(d, predPop, Color.red, 3,
+		if (s.getPredatorModel() == SimulationSettings.POP_DUMMYPRED) {
+			pred = new DummyPredatorPopulation(d, s.getPredPopSize(), Color.red, 3,
 					0.75, 275, shape);
-		} else if (predatorModel == POP_WOLF) {
-			pred = new WolfPopulation("Wolves", d, predPop, Color.red, 3,
+		} else if (s.getPredatorModel() == SimulationSettings.POP_WOLF) {
+			pred = new WolfPopulation("Wolves", d, s.getPredPopSize(), Color.red, 3,
 					0.8, 250, true, shape, obstacles);
-		} else if (predatorModel == POP_WOLF_GRID) {
-			pred = new WolfPopulationGrid("Wolves", d, predPop, Color.red, 3,
+		} else if (s.getPredatorModel() == SimulationSettings.POP_WOLF_GRID) {
+			pred = new WolfPopulationGrid("Wolves", d, s.getPredPopSize(), Color.red, 3,
 					0.8, 250, true, shape);
 		}
 
-		if (preyModel == POP_DEER) {
-			prey = new DeerPopulation("Deers", d, preyPop, Color.blue, 2.0, 2,
+		if (s.getPreyModel() == SimulationSettings.POP_DEER) {
+			prey = new DeerPopulation("Deers", d, s.getPreyPopSize(), Color.blue, 2.0, 2,
 					200, true, shape, obstacles);
-		} else if (preyModel == POP_DEER_GRID) {
-			prey = new DeerPopulationGrid("Deers", d, preyPop, Color.blue, 2.0,
+		} else if (s.getPreyModel() == SimulationSettings.POP_DEER_GRID) {
+			prey = new DeerPopulationGrid("Deers", d, s.getPreyPopSize(), Color.blue, 2.0,
 					2, 200, true, shape);
-		} else if (preyModel == POP_DUMMYPREY) {
-			prey = new DummyPreyPopulation(d, preyPop, Color.blue, 2.2, 2, 250, shape);
-		} else if (preyModel == POP_PIG) {
-			prey = new PigPopulation("Filthy Pigs", d, preyPop, Color.pink,
+		} else if (s.getPreyModel() == SimulationSettings.POP_DUMMYPREY) {
+			prey = new DummyPreyPopulation(d, s.getPreyPopSize(), Color.blue, 2.2, 2, 250, shape);
+		} else if (s.getPreyModel() == SimulationSettings.POP_PIG) {
+			prey = new PigPopulation("Filthy Pigs", d, s.getPreyPopSize(), Color.pink,
 					2.0, 1.5, 225, shape);
 		}
 
-		if (grassModel == POP_GRASS) {
-			grass = new GrassPopulation("Grass", d, grassPop, new Color(69,139,00), 1,
+		if (s.getGrassModel() == SimulationSettings.POP_GRASS) {
+			grass = new GrassPopulation("Grass", d, s.getGrassPopSize(), new Color(69,139,00), 1,
 					1, 0, 1500, shape, obstacles);
-		} else if (grassModel == POP_GRASS_GRID) {
-			grass = new GrassPopulationGrid("Grass", d, grassPop, new Color(69,139,00),
+		} else if (s.getGrassModel() == SimulationSettings.POP_GRASS_GRID) {
+			grass = new GrassPopulationGrid("Grass", d, s.getGrassPopSize(), new Color(69,139,00),
 					1, 1, 0, 1500, shape);
 		}
 
@@ -380,23 +338,16 @@ public class EcoWorld implements IModel {
 			recordedSimulation = new ArrayList<List<IPopulation>>(
 					numIterations / 2);
 		}
-		this.env = new SquareEnvironment2(populations, obstacles,
+		this.env = new EnvironmentScheduler(populations, obstacles,
 				mOnFinishListener, d.height, d.width, numThreads);
 	}
 
 	private List<IObstacle> readObsticlesFromFile() {
 		List<IObstacle> obsList = new ArrayList<IObstacle>();
-		obsList.add(new EllipticalObstacle(0,0, new Position()));
+		obsList.add(new EllipticalObstacle(0,0, new Position(), Color.black));
 		return obsList;
 	}
 
-	public void setNumThreads(int numThreads) {
-		this.numThreads = numThreads;
-	}
-
-	public int getNumThreads() {
-		return numThreads;
-	}
 
 	/**
 	 * Start the EcoWorld simulation program.
