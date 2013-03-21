@@ -101,25 +101,21 @@ public class OpenGLSimulationView extends GLCanvas /* (GLCanvas extends Java.AWT
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			
@@ -256,7 +252,6 @@ public class OpenGLSimulationView extends GLCanvas /* (GLCanvas extends Java.AWT
 	 */
     private class JOGLListener implements GLEventListener {
     	
-    		//Number of edges in each created circle.
         	private final float  COLOR_FACTOR        = (1.0f/255);
         	private int zoomValue = 0;
         	private int currentScrollZoom = 0;
@@ -529,38 +524,6 @@ public class OpenGLSimulationView extends GLCanvas /* (GLCanvas extends Java.AWT
         		}
 			}
         	
-        	private void updateViewPort() {
-                //System.out.println("RESHAPE CALLED Frame size:" + getSize().toString());
-                //Projection mode is for setting camera
-        		GL gl = getGL();
-            	gl.glMatrixMode(GL.GL_PROJECTION);
-              //This will set the camera for orthographic projection and allow 2D view
-              //Our projection will be on 400 X 400 screen
-                gl.glLoadIdentity();
-//                Log.v("getWidth(): " + getWidth());
-//                Log.v("getHeight(): " + getHeight());
-//                Log.v("size.width: " + size.width);
-//                Log.v("size.height: " + size.height);
-                gl.glViewport(zoomValue, zoomValue, getWidth() + zoomValue, getHeight() + zoomValue);
-                gl.glOrtho(0 + zoomValue, getWidth()+ zoomValue, getHeight()+ zoomValue, 0 +zoomValue, 0 + zoomValue, 1+ zoomValue);
-              //Modelview is for drawing
-                gl.glMatrixMode(GL.GL_MODELVIEW);
-              //Depth is disabled because we are drawing in 2D
-                gl.glDisable(GL.GL_DEPTH_TEST);
-              //Setting the clear color (in this case black)
-              //and clearing the buffer with this set clear color
-                gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);  
-                gl.glClear(GL.GL_COLOR_BUFFER_BIT);
-              //This defines how to blend when a transparent graphics
-              //is placed over another (here we have blended colors of
-              //two consecutively overlapping graphic objects)
-                gl.glBlendFunc (GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
-                gl.glEnable (GL.GL_BLEND);
-                gl.glLoadIdentity();
-              //After this we start the drawing of object  
-              //We want to draw a triangle which is a type of polygon
-        	}
-
 			public void zoomIn() {
         		zoomValue = zoomValue + 20;
 			}
@@ -572,7 +535,6 @@ public class OpenGLSimulationView extends GLCanvas /* (GLCanvas extends Java.AWT
  
             @Override
             public void init(GLAutoDrawable drawable) {
-//                    System.out.println("INIT CALLED");
 
             }
             
@@ -632,24 +594,20 @@ public class OpenGLSimulationView extends GLCanvas /* (GLCanvas extends Java.AWT
 
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void addController(ActionListener controller) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onTick() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void release() {
-		// TODO Auto-generated method stub
 		
 	}
 
