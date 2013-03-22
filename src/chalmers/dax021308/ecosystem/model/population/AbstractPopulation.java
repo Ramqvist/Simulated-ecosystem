@@ -44,7 +44,7 @@ public abstract class AbstractPopulation implements IPopulation {
 
 	protected List<Integer> lifeLengths;
 	protected boolean groupBehaviour;
-	private String name;
+	protected String name;
 
 	public AbstractPopulation() {
 		preys = new ArrayList<IPopulation>();

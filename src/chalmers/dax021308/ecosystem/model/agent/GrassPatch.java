@@ -23,7 +23,6 @@ public class GrassPatch {
 	private Dimension size;
 	private int capacity;
 	private static final double REPRODUCTION_RATE = 0.003;
-	private IShape shape;
 	private String name;
 	private Color color;
 	private Vector grassVelocity;
@@ -36,13 +35,12 @@ public class GrassPatch {
 		this.capacity = capacity;
 		this.name = name;
 		this.color = color;
-		shape = new CircleShape();
 	}
 
 	public IAgent createGrass(int populationSize, Dimension gridDimension,
 			IShape shape) {
-		IAgent grass = new GrassAgent(name, getSpawnPosition(gridDimension, shape),
-				color, 5, 5, grassVelocity, 2.0, capacity);
+		IAgent grass = new GrassAgent(name, getSpawnPosition(gridDimension,
+				shape), color, 5, 5, grassVelocity, 2.0, capacity);
 		grassPatches.add(grass);
 		return grass;
 	}
@@ -51,6 +49,7 @@ public class GrassPatch {
 			IShape shape) {
 		List<IAgent> spawn = new ArrayList<IAgent>();
 		for (int i = 0; i < grassPatches.size(); i++) {
+			grassPatches.get(i).updatePosition();
 			double popSize = (double) populationSize;
 			double cap = (double) capacity;
 			if (Math.random() < REPRODUCTION_RATE * (1.0 - popSize / cap)) {
@@ -61,11 +60,14 @@ public class GrassPatch {
 		return spawn;
 	}
 
+	public boolean removeGrass(IAgent a) {
+		return grassPatches.remove(a);
+	}
+
 	/**
-	 * Finds a new position close to the current position
+	 * Finds a new position inside the grassPatch
 	 * 
 	 * @param gridDimension
-	 *            TODO
 	 * 
 	 * @return The position found
 	 */
@@ -73,8 +75,8 @@ public class GrassPatch {
 		Position p;
 		do {
 			p = shape.getRandomPosition(size);
-			double x = p.getX() - size.getWidth();
-			double y = p.getY() - size.getHeight();
+			double x = p.getX() - size.getWidth() / 2;
+			double y = p.getY() - size.getHeight() / 2;
 			Vector v = new Vector(x, y);
 			p = Position.positionPlusVector(pos, v);
 		} while (!shape.isInside(gridDimension, p));
