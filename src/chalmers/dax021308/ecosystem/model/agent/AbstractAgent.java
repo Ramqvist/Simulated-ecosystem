@@ -23,7 +23,6 @@ public abstract class AbstractAgent implements IAgent {
 	protected Position position;
 	protected Position nextPosition;
 	protected Position reUsedPosition;
-	protected Random ran;
 	protected String name;
 	protected Color color;
 	protected boolean groupBehaviour;
@@ -50,6 +49,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected List<IObstacle> obstacles;
 	private int neighbourCounter;
 	private static final int NEIGHBOURS_UPDATE_THRESHOLD = 10;
+	protected static Random ran = new Random();
 
 	protected final static double INTERACTION_RANGE = 10;
 	protected final static double EATING_RANGE = 4;
@@ -73,7 +73,7 @@ public abstract class AbstractAgent implements IAgent {
 		this.maxAcceleration = maxAcceleration;
 		this.capacity = Integer.MAX_VALUE;
 		this.lifeLength = 0;
-		ran = new Random();
+
 		this.isAlive = true;
 		
 		/* LinkedList for fast changing of Agents, consider ArrayList for less memory */
