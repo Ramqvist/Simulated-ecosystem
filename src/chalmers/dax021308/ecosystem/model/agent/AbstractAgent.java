@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import org.lwjgl.LWJGLException;
+
 import com.amd.aparapi.Kernel;
 import com.amd.aparapi.Range;
 
@@ -50,6 +52,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected List<IAgent> predNeighbours;
 	protected List<IAgent> neutralNeighbours;
 	private int neighbourCounter;
+	private MutualTestKernel kernel;
 	private static final int NEIGHBOURS_UPDATE_THRESHOLD = 10;
 
 	protected final static double INTERACTION_RANGE = 10;
@@ -80,6 +83,7 @@ public abstract class AbstractAgent implements IAgent {
 		neutralNeighbours = new ArrayList<IAgent>(256);
 		
 		//To update the first time.
+		kernel = new MutualTestKernel();
 		neighbourCounter = ran.nextInt(NEIGHBOURS_UPDATE_THRESHOLD);
 	}
 
@@ -298,10 +302,47 @@ public abstract class AbstractAgent implements IAgent {
 	 */
 	protected Vector mutualInteractionForce() {
 		long time = System.nanoTime();
-		Vector result = mutualInteractionForceGPU();
+		Vector result = mutualInteractionForceJWJGLOpenCL();
 		time = (long) (0.000001 * time - System.nanoTime());
 		return result;
 	}
+	
+	protected Vector mutualInteractionForceJWJGLOpenCL() {
+		final int size = neutralNeighbours.size();
+		if(size == 0) {
+			return Vector.EmptyVector();
+		}
+		IAgent agent;
+		float[] xPosArray = new float[size];
+		float[] yPosArray = new float[size];
+	
+		for (int i = 0; i < size; i++) {
+			agent = neutralNeighbours.get(i);
+			if (agent != AbstractAgent.this) {
+				Position p = agent.getPosition();
+				xPosArray[i] = (float) p.getX();
+				yPosArray[i] = (float) p.getY();
+			}
+		}	
+		kernel.setValues(size, (float) INTERACTION_RANGE,(float) getPosition().getX(), (float) getPosition().getY(), xPosArray, yPosArray);
+		//kernel.getExecutionTime()
+		try {
+			kernel.executeMutualKernel();
+		} catch (LWJGLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		double mutualInteractionForceX = 0;
+		double mutualInteractionForceY = 0;
+		for (int i = 0; i < size; i++) {
+			mutualInteractionForceX = mutualInteractionForceX + kernel.resultBuffX.get(i);
+			mutualInteractionForceY = mutualInteractionForceY + kernel.resultBuffY.get(i);
+//			Log.v(kernel.xResult[i] + " " + kernel.yResult[i]);
+		}
+		final Vector mutualInteractionForce = new Vector(mutualInteractionForceX, mutualInteractionForceY);
+		return mutualInteractionForce.multiply((ran.nextDouble() + ran.nextDouble()));
+	}
+	
 	protected Vector mutualInteractionForceGPU() {
 		final int size = neutralNeighbours.size();
 		if(size == 0) {

@@ -13,37 +13,27 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.opencl.*;
 
-public class MyClClass {
+public class TestJWJGLOpenCL {
 	// OpenCL variables
 	public static CLContext context;
 	public static CLPlatform platform;
 	public static List<CLDevice> devices;
 	public static CLCommandQueue queue;
-	
-	public static void main(String[] args) {
-		try {
-			doSumExample();
-		} catch (LWJGLException e) {
-			e.printStackTrace();
-		}
-	}
 
 	public static void doSumExample() throws LWJGLException {
 		// Create our OpenCL context to run commands
 		initializeCL();
 		// Create an OpenCL 'program' from a source code file
-		CLProgram sumProgram = CL10.clCreateProgramWithSource(context, loadText("sumKernel.cl"), null);
+		CLProgram sumProgram = CL10.clCreateProgramWithSource(context, loadText("sumKernel.cls"), null);
 		// Build the OpenCL program, store it on the specified device
 		int error = CL10.clBuildProgram(sumProgram, devices.get(0), "", null);
 		// Check for any OpenCL errors
 		Util.checkCLError(error);
 		// Create a kernel instance of our OpenCl program
-
-		long time = System.currentTimeMillis();
 		CLKernel sumKernel = CL10.clCreateKernel(sumProgram, "sum", null);
 
 		// Used to determine how many units of work to do
-		final int size = 1000;
+		final int size = 100;
 		// Error buffer used to check for OpenCL error that occurred while a command was running
 		IntBuffer errorBuff = BufferUtils.createIntBuffer(1);
 
@@ -98,8 +88,6 @@ public class MyClClass {
 		FloatBuffer resultBuff = BufferUtils.createFloatBuffer(size);
 		// We read the buffer in blocking mode so that when the method returns we know that the result buffer is full
 		CL10.clEnqueueReadBuffer(queue, resultMemory, CL10.CL_TRUE, 0, resultBuff, null, null);
-		time = System.currentTimeMillis() - time;
-		System.out.println("Elapsed time GPU: " + time);
 		// Print the values in the result buffer
 		for(int i = 0; i < resultBuff.capacity(); i++) {
 			System.out.println("result at " + i + " = " + resultBuff.get(i));
@@ -115,62 +103,6 @@ public class MyClClass {
 		CL10.clReleaseMemObject(resultMemory);
 		// Destroy the OpenCL context
 		destroyCL();
-		doSameJavaExample();
-	}
-	
-	public static void doSameJavaExample() {
-		final int size = 1000;
-
-		float[] tempData = new float[size];
-		float[] result = new float[size];
-		for (int i = 0; i < size; i++) {
-			tempData[i] = i;
-		}
-
-		long time = System.currentTimeMillis();
-		for (int itemId = 0; itemId < size; itemId++) {
-			if (itemId < size) {
-				result[itemId] = tempData[itemId] * tempData[itemId];
-				result[itemId] = result[itemId] * result[itemId];
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-				result[itemId] = result[itemId] / 2;
-			}
-		}
-		time = System.currentTimeMillis() - time;
-		System.out.println("Elapsed time CPU: " + time);
-		for(int i = 0; i < size; i++) {
-			System.out.println("result at " + i + " = " + result[i]);
-		}
 	}
 
 
@@ -201,14 +133,14 @@ public class MyClClass {
 
 
 	public static String loadText(String name) {
-		if(!name.endsWith(".cl")) {
-			name += ".cl";
+		if(!name.endsWith(".cls")) {
+			name += ".cls";
 		}
 		BufferedReader br = null;
 		String resultString = null;
 		try {
 			// Get the file containing the OpenCL kernel source code
-			File clSourceFile = new File(MyClClass.class.getClassLoader().getResource(name).toURI());
+			File clSourceFile = new File(TestJWJGLOpenCL.class.getClassLoader().getResource(name).toURI());
 			// Create a buffered file reader for the source file
 			br = new BufferedReader(new FileReader(clSourceFile));
 			// Read the file's source code line by line and store it in a string builder

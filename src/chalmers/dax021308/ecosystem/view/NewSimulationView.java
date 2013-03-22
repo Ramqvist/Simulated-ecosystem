@@ -135,6 +135,7 @@ public class NewSimulationView {
 				Log.v(e.toString());
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			JOptionPane.showMessageDialog(frmSimulatedEcosystem,
 					"Something didnt go quite well there. Have some coffee.");
 		}
