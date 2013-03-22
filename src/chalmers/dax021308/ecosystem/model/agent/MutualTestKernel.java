@@ -56,7 +56,7 @@ public class MutualTestKernel {
 	}
 
 	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		int size = 500;
 		final float[] xPosArray = new float[500];
 		for(int i = 0; i < xPosArray.length ; i++) {
@@ -70,7 +70,7 @@ public class MutualTestKernel {
 		final float randomY = (float) (45*Math.random());
 		//new MutualTestKernel(size, 250, randomX, randomY, xPosArray, yPosArray).executeMutualKernel();
 		
-	}
+	}*/
 	
 
 	public void executeMutualKernel() throws LWJGLException {
@@ -78,7 +78,7 @@ public class MutualTestKernel {
 //		initializeCL();
 		// Create an OpenCL 'program' from a source code file
 
-		long time = System.currentTimeMillis();
+//		long time = System.currentTimeMillis();
 		// Create a kernel instance of our OpenCl program
 
 		sumKernel = CL10.clCreateKernel(sumProgram, "mutualInteractionForce", null);
@@ -140,8 +140,6 @@ public class MutualTestKernel {
 		
 		resultBuffY = BufferUtils.createFloatBuffer(size);
 		CL10.clEnqueueReadBuffer(queue, resultMemoryY, CL10.CL_TRUE, 0, resultBuffY, null, null);
-		time = System.currentTimeMillis() - time;
-//		System.out.println("Elapsed time GPU: " + time);
 		// Print the values in the result buffer
 //		for(int i = 0; i < resultBuffX.capacity(); i++) {
 //			System.out.println("result at resultBuffX " + i + " = " + resultBuffX.get(i));
@@ -161,6 +159,8 @@ public class MutualTestKernel {
 		CL10.clReleaseMemObject(resultMemoryX);
 		CL10.clReleaseMemObject(resultMemoryY);
 //		destroyCL();
+//		time = System.currentTimeMillis() - time;
+//		System.out.println("Elapsed time GPU: " + time);
 
 	}
 	

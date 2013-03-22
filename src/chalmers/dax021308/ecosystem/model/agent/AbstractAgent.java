@@ -18,6 +18,7 @@ import chalmers.dax021308.ecosystem.model.util.Gender;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
+import chalmers.dax021308.ecosystem.model.util.Stat;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
@@ -53,6 +54,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected List<IAgent> neutralNeighbours;
 	private int neighbourCounter;
 	private MutualTestKernel kernel;
+	private Stat<Double> stat;
 	private static final int NEIGHBOURS_UPDATE_THRESHOLD = 10;
 
 	protected final static double INTERACTION_RANGE = 10;
@@ -76,6 +78,9 @@ public abstract class AbstractAgent implements IAgent {
 		this.lifeLength = 0;
 		ran = new Random();
 		this.isAlive = true;
+		
+		//TODO: STAT REMOVE WHEN FINISHED!
+		this.stat = new Stat<Double>();
 		
 		/* LinkedList for fast changing of Agents, consider ArrayList for less memory */
 		preyNeighbours    = new ArrayList<IAgent>(256);
@@ -302,9 +307,23 @@ public abstract class AbstractAgent implements IAgent {
 	 */
 	protected Vector mutualInteractionForce() {
 		long time = System.nanoTime();
-		Vector result = mutualInteractionForceJWJGLOpenCL();
-		time = (long) (0.000001 * time - System.nanoTime());
-		return result;
+		boolean executeCPU = true;
+		if(executeCPU) {
+			for(int i = 0; i < 10000;i++) {
+				mutualInteractionForceCPU();
+			}
+			double dtime = (0.000001 * (System.nanoTime() - time));
+			stat.addObservation(dtime);
+			System.out.println("mutualInteractionForce size: " + neutralNeighbours.size() + " Elapsed time CPU: " + dtime + " mean: " + stat.getMean());
+			return mutualInteractionForceCPU();
+		} else {
+			Vector result = mutualInteractionForceJWJGLOpenCL();
+//			time = (long) (0.000001 * (System.nanoTime() - time) );
+			double dtime = (0.000001 * (System.nanoTime() - time));
+			stat.addObservation(dtime);
+			System.out.println("mutualInteractionForce size: " + neutralNeighbours.size() + " Elapsed time GPU: " + dtime + " mean: " + stat.getMean());
+			return result;
+		}
 	}
 	
 	protected Vector mutualInteractionForceJWJGLOpenCL() {
