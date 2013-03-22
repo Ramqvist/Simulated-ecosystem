@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -467,7 +468,7 @@ public class EcoWorld implements IModel {
 				timer.start(tickTime, onTickListener);
 			}
 			StringBuffer sb = new StringBuffer(
-					"---- Simulation model Update ---- Number of updates: ");
+					"-- Simulation model Update: ");
 			sb.append(++numUpdates);
 			if (startIterationTime != 0) {
 				sb.append(" - Iteration time:");
@@ -475,9 +476,9 @@ public class EcoWorld implements IModel {
 				sb.append(" ms.");
 				recordedTime.add((int) (0.000001 * elapsedTime));
 				sb.append(" mean value: ");
-				sb.append(Stat.mean(recordedTime));
+				sb.append(roundTwoDecimals(Stat.mean(recordedTime)));
 				sb.append(" sample variance: ");
-				sb.append(Stat.sampleVariance(recordedTime));
+				sb.append(roundTwoDecimals(Stat.sampleVariance(recordedTime)));
 			}
 			Log.v(sb.toString());
 			executor.execute(env);
@@ -489,7 +490,13 @@ public class EcoWorld implements IModel {
 			}
 		}
 	}
-
+	
+	public static double roundTwoDecimals(double num) {
+		double result = num * 100;
+		result = Math.round(result);
+		result = result / 100;
+		return result;
+		}
 	/**
 	 * Adjust the tick rate of the next iteration. The currently executing
 	 * iteration will not be affected.

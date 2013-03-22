@@ -103,6 +103,7 @@ public class EnvironmentScheduler implements IEnvironment {
 	 * Slow, but fast start, appropriate for small populations.
 	 */
 	private void executeFastPopulationDividedAlgorithm() {
+        futures.clear();
 		   //Assign objects to workers.
 				longestExecuteTime = 0;
 				for(int i = 0 ; i < populations.size(); i ++) {
