@@ -14,6 +14,7 @@ import chalmers.dax021308.ecosystem.model.util.CircleShape;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.SquareShape;
 import chalmers.dax021308.ecosystem.model.util.Stat;
+import chalmers.dax021308.ecosystem.model.util.TriangleShape;
 
 /**
  * 
@@ -230,11 +231,14 @@ public abstract class AbstractPopulation implements IPopulation {
 		int cap = Integer.parseInt(inputArray[3]);
 		String shapeModel = inputArray[4];
 		IShape shape = null;
-		if (shapeModel == EcoWorld.SHAPE_SQUARE) {
+
+		if (shapeModel == EcoWorld.SHAPE_SQUARE)
 			shape = new SquareShape();
-		} else if (shapeModel == EcoWorld.SHAPE_CIRCLE) {
+		else if (shapeModel == EcoWorld.SHAPE_CIRCLE)
 			shape = new CircleShape();
-		}
+		else if (shapeModel == EcoWorld.SHAPE_TRIANGLE)
+			shape = new TriangleShape();
+
 		if (shape == null)
 			throw new IllegalArgumentException("Illegal Shape from file.");
 
@@ -267,15 +271,17 @@ public abstract class AbstractPopulation implements IPopulation {
 		int populationSize = agents.size();
 		for (IAgent a : agents) {
 			a.updatePosition();
-			List<IAgent> spawn = a.reproduce(null, populationSize, gridDimension);
+			List<IAgent> spawn = a.reproduce(null, populationSize,
+					gridDimension, shape);
 			if (spawn != null) {
 				kids.addAll(spawn);
 			}
 		}
 		if (kids != null) {
-			//Maybe the most sense is just to make the kids move
-			for (IAgent a : kids){
-				a.calculateNextPosition(predators, preys, neutral, gridDimension, shape);
+			// Maybe the most sense is just to make the kids move
+			for (IAgent a : kids) {
+				a.calculateNextPosition(predators, preys, neutral,
+						gridDimension, shape);
 				a.updatePosition();
 			}
 			agents.addAll(kids);
@@ -299,7 +305,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		for (int i = 0; i < removeList.size(); i++) {
 			a = removeList.get(i);
 			lifeLengths.add(a.getLifeLength());
-				
+
 			agents.remove(a);
 		}
 		removeList.clear();

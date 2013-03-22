@@ -41,20 +41,24 @@ public class DeerAgent extends AbstractAgent {
 	}
 
 	@Override
-	public List<IAgent> reproduce(IAgent agent, int populationSize, Dimension gridDimension) {
+	public List<IAgent> reproduce(IAgent agent, int populationSize,
+			Dimension gridDimension, IShape shape) {
 		if (hungry)
 			return null;
 		else {
 			List<IAgent> spawn = new ArrayList<IAgent>();
 			hungry = true;
 			if (Math.random() < REPRODUCTION_RATE) {
-				double xSign = Math.signum(-1 + 2 * Math.random());
-				double ySign = Math.signum(-1 + 2 * Math.random());
-				double newX = this.getPosition().getX() + xSign
-						* (1 + 5 * Math.random());
-				double newY = this.getPosition().getY() + ySign
-						* (1 + 5 * Math.random());
-				Position pos = new Position(newX, newY);
+				Position pos;
+				do {
+					double xSign = Math.signum(-1 + 2 * Math.random());
+					double ySign = Math.signum(-1 + 2 * Math.random());
+					double newX = this.getPosition().getX() + xSign
+							* (1 + 5 * Math.random());
+					double newY = this.getPosition().getY() + ySign
+							* (1 + 5 * Math.random());
+					pos = new Position(newX, newY);
+				} while (!shape.isInside(gridDimension, pos));
 				IAgent child = new DeerAgent(name, pos, color, width, height,
 						new Vector(velocity), maxSpeed, maxAcceleration,
 						visionRange, groupBehaviour);

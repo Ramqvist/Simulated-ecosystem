@@ -35,7 +35,7 @@ public class GrassPopulationGrid extends AbstractPopulation {
 			Position randPos = shape.getRandomPosition(gridDimension);
 			Vector velocity = new Vector(maxSpeed, maxSpeed);
 			IAgent a = new GrassAgent(getName(), randPos, color, 5, 5,
-					velocity, maxSpeed, capacity, shape);
+					velocity, maxSpeed, capacity);
 			newAgents.add(a);
 			wg.add(a);
 		}

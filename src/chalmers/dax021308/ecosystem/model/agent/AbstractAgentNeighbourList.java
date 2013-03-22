@@ -188,7 +188,7 @@ public abstract class AbstractAgentNeighbourList implements IAgent {
 			}
 
 			@Override
-			public List<IAgent> reproduce(IAgent agent, int populationSize, Dimension gridDimension) {
+			public List<IAgent> reproduce(IAgent agent, int populationSize, Dimension gridDimension, IShape shape) {
 				return Collections.emptyList();
 			}
 
@@ -477,7 +477,7 @@ public abstract class AbstractAgentNeighbourList implements IAgent {
 				maxSpeed, visionRange, maxAcceleration) {
 
 			@Override
-			public List<IAgent> reproduce(IAgent agent, int populationSize, Dimension gridDimension) {
+			public List<IAgent> reproduce(IAgent agent, int populationSize, Dimension gridDimension, IShape shape) {
 				return null;
 			}
 
