@@ -19,16 +19,22 @@ public class MutualTestKernel {
 	public static CLContext context;
 	public static CLPlatform platform;
 	private static String textProgram;
+	private static CLProgram sumProgram;
+	public static List<CLDevice> devices;
+	public static CLCommandQueue queue;
 	static {
 		try {
 			initializeCL();
 			textProgram = loadText("mutualInteractionKernel.cl");
+			sumProgram = CL10.clCreateProgramWithSource(context, textProgram, null);
+			// Build the OpenCL program, store it on the specified device
+			int error = CL10.clBuildProgram(sumProgram, devices.get(0), "", null);
+			// Check for any OpenCL errors
+			Util.checkCLError(error);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
 	}
-	public static List<CLDevice> devices;
-	public static CLCommandQueue queue;
 	private int size;
 	private float INTERACTION_RANGE;
 	private float myPosX;
@@ -39,7 +45,6 @@ public class MutualTestKernel {
 	public FloatBuffer resultBuffX;
 	public FloatBuffer resultBuffY;
 	private CLKernel sumKernel;
-	private CLProgram sumProgram;
 	
 	public void setValues(final int size ,final float INTERACTION_RANGE, final float myPosX, final float myPosY, final float[] xPosArray,final float[] yPosArray) {
 		this.size = size;
@@ -70,14 +75,10 @@ public class MutualTestKernel {
 
 	public void executeMutualKernel() throws LWJGLException {
 
-		long time = System.currentTimeMillis();
-		initializeCL();
+//		initializeCL();
 		// Create an OpenCL 'program' from a source code file
-		sumProgram = CL10.clCreateProgramWithSource(context, textProgram, null);
-		// Build the OpenCL program, store it on the specified device
-		int error = CL10.clBuildProgram(sumProgram, devices.get(0), "", null);
-		// Check for any OpenCL errors
-		Util.checkCLError(error);
+
+		long time = System.currentTimeMillis();
 		// Create a kernel instance of our OpenCl program
 
 		sumKernel = CL10.clCreateKernel(sumProgram, "mutualInteractionForce", null);
@@ -140,7 +141,7 @@ public class MutualTestKernel {
 		resultBuffY = BufferUtils.createFloatBuffer(size);
 		CL10.clEnqueueReadBuffer(queue, resultMemoryY, CL10.CL_TRUE, 0, resultBuffY, null, null);
 		time = System.currentTimeMillis() - time;
-		System.out.println("Elapsed time GPU: " + time);
+//		System.out.println("Elapsed time GPU: " + time);
 		// Print the values in the result buffer
 //		for(int i = 0; i < resultBuffX.capacity(); i++) {
 //			System.out.println("result at resultBuffX " + i + " = " + resultBuffX.get(i));
@@ -152,7 +153,7 @@ public class MutualTestKernel {
 		// This should print out 100 lines of result floats, each being 99.
 
 		CL10.clReleaseKernel(sumKernel);
-		CL10.clReleaseProgram(sumProgram);
+//		CL10.clReleaseProgram(sumProgram);
 
 		// Destroy our memory objects
 		CL10.clReleaseMemObject(xPosArrayMemory);
