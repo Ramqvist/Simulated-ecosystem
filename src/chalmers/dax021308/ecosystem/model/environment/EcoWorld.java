@@ -186,7 +186,7 @@ public class EcoWorld implements IModel {
 			d = SimulationSettings.D_SMALL;
 		}
 		observers.firePropertyChange(EVENT_DIMENSIONCHANGED, null, d);
-		WorldGrid.getInstance().init(d, 20);
+//		WorldGrid.getInstance().init(d, 20);
 	}
 
 
@@ -281,7 +281,10 @@ public class EcoWorld implements IModel {
 		populations.add(grass);
 		populations.add(prey);
 		populations.add(pred);
-
+		recordSimulation = s.isRecordSimulation();
+		runWithoutTimer = s.isRunWithoutTimer();
+		tickTime = s.getDelayLength();
+		numIterations = s.getNumIterations();
 		if (recordSimulation) {
 			recordedSimulation = new ArrayList<List<IPopulation>>(
 					numIterations / 2);
@@ -442,7 +445,8 @@ public class EcoWorld implements IModel {
 		result = Math.round(result);
 		result = result / 100;
 		return result;
-		}
+	}
+	
 	/**
 	 * Adjust the tick rate of the next iteration. The currently executing
 	 * iteration will not be affected.

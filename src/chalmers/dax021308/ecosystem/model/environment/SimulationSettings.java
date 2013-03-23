@@ -56,9 +56,9 @@ public class SimulationSettings {
 	public static final String[] DIM_VALUES = { DIM_SMALL, DIM_MEDIUM, DIM_LARGE, DIM_XLARGE };
 	
 	static {
-		DEFAULT = new SimulationSettings(POP_WOLF, 10, POP_DEER, 100, POP_GRASS, 400, SHAPE_SQUARE, ELLIPTICAL_OBSTACLE, 4);
+		DEFAULT = new SimulationSettings(POP_WOLF, 10, POP_DEER, 100, POP_GRASS, 400, SHAPE_SQUARE, ELLIPTICAL_OBSTACLE, 4, false, false, 16, Integer.MAX_VALUE);
 		DEFAULT.setSimulationDimension(new Dimension(1000, 1000));
-		LARGESIM = new SimulationSettings(POP_WOLF, 100, POP_DEER, 1000, POP_GRASS, 4000, SHAPE_SQUARE, NO_OBSTACLE, 4);
+		LARGESIM = new SimulationSettings(POP_WOLF, 100, POP_DEER, 1000, POP_GRASS, 4000, SHAPE_SQUARE, NO_OBSTACLE, 4, false, false, 16, Integer.MAX_VALUE);
 		LARGESIM.setSimulationDimension(new Dimension(2200, 2200));
 	}
 	
@@ -73,8 +73,12 @@ public class SimulationSettings {
 	private Dimension simDimension;
 	private String simDimensionConstant;
 	private int numThreads;
+	private boolean runWithoutTimer;
+	private boolean recordSimulation;
+	private int delayLength;
+	private int numIterations;
 
-	public SimulationSettings(String predatorModel, int predPopSize, String preyModel, int preyPopSize, String grassModel, int grassPopSize, String shapeModel, String obstacle, int numThreads) {
+	public SimulationSettings(String predatorModel, int predPopSize, String preyModel, int preyPopSize, String grassModel, int grassPopSize, String shapeModel, String obstacle, int numThreads, boolean runWithoutTimer, boolean recordSimulation, int delayLength, int numIterations) {
 		this.predatorModel = predatorModel;
 		this.predPopSize = predPopSize;
 		this.preyModel = preyModel;
@@ -84,6 +88,34 @@ public class SimulationSettings {
 		this.shapeModel = shapeModel;
 		this.obstacle = obstacle;
 		this.numThreads = numThreads;
+		this.runWithoutTimer = runWithoutTimer;
+		this.recordSimulation = recordSimulation;
+		this.delayLength = delayLength;
+		this.numIterations = numIterations;
+	}
+	
+	public int getDelayLength() {
+		return delayLength;
+	}
+	
+	public void setDelayLength(int delayLength) {
+		this.delayLength = delayLength;
+	}
+	
+	public int getNumIterations() {
+		return numIterations;
+	}
+	
+	public void setNumIterations(int numIterations) {
+		this.numIterations = numIterations;
+	}
+
+	public boolean isRecordSimulation() {
+		return recordSimulation;
+	}
+	
+	public boolean isRunWithoutTimer() {
+		return runWithoutTimer;
 	}
 	
 	public void setSimulationDimension(Dimension d) {
