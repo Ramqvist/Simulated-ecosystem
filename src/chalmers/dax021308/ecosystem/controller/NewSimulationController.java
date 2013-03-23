@@ -76,7 +76,7 @@ public class NewSimulationController implements IController {
 		} else {
 			shape = SimulationSettings.SHAPE_TRIANGLE;
 		}
-		SimulationSettings s = new SimulationSettings(
+		SimulationSettings s = new SimulationSettings("Custom",
 				(String) view.predList.getSelectedValue(),
 				Integer.parseInt(view.tvPredPopSize.getText()),
 				(String) view.preyList.getSelectedValue(),
@@ -99,7 +99,64 @@ public class NewSimulationController implements IController {
 	}
 	
 	private void injectSimulationSettingsToGUI(SimulationSettings s) {
-		//Set views to the values of s.
+		/* Inverse of method getSimulationSettingsFromGUI() */
+		int numThreads = s.getNumThreads();
+		if(numThreads == 2) {
+			view.rdbtn2Threads.setSelected(true);
+			view.rdbtn4Threads.setSelected(false);
+			view.rdbtn8Threads.setSelected(false);
+		} else if(numThreads == 4) {
+			view.rdbtn2Threads.setSelected(false);
+			view.rdbtn4Threads.setSelected(true);
+			view.rdbtn8Threads.setSelected(false);
+		} else if(numThreads == 8) {
+			view.rdbtn2Threads.setSelected(false);
+			view.rdbtn4Threads.setSelected(false);
+			view.rdbtn8Threads.setSelected(true);
+		}
+
+		view.textfield_Iterationdelay.setText(s.getDelayLength() + "");
+		
+		if(s.getNumIterations() == Integer.MAX_VALUE) {
+			view.checkBoxLimitIterations.setSelected(false);
+			view.tvNumIterations.setText("0");
+		} else {
+			view.checkBoxLimitIterations.setSelected(true);
+			view.tvNumIterations.setText(s.getNumIterations() + "");
+		}
+		String shape = s.getShapeModel();
+		if(shape == SimulationSettings.SHAPE_CIRCLE) {
+			view.rdbtnCircle.setSelected(true);
+			view.rdbtnSquare.setSelected(false);
+			view.rdbtnTriangle.setSelected(false);
+		} else if(shape == SimulationSettings.SHAPE_SQUARE) {
+			view.rdbtnCircle.setSelected(false);
+			view.rdbtnSquare.setSelected(true);
+			view.rdbtnTriangle.setSelected(false);
+		} else if(shape == SimulationSettings.SHAPE_TRIANGLE) {
+			view.rdbtnCircle.setSelected(false);
+			view.rdbtnSquare.setSelected(false);
+			view.rdbtnTriangle.setSelected(true);
+		}
+		
+		if(s.getSimDimensionConstant() == null) {
+			view.chckbxCustomSize.setSelected(false);
+			view.tfCustomWidth.setText(s.getSimDimension().width + "");
+			view.tfCustomHeight.setText(s.getSimDimension().height + "");
+		} else {
+			view.chckbxCustomSize.setSelected(true);
+			view.listSimulationDim.setSelectedValue(s.getSimDimensionConstant(), true);
+		}
+		
+		view.grassList.setSelectedValue(s.getGrassModel(), true);
+		view.predList.setSelectedValue(s.getPredatorModel(), true);
+		view.preyList.setSelectedValue(s.getPreyModel(), true);
+		view.obstacleList.setSelectedValue(s.getObstacle(), true);
+		
+		view.chckbxRecordSimulation.setSelected(s.isRecordSimulation());
+		view.tvPredPopSize.setText(s.getPredPopSize() + "");
+		view.tvPreyPopSize.setText(s.getPreyPopSize() + "");
+		view.tvGrassPopSize.setText(s.getGrassPopSize() + "");
 	}
 
 	@Override

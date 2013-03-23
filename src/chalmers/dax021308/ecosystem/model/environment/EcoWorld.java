@@ -226,7 +226,7 @@ public class EcoWorld implements IModel {
 		} else if (s.getShapeModel() == SimulationSettings.SHAPE_CIRCLE) {
 			shape = new CircleShape();
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
-		}else if (s.getShapeModel() == SimulationSettings.SHAPE_TRIANGLE){
+		} else if (s.getShapeModel() == SimulationSettings.SHAPE_TRIANGLE){
 			shape = new TriangleShape();
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
 		}
@@ -236,17 +236,11 @@ public class EcoWorld implements IModel {
 		} else if (s.getPredatorModel() == SimulationSettings.POP_WOLF) {
 			pred = new WolfPopulation("Wolves", d, s.getPredPopSize(), Color.red, 3,
 					0.8, 250, true, shape, obstacles);
-		} else if (s.getPredatorModel() == SimulationSettings.POP_WOLF_GRID) {
-			pred = new WolfPopulationGrid("Wolves", d, s.getPredPopSize(), Color.red, 3,
-					0.8, 250, true, shape);
-		}
+		} 
 
 		if (s.getPreyModel() == SimulationSettings.POP_DEER) {
 			prey = new DeerPopulation("Deers", d, s.getPreyPopSize(), Color.blue, 2.0, 2,
 					200, true, shape, obstacles);
-		} else if (s.getPreyModel() == SimulationSettings.POP_DEER_GRID) {
-			prey = new DeerPopulationGrid("Deers", d, s.getPreyPopSize(), Color.blue, 2.0,
-					2, 200, true, shape);
 		} else if (s.getPreyModel() == SimulationSettings.POP_DUMMYPREY) {
 			prey = new DummyPreyPopulation(d, s.getPreyPopSize(), Color.blue, 2.2, 2, 250, shape);
 		} else if (s.getPreyModel() == SimulationSettings.POP_PIG) {
@@ -257,10 +251,7 @@ public class EcoWorld implements IModel {
 		if (s.getGrassModel() == SimulationSettings.POP_GRASS) {
 			grass = new GrassPopulation("Grass", d, s.getGrassPopSize(), new Color(69,139,00), 1,
 					1, 0, 1500, shape, obstacles);
-		} else if (s.getGrassModel() == SimulationSettings.POP_GRASS_GRID) {
-			grass = new GrassPopulationGrid("Grass", d, s.getGrassPopSize(), new Color(69,139,00),
-					1, 1, 0, 1500, shape);
-		}
+		} 
 
 		if (prey == null || pred == null || grass == null || shape == null) {
 			throw new IllegalArgumentException("Wrong populations set.");

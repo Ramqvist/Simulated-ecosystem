@@ -13,6 +13,7 @@ public class SimulationSettings {
 	/* Static presets profiles */
 	public static final SimulationSettings DEFAULT;
 	public static final SimulationSettings LARGESIM;
+	public static final SimulationSettings[] PROFILE_VALUES;
 	
 	
 	/* Shape Constants */
@@ -24,17 +25,14 @@ public class SimulationSettings {
 	public static final String POP_PIG        = "Pig Population";
 	public static final String POP_DUMMYPREY  = "Dummy Prey Population";
 	public static final String POP_DEER       = "Deer Population";
-	public static final String POP_DEER_GRID  = "Deer Population Grid";
 	public static final String POP_GRASS      = "Grass Population";
-	public static final String POP_GRASS_GRID = "Grass Population Grid";
 	public static final String POP_DUMMYPRED  = "Dummy Predator Population";
 	public static final String POP_WOLF       = "Wolf Population";
-	public static final String POP_WOLF_GRID  = "Wolf Population Grid";
 
 	/* Population array based on predator-prey model, the view uses these values. */
-	public static final String[] PREY_VALUES  = { POP_DEER, POP_DEER_GRID, POP_PIG, POP_DUMMYPREY };
-	public static final String[] PRED_VALUES  = { POP_WOLF, POP_WOLF_GRID, POP_DUMMYPRED };
-	public static final String[] GRASS_VALUES = { POP_GRASS, POP_GRASS_GRID };
+	public static final String[] PREY_VALUES  = { POP_DEER, POP_PIG, POP_DUMMYPREY };
+	public static final String[] PRED_VALUES  = { POP_WOLF, POP_DUMMYPRED };
+	public static final String[] GRASS_VALUES = { POP_GRASS };
 	
 	/*Obstacle constants */
 	public static final String RECTANGULAR_OBSTACLE = "Rectangular obstacle";
@@ -55,13 +53,18 @@ public class SimulationSettings {
 
 	public static final String[] DIM_VALUES = { DIM_SMALL, DIM_MEDIUM, DIM_LARGE, DIM_XLARGE };
 	
+	/* Simulation profiles settings */
 	static {
-		DEFAULT = new SimulationSettings(POP_WOLF, 10, POP_DEER, 100, POP_GRASS, 400, SHAPE_SQUARE, ELLIPTICAL_OBSTACLE, 4, false, false, 16, Integer.MAX_VALUE);
-		DEFAULT.setSimulationDimension(new Dimension(1000, 1000));
-		LARGESIM = new SimulationSettings(POP_WOLF, 100, POP_DEER, 1000, POP_GRASS, 4000, SHAPE_SQUARE, NO_OBSTACLE, 4, false, false, 16, Integer.MAX_VALUE);
-		LARGESIM.setSimulationDimension(new Dimension(2200, 2200));
+		DEFAULT = new SimulationSettings("Default", POP_WOLF, 10, POP_DEER, 100, POP_GRASS, 400, SHAPE_SQUARE, ELLIPTICAL_OBSTACLE, 4, false, false, 16, Integer.MAX_VALUE);
+		DEFAULT.setSimulationDimension(D_MEDIUM);
+		LARGESIM = new SimulationSettings("Large simulation", POP_WOLF, 100, POP_DEER, 1000, POP_GRASS, 4000, SHAPE_SQUARE, NO_OBSTACLE, 4, false, false, 16, Integer.MAX_VALUE);
+		LARGESIM.setSimulationDimension(D_XLARGE);
+		PROFILE_VALUES = new SimulationSettings[2];
+		PROFILE_VALUES[0] = DEFAULT;
+		PROFILE_VALUES[1] = LARGESIM;
 	}
-	
+
+	private String simulationProfileName;
 	private String predatorModel;
 	private int predPopSize;
 	private String preyModel;
@@ -78,7 +81,8 @@ public class SimulationSettings {
 	private int delayLength;
 	private int numIterations;
 
-	public SimulationSettings(String predatorModel, int predPopSize, String preyModel, int preyPopSize, String grassModel, int grassPopSize, String shapeModel, String obstacle, int numThreads, boolean runWithoutTimer, boolean recordSimulation, int delayLength, int numIterations) {
+	public SimulationSettings(String simulationProfileName, String predatorModel, int predPopSize, String preyModel, int preyPopSize, String grassModel, int grassPopSize, String shapeModel, String obstacle, int numThreads, boolean runWithoutTimer, boolean recordSimulation, int delayLength, int numIterations) {
+		this.simulationProfileName = simulationProfileName;
 		this.predatorModel = predatorModel;
 		this.predPopSize = predPopSize;
 		this.preyModel = preyModel;
