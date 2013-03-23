@@ -40,6 +40,7 @@ public class NewSimulationController implements IController {
 			view = new NewSimulationView(model);
 			view.btnRunSim.addActionListener(onStartButtonListener);
 		}
+		injectSimulationSettingsToGUI(SimulationSettings.DEFAULT);
 		view.show();
 	}
 
@@ -120,7 +121,9 @@ public class NewSimulationController implements IController {
 		if(s.getNumIterations() == Integer.MAX_VALUE) {
 			view.checkBoxLimitIterations.setSelected(false);
 			view.tvNumIterations.setText("0");
+			view.tvNumIterations.setEnabled(false);
 		} else {
+			view.tvNumIterations.setEnabled(true);
 			view.checkBoxLimitIterations.setSelected(true);
 			view.tvNumIterations.setText(s.getNumIterations() + "");
 		}
@@ -140,12 +143,18 @@ public class NewSimulationController implements IController {
 		}
 		
 		if(s.getSimDimensionConstant() == null) {
-			view.chckbxCustomSize.setSelected(false);
+			view.chckbxCustomSize.setSelected(true);
+			view.tfCustomWidth.setEnabled(true);
+			view.tfCustomHeight.setEnabled(true);
+			view.listSimulationDim.setEnabled(false);
 			view.tfCustomWidth.setText(s.getSimDimension().width + "");
 			view.tfCustomHeight.setText(s.getSimDimension().height + "");
 		} else {
-			view.chckbxCustomSize.setSelected(true);
+			view.chckbxCustomSize.setSelected(false);
+			view.listSimulationDim.setEnabled(true);
 			view.listSimulationDim.setSelectedValue(s.getSimDimensionConstant(), true);
+			view.tfCustomWidth.setEnabled(false);
+			view.tfCustomHeight.setEnabled(false);
 		}
 		
 		view.grassList.setSelectedValue(s.getGrassModel(), true);

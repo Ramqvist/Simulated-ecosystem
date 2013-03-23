@@ -279,7 +279,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		}
 		if (kids != null) {
 			agents.addAll(kids);
-			wg.addAll(kids);
+//			wg.addAll(kids);
 		}
 
 		// System.out.println(name + " life length: mean = " +

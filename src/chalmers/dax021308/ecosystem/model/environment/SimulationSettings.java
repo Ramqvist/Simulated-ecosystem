@@ -55,10 +55,10 @@ public class SimulationSettings {
 	
 	/* Simulation profiles settings */
 	static {
-		DEFAULT = new SimulationSettings("Default", POP_WOLF, 10, POP_DEER, 100, POP_GRASS, 400, SHAPE_SQUARE, ELLIPTICAL_OBSTACLE, 4, false, false, 16, Integer.MAX_VALUE);
-		DEFAULT.setSimulationDimension(D_MEDIUM);
+		DEFAULT = new SimulationSettings("Default", POP_WOLF, 10, POP_DEER, 100, POP_GRASS, 400, SHAPE_SQUARE, ELLIPTICAL_OBSTACLE, 4, false, false, 16, 1000);
+		DEFAULT.setSimulationDimension(DIM_MEDIUM);
 		LARGESIM = new SimulationSettings("Large simulation", POP_WOLF, 100, POP_DEER, 1000, POP_GRASS, 4000, SHAPE_SQUARE, NO_OBSTACLE, 4, false, false, 16, Integer.MAX_VALUE);
-		LARGESIM.setSimulationDimension(D_XLARGE);
+		LARGESIM.setSimulationDimension(DIM_XLARGE);
 		PROFILE_VALUES = new SimulationSettings[2];
 		PROFILE_VALUES[0] = DEFAULT;
 		PROFILE_VALUES[1] = LARGESIM;
@@ -124,10 +124,11 @@ public class SimulationSettings {
 	
 	public void setSimulationDimension(Dimension d) {
 		this.simDimension = d;
-		WorldGrid.getInstance().init(d, 20);
+		this.simDimensionConstant = null;
 	}
 
 	public void setSimulationDimension(String simDimensionConstant) {
+		this.simDimension = null;
 		this.simDimensionConstant = simDimensionConstant;
 	}
 	
@@ -209,6 +210,11 @@ public class SimulationSettings {
 
 	public int getNumThreads() {
 		return numThreads;
+	}
+	
+	@Override
+	public String toString() {
+		return simulationProfileName;
 	}
 	
 	
