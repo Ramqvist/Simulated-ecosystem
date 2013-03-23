@@ -74,8 +74,8 @@ public class EcoWorld implements IModel {
 
 	/* Time measurements variables (in ns).*/
 	private long startIterationTime;
-	private long elapsedTime;
-	private ArrayList<Integer> recordedTime = new ArrayList<Integer>(512);
+	private double elapsedTime;
+	private Stat<Double> statTime;
 
 	/**
 	 * Each list in the list contains one snapshot of frame;
@@ -98,7 +98,7 @@ public class EcoWorld implements IModel {
 			if (!shouldRun) {
 				return;
 			}
-			elapsedTime = System.nanoTime() - startIterationTime;
+			elapsedTime = (0.000001 * (System.nanoTime() - startIterationTime));
 			// Fire state changed to observers, notify there has been an update.
 			if (recordSimulation) {
 				recordedSimulation.add(AbstractPopulation.clonePopulationList(popList));
@@ -212,6 +212,7 @@ public class EcoWorld implements IModel {
 		 */
 		List<IObstacle> obstacles = new ArrayList<IObstacle>();
 		
+		statTime = new Stat<Double>();
 
 		IPopulation prey = null;
 		IPopulation pred = null;
@@ -413,18 +414,17 @@ public class EcoWorld implements IModel {
 			if (!runWithoutTimer) {
 				timer.start(tickTime, onTickListener);
 			}
-			StringBuffer sb = new StringBuffer(
-					"-- Simulation model Update: ");
+			StringBuffer sb = new StringBuffer("-- Simulation model Update: ");
 			sb.append(++numUpdates);
 			if (startIterationTime != 0) {
 				sb.append(" - Iteration time:");
-				sb.append((long) (0.000001 * elapsedTime));
+				sb.append(roundTwoDecimals(elapsedTime));
 				sb.append(" ms.");
-				recordedTime.add((int) (0.000001 * elapsedTime));
+				statTime.addObservation(elapsedTime);
 				sb.append(" mean value: ");
-				sb.append(roundTwoDecimals(Stat.mean(recordedTime)));
+				sb.append(roundTwoDecimals(statTime.getMean()));
 				sb.append(" sample variance: ");
-				sb.append(roundTwoDecimals(Stat.sampleVariance(recordedTime)));
+				sb.append(roundTwoDecimals(statTime.getSampleVariance()));
 			}
 			Log.v(sb.toString());
 			executor.execute(env);

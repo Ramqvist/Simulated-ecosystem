@@ -16,8 +16,8 @@ import info.monitorenter.util.Range;
  */
 public class IterationTimeGraph extends AbstractGraph2D {
 	private static final long serialVersionUID = 1499857926631611643L;
-	private long lastIteration;
-	private long lastlastIteration;
+	private double lastIteration;
+	private double lastlastIteration;
 	
 	
 	private ITrace2D iterationTimeTrace;
@@ -61,20 +61,17 @@ public class IterationTimeGraph extends AbstractGraph2D {
 	}
 	
 	private void updateGraph(Object object){	
-		Long iterationTime = (Long) (object);
-		if(lastlastIteration == 0) {
-			iterationTime = (long) (0.000001 * iterationTime); // ms	
+		Double iterationTime = (Double) (object);
+		if(lastIteration == 0) {
 			lastIteration = iterationTime;
 			this.iterationTimeTrace.addPoint(nIterationsPassed, iterationTime);
 		} else if(lastlastIteration == 0){
-			iterationTime = (long) (0.000001 * iterationTime); // ms	
-			long time = (lastIteration + iterationTime) / 2;
+			double time = (lastIteration + iterationTime) / 2;
 			lastlastIteration = lastIteration;
 			lastIteration = time;
 			this.iterationTimeTrace.addPoint(nIterationsPassed, time);
 		} else {
-			iterationTime = (long) (0.000001 * iterationTime); // ms	
-			long time = (lastIteration + iterationTime + lastlastIteration) / 3;
+			double time = (lastIteration + iterationTime + lastlastIteration) / 3;
 			lastIteration = time;
 			lastlastIteration = lastIteration;
 			this.iterationTimeTrace.addPoint(nIterationsPassed, time);
