@@ -161,21 +161,13 @@ public class EcoWorld implements IModel {
 
 	}
 
-	public void setRecordSimulation(boolean recordSimulation) {
-		this.recordSimulation = recordSimulation;
-	}
-
-	public synchronized void setNumIterations(int numIterations) {
-		this.numIterations = numIterations;
-	}
-
-	private synchronized void setSimulationDimension(Dimension d) {
+	private void setSimulationDimension(Dimension d) {
 		this.d = d;
 		observers.firePropertyChange(EVENT_DIMENSIONCHANGED, null, d);
-		WorldGrid.getInstance().init(d, 20);
+//		WorldGrid.getInstance().init(d, 20);
 	}
 
-	private synchronized void setSimulationDimension(String dimConstant) {
+	private void setSimulationDimension(String dimConstant) {
 		if (dimConstant == SimulationSettings.DIM_XLARGE) {
 			d = SimulationSettings.D_XLARGE;
 		} else if (dimConstant == SimulationSettings.DIM_LARGE) {
