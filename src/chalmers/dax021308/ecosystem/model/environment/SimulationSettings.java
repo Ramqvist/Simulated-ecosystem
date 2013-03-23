@@ -217,5 +217,89 @@ public class SimulationSettings {
 		return simulationProfileName;
 	}
 	
+	/**
+	 * Try to read a SimulationSettings from a file.
+	 * @param filePath
+	 */
+	public static SimulationSettings getSimulationSettingsFromFile(String filePath) {
+		//TODO: Implement
+		return fromDataString(filePath);
+	}
+	
+	/**
+	 * Save this instance of SimulationSettings to a file.
+	 */
+	public void saveToFile() {
+		//TODO: Implement
+	}
+	
+	/**
+	 * Untested!
+	 * @param s
+	 * @return
+	 */
+	public static SimulationSettings fromDataString(String s) {
+		String[] input = s.split(";");
+		if(input.length < 12) {
+			return null;
+		}
+		int i = 0;
+		SimulationSettings simSettings = new SimulationSettings(
+				input[++i],
+				input[++i], 
+				Integer.parseInt(input[++i]),
+				input[++i],
+				Integer.parseInt(input[++i]),
+				input[++i],
+				Integer.parseInt(input[++i]),
+				input[++i],
+				input[++i],
+				Integer.parseInt(input[++i]),
+				Boolean.valueOf(input[++i]),
+				Boolean.valueOf(input[++i]),
+				Integer.parseInt(input[++i]),
+				Integer.parseInt(input[++i]));
+		return simSettings;
+	}
+
+	/**
+	 * Untested!
+	 */
+	public String toDataString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(simulationProfileName);
+		sb.append(';');
+		sb.append(predatorModel);
+		sb.append(';');
+		sb.append(predPopSize);
+		sb.append(';');
+		sb.append(preyModel);
+		sb.append(';');
+		sb.append(preyPopSize);
+		sb.append(';');
+		sb.append(grassModel);
+		sb.append(';');
+		sb.append(grassPopSize);
+		sb.append(';');
+		sb.append(shapeModel);
+		sb.append(';');
+		sb.append(obstacle);
+		sb.append(';');
+		sb.append(simDimension);
+		sb.append(';');
+		sb.append(simDimensionConstant);
+		sb.append(';');
+		sb.append(numThreads);
+		sb.append(';');
+		sb.append(runWithoutTimer);
+		sb.append(';');
+		sb.append(recordSimulation);
+		sb.append(';');
+		sb.append(delayLength);
+		sb.append(';');
+		sb.append(numIterations);
+		return sb.toString();
+	}
+	
 	
 }
