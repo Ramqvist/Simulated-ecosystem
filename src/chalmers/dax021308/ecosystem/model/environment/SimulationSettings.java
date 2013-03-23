@@ -55,7 +55,7 @@ public class SimulationSettings {
 	
 	/* Simulation profiles settings */
 	static {
-		DEFAULT = new SimulationSettings("Default", POP_WOLF, 10, POP_DEER, 100, POP_GRASS, 400, SHAPE_SQUARE, ELLIPTICAL_OBSTACLE, 4, false, false, 16, 1000);
+		DEFAULT = new SimulationSettings("Default", POP_WOLF, 10, POP_DEER, 100, POP_GRASS, 400, SHAPE_SQUARE, ELLIPTICAL_OBSTACLE, 4, false, false, 16, Integer.MAX_VALUE);
 		DEFAULT.setSimulationDimension(DIM_MEDIUM);
 		LARGESIM = new SimulationSettings("Large simulation", POP_WOLF, 100, POP_DEER, 1000, POP_GRASS, 4000, SHAPE_SQUARE, NO_OBSTACLE, 4, false, false, 16, Integer.MAX_VALUE);
 		LARGESIM.setSimulationDimension(DIM_XLARGE);

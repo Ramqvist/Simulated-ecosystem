@@ -22,7 +22,7 @@ import chalmers.dax021308.ecosystem.model.util.Position;
  * @author Henrik, for concurrency: Erik Ramqvist
  * 
  */
-public class EnvironmentScheduler implements IEnvironment {
+public class EnvironmentScheduler implements Runnable {
 	
 	private static final int NUMAGENTS_PER_WORKPOOL = 300;
 	
@@ -287,17 +287,17 @@ public class EnvironmentScheduler implements IEnvironment {
 		}
 	}
 
-	@Override
+	/*@Override
 	public boolean isFree(Position p) {
 
 		// for each population, check if any agent is currently occupying
 		// position p
-		/*
+		
 		 * Needs some kind of lookup method in IPopulation to function easily.
 		 * Or some kind of getPosition for each agent or something similar for
 		 * (int i = 0; i < populations.size(); i++) if
 		 * (populations.get(i).occupies(p)) return false;
-		 */
+		 
 
 		// for each obstacle, check if the position p lies inside any obstacle
 //		for (int i = 0; i < obstacles.size(); i++)
@@ -307,5 +307,5 @@ public class EnvironmentScheduler implements IEnvironment {
 		// If there is neither a population nor an obstacle at position p, then
 		// it is free
 		return true;
-	}
+	}*/
 }

@@ -67,7 +67,7 @@ public class EcoWorld implements IModel {
 	/* Simulation settings */
 	private int numIterations;
 	private TimerHandler timer;
-	private IEnvironment env;
+	private EnvironmentScheduler env;
 	private int tickTime;
 	private PropertyChangeSupport observers;
 	private List<IPopulation> recycledPopulationList;
