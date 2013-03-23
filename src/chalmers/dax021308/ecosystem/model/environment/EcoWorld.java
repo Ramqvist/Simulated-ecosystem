@@ -148,42 +148,17 @@ public class EcoWorld implements IModel {
 			}
 		}
 	};
-	private int numThreads;
 
 	/**
-	 * Start EcoWorld with a tick-timer.
-	 * 
-	 * @param tickTime
-	 *            Minimum time it will take for one tick to complete.
-	 * @param numIterations
-	 *            Number of iterations before the program finishes.
-	 * 
-	 * @param d
-	 *            Dimension of the simulation.
+	 * Create the EcoWorld object. 
+	 * Needs to be loaded with a {@link SimulationSettings} before starting.
 	 */
-	public EcoWorld(Dimension d, int tickTime, int numIterations,
-			boolean recordSimulation) {
-		this.tickTime = tickTime;
+	public EcoWorld() {
+//		WorldGrid.getInstance().init(new Dimension(1000, 1000), 20);
+		this.d = new Dimension(1000, 1000);
 		this.timer = new TimerHandler();
-		this.d = d;
-		this.recordSimulation = recordSimulation;
-		if (recordSimulation) {
-			// For recording in half fps.
-			if (skipBoolean) {
-				recordedSimulation = new ArrayList<List<IPopulation>>(
-						numIterations);
-				skipBoolean = false;
-			} else {
-				skipBoolean = true;
-			}
-		}
-
-		WorldGrid.getInstance().init(d, 20);
-
-		this.runWithoutTimer = false;
-		this.numIterations = numIterations;
-
 		this.observers = new PropertyChangeSupport(this);
+
 	}
 
 	public void setRecordSimulation(boolean recordSimulation) {
@@ -214,35 +189,7 @@ public class EcoWorld implements IModel {
 		WorldGrid.getInstance().init(d, 20);
 	}
 
-	/**
-	 * Start EcoWorld WITHOUT a tick-timer.
-	 * <p>
-	 * EcoWorld simulation will run as fast as it can, without delays.
-	 * 
-	 * @param numIterations
-	 *            Number of iterations before the program finishes.
-	 * 
-	 * @param d
-	 *            Dimension of the simulation.
-	 */
-	public EcoWorld(Dimension d, int numIterations) {
-		this(d, 0, numIterations, false);
-		this.runWithoutTimer = true;
-	}
 
-	/**
-	 * Start EcoWorld WITHOUT a tick-timer.
-	 * <p>
-	 * EcoWorld simulation will run as fast as it can, without delays. For a
-	 * very long time.
-	 * 
-	 * @param d
-	 *            Dimension of the simulation.
-	 * 
-	 */
-	public EcoWorld(Dimension d) {
-		this(d, Integer.MAX_VALUE);
-	}
 
 	/**
 	 * Load a {@link SimulationSettings} into EcoWorld.
@@ -265,7 +212,6 @@ public class EcoWorld implements IModel {
 		 */
 		List<IObstacle> obstacles = new ArrayList<IObstacle>();
 		
-		this.numThreads = s.getNumThreads();
 
 		IPopulation prey = null;
 		IPopulation pred = null;
@@ -340,7 +286,7 @@ public class EcoWorld implements IModel {
 					numIterations / 2);
 		}
 		this.env = new EnvironmentScheduler(populations, obstacles,
-				mOnFinishListener, d.height, d.width, numThreads);
+				mOnFinishListener, d.height, d.width, s.getNumThreads());
 	}
 
 	private List<IObstacle> readObsticlesFromFile() {

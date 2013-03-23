@@ -54,7 +54,6 @@ public class MainWindow extends JFrame implements IView {
 		this.setExtendedState(MAXIMIZED_BOTH);
 		//OpenGL   
 	    Dimension d = model.getSize();
-	    System.out.println(d);
 		openGL = new OpenGLSimulationView(model, d, true);
 		openGL.init();
 		//openGL.setSize(new Dimension(980,700));
