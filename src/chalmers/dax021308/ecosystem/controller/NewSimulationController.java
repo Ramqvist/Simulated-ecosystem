@@ -39,8 +39,8 @@ public class NewSimulationController implements IController {
 		if(view == null) {
 			view = new NewSimulationView(model);
 			view.btnRunSim.addActionListener(onStartButtonListener);
+			injectSimulationSettingsToGUI(SimulationSettings.DEFAULT);
 		}
-		injectSimulationSettingsToGUI(SimulationSettings.DEFAULT);
 		view.show();
 	}
 

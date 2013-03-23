@@ -77,6 +77,7 @@ public class EnvironmentScheduler implements Runnable {
 			finWorkers[i] = new FinalizeIteration();
 		}
 	}
+	
 
 	/**
 	 * Run method, called for each tick of the timer

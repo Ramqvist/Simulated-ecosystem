@@ -89,6 +89,9 @@ public class EcoWorld implements IModel {
 	private int numUpdates = 0;
 	private Dimension d;
 	private ExecutorService executor;
+	private ExecutorService notifierExecutor = Executors.newSingleThreadExecutor();
+	
+	private ObserverNotifier notifier = new ObserverNotifier();
 
 	private OnFinishListener mOnFinishListener = new OnFinishListener() {
 
@@ -98,16 +101,23 @@ public class EcoWorld implements IModel {
 			if (!shouldRun) {
 				return;
 			}
-			elapsedTime = (0.000001 * (System.nanoTime() - startIterationTime));
+			long start = System.nanoTime();
+			elapsedTime = (0.000001 * (start - startIterationTime));
 			// Fire state changed to observers, notify there has been an update.
-			if (recordSimulation) {
+			/*if (recordSimulation) {
 				recordedSimulation.add(AbstractPopulation.clonePopulationList(popList));
 			} else {
 				//Send out the new cloned population list and obstacle list.
 //				recycledPopulationList = AbstractPopulation.clonePopulationListWithRecycledList(recycledPopulationList, popList);
 				observers.firePropertyChange(EVENT_TICK, obsList, AbstractPopulation.clonePopulationList(popList));
 				observers.firePropertyChange(EVENT_ITERATION_FINISHED, null, elapsedTime);
-			}
+			}*/
+			
+			notifier.popList = AbstractPopulation.clonePopulationList(popList);
+			notifier.obsList = obsList;
+			notifierExecutor.execute(notifier);
+//			double observerTime = (0.000001 * (System.nanoTime() - start));
+//			Log.v("Observer propertychange time: " + observerTime);
 			if (runWithoutTimer) {
 				scheduleEnvironmentUpdate();
 			} else {
@@ -123,6 +133,24 @@ public class EcoWorld implements IModel {
 						environmentFinished = true;
 					}
 				}
+			}
+		}
+	};
+	
+
+	private class ObserverNotifier implements Runnable {
+		public List<IPopulation> popList;
+		public List<IObstacle> obsList;
+
+		@Override
+		public void run() {
+			if (recordSimulation) {
+				recordedSimulation.add(AbstractPopulation.clonePopulationList(popList));
+			} else {
+				//Send out the new cloned population list and obstacle list.
+//				recycledPopulationList = AbstractPopulation.clonePopulationListWithRecycledList(recycledPopulationList, popList);
+				observers.firePropertyChange(EVENT_TICK, obsList, popList);
+				observers.firePropertyChange(EVENT_ITERATION_FINISHED, null, elapsedTime);
 			}
 		}
 	};
