@@ -66,6 +66,7 @@ public class EcoWorld implements IModel {
 	private boolean runWithoutTimer;
 	private boolean recordSimulation;
 	private boolean skipBoolean;
+	private boolean playRecording;
 
 	/* Simulation settings */
 	private int numIterations;
@@ -304,6 +305,20 @@ public class EcoWorld implements IModel {
 		this.env = new EnvironmentScheduler(populations, obstacles,
 				mOnFinishListener, d.height, d.width, s.getNumThreads());
 	}
+	
+	/**
+	 * Loads a simulation from the given filePath.
+	 * 
+	 * @param filePath
+	 */
+	public boolean loadRecordedSimulation(String filePath) {
+		this.recording = new SimulationRecording();
+		if(recording.initReading(filePath)) {
+			playRecording = true;
+			return true;
+		}
+		return false;
+	}
 
 	private List<IObstacle> readObsticlesFromFile() {
 		List<IObstacle> obsList = new ArrayList<IObstacle>();
@@ -394,26 +409,24 @@ public class EcoWorld implements IModel {
 
 	/**
 	 * Plays the recorded simulation (if any). Assumes the recording is recorded
-	 * in half fps.
+	 * in 60 fps.
 	 * <P>
 	 * Uses internal {@link TimerHandler} for smooth playing.
 	 */
-	public void playRecordedSimulation(final List<List<IPopulation>> recordedSim) {
+	public void playRecordedSimulation() throws IllegalStateException {
 		final TimerHandler t = new TimerHandler();
-
+		if(recording == null || !playRecording) {
+			throw new IllegalStateException("No recorded simulation loaded.");
+		}
 		t.start(17, new OnTickUpdate() {
 			@Override
 			public void onTick() {
-				if (recordedSim.size() > 0) {
-					List<IPopulation> popList = recordedSim.get(0);
-					recordedSim.remove(0);
-					observers.firePropertyChange(EVENT_TICK,
-							Collections.emptyList(), popList);
-					t.start(32, this);
-				} else {
+				List<IPopulation> frame = recording.readFrame();
+				if(frame == null) {
 					t.stop();
-					observers.firePropertyChange(EVENT_STOP,
-							Collections.emptyList(), Collections.emptyList());
+				} else {
+					observers.firePropertyChange(EVENT_TICK, null, frame);
+					t.start(17, this);
 				}
 			}
 		});
@@ -446,6 +459,9 @@ public class EcoWorld implements IModel {
 			startIterationTime = System.nanoTime();
 		} else {
 			stop();
+			if(recording != null) recording.close();
+			loadRecordedSimulation("Testrecording1.sim");
+			playRecordedSimulation();
 			/*if (recordSimulation) {
 				playRecordedSimulation(recordedSimulation);
 			}*/
@@ -513,16 +529,5 @@ public class EcoWorld implements IModel {
 	}
 
 
-	/**
-	 * Plays the loaded simulation, or throws {@link IllegalStateException} if
-	 * not any recording is loaded.
-	 */
-	public void playRecentLoadedSimulation() throws IllegalStateException {
-		if (recordedSimulation != null && !recordedSimulation.isEmpty()) {
-			playRecordedSimulation(recordedSimulation);
-		} else {
-			throw new IllegalStateException("No recording loaded");
-		}
-	}
 
 }

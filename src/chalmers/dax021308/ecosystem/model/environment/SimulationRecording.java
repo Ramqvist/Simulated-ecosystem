@@ -26,6 +26,8 @@ import chalmers.dax021308.ecosystem.model.util.Log;
 public class SimulationRecording {
 
 	/*	Text syntax constants */
+	private static final String headerDividerStart = "<HEAD>";
+	private static final String headerDividerEnd   = "</HEAD>";
 	private static final String frameDividerStart = "<FRM>";
 	private static final String frameDividerEnd   = "</FRM>";
 	private static final String populationDivider = "<POP>";
@@ -91,13 +93,13 @@ public class SimulationRecording {
 	public synchronized List<IPopulation> readFrame() {
 		List<IPopulation> currentFrame = null;
 		String input = null;
+		try {
+			input = br.readLine();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		IPopulation currentPop = null;
 		while (input != null) {
-			try {
-				input = br.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 			if (input.startsWith(frameDividerStart)) {
 				currentFrame = new ArrayList<IPopulation>();
 			} else if (input.startsWith(frameDividerEnd)) {
@@ -114,6 +116,12 @@ public class SimulationRecording {
 					IAgent newIAgent = AbstractAgent.createFromFile(inputArr[1]);
 					currentPop.getAgents().add(newIAgent);
 				}
+			}
+			try {
+				input = br.readLine();
+				Log.v(input);
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 		Log.v("Error no ending found while reading Simulation.");

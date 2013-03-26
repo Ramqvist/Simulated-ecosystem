@@ -237,7 +237,8 @@ public abstract class AbstractPopulation implements IPopulation {
 //		if (shape == null)
 //			throw new IllegalArgumentException("Illegal Shape from file.");
 
-		IPopulation created = new AbstractPopulation(name, null, 0, true, null, null) {};
+		AbstractPopulation created = new AbstractPopulation(name, null, 0, true, null, null) {};
+		created.agents = new ArrayList<IAgent>();
 		created.setColor(c);
 		return created;
 	}
