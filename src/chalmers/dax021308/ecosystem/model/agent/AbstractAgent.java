@@ -487,15 +487,13 @@ public abstract class AbstractAgent implements IAgent {
 	public static IAgent createFromFile(String input) {
 		String[] inputArray = input.split(";");
 //		String name = inputArray[0];
-		Position pos = new Position(Double.parseDouble(inputArray[0]),
-				Double.parseDouble(inputArray[1]));
+		Position pos = new Position(Double.parseDouble(inputArray[0]), Double.parseDouble(inputArray[1]));
 		Color c = new Color(Integer.parseInt(inputArray[2]),
-				Integer.parseInt(inputArray[3]),
-				Integer.parseInt(inputArray[4]));
+					Integer.parseInt(inputArray[3]),
+					Integer.parseInt(inputArray[4]));
 		int width = Integer.parseInt(inputArray[5]);
 		int height = Integer.parseInt(inputArray[6]);
-		Vector v = new Vector(Double.parseDouble(inputArray[7]),
-				Double.parseDouble(inputArray[8]));
+		Vector v = new Vector(Double.parseDouble(inputArray[7]), Double.parseDouble(inputArray[8]));
 //		int maxSpeed = Integer.parseInt(inputArray[9]);
 //		int visionRange = Integer.parseInt(inputArray[10]);
 //		int maxAcceleration = Integer.parseInt(inputArray[11]);
@@ -535,7 +533,7 @@ public abstract class AbstractAgent implements IAgent {
 		sb.append(';');
 		sb.append(height);
 		sb.append(';');
-		sb.append(roundTwoDecimals(velocity.y));
+		sb.append(roundTwoDecimals(velocity.x));
 		sb.append(';');
 		sb.append(roundTwoDecimals(velocity.y));
 //		sb.append(';');
