@@ -261,9 +261,9 @@ public abstract class AbstractPopulation implements IPopulation {
 //		sb.append(gridDimension.height);
 //		sb.append(';');
 //		sb.append(capacity);
-		sb.append(';');
-		sb.append(shape.getShape());
-		return null;
+//		sb.append(';');
+//		sb.append(shape.getShape());
+		return sb.toString();
 	}
 
 	@Override

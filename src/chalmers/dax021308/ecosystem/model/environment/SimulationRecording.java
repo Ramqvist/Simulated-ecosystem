@@ -16,6 +16,7 @@ import chalmers.dax021308.ecosystem.model.agent.AbstractAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.util.Log;
 
 /**
  * Class representing a Recorded simulation.
@@ -24,55 +25,111 @@ import chalmers.dax021308.ecosystem.model.population.IPopulation;
  */
 public class SimulationRecording {
 
-	private static final String frameDivider      = "FRAME";
-	private static final String populationDivider = "POPULATION";
-	private static final String agentDivider      = "AGENT";
+	/*	Text syntax constants */
+	private static final String frameDividerStart = "<FRM>";
+	private static final String frameDividerEnd   = "</FRM>";
+	private static final String populationDivider = "<POP>";
+	private static final String agentDivider      = "<AGE>";
 	
 	private File recordedFile;
+	private BufferedReader br;
+	private FileInputStream fileStream;
+	private PrintWriter pw;
 	
-	public boolean init(String fileName) {
+	public boolean initReading(String fileName) {
 		recordedFile = new File(fileName);
-		return recordedFile.exists() && recordedFile.canRead() && recordedFile.canWrite();
-	}
-	
-	public void appendFrame(List<IPopulation> popList) {
-		
-	}
-	
-	public List<IPopulation> readFrame() {
-		return null;
-	}
-	
-	/**
-	 * Reads the recording from the given filePath.
-	 * <p>
-	 * Untested! Unfinished!
-	 * 
-	 * @param filePath
-	 * @return True if success, otherwise false.
-	 */
-	public boolean readRecordFromDisk(String filePath) {
-		File f = new File(filePath);
-		if (!f.exists()) {
+		if (!recordedFile.exists()) {
 			return false;
 		}
-		if (!f.canRead()) {
+		if (!recordedFile.canRead()) {
 			return false;
 		}
 		try {
-			FileInputStream fileStream = new FileInputStream(f);
+			fileStream = new FileInputStream(recordedFile);
 			Charset utf8 = Charset.forName("UTF-8");
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					fileStream, utf8));
-			List<List<IPopulation>> readInput = parseFile(br);
-			br.close();
-			fileStream.close();
+			br = new BufferedReader(new InputStreamReader(fileStream, utf8));
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
 		}
-		return false;
+		return true;
 	}
+	
+	public boolean initWriting(String fileName) {
+		recordedFile = new File(fileName);
+		if (recordedFile.exists()) {
+			recordedFile.delete();
+		}
+		try {
+			recordedFile.createNewFile();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		if (!recordedFile.canWrite()) {
+			return false;
+		}
+		try {
+			pw = new PrintWriter(recordedFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	public void appendFrame(List<IPopulation> popList) {
+		pw.println(frameDividerStart);
+		for (IPopulation p : popList) {
+			pw.println(populationDivider + ';' + p.toBinaryString());
+			for (IAgent a : p.getAgents()) {
+				pw.println(agentDivider + ';' + a.toBinaryString());
+			}
+		}
+		pw.println(frameDividerEnd);
+	}
+	
+	public synchronized List<IPopulation> readFrame() {
+		List<IPopulation> currentFrame = null;
+		String input = null;
+		IPopulation currentPop = null;
+		while (input != null) {
+			try {
+				input = br.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			if (input.startsWith(frameDividerStart)) {
+				currentFrame = new ArrayList<IPopulation>();
+			} else if (input.startsWith(frameDividerEnd)) {
+				return currentFrame;
+			} else if (input.startsWith(populationDivider)) {
+				if (currentPop != null) {
+					currentFrame.add(currentPop);
+				}
+				String[] inputArr = input.split(";", 2);
+				currentPop = AbstractPopulation.createFromFile(inputArr[1]);
+			} else if (input.startsWith(agentDivider)) {
+				if (currentPop != null) {
+					String[] inputArr = input.split(";", 2);
+					IAgent newIAgent = AbstractAgent.createFromFile(inputArr[1]);
+					currentPop.getAgents().add(newIAgent);
+				}
+			}
+		}
+		Log.v("Error no ending found while reading Simulation.");
+		return currentFrame;
+	}
+	
+	public void close() {
+		try {
+			if(br != null) br.close();
+			if(fileStream != null) fileStream.close();
+			if(pw != null) pw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 	/**
 	 * Helper method for readRecordFromDisk.
@@ -81,10 +138,7 @@ public class SimulationRecording {
 	 * @param br
 	 * @return
 	 */
-	private List<List<IPopulation>> parseFile(BufferedReader br) {
-		String frameDivider = "FRAME";
-		String populationDivider = "POPULATION";
-		String agentDivider = "AGENT";
+	private List<List<IPopulation>> parseFile() {
 
 		List<List<IPopulation>> result = new ArrayList<List<IPopulation>>();
 
@@ -103,7 +157,7 @@ public class SimulationRecording {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			if (input.startsWith(frameDivider)) {
+			if (input.startsWith(frameDividerStart)) {
 				if (currentFrame != null) {
 					result.add(currentFrame);
 				}
@@ -117,8 +171,7 @@ public class SimulationRecording {
 			} else if (input.startsWith(agentDivider)) {
 				if (currentPop != null) {
 					String[] inputArr = input.split(";", 2);
-					IAgent newIAgent = AbstractAgent
-							.createFromFile(inputArr[1]);
+					IAgent newIAgent = AbstractAgent.createFromFile(inputArr[1]);
 					currentPop.getAgents().add(newIAgent);
 				}
 			}
@@ -137,34 +190,17 @@ public class SimulationRecording {
 	 */
 	public boolean dumpRecordToDisk(List<List<IPopulation>> record,
 			String filePath) {
-		File f = new File(filePath);
-		if (f.exists()) {
-			f.delete();
-		}
-		try {
-			f.createNewFile();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-		PrintWriter pw = null;
-		try {
-			pw = new PrintWriter(f);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		}
 		for (List<IPopulation> popList : record) {
-			pw.println(frameDivider);
+			pw.println(frameDividerStart);
 			for (IPopulation p : popList) {
 				pw.println(populationDivider + ';' + p.toBinaryString());
 				for (IAgent a : p.getAgents()) {
 					pw.println(agentDivider + ';' + a.toBinaryString());
 				}
 			}
+			pw.println(frameDividerEnd);
 		}
 		pw.close();
 		return true;
 	}
-	
 }

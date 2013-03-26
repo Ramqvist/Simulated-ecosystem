@@ -71,6 +71,7 @@ public class EcoWorld implements IModel {
 	private int tickTime;
 	private PropertyChangeSupport observers;
 	private List<IPopulation> recycledPopulationList;
+	private SimulationRecording recording;
 
 	/* Time measurements variables (in ns).*/
 	private long startIterationTime;
@@ -144,14 +145,14 @@ public class EcoWorld implements IModel {
 
 		@Override
 		public void run() {
-			if (recordSimulation) {
-				recordedSimulation.add(AbstractPopulation.clonePopulationList(popList));
-			} else {
+			if (recordSimulation && recording != null) {
+				recording.appendFrame(popList);
+				//recordedSimulation.add(AbstractPopulation.clonePopulationList(popList));
+			} 
 				//Send out the new cloned population list and obstacle list.
 //				recycledPopulationList = AbstractPopulation.clonePopulationListWithRecycledList(recycledPopulationList, popList);
-				observers.firePropertyChange(EVENT_TICK, obsList, popList);
-				observers.firePropertyChange(EVENT_ITERATION_FINISHED, null, elapsedTime);
-			}
+			observers.firePropertyChange(EVENT_TICK, obsList, popList);
+			observers.firePropertyChange(EVENT_ITERATION_FINISHED, null, elapsedTime);
 		}
 	};
 
@@ -297,8 +298,8 @@ public class EcoWorld implements IModel {
 		tickTime = s.getDelayLength();
 		numIterations = s.getNumIterations();
 		if (recordSimulation) {
-			recordedSimulation = new ArrayList<List<IPopulation>>(
-					numIterations / 2);
+			this.recording = new SimulationRecording();
+			recording.initWriting("Testrecording1.sim");
 		}
 		this.env = new EnvironmentScheduler(populations, obstacles,
 				mOnFinishListener, d.height, d.width, s.getNumThreads());
@@ -445,9 +446,9 @@ public class EcoWorld implements IModel {
 			startIterationTime = System.nanoTime();
 		} else {
 			stop();
-			if (recordSimulation) {
+			/*if (recordSimulation) {
 				playRecordedSimulation(recordedSimulation);
-			}
+			}*/
 		}
 	}
 	

@@ -486,22 +486,22 @@ public abstract class AbstractAgent implements IAgent {
 	 */
 	public static IAgent createFromFile(String input) {
 		String[] inputArray = input.split(";");
-		String name = inputArray[0];
-		Position pos = new Position(Integer.parseInt(inputArray[1]),
-				Integer.parseInt(inputArray[2]));
-		Color c = new Color(Integer.parseInt(inputArray[3]),
-				Integer.parseInt(inputArray[4]),
-				Integer.parseInt(inputArray[5]));
-		int width = Integer.parseInt(inputArray[6]);
-		int height = Integer.parseInt(inputArray[7]);
-		Vector v = new Vector(Integer.parseInt(inputArray[8]),
-				Integer.parseInt(inputArray[9]));
-		int maxSpeed = Integer.parseInt(inputArray[10]);
-		int visionRange = Integer.parseInt(inputArray[11]);
-		int maxAcceleration = Integer.parseInt(inputArray[12]);
+//		String name = inputArray[0];
+		Position pos = new Position(Integer.parseInt(inputArray[0]),
+				Integer.parseInt(inputArray[1]));
+		Color c = new Color(Integer.parseInt(inputArray[2]),
+				Integer.parseInt(inputArray[3]),
+				Integer.parseInt(inputArray[4]));
+		int width = Integer.parseInt(inputArray[5]);
+		int height = Integer.parseInt(inputArray[6]);
+		Vector v = new Vector(Integer.parseInt(inputArray[7]),
+				Integer.parseInt(inputArray[8]));
+//		int maxSpeed = Integer.parseInt(inputArray[9]);
+//		int visionRange = Integer.parseInt(inputArray[10]);
+//		int maxAcceleration = Integer.parseInt(inputArray[11]);
 
-		AbstractAgent ab = new AbstractAgent(name, pos, c, width, height, v,
-				maxSpeed, visionRange, maxAcceleration) {
+		AbstractAgent ab = new AbstractAgent("Noname", pos, c, width, height, v,
+				0, 0, 0) {
 
 			@Override
 			public List<IAgent> reproduce(IAgent agent, int populationSize, List<IObstacle> obstacles) {
@@ -521,11 +521,9 @@ public abstract class AbstractAgent implements IAgent {
 	@Override
 	public String toBinaryString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(name);
+		sb.append(roundTwoDecimals(position.getX()));
 		sb.append(';');
-		sb.append(position.getX());
-		sb.append(';');
-		sb.append(position.getY());
+		sb.append(roundTwoDecimals(position.getY()));
 		sb.append(';');
 		sb.append(color.getRed());
 		sb.append(';');
@@ -537,15 +535,23 @@ public abstract class AbstractAgent implements IAgent {
 		sb.append(';');
 		sb.append(height);
 		sb.append(';');
-		sb.append(velocity.x);
+		sb.append(roundTwoDecimals(velocity.y));
 		sb.append(';');
-		sb.append(velocity.y);
-		sb.append(';');
-		sb.append(maxSpeed);
-		sb.append(';');
-		sb.append(visionRange);
-		sb.append(';');
-		sb.append(maxAcceleration);
+		sb.append(roundTwoDecimals(velocity.y));
+//		sb.append(';');
+//		sb.append(maxSpeed);
+//		sb.append(';');
+//		sb.append(visionRange);
+//		sb.append(';');
+//		sb.append(maxAcceleration);
 		return sb.toString();
+	}
+	
+	
+	public static double roundTwoDecimals(double num) {
+		double result = num * 100;
+		result = Math.round(result);
+		result = result / 100;
+		return result;
 	}
 }
