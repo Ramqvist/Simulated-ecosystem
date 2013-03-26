@@ -2,7 +2,9 @@ package chalmers.dax021308.ecosystem.model.environment.obstacle;
 
 import java.awt.Color;
 
+import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 import chalmers.dax021308.ecosystem.model.util.Position;
+import chalmers.dax021308.ecosystem.model.util.SquareShape;
 
 public abstract class AbstractObstacle implements IObstacle {
 	
@@ -25,30 +27,48 @@ public abstract class AbstractObstacle implements IObstacle {
 	}
 	
 	public String toBinaryString() {
-		return null;
+		StringBuilder sb = new StringBuilder();
+		sb.append(SimulationSettings.SHAPE_CIRCLE); //TODO: Needs shape here.
+		sb.append(';');
+		sb.append(roundTwoDecimals(position.getX()));
+		sb.append(';');
+		sb.append(roundTwoDecimals(position.getY()));
+		sb.append(';');
+		sb.append(width);
+		sb.append(';');
+		sb.append(height);
+		sb.append(';');
+		sb.append(color.getRed());
+		sb.append(';');
+		sb.append(color.getGreen());
+		sb.append(';');
+		sb.append(color.getBlue());
+		return sb.toString();
 	}
 	
 	public static AbstractObstacle createFromFile(String input) {
-		return new AbstractObstacle() {
-			
-			@Override
-			public boolean isInObstacle(Position p) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-			
-			@Override
-			public Color getColor() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-			@Override
-			public Position closestBoundary(Position p) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		};
+		String[] inputArray = input.split(";");
+		String shape = inputArray[0];
+		AbstractObstacle obs = null;
+		if (shape.equals(SimulationSettings.RECTANGULAR_OBSTACLE)) {
+			obs = new RectangularObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
+					new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
+					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), Integer.parseInt(inputArray[7])));
+		} else if (shape.equals(SimulationSettings.ELLIPTICAL_OBSTACLE)) {
+			obs = new EllipticalObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
+					new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
+					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), Integer.parseInt(inputArray[7])));
+		} else if (shape.equals(SimulationSettings.NO_OBSTACLE)) {
+		
+		}
+		return obs;
+	}
+	
+	public static double roundTwoDecimals(double num) {
+		double result = num * 100;
+		result = Math.round(result);
+		result = result / 100;
+		return result;
 	}
 
 }
