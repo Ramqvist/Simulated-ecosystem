@@ -4,28 +4,31 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.nio.charset.Charset;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import chalmers.dax021308.ecosystem.model.agent.AbstractAgent;
-import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.EllipticalObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.RectangularObstacle;
-import chalmers.dax021308.ecosystem.model.population.*;
-import chalmers.dax021308.ecosystem.model.util.*;
+import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
+import chalmers.dax021308.ecosystem.model.population.DeerPopulation;
+import chalmers.dax021308.ecosystem.model.population.DummyPredatorPopulation;
+import chalmers.dax021308.ecosystem.model.population.DummyPreyPopulation;
+import chalmers.dax021308.ecosystem.model.population.GrassPopulation;
+import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.population.PigPopulation;
+import chalmers.dax021308.ecosystem.model.population.WolfPopulation;
+import chalmers.dax021308.ecosystem.model.util.CircleShape;
+import chalmers.dax021308.ecosystem.model.util.IShape;
+import chalmers.dax021308.ecosystem.model.util.Log;
+import chalmers.dax021308.ecosystem.model.util.Position;
+import chalmers.dax021308.ecosystem.model.util.SquareShape;
+import chalmers.dax021308.ecosystem.model.util.Stat;
+import chalmers.dax021308.ecosystem.model.util.TimerHandler;
+import chalmers.dax021308.ecosystem.model.util.TriangleShape;
 
 /**
  * Ecosystem main class.
@@ -183,7 +186,6 @@ public class EcoWorld implements IModel {
 	 * Needs to be loaded with a {@link SimulationSettings} before starting.
 	 */
 	public EcoWorld() {
-//		WorldGrid.getInstance().init(new Dimension(1000, 1000), 20);
 		this.d = new Dimension(1000, 1000);
 		this.timer = new TimerHandler();
 		this.observers = new PropertyChangeSupport(this);
@@ -193,7 +195,6 @@ public class EcoWorld implements IModel {
 	private void setSimulationDimension(Dimension d) {
 		this.d = d;
 		observers.firePropertyChange(EVENT_DIMENSIONCHANGED, null, d);
-//		WorldGrid.getInstance().init(d, 20);
 	}
 
 	private void setSimulationDimension(String dimConstant) {
@@ -207,7 +208,6 @@ public class EcoWorld implements IModel {
 			d = SimulationSettings.D_SMALL;
 		}
 		observers.firePropertyChange(EVENT_DIMENSIONCHANGED, null, d);
-//		WorldGrid.getInstance().init(d, 20);
 	}
 
 

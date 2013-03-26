@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
-import chalmers.dax021308.ecosystem.model.environment.WorldGrid;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -23,7 +22,6 @@ public abstract class AbstractPopulation implements IPopulation {
 	protected List<IPopulation> preys;
 	protected List<IPopulation> predators;
 	protected List<IPopulation> neutral;
-	protected WorldGrid wg;
 	protected IShape shape;
 	protected List<IObstacle> obstacles;
 	
@@ -50,7 +48,6 @@ public abstract class AbstractPopulation implements IPopulation {
 		neutral = new ArrayList<IPopulation>();
 		removeList = new ArrayList<IAgent>();
 		lifeLengths = new LinkedList<Integer>();
-		wg = WorldGrid.getInstance();
 	}
 
 	public AbstractPopulation(String name, Dimension gridDimension, IShape shape, List<IObstacle> obstacles) {
