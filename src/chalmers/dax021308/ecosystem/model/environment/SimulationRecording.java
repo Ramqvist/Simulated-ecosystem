@@ -90,6 +90,10 @@ public class SimulationRecording {
 		pw.println(frameDividerEnd);
 	}
 	
+	/**
+	 * Read one frame from the loaded text-file and return it.
+	 * @return
+	 */
 	public synchronized List<IPopulation> readFrame() {
 		List<IPopulation> currentFrame = null;
 		String input = null;
@@ -103,13 +107,18 @@ public class SimulationRecording {
 			if (input.startsWith(frameDividerStart)) {
 				currentFrame = new ArrayList<IPopulation>();
 			} else if (input.startsWith(frameDividerEnd)) {
+				if(currentPop != null) {
+					currentFrame.add(currentPop);
+				}
 				return currentFrame;
 			} else if (input.startsWith(populationDivider)) {
+				Log.v(input);
 				if (currentPop != null) {
 					currentFrame.add(currentPop);
 				}
 				String[] inputArr = input.split(";", 2);
 				currentPop = AbstractPopulation.createFromFile(inputArr[1]);
+				Log.v(currentPop.toString());
 			} else if (input.startsWith(agentDivider)) {
 				if (currentPop != null) {
 					String[] inputArr = input.split(";", 2);
@@ -119,7 +128,6 @@ public class SimulationRecording {
 			}
 			try {
 				input = br.readLine();
-				Log.v(input);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -128,6 +136,9 @@ public class SimulationRecording {
 		return currentFrame;
 	}
 	
+	/**
+	 * Closes the streams used by this class.
+	 */
 	public void close() {
 		try {
 			if(br != null) br.close();
@@ -146,6 +157,7 @@ public class SimulationRecording {
 	 * @param br
 	 * @return
 	 */
+	@Deprecated
 	private List<List<IPopulation>> parseFile() {
 
 		List<List<IPopulation>> result = new ArrayList<List<IPopulation>>();
