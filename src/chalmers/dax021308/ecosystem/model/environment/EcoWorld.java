@@ -127,14 +127,14 @@ public class EcoWorld implements IModel {
 				scheduleEnvironmentUpdate();
 			} else {
 				synchronized (syncObject) {
-					// Log.v("Environment: Finished.");
+					// Environment finished
 					if (timerFinished) {
-						// Log.v("Environment: Timer is finished, doing Environment update");
+						// Environment: Timer is finished, doing Environment update
 						environmentFinished = false;
 						timerFinished = false;
 						scheduleEnvironmentUpdate();
 					} else {
-						// Log.v("Environment: Timer NOT finished, waiting...");
+						// Environment: Timer NOT finished, waiting...
 						environmentFinished = true;
 					}
 				}
@@ -162,20 +162,19 @@ public class EcoWorld implements IModel {
 
 	private OnTickUpdate onTickListener = new OnTickUpdate() {
 		@Override
-		// När timer är klar.
 		public void onTick() {
 			if (!shouldRun) {
 				return;
 			}
 			synchronized (syncObject) {
-				// Log.v("Timer: Finished.");
+				// Timer: Finished.
 				if (environmentFinished) {
-					// Log.v("Timer: Environment is finished, doing Environment update");
+					// Timer: Environment is finished, doing Environment update.
 					timerFinished = false;
 					environmentFinished = false;
 					scheduleEnvironmentUpdate();
 				} else {
-					// Log.v("Timer: Environment NOT finished, waiting...");
+					// Timer: Environment NOT finished, waiting...
 					timerFinished = true;
 				}
 			}
