@@ -24,4 +24,6 @@ public interface IObstacle {
 	public Position getPosition();
 	
 	public Color getColor();
+
+	public String toBinaryString();
 }

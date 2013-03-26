@@ -14,6 +14,8 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.AbstractAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.AbstractObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Log;
@@ -26,17 +28,20 @@ import chalmers.dax021308.ecosystem.model.util.Log;
 public class SimulationRecording {
 
 	/*	Text syntax constants */
-	private static final String headerDividerStart = "<HEAD>";
-	private static final String headerDividerEnd   = "</HEAD>";
-	private static final String frameDividerStart = "<FRM>";
-	private static final String frameDividerEnd   = "</FRM>";
-	private static final String populationDivider = "<POP>";
-	private static final String agentDivider      = "<AGE>";
+	private static final String headerDividerStart   = "<HEAD>";
+	private static final String headerDividerEnd     = "</HEAD>";
+	private static final String frameDividerStart    = "<FRM>";
+	private static final String frameDividerEnd      = "</FRM>";
+	private static final String populationDivider    = "<POP>";
+	private static final String agentDivider         = "<AGE>";
+	private static final String obstacleDivider      = "<OBS>";
 	
 	private File recordedFile;
 	private BufferedReader br;
 	private FileInputStream fileStream;
 	private PrintWriter pw;
+	
+	private List<IObstacle> obsList;
 	
 	public boolean initReading(String fileName) {
 		recordedFile = new File(fileName);
@@ -91,6 +96,49 @@ public class SimulationRecording {
 	}
 	
 	/**
+	 * Reads the header information from the text file.
+	 */
+	public void readHeader() {
+		String input = null;
+		try {
+			input = br.readLine();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		while (input != null) {
+			if (input.startsWith(headerDividerStart)) {
+				obsList = new ArrayList<IObstacle>();
+			} else if (input.startsWith(headerDividerEnd)) {
+				return;
+			} else if (input.startsWith(obstacleDivider)) {
+				String[] inputArr = input.split(";", 2);
+				IObstacle o = AbstractObstacle.createFromFile(inputArr[1]);
+				if(obsList != null) obsList.add(o);
+				//Create obstacle method.
+			} 
+			try {
+				input = br.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		Log.v("Reached end of header.");
+		return;
+	}
+	
+	/**
+	 * Append header information, now only contains obstacles.
+	 * @param obsList
+	 */
+	public void appendHeader(List<IObstacle> obsList) {
+		pw.println(headerDividerStart);
+		for (IObstacle p : obsList) {
+			pw.println(populationDivider + ';' + p.toBinaryString());
+		}
+		pw.println(headerDividerEnd);
+	}
+	
+	/**
 	 * Read one frame from the loaded text-file and return it.
 	 * @return
 	 */
@@ -112,13 +160,11 @@ public class SimulationRecording {
 				}
 				return currentFrame;
 			} else if (input.startsWith(populationDivider)) {
-				Log.v(input);
 				if (currentPop != null) {
 					currentFrame.add(currentPop);
 				}
 				String[] inputArr = input.split(";", 2);
 				currentPop = AbstractPopulation.createFromFile(inputArr[1]);
-				Log.v(currentPop.toString());
 			} else if (input.startsWith(agentDivider)) {
 				if (currentPop != null) {
 					String[] inputArr = input.split(";", 2);
@@ -132,7 +178,7 @@ public class SimulationRecording {
 				e.printStackTrace();
 			}
 		}
-		Log.v("Error no ending found while reading Simulation.");
+		Log.v("Reached end of recording.");
 		return currentFrame;
 	}
 	

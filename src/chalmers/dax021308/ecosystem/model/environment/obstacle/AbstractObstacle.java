@@ -23,5 +23,32 @@ public abstract class AbstractObstacle implements IObstacle {
 	public Position getPosition() {
 		return new Position(position);
 	}
+	
+	public String toBinaryString() {
+		return null;
+	}
+	
+	public static AbstractObstacle createFromFile(String input) {
+		return new AbstractObstacle() {
+			
+			@Override
+			public boolean isInObstacle(Position p) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public Color getColor() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public Position closestBoundary(Position p) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
+	}
 
 }
