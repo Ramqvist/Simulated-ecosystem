@@ -241,10 +241,10 @@ public class EcoWorld implements IModel {
 		IShape shape = null;
 		
 		
-		if(s.getObstacle() == SimulationSettings.ELLIPTICAL_OBSTACLE){
+		if(s.getObstacle() == SimulationSettings.OBSTACLE_ELLIPTICAL){
 			obstacles.add(new EllipticalObstacle(d.getWidth()*0.2, d.getHeight()*0.15, 
 					new Position(d.getWidth()/2,d.getHeight()/2),new Color(0, 128, 255)));
-		} else if (s.getObstacle() == SimulationSettings.RECTANGULAR_OBSTACLE) {
+		} else if (s.getObstacle() == SimulationSettings.OBSTACLE_RECTANGULAR) {
 			obstacles.add(new RectangularObstacle(d.getWidth()*0.1, d.getHeight()*0.02, 
 					new Position(d.getWidth()/2,d.getHeight()/2),new Color(0, 128, 255)));
 		}
@@ -459,8 +459,10 @@ public class EcoWorld implements IModel {
 		} else {
 			stop();
 			if(recording != null) recording.close();
-			loadRecordedSimulation("Testrecording1.sim");
-			playRecordedSimulation();
+			if(recordSimulation) {
+				loadRecordedSimulation("Testrecording1.sim");
+				playRecordedSimulation();
+			}
 			/*if (recordSimulation) {
 				playRecordedSimulation(recordedSimulation);
 			}*/

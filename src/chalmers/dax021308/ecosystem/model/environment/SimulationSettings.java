@@ -35,10 +35,10 @@ public class SimulationSettings {
 	public static final String[] GRASS_VALUES = { POP_GRASS };
 	
 	/*Obstacle constants */
-	public static final String RECTANGULAR_OBSTACLE = "Rectangular obstacle";
-	public static final String ELLIPTICAL_OBSTACLE = "Elliptical obstacle";
-	public static final String NO_OBSTACLE = "No obstacle";
-	public static final String[] OBSTACLE_VALUES = {NO_OBSTACLE, RECTANGULAR_OBSTACLE, ELLIPTICAL_OBSTACLE};
+	public static final String OBSTACLE_RECTANGULAR = "Rectangular obstacle";
+	public static final String OBSTACLE_ELLIPTICAL  = "Elliptical obstacle";
+	public static final String OBSTACLE_NONE        = "No obstacle";
+	public static final String[] OBSTACLE_VALUES = {OBSTACLE_NONE, OBSTACLE_RECTANGULAR, OBSTACLE_ELLIPTICAL};
 	
 	/* Dimension constants */
 	public static final String DIM_SMALL  = "500  x 500";
@@ -55,9 +55,9 @@ public class SimulationSettings {
 	
 	/* Simulation profiles settings */
 	static {
-		DEFAULT = new SimulationSettings("Default", POP_WOLF, 10, POP_DEER, 100, POP_GRASS, 400, SHAPE_SQUARE, ELLIPTICAL_OBSTACLE, 4, false, false, 16, Integer.MAX_VALUE);
+		DEFAULT = new SimulationSettings("Default", POP_WOLF, 10, POP_DEER, 100, POP_GRASS, 400, SHAPE_SQUARE, OBSTACLE_ELLIPTICAL, 4, false, false, 16, Integer.MAX_VALUE);
 		DEFAULT.setSimulationDimension(DIM_MEDIUM);
-		LARGESIM = new SimulationSettings("Large simulation", POP_WOLF, 100, POP_DEER, 1000, POP_GRASS, 4000, SHAPE_SQUARE, NO_OBSTACLE, 4, false, false, 16, Integer.MAX_VALUE);
+		LARGESIM = new SimulationSettings("Large simulation", POP_WOLF, 100, POP_DEER, 1000, POP_GRASS, 4000, SHAPE_SQUARE, OBSTACLE_NONE, 4, false, false, 16, Integer.MAX_VALUE);
 		LARGESIM.setSimulationDimension(DIM_XLARGE);
 		PROFILE_VALUES = new SimulationSettings[2];
 		PROFILE_VALUES[0] = DEFAULT;

@@ -50,15 +50,15 @@ public abstract class AbstractObstacle implements IObstacle {
 		String[] inputArray = input.split(";");
 		String shape = inputArray[0];
 		AbstractObstacle obs = null;
-		if (shape.equals(SimulationSettings.RECTANGULAR_OBSTACLE)) {
+		if (shape.equals(SimulationSettings.OBSTACLE_RECTANGULAR)) {
 			obs = new RectangularObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
 					new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
 					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), Integer.parseInt(inputArray[7])));
-		} else if (shape.equals(SimulationSettings.ELLIPTICAL_OBSTACLE)) {
+		} else if (shape.equals(SimulationSettings.OBSTACLE_ELLIPTICAL)) {
 			obs = new EllipticalObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
 					new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
 					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), Integer.parseInt(inputArray[7])));
-		} else if (shape.equals(SimulationSettings.NO_OBSTACLE)) {
+		} else if (shape.equals(SimulationSettings.OBSTACLE_NONE)) {
 		
 		}
 		return obs;
