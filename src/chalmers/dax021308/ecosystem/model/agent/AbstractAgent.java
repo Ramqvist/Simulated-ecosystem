@@ -52,10 +52,10 @@ public abstract class AbstractAgent implements IAgent {
 	protected static Random ran = new Random();
 
 	protected final static double INTERACTION_RANGE = 10;
-	protected final static double EATING_RANGE = 4;
+	protected final static double EATING_RANGE = 5;
 	protected final static double FOCUS_RANGE = 100;
-	protected final static double ENVIRONMENT_CONSTANT = 200;
-	protected final static double OBSTACLE_CONSTANT = 100;
+	protected final static double ENVIRONMENT_CONSTANT = 50;
+	protected final static double OBSTACLE_CONSTANT = 50;
 	protected static final double VELOCITY_DECAY = 1;
 	protected static final double RANDOM_FORCE_MAGNITUDE = 0.05;
 
@@ -325,8 +325,7 @@ public abstract class AbstractAgent implements IAgent {
 					mutualInteractionForce.y = (mutualInteractionForce.y + newForce.y);
 				}
 			}
-		return mutualInteractionForce.multiply((ran.nextDouble() + ran
-				.nextDouble()));
+		return mutualInteractionForce;
 	}
 
 	/**

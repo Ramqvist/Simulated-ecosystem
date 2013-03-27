@@ -52,7 +52,7 @@ public class HeatMapView extends GLCanvas implements IView {
 	//private GLCanvas canvas;
 	
 	/**
-	 * Create the panel.
+	 * Create the heat map.
 	 */
 	public HeatMapView(IModel model, Dimension grid, double samplingConstant, String populationName) {
 		this.grid = grid;
@@ -73,7 +73,10 @@ public class HeatMapView extends GLCanvas implements IView {
 	public void propertyChange(PropertyChangeEvent event) {
 		String eventName = event.getPropertyName();
 		if(eventName == EcoWorld.EVENT_STOP) {
-			//TODO: DO nassing?
+			maxVisited = 1;
+			minVisited = Integer.MAX_VALUE;
+			heatMap = new int[heatMapWidth][heatMapHeight];
+			visited = new boolean[heatMapWidth][heatMapHeight];
 		} else if(eventName == EcoWorld.EVENT_TICK) {
 			//Tick notification recived from model. Do something with the data.
 			if(event.getNewValue() instanceof List<?>) {
@@ -138,10 +141,10 @@ public class HeatMapView extends GLCanvas implements IView {
 	        				intPosX = (int)(pos.getX()/samplingConstant);
 	    					intPosY = (int)(pos.getY()/samplingConstant);
 	    					
-	    					if(!visited[intPosX][intPosY]){
+//	    					if(!visited[intPosX][intPosY]){
 	    						heatMap[intPosX][intPosY]++;
 	    						visited[intPosX][intPosY]=true;
-	    					}
+//	    					}
 	    						
 	    					if(heatMap[intPosX][intPosY]>maxVisited){
 	    						maxVisited = heatMap[intPosX][intPosY];
@@ -156,7 +159,7 @@ public class HeatMapView extends GLCanvas implements IView {
           		 */
           		for(int j=0;j<heatMapHeight;j++){
           			for(int i=0;i<heatMapWidth;i++){
-          				if(heatMap[i][j]<minVisited){
+          				if(heatMap[i][j]<minVisited && heatMap[i][j] > 0){
     						minVisited = heatMap[i][j];
     					} 
           			}

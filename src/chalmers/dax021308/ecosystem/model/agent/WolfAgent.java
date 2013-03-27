@@ -21,6 +21,7 @@ public class WolfAgent extends AbstractAgent {
 	private boolean willFocusPreys = true;
 	private static final int MAX_ENERGY = 1300;
 	private static final double REPRODUCTION_RATE = 0.15;
+	private IAgent focusedPrey;
 
 	public WolfAgent(String name, Position p, Color c, int width, int height,
 			Vector velocity, double maxSpeed, double maxAcceleration,
@@ -130,8 +131,22 @@ public class WolfAgent extends AbstractAgent {
 		 * be interpreted as the average sum of forces that the agent feels,
 		 * weighted by how close the source of the force is.
 		 */
-		Vector preyForce = new Vector(0, 0);
+		if(focusedPrey != null && focusedPrey.isAlive()) {
+			Position p = focusedPrey.getPosition();
+			double distance = getPosition().getDistance(p);
+			if (distance <= EATING_RANGE) {
+				if (focusedPrey.tryConsumeAgent()) {
+					focusedPrey = null;
+					hungry = false;
+					energy = MAX_ENERGY;
+				}
+			} else {
+				return new Vector(focusedPrey.getPosition(), getPosition());
+			}
+		}
 		
+		Vector preyForce = new Vector(0, 0);
+		IAgent closestFocusPrey = null;
 		int preySize = preyNeighbours.size();
 		for (int i = 0; i < preySize; i++) {
 			IAgent a = preyNeighbours.get(i);
@@ -143,7 +158,16 @@ public class WolfAgent extends AbstractAgent {
 						hungry = false;
 						energy = MAX_ENERGY;
 					}
-				} else {
+				} else if(distance <= FOCUS_RANGE){
+					if(closestFocusPrey != null) {
+						if(closestFocusPrey.getPosition().getDistance(this.position) > 
+							a.getPosition().getDistance(this.position)) {
+							closestFocusPrey = a;
+						}
+					} else {
+						closestFocusPrey = a;
+					}
+				} else if (closestFocusPrey != null){
 					/*
 					 * Create a vector that points towards the prey.
 					 */
@@ -165,8 +189,14 @@ public class WolfAgent extends AbstractAgent {
 			preyForce.multiply(maxAcceleration / norm);
 		}
 		
+		if(closestFocusPrey != null){
+			focusedPrey = closestFocusPrey;
+			return new Vector(focusedPrey.getPosition(), getPosition());
+		} 
+		
 		return preyForce;
 	}
+
 
 	/**
 	 * This also decreases the wolfs energy.
