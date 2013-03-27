@@ -14,6 +14,8 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.opencl.*;
 
+import chalmers.dax021308.ecosystem.model.util.Log;
+
 public class MutualTestKernel {
 	// OpenCL variables
 	public static CLContext context;
@@ -233,6 +235,11 @@ public class MutualTestKernel {
 		platform = CLPlatform.getPlatforms().get(0); 
 		// Run our program on the GPU
 		devices = platform.getDevices(CL10.CL_DEVICE_TYPE_GPU);
+		Log.v("Devices!");
+		for(CLDevice d : devices) {
+			Log.v(d.toString());
+			Log.v(d.getInfoString(CL10.CL_DEVICE_VENDOR));
+		}
 		// Create an OpenCL context, this is where we could create an OpenCL-OpenGL compatible context
 		context = CLContext.create(platform, devices, errorBuf);
 		// Create a command queue

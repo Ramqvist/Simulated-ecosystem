@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Random;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.opencl.CL10;
+import org.lwjgl.opencl.CLDevice;
+import org.lwjgl.opencl.CLPlatform;
 
 import com.amd.aparapi.Kernel;
 import com.amd.aparapi.Range;
@@ -306,6 +309,9 @@ public abstract class AbstractAgent implements IAgent {
 	 *         agents in that it interacts with.
 	 */
 	protected Vector mutualInteractionForce() {
+		if(neutralNeighbours.size() == 0) {
+			return Vector.EmptyVector();
+		}
 		long time = System.nanoTime();
 		boolean executeCPU = true;
 		if(executeCPU) {
@@ -314,6 +320,7 @@ public abstract class AbstractAgent implements IAgent {
 			}
 			double dtime = (0.000001 * (System.nanoTime() - time));
 			stat.addObservation(dtime);
+
 			System.out.println("mutualInteractionForce size: " + neutralNeighbours.size() + " Elapsed time CPU: " + dtime + " mean: " + stat.getMean());
 			return mutualInteractionForceCPU();
 		} else {
@@ -321,6 +328,19 @@ public abstract class AbstractAgent implements IAgent {
 //			time = (long) (0.000001 * (System.nanoTime() - time) );
 			double dtime = (0.000001 * (System.nanoTime() - time));
 			stat.addObservation(dtime);
+
+			CLPlatform platform = CLPlatform.getPlatforms().get(0); 
+			// Run our program on the GPU
+			List<CLDevice> devices = platform.getDevices(CL10.CL_DEVICE_TYPE_GPU);
+			/*for(CLDevice d : devices) {
+				Log.v(d.getInfoString(CL10.CL_DEVICE_VENDOR));
+				Log.v(d.getInfoInt(CL10.CL_DEVICE_TYPE) + "");
+				Log.v("Compute units: " + d.getInfoInt(CL10.CL_DEVICE_MAX_COMPUTE_UNITS) + "");
+				Log.v("Compute units: " + d.getInfoInt(CL10.CL_DEVICE_MAX_CLOCK_FREQUENCY) + "");
+				Log.v("Name: " + d.getInfoString(CL10.CL_DEVICE_NAME) + "");
+				Log.v("Available: " + d.getInfoString(CL10.CL_DEVICE_AVAILABLE) + "");
+				Log.v("Memeory size: " + d.getInfoLong(CL10.CL_DEVICE_GLOBAL_MEM_SIZE) + "");
+			}*/
 			System.out.println("mutualInteractionForce size: " + neutralNeighbours.size() + " Elapsed time GPU: " + dtime + " mean: " + stat.getMean());
 			return result;
 		}
