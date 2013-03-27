@@ -39,7 +39,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected double visionRange;
 	protected double maxAcceleration;
 	protected IAgent focusedPrey;
-	private boolean isAlive;
+	private boolean isAlive = true;
 	
 	/* Neighbour list module variables */
 	protected List<IAgent> preyNeighbours;
@@ -52,7 +52,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected static Random ran = new Random();
 
 	protected final static double INTERACTION_RANGE = 10;
-	protected final static double EATING_RANGE = 5;
+	protected final static double EATING_RANGE = 10;
 	protected final static double FOCUS_RANGE = 100;
 	protected final static double ENVIRONMENT_CONSTANT = 50;
 	protected final static double OBSTACLE_CONSTANT = 50;
@@ -73,8 +73,6 @@ public abstract class AbstractAgent implements IAgent {
 		this.maxAcceleration = maxAcceleration;
 		this.capacity = Integer.MAX_VALUE;
 		this.lifeLength = 0;
-
-		this.isAlive = true;
 		
 		/* LinkedList for fast changing of Agents, consider ArrayList for less memory */
 		preyNeighbours    = new ArrayList<IAgent>(256);
@@ -381,9 +379,7 @@ public abstract class AbstractAgent implements IAgent {
 			arrayalForce.x /= nAgentsInVision;
 			arrayalForce.y /= nAgentsInVision;
 		}
-		double randomSmoothFactor = ((ran.nextDouble() + ran.nextDouble()) + (ran
-				.nextDouble() + ran.nextDouble())) / 2;
-		return arrayalForce.multiply(randomSmoothFactor);
+		return arrayalForce;
 	}
 
 	/**

@@ -18,10 +18,9 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public class WolfAgent extends AbstractAgent {
 
 	private boolean hungry = true;
-	private boolean willFocusPreys = true;
+	private boolean willFocusPreys = false;
 	private static final int MAX_ENERGY = 1300;
 	private static final double REPRODUCTION_RATE = 0.15;
-	private IAgent focusedPrey;
 
 	public WolfAgent(String name, Position p, Color c, int width, int height,
 			Vector velocity, double maxSpeed, double maxAcceleration,
@@ -59,12 +58,10 @@ public class WolfAgent extends AbstractAgent {
 		 * the acceleration.
 		 */
 
-		Vector randomForce = randomForce();
 		Vector acceleration = preyForce.multiply(10)
 				.add(mutualInteractionForce)
 				.add(forwardThrust)
-				.add(arrayalForce)
-				.add(randomForce);
+				.add(arrayalForce);
 		double accelerationNorm = acceleration.getNorm();
 		if (accelerationNorm > maxAcceleration) {
 			acceleration.multiply(maxAcceleration / accelerationNorm);
@@ -131,7 +128,7 @@ public class WolfAgent extends AbstractAgent {
 		 * be interpreted as the average sum of forces that the agent feels,
 		 * weighted by how close the source of the force is.
 		 */
-		if(focusedPrey != null && focusedPrey.isAlive()) {
+		if(willFocusPreys && focusedPrey != null && focusedPrey.isAlive()) {
 			Position p = focusedPrey.getPosition();
 			double distance = getPosition().getDistance(p);
 			if (distance <= EATING_RANGE) {
@@ -158,7 +155,7 @@ public class WolfAgent extends AbstractAgent {
 						hungry = false;
 						energy = MAX_ENERGY;
 					}
-				} else if(distance <= FOCUS_RANGE){
+				} else if(willFocusPreys && distance <= FOCUS_RANGE){
 					if(closestFocusPrey != null) {
 						if(closestFocusPrey.getPosition().getDistance(this.position) > 
 							a.getPosition().getDistance(this.position)) {
@@ -167,7 +164,7 @@ public class WolfAgent extends AbstractAgent {
 					} else {
 						closestFocusPrey = a;
 					}
-				} else if (closestFocusPrey != null){
+				} else if (closestFocusPrey == null){
 					/*
 					 * Create a vector that points towards the prey.
 					 */
@@ -189,7 +186,7 @@ public class WolfAgent extends AbstractAgent {
 			preyForce.multiply(maxAcceleration / norm);
 		}
 		
-		if(closestFocusPrey != null){
+		if(willFocusPreys && closestFocusPrey != null){
 			focusedPrey = closestFocusPrey;
 			return new Vector(focusedPrey.getPosition(), getPosition());
 		} 
