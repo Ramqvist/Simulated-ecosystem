@@ -1,6 +1,13 @@
 package chalmers.dax021308.ecosystem.model.environment;
 
 import java.awt.Dimension;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.nio.charset.Charset;
 
 /**
  * Container class for various simulation settings.
@@ -14,6 +21,8 @@ public class SimulationSettings {
 	public static final SimulationSettings DEFAULT;
 	public static final SimulationSettings LARGESIM;
 	public static final SimulationSettings[] PROFILE_VALUES;
+	
+	public static final String DEFAULT_SETTINGSFILE = "saved_settings.property";
 	
 	
 	/* Shape Constants */
@@ -226,11 +235,55 @@ public class SimulationSettings {
 		return fromDataString(filePath);
 	}
 	
+	public static SimulationSettings loadFromFile() {
+		String fileName = DEFAULT_SETTINGSFILE;
+		File recordedFile = new File(fileName);
+		if (!recordedFile.exists()) {
+			return null;
+		}
+		if (!recordedFile.canRead()) {
+			return null;
+		}
+		try { 
+			FileInputStream fileStream = new FileInputStream(recordedFile);
+			Charset utf8 = Charset.forName("UTF-8");
+			BufferedReader br = new BufferedReader(new InputStreamReader(fileStream, utf8));
+			String inputLine = br.readLine();
+			br.close();
+			return fromDataString(inputLine);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
 	/**
-	 * Save this instance of SimulationSettings to a file.
+	 * Save this instance of SimulationSettings to a file. 
+	 * Overwrites of there is already a file with that name.
 	 */
-	public void saveToFile() {
-		//TODO: Implement
+	public boolean saveToFile() {
+		String filepath = DEFAULT_SETTINGSFILE;
+		File f = new File(filepath);
+		if(f.exists()) {
+			f.delete();
+		}
+		try {
+			f.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(filepath);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		pw.println(toDataString());
+		pw.close();
+		return true;
 	}
 	
 	/**
@@ -243,7 +296,9 @@ public class SimulationSettings {
 		if(input.length < 12) {
 			return null;
 		}
-		int i = 0;
+		int i = -1;
+		//public SimulationSettings(String simulationProfileName, String predatorModel, int predPopSize, String preyModel, int preyPopSize, String grassModel, int grassPopSize, String shapeModel, String obstacle, int numThreads, 
+		//boolean runWithoutTimer, boolean recordSimulation, int delayLength, int numIterations) {
 		SimulationSettings simSettings = new SimulationSettings(
 				input[++i],
 				input[++i], 
@@ -259,6 +314,16 @@ public class SimulationSettings {
 				Boolean.valueOf(input[++i]),
 				Integer.parseInt(input[++i]),
 				Integer.parseInt(input[++i]));
+		i++;
+		int pos = i;
+		try {
+			int width = Integer.parseInt(input[i++]);
+			int height = Integer.parseInt(input[i++]);
+			simSettings.setSimulationDimension(new Dimension(width, height));
+		} catch (NumberFormatException e) {
+			String dimConstant = input[pos];
+			simSettings.setSimulationDimension(dimConstant);
+		}
 		return simSettings;
 	}
 
@@ -285,10 +350,6 @@ public class SimulationSettings {
 		sb.append(';');
 		sb.append(obstacle);
 		sb.append(';');
-		sb.append(simDimension);
-		sb.append(';');
-		sb.append(simDimensionConstant);
-		sb.append(';');
 		sb.append(numThreads);
 		sb.append(';');
 		sb.append(runWithoutTimer);
@@ -298,6 +359,14 @@ public class SimulationSettings {
 		sb.append(delayLength);
 		sb.append(';');
 		sb.append(numIterations);
+		sb.append(';');
+		if(simDimension == null) {
+			sb.append(simDimensionConstant);
+		} else {
+			sb.append(simDimension.width);
+			sb.append(';');
+			sb.append(simDimension.height);
+		}
 		return sb.toString();
 	}
 	

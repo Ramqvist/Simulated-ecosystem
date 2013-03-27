@@ -39,7 +39,12 @@ public class NewSimulationController implements IController {
 		if(view == null) {
 			view = new NewSimulationView(model);
 			view.btnRunSim.addActionListener(onStartButtonListener);
-			injectSimulationSettingsToGUI(SimulationSettings.DEFAULT);
+			SimulationSettings s = SimulationSettings.loadFromFile();
+			if(s == null) {
+				Log.v("Failed to load saved settings, loading default.");
+				s = SimulationSettings.DEFAULT;
+			}
+			injectSimulationSettingsToGUI(s);
 		}
 		view.show();
 	}
@@ -128,15 +133,15 @@ public class NewSimulationController implements IController {
 			view.tvNumIterations.setText(s.getNumIterations() + "");
 		}
 		String shape = s.getShapeModel();
-		if(shape == SimulationSettings.SHAPE_CIRCLE) {
+		if(shape.equals(SimulationSettings.SHAPE_CIRCLE)) {
 			view.rdbtnCircle.setSelected(true);
 			view.rdbtnSquare.setSelected(false);
 			view.rdbtnTriangle.setSelected(false);
-		} else if(shape == SimulationSettings.SHAPE_SQUARE) {
+		} else if(shape.equals(SimulationSettings.SHAPE_SQUARE)) {
 			view.rdbtnCircle.setSelected(false);
 			view.rdbtnSquare.setSelected(true);
 			view.rdbtnTriangle.setSelected(false);
-		} else if(shape == SimulationSettings.SHAPE_TRIANGLE) {
+		} else if(shape.equals(SimulationSettings.SHAPE_TRIANGLE)) {
 			view.rdbtnCircle.setSelected(false);
 			view.rdbtnSquare.setSelected(false);
 			view.rdbtnTriangle.setSelected(true);
@@ -185,7 +190,9 @@ public class NewSimulationController implements IController {
 				model.stop();
 			} catch (IllegalStateException e) {
 			}
-			model.loadSimulationSettings(getSimulationSettingsFromGUI());
+			SimulationSettings s = getSimulationSettingsFromGUI();
+			s.saveToFile();
+			model.loadSimulationSettings(s);
 			try {
 				model.start();
 			} catch (IllegalStateException e) {
