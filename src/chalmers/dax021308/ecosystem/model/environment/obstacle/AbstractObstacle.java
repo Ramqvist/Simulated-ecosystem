@@ -28,7 +28,14 @@ public abstract class AbstractObstacle implements IObstacle {
 	
 	public String toBinaryString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(SimulationSettings.SHAPE_CIRCLE); //TODO: Needs shape here.
+		if(this instanceof EllipticalObstacle) {
+		sb.append(SimulationSettings.OBSTACLE_ELLIPTICAL); //TODO: Needs shape here.
+		} else if(this instanceof RectangularObstacle) {
+			sb.append(SimulationSettings.OBSTACLE_RECTANGULAR); //TODO: Needs shape here.
+		} else {
+			sb.append(SimulationSettings.OBSTACLE_NONE);
+			return sb.toString();
+		}
 		sb.append(';');
 		sb.append(roundTwoDecimals(position.getX()));
 		sb.append(';');
@@ -59,7 +66,7 @@ public abstract class AbstractObstacle implements IObstacle {
 					new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
 					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), Integer.parseInt(inputArray[7])));
 		} else if (shape.equals(SimulationSettings.OBSTACLE_NONE)) {
-		
+			return null;
 		}
 		return obs;
 	}

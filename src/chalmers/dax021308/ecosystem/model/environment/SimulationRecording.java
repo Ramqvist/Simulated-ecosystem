@@ -1,5 +1,6 @@
 package chalmers.dax021308.ecosystem.model.environment;
 
+import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,19 +34,31 @@ public class SimulationRecording {
 	/*	Text syntax constants */
 	private static final String headerDividerStart   = "<HEAD>";
 	private static final String headerDividerEnd     = "</HEAD>";
-	private static final String frameDividerStart    = "<FRM>";
-	private static final String frameDividerEnd      = "</FRM>";
+	private static final String dimensionDivider     = "<DIM>";
+	private static final String shapeDivider         = "<SHAPE>";
+	private static final String frameDividerStart    = "<FRAME>";
+	private static final String frameDividerEnd      = "</FRAME>";
 	private static final String populationDivider    = "<POP>";
 	private static final String agentDivider         = "<AGE>";
 	private static final String obstacleDivider      = "<OBS>";
 	
+	/* Temporary class variables */
 	private File recordedFile;
 	private BufferedReader br;
 	private FileInputStream fileStream;
+	private Dimension simDim;
 	private PrintWriter pw;
+	private String shapeConstant;
 	
-	private List<IObstacle> obsList;
 	
+	/**
+	 * Initialize the reading.
+	 * <p>
+	 * Need to call this before reading.
+	 * Otherwise undefined behavior.
+	 * @param fileName path to the file.
+	 * @return
+	 */
 	public boolean initReading(String fileName) {
 		recordedFile = new File(fileName);
 		if (!recordedFile.exists()) {
@@ -64,7 +77,15 @@ public class SimulationRecording {
 		}
 		return true;
 	}
-	
+
+	/**
+	 * Initialize the writing.
+	 * <p>
+	 * Need to call this before writing. 
+	 * Otherwise undefined behavior.
+	 * @param fileName path to the file.
+	 * @return
+	 */
 	public boolean initWriting(String fileName) {
 		recordedFile = new File(fileName);
 		if (recordedFile.exists()) {
@@ -107,7 +128,8 @@ public class SimulationRecording {
 	 * Reads the header information from the text file.
 	 * For now only contains obstacle.
 	 */
-	public void readHeader() {
+	public List<IObstacle> readHeader() {
+		List<IObstacle> obsList = null;
 		String input = null;
 		try {
 			input = br.readLine();
@@ -118,8 +140,14 @@ public class SimulationRecording {
 			if (input.startsWith(headerDividerStart)) {
 				obsList = new ArrayList<IObstacle>();
 			} else if (input.startsWith(headerDividerEnd)) {
-				return;
-			} else if (input.startsWith(obstacleDivider)) {
+				return obsList;
+			} else if (input.startsWith(dimensionDivider)) {
+				String[] inputArr = input.split(";", 2);
+				this.simDim = readDimension(inputArr[1]);
+			}  else if (input.startsWith(shapeDivider)) {
+				String[] inputArr = input.split(";", 2);
+				this.shapeConstant = inputArr[1];
+			}  else if (input.startsWith(obstacleDivider)) {
 				String[] inputArr = input.split(";", 2);
 				IObstacle o = AbstractObstacle.createFromFile(inputArr[1]);
 				if(obsList != null) obsList.add(o);
@@ -132,21 +160,48 @@ public class SimulationRecording {
 			}
 		}
 		Log.v("Reached end of header.");
-		return;
+		return null;
 	}
 	
 	/**
 	 * Append header information, now only contains obstacles.
 	 * @param obsList
 	 */
-	public void appendHeader(List<IObstacle> obsList) {
+	public void appendHeader(List<IObstacle> obsList, Dimension simDim, String shapeConstant) {
 		pw.println(headerDividerStart);
 		for (IObstacle p : obsList) {
 			pw.println(populationDivider + ';' + p.toBinaryString());
 		}
+		pw.println(getDimensionBinaryString(simDim));
+		pw.print(shapeDivider + ';' + shapeConstant);
 		pw.println(headerDividerEnd);
 	}
 	
+	private String getDimensionBinaryString(Dimension d) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(dimensionDivider);
+		sb.append(';');
+		sb.append(d.width);
+		sb.append(';');
+		sb.append(d.height);
+		return sb.toString();
+	}
+	
+	public String getShapeConstant() {
+		return shapeConstant;
+	}
+	
+	private Dimension readDimension(String s) {
+		String[] input = s.split(";");
+		int width = Integer.parseInt(input[0]);
+		int height = Integer.parseInt(input[1]);
+		return new Dimension(width, height);
+	}
+	
+	public Dimension getLoadedDimension() {
+		return simDim;
+	}
+
 	/**
 	 * Read one frame from the loaded text-file and return it.
 	 * @return a frame, or NULL if the end had been reached.
@@ -265,6 +320,7 @@ public class SimulationRecording {
 	 * @param filePath
 	 * @return
 	 */
+	@Deprecated
 	public boolean dumpRecordToDisk(List<List<IPopulation>> record,
 			String filePath) {
 		for (List<IPopulation> popList : record) {
