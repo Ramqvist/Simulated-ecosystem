@@ -13,3 +13,5 @@ Makefile.in
 /missing
 /bin
 .classpath
+Testrecording1.sim
+saved_settings.property

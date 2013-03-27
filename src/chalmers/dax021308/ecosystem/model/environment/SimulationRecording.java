@@ -33,14 +33,14 @@ public class SimulationRecording {
 
 	/*	Text syntax constants */
 	private static final String headerDividerStart   = "<HEAD>";
-	private static final String headerDividerEnd     = "</HEAD>";
+	private static final String obstacleDivider      = "<OBS>";
 	private static final String dimensionDivider     = "<DIM>";
 	private static final String shapeDivider         = "<SHAPE>";
+	private static final String headerDividerEnd     = "</HEAD>";
 	private static final String frameDividerStart    = "<FRAME>";
-	private static final String frameDividerEnd      = "</FRAME>";
 	private static final String populationDivider    = "<POP>";
 	private static final String agentDivider         = "<AGE>";
-	private static final String obstacleDivider      = "<OBS>";
+	private static final String frameDividerEnd      = "</FRAME>";
 	
 	/* Temporary class variables */
 	private File recordedFile;
@@ -170,10 +170,10 @@ public class SimulationRecording {
 	public void appendHeader(List<IObstacle> obsList, Dimension simDim, String shapeConstant) {
 		pw.println(headerDividerStart);
 		for (IObstacle p : obsList) {
-			pw.println(populationDivider + ';' + p.toBinaryString());
+			pw.println(obstacleDivider + ';' + p.toBinaryString());
 		}
 		pw.println(getDimensionBinaryString(simDim));
-		pw.print(shapeDivider + ';' + shapeConstant);
+		pw.println(shapeDivider + ';' + shapeConstant);
 		pw.println(headerDividerEnd);
 	}
 	

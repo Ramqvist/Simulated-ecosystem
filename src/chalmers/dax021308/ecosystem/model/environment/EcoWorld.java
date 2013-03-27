@@ -300,6 +300,7 @@ public class EcoWorld implements IModel {
 		if (recordSimulation) {
 			this.recording = new SimulationRecording();
 			recording.initWriting("Testrecording1.sim");
+			recording.appendHeader(obstacles, d, s.getShapeModel());
 		}
 		this.env = new EnvironmentScheduler(populations, obstacles,
 				mOnFinishListener, d.height, d.width, s.getNumThreads());
@@ -315,6 +316,24 @@ public class EcoWorld implements IModel {
 		if(recording.initReading(filePath)) {
 			playRecording = true;
 			return true;
+		}
+		List<IObstacle> obsList = recording.readHeader();
+		Dimension simDim = recording.getLoadedDimension();
+		String shapeModel = recording.getShapeConstant();
+		IShape shape;
+		if(shapeModel == null || simDim == null || obsList == null) {
+			throw new NullPointerException();
+		}
+		observers.firePropertyChange(EVENT_DIMENSIONCHANGED, null, simDim);
+		if (shapeModel.equals(SimulationSettings.SHAPE_SQUARE)) {
+			shape = new SquareShape();
+			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
+		} else if (shapeModel.equals(SimulationSettings.SHAPE_CIRCLE)) {
+			shape = new CircleShape();
+			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
+		} else if (shapeModel.equals(SimulationSettings.SHAPE_TRIANGLE)){
+			shape = new TriangleShape();
+			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
 		}
 		return false;
 	}
