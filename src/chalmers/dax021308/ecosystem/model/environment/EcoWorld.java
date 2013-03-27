@@ -263,7 +263,7 @@ public class EcoWorld implements IModel {
 			pred = new DummyPredatorPopulation(d, s.getPredPopSize(), Color.red, 3,
 					0.75, 275, shape);
 		} else if (s.getPredatorModel() == SimulationSettings.POP_WOLF) {
-			pred = new WolfPopulation("Wolves", d, s.getPredPopSize(), Color.red, 3,
+			pred = new WolfPopulation("Wolves", d, s.getPredPopSize(), Color.red, 2.2,
 					0.8, 250, true, shape, obstacles);
 		} 
 
@@ -279,7 +279,7 @@ public class EcoWorld implements IModel {
 
 		if (s.getGrassModel() == SimulationSettings.POP_GRASS) {
 			grass = new GrassPopulation("Grass", d, s.getGrassPopSize(), new Color(69,139,00), 1,
-					1, 0, 1500, shape, obstacles);
+					1, 0, 800, shape, obstacles);
 		} 
 
 		if (prey == null || pred == null || grass == null || shape == null) {

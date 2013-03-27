@@ -52,7 +52,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected static Random ran = new Random();
 
 	protected final static double INTERACTION_RANGE = 10;
-	protected final static double EATING_RANGE = 10;
+	protected final static double EATING_RANGE = 5;
 	protected final static double FOCUS_RANGE = 100;
 	protected final static double ENVIRONMENT_CONSTANT = 50;
 	protected final static double OBSTACLE_CONSTANT = 50;

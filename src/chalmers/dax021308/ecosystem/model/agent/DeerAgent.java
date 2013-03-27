@@ -17,10 +17,10 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class DeerAgent extends AbstractAgent {
 
-	private static final int MAX_ENERGY = 1100;
+	private static final int MAX_ENERGY = 900;
 	private boolean hungry = true;
-	private static final double REPRODUCTION_RATE = 0.15;
-	private boolean willFocusPreys = true;
+	private static final double REPRODUCTION_RATE = 0.1;
+	private boolean willFocusPreys = false;
 
 	public DeerAgent(String name, Position p, Color c, int width, int height,
 			Vector velocity, double maxSpeed, double maxAcceleration,
@@ -130,16 +130,9 @@ public class DeerAgent extends AbstractAgent {
 
 	/**
 	 * @return returns The force the preys attracts the agent with
-	 * @author Henrik
+	 * @author Sebastian/Henrik
 	 */
 	private Vector getPreyForce() {
-		/*
-		 * "Prey Force" is AT THE MOMENT defined as the sum of the vectors
-		 * pointing away from all the preys in vision, weighted by the inverse
-		 * of the distance to the preys, then normalized to have unit norm. Can
-		 * be interpreted as the average sum of forces that the agent feels,
-		 * weighted by how close the source of the force is.
-		 */
 		if(willFocusPreys && focusedPrey != null && focusedPrey.isAlive()) {
 			Position p = focusedPrey.getPosition();
 			double distance = getPosition().getDistance(p);
@@ -150,7 +143,7 @@ public class DeerAgent extends AbstractAgent {
 					energy = MAX_ENERGY;
 				}
 			} else {
-				return new Vector(focusedPrey.getPosition(), getPosition());
+				return new Vector(focusedPrey.getPosition(), position);
 			}
 		}
 		
@@ -168,7 +161,7 @@ public class DeerAgent extends AbstractAgent {
 						energy = MAX_ENERGY;
 					}
 				} else if(willFocusPreys && distance <= FOCUS_RANGE){
-					if(closestFocusPrey != null) {
+					if(closestFocusPrey != null && a.isAlive()) {
 						if(closestFocusPrey.getPosition().getDistance(this.position) > 
 							a.getPosition().getDistance(this.position)) {
 							closestFocusPrey = a;
@@ -200,7 +193,7 @@ public class DeerAgent extends AbstractAgent {
 		
 		if(willFocusPreys && closestFocusPrey != null){
 			focusedPrey = closestFocusPrey;
-			return new Vector(focusedPrey.getPosition(), getPosition());
+			return new Vector(focusedPrey.getPosition(), position);
 		} 
 		
 		return preyForce;
