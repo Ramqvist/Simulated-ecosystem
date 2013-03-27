@@ -18,6 +18,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class GrassAgent extends AbstractAgent {
 	private static final double REPRODUCTION_RATE = 0.003;
+	int delay = 0;
 
 	public GrassAgent(String name, Position pos, Color color, int width,
 			int height, Vector velocity, double maxSpeed, int capacity) {
@@ -37,6 +38,9 @@ public class GrassAgent extends AbstractAgent {
 	public void updatePosition() {
 		// Grass shouldn't move, so just make it one iteration older
 		lifeLength++;
+		if (delay++ == 100) {
+			color = color.darker();
+		}
 	}
 
 	@Override
@@ -46,8 +50,8 @@ public class GrassAgent extends AbstractAgent {
 		double cap = (double) capacity;
 		if (Math.random() < REPRODUCTION_RATE * (1.0 - popSize / cap)) {
 			List<IAgent> spawn = new ArrayList<IAgent>();
-			IAgent a = new GrassAgent(name, getSpawnPosition(gridDimension, shape),
-					color, 5, 5, velocity, 0, capacity);
+			IAgent a = new GrassAgent(name, getSpawnPosition(gridDimension,
+					shape), Color.green, 5, 5, velocity, 0, capacity);
 			spawn.add(a);
 			return spawn;
 		}
