@@ -22,7 +22,10 @@ import chalmers.dax021308.ecosystem.model.util.Log;
 
 /**
  * Class representing a Recorded simulation.
- * @author Erik
+ * 
+ * Use the init methods before reading/writing.
+ * 
+ * @author Erik Ramqvist
  *
  */
 public class SimulationRecording {
@@ -84,6 +87,11 @@ public class SimulationRecording {
 		return true;
 	}
 	
+	/**
+	 * Adds a recorded frame to the currently writing file.
+	 * 
+	 * @param popList
+	 */
 	public void appendFrame(List<IPopulation> popList) {
 		pw.println(frameDividerStart);
 		for (IPopulation p : popList) {
@@ -97,6 +105,7 @@ public class SimulationRecording {
 	
 	/**
 	 * Reads the header information from the text file.
+	 * For now only contains obstacle.
 	 */
 	public void readHeader() {
 		String input = null;
@@ -140,7 +149,7 @@ public class SimulationRecording {
 	
 	/**
 	 * Read one frame from the loaded text-file and return it.
-	 * @return
+	 * @return a frame, or NULL if the end had been reached.
 	 */
 	public synchronized List<IPopulation> readFrame() {
 		List<IPopulation> currentFrame = null;
@@ -183,7 +192,9 @@ public class SimulationRecording {
 	}
 	
 	/**
-	 * Closes the streams used by this class.
+	 * Closes the streams used by this class. 
+	 * Do this after {@link #readFrame()} return null or the model has finished its iterations.
+	 * 
 	 */
 	public void close() {
 		try {

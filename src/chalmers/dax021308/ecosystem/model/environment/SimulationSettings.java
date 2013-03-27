@@ -226,15 +226,13 @@ public class SimulationSettings {
 		return simulationProfileName;
 	}
 	
+
 	/**
 	 * Try to read a SimulationSettings from a file.
+	 * <p>
+	 * Is now hard-coded to read the default settings file, but can easily be changed to read arbitrary settings file.
 	 * @param filePath
 	 */
-	public static SimulationSettings getSimulationSettingsFromFile(String filePath) {
-		//TODO: Implement
-		return fromDataString(filePath);
-	}
-	
 	public static SimulationSettings loadFromFile() {
 		String fileName = DEFAULT_SETTINGSFILE;
 		File recordedFile = new File(fileName);
@@ -261,6 +259,8 @@ public class SimulationSettings {
 	/**
 	 * Save this instance of SimulationSettings to a file. 
 	 * Overwrites of there is already a file with that name.
+	 * <p>
+	 * Is now hard-coded to save to the default settings file, but can easily be changed to save to arbitrary settings file.
 	 */
 	public boolean saveToFile() {
 		String filepath = DEFAULT_SETTINGSFILE;
@@ -287,7 +287,8 @@ public class SimulationSettings {
 	}
 	
 	/**
-	 * Untested!
+	 * Tries to create a SimulationSettings from the given String.
+	 * 
 	 * @param s
 	 * @return
 	 */
@@ -328,7 +329,8 @@ public class SimulationSettings {
 	}
 
 	/**
-	 * Untested!
+	 * Converts the instance to a data String, for dumping to a textfile and reading later on.
+	 * 
 	 */
 	public String toDataString() {
 		StringBuilder sb = new StringBuilder();
