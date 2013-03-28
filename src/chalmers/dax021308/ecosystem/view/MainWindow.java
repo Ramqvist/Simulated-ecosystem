@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 
 import javax.swing.ImageIcon;
@@ -16,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.chart.AbstractGraph2D;
 import chalmers.dax021308.ecosystem.view.chart.IterationTimeGraph;
 import chalmers.dax021308.ecosystem.view.chart.PopulationAmountGraph;
@@ -46,7 +49,7 @@ public class MainWindow extends JFrame implements IView {
 	/**
 	 * Create the frame.
 	 */
-	public MainWindow(EcoWorld model) {
+	public MainWindow(final EcoWorld model) {
 		setTitle("Simulated Ecosystem");
 		setIconImage(new ImageIcon("res/Simulated ecosystem icon.png").getImage());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -137,7 +140,38 @@ public class MainWindow extends JFrame implements IView {
 		
 		contentPane.add(left, BorderLayout.CENTER);
 		contentPane.add(right, BorderLayout.EAST);
-		
+		addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent arg0) {
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent arg0) {
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent arg0) {
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				//Try to shutdown all worker threads.
+				model.shutdownNow();
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent arg0) {
+			}
+		});
 		//contentPane.add(graphView2);
 	}
 

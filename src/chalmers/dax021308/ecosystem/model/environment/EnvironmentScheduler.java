@@ -288,6 +288,12 @@ public class EnvironmentScheduler implements Runnable {
 		}
 	}
 
+
+
+	public void shutdown() {
+		workPool.shutdownNow();
+	}
+
 	/*@Override
 	public boolean isFree(Position p) {
 

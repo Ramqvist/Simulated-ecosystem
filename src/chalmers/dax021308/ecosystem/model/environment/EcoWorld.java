@@ -424,6 +424,23 @@ public class EcoWorld implements IModel {
 			}
 		}
 	}
+	
+	/**
+	 * One way shutdown of EcoWorld and its workers.
+	 * Should be used when exiting the program or creating a new instance of EcoWorld.
+	 */
+	public void shutdownNow() {
+		try {
+			stop();
+			if(executor != null) executor.shutdownNow();
+			if(env != null) env.shutdown();
+			if(timer != null) timer.stop();
+			if(recording != null) recording.close();
+			if(notifierExecutor != null) notifierExecutor.shutdownNow();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Plays the recorded simulation (if any). Assumes the recording is recorded
