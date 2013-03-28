@@ -59,8 +59,7 @@ public class SimulationRecording {
 	 * @param fileName path to the file.
 	 * @return
 	 */
-	public boolean initReading(String fileName) {
-		recordedFile = new File(fileName);
+	public boolean initReading(File recordedFile) {
 		if (!recordedFile.exists()) {
 			return false;
 		}

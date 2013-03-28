@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -84,7 +85,12 @@ public class MainWindow extends JFrame implements IView {
 				if(ret == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = fc.getSelectedFile();
 					if(selectedFile != null) {
-						//Handlefile
+						Log.v(selectedFile.toString());
+						if(!model.loadRecordedSimulation(selectedFile)) {
+							JOptionPane.showMessageDialog(MainWindow.this, "Failed to load simulation file.");
+						} else {
+							model.playRecordedSimulation();
+						}
 					}
 				}
 			}
@@ -103,6 +109,7 @@ public class MainWindow extends JFrame implements IView {
 				int ret = fc.showSaveDialog(MainWindow.this);
 				if(ret == JFileChooser.APPROVE_OPTION) {
 					File savedFileAs = fc.getSelectedFile();
+					Log.v(savedFileAs.toString());
 				}
 			}
 		});

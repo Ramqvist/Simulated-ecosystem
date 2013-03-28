@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -309,11 +310,11 @@ public class EcoWorld implements IModel {
 	/**
 	 * Loads a simulation from the given filePath.
 	 * 
-	 * @param filePath
+	 * @param selectedFile
 	 */
-	public boolean loadRecordedSimulation(String filePath) {
+	public boolean loadRecordedSimulation(File selectedFile) {
 		this.recording = new SimulationRecording();
-		if(recording.initReading(filePath)) {
+		if(recording.initReading(selectedFile)) {
 			playRecording = true;
 			return true;
 		}
@@ -336,6 +337,14 @@ public class EcoWorld implements IModel {
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
 		}
 		return false;
+	}
+	
+	/**
+	 * Saves the recording to a file.
+	 * @param f
+	 */
+	public void saveRecordingToFile(File f) {
+		
 	}
 
 	private List<IObstacle> readObsticlesFromFile() {
@@ -496,7 +505,7 @@ public class EcoWorld implements IModel {
 			stop();
 			if(recording != null) recording.close();
 			if(recordSimulation) {
-				loadRecordedSimulation("Testrecording1.sim");
+				loadRecordedSimulation(new File("Testrecording1.sim") );
 				playRecordedSimulation();
 			}
 			/*if (recordSimulation) {
