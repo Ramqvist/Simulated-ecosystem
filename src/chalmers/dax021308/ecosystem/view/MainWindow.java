@@ -77,6 +77,7 @@ public class MainWindow extends JFrame implements IView {
 		menuBar.add(mnFile);
 		
 		JMenuItem mntmLoad = new JMenuItem("Load simulation");
+		//TODO: MOve this to controller.
 		mntmLoad.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -99,7 +100,7 @@ public class MainWindow extends JFrame implements IView {
 		
 		JMenuItem mntmSave = new JMenuItem("Save simulation");
 		mnFile.add(mntmSave);
-
+		//TODO: MOve this to controller.
 		mntmSave.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -109,13 +110,16 @@ public class MainWindow extends JFrame implements IView {
 				int ret = fc.showSaveDialog(MainWindow.this);
 				if(ret == JFileChooser.APPROVE_OPTION) {
 					File savedFileAs = fc.getSelectedFile();
-					model.saveRecordingToFile(savedFileAs);
+					if(!model.saveRecordingToFile(savedFileAs))  {
+						JOptionPane.showMessageDialog(MainWindow.this, "Failed to save recorded simulation file.");
+					} 
 				}
 			}
 		});
 		
 		JMenuItem mntmExit = new JMenuItem("Exit");
 
+		//TODO: MOve this to controller.
 		mntmExit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
