@@ -438,7 +438,7 @@ public class EcoWorld implements IModel {
 			if(recording != null) recording.close();
 			if(notifierExecutor != null) notifierExecutor.shutdownNow();
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 

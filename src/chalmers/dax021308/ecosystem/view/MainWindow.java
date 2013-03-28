@@ -8,8 +8,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
+import java.io.File;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -74,12 +76,45 @@ public class MainWindow extends JFrame implements IView {
 		menuBar.add(mnFile);
 		
 		JMenuItem mntmLoad = new JMenuItem("Load simulation");
+		mntmLoad.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser  fc = new JFileChooser();
+				int ret = fc.showOpenDialog(MainWindow.this);
+				if(ret == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fc.getSelectedFile();
+					if(selectedFile != null) {
+						//Handlefile
+					}
+				}
+			}
+		});
 		mnFile.add(mntmLoad);
 		
 		JMenuItem mntmSave = new JMenuItem("Save simulation");
 		mnFile.add(mntmSave);
+
+		mntmSave.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser  fc = new JFileChooser();
+				//File selectedFile = null;//Get file from somewhere.
+				//fc.setSelectedFile(selectedFile);
+				int ret = fc.showSaveDialog(MainWindow.this);
+				if(ret == JFileChooser.APPROVE_OPTION) {
+					File savedFileAs = fc.getSelectedFile();
+				}
+			}
+		});
 		
 		JMenuItem mntmExit = new JMenuItem("Exit");
+
+		mntmExit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
 		mnFile.add(mntmExit);
 		
 		JMenu mnControls = new JMenu("Controls");
