@@ -343,8 +343,11 @@ public class EcoWorld implements IModel {
 	 * Saves the recording to a file.
 	 * @param f
 	 */
-	public void saveRecordingToFile(File f) {
-		
+	public boolean saveRecordingToFile(File f) {
+		if(recordSimulation && recording != null) {
+			return recording.saveToFile(f);
+		}
+		return false;
 	}
 
 	private List<IObstacle> readObsticlesFromFile() {
@@ -466,10 +469,11 @@ public class EcoWorld implements IModel {
 			@Override
 			public void onTick() {
 				List<IPopulation> frame = recording.readFrame();
+				List<IObstacle> obsList = recording.getObstacles();
 				if(frame == null) {
 					t.stop();
 				} else {
-					observers.firePropertyChange(EVENT_TICK, null, frame);
+					observers.firePropertyChange(EVENT_TICK, obsList, frame);
 					t.start(17, this);
 				}
 			}

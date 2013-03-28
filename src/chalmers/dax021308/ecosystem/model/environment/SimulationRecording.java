@@ -5,9 +5,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +51,7 @@ public class SimulationRecording {
 	private Dimension simDim;
 	private PrintWriter pw;
 	private String shapeConstant;
+	private List<IObstacle> obsList;
 	
 	
 	/**
@@ -60,6 +63,7 @@ public class SimulationRecording {
 	 * @return
 	 */
 	public boolean initReading(File recordedFile) {
+		this.recordedFile = recordedFile;
 		if (!recordedFile.exists()) {
 			return false;
 		}
@@ -86,7 +90,7 @@ public class SimulationRecording {
 	 * @return
 	 */
 	public boolean initWriting(String fileName) {
-		recordedFile = new File(fileName);
+		this.recordedFile = new File(fileName);
 		if (recordedFile.exists()) {
 			recordedFile.delete();
 		}
@@ -128,7 +132,6 @@ public class SimulationRecording {
 	 * For now only contains obstacle.
 	 */
 	public List<IObstacle> readHeader() {
-		List<IObstacle> obsList = null;
 		String input = null;
 		try {
 			input = br.readLine();
@@ -137,7 +140,7 @@ public class SimulationRecording {
 		}
 		while (input != null) {
 			if (input.startsWith(headerDividerStart)) {
-				obsList = new ArrayList<IObstacle>();
+				this.obsList = new ArrayList<IObstacle>();
 			} else if (input.startsWith(headerDividerEnd)) {
 				return obsList;
 			} else if (input.startsWith(dimensionDivider)) {
@@ -260,6 +263,8 @@ public class SimulationRecording {
 		}
 	}
 	
+	
+	
 
 	/**
 	 * Helper method for readRecordFromDisk.
@@ -309,6 +314,38 @@ public class SimulationRecording {
 		}
 		return result;
 	}
+	
+	public boolean saveToFile(File f) {
+		try {
+			copyFile(recordedFile, f);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	private void copyFile(File sourceFile, File destFile) throws IOException {
+	    if(!destFile.exists()) {
+	        destFile.createNewFile();
+	    }
+
+	    FileChannel source = null;
+	    FileChannel destination = null;
+
+	    try {
+	        source = new FileInputStream(sourceFile).getChannel();
+	        destination = new FileOutputStream(destFile).getChannel();
+	        destination.transferFrom(source, 0, source.size());
+	    }
+	    finally {
+	        if(source != null) {
+	            source.close();
+	        }
+	        if(destination != null) {
+	            destination.close();
+	        }
+	    }
+	}
 
 	/**
 	 * Saves the given recording to the filePath
@@ -334,5 +371,13 @@ public class SimulationRecording {
 		}
 		pw.close();
 		return true;
+	}
+
+	public List<IObstacle> getObstacles() {
+		return obsList;
+	}
+
+	public File getFile() {
+		return recordedFile;
 	}
 }

@@ -109,7 +109,7 @@ public class MainWindow extends JFrame implements IView {
 				int ret = fc.showSaveDialog(MainWindow.this);
 				if(ret == JFileChooser.APPROVE_OPTION) {
 					File savedFileAs = fc.getSelectedFile();
-					Log.v(savedFileAs.toString());
+					model.saveRecordingToFile(savedFileAs);
 				}
 			}
 		});
