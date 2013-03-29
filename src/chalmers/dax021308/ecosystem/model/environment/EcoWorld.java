@@ -28,6 +28,7 @@ import chalmers.dax021308.ecosystem.model.population.DummyPredatorPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPreyPopulation;
 import chalmers.dax021308.ecosystem.model.population.GrassPopulation;
 import chalmers.dax021308.ecosystem.model.population.GrassPopulationGrid;
+import chalmers.dax021308.ecosystem.model.population.GrassFieldPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.population.PigPopulation;
 import chalmers.dax021308.ecosystem.model.population.RabbitPopulation;
@@ -83,11 +84,11 @@ public class EcoWorld implements IModel {
 	public static final String POP_DUMMYPRED  = "Dummy Predator Population";
 	public static final String POP_WOLF       = "Wolf Population";
 	public static final String POP_WOLF_GRID  = "Wolf Population Grid";
-
+	public static final String POP_GRASS_FIELD = "Grass Field Population";
 	/* Population array based on predator-prey model, the view uses these values. */
 	public static final String[] PREY_VALUES  = { POP_DEER, POP_DEER_GRID, POP_PIG, POP_RABBIT, POP_DUMMYPREY };
 	public static final String[] PRED_VALUES  = { POP_WOLF, POP_WOLF_GRID, POP_DUMMYPRED };
-	public static final String[] GRASS_VALUES = { POP_GRASS, POP_GRASS_GRID };
+	public static final String[] GRASS_VALUES = { POP_GRASS, POP_GRASS_GRID, POP_GRASS_FIELD };
 
 	/* Dimension constants */
 	public static final String DIM_SMALL  = "500  x 500";
@@ -336,6 +337,9 @@ public class EcoWorld implements IModel {
 					1, 0, 1500, shape);
 		} else if (grassModel == POP_GRASS_GRID) {
 			grass = new GrassPopulationGrid("Grass", d, grassPop, new Color(69,139,00),
+					1, 1, 0, 1500, shape);
+		} else if (grassModel == POP_GRASS_FIELD){
+			grass = new GrassFieldPopulation("Grass", d, grassPop, Color.GREEN,
 					1, 1, 0, 1500, shape);
 		}
 

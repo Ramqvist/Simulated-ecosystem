@@ -24,7 +24,7 @@ public class DeerAgent extends AbstractAgent {
 	private boolean hungry = true;
 	private static final double REPRODUCTION_RATE = 0.30;
 	private int digesting = 0;
-	private static final int DIGESTION_TIME = 25;
+	private static final int DIGESTION_TIME = 2;
 	private static final int ENERGY_GAIN = 30;
 	private boolean alone;
 
