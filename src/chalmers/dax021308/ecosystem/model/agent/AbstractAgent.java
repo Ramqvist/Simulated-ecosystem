@@ -540,6 +540,11 @@ public abstract class AbstractAgent implements IAgent {
 		return sb.toString();
 	}
 	
+	@Override
+	public String toString() {
+		return "Agent - name: " + name + " Position:" + position.toString() + " Velocity: " + velocity.toString();
+	}
+	
 	
 	public static double roundTwoDecimals(double num) {
 		double result = num * 100;
