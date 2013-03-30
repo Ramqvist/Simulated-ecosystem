@@ -271,7 +271,7 @@ public class MainWindow extends JFrame implements IView {
 		
 		@Override
 		public boolean accept(File f) {
-			  return f.getName().toLowerCase().endsWith(".sim");  
+			  return f.isDirectory() || f.getName().toLowerCase().endsWith(".sim");  
 		}
 		
 
