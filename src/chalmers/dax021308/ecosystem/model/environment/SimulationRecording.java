@@ -34,15 +34,15 @@ import chalmers.dax021308.ecosystem.model.util.Log;
 public class SimulationRecording {
 
 	/*	Text syntax constants */
-	private static final String headerDividerStart   = "<HEAD>";
-	private static final String obstacleDivider      = "<OBS>";
-	private static final String dimensionDivider     = "<DIM>";
-	private static final String shapeDivider         = "<SHAPE>";
-	private static final String headerDividerEnd     = "</HEAD>";
-	private static final String frameDividerStart    = "<FRAME>";
-	private static final String populationDivider    = "<POP>";
-	private static final String agentDivider         = "<AGE>";
-	private static final String frameDividerEnd      = "</FRAME>";
+	private static final String headerDividerStart   = "<H>";
+	private static final String obstacleDivider      = "<O>";
+	private static final String dimensionDivider     = "<D>";
+	private static final String shapeDivider         = "<S>";
+	private static final String headerDividerEnd     = "</H>";
+	private static final String frameDividerStart    = "<F>";
+	private static final String populationDivider    = "<P>";
+	private static final String agentDivider         = "<A>";
+	private static final String frameDividerEnd      = "</F>";
 	
 	/* Temporary class variables */
 	private File recordedFile;
