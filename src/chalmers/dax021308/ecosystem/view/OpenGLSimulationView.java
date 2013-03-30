@@ -17,6 +17,7 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
+import javax.media.opengl.GLJPanel;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
@@ -52,7 +53,7 @@ import com.sun.opengl.util.FPSAnimator;
  * @author Erik Ramqvist
  *
  */
-public class OpenGLSimulationView extends GLCanvas /* (GLCanvas extends Java.AWT.Component) */ implements IView {
+public class OpenGLSimulationView extends GLJPanel implements IView {
 	
 	private static final long serialVersionUID = 1585638837620985591L;
 	private List<IPopulation> newPops = new ArrayList<IPopulation>();
