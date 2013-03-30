@@ -3,12 +3,14 @@ package chalmers.dax021308.ecosystem.view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
+
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -19,6 +21,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileFilter;  
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.util.Log;
@@ -76,12 +79,16 @@ public class MainWindow extends JFrame implements IView {
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
 		
+
+		
 		JMenuItem mntmLoad = new JMenuItem("Load simulation");
 		//TODO: MOve this to controller.
 		mntmLoad.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser  fc = new JFileChooser();
+				fc.setFileFilter(new SimFileFilter());
+				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				int ret = fc.showOpenDialog(MainWindow.this);
 				if(ret == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = fc.getSelectedFile();
@@ -105,14 +112,22 @@ public class MainWindow extends JFrame implements IView {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser  fc = new JFileChooser();
+				fc.setFileFilter(new SimFileFilter());
+				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				//File selectedFile = null;//Get file from somewhere.
 				//fc.setSelectedFile(selectedFile);
 				int ret = fc.showSaveDialog(MainWindow.this);
 				if(ret == JFileChooser.APPROVE_OPTION) {
 					File savedFileAs = fc.getSelectedFile();
+					String filePath = savedFileAs.getPath();
+					if(!filePath.toLowerCase().endsWith(".sim")) {
+						savedFileAs = new File(filePath + ".sim");
+					}
 					if(!model.saveRecordingToFile(savedFileAs))  {
 						JOptionPane.showMessageDialog(MainWindow.this, "Failed to save recorded simulation file.");
-					} 
+					} else {
+						JOptionPane.showMessageDialog(MainWindow.this, "File saved succesfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+					}
 				}
 			}
 		});
@@ -189,34 +204,22 @@ public class MainWindow extends JFrame implements IView {
 		addWindowListener(new WindowListener() {
 			
 			@Override
-			public void windowOpened(WindowEvent arg0) {
-			}
-			
+			public void windowOpened(WindowEvent arg0) {}
 			@Override
-			public void windowIconified(WindowEvent arg0) {
-			}
-			
+			public void windowIconified(WindowEvent arg0) {}
 			@Override
-			public void windowDeiconified(WindowEvent arg0) {
-			}
-			
+			public void windowDeiconified(WindowEvent arg0) {}
 			@Override
-			public void windowDeactivated(WindowEvent arg0) {
-			}
-			
+			public void windowDeactivated(WindowEvent arg0) {}
 			@Override
 			public void windowClosing(WindowEvent arg0) {
 				//Try to shutdown all worker threads.
 				model.shutdownNow();
 			}
-			
 			@Override
-			public void windowClosed(WindowEvent arg0) {
-			}
-			
+			public void windowClosed(WindowEvent arg0) {}
 			@Override
-			public void windowActivated(WindowEvent arg0) {
-			}
+			public void windowActivated(WindowEvent arg0) {}
 		});
 		//contentPane.add(graphView2);
 	}
@@ -263,4 +266,18 @@ public class MainWindow extends JFrame implements IView {
 	public void setBtnStartNewSimWindowActionListener(ActionListener a) {
 		controlView.btnStartNew.addActionListener(a);		
 	}
+	
+	private class SimFileFilter extends FileFilter{
+		
+		@Override
+		public boolean accept(File f) {
+			  return f.getName().toLowerCase().endsWith(".sim");  
+		}
+		
+
+		@Override
+		public String getDescription() {
+			  return ".sim files"; 
+		}
+	};
 }
