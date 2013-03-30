@@ -12,8 +12,8 @@ public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 
 	public RectangularObstacle(double width, double height, Position position, Color color){
 		this.position = position;
-		this.width = width;
-		this.height = height;
+		this.a = width;
+		this.b = height;
 		this.color = color;
 		angleLimit = Math.atan(height/width);
 	}
@@ -33,25 +33,25 @@ public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 		Position bestPos = new Position(Double.MAX_VALUE, Double.MAX_VALUE);
 		Position rectPos = new Position();
 		for(int i=0; i<nStep/4; i++){
-			rectPos.setPosition(-width + 8*i/nStep*width, -height);
+			rectPos.setPosition(-a + 8*i/nStep*a, -b);
 			if(rectPos.getDistance(agentPos) < bestPos.getDistance(agentPos)) {
 				bestPos.setPosition(rectPos);
 			}
 		}
 		for(int i=0; i<nStep/4; i++){
-			rectPos.setPosition(width, -height + 8*i/nStep*height);
+			rectPos.setPosition(a, -b + 8*i/nStep*b);
 			if(rectPos.getDistance(agentPos) < bestPos.getDistance(agentPos)) {
 				bestPos.setPosition(rectPos);
 			}
 		}
 		for(int i=0; i<nStep/4; i++){
-			rectPos.setPosition(-width + 8*i/nStep*width, height);
+			rectPos.setPosition(-a + 8*i/nStep*a, b);
 			if(rectPos.getDistance(agentPos) < bestPos.getDistance(agentPos)) {
 				bestPos.setPosition(rectPos);
 			}
 		}
 		for(int i=0; i<nStep/4; i++){
-			rectPos.setPosition(-width, -height + 8*i/nStep*height);
+			rectPos.setPosition(-a, -b + 8*i/nStep*b);
 			if(rectPos.getDistance(agentPos) < bestPos.getDistance(agentPos)) {
 				bestPos.setPosition(rectPos);
 			}
@@ -61,8 +61,8 @@ public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 
 	@Override
 	public boolean isInObstacle(Position p) {
-		if(p.getY() < position.getY()+height && p.getY() > position.getY()-height){
-			if(p.getX() < position.getX()+width && p.getX() > position.getX()-width) {
+		if(p.getY() < position.getY()+b && p.getY() > position.getY()-b){
+			if(p.getX() < position.getX()+a && p.getX() > position.getX()-a) {
 				return true;
 			}
 		}
