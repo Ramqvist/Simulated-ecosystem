@@ -22,33 +22,33 @@ public class EllipticalObstacle extends AbstractObstacle{
 	public Position closestBoundary(Position p) {
 		Position agentPos = new Position(p.getX()-this.position.getX(), p.getY()-this.position.getY());
 		
-//		if(a<b) {
-//			agentPos = new Position(-agentPos.getY(), agentPos.getX());
-//		} else {
-//			agentPos = new Position(agentPos.getX(), agentPos.getY());
-//		}
-//		
-//		double xSign = Math.signum(agentPos.getX());
-//		double ySign = Math.signum(agentPos.getY());
-//		agentPos.setPosition(agentPos.getX()*xSign, agentPos.getY()*ySign);
-//		
-//		Position bestPos;
-//		if(a<b) {
-//			bestPos = newtonsMethod(agentPos, b, a);
-//		} else {
-//			bestPos = newtonsMethod(agentPos, a, b);
-//		}
-//		
-//		bestPos.setPosition(bestPos.getX()*xSign, bestPos.getY()*ySign);
-//		
-//		if(a<b) {
-//			bestPos.setPosition(bestPos.getY(), -bestPos.getX());
-//		}
+		if(a<b) {
+			agentPos = new Position(-agentPos.getY(), agentPos.getX());
+		} else {
+			agentPos = new Position(agentPos.getX(), agentPos.getY());
+		}
+		
+		double xSign = Math.signum(agentPos.getX());
+		double ySign = Math.signum(agentPos.getY());
+		agentPos.setPosition(agentPos.getX()*xSign, agentPos.getY()*ySign);
+		
+		Position bestPos;
+		if(a<b) {
+			bestPos = newtonsMethod(agentPos, b, a);
+		} else {
+			bestPos = newtonsMethod(agentPos, a, b);
+		}
+		
+		bestPos.setPosition(bestPos.getX()*xSign, bestPos.getY()*ySign);
+		
+		if(a<b) {
+			bestPos.setPosition(bestPos.getY(), -bestPos.getX());
+		}
 		
 		
 		
-		e = 0.01;
-		Position bestPos = recursiveBoundarySearch(agentPos, 0, 2*Math.PI/nStep, 1);
+//		e = 0.01;
+//		Position bestPos = recursiveBoundarySearch(agentPos, 0, 2*Math.PI/nStep, 1);
 		
 //		nStep = 700;	
 //		Position bestPos = bruteBoundarySearch(agentPos);
