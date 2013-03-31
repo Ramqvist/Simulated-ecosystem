@@ -63,6 +63,15 @@ public class EllipticalObstacleTest extends JPanel {
     public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		for(int i=0; i < positions.size(); i++){
+			if(i<1000) {
+				g.setColor(Color.orange);
+			} else if(i<2000) {
+				g.setColor(Color.green);
+			} else if (i<3000) {
+				g.setColor(Color.red);
+			} else {
+				g.setColor(Color.blue);
+			}
 			Position p = positions.get(i);
 			g.drawOval((int)p.getX(), 1000-(int)p.getY(), 1, 1);
 //			System.out.println(p);

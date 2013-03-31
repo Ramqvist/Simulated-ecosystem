@@ -22,33 +22,33 @@ public class EllipticalObstacle extends AbstractObstacle{
 	public Position closestBoundary(Position p) {
 		Position agentPos = new Position(p.getX()-this.position.getX(), p.getY()-this.position.getY());
 		
-		if(a<b) {
-			agentPos = new Position(-agentPos.getY(), agentPos.getX());
-		} else {
-			agentPos = new Position(agentPos.getX(), agentPos.getY());
-		}
+//		if(a<b) {
+//			agentPos = new Position(-agentPos.getY(), agentPos.getX());
+//		} else {
+//			agentPos = new Position(agentPos.getX(), agentPos.getY());
+//		}
+//		
+//		double xSign = Math.signum(agentPos.getX());
+//		double ySign = Math.signum(agentPos.getY());
+//		agentPos.setPosition(agentPos.getX()*xSign, agentPos.getY()*ySign);
+//		
+//		Position bestPos;
+//		if(a<b) {
+//			bestPos = newtonsMethod(agentPos, b, a);
+//		} else {
+//			bestPos = newtonsMethod(agentPos, a, b);
+//		}
+//		
+//		bestPos.setPosition(bestPos.getX()*xSign, bestPos.getY()*ySign);
+//		
+//		if(a<b) {
+//			bestPos.setPosition(bestPos.getY(), -bestPos.getX());
+//		}
 		
-		double xSign = Math.signum(agentPos.getX());
-		double ySign = Math.signum(agentPos.getY());
-		agentPos.setPosition(agentPos.getX()*xSign, agentPos.getY()*ySign);
-		
-		Position bestPos;
-		if(a<b) {
-			bestPos = newtonsMethod(agentPos, b, a);
-		} else {
-			bestPos = newtonsMethod(agentPos, a, b);
-		}
-		
-		bestPos.setPosition(bestPos.getX()*xSign, bestPos.getY()*ySign);
-		
-		if(a<b) {
-			bestPos.setPosition(bestPos.getY(), -bestPos.getX());
-		}
 		
 		
-		
-//		e = 0.01;
-//		Position bestPos = recursiveBoundarySearch(agentPos, 0, Math.PI/2, 1);
+		e = 0.01;
+		Position bestPos = recursiveBoundarySearch(agentPos, 0, 2*Math.PI/nStep, 1);
 		
 //		nStep = 700;	
 //		Position bestPos = bruteBoundarySearch(agentPos);
@@ -62,7 +62,7 @@ public class EllipticalObstacle extends AbstractObstacle{
 		Position elipPos2 = new Position(Double.MAX_VALUE, Double.MAX_VALUE);
 		Position bestPos = new Position(a*Math.cos(startAngle), b*Math.sin(startAngle));
 		double bestI = 0;
-		for(double i=1; i<=nStep; i++){
+		for(double i=1; i<=nStep/2; i++){
 			elipPos1 = new Position(a*Math.cos(startAngle+i*step), b*Math.sin(startAngle+i*step));
 			elipPos2 = new Position(a*Math.cos(startAngle-i*step), b*Math.sin(startAngle-i*step));
 			if(elipPos1.getDistance(agentPos)<bestPos.getDistance(agentPos)){
