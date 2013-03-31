@@ -313,7 +313,7 @@ public abstract class AbstractAgent implements IAgent {
 			return Vector.EmptyVector();
 		}
 		long time = System.nanoTime();
-		boolean executeCPU = true;
+		boolean executeCPU = false;
 		if(executeCPU) {
 			for(int i = 0; i < 10000;i++) {
 				mutualInteractionForceCPU();
@@ -321,7 +321,7 @@ public abstract class AbstractAgent implements IAgent {
 			double dtime = (0.000001 * (System.nanoTime() - time));
 			stat.addObservation(dtime);
 
-			System.out.println("mutualInteractionForce size: " + neutralNeighbours.size() + " Elapsed time CPU: " + dtime + " mean: " + stat.getMean());
+//			System.out.println("mutualInteractionForce size: " + neutralNeighbours.size() + " Elapsed time CPU: " + dtime + " mean: " + stat.getMean());
 			return mutualInteractionForceCPU();
 		} else {
 			Vector result = mutualInteractionForceJWJGLOpenCL();
@@ -341,7 +341,7 @@ public abstract class AbstractAgent implements IAgent {
 				Log.v("Available: " + d.getInfoString(CL10.CL_DEVICE_AVAILABLE) + "");
 				Log.v("Memeory size: " + d.getInfoLong(CL10.CL_DEVICE_GLOBAL_MEM_SIZE) + "");
 			}*/
-			System.out.println("mutualInteractionForce size: " + neutralNeighbours.size() + " Elapsed time GPU: " + dtime + " mean: " + stat.getMean());
+//			System.out.println("mutualInteractionForce size: " + neutralNeighbours.size() + " Elapsed time GPU: " + dtime + " mean: " + stat.getMean());
 			return result;
 		}
 	}

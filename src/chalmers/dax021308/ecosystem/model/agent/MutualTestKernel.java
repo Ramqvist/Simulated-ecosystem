@@ -27,7 +27,7 @@ public class MutualTestKernel {
 	static {
 		try {
 			initializeCL();
-			textProgram = loadText("mutualInteractionKernel.cl");
+			textProgram = loadText("mutualInteractionKernel_2.cl");
 			sumProgram = CL10.clCreateProgramWithSource(context, textProgram, null);
 			// Build the OpenCL program, store it on the specified device
 			int error = CL10.clBuildProgram(sumProgram, devices.get(0), "", null);
