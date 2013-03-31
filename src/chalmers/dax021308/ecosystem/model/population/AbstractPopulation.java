@@ -131,7 +131,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		for(IPopulation pop : neutral) {
 			totalAgents = totalAgents + pop.getAgents().size();
 		}
-		if(totalAgents == 0 || agents.size() == 0) {
+		if(totalAgents < 1 || agents.size() < 1) {
 			return;
 		}
 		IAgent agent;

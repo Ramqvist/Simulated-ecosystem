@@ -76,7 +76,12 @@ public class MultipleAgentMutualKernel {
 	
 
 	public void executeMutualKernel() throws LWJGLException {
-		
+		Log.v("Total agents: " + totalAgent + " xPosArray.length: " + xPosArray.length);
+		Log.v("INTERACTION_RANGE: " + INTERACTION_RANGE);
+		Log.v("agentsPosX: " + agentsPosX);
+		Log.v("agentsPosY: " + agentsPosY);
+		Log.v("xPosArray: " + xPosArray);
+		Log.v("yPosArray: " + yPosArray);
 //		initializeCL();
 		// Create an OpenCL 'program' from a source code file
 
@@ -93,14 +98,13 @@ public class MultipleAgentMutualKernel {
 		FloatBuffer xPosArrayBuffer = BufferUtils.createFloatBuffer(xPosArray.length);
 		xPosArrayBuffer.put(xPosArray);
 		xPosArrayBuffer.rewind();
-	
 
 		// Create our second array of numbers
 
 		// Create a buffer containing our second array of numbers
-		FloatBuffer yPosBuffer = BufferUtils.createFloatBuffer(yPosArray.length);
-		yPosBuffer.put(yPosArray);
-		yPosBuffer.rewind();
+		FloatBuffer yPosArrayBuffer = BufferUtils.createFloatBuffer(yPosArray.length);
+		yPosArrayBuffer.put(yPosArray);
+		yPosArrayBuffer.rewind();
 
 		FloatBuffer agentsPosXBuffer = BufferUtils.createFloatBuffer(agentsPosX.length);
 		agentsPosXBuffer.put(agentsPosX);
@@ -116,13 +120,18 @@ public class MultipleAgentMutualKernel {
 		// Create an OpenCL memory object containing a copy of the data buffer
 		
 		CLMem xPosArrayMemory = CL10.clCreateBuffer(context, CL10.CL_MEM_WRITE_ONLY | CL10.CL_MEM_COPY_HOST_PTR, xPosArrayBuffer, errorBuff);
-		CLMem yPosArrayMemory = CL10.clCreateBuffer(context, CL10.CL_MEM_WRITE_ONLY | CL10.CL_MEM_COPY_HOST_PTR, yPosBuffer, errorBuff);
+		Util.checkCLError(errorBuff.get(0));
+		CLMem yPosArrayMemory = CL10.clCreateBuffer(context, CL10.CL_MEM_WRITE_ONLY | CL10.CL_MEM_COPY_HOST_PTR, yPosArrayBuffer, errorBuff);
 		// Check if the error buffer now contains an error
 
+		// Check for any error creating the memory buffer
+		Util.checkCLError(errorBuff.get(0));
 		// Create an empty OpenCL buffer to store the result of adding the numbers together
 		CLMem resultMemoryX = CL10.clCreateBuffer(context, CL10.CL_MEM_READ_ONLY, totalAgent*4, errorBuff);
 		CLMem resultMemoryY = CL10.clCreateBuffer(context, CL10.CL_MEM_READ_ONLY, totalAgent*4, errorBuff);
 
+		// Check for any error creating the memory buffer
+		Util.checkCLError(errorBuff.get(0));
 		CLMem agentsPosXMemory = CL10.clCreateBuffer(context, CL10.CL_MEM_WRITE_ONLY | CL10.CL_MEM_COPY_HOST_PTR, agentsPosXBuffer, errorBuff);
 		CLMem agentsPosYMemory = CL10.clCreateBuffer(context, CL10.CL_MEM_WRITE_ONLY | CL10.CL_MEM_COPY_HOST_PTR, agentsPosYBuffer, errorBuff);
 		
