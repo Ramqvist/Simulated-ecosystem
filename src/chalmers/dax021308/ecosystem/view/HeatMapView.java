@@ -43,7 +43,8 @@ public class HeatMapView extends GLCanvas implements IView {
 	private boolean[][] visited;
 	int heatMapWidth;
 	int heatMapHeight;
-	private double samplingConstant;
+	private double xSamplingConstant;
+	private double ySamplingConstant;
 	int maxVisited = 1;
 	int minVisited = Integer.MAX_VALUE;
 	private Dimension grid;
@@ -54,12 +55,13 @@ public class HeatMapView extends GLCanvas implements IView {
 	/**
 	 * Create the heat map.
 	 */
-	public HeatMapView(IModel model, Dimension grid, double samplingConstant, String populationName) {
+	public HeatMapView(IModel model, Dimension grid, Dimension heatMapDim, String populationName) {
 		this.grid = grid;
-		this.samplingConstant = samplingConstant;
+		this.xSamplingConstant = grid.getWidth()/(((double)heatMapDim.getWidth())-1);
+		this.ySamplingConstant = grid.getHeight()/(((double)heatMapDim.getHeight())-1);
 		this.populationName = populationName;
-		heatMapWidth = (int)(grid.getWidth()/samplingConstant+1);
-		heatMapHeight = (int)(grid.getHeight()/samplingConstant+1);
+		heatMapWidth = (int)(grid.getWidth()/xSamplingConstant+1);
+		heatMapHeight = (int)(grid.getHeight()/ySamplingConstant+1);
 		heatMap = new int[heatMapWidth][heatMapHeight];
 		visited = new boolean[heatMapWidth][heatMapHeight];
 		model.addObserver(this);
@@ -87,8 +89,8 @@ public class HeatMapView extends GLCanvas implements IView {
 			Object o = event.getNewValue();
 			if(o instanceof Dimension) {
 				this.grid = (Dimension) o;
-				heatMapWidth = (int)(grid.getWidth()/samplingConstant+1);
-				heatMapHeight = (int)(grid.getHeight()/samplingConstant+1);
+				heatMapWidth = (int)(grid.getWidth()/xSamplingConstant+1);
+				heatMapHeight = (int)(grid.getHeight()/ySamplingConstant+1);
 				heatMap = new int[heatMapWidth][heatMapHeight];
 				visited = new boolean[heatMapWidth][heatMapHeight];
 			}
@@ -138,8 +140,8 @@ public class HeatMapView extends GLCanvas implements IView {
 	        			for(int j = 0; j < size; j++) {
 	        				a = agents.get(j);
 	        				pos = a.getPosition();
-	        				intPosX = (int)(pos.getX()/samplingConstant);
-	    					intPosY = (int)(pos.getY()/samplingConstant);
+	        				intPosX = (int)(pos.getX()/xSamplingConstant);
+	    					intPosY = (int)(pos.getY()/ySamplingConstant);
 	    					
 //	    					if(!visited[intPosX][intPosY]){
 	    						heatMap[intPosX][intPosY]++;
