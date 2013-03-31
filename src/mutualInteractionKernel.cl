@@ -3,7 +3,7 @@ kernel void mutualInteractionForce(global const float* xPosArray, global const f
    const int gid = get_global_id(0); 
    
 	if(gid < size) {
-			for(int i = 0; i < 10000;i++) {
+			for(int i = 0; i < 100;i++) {
 				float newForceX = 0;
 				float newForceY = 0;
 				float mutualInteractionForceX = 0;

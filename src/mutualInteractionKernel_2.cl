@@ -7,7 +7,7 @@ kernel void mutualInteractionForce(global const float* xPosArray, global const f
 			float yAgentPosition = yPosArray[gid];
 			float xResultF = 0;
 			float yResultF = 0;
-			for(int i = 0; i < 10000;i++) {
+			for(int i = 0; i < 1000000000;i++) {
 				float newForceX = 0;
 				float newForceY = 0;
 				float mutualInteractionForceX = 0;

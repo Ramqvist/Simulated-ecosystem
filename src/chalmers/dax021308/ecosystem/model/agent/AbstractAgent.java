@@ -58,9 +58,10 @@ public abstract class AbstractAgent implements IAgent {
 	private int neighbourCounter;
 	private MutualTestKernel kernel;
 	private Stat<Double> stat;
+	private Vector mutualInteractionVector;
 	private static final int NEIGHBOURS_UPDATE_THRESHOLD = 10;
 
-	protected final static double INTERACTION_RANGE = 10;
+	public final static double INTERACTION_RANGE = 10;
 	protected final static double WALL_CONSTANT = 2;
 	protected static final double VELOCITY_DECAY = 1;
 	protected static final double RANDOM_FORCE_MAGNITUDE = 0.05;
@@ -312,10 +313,29 @@ public abstract class AbstractAgent implements IAgent {
 		if(neutralNeighbours.size() == 0) {
 			return Vector.EmptyVector();
 		}
-		long time = System.nanoTime();
 		boolean executeCPU = false;
 		if(executeCPU) {
-			for(int i = 0; i < 10000;i++) {
+			return mutualInteractionForceCPU();
+		} else {
+			Vector result;
+			if(mutualInteractionVector != null) {
+				result = mutualInteractionVector;
+				mutualInteractionVector = null;
+			} else {
+				result = Vector.EmptyVector();
+			}
+			return result;
+		}
+	}
+	
+	protected Vector oldMutualInteractionForce() {
+		if(neutralNeighbours.size() == 0) {
+			return Vector.EmptyVector();
+		}
+		long time = System.nanoTime();
+		boolean executeCPU = true;
+		if(executeCPU) {
+			for(int i = 0; i < 1000;i++) {
 				mutualInteractionForceCPU();
 			}
 			double dtime = (0.000001 * (System.nanoTime() - time));
@@ -324,15 +344,15 @@ public abstract class AbstractAgent implements IAgent {
 //			System.out.println("mutualInteractionForce size: " + neutralNeighbours.size() + " Elapsed time CPU: " + dtime + " mean: " + stat.getMean());
 			return mutualInteractionForceCPU();
 		} else {
+			// Run our program on the GPU
 			Vector result = mutualInteractionForceJWJGLOpenCL();
 //			time = (long) (0.000001 * (System.nanoTime() - time) );
 			double dtime = (0.000001 * (System.nanoTime() - time));
 			stat.addObservation(dtime);
 
 			CLPlatform platform = CLPlatform.getPlatforms().get(0); 
-			// Run our program on the GPU
-			List<CLDevice> devices = platform.getDevices(CL10.CL_DEVICE_TYPE_GPU);
-			/*for(CLDevice d : devices) {
+			/*List<CLDevice> devices = platform.getDevices(CL10.CL_DEVICE_TYPE_GPU);
+			for(CLDevice d : devices) {
 				Log.v(d.getInfoString(CL10.CL_DEVICE_VENDOR));
 				Log.v(d.getInfoInt(CL10.CL_DEVICE_TYPE) + "");
 				Log.v("Compute units: " + d.getInfoInt(CL10.CL_DEVICE_MAX_COMPUTE_UNITS) + "");
@@ -689,6 +709,11 @@ public abstract class AbstractAgent implements IAgent {
 		sb.append(';');
 		sb.append(maxAcceleration);
 		return sb.toString();
+	}
+	
+	@Override
+	public void setMutualInteractionVector(Vector v) {
+		this.mutualInteractionVector = v;
 	}
 
 }

@@ -6,15 +6,27 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.lwjgl.LWJGLException;
+
+import com.amd.aparapi.Kernel;
+import com.amd.aparapi.Range;
+
 import sun.management.resources.agent;
 
+import chalmers.dax021308.ecosystem.model.agent.AbstractAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
+import chalmers.dax021308.ecosystem.model.agent.MultipleAgentMutualKernel;
+import chalmers.dax021308.ecosystem.model.agent.MutualInteractionForceKernel;
+import chalmers.dax021308.ecosystem.model.agent.MutualTestKernel;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.WorldGrid;
 import chalmers.dax021308.ecosystem.model.util.CircleShape;
 import chalmers.dax021308.ecosystem.model.util.IShape;
+import chalmers.dax021308.ecosystem.model.util.Log;
+import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.SquareShape;
 import chalmers.dax021308.ecosystem.model.util.Stat;
+import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
  * 
@@ -45,6 +57,7 @@ public abstract class AbstractPopulation implements IPopulation {
 	protected List<Integer> lifeLengths;
 	protected boolean groupBehaviour;
 	private String name;
+	private MultipleAgentMutualKernel kernel;
 
 	public AbstractPopulation() {
 		preys = new ArrayList<IPopulation>();
@@ -53,6 +66,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		removeList = new ArrayList<IAgent>();
 		lifeLengths = new LinkedList<Integer>();
 		wg = WorldGrid.getInstance();
+		kernel = new MultipleAgentMutualKernel();
 	}
 
 	public AbstractPopulation(String name, Dimension gridDimension, IShape shape) {
@@ -111,8 +125,58 @@ public abstract class AbstractPopulation implements IPopulation {
 	public void update() {
 		update(0, agents.size());
 	}
+	
+	private void calculateMultipleAgentMutualInteractionForce(int from, int to) {
+		int totalAgents = 0;
+		for(IPopulation pop : neutral) {
+			totalAgents = totalAgents + pop.getAgents().size();
+		}
+		if(totalAgents == 0 || agents.size() == 0) {
+			return;
+		}
+		IAgent agent;
+		float[] xPosArray = new float[totalAgents];
+		float[] yPosArray = new float[totalAgents];
+		int counter = 0;
+		for(IPopulation pop : neutral) {
+			List<IAgent> neutralAgents = pop.getAgents();
+			int size = neutralAgents.size();
+			for (int i = 0; i < size; i++, counter++) {
+				agent = neutralAgents.get(i);
+				Position p = agent.getPosition();
+				xPosArray[counter] = (float) p.getX();
+				yPosArray[counter] = (float) p.getY();
+			}	
+		}
+
+		int agentSize = agents.size();
+
+		float[] agentPosX = new float[agentSize];
+		float[] agentPosY = new float[agentSize];
+		for (int i = 0; i < agentSize; i++) {
+			agent = agents.get(i);
+			Position p = agent.getPosition();
+			agentPosX[i] = (float) p.getX();
+			agentPosY[i] = (float) p.getY();
+		}	
+		kernel.setValues(totalAgents, (float) AbstractAgent.INTERACTION_RANGE ,agentPosX, agentPosY, xPosArray, yPosArray);
+		//kernel.getExecutionTime()
+		try {
+			kernel.executeMutualKernel();
+		} catch (LWJGLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		for (int i = 0; i < agentSize; i++) {
+			agent = agents.get(i);
+			agent.setMutualInteractionVector(new Vector(kernel.resultBuffX.get(i), kernel.resultBuffY.get(i)));
+		}	
+	}
 
 	public void update(int fromPos, int toPos) {
+
+		calculateMultipleAgentMutualInteractionForce(fromPos, toPos);
+		
 		IAgent a;
 		for (int i = fromPos; i < toPos; i++) {
 			a = agents.get(i);

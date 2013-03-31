@@ -123,4 +123,6 @@ public interface IAgent extends Cloneable {
 	public int getTrophicLevel();
 
 	public boolean isAlive();
+	
+	public void setMutualInteractionVector(Vector v);
 }
