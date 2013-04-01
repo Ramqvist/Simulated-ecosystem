@@ -450,13 +450,15 @@ public abstract class AbstractAgent implements IAgent {
 	public Vector getObstacleForce(List<IObstacle> obstacles){
 		Vector obstacleForce = new Vector();
 		for(IObstacle o: obstacles){
-			Position obstaclePos = o.closestBoundary(this.position);
-			double distance = position.getDistance(obstaclePos);
-			if(distance <= INTERACTION_RANGE){
-				Vector singleForce = new Vector(position, obstaclePos);
-				singleForce.toUnitVector().multiply(1/(distance*distance));
-				obstacleForce.add(singleForce);
-			}
+			if(o.isCloseTo(this.position, INTERACTION_RANGE)) {
+				Position obstaclePos = o.closestBoundary(this.position);
+				double distance = position.getDistance(obstaclePos);
+				if(distance <= INTERACTION_RANGE){
+					Vector singleForce = new Vector(position, obstaclePos);
+					singleForce.toUnitVector().multiply(1/(distance*distance));
+					obstacleForce.add(singleForce);
+				}
+			}	
 		}
 		return obstacleForce.multiply(OBSTACLE_CONSTANT);
 	}

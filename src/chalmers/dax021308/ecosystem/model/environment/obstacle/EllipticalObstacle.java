@@ -130,9 +130,18 @@ public class EllipticalObstacle extends AbstractObstacle{
 		}
 		return false;
 	}
+	
 	@Override
 	public Color getColor() {
 		return color;
 	}
 	
+	@Override
+	public boolean isCloseTo(Position p, double interactionRange){
+		double ab = Math.max(a, b);
+		if(this.position.getDistance(p) <= ab + interactionRange) {
+			return true;
+		}
+		return false;
+	}
 }

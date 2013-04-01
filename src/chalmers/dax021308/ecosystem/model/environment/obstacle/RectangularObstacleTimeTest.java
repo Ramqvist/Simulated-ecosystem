@@ -8,7 +8,7 @@ import java.util.List;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Stat;
 
-public class EllipticalObstacleTimeTest {
+public class RectangularObstacleTimeTest {
 	
 	public static List<Position> positions;
 	private static int nIterations = 10000;
@@ -18,7 +18,7 @@ public class EllipticalObstacleTimeTest {
 	
 	public static void main(String[] args) {
 		
-		EllipticalObstacle eo = new EllipticalObstacle(200, 100, new Position(500,500), Color.blue);
+		RectangularObstacle ro = new RectangularObstacle(200, 100, new Position(500,500), Color.blue);
 		
 		for(int obs = 0; obs < sampleSize; obs++) {
 			
@@ -27,7 +27,7 @@ public class EllipticalObstacleTimeTest {
 				double x = Math.random()*dim.getWidth();
 				double y = Math.random()*dim.getHeight();
 				Position p = new Position(x,y);
-				while(eo.isInObstacle(p)){
+				while(ro.isInObstacle(p)){
 					x = Math.random()*dim.getWidth();
 					y = Math.random()*dim.getHeight();
 					p = new Position(x,y);
@@ -38,8 +38,8 @@ public class EllipticalObstacleTimeTest {
 			//Start time
 			long start = System.nanoTime();
 			for(Position p: positions) {
-				if(eo.isCloseTo(p, 10)) {
-					eo.closestBoundary(p);
+				if(ro.isCloseTo(p, 10)) {
+					ro.closestBoundary(p);
 				}
 			}
 			long end = System.nanoTime();

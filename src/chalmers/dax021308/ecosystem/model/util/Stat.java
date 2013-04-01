@@ -11,7 +11,6 @@ public class Stat<T extends Number> {
 	
 	private List<T> sample;
 	private double mean;
-	private double sampleVariance;
 	
 	/**
 	 * Creates a new and empty Stat object.
@@ -86,4 +85,16 @@ public class Stat<T extends Number> {
 		return ((double)sum)/(((double)sampleSize)-1.0);
 	}
 
+	@Override
+	public String toString(){
+		return "mean = " + roundTwoDecimals(this.mean) + " | std = " + roundTwoDecimals(this.getSampleVariance());
+	}
+	
+	public static double roundTwoDecimals(double d) {
+		double result = d * 100;
+		result = Math.round(result);
+		result = result / 100;
+		return result;
+	}
+	
 }
