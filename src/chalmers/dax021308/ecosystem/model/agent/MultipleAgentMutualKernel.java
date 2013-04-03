@@ -76,12 +76,15 @@ public class MultipleAgentMutualKernel {
 	
 
 	public void executeMutualKernel() throws LWJGLException {
-		Log.v("Total agents: " + totalAgent + " xPosArray.length: " + xPosArray.length);
-		Log.v("INTERACTION_RANGE: " + INTERACTION_RANGE);
-		Log.v("agentsPosX: " + agentsPosX);
-		Log.v("agentsPosY: " + agentsPosY);
-		Log.v("xPosArray: " + xPosArray);
-		Log.v("yPosArray: " + yPosArray);
+//		Log.v("Total agents: " + totalAgent + " xPosArray.length: " + xPosArray.length + " agentsPosX.length: " + agentsPosX.length );
+//		Log.v("INTERACTION_RANGE: " + INTERACTION_RANGE);
+//		Log.v("agentsPosX: " + agentsPosX);
+//		Log.v("agentsPosY: " + agentsPosY);
+//		Log.v("xPosArray: " + xPosArray);
+//		Log.v("yPosArray: " + yPosArray);
+//		for(int i = 0 ; i < xPosArray.length ; i++) {
+//			Log.v("xPosArray: " + xPosArray[i]);
+//		}
 //		initializeCL();
 		// Create an OpenCL 'program' from a source code file
 
@@ -141,9 +144,9 @@ public class MultipleAgentMutualKernel {
 		// Set the kernel parameters
 		sumKernel.setArg(0, xPosArrayMemory);
 		sumKernel.setArg(1, yPosArrayMemory);
-		sumKernel.setArg(4, xPosArray.length);
-		sumKernel.setArg(2, resultMemoryX);
-		sumKernel.setArg(3, resultMemoryY);
+		sumKernel.setArg(2, xPosArray.length);
+		sumKernel.setArg(3, resultMemoryX);
+		sumKernel.setArg(4, resultMemoryY);
 		sumKernel.setArg(5, INTERACTION_RANGE);
 		sumKernel.setArg(6, agentsPosXMemory);
 		sumKernel.setArg(7, agentsPosYMemory);
@@ -184,7 +187,7 @@ public class MultipleAgentMutualKernel {
 		CL10.clReleaseMemObject(resultMemoryY);
 		CL10.clReleaseMemObject(agentsPosXMemory);
 		CL10.clReleaseMemObject(agentsPosYMemory);
-		destroyCL();
+		//destroyCL();
 		time = System.currentTimeMillis() - time;
 		System.out.println("Elapsed time GPU: " + time);
 

@@ -1,12 +1,12 @@
 kernel void mutualInteractionForce(
-			global const float* xPosArray,
-			global const float* yPosArray, 
-			int const totalAgents,
-			global float* xResult,
-			global float* yResult,
-			float const interactRange, 
-			global const float* agentsPosX,
-			global const float* agentsPosY,
+			global const float* xPosArray, //0
+			global const float* yPosArray, //1
+			int const totalAgents, //2
+			global float* xResult, //3
+			global float* yResult, //4
+			float const interactRange,  //5
+			global const float* agentsPosX, //6
+			global const float* agentsPosY, //7
 			int const numAgentToCalc) {
 	
 	const int gid = get_global_id(0); 

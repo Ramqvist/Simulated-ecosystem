@@ -164,7 +164,6 @@ public abstract class AbstractPopulation implements IPopulation {
 		try {
 			kernel.executeMutualKernel();
 		} catch (LWJGLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		for (int i = 0; i < agentSize; i++) {
