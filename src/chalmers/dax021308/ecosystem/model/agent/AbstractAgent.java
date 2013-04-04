@@ -310,9 +310,9 @@ public abstract class AbstractAgent implements IAgent {
 	 *         agents in that it interacts with.
 	 */
 	protected Vector mutualInteractionForce() {
-		if(neutralNeighbours.size() == 0) {
+		//if(neutralNeighbours.size() == 0) {
 			return Vector.EmptyVector();
-		}
+		/*}
 		boolean executeCPU = false;
 		if(executeCPU) {
 			return mutualInteractionForceCPU();
@@ -325,7 +325,7 @@ public abstract class AbstractAgent implements IAgent {
 				result = Vector.EmptyVector();
 			}
 			return result;
-		}
+		}*/
 	}
 	
 	protected Vector oldMutualInteractionForce() {
