@@ -13,26 +13,16 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
  * Simple grass, lowest part of the food chain
+ * 
  * @author Henrik
  */
 public class GrassAgent extends AbstractAgent {
-	private final Dimension gridDimension;
-	private final IShape shape;
+
 	private static final double REPRODUCTION_RATE = 0.02;
 
 	public GrassAgent(String name, Position pos, Color color, int width,
-			int height, Vector velocity, double maxSpeed,
-			Dimension gridDimension, IShape shape) {
+			int height, Vector velocity, double maxSpeed, int capacity) {
 		super(name, pos, color, width, height, velocity, maxSpeed, 0, 0);
-		this.gridDimension = gridDimension;
-		this.shape = shape;
-	}
-
-	public GrassAgent(String name, Position pos, Color color, int width,
-			int height, Vector velocity, double maxSpeed,
-			Dimension gridDimension, int capacity, IShape shape) {
-		this(name, pos, color, width, height, velocity, maxSpeed,
-				gridDimension, shape);
 		this.capacity = capacity;
 	}
 
@@ -49,24 +39,15 @@ public class GrassAgent extends AbstractAgent {
 	}
 
 	@Override
-	public List<IAgent> reproduce(IAgent agent, int populationSize, List<IObstacle> obstacles) {
+	public List<IAgent> reproduce(IAgent agent, int populationSize,
+			List<IObstacle> obstacles, IShape shape, Dimension gridDimension) {
 		double popSize = (double) populationSize;
 		double cap = (double) capacity;
 		if (Math.random() < REPRODUCTION_RATE * (1.0 - popSize / cap)) {
 			List<IAgent> spawn = new ArrayList<IAgent>();
-			Position p = new Position();
-			boolean validPos = false;
-			while(!validPos){
-				p = shape.getRandomPosition(gridDimension);
-				validPos = true;
-				for(IObstacle o: obstacles){
-					if(o.isInObstacle(p)){
-						validPos = false;
-					}
-				}
-			}
-			IAgent a = new GrassAgent(name, p, color, 5, 5,
-					velocity, maxSpeed, gridDimension, capacity, shape);
+			Position p = getSpawnPosition(gridDimension, shape, obstacles);
+			IAgent a = new GrassAgent(name, p, color, 5, 5, velocity, maxSpeed,
+					capacity);
 			spawn.add(a);
 			return spawn;
 		}
@@ -75,30 +56,29 @@ public class GrassAgent extends AbstractAgent {
 	}
 
 	/**
-	 * Finds a new position close to the current position
+	 * Finds a new position close to the current position, which lies inside the
+	 * shape and outside all the obstacles
+	 * 
 	 * @return The position found
 	 */
-	private Position getSpawnPosition() {
-		Position pos;
-		Vector v = new Vector(5, 0);
-		// Find a position which lies 5 pixels away from the current position in
-		// a random direction
+	private Position getSpawnPosition(Dimension gridDimension, IShape shape,
+			List<IObstacle> obstacles) {
+		// create a random position which lies within __ pixels of the
+		// current position, and if it lies inside the shape and not inside any
+		// obstacle, return it.
+		Position p;
+		Vector v = new Vector(Math.random() * 200, 0);
+		boolean validPos;
 		do {
-			pos = new Position(position);
-			v.rotate(Math.random() * 2 * Math.PI);
-			pos.addVector(v);
-
-		} while (!legitPos(pos));
-		return pos;
-	}
-
-	/**
-	 * Checks if a Position is legit, i.e it is inside the view.
-	 * @param pos - The Position to check.
-	 * @return True if pos lies inside the view, otherwise returns false
-	 */
-	private boolean legitPos(Position pos) {
-		return (pos.getX() > 0 && pos.getX() < gridDimension.getWidth()
-				&& pos.getY() > 0 && pos.getY() < gridDimension.getHeight());
+			v.rotate(Math.random() * Math.PI * 2);
+			p = Position.positionPlusVector(position, v);
+			validPos = shape.isInside(gridDimension, p);
+			for (IObstacle o : obstacles) {
+				if (o.isInObstacle(p)) {
+					validPos = false;
+				}
+			}
+		} while (!validPos);
+		return p;
 	}
 }

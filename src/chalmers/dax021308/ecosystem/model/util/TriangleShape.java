@@ -59,5 +59,14 @@ public class TriangleShape implements IShape {
 		return new Position().addVector(top.multiply(topDirection)).addVector(
 				right.multiply(rightDirection));
 	}
+	
+	@Override
+	public boolean isInside(Dimension dim, Position p) {
+		// if the position is not above or below, or outside of the left or
+		// right 'wall' of the triangle, then it lies inside the shape
+		return p.getY() > 0 && p.getY() < dim.getHeight()
+				&& p.getX() > getXWallLeft(dim, p).getX()
+				&& p.getX() < getXWallRight(dim, p).getX();
+	}
 
 }

@@ -33,4 +33,17 @@ public interface IShape {
 	 * @return The String name for the shape
 	 */
 	public String getShape();
+
+	/**
+	 * Checks whether or not the position lies inside the shape of specified
+	 * dimension
+	 * 
+	 * @param dim
+	 *            The dimension to be specified
+	 * @param p
+	 *            The position to be checked
+	 * @return returns True if the position lies inside the shape of specified
+	 *         dimension, otherwise returns False
+	 */
+	public boolean isInside(Dimension dim, Position p);
 }

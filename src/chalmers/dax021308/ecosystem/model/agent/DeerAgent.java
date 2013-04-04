@@ -13,13 +13,14 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
  * A basic implementation of the IAgent interface.
+ * 
  * @author Albin
  */
 public class DeerAgent extends AbstractAgent {
 
 	private static final int MAX_ENERGY = 900;
 	private boolean hungry = true;
-	private static final double REPRODUCTION_RATE = 0.1;
+	private static final double REPRODUCTION_RATE = 0.07;
 	private boolean willFocusPreys = false;
 
 	public DeerAgent(String name, Position p, Color c, int width, int height,
@@ -35,13 +36,14 @@ public class DeerAgent extends AbstractAgent {
 	}
 
 	@Override
-	public List<IAgent> reproduce(IAgent agent, int populationSize, List<IObstacle> obstacles) {
+	public List<IAgent> reproduce(IAgent agent, int populationSize,
+			List<IObstacle> obstacles, IShape shape, Dimension gridDimension) {
 		if (hungry)
 			return null;
 		else {
+			hungry = true;
 			List<IAgent> spawn = new ArrayList<IAgent>();
 			if (Math.random() < REPRODUCTION_RATE) {
-				hungry = true;
 				double xSign = Math.signum(-1 + 2 * Math.random());
 				double ySign = Math.signum(-1 + 2 * Math.random());
 				double newX = this.getPosition().getX() + xSign
@@ -53,17 +55,17 @@ public class DeerAgent extends AbstractAgent {
 						new Vector(velocity), maxSpeed, maxAcceleration,
 						visionRange, groupBehaviour);
 				spawn.add(child);
-			} else {
-				hungry = true;
+				
 			}
 			return spawn;
 		}
 	}
 
 	/**
-	 * Calculates the next position of the agent depending on the
-	 * forces that affects it. Note: The next position is not set until
-	 * updatePosition() is called.
+	 * Calculates the next position of the agent depending on the forces that
+	 * affects it. Note: The next position is not set until updatePosition() is
+	 * called.
+	 * 
 	 * @author Sebbe
 	 */
 	@Override
@@ -93,8 +95,7 @@ public class DeerAgent extends AbstractAgent {
 		 * the acceleration.
 		 */
 		Vector acceleration = predatorForce.multiply(5)
-				.add(mutualInteractionForce)
-				.add(forwardThrust)
+				.add(mutualInteractionForce).add(forwardThrust)
 				.add(arrayalForce)
 				.add(preyForce.multiply(5 * (1 - energy / MAX_ENERGY)));
 		double accelerationNorm = acceleration.getNorm();
@@ -103,7 +104,7 @@ public class DeerAgent extends AbstractAgent {
 		}
 
 		acceleration.add(environmentForce).add(obstacleForce);
-		
+
 		/*
 		 * The new velocity is then just: v(t+dt) = (v(t)+a(t+1)*dt)*decay,
 		 * where dt = 1 in this case. There is a decay that says if they are not
@@ -119,12 +120,13 @@ public class DeerAgent extends AbstractAgent {
 		}
 
 		this.setVelocity(newVelocity);
-		
+
 		/* Reusing the same position object, for less heap allocations. */
-		if(reUsedPosition == null) {
+		if (reUsedPosition == null) {
 			nextPosition = Position.positionPlusVector(position, velocity);
 		} else {
-			nextPosition = reUsedPosition.setPosition(position.getX() + velocity.x, position.getY() + velocity.y);
+			nextPosition = reUsedPosition.setPosition(position.getX()
+					+ velocity.x, position.getY() + velocity.y);
 		}
 	}
 
@@ -133,7 +135,7 @@ public class DeerAgent extends AbstractAgent {
 	 * @author Sebastian/Henrik
 	 */
 	private Vector getPreyForce() {
-		if(willFocusPreys && focusedPrey != null && focusedPrey.isAlive()) {
+		if (willFocusPreys && focusedPrey != null && focusedPrey.isAlive()) {
 			Position p = focusedPrey.getPosition();
 			double distance = getPosition().getDistance(p);
 			if (distance <= EATING_RANGE) {
@@ -146,7 +148,7 @@ public class DeerAgent extends AbstractAgent {
 				return new Vector(focusedPrey.getPosition(), position);
 			}
 		}
-		
+
 		Vector preyForce = new Vector(0, 0);
 		IAgent closestFocusPrey = null;
 		int preySize = preyNeighbours.size();
@@ -160,25 +162,26 @@ public class DeerAgent extends AbstractAgent {
 						hungry = false;
 						energy = MAX_ENERGY;
 					}
-				} else if(willFocusPreys && distance <= FOCUS_RANGE){
-					if(closestFocusPrey != null && a.isAlive()) {
-						if(closestFocusPrey.getPosition().getDistance(this.position) > 
-							a.getPosition().getDistance(this.position)) {
+				} else if (willFocusPreys && distance <= FOCUS_RANGE) {
+					if (closestFocusPrey != null && a.isAlive()) {
+						if (closestFocusPrey.getPosition().getDistance(
+								this.position) > a.getPosition().getDistance(
+								this.position)) {
 							closestFocusPrey = a;
 						}
 					} else {
 						closestFocusPrey = a;
 					}
-				} else if (closestFocusPrey == null){
+				} else if (closestFocusPrey == null) {
 					/*
 					 * Create a vector that points towards the prey.
 					 */
 					Vector newForce = new Vector(p, getPosition());
 
 					/*
-					 * Add this vector to the prey force, with proportion to
-					 * how close the prey is. Closer preys will affect the
-					 * force more than those far away.
+					 * Add this vector to the prey force, with proportion to how
+					 * close the prey is. Closer preys will affect the force
+					 * more than those far away.
 					 */
 					double norm = newForce.getNorm();
 					preyForce.add(newForce.multiply(1 / (norm * distance)));
@@ -187,24 +190,25 @@ public class DeerAgent extends AbstractAgent {
 		}
 
 		double norm = preyForce.getNorm();
-		if (norm != 0) { 
+		if (norm != 0) {
 			preyForce.multiply(maxAcceleration / norm);
 		}
-		
-		if(willFocusPreys && closestFocusPrey != null){
+
+		if (willFocusPreys && closestFocusPrey != null) {
 			focusedPrey = closestFocusPrey;
 			return new Vector(focusedPrey.getPosition(), position);
-		} 
-		
+		}
+
 		return preyForce;
 	}
 
 	/**
-	 * "Predator Force" is defined as the sum of the vectors
-	 * pointing away from all the predators in vision, weighted by the
-	 * inverse of the distance to the predators, then normalized to have
-	 * unit norm. Can be interpreted as the average sum of forces that
-	 * the agent feels, weighted by how close the source of the force is.
+	 * "Predator Force" is defined as the sum of the vectors pointing away from
+	 * all the predators in vision, weighted by the inverse of the distance to
+	 * the predators, then normalized to have unit norm. Can be interpreted as
+	 * the average sum of forces that the agent feels, weighted by how close the
+	 * source of the force is.
+	 * 
 	 * @author Sebbe
 	 */
 	private Vector getPredatorForce() {
@@ -224,9 +228,9 @@ public class DeerAgent extends AbstractAgent {
 				Vector newForce = new Vector(this.getPosition(), p);
 
 				/*
-				 * Add this vector to the predator force, with proportion to
-				 * how close the predator is. Closer predators will affect
-				 * the force more than those far away.
+				 * Add this vector to the predator force, with proportion to how
+				 * close the predator is. Closer predators will affect the force
+				 * more than those far away.
 				 */
 				double norm = newForce.getNorm();
 				predatorForce.add(newForce.multiply(1 / (norm * distance)));

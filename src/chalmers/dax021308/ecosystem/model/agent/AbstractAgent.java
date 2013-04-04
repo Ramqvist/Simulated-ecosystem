@@ -207,7 +207,7 @@ public abstract class AbstractAgent implements IAgent {
 			}
 
 			@Override
-			public List<IAgent> reproduce(IAgent agent, int populationSize, List<IObstacle> obstacles) {
+			public List<IAgent> reproduce(IAgent agent, int populationSize, List<IObstacle> obstacles, IShape shape, Dimension gridDimension) {
 				return Collections.emptyList();
 			}
 
@@ -605,7 +605,7 @@ public abstract class AbstractAgent implements IAgent {
 				0, 0, 0) {
 
 			@Override
-			public List<IAgent> reproduce(IAgent agent, int populationSize, List<IObstacle> obstacles) {
+			public List<IAgent> reproduce(IAgent agent, int populationSize, List<IObstacle> obstacles, IShape shape, Dimension gridDimension) {
 				return null;
 			}
 
