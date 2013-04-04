@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
@@ -462,6 +464,114 @@ public abstract class AbstractAgent implements IAgent {
 		}
 		return obstacleForce.multiply(OBSTACLE_CONSTANT);
 	}
+	
+	/**
+	 * Calculates the shortest path to the target using A* search algorithm.
+	 * 
+	 * Algorithm:
+		 function A*(start,goal)
+		     closedset := the empty set    // The set of nodes already evaluated.
+		     openset := {start}    // The set of tentative nodes to be evaluated, initially containing the start node
+		     came_from := the empty map    // The map of navigated nodes.
+		 
+		     g_score[start] := 0    // Cost from start along best known path.
+		     // Estimated total cost from start to goal through y.
+		     f_score[start] := g_score[start] + heuristic_cost_estimate(start, goal)
+		 
+		     while openset is not empty
+		         current := the node in openset having the lowest f_score[] value
+		         if current = goal
+		             return reconstruct_path(came_from, goal)
+		 
+		         remove current from openset
+		         add current to closedset
+		         for each neighbor in neighbor_nodes(current)
+		             tentative_g_score := g_score[current] + dist_between(current,neighbor)
+		             if neighbor in closedset
+		                 if tentative_g_score >= g_score[neighbor]
+		                     continue
+		 
+		             if neighbor not in openset or tentative_g_score < g_score[neighbor] 
+		                 came_from[neighbor] := current
+		                 g_score[neighbor] := tentative_g_score
+		                 f_score[neighbor] := g_score[neighbor] + heuristic_cost_estimate(neighbor, goal)
+		                 if neighbor not in openset
+		                     add neighbor to openset
+		 
+		     return failure
+		 
+		 function reconstruct_path(came_from, current_node)
+		     if current_node in came_from
+		         p := reconstruct_path(came_from, came_from[current_node])
+		         return (p + current_node)
+		     else
+		         return current_node
+	 * 
+	 * @see <a href="http://en.wikipedia.org/wiki/A*_search_algorithm">http://en.wikipedia.org/wiki/A*_search_algorithm</a>
+	 * @param target
+	 * @return
+	 * @author Erik Ramqvist
+	 */
+	public List<Position> getShortestPath(NodePosition start, NodePosition goal) {
+		List<NodePosition> closedSet = new ArrayList<NodePosition>();
+		List<NodePosition> openSet = new ArrayList<NodePosition>();
+		openSet.add(start);
+		Map<NodePosition, NodePosition> came_from = new HashMap<NodePosition, NodePosition>();
+		
+		Map<NodePosition, Double> g_score = new HashMap<NodePosition, Double>();
+		g_score.put(start, 0.0);
+		Map<NodePosition, Double> f_score = new HashMap<NodePosition, Double>(); //Kö?
+		f_score.put(start, g_score.get(start) + heuristic_cost_estimate(start, goal));
+		
+		while(!openSet.isEmpty()) {
+			NodePosition current = start;//the node in openset having the lowest f_score[] value
+			if(current.equals(goal)) {
+				return reconstructPath(came_from, goal);
+			}
+			openSet.remove(current);
+			closedSet.add(current);
+			for(NodePosition neighbour : current.neighbours) {
+				double tentative_g_score = g_score.get(current) + current.getDistance(neighbour);
+				if(closedSet.contains(neighbour)) {
+					if(tentative_g_score >= g_score.get(neighbour)) {
+						continue;
+					}
+				}
+				if(!openSet.contains(neighbour) || tentative_g_score < g_score.get(neighbour)) {
+					came_from.put(neighbour, current);
+					g_score.put(neighbour, tentative_g_score);
+					f_score.put(neighbour, g_score.get(neighbour) + heuristic_cost_estimate(neighbour, goal));
+					if(!openSet.contains(neighbour)) {
+						openSet.add(neighbour);
+					}
+				}
+			}
+		}
+		
+			
+		//Failure to find path.
+		return Collections.emptyList();
+	}
+	
+	private double heuristic_cost_estimate(Position start, Position goal) {
+	    return Math.abs(start.getX() - goal.getX()) + Math.abs(start.getY() - goal.getY());
+	}
+	
+	private List<Position> reconstructPath(Map<NodePosition, NodePosition> came_from, NodePosition current_node) {
+		List<Position> result = new ArrayList<Position>();
+		NodePosition current = current_node;
+		while(current != null) {
+			result.add(current);
+			current = current.parent;
+		}
+		return result;
+	}
+	
+	class NodePosition extends Position {
+		NodePosition parent;
+		List<NodePosition> neighbours;
+	}
+
 
 	@Override
 	public synchronized boolean tryConsumeAgent() {
