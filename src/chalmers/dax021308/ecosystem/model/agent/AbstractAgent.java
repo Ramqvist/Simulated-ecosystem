@@ -492,9 +492,21 @@ public abstract class AbstractAgent implements IAgent {
 		g_score.put(start, 0.0);
 		Map<NodePosition, Double> f_score = new HashMap<NodePosition, Double>(); //Kö?
 		f_score.put(start, g_score.get(start) + heuristic_cost_estimate(start, goal));
-		
+		NodePosition current = start;//the node in openset having the lowest f_score[] value
+		double highScore = 0;
 		while(!openSet.isEmpty()) {
-			NodePosition current = start;//the node in openset having the lowest f_score[] value
+			for(NodePosition n : openSet) {
+				if(f_score.get(n) > highScore) {
+					current = n;
+					highScore = f_score.get(n);
+				}
+			}
+
+			Log.v("openset" + openSet);
+			Log.v("closedSet" + closedSet);
+			Log.v("g_score" + g_score);
+			Log.v("current" + current);
+			Log.v("--------");
 			if(current.equals(goal)) {
 				return reconstructPath(came_from, goal);
 			}
@@ -507,11 +519,6 @@ public abstract class AbstractAgent implements IAgent {
 						continue;
 					}
 				}
-				Log.v("openset" + openSet);
-				Log.v("closedSet" + closedSet);
-				Log.v("g_score" + g_score);
-				Log.v("neighbour" + neighbour);
-				Log.v("--------");
 				if(!openSet.contains(neighbour) || tentative_g_score < g_score.get(neighbour)) {
 					came_from.put(neighbour, current);
 					g_score.put(neighbour, tentative_g_score);
@@ -553,8 +560,9 @@ public abstract class AbstractAgent implements IAgent {
 			//Check here if positions is inside obstacle?
 			neighbours.add(new NodePosition(getX(), getY()+1));
 			neighbours.add(new NodePosition(getX()+1, getY()));
-			neighbours.add(new NodePosition(getX()-1, getY()));
-			neighbours.add(new NodePosition(getX(), getY()-1));
+			neighbours.add(new NodePosition(getX()+1, getY()+1));
+//			neighbours.add(new NodePosition(getX()-1, getY()));
+//			neighbours.add(new NodePosition(getX(), getY()-1));
 			return neighbours;
 		}
 		
