@@ -49,6 +49,16 @@ public class Log {
 			System.out.println(s);
 		}
 	}
+
+	/**
+	 * Verbose printout.
+	 * @param s
+	 */
+	public static void v(Object o) {
+		if(enableLog && currentLogLevel == LEVEL_VERBOSE) {
+			System.out.println(o.toString());
+		}
+	}
 	
 	/**
 	 * Error printout.

@@ -5,15 +5,18 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Gender;
 import chalmers.dax021308.ecosystem.model.util.IShape;
+import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
@@ -467,54 +470,21 @@ public abstract class AbstractAgent implements IAgent {
 	
 	/**
 	 * Calculates the shortest path to the target using A* search algorithm.
+	 * <p>
+	 * Under development!
 	 * 
-	 * Algorithm:
-		 function A*(start,goal)
-		     closedset := the empty set    // The set of nodes already evaluated.
-		     openset := {start}    // The set of tentative nodes to be evaluated, initially containing the start node
-		     came_from := the empty map    // The map of navigated nodes.
-		 
-		     g_score[start] := 0    // Cost from start along best known path.
-		     // Estimated total cost from start to goal through y.
-		     f_score[start] := g_score[start] + heuristic_cost_estimate(start, goal)
-		 
-		     while openset is not empty
-		         current := the node in openset having the lowest f_score[] value
-		         if current = goal
-		             return reconstruct_path(came_from, goal)
-		 
-		         remove current from openset
-		         add current to closedset
-		         for each neighbor in neighbor_nodes(current)
-		             tentative_g_score := g_score[current] + dist_between(current,neighbor)
-		             if neighbor in closedset
-		                 if tentative_g_score >= g_score[neighbor]
-		                     continue
-		 
-		             if neighbor not in openset or tentative_g_score < g_score[neighbor] 
-		                 came_from[neighbor] := current
-		                 g_score[neighbor] := tentative_g_score
-		                 f_score[neighbor] := g_score[neighbor] + heuristic_cost_estimate(neighbor, goal)
-		                 if neighbor not in openset
-		                     add neighbor to openset
-		 
-		     return failure
-		 
-		 function reconstruct_path(came_from, current_node)
-		     if current_node in came_from
-		         p := reconstruct_path(came_from, came_from[current_node])
-		         return (p + current_node)
-		     else
-		         return current_node
+	 * Move to Position class?!
 	 * 
 	 * @see <a href="http://en.wikipedia.org/wiki/A*_search_algorithm">http://en.wikipedia.org/wiki/A*_search_algorithm</a>
 	 * @param target
 	 * @return
 	 * @author Erik Ramqvist
 	 */
-	public List<Position> getShortestPath(NodePosition start, NodePosition goal) {
-		List<NodePosition> closedSet = new ArrayList<NodePosition>();
-		List<NodePosition> openSet = new ArrayList<NodePosition>();
+	public List<Position> getShortestPath(Position startPos, Position endPos) {
+		NodePosition start = new NodePosition(startPos.getX(), startPos.getY());
+		NodePosition goal = new NodePosition(endPos.getX(), endPos.getY());
+		Set<NodePosition> closedSet = new HashSet<NodePosition>();
+		Set<NodePosition> openSet = new HashSet<NodePosition>();
 		openSet.add(start);
 		Map<NodePosition, NodePosition> came_from = new HashMap<NodePosition, NodePosition>();
 		
@@ -530,13 +500,18 @@ public abstract class AbstractAgent implements IAgent {
 			}
 			openSet.remove(current);
 			closedSet.add(current);
-			for(NodePosition neighbour : current.neighbours) {
+			for(NodePosition neighbour : current.getNeighbours()) {
 				double tentative_g_score = g_score.get(current) + current.getDistance(neighbour);
 				if(closedSet.contains(neighbour)) {
 					if(tentative_g_score >= g_score.get(neighbour)) {
 						continue;
 					}
 				}
+				Log.v("openset" + openSet);
+				Log.v("closedSet" + closedSet);
+				Log.v("g_score" + g_score);
+				Log.v("neighbour" + neighbour);
+				Log.v("--------");
 				if(!openSet.contains(neighbour) || tentative_g_score < g_score.get(neighbour)) {
 					came_from.put(neighbour, current);
 					g_score.put(neighbour, tentative_g_score);
@@ -547,29 +522,42 @@ public abstract class AbstractAgent implements IAgent {
 				}
 			}
 		}
-		
-			
 		//Failure to find path.
 		return Collections.emptyList();
 	}
 	
-	private double heuristic_cost_estimate(Position start, Position goal) {
+	private static double heuristic_cost_estimate(Position start, Position goal) {
 	    return Math.abs(start.getX() - goal.getX()) + Math.abs(start.getY() - goal.getY());
 	}
 	
-	private List<Position> reconstructPath(Map<NodePosition, NodePosition> came_from, NodePosition current_node) {
+	private static List<Position> reconstructPath(Map<NodePosition, NodePosition> came_from, NodePosition current_node) {
 		List<Position> result = new ArrayList<Position>();
 		NodePosition current = current_node;
 		while(current != null) {
 			result.add(current);
-			current = current.parent;
+			current = came_from.get(current);
 		}
+		//Reverse result?
 		return result;
 	}
 	
-	class NodePosition extends Position {
+	public class NodePosition extends Position {
 		NodePosition parent;
-		List<NodePosition> neighbours;
+		
+		public NodePosition(double x, double y) {
+			super(x,y);
+		}
+		
+		public List<NodePosition> getNeighbours() {
+			List<NodePosition> neighbours = new ArrayList<NodePosition>(5);
+			//Check here if positions is inside obstacle?
+			neighbours.add(new NodePosition(getX(), getY()+1));
+			neighbours.add(new NodePosition(getX()+1, getY()));
+			neighbours.add(new NodePosition(getX()-1, getY()));
+			neighbours.add(new NodePosition(getX(), getY()-1));
+			return neighbours;
+		}
+		
 	}
 
 
