@@ -1,5 +1,14 @@
 package chalmers.dax021308.ecosystem.model.util;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+
 /**
  * Position class.
  * 
@@ -100,6 +109,108 @@ public class Position {
 		return true;
 	}
 	
+	
+	/**
+	 * Calculates the shortest path to the target using A* search algorithm.
+	 * <p>
+	 * Under development!
+	 * 
+	 * TODO: Move to Position class and supply a obstacle-list?
+	 * 
+	 * For use with target agents behind obstacles.
+	 * 
+	 * @see <a href="http://en.wikipedia.org/wiki/A*_search_algorithm">http://en.wikipedia.org/wiki/A*_search_algorithm</a>
+	 * @param target
+	 * @return
+	 * @author Erik Ramqvist
+	 */
+	public static List<Position> getShortestPath(Position startPos, Position endPos) {
+		Position start = new Position(startPos.getX(), startPos.getY());
+		Position goal = new Position(endPos.getX(), endPos.getY());
+		Set<Position> closedSet = new HashSet<Position>();
+		Set<Position> openSet = new HashSet<Position>();
+		openSet.add(start);
+		Map<Position, Position> came_from = new HashMap<Position, Position>();
+		
+		Map<Position, Double> g_score = new HashMap<Position, Double>();
+		g_score.put(start, 0.0);
+		Map<Position, Double> f_score = new HashMap<Position, Double>(); //Prioritets kö?
+		f_score.put(start, g_score.get(start) + heuristic_cost_estimate_vector_distance(start, goal));
+		Position current = start;//the node in openset having the lowest f_score[] value
+		double lowScore = Integer.MAX_VALUE;
+		while(!openSet.isEmpty()) {
+			for(Position n : openSet) {
+				if(f_score.get(n) < lowScore) {
+					current = n;
+					lowScore = f_score.get(n);
+				}
+			}
+
+			Log.v("openset" + openSet);
+			Log.v("closedSet" + closedSet);
+			Log.v("g_score" + g_score);
+			Log.v("f_score" + f_score);
+			Log.v("current" + current);
+			Log.v("--------");
+			if(current.equals(goal)) {
+				return reconstructPath(came_from, goal);
+			}
+			openSet.remove(current);
+			closedSet.add(current);
+			for(Position neighbour : getNeighbours(current)) {
+				double tentative_g_score = g_score.get(current) + current.getDistance(neighbour);
+				if(closedSet.contains(neighbour)) {
+					if(tentative_g_score >= g_score.get(neighbour)) {
+						continue;
+					}
+				}
+				if(!openSet.contains(neighbour) || tentative_g_score < g_score.get(neighbour)) {
+					came_from.put(neighbour, current);
+					g_score.put(neighbour, tentative_g_score);
+					f_score.put(neighbour, g_score.get(neighbour) + heuristic_cost_estimate_vector_distance(neighbour, goal));
+					if(!openSet.contains(neighbour)) {
+						openSet.add(neighbour);
+					}
+				}
+			}
+		}
+		//Failure to find path.
+		return Collections.emptyList();
+	}
+	
+	/* Error with heuristic function! */
+	private static double heuristic_cost_estimate_vector_distance(Position start, Position goal) {
+	    return Math.sqrt(Math.pow(Math.abs(goal.getX() - start.getX()), 2) + Math.pow(Math.abs(goal.getY() - start.getY()), 2));
+	}
+	private static double heuristic_cost_estimate(Position start, Position goal) {
+	    return Math.sqrt(Math.pow(goal.getX() - start.getX(), 2) + Math.pow(goal.getY() - start.getY(), 2));
+	}
+	
+	private static List<Position> reconstructPath(Map<Position, Position> came_from, Position current_node) {
+		List<Position> result = new ArrayList<Position>();
+		Position current = current_node;
+		while(current != null) {
+			result.add(current);
+			current = came_from.get(current);
+		}
+	    Collections.reverse(result);
+		return result;
+	}
+	
+	
+	public static List<Position> getNeighbours(Position p) {
+		List<Position> neighbours = new ArrayList<Position>(8);
+		//TODO: Check here if positions is not inside obstacle.
+		neighbours.add(new Position(p.getX(), 	p.getY()+1));
+		neighbours.add(new Position(p.getX()+1, p.getY()));
+		neighbours.add(new Position(p.getX()-1, p.getY()));
+		neighbours.add(new Position(p.getX(), 	p.getY()-1));
+		neighbours.add(new Position(p.getX()+1, p.getY()-1));
+		neighbours.add(new Position(p.getX()-1, p.getY()+1));
+		neighbours.add(new Position(p.getX()+1, p.getY()+1));
+		neighbours.add(new Position(p.getX()-1, p.getY()-1));
+		return neighbours;
+	}
 	
 	@Override
 	public String toString(){
