@@ -113,9 +113,8 @@ public class Position {
 	/**
 	 * Calculates the shortest path to the target using A* search algorithm.
 	 * <p>
-	 * Under development!
 	 * 
-	 * TODO: Move to Position class and supply a obstacle-list?
+	 * TODO: Supply a obstacle-list and Shape?
 	 * 
 	 * For use with target agents behind obstacles.
 	 * 
@@ -139,6 +138,7 @@ public class Position {
 		Position current = start;//the node in openset having the lowest f_score[] value
 		double lowScore = Integer.MAX_VALUE;
 		while(!openSet.isEmpty()) {
+			//Get the position with the lowest estimated distance to target.
 			for(Position n : openSet) {
 				if(f_score.get(n) + heuristic_manhattan_distance(n, goal) < lowScore) {
 					current = n;
@@ -172,11 +172,12 @@ public class Position {
 					}
 				}
 			}
-		}
+		}	
 		//Failure to find path.
 		return Collections.emptyList();
 	}
 	
+	@SuppressWarnings("unused")
 	private static double heuristic_vector_distance(Position start, Position goal /*, List<IObstacle> obsList, IShape simShape*/) {
 	    return Math.sqrt(Math.pow(Math.abs(goal.getX() - start.getX()), 2) + Math.pow(Math.abs(goal.getY() - start.getY()), 2));
 	}
