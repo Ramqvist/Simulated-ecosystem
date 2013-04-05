@@ -2,11 +2,15 @@ package chalmers.dax021308.ecosystem.model.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
+
+import org.jfree.data.ComparableObjectItem;
 
 
 /**
@@ -123,50 +127,52 @@ public class Position {
 	 * @return
 	 * @author Erik Ramqvist
 	 */
-	public static List<Position> getShortestPath(Position startPos, Position endPos /*, List<IObstacle> obsList, IShape simShape*/) {
-		Position start = new Position(startPos.getX(), startPos.getY());
-		Position goal = new Position(endPos.getX(), endPos.getY());
-		Set<Position> closedSet = new HashSet<Position>();
-		Set<Position> openSet = new HashSet<Position>();
+	public static List<Position> getShortestPathPriorityQueue(Position startPos, Position endPos /*, List<IObstacle> obsList, IShape simShape*/) {
+		AStarPosition start = new AStarPosition(startPos.getX(), startPos.getY());
+		AStarPosition goal = new AStarPosition(endPos.getX(), endPos.getY());
+		start.g_score = 0;
+		start.f_score = heuristic_manhattan_distance(start, goal)*2;
+		Set<AStarPosition> closedSet = new HashSet<AStarPosition>();
+		//Set<AStarPosition> openSet = new HashSet<AStarPosition>();
+//		Map<AStarPosition, AStarPosition> came_from = new HashMap<AStarPosition, AStarPosition>();
+		PriorityQueue<AStarPosition> openSet = new PriorityQueue<AStarPosition>(100, new AStarPositionComparator());
 		openSet.add(start);
-		Map<Position, Position> came_from = new HashMap<Position, Position>();
-		
-		Map<Position, Double> g_score = new HashMap<Position, Double>();
-		g_score.put(start, 0.0);
-		Map<Position, Double> f_score = new HashMap<Position, Double>(); //Prioritets kö?
-		f_score.put(start, g_score.get(start) + heuristic_manhattan_distance(start, goal));
-		Position current = start;//the node in openset having the lowest f_score[] value
-		double lowScore = Integer.MAX_VALUE;
+//		Map<AStarPosition, Double> g_score = new HashMap<AStarPosition, Double>();
+//		g_score.put(start, 0.0);
+//		Map<AStarPosition, Double> f_score = new HashMap<AStarPosition, Double>(); //Prioritets kö?
+//		f_score.put(start, g_score.get(start) + heuristic_manhattan_distance(start, goal));
+		AStarPosition current = start;//the node in openset having the lowest f_score[] value
+		//double lowScore = Integer.MAX_VALUE;
 		while(!openSet.isEmpty()) {
 			//Get the position with the lowest estimated distance to target.
-			for(Position n : openSet) {
-				if(f_score.get(n) + heuristic_manhattan_distance(n, goal) < lowScore) {
+			/*for(AStarPosition n : openSet) {
+				if(n.f_score + heuristic_manhattan_distance(n, goal) < lowScore) {
 					current = n;
-					lowScore = f_score.get(n) + heuristic_manhattan_distance(n, goal);
+					lowScore = n.f_score + heuristic_manhattan_distance(n, goal);
 				}
-			}
+			}*/
 //			Log.v("openset" + openSet);
 //			Log.v("closedSet" + closedSet);
-//			Log.v("g_score" + g_score);
-//			Log.v("f_score" + f_score);
+////			Log.v("g_score" + g_score);
+////			Log.v("f_score" + f_score);
 //			Log.v("current" + current);
 //			Log.v("--------");
-			if(current.equals(goal)) {
-				return reconstructPath(came_from, goal);
-			}
-			openSet.remove(current);
+			current = openSet.poll();
 			closedSet.add(current);
-			for(Position neighbour : getNeighbours(current)) {
-				double tentative_g_score = g_score.get(current) + current.getDistance(neighbour);
+			if(current.equals(goal)) {
+				return reconstructPath(goal);
+			}
+			for(AStarPosition neighbour : getNeighbours(current)) {
+				double tentative_g_score = current.g_score + current.getDistance(neighbour);
 				if(closedSet.contains(neighbour)) {
-					if(tentative_g_score >= g_score.get(neighbour)) {
+					if(tentative_g_score >= neighbour.g_score) {
 						continue;
 					}
 				}
-				if(!openSet.contains(neighbour) || tentative_g_score < g_score.get(neighbour)) {
-					came_from.put(neighbour, current);
-					g_score.put(neighbour, tentative_g_score);
-					f_score.put(neighbour, g_score.get(neighbour) + heuristic_manhattan_distance(goal, neighbour));
+				if(!openSet.contains(neighbour) || tentative_g_score < neighbour.g_score) {
+					current.came_from = neighbour;
+					neighbour.g_score = tentative_g_score;
+					neighbour.f_score = neighbour.g_score + heuristic_manhattan_distance(goal, neighbour)*2;
 					if(!openSet.contains(neighbour)) {
 						openSet.add(neighbour);
 					}
@@ -177,44 +183,160 @@ public class Position {
 		return Collections.emptyList();
 	}
 	
+	/**
+	 * Calculates the shortest path to the target using A* search algorithm.
+	 * <p>
+	 * 
+	 * TODO: Supply a obstacle-list and Shape?
+	 * 
+	 * For use with target agents behind obstacles.
+	 * 
+	 * @see <a
+	 *      href="http://en.wikipedia.org/wiki/A*_search_algorithm">http://en.wikipedia.org/wiki/A*_search_algorithm</a>
+	 * @param target
+	 * @return
+	 * @author Erik Ramqvist
+	 */
+	public static List<Position> getShortestPathHashSet(Position startPos,
+			Position endPos /* , List<IObstacle> obsList, IShape simShape */) {
+		AStarPosition start = new AStarPosition(startPos.getX(), startPos.getY());
+		AStarPosition goal = new AStarPosition(endPos.getX(), endPos.getY());
+		Set<AStarPosition> closedSet = new HashSet<AStarPosition>();
+		Set<AStarPosition> openSet = new HashSet<AStarPosition>();
+		openSet.add(start);
+		Map<AStarPosition, AStarPosition> came_from = new HashMap<AStarPosition, AStarPosition>();
+
+		Map<AStarPosition, Double> g_score = new HashMap<AStarPosition, Double>();
+		g_score.put(start, 0.0);
+		Map<AStarPosition, Double> f_score = new HashMap<AStarPosition, Double>(); // Prioritets
+																			// kö?
+		f_score.put(start,
+				g_score.get(start) + heuristic_manhattan_distance(start, goal));
+		AStarPosition current = start;// the node in openset having the lowest
+									// f_score[] value
+		double lowScore = Integer.MAX_VALUE;
+		while (!openSet.isEmpty()) {
+			// Get the AStarPosition with the lowest estimated distance to target.
+			for (AStarPosition n : openSet) {
+				if (f_score.get(n) + heuristic_manhattan_distance(n, goal) < lowScore) {
+					current = n;
+					lowScore = f_score.get(n)
+							+ heuristic_manhattan_distance(n, goal);
+				}
+			}
+			// Log.v("openset" + openSet);
+			// Log.v("closedSet" + closedSet);
+			// Log.v("g_score" + g_score);
+			// Log.v("f_score" + f_score);
+			// Log.v("current" + current);
+			// Log.v("--------");
+			if (current.equals(goal)) {
+				return reconstructPath(came_from, goal);
+			}
+			openSet.remove(current);
+			closedSet.add(current);
+			for (AStarPosition neighbour : getNeighbours(current)) {
+				double tentative_g_score = g_score.get(current)
+						+ current.getDistance(neighbour);
+				if (closedSet.contains(neighbour)) {
+					if (tentative_g_score >= g_score.get(neighbour)) {
+						continue;
+					}
+				}
+				if (!openSet.contains(neighbour)
+						|| tentative_g_score < g_score.get(neighbour)) {
+					came_from.put(neighbour, current);
+					g_score.put(neighbour, tentative_g_score);
+					f_score.put(neighbour, g_score.get(neighbour)
+							+ heuristic_manhattan_distance(goal, neighbour));
+					if (!openSet.contains(neighbour)) {
+						openSet.add(neighbour);
+					}
+				}
+			}
+		}
+		// Failure to find path.
+		return Collections.emptyList();
+	}
+
+	
 	@SuppressWarnings("unused")
-	private static double heuristic_vector_distance(Position start, Position goal /*, List<IObstacle> obsList, IShape simShape*/) {
+	private static double heuristic_vector_distance(AStarPosition start, AStarPosition goal /*, List<IObstacle> obsList, IShape simShape*/) {
 	    return Math.sqrt(Math.pow(Math.abs(goal.getX() - start.getX()), 2) + Math.pow(Math.abs(goal.getY() - start.getY()), 2));
 	}
 	
-    public static double heuristic_manhattan_distance(Position a, Position b /*, List<IObstacle> obsList, IShape simShape*/){
+    public static double heuristic_manhattan_distance(AStarPosition a, AStarPosition b /*, List<IObstacle> obsList, IShape simShape*/){
         return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY());
     }
 
-	
-	private static List<Position> reconstructPath(Map<Position, Position> came_from, Position current_node) {
+	private static List<Position> reconstructPath(Map<AStarPosition, AStarPosition> came_from, AStarPosition current_node) {
 		List<Position> result = new ArrayList<Position>();
-		Position current = current_node;
-		while(current != null) {
+		AStarPosition current = current_node;
+		while (current != null) {
 			result.add(current);
 			current = came_from.get(current);
+		}
+		Collections.reverse(result);
+		return result;
+}
+	private static List<Position> reconstructPath(/*Map<AStarPosition, AStarPosition> came_from,*/ AStarPosition current_node) {
+		List<Position> result = new ArrayList<Position>();
+		AStarPosition current = current_node;
+		while(current != null) {
+			result.add(current);
+			current = current.came_from;
 		}
 	    Collections.reverse(result);
 		return result;
 	}
 	
 	
-	public static List<Position> getNeighbours(Position p /*, List<IObstacle> obsList*/) {
-		List<Position> neighbours = new ArrayList<Position>(8);
+	public static List<AStarPosition> getNeighbours(AStarPosition p /*, List<IObstacle> obsList, IShape shape*/) {
+		List<AStarPosition> neighbours = new ArrayList<AStarPosition>(8);
 		//TODO: Check here if positions is not inside obstacle. And inside simulation dimension.
-		neighbours.add(new Position(p.getX(), 	p.getY()+1));
-		neighbours.add(new Position(p.getX()+1, p.getY()));
-		neighbours.add(new Position(p.getX()-1, p.getY()));
-		neighbours.add(new Position(p.getX(), 	p.getY()-1));
-		neighbours.add(new Position(p.getX()+1, p.getY()-1));
-		neighbours.add(new Position(p.getX()-1, p.getY()+1));
-		neighbours.add(new Position(p.getX()+1, p.getY()+1));
-		neighbours.add(new Position(p.getX()-1, p.getY()-1));
+		neighbours.add(new AStarPosition(p.getX(), 	p.getY()+1));
+		neighbours.add(new AStarPosition(p.getX()+1, p.getY()));
+		neighbours.add(new AStarPosition(p.getX()-1, p.getY()));
+		neighbours.add(new AStarPosition(p.getX(), 	p.getY()-1));
+		neighbours.add(new AStarPosition(p.getX()+1, p.getY()-1));
+		neighbours.add(new AStarPosition(p.getX()-1, p.getY()+1));
+		neighbours.add(new AStarPosition(p.getX()+1, p.getY()+1));
+		neighbours.add(new AStarPosition(p.getX()-1, p.getY()-1));
 		return neighbours;
 	}
 	
 	@Override
 	public String toString(){
 		return "("+this.x+","+this.y+")";
+	}
+	
+	private static class AStarPositionComparator implements Comparator<AStarPosition> {
+
+		@Override
+		public int compare(AStarPosition o1, AStarPosition o2) {
+			if(o1.getGF() > o2.getGF()) {
+				return 1;
+			} else if(o1.getGF() < o2.getGF()) {
+				return -1;
+			}
+			return 0;
+		}
+	}
+	
+	private static class AStarPosition extends Position {
+		double g_score;
+		double f_score;
+		AStarPosition came_from;
+		public double getGF() {
+			return g_score+f_score;
+		}
+		public AStarPosition(double x, double y) {
+			super(x,y);
+		}
+		
+		@Override
+		public String toString() {
+			return "G: " + g_score + " F: " + f_score + " " + super.toString();
+		}
 	}
 }
