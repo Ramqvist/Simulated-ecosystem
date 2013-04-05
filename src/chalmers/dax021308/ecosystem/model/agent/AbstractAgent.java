@@ -490,21 +490,22 @@ public abstract class AbstractAgent implements IAgent {
 		
 		Map<NodePosition, Double> g_score = new HashMap<NodePosition, Double>();
 		g_score.put(start, 0.0);
-		Map<NodePosition, Double> f_score = new HashMap<NodePosition, Double>(); //Kö?
+		Map<NodePosition, Double> f_score = new HashMap<NodePosition, Double>(); //Prioritets kö?
 		f_score.put(start, g_score.get(start) + heuristic_cost_estimate(start, goal));
 		NodePosition current = start;//the node in openset having the lowest f_score[] value
-		double highScore = 0;
+		double lowScore = Integer.MAX_VALUE;
 		while(!openSet.isEmpty()) {
 			for(NodePosition n : openSet) {
-				if(f_score.get(n) > highScore) {
+				if(f_score.get(n) < lowScore) {
 					current = n;
-					highScore = f_score.get(n);
+					lowScore = f_score.get(n);
 				}
 			}
 
 			Log.v("openset" + openSet);
 			Log.v("closedSet" + closedSet);
 			Log.v("g_score" + g_score);
+			Log.v("f_score" + f_score);
 			Log.v("current" + current);
 			Log.v("--------");
 			if(current.equals(goal)) {
@@ -544,7 +545,7 @@ public abstract class AbstractAgent implements IAgent {
 			result.add(current);
 			current = came_from.get(current);
 		}
-		//Reverse result?
+	    Collections.reverse(result);
 		return result;
 	}
 	
@@ -560,9 +561,10 @@ public abstract class AbstractAgent implements IAgent {
 			//Check here if positions is inside obstacle?
 			neighbours.add(new NodePosition(getX(), getY()+1));
 			neighbours.add(new NodePosition(getX()+1, getY()));
-			neighbours.add(new NodePosition(getX()+1, getY()+1));
-//			neighbours.add(new NodePosition(getX()-1, getY()));
-//			neighbours.add(new NodePosition(getX(), getY()-1));
+//			neighbours.add(new NodePosition(getX()+1, getY()+1));
+			neighbours.add(new NodePosition(getX()-1, getY()));
+			neighbours.add(new NodePosition(getX(), getY()-1));
+//			neighbours.add(new NodePosition(getX()-1, getY()-1));
 			return neighbours;
 		}
 		
