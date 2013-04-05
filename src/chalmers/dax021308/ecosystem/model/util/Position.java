@@ -12,6 +12,9 @@ import java.util.Set;
 
 import org.jfree.data.ComparableObjectItem;
 
+import chalmers.dax021308.ecosystem.model.environment.obstacle.AbstractObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+
 
 /**
  * Position class.
@@ -21,6 +24,7 @@ import org.jfree.data.ComparableObjectItem;
  */
 
 public class Position {
+	private static final double ASTAR_HASHSET_THRESHOLD = 45;
 	private double x;
 	private double y;
 
@@ -114,7 +118,7 @@ public class Position {
 	}
 	
 	/**
-	 * Optimized versino of shortest path.
+	 * Optimized version of A* with dynamic datastructure based on distance to target.
 	 * Uses
 	 * @param startPos
 	 * @param endPos
@@ -122,7 +126,7 @@ public class Position {
 	 */
 	public static List<Position> getShortestPathPriority(Position startPos, Position endPos /*, List<IObstacle> obsList, IShape simShape*/) {
 		double distance = startPos.getDistance(endPos);
-		if(distance > 45) {
+		if(distance > ASTAR_HASHSET_THRESHOLD) {
 			return getShortestPathHashSet(startPos, endPos);
 		} else {
 			return getShortestPathPriorityQueue(startPos, endPos);
@@ -132,7 +136,8 @@ public class Position {
 	/**
 	 * Calculates the shortest path to the target using A* search algorithm.
 	 * <p>
-	 * 
+	 * Fast for long distances.
+	 * <p>
 	 * TODO: Supply a obstacle-list and Shape?
 	 * 
 	 * For use with target agents behind obstacles.
@@ -202,7 +207,8 @@ public class Position {
 	/**
 	 * Calculates the shortest path to the target using A* search algorithm.
 	 * <p>
-	 * 
+	 * Fast for short distances.
+	 * <p>
 	 * TODO: Supply a obstacle-list and Shape?
 	 * 
 	 * For use with target agents behind obstacles.
@@ -319,6 +325,68 @@ public class Position {
 		neighbours.add(new AStarPosition(p.getX()-1, p.getY()-1));
 		return neighbours;
 	}
+	
+	/**
+	 * Gets the neighbours of one AStarPosition.
+	 * <p>
+	 * Is shape really needed here? Since we guarantee Agents are inside the shape.
+	 * 
+	 * @param p1
+	 * @param obsList
+	 * @param shape
+	 * @return
+	 */
+	public static List<AStarPosition> getNeighbours(AStarPosition p1, List<IObstacle> obsList/*, IShape shape*/) {
+		List<AStarPosition> neighbours = new ArrayList<AStarPosition>(8);
+		if(obsList.isEmpty()) {
+			neighbours.add(new AStarPosition(p1.getX(), 	p1.getY()+1));
+			neighbours.add(new AStarPosition(p1.getX()+1, p1.getY()));
+			neighbours.add(new AStarPosition(p1.getX()-1, p1.getY()));
+			neighbours.add(new AStarPosition(p1.getX(), 	p1.getY()-1));
+			neighbours.add(new AStarPosition(p1.getX()+1, p1.getY()-1));
+			neighbours.add(new AStarPosition(p1.getX()-1, p1.getY()+1));
+			neighbours.add(new AStarPosition(p1.getX()+1, p1.getY()+1));
+			neighbours.add(new AStarPosition(p1.getX()-1, p1.getY()-1));
+		} else {
+			double x = p1.getX();
+			double y = p1.getY();
+			AStarPosition p2 = new AStarPosition(x, y+1);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			p2 = new AStarPosition(x+1, y);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			p2 = new AStarPosition(x-1, y);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			p2 = new AStarPosition(x, y-1);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			p2 = new AStarPosition(x+1, y-1);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			p2 = new AStarPosition(x-1, y+1);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			p2 = new AStarPosition(x+1, y+1);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			p2 = new AStarPosition(x-1, y-1);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			
+		}
+		return neighbours;
+	}
+	
 	
 	@Override
 	public String toString(){
