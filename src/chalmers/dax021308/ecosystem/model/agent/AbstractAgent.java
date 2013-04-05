@@ -207,7 +207,8 @@ public abstract class AbstractAgent implements IAgent {
 			}
 
 			@Override
-			public List<IAgent> reproduce(IAgent agent, int populationSize, List<IObstacle> obstacles, IShape shape, Dimension gridDimension) {
+			public List<IAgent> reproduce(IAgent agent, int populationSize,
+					List<IObstacle> obstacles) {
 				return Collections.emptyList();
 			}
 
@@ -504,17 +505,19 @@ public abstract class AbstractAgent implements IAgent {
 
 		AbstractAgent ab = new AbstractAgent("Noname", pos, c, width, height, v,
 				0, 0, 0) {
-
-			@Override
-			public List<IAgent> reproduce(IAgent agent, int populationSize, List<IObstacle> obstacles, IShape shape, Dimension gridDimension) {
-				return null;
-			}
-
+			
 			@Override
 			public void calculateNextPosition(List<IPopulation> predators,
 					List<IPopulation> preys, List<IPopulation> neutral,
 					Dimension dim, IShape shape, List<IObstacle> obstacles) {
 
+			}
+
+			@Override
+			public List<IAgent> reproduce(IAgent agent, int populationSize,
+					List<IObstacle> obstacles) {
+				// TODO Auto-generated method stub
+				return null;
 			}
 		};
 		return ab;

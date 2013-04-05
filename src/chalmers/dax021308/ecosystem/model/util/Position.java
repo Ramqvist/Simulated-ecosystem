@@ -124,7 +124,7 @@ public class Position {
 	 * @return
 	 * @author Erik Ramqvist
 	 */
-	public static List<Position> getShortestPath(Position startPos, Position endPos) {
+	public static List<Position> getShortestPath(Position startPos, Position endPos /*, List<IObstacle> obsList*/) {
 		Position start = new Position(startPos.getX(), startPos.getY());
 		Position goal = new Position(endPos.getX(), endPos.getY());
 		Set<Position> closedSet = new HashSet<Position>();
@@ -198,7 +198,7 @@ public class Position {
 	}
 	
 	
-	public static List<Position> getNeighbours(Position p) {
+	public static List<Position> getNeighbours(Position p /*, List<IObstacle> obsList*/) {
 		List<Position> neighbours = new ArrayList<Position>(8);
 		//TODO: Check here if positions is not inside obstacle.
 		neighbours.add(new Position(p.getX(), 	p.getY()+1));
