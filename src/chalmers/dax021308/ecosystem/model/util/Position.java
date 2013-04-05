@@ -135,14 +135,14 @@ public class Position {
 		Map<Position, Double> g_score = new HashMap<Position, Double>();
 		g_score.put(start, 0.0);
 		Map<Position, Double> f_score = new HashMap<Position, Double>(); //Prioritets kö?
-		f_score.put(start, g_score.get(start) + heuristic_cost_estimate_vector_distance(start, goal));
+		f_score.put(start, g_score.get(start) + heuristic_manhattan_distance(start, goal));
 		Position current = start;//the node in openset having the lowest f_score[] value
 		double lowScore = Integer.MAX_VALUE;
 		while(!openSet.isEmpty()) {
 			for(Position n : openSet) {
-				if(f_score.get(n) < lowScore) {
+				if(f_score.get(n) + heuristic_manhattan_distance(n, goal) < lowScore) {
 					current = n;
-					lowScore = f_score.get(n);
+					lowScore = f_score.get(n) + heuristic_manhattan_distance(n, goal);
 				}
 			}
 
@@ -167,7 +167,7 @@ public class Position {
 				if(!openSet.contains(neighbour) || tentative_g_score < g_score.get(neighbour)) {
 					came_from.put(neighbour, current);
 					g_score.put(neighbour, tentative_g_score);
-					f_score.put(neighbour, g_score.get(neighbour) + heuristic_cost_estimate_vector_distance(neighbour, goal));
+					f_score.put(neighbour, g_score.get(neighbour) + heuristic_manhattan_distance(goal, neighbour));
 					if(!openSet.contains(neighbour)) {
 						openSet.add(neighbour);
 					}
@@ -179,9 +179,14 @@ public class Position {
 	}
 	
 	/* Error with heuristic function! */
-	private static double heuristic_cost_estimate_vector_distance(Position start, Position goal) {
+	private static double heuristic_vector_distance(Position start, Position goal) {
 	    return Math.sqrt(Math.pow(Math.abs(goal.getX() - start.getX()), 2) + Math.pow(Math.abs(goal.getY() - start.getY()), 2));
 	}
+	
+    public static double heuristic_manhattan_distance(Position a, Position b){
+        return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY());
+    }
+
 	private static double heuristic_cost_estimate(Position start, Position goal) {
 	    return Math.sqrt(Math.pow(goal.getX() - start.getX(), 2) + Math.pow(goal.getY() - start.getY(), 2));
 	}
@@ -200,7 +205,7 @@ public class Position {
 	
 	public static List<Position> getNeighbours(Position p /*, List<IObstacle> obsList*/) {
 		List<Position> neighbours = new ArrayList<Position>(8);
-		//TODO: Check here if positions is not inside obstacle.
+		//TODO: Check here if positions is not inside obstacle. And inside simulation dimension.
 		neighbours.add(new Position(p.getX(), 	p.getY()+1));
 		neighbours.add(new Position(p.getX()+1, p.getY()));
 		neighbours.add(new Position(p.getX()-1, p.getY()));
