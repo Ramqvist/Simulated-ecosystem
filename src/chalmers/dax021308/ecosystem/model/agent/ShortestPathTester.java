@@ -16,8 +16,9 @@ public class ShortestPathTester {
 	public ShortestPathTester() {
 //		Position start = new Position(5.0, 5000.0);
 //		Position end = new Position(5.0, -32.0);
-		Position start = new Position(5244.0, 581.0);
-		Position end = new Position(-525.0, 5321.0);
+		Position start = new Position(1.0, 1.0);
+		Position end = new Position(1242.0, 1742.0);
+		//Threshold for using PriorityQueue is 45, lower use HashSet!
 		long time = System.nanoTime();
 		List<Position> result = Position.getShortestPathPriorityQueue(start, end);
 		double elapsed = (System.nanoTime() - time)*0.000001;

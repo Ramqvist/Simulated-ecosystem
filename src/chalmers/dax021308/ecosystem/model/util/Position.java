@@ -113,6 +113,21 @@ public class Position {
 		return true;
 	}
 	
+	/**
+	 * Optimized versino of shortest path.
+	 * Uses
+	 * @param startPos
+	 * @param endPos
+	 * @return
+	 */
+	public static List<Position> getShortestPathPriority(Position startPos, Position endPos /*, List<IObstacle> obsList, IShape simShape*/) {
+		double distance = startPos.getDistance(endPos);
+		if(distance > 45) {
+			return getShortestPathHashSet(startPos, endPos);
+		} else {
+			return getShortestPathPriorityQueue(startPos, endPos);
+		}
+	}
 	
 	/**
 	 * Calculates the shortest path to the target using A* search algorithm.
@@ -160,7 +175,7 @@ public class Position {
 			current = openSet.poll();
 			closedSet.add(current);
 			if(current.equals(goal)) {
-				return reconstructPath(goal);
+				return reconstructPath(current);
 			}
 			for(AStarPosition neighbour : getNeighbours(current)) {
 				double tentative_g_score = current.g_score + current.getDistance(neighbour);
@@ -170,7 +185,8 @@ public class Position {
 					}
 				}
 				if(!openSet.contains(neighbour) || tentative_g_score < neighbour.g_score) {
-					current.came_from = neighbour;
+					neighbour.came_from = current;
+//					came_from.put(neighbour, current);
 					neighbour.g_score = tentative_g_score;
 					neighbour.f_score = neighbour.g_score + heuristic_manhattan_distance(goal, neighbour)*2;
 					if(!openSet.contains(neighbour)) {
@@ -208,8 +224,7 @@ public class Position {
 
 		Map<AStarPosition, Double> g_score = new HashMap<AStarPosition, Double>();
 		g_score.put(start, 0.0);
-		Map<AStarPosition, Double> f_score = new HashMap<AStarPosition, Double>(); // Prioritets
-																			// kö?
+		Map<AStarPosition, Double> f_score = new HashMap<AStarPosition, Double>(); 
 		f_score.put(start,
 				g_score.get(start) + heuristic_manhattan_distance(start, goal));
 		AStarPosition current = start;// the node in openset having the lowest
@@ -218,10 +233,10 @@ public class Position {
 		while (!openSet.isEmpty()) {
 			// Get the AStarPosition with the lowest estimated distance to target.
 			for (AStarPosition n : openSet) {
-				if (f_score.get(n) + heuristic_manhattan_distance(n, goal) < lowScore) {
+				double score = f_score.get(n) + heuristic_manhattan_distance(n, goal);
+				if (score < lowScore) {
 					current = n;
-					lowScore = f_score.get(n)
-							+ heuristic_manhattan_distance(n, goal);
+					lowScore = score;
 				}
 			}
 			// Log.v("openset" + openSet);
@@ -279,7 +294,7 @@ public class Position {
 		Collections.reverse(result);
 		return result;
 }
-	private static List<Position> reconstructPath(/*Map<AStarPosition, AStarPosition> came_from,*/ AStarPosition current_node) {
+	private static List<Position> reconstructPath(AStarPosition current_node) {
 		List<Position> result = new ArrayList<Position>();
 		AStarPosition current = current_node;
 		while(current != null) {
