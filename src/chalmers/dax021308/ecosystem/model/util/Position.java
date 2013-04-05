@@ -124,7 +124,7 @@ public class Position {
 	 * @return
 	 * @author Erik Ramqvist
 	 */
-	public static List<Position> getShortestPath(Position startPos, Position endPos /*, List<IObstacle> obsList*/) {
+	public static List<Position> getShortestPath(Position startPos, Position endPos /*, List<IObstacle> obsList, IShape simShape*/) {
 		Position start = new Position(startPos.getX(), startPos.getY());
 		Position goal = new Position(endPos.getX(), endPos.getY());
 		Set<Position> closedSet = new HashSet<Position>();
@@ -145,13 +145,12 @@ public class Position {
 					lowScore = f_score.get(n) + heuristic_manhattan_distance(n, goal);
 				}
 			}
-
-			Log.v("openset" + openSet);
-			Log.v("closedSet" + closedSet);
-			Log.v("g_score" + g_score);
-			Log.v("f_score" + f_score);
-			Log.v("current" + current);
-			Log.v("--------");
+//			Log.v("openset" + openSet);
+//			Log.v("closedSet" + closedSet);
+//			Log.v("g_score" + g_score);
+//			Log.v("f_score" + f_score);
+//			Log.v("current" + current);
+//			Log.v("--------");
 			if(current.equals(goal)) {
 				return reconstructPath(came_from, goal);
 			}
@@ -178,18 +177,14 @@ public class Position {
 		return Collections.emptyList();
 	}
 	
-	/* Error with heuristic function! */
-	private static double heuristic_vector_distance(Position start, Position goal) {
+	private static double heuristic_vector_distance(Position start, Position goal /*, List<IObstacle> obsList, IShape simShape*/) {
 	    return Math.sqrt(Math.pow(Math.abs(goal.getX() - start.getX()), 2) + Math.pow(Math.abs(goal.getY() - start.getY()), 2));
 	}
 	
-    public static double heuristic_manhattan_distance(Position a, Position b){
+    public static double heuristic_manhattan_distance(Position a, Position b /*, List<IObstacle> obsList, IShape simShape*/){
         return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY());
     }
 
-	private static double heuristic_cost_estimate(Position start, Position goal) {
-	    return Math.sqrt(Math.pow(goal.getX() - start.getX(), 2) + Math.pow(goal.getY() - start.getY(), 2));
-	}
 	
 	private static List<Position> reconstructPath(Map<Position, Position> came_from, Position current_node) {
 		List<Position> result = new ArrayList<Position>();
