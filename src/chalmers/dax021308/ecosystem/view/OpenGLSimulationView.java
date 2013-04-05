@@ -25,6 +25,7 @@ import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.EllipticalObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.RectangularObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.TriangleObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.CircleShape;
 import chalmers.dax021308.ecosystem.model.util.IShape;
@@ -426,6 +427,25 @@ public class OpenGLSimulationView extends GLJPanel implements IView {
     	          		
     	          		gl.glVertex2d(frameWidth*(x-w)/size.width, 
     	          				frameHeight - frameHeight*(y+h)/size.height);
+    	          		gl.glEnd();
+          			} else if(o != null && o instanceof TriangleObstacle){
+          				double x = o.getPosition().getX();
+          				double y = o.getPosition().getY();
+          				double w = o.getWidth();
+          				double h = o.getHeight();
+          				Color c = o.getColor();
+          				gl.glColor3d((double)c.getRed()/(double)255, (double)c.getGreen()/(double)255, (double)c.getBlue()/(double)255);
+          				gl.glLineWidth(2.5F);
+    	          		gl.glBegin(GL.GL_TRIANGLES); 
+    	          		gl.glVertex2d(frameWidth*(x+w)/size.width,
+    	          				frameHeight - frameHeight*(y-h)/size.height);
+    	          		
+    	          		gl.glVertex2d(frameWidth*(x-w)/size.width, 
+    	          				frameHeight - frameHeight*(y-h)/size.height);
+    	          		
+    	          		gl.glVertex2d(frameWidth*(x)/size.width, 
+    	          				frameHeight - frameHeight*(y+h)/size.height);
+    	          		
     	          		gl.glEnd();
           			}
           			

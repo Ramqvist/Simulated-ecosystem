@@ -46,8 +46,9 @@ public class SimulationSettings {
 	/*Obstacle constants */
 	public static final String OBSTACLE_RECTANGULAR = "Rectangular obstacle";
 	public static final String OBSTACLE_ELLIPTICAL  = "Elliptical obstacle";
+	public static final String OBSTACLE_TRIANGLE  = "Triangle obstacle";
 	public static final String OBSTACLE_NONE        = "No obstacle";
-	public static final String[] OBSTACLE_VALUES = {OBSTACLE_NONE, OBSTACLE_RECTANGULAR, OBSTACLE_ELLIPTICAL};
+	public static final String[] OBSTACLE_VALUES = {OBSTACLE_NONE, OBSTACLE_RECTANGULAR, OBSTACLE_ELLIPTICAL, OBSTACLE_TRIANGLE};
 	
 	/* Dimension constants */
 	public static final String DIM_SMALL  = "500  x 500";

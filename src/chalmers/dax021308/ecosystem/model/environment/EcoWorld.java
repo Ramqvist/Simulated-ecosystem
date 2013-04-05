@@ -14,6 +14,7 @@ import java.util.concurrent.Executors;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.EllipticalObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.RectangularObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.TriangleObstacle;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.DeerPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPredatorPopulation;
@@ -246,7 +247,10 @@ public class EcoWorld implements IModel {
 			obstacles.add(new EllipticalObstacle(d.getWidth()*0.2, d.getHeight()*0.15, 
 					new Position(d.getWidth()/2,d.getHeight()/2),new Color(0, 128, 255)));
 		} else if (s.getObstacle() == SimulationSettings.OBSTACLE_RECTANGULAR) {
-			obstacles.add(new RectangularObstacle(d.getWidth()*0.1, d.getHeight()*0.02, 
+			obstacles.add(new RectangularObstacle(d.getWidth()*0.2, d.getHeight()*0.1, 
+					new Position(d.getWidth()/2,d.getHeight()/2),new Color(0, 128, 255)));
+		} else if (s.getObstacle() == SimulationSettings.OBSTACLE_TRIANGLE){
+			obstacles.add(new TriangleObstacle(d.getWidth()*0.2, d.getHeight()*0.2, 
 					new Position(d.getWidth()/2,d.getHeight()/2),new Color(0, 128, 255)));
 		}
 		

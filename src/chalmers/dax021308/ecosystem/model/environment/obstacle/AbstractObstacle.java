@@ -26,6 +26,11 @@ public abstract class AbstractObstacle implements IObstacle {
 		return new Position(position);
 	}
 	
+	@Override
+	public Color getColor(){
+		return this.color;
+	}
+	
 	public String toBinaryString() {
 		StringBuilder sb = new StringBuilder();
 		if(this instanceof EllipticalObstacle) {
