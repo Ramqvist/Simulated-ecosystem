@@ -19,6 +19,7 @@ import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.DeerPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPredatorPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPreyPopulation;
+import chalmers.dax021308.ecosystem.model.population.GrassFieldPopulation;
 import chalmers.dax021308.ecosystem.model.population.GrassPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.population.PigPopulation;
@@ -46,25 +47,24 @@ import chalmers.dax021308.ecosystem.model.util.TriangleShape;
  */
 public class EcoWorld implements IModel {
 
-	//Please don't auto-indent this class, thanks.
-	
-	/* Property change events constants */
-	public static final String EVENT_TICK               = "chalmers.dax021308.ecosystem.model.Ecoworld.event_tick";
-	public static final String EVENT_STOP               = "chalmers.dax021308.ecosystem.model.Ecoworld.event_stop";
-	public static final String EVENT_START              = "chalmers.dax021308.ecosystem.model.Ecoworld.event_start";
-	public static final String EVENT_PAUSE              = "chalmers.dax021308.ecosystem.model.Ecoworld.event_pause";
-	public static final String EVENT_RECORDING_FINISHED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recording_started";
-	public static final String EVENT_RECORDING_STARTED  = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recording_finished";
-	public static final String EVENT_DIMENSIONCHANGED   = "chalmers.dax021308.ecosystem.model.Ecoworld.event_dimension_changed";
-	public static final String EVENT_DELAY_CHANGED      = "chalmers.dax021308.ecosystem.model.Ecoworld.event_delay_changed";
-	public static final String EVENT_SHAPE_CHANGED      = "chalmers.dax021308.ecosystem.model.Ecoworld.event_shape_changed";
-	public static final String EVENT_ITERATION_FINISHED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_iteration_finished";
+	// Please don't auto-indent this class, thanks.
 
+	/* Property change events constants */
+	public static final String EVENT_TICK = "chalmers.dax021308.ecosystem.model.Ecoworld.event_tick";
+	public static final String EVENT_STOP = "chalmers.dax021308.ecosystem.model.Ecoworld.event_stop";
+	public static final String EVENT_START = "chalmers.dax021308.ecosystem.model.Ecoworld.event_start";
+	public static final String EVENT_PAUSE = "chalmers.dax021308.ecosystem.model.Ecoworld.event_pause";
+	public static final String EVENT_RECORDING_FINISHED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recording_started";
+	public static final String EVENT_RECORDING_STARTED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recording_finished";
+	public static final String EVENT_DIMENSIONCHANGED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_dimension_changed";
+	public static final String EVENT_DELAY_CHANGED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_delay_changed";
+	public static final String EVENT_SHAPE_CHANGED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_shape_changed";
+	public static final String EVENT_ITERATION_FINISHED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_iteration_finished";
 
 	/* State variables */
 	private boolean environmentFinished = false;
-	private boolean timerFinished       = false;
-	private boolean shouldRun           = false;
+	private boolean timerFinished = false;
+	private boolean shouldRun = false;
 	private boolean runWithoutTimer;
 	private boolean recordSimulation;
 	private boolean skipBoolean;
@@ -79,7 +79,7 @@ public class EcoWorld implements IModel {
 	private List<IPopulation> recycledPopulationList;
 	private SimulationRecording recording;
 
-	/* Time measurements variables (in ns).*/
+	/* Time measurements variables (in ns). */
 	private long startIterationTime;
 	private double elapsedTime;
 	private Stat<Double> statTime;
@@ -90,18 +90,19 @@ public class EcoWorld implements IModel {
 	private List<List<IPopulation>> recordedSimulation;
 	/**
 	 * Simple object, used for synchronizing the {@link TimerHandler} and the
-	 * {@link IEnvironment} {@link OnFinishListener}. This object makes the change of state done in mutual exclusion.
+	 * {@link IEnvironment} {@link OnFinishListener}. This object makes the
+	 * change of state done in mutual exclusion.
 	 */
 	private Object syncObject = new Object();
 	private int numUpdates = 0;
 	private Dimension d;
 	private ExecutorService executor;
-	private ExecutorService notifierExecutor = Executors.newSingleThreadExecutor();
-	
+	private ExecutorService notifierExecutor = Executors
+			.newSingleThreadExecutor();
+
 	private ObserverNotifier notifier = new ObserverNotifier();
 
 	private OnFinishListener mOnFinishListener = new OnFinishListener() {
-
 
 		@Override
 		public void onFinish(List<IPopulation> popList, List<IObstacle> obsList) {
@@ -111,27 +112,32 @@ public class EcoWorld implements IModel {
 			long start = System.nanoTime();
 			elapsedTime = (0.000001 * (start - startIterationTime));
 			// Fire state changed to observers, notify there has been an update.
-			/*if (recordSimulation) {
-				recordedSimulation.add(AbstractPopulation.clonePopulationList(popList));
-			} else {
-				//Send out the new cloned population list and obstacle list.
-//				recycledPopulationList = AbstractPopulation.clonePopulationListWithRecycledList(recycledPopulationList, popList);
-				observers.firePropertyChange(EVENT_TICK, obsList, AbstractPopulation.clonePopulationList(popList));
-				observers.firePropertyChange(EVENT_ITERATION_FINISHED, null, elapsedTime);
-			}*/
-			
+			/*
+			 * if (recordSimulation) {
+			 * recordedSimulation.add(AbstractPopulation.
+			 * clonePopulationList(popList)); } else { //Send out the new cloned
+			 * population list and obstacle list. // recycledPopulationList =
+			 * AbstractPopulation
+			 * .clonePopulationListWithRecycledList(recycledPopulationList,
+			 * popList); observers.firePropertyChange(EVENT_TICK, obsList,
+			 * AbstractPopulation.clonePopulationList(popList));
+			 * observers.firePropertyChange(EVENT_ITERATION_FINISHED, null,
+			 * elapsedTime); }
+			 */
+
 			notifier.popList = AbstractPopulation.clonePopulationList(popList);
 			notifier.obsList = obsList;
 			notifierExecutor.execute(notifier);
-//			double observerTime = (0.000001 * (System.nanoTime() - start));
-//			Log.v("Observer propertychange time: " + observerTime);
+			// double observerTime = (0.000001 * (System.nanoTime() - start));
+			// Log.v("Observer propertychange time: " + observerTime);
 			if (runWithoutTimer) {
 				scheduleEnvironmentUpdate();
 			} else {
 				synchronized (syncObject) {
 					// Environment finished
 					if (timerFinished) {
-						// Environment: Timer is finished, doing Environment update
+						// Environment: Timer is finished, doing Environment
+						// update
 						environmentFinished = false;
 						timerFinished = false;
 						scheduleEnvironmentUpdate();
@@ -143,7 +149,6 @@ public class EcoWorld implements IModel {
 			}
 		}
 	};
-	
 
 	private class ObserverNotifier implements Runnable {
 		public List<IPopulation> popList;
@@ -153,12 +158,15 @@ public class EcoWorld implements IModel {
 		public void run() {
 			if (recordSimulation && recording != null) {
 				recording.appendFrame(popList);
-				//recordedSimulation.add(AbstractPopulation.clonePopulationList(popList));
-			} 
-				//Send out the new cloned population list and obstacle list.
-//				recycledPopulationList = AbstractPopulation.clonePopulationListWithRecycledList(recycledPopulationList, popList);
+				// recordedSimulation.add(AbstractPopulation.clonePopulationList(popList));
+			}
+			// Send out the new cloned population list and obstacle list.
+			// recycledPopulationList =
+			// AbstractPopulation.clonePopulationListWithRecycledList(recycledPopulationList,
+			// popList);
 			observers.firePropertyChange(EVENT_TICK, obsList, popList);
-			observers.firePropertyChange(EVENT_ITERATION_FINISHED, null, elapsedTime);
+			observers.firePropertyChange(EVENT_ITERATION_FINISHED, null,
+					elapsedTime);
 		}
 	};
 
@@ -184,8 +192,8 @@ public class EcoWorld implements IModel {
 	};
 
 	/**
-	 * Create the EcoWorld object. 
-	 * Needs to be loaded with a {@link SimulationSettings} before starting.
+	 * Create the EcoWorld object. Needs to be loaded with a
+	 * {@link SimulationSettings} before starting.
 	 */
 	public EcoWorld() {
 		this.d = new Dimension(1000, 1000);
@@ -212,8 +220,6 @@ public class EcoWorld implements IModel {
 		observers.firePropertyChange(EVENT_DIMENSIONCHANGED, null, d);
 	}
 
-
-
 	/**
 	 * Load a {@link SimulationSettings} into EcoWorld.
 	 * <p>
@@ -222,70 +228,79 @@ public class EcoWorld implements IModel {
 	 * @param s
 	 * @throws IllegalArgumentException
 	 */
-	public void loadSimulationSettings(SimulationSettings s) throws IllegalArgumentException {
-		if(s.getSimDimension() == null && s.getSimDimensionConstant() != null) {
+	public void loadSimulationSettings(SimulationSettings s)
+			throws IllegalArgumentException {
+		if (s.getSimDimension() == null && s.getSimDimensionConstant() != null) {
 			setSimulationDimension(s.getSimDimensionConstant());
-		} else if(s.getSimDimension() != null && s.getSimDimensionConstant() == null) {
+		} else if (s.getSimDimension() != null
+				&& s.getSimDimensionConstant() == null) {
 			setSimulationDimension(s.getSimDimension());
 		}
-		
+
 		List<IPopulation> populations = new ArrayList<IPopulation>();
 		/*
-		 * Creating obstacles here for test. This should be done in a proper way later.
+		 * Creating obstacles here for test. This should be done in a proper way
+		 * later.
 		 */
 		List<IObstacle> obstacles = new ArrayList<IObstacle>();
-		
+
 		statTime = new Stat<Double>();
 
 		IPopulation prey = null;
 		IPopulation pred = null;
 		IPopulation grass = null;
 		IShape shape = null;
-		
-		
-		if(s.getObstacle() == SimulationSettings.OBSTACLE_ELLIPTICAL){
-			obstacles.add(new EllipticalObstacle(d.getWidth()*0.2, d.getHeight()*0.15, 
-					new Position(d.getWidth()/2,d.getHeight()/2),new Color(0, 128, 255)));
+
+		if (s.getObstacle() == SimulationSettings.OBSTACLE_ELLIPTICAL) {
+			obstacles.add(new EllipticalObstacle(d.getWidth() * 0.2, d
+					.getHeight() * 0.15, new Position(d.getWidth() / 2, d
+					.getHeight() / 2), new Color(0, 128, 255)));
 		} else if (s.getObstacle() == SimulationSettings.OBSTACLE_RECTANGULAR) {
-			obstacles.add(new RectangularObstacle(d.getWidth()*0.2, d.getHeight()*0.1, 
-					new Position(d.getWidth()/2,d.getHeight()/2),new Color(0, 128, 255)));
-		} else if (s.getObstacle() == SimulationSettings.OBSTACLE_TRIANGLE){
-			obstacles.add(new TriangleObstacle(d.getWidth()*0.2, d.getHeight()*0.2, 
-					new Position(d.getWidth()/2,d.getHeight()/2),new Color(0, 128, 255)));
+			obstacles.add(new RectangularObstacle(d.getWidth() * 0.2, d
+					.getHeight() * 0.1, new Position(d.getWidth() / 2, d
+					.getHeight() / 2), new Color(0, 128, 255)));
+		} else if (s.getObstacle() == SimulationSettings.OBSTACLE_TRIANGLE) {
+			obstacles.add(new TriangleObstacle(d.getWidth() * 0.2, d
+					.getHeight() * 0.2, new Position(d.getWidth() / 2, d
+					.getHeight() / 2), new Color(0, 128, 255)));
 		}
-		
+
 		if (s.getShapeModel() == SimulationSettings.SHAPE_SQUARE) {
 			shape = new SquareShape();
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
 		} else if (s.getShapeModel() == SimulationSettings.SHAPE_CIRCLE) {
 			shape = new CircleShape();
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
-		} else if (s.getShapeModel() == SimulationSettings.SHAPE_TRIANGLE){
+		} else if (s.getShapeModel() == SimulationSettings.SHAPE_TRIANGLE) {
 			shape = new TriangleShape();
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
 		}
 		if (s.getPredatorModel() == SimulationSettings.POP_DUMMYPRED) {
-			pred = new DummyPredatorPopulation(d, s.getPredPopSize(), Color.red, 3,
-					0.75, 275, shape);
+			pred = new DummyPredatorPopulation(d, s.getPredPopSize(),
+					Color.red, 3, 0.75, 275, shape);
 		} else if (s.getPredatorModel() == SimulationSettings.POP_WOLF) {
-			pred = new WolfPopulation("Wolves", d, s.getPredPopSize(), Color.red, 2.2,
-					0.8, 250, true, shape, obstacles);
-		} 
+			pred = new WolfPopulation("Wolves", d, s.getPredPopSize(),
+					Color.red, 2.2, 0.8, 250, true, shape, obstacles);
+		}
 
 		if (s.getPreyModel() == SimulationSettings.POP_DEER) {
-			prey = new DeerPopulation("Deers", d, s.getPreyPopSize(), Color.blue, 2.0, 2,
-					200, true, shape, obstacles);
+			prey = new DeerPopulation("Deers", d, s.getPreyPopSize(),
+					Color.blue, 2.0, 2, 200, true, shape, obstacles);
 		} else if (s.getPreyModel() == SimulationSettings.POP_DUMMYPREY) {
-			prey = new DummyPreyPopulation(d, s.getPreyPopSize(), Color.blue, 2.2, 2, 250, shape);
+			prey = new DummyPreyPopulation(d, s.getPreyPopSize(), Color.blue,
+					2.2, 2, 250, shape);
 		} else if (s.getPreyModel() == SimulationSettings.POP_PIG) {
-			prey = new PigPopulation("Filthy Pigs", d, s.getPreyPopSize(), Color.pink,
-					2.0, 1.5, 225, shape);
+			prey = new PigPopulation("Filthy Pigs", d, s.getPreyPopSize(),
+					Color.pink, 2.0, 1.5, 225, shape);
 		}
 
 		if (s.getGrassModel() == SimulationSettings.POP_GRASS) {
-			grass = new GrassPopulation("Grass", d, s.getGrassPopSize(), new Color(69,139,00), 1,
-					1, 0, 800, shape, obstacles);
-		} 
+			grass = new GrassPopulation("Grass", d, s.getGrassPopSize(),
+					new Color(69, 139, 00), 1, 1, 0, 800, shape, obstacles);
+		} else if (s.getGrassModel() == SimulationSettings.POP_GRASS_FIELD) {
+			grass = new GrassFieldPopulation("Grass_Fields", d, s.getGrassPopSize(),
+					new Color(69, 139, 00), 1, 1, 0, 80, shape, obstacles);
+		}
 
 		if (prey == null || pred == null || grass == null || shape == null) {
 			throw new IllegalArgumentException("Wrong populations set.");
@@ -310,7 +325,7 @@ public class EcoWorld implements IModel {
 		this.env = new EnvironmentScheduler(populations, obstacles,
 				mOnFinishListener, d.height, d.width, s.getNumThreads());
 	}
-	
+
 	/**
 	 * Loads a simulation from the given filePath.
 	 * 
@@ -318,7 +333,7 @@ public class EcoWorld implements IModel {
 	 */
 	public boolean loadRecordedSimulation(File selectedFile) {
 		this.recording = new SimulationRecording();
-		if(!recording.initReading(selectedFile)) {
+		if (!recording.initReading(selectedFile)) {
 			return false;
 		}
 		playRecording = true;
@@ -326,33 +341,34 @@ public class EcoWorld implements IModel {
 		Dimension simDim = recording.getLoadedDimension();
 		String shapeModel = recording.getShapeConstant();
 		IShape shape;
-		if(shapeModel == null || simDim == null || obsList == null) {
+		if (shapeModel == null || simDim == null || obsList == null) {
 			throw new NullPointerException();
 		}
 		observers.firePropertyChange(EVENT_DIMENSIONCHANGED, null, simDim);
 		Log.v("Shape model: " + shapeModel);
-		Log.v("Simulation dim: " + simDim.toString() );
+		Log.v("Simulation dim: " + simDim.toString());
 		if (shapeModel.equals(SimulationSettings.SHAPE_SQUARE)) {
 			shape = new SquareShape();
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
 		} else if (shapeModel.equals(SimulationSettings.SHAPE_CIRCLE)) {
 			shape = new CircleShape();
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
-		} else if (shapeModel.equals(SimulationSettings.SHAPE_TRIANGLE)){
+		} else if (shapeModel.equals(SimulationSettings.SHAPE_TRIANGLE)) {
 			shape = new TriangleShape();
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
 		}
 
-//		observers.firePropertyChange(EVENT_START, null, null);
+		// observers.firePropertyChange(EVENT_START, null, null);
 		return true;
 	}
-	
+
 	/**
 	 * Saves the recording to a file.
+	 * 
 	 * @param f
 	 */
 	public boolean saveRecordingToFile(File f) {
-		if(recordSimulation && recording != null) {
+		if (recordSimulation && recording != null) {
 			return recording.saveToFile(f);
 		}
 		return false;
@@ -360,10 +376,9 @@ public class EcoWorld implements IModel {
 
 	private List<IObstacle> readObsticlesFromFile() {
 		List<IObstacle> obsList = new ArrayList<IObstacle>();
-		obsList.add(new EllipticalObstacle(0,0, new Position(), Color.black));
+		obsList.add(new EllipticalObstacle(0, 0, new Position(), Color.black));
 		return obsList;
 	}
-
 
 	/**
 	 * Start the EcoWorld simulation program.
@@ -444,21 +459,26 @@ public class EcoWorld implements IModel {
 			}
 		}
 	}
-	
+
 	/**
-	 * One way shutdown of EcoWorld and its workers.
-	 * Should be used when exiting the program or creating a new instance of EcoWorld.
+	 * One way shutdown of EcoWorld and its workers. Should be used when exiting
+	 * the program or creating a new instance of EcoWorld.
 	 */
 	public void shutdownNow() {
 		try {
 			stop();
-			if(executor != null) executor.shutdownNow();
-			if(env != null) env.shutdown();
-			if(timer != null) timer.stop();
-			if(recording != null) recording.close();
-			if(notifierExecutor != null) notifierExecutor.shutdownNow();
+			if (executor != null)
+				executor.shutdownNow();
+			if (env != null)
+				env.shutdown();
+			if (timer != null)
+				timer.stop();
+			if (recording != null)
+				recording.close();
+			if (notifierExecutor != null)
+				notifierExecutor.shutdownNow();
 		} catch (Exception e) {
-			//e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 
@@ -470,7 +490,7 @@ public class EcoWorld implements IModel {
 	 */
 	public void playRecordedSimulation() throws IllegalStateException {
 		final TimerHandler t = new TimerHandler();
-		if(recording == null || !playRecording) {
+		if (recording == null || !playRecording) {
 			throw new IllegalStateException("No recorded simulation loaded.");
 		}
 		t.start(17, new OnTickUpdate() {
@@ -478,7 +498,7 @@ public class EcoWorld implements IModel {
 			public void onTick() {
 				List<IPopulation> frame = recording.readFrame();
 				List<IObstacle> obsList = recording.getObstacles();
-				if(frame == null) {
+				if (frame == null) {
 					t.stop();
 				} else {
 					observers.firePropertyChange(EVENT_TICK, obsList, frame);
@@ -515,24 +535,26 @@ public class EcoWorld implements IModel {
 			startIterationTime = System.nanoTime();
 		} else {
 			stop();
-			if(recording != null) recording.close();
-			if(recordSimulation) {
-				loadRecordedSimulation(new File("Testrecording1.sim") );
+			if (recording != null)
+				recording.close();
+			if (recordSimulation) {
+				loadRecordedSimulation(new File("Testrecording1.sim"));
 				playRecordedSimulation();
 			}
-			/*if (recordSimulation) {
-				playRecordedSimulation(recordedSimulation);
-			}*/
+			/*
+			 * if (recordSimulation) {
+			 * playRecordedSimulation(recordedSimulation); }
+			 */
 		}
 	}
-	
+
 	public static double roundTwoDecimals(double num) {
 		double result = num * 100;
 		result = Math.round(result);
 		result = result / 100;
 		return result;
 	}
-	
+
 	/**
 	 * Adjust the tick rate of the next iteration. The currently executing
 	 * iteration will not be affected.
@@ -585,7 +607,5 @@ public class EcoWorld implements IModel {
 	public void removeObserver(PropertyChangeListener listener) {
 		observers.removePropertyChangeListener(listener);
 	}
-
-
 
 }

@@ -37,11 +37,12 @@ public class SimulationSettings {
 	public static final String POP_GRASS      = "Grass Population";
 	public static final String POP_DUMMYPRED  = "Dummy Predator Population";
 	public static final String POP_WOLF       = "Wolf Population";
+	public static final String POP_GRASS_FIELD = "Grass Field Population";
 
 	/* Population array based on predator-prey model, the view uses these values. */
 	public static final String[] PREY_VALUES  = { POP_DEER, POP_PIG, POP_DUMMYPREY };
 	public static final String[] PRED_VALUES  = { POP_WOLF, POP_DUMMYPRED };
-	public static final String[] GRASS_VALUES = { POP_GRASS };
+	public static final String[] GRASS_VALUES = { POP_GRASS, POP_GRASS_FIELD };
 	
 	/*Obstacle constants */
 	public static final String OBSTACLE_RECTANGULAR = "Rectangular obstacle";
