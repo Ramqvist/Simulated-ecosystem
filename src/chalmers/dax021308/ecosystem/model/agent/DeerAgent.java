@@ -92,7 +92,6 @@ public class DeerAgent extends AbstractAgent {
 
 			Vector environmentForce = getEnvironmentForce(gridDimension, shape);
 			Vector obstacleForce = getObstacleForce(obstacles);
-			Vector preyForce = getPreyForce();
 
 			/*
 			 * Sum the forces from walls, predators and neutral to form the
@@ -103,8 +102,12 @@ public class DeerAgent extends AbstractAgent {
 			Vector acceleration;
 			acceleration = predatorForce.multiply(5)
 					.add(mutualInteractionForce).add(forwardThrust)
-					.add(arrayalForce)
-					.add(preyForce.multiply(5 * (1 - energy / MAX_ENERGY)));
+					.add(arrayalForce);
+			//if (alone) {
+				Vector preyForce = getPreyForce();
+				acceleration.add(preyForce.multiply(5 * (1 - energy
+						/ MAX_ENERGY)));
+			//}
 			double accelerationNorm = acceleration.getNorm();
 			if (accelerationNorm > maxAcceleration) {
 				acceleration.multiply(maxAcceleration / accelerationNorm);
@@ -126,12 +129,8 @@ public class DeerAgent extends AbstractAgent {
 			if (speed > maxSpeed) {
 				newVelocity.multiply(maxSpeed / speed);
 			}
-			if(alone){
-				newVelocity.multiply(0.8);
-			/*}else{
-				newVelocity.multiply(1.05);
-				energy--;*/
-			}
+			if (alone)
+				newVelocity.multiply(0.9);
 			this.setVelocity(newVelocity);
 
 			/* Reusing the same position object, for less heap allocations. */
