@@ -12,15 +12,19 @@ import java.util.Set;
 
 import org.jfree.data.ComparableObjectItem;
 
+import chalmers.dax021308.ecosystem.model.environment.obstacle.AbstractObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+
 
 /**
  * Position class.
  * 
- * @author Henrik
+ * @author Henrik, path-finding Erik Ramqvist
  * 
  */
 
 public class Position {
+	private static final double ASTAR_HASHSET_THRESHOLD = 55;
 	private double x;
 	private double y;
 
@@ -114,15 +118,15 @@ public class Position {
 	}
 	
 	/**
-	 * Optimized versino of shortest path.
+	 * Optimized version of A* with dynamic datastructure based on distance to target.
 	 * Uses
 	 * @param startPos
 	 * @param endPos
 	 * @return
 	 */
-	public static List<Position> getShortestPathPriority(Position startPos, Position endPos /*, List<IObstacle> obsList, IShape simShape*/) {
+	public static List<Position> getShortestPath(Position startPos, Position endPos /*, List<IObstacle> obsList, IShape simShape*/) {
 		double distance = startPos.getDistance(endPos);
-		if(distance > 45) {
+		if(distance > ASTAR_HASHSET_THRESHOLD) {
 			return getShortestPathHashSet(startPos, endPos);
 		} else {
 			return getShortestPathPriorityQueue(startPos, endPos);
@@ -132,8 +136,10 @@ public class Position {
 	/**
 	 * Calculates the shortest path to the target using A* search algorithm.
 	 * <p>
-	 * 
+	 * Fast for long distances.
+	 * <p>
 	 * TODO: Supply a obstacle-list and Shape?
+	 * TODO: Make private when finished.
 	 * 
 	 * For use with target agents behind obstacles.
 	 * 
@@ -202,8 +208,10 @@ public class Position {
 	/**
 	 * Calculates the shortest path to the target using A* search algorithm.
 	 * <p>
-	 * 
+	 * Fast for short distances.
+	 * <p>
 	 * TODO: Supply a obstacle-list and Shape?
+	 * TODO: Make private when finished.
 	 * 
 	 * For use with target agents behind obstacles.
 	 * 
@@ -220,7 +228,6 @@ public class Position {
 		Set<AStarPosition> closedSet = new HashSet<AStarPosition>();
 		Set<AStarPosition> openSet = new HashSet<AStarPosition>();
 		openSet.add(start);
-		Map<AStarPosition, AStarPosition> came_from = new HashMap<AStarPosition, AStarPosition>();
 
 		Map<AStarPosition, Double> g_score = new HashMap<AStarPosition, Double>();
 		g_score.put(start, 0.0);
@@ -246,7 +253,7 @@ public class Position {
 			// Log.v("current" + current);
 			// Log.v("--------");
 			if (current.equals(goal)) {
-				return reconstructPath(came_from, goal);
+				return reconstructPath(current);
 			}
 			openSet.remove(current);
 			closedSet.add(current);
@@ -258,9 +265,8 @@ public class Position {
 						continue;
 					}
 				}
-				if (!openSet.contains(neighbour)
-						|| tentative_g_score < g_score.get(neighbour)) {
-					came_from.put(neighbour, current);
+				if (!openSet.contains(neighbour) || tentative_g_score < g_score.get(neighbour)) {
+					neighbour.came_from = current;
 					g_score.put(neighbour, tentative_g_score);
 					f_score.put(neighbour, g_score.get(neighbour)
 							+ heuristic_manhattan_distance(goal, neighbour));
@@ -283,17 +289,7 @@ public class Position {
     public static double heuristic_manhattan_distance(AStarPosition a, AStarPosition b /*, List<IObstacle> obsList, IShape simShape*/){
         return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY());
     }
-
-	private static List<Position> reconstructPath(Map<AStarPosition, AStarPosition> came_from, AStarPosition current_node) {
-		List<Position> result = new ArrayList<Position>();
-		AStarPosition current = current_node;
-		while (current != null) {
-			result.add(current);
-			current = came_from.get(current);
-		}
-		Collections.reverse(result);
-		return result;
-}
+	
 	private static List<Position> reconstructPath(AStarPosition current_node) {
 		List<Position> result = new ArrayList<Position>();
 		AStarPosition current = current_node;
@@ -305,7 +301,19 @@ public class Position {
 		return result;
 	}
 	
-	
+
+	/**
+	 * Gets the neighbours of one AStarPosition. 
+	 * <p>
+	 * 8 direction around the given position.
+	 * <p>
+	 * Ignores obstacles and shape.
+	 * 
+	 * @param p1
+	 * @param obsList
+	 * @param shape
+	 * @return
+	 */
 	public static List<AStarPosition> getNeighbours(AStarPosition p /*, List<IObstacle> obsList, IShape shape*/) {
 		List<AStarPosition> neighbours = new ArrayList<AStarPosition>(8);
 		//TODO: Check here if positions is not inside obstacle. And inside simulation dimension.
@@ -319,6 +327,68 @@ public class Position {
 		neighbours.add(new AStarPosition(p.getX()-1, p.getY()-1));
 		return neighbours;
 	}
+	
+	/**
+	 * Gets the neighbours of one AStarPosition.
+	 * <p>
+	 * Is shape really needed here? Since we guarantee Agents are inside the shape.
+	 * 
+	 * @param p1
+	 * @param obsList
+	 * @param shape
+	 * @return
+	 */
+	public static List<AStarPosition> getNeighbours(AStarPosition p1, List<IObstacle> obsList/*, IShape shape*/) {
+		List<AStarPosition> neighbours = new ArrayList<AStarPosition>(8);
+		if(obsList.isEmpty()) {
+			neighbours.add(new AStarPosition(p1.getX(), 	p1.getY()+1));
+			neighbours.add(new AStarPosition(p1.getX()+1, p1.getY()));
+			neighbours.add(new AStarPosition(p1.getX()-1, p1.getY()));
+			neighbours.add(new AStarPosition(p1.getX(), 	p1.getY()-1));
+			neighbours.add(new AStarPosition(p1.getX()+1, p1.getY()-1));
+			neighbours.add(new AStarPosition(p1.getX()-1, p1.getY()+1));
+			neighbours.add(new AStarPosition(p1.getX()+1, p1.getY()+1));
+			neighbours.add(new AStarPosition(p1.getX()-1, p1.getY()-1));
+		} else {
+			double x = p1.getX();
+			double y = p1.getY();
+			AStarPosition p2 = new AStarPosition(x, y+1);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			p2 = new AStarPosition(x+1, y);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			p2 = new AStarPosition(x-1, y);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			p2 = new AStarPosition(x, y-1);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			p2 = new AStarPosition(x+1, y-1);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			p2 = new AStarPosition(x-1, y+1);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			p2 = new AStarPosition(x+1, y+1);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			p2 = new AStarPosition(x-1, y-1);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			
+		}
+		return neighbours;
+	}
+	
 	
 	@Override
 	public String toString(){
@@ -338,6 +408,12 @@ public class Position {
 		}
 	}
 	
+	/**
+	 * Internal Position class for use with A* shortest path algorithm.
+	 * 
+	 * @author Erik
+	 *
+	 */
 	private static class AStarPosition extends Position {
 		double g_score;
 		double f_score;

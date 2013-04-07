@@ -1,6 +1,7 @@
 package chalmers.dax021308.ecosystem.model.environment.obstacle;
 
 import java.awt.Color;
+import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -81,6 +82,15 @@ public abstract class AbstractObstacle implements IObstacle {
 		result = Math.round(result);
 		result = result / 100;
 		return result;
+	}
+	
+	public static boolean isInsideObstacleList(List<IObstacle> obsList, Position p) {
+		for(IObstacle o : obsList) {
+			if(o.isInObstacle(p)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
