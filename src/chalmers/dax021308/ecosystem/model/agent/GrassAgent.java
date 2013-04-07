@@ -19,6 +19,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public class GrassAgent extends AbstractAgent {
 
 	private static final double REPRODUCTION_RATE = 0.02;
+	private static final int MAX_LIFE_LENGTH = 5000;
 
 	public GrassAgent(String name, Position pos, Color color, int width,
 			int height, Vector velocity, double maxSpeed, int capacity) {
@@ -36,6 +37,8 @@ public class GrassAgent extends AbstractAgent {
 	@Override
 	public void updatePosition() {
 		lifeLength++;
+		if(lifeLength > MAX_LIFE_LENGTH)
+			isAlive = false;
 	}
 
 	@Override
@@ -67,7 +70,7 @@ public class GrassAgent extends AbstractAgent {
 		// current position, and if it lies inside the shape and not inside any
 		// obstacle, return it.
 		Position p;
-		Vector v = new Vector(Math.random() * 200, 0);
+		Vector v = new Vector(Math.random() * 400, 0);
 		boolean validPos;
 		do {
 			v.rotate(Math.random() * Math.PI * 2);

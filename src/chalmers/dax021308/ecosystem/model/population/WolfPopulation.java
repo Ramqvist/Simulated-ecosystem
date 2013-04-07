@@ -53,7 +53,7 @@ public class WolfPopulation extends AbstractPopulation {
 				velocity.setVector(-maxSpeed + Math.random() * 2 * maxSpeed,
 						-maxSpeed + Math.random() * 2 * maxSpeed);
 			}
-			IAgent a = new WolfAgent("Big Hungry", randPos, color, 10, 20,
+			IAgent a = new WolfAgent("Wolf", randPos, color, 10, 20,
 					velocity, maxSpeed, maxAcceleration, visionRange,
 					groupBehaviour);
 			newAgents.add(a);

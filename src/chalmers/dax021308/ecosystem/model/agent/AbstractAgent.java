@@ -22,6 +22,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
  * AbstractAgent with neighbourlist.
+ * 
  * @author Henrik Abstract class for handling the dummy methods
  */
 public abstract class AbstractAgent implements IAgent {
@@ -44,13 +45,13 @@ public abstract class AbstractAgent implements IAgent {
 	protected double visionRange;
 	protected double maxAcceleration;
 	protected IAgent focusedPrey;
-	private boolean isAlive = true;
-	
+	protected boolean isAlive = true;
+
 	/* Neighbour list module variables */
 	protected List<IAgent> preyNeighbours;
 	protected List<IAgent> predNeighbours;
 	protected List<IAgent> neutralNeighbours;
-	
+
 	protected List<IObstacle> obstacles;
 	private int neighbourCounter;
 	private static final int NEIGHBOURS_UPDATE_THRESHOLD = 10;
@@ -78,13 +79,16 @@ public abstract class AbstractAgent implements IAgent {
 		this.maxAcceleration = maxAcceleration;
 		this.capacity = Integer.MAX_VALUE;
 		this.lifeLength = 0;
-		
-		/* LinkedList for fast changing of Agents, consider ArrayList for less memory */
-		preyNeighbours    = new ArrayList<IAgent>(256);
-		predNeighbours    = new ArrayList<IAgent>(256);
+
+		/*
+		 * LinkedList for fast changing of Agents, consider ArrayList for less
+		 * memory
+		 */
+		preyNeighbours = new ArrayList<IAgent>(256);
+		predNeighbours = new ArrayList<IAgent>(256);
 		neutralNeighbours = new ArrayList<IAgent>(256);
-		
-		//To update the first time.
+
+		// To update the first time.
 		neighbourCounter = ran.nextInt(NEIGHBOURS_UPDATE_THRESHOLD);
 	}
 
@@ -100,7 +104,9 @@ public abstract class AbstractAgent implements IAgent {
 
 	/**
 	 * Clone constructor. Use this to create a copy.
-	 * @param a - The agent to clone.
+	 * 
+	 * @param a
+	 *            - The agent to clone.
 	 */
 	public AbstractAgent(AbstractAgent a) {
 		this(a.name, new Position(a.position), a.color, a.width, a.height,
@@ -115,13 +121,16 @@ public abstract class AbstractAgent implements IAgent {
 		this.color = color;
 		this.width = width;
 		this.height = height;
-		
-		/* LinkedList for fast changing of Agents, consider ArrayList for less memory */
-		preyNeighbours    = new LinkedList<IAgent>();
-		predNeighbours    = new LinkedList<IAgent>();
+
+		/*
+		 * LinkedList for fast changing of Agents, consider ArrayList for less
+		 * memory
+		 */
+		preyNeighbours = new LinkedList<IAgent>();
+		predNeighbours = new LinkedList<IAgent>();
 		neutralNeighbours = new LinkedList<IAgent>();
-		
-		//To update the first time.
+
+		// To update the first time.
 		neighbourCounter = NEIGHBOURS_UPDATE_THRESHOLD;
 	}
 
@@ -178,14 +187,9 @@ public abstract class AbstractAgent implements IAgent {
 
 	@Override
 	public int getLifeLength() {
-		return this.lifeLength;
+		return lifeLength;
 	}
 
-	@Override
-	public int getEnergy() {
-		return energy;
-	}
-	
 	@Override
 	public int getTrophicLevel() {
 		return trophicLevel;
@@ -213,7 +217,6 @@ public abstract class AbstractAgent implements IAgent {
 				// TODO Auto-generated method stub
 				return null;
 			}
-
 		};
 		return a;
 	}
@@ -228,49 +231,52 @@ public abstract class AbstractAgent implements IAgent {
 		this.position = nextPosition;
 		this.lifeLength++;
 	}
-	
+
 	/**
-	 * Update the neighbourlist, should be done once in a while. 
-	 * <p> Warning, heavy computation!
-	 * Needs optimizations.
+	 * Update the neighbourlist, should be done once in a while.
+	 * <p>
+	 * Warning, heavy computation! Needs optimizations.
+	 * 
 	 * @param neutral
 	 * @param prey
 	 * @param pred
-	 * @author Erik 
+	 * @author Erik
 	 */
-	public void updateNeighbourList(List<IPopulation> neutral, List<IPopulation> prey, List<IPopulation> pred) {	
-		if(neighbourCounter++ < NEIGHBOURS_UPDATE_THRESHOLD) {
-			//Don't update just yet.
+	public void updateNeighbourList(List<IPopulation> neutral,
+			List<IPopulation> prey, List<IPopulation> pred) {
+		if (neighbourCounter++ < NEIGHBOURS_UPDATE_THRESHOLD) {
+			// Don't update just yet.
 			return;
 		}
-//		Log.v("Updating Neighbourlist! Agent: " + toString());
+		// Log.v("Updating Neighbourlist! Agent: " + toString());
 		neighbourCounter = 0;
-//		neutralNeighbours = new ArrayList<IAgent>(2*neutralNeighbours.size());
-//		predNeighbours = new ArrayList<IAgent>(2*predNeighbours.size());
-//		preyNeighbours = new ArrayList<IAgent>(2*preyNeighbours.size());
+		// neutralNeighbours = new
+		// ArrayList<IAgent>(2*neutralNeighbours.size());
+		// predNeighbours = new ArrayList<IAgent>(2*predNeighbours.size());
+		// preyNeighbours = new ArrayList<IAgent>(2*preyNeighbours.size());
 
 		neutralNeighbours.clear();
 		predNeighbours.clear();
 		preyNeighbours.clear();
-		
-		for(IPopulation p : neutral) {
-			for(IAgent a : p.getAgents()) {
+
+		for (IPopulation p : neutral) {
+			for (IAgent a : p.getAgents()) {
 				if (a.getPosition().getDistance(position) <= visionRange) {
 					neutralNeighbours.add(a);
 				}
 			}
 		}
-		
-		for(IPopulation p : prey) {
-			for(IAgent a : p.getAgents()) {
+
+		for (IPopulation p : prey) {
+			for (IAgent a : p.getAgents()) {
 				if (a.getPosition().getDistance(position) <= visionRange) {
 					preyNeighbours.add(a);
 				}
 			}
 		}
-		
-		for(IPopulation p : pred) {
-			for(IAgent a : p.getAgents()) {
+
+		for (IPopulation p : pred) {
+			for (IAgent a : p.getAgents()) {
 				if (a.getPosition().getDistance(position) <= visionRange) {
 					predNeighbours.add(a);
 				}
@@ -279,11 +285,11 @@ public abstract class AbstractAgent implements IAgent {
 	}
 
 	/**
-	 * A random force that the agent gets influenced by. Can be
-	 * interpreted as an estimation error that the agent does in where
-	 * to head.
+	 * A random force that the agent gets influenced by. Can be interpreted as
+	 * an estimation error that the agent does in where to head.
+	 * 
 	 * @return A vector pointing approximately in the same direction as the
-	 * agents velocity.
+	 *         agents velocity.
 	 * @author Sebbe
 	 */
 	protected Vector randomForce() {
@@ -295,48 +301,50 @@ public abstract class AbstractAgent implements IAgent {
 	}
 
 	/**
-	 * The agent is influences by the mutual interaction force
-	 * because it is subject to attraction and repulsion from other
-	 * individuals that it wants to group with. This force describes the
-	 * relationship between the tendency to steer towards other groups
-	 * of agents, but not be to close to them either.
-	 * @param neutral - The population of neutral agents.
+	 * The agent is influences by the mutual interaction force because it is
+	 * subject to attraction and repulsion from other individuals that it wants
+	 * to group with. This force describes the relationship between the tendency
+	 * to steer towards other groups of agents, but not be to close to them
+	 * either.
+	 * 
+	 * @param neutral
+	 *            - The population of neutral agents.
 	 * @return A vector with the force that this agent feels from other neutral
-	 * agents in that it interacts with.
+	 *         agents in that it interacts with.
 	 * @author Sebbe
 	 */
 	protected Vector mutualInteractionForce() {
 		Vector mutualInteractionForce = new Vector(0, 0);
 		Vector newForce = new Vector(0, 0);
-			IAgent agent;
-			int size = neutralNeighbours.size();
-			for (int i = 0; i < size; i++) {
-				agent = neutralNeighbours.get(i);
-				if (agent != this) {
-					Position p = agent.getPosition();
-					double distance = getPosition().getDistance(p);
-					double Q = 0; // Q is a function of the distance.
-					if (distance <= INTERACTION_RANGE) {
-						Q = -20 * (INTERACTION_RANGE - distance);
-					} else {
-						Q = 1;
-					}
-					newForce.x = p.getX() - this.getPosition().getX();
-					newForce.y = p.getY() - this.getPosition().getY();
-					double norm = newForce.getNorm();
-					double v = Q / (norm * distance);
-					newForce.x = newForce.x * v;
-					newForce.y = newForce.y * v;
-					mutualInteractionForce.x = (mutualInteractionForce.x + newForce.x);
-					mutualInteractionForce.y = (mutualInteractionForce.y + newForce.y);
+		IAgent agent;
+		int size = neutralNeighbours.size();
+		for (int i = 0; i < size; i++) {
+			agent = neutralNeighbours.get(i);
+			if (agent != this) {
+				Position p = agent.getPosition();
+				double distance = getPosition().getDistance(p);
+				double Q = 0; // Q is a function of the distance.
+				if (distance <= INTERACTION_RANGE) {
+					Q = -20 * (INTERACTION_RANGE - distance);
+				} else {
+					Q = 1;
 				}
+				newForce.x = p.getX() - this.getPosition().getX();
+				newForce.y = p.getY() - this.getPosition().getY();
+				double norm = newForce.getNorm();
+				double v = Q / (norm * distance);
+				newForce.x = newForce.x * v;
+				newForce.y = newForce.y * v;
+				mutualInteractionForce.x = (mutualInteractionForce.x + newForce.x);
+				mutualInteractionForce.y = (mutualInteractionForce.y + newForce.y);
 			}
+		}
 		return mutualInteractionForce;
 	}
 
 	/**
-	 * The tendency of an agent to continue moving forward with
-	 * its velocity.
+	 * The tendency of an agent to continue moving forward with its velocity.
+	 * 
 	 * @return The forward thrust force.
 	 * @author Sebbe
 	 */
@@ -350,13 +358,14 @@ public abstract class AbstractAgent implements IAgent {
 	}
 
 	/**
-	 * This is the force that makes neighbouring agents to
-	 * equalize their velocities and therefore go in the same direction.
-	 * The sphere of incluence is defined as 2*INTERACTION_RANGE at the
-	 * moment.
-	 * @param neutral - The population of neutral agents.
+	 * This is the force that makes neighbouring agents to equalize their
+	 * velocities and therefore go in the same direction. The sphere of
+	 * incluence is defined as 2*INTERACTION_RANGE at the moment.
+	 * 
+	 * @param neutral
+	 *            - The population of neutral agents.
 	 * @return a vector with the force influencing the agents to steer in the
-	 * same direction as other nearby agents.
+	 *         same direction as other nearby agents.
 	 * @author Sebbe
 	 */
 	protected Vector arrayalForce() {
@@ -394,7 +403,9 @@ public abstract class AbstractAgent implements IAgent {
 	 * The environment force is at the moment defined as
 	 * 1/((wall-constant)*(distance to wall))^2. The agents feel the forces from
 	 * the wall directly to the left, right, top and bottom.
-	 * @param dim - The dimensions of the rectangular environment.
+	 * 
+	 * @param dim
+	 *            - The dimensions of the rectangular environment.
 	 * @return A vector with the force that an agent feel from its environment.
 	 * @author Sebbe
 	 */
@@ -439,7 +450,8 @@ public abstract class AbstractAgent implements IAgent {
 
 		double topWallDistance = this.getPosition().getDistance(yWallTop);
 		if (topWallDistance <= INTERACTION_RANGE) {
-			yWallBottomForce = yWallTopForce = -1 / (topWallDistance * topWallDistance);
+			yWallBottomForce = yWallTopForce = -1
+					/ (topWallDistance * topWallDistance);
 		}
 
 		/*
@@ -453,25 +465,24 @@ public abstract class AbstractAgent implements IAgent {
 
 		return environmentForce.multiply(ENVIRONMENT_CONSTANT);
 	}
-	
+
 	@Override
-	public Vector getObstacleForce(List<IObstacle> obstacles){
+	public Vector getObstacleForce(List<IObstacle> obstacles) {
 		Vector obstacleForce = new Vector();
-		for(IObstacle o: obstacles){
-			if(o.isCloseTo(this.position, INTERACTION_RANGE)) {
+		for (IObstacle o : obstacles) {
+			if (o.isCloseTo(this.position, INTERACTION_RANGE)) {
 				Position obstaclePos = o.closestBoundary(this.position);
 				double distance = position.getDistance(obstaclePos);
-				if(distance <= INTERACTION_RANGE){
+				if (distance <= INTERACTION_RANGE) {
 					Vector singleForce = new Vector(position, obstaclePos);
-					singleForce.toUnitVector().multiply(1/(distance*distance));
+					singleForce.toUnitVector().multiply(
+							1 / (distance * distance));
 					obstacleForce.add(singleForce);
 				}
-			}	
+			}
 		}
 		return obstacleForce.multiply(OBSTACLE_CONSTANT);
 	}
-	
-
 
 	@Override
 	public synchronized boolean tryConsumeAgent() {
@@ -481,7 +492,7 @@ public abstract class AbstractAgent implements IAgent {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean isAlive() {
 		return isAlive;
@@ -489,25 +500,28 @@ public abstract class AbstractAgent implements IAgent {
 
 	/**
 	 * Create a new IAgent from the raw parameters.
+	 * 
 	 * @return
 	 */
 	public static IAgent createFromFile(String input) {
 		String[] inputArray = input.split(";");
-//		String name = inputArray[0];
-		Position pos = new Position(Double.parseDouble(inputArray[0]), Double.parseDouble(inputArray[1]));
+		// String name = inputArray[0];
+		Position pos = new Position(Double.parseDouble(inputArray[0]),
+				Double.parseDouble(inputArray[1]));
 		Color c = new Color(Integer.parseInt(inputArray[2]),
-					Integer.parseInt(inputArray[3]),
-					Integer.parseInt(inputArray[4]));
+				Integer.parseInt(inputArray[3]),
+				Integer.parseInt(inputArray[4]));
 		int width = Integer.parseInt(inputArray[5]);
 		int height = Integer.parseInt(inputArray[6]);
-		Vector v = new Vector(Double.parseDouble(inputArray[7]), Double.parseDouble(inputArray[8]));
-//		int maxSpeed = Integer.parseInt(inputArray[9]);
-//		int visionRange = Integer.parseInt(inputArray[10]);
-//		int maxAcceleration = Integer.parseInt(inputArray[11]);
+		Vector v = new Vector(Double.parseDouble(inputArray[7]),
+				Double.parseDouble(inputArray[8]));
+		// int maxSpeed = Integer.parseInt(inputArray[9]);
+		// int visionRange = Integer.parseInt(inputArray[10]);
+		// int maxAcceleration = Integer.parseInt(inputArray[11]);
 
-		AbstractAgent ab = new AbstractAgent("Noname", pos, c, width, height, v,
-				0, 0, 0) {
-			
+		AbstractAgent ab = new AbstractAgent("Noname", pos, c, width, height,
+				v, 0, 0, 0) {
+
 			@Override
 			public void calculateNextPosition(List<IPopulation> predators,
 					List<IPopulation> preys, List<IPopulation> neutral,
@@ -546,21 +560,21 @@ public abstract class AbstractAgent implements IAgent {
 		sb.append(roundTwoDecimals(velocity.x));
 		sb.append(';');
 		sb.append(roundTwoDecimals(velocity.y));
-//		sb.append(';');
-//		sb.append(maxSpeed);
-//		sb.append(';');
-//		sb.append(visionRange);
-//		sb.append(';');
-//		sb.append(maxAcceleration);
+		// sb.append(';');
+		// sb.append(maxSpeed);
+		// sb.append(';');
+		// sb.append(visionRange);
+		// sb.append(';');
+		// sb.append(maxAcceleration);
 		return sb.toString();
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Agent - name: " + name + " Position:" + position.toString() + " Velocity: " + velocity.toString();
+		return "Agent - name: " + name + " Position:" + position.toString()
+				+ " Velocity: " + velocity.toString();
 	}
-	
-	
+
 	public static double roundTwoDecimals(double num) {
 		double result = num * 100;
 		result = Math.round(result);
