@@ -19,15 +19,17 @@ public class WolfAgent extends AbstractAgent {
 
 	private boolean hungry = true;
 	private boolean willFocusPreys = true;
-	private static final int MAX_ENERGY = 1000;
-	private static final double REPRODUCTION_RATE = 0.1;
+	private static final int MAX_ENERGY = 800;
+	private static final int MAX_LIFE_LENGTH = 3000;
+	private static final double REPRODUCTION_RATE = 0.25;
+	private static final int DIGESTION_TIME = 50;
+	private int digesting = 0;
 
 	public WolfAgent(String name, Position p, Color c, int width, int height,
 			Vector velocity, double maxSpeed, double maxAcceleration,
 			double visionRange, boolean groupBehaviour) {
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
-
 		this.energy = MAX_ENERGY;
 		this.groupBehaviour = groupBehaviour;
 	}
@@ -36,58 +38,61 @@ public class WolfAgent extends AbstractAgent {
 	public void calculateNextPosition(List<IPopulation> predators,
 			List<IPopulation> preys, List<IPopulation> neutral,
 			Dimension gridDimension, IShape shape, List<IObstacle> obstacles) {
-
-		updateNeighbourList(neutral, preys, predators);
-
-		Vector preyForce = getPreyForce();
-		Vector mutualInteractionForce = new Vector();
-		Vector forwardThrust = new Vector();
-		Vector arrayalForce = new Vector();
-		if (groupBehaviour) {
-			mutualInteractionForce = mutualInteractionForce();
-			forwardThrust = forwardThrust();
-			arrayalForce = arrayalForce();
-		}
-		Vector environmentForce = getEnvironmentForce(gridDimension, shape);
-		Vector obstacleForce = getObstacleForce(obstacles);
-
-		/*
-		 * Sum the forces from walls, predators and neutral to form the
-		 * acceleration force. If the acceleration exceeds maximum acceleration
-		 * --> scale it to maxAcceleration, but keep the correct direction of
-		 * the acceleration.
-		 */
-
-		Vector acceleration = preyForce.multiply(10)
-				.add(mutualInteractionForce).add(forwardThrust)
-				.add(arrayalForce);
-		double accelerationNorm = acceleration.getNorm();
-		if (accelerationNorm > maxAcceleration) {
-			acceleration.multiply(maxAcceleration / accelerationNorm);
-		}
-
-		acceleration.add(environmentForce).add(obstacleForce);
-
-		/*
-		 * The new velocity is then just: v(t+dt) = (v(t)+a(t+1)*dt)*decay,
-		 * where dt = 1 in this case. There is a decay that says if they are not
-		 * affected by any force, they will eventually stop. If speed exceeds
-		 * maxSpeed --> scale it to maxSpeed, but keep the correct direction.
-		 */
-		Vector newVelocity = Vector
-				.addVectors(this.getVelocity(), acceleration);
-		double speed = newVelocity.getNorm();
-		if (speed > maxSpeed) {
-			newVelocity.multiply(maxSpeed / speed);
-		}
-
-		this.setVelocity(newVelocity);
-		/* Reusing the same position object, for less heap allocations. */
-		if (reUsedPosition == null) {
-			nextPosition = Position.positionPlusVector(position, velocity);
+		if (digesting > 0) {
+			digesting--;
 		} else {
-			nextPosition = reUsedPosition.setPosition(position.getX()
-					+ velocity.x, position.getY() + velocity.y);
+			updateNeighbourList(neutral, preys, predators);	
+			Vector preyForce = getPreyForce();
+			Vector mutualInteractionForce = new Vector();
+			Vector forwardThrust = new Vector();
+			Vector arrayalForce = new Vector();
+			if (groupBehaviour) {
+				mutualInteractionForce = mutualInteractionForce();
+				forwardThrust = forwardThrust();
+				arrayalForce = arrayalForce();
+			}
+			Vector environmentForce = getEnvironmentForce(gridDimension, shape);
+			Vector obstacleForce = getObstacleForce(obstacles);
+
+			/*
+			 * Sum the forces from walls, predators and neutral to form the
+			 * acceleration force. If the acceleration exceeds maximum
+			 * acceleration --> scale it to maxAcceleration, but keep the
+			 * correct direction of the acceleration.
+			 */
+
+			Vector acceleration = preyForce.multiply(10)
+					.add(mutualInteractionForce).add(forwardThrust)
+					.add(arrayalForce);
+			double accelerationNorm = acceleration.getNorm();
+			if (accelerationNorm > maxAcceleration) {
+				acceleration.multiply(maxAcceleration / accelerationNorm);
+			}
+
+			acceleration.add(environmentForce).add(obstacleForce);
+
+			/*
+			 * The new velocity is then just: v(t+dt) = (v(t)+a(t+1)*dt)*decay,
+			 * where dt = 1 in this case. There is a decay that says if they are
+			 * not affected by any force, they will eventually stop. If speed
+			 * exceeds maxSpeed --> scale it to maxSpeed, but keep the correct
+			 * direction.
+			 */
+			Vector newVelocity = Vector.addVectors(this.getVelocity(),
+					acceleration);
+			double speed = newVelocity.getNorm();
+			if (speed > maxSpeed) {
+				newVelocity.multiply(maxSpeed / speed);
+			}
+
+			this.setVelocity(newVelocity);
+			/* Reusing the same position object, for less heap allocations. */
+			if (reUsedPosition == null) {
+				nextPosition = Position.positionPlusVector(position, velocity);
+			} else {
+				nextPosition = reUsedPosition.setPosition(position.getX()
+						+ velocity.x, position.getY() + velocity.y);
+			}
 		}
 	}
 
@@ -131,12 +136,12 @@ public class WolfAgent extends AbstractAgent {
 					focusedPrey = null;
 					hungry = false;
 					energy = MAX_ENERGY;
+					digesting = DIGESTION_TIME;
 				}
 			} else {
 				return new Vector(focusedPrey.getPosition(), position);
 			}
 		}
-
 		Vector preyForce = new Vector(0, 0);
 		IAgent closestFocusPrey = null;
 		int preySize = preyNeighbours.size();
@@ -145,10 +150,12 @@ public class WolfAgent extends AbstractAgent {
 			Position p = a.getPosition();
 			double distance = getPosition().getDistance(p);
 			if (distance <= visionRange) {
+				
 				if (distance <= EATING_RANGE) {
 					if (a.tryConsumeAgent()) {
 						hungry = false;
 						energy = MAX_ENERGY;
+						digesting = DIGESTION_TIME;
 					}
 				} else if (willFocusPreys && distance <= FOCUS_RANGE) {
 					if (closestFocusPrey != null && a.isAlive()) {
@@ -197,5 +204,7 @@ public class WolfAgent extends AbstractAgent {
 	public void updatePosition() {
 		super.updatePosition();
 		this.energy--;
+		if (energy == 0 || lifeLength > MAX_LIFE_LENGTH)
+			isAlive = false;
 	}
 }

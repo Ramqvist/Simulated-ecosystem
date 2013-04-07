@@ -18,10 +18,14 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class DeerAgent extends AbstractAgent {
 
-	private static final int MAX_ENERGY = 900;
+	private static final int MAX_ENERGY = 500;
+	private static final int MAX_LIFE_LENGTH = 2500;
 	private boolean hungry = true;
-	private static final double REPRODUCTION_RATE = 0.07;
+	private static final double REPRODUCTION_RATE = 0.1;
 	private boolean willFocusPreys = false;
+	private static final int DIGESTION_TIME = 10;
+	private int digesting = 0;
+	private boolean alone;
 
 	public DeerAgent(String name, Position p, Color c, int width, int height,
 			Vector velocity, double maxSpeed, double maxAcceleration,
@@ -29,7 +33,6 @@ public class DeerAgent extends AbstractAgent {
 
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
-
 		this.energy = MAX_ENERGY;
 		this.groupBehaviour = groupBehaviour;
 
@@ -55,7 +58,7 @@ public class DeerAgent extends AbstractAgent {
 						new Vector(velocity), maxSpeed, maxAcceleration,
 						visionRange, groupBehaviour);
 				spawn.add(child);
-				
+
 			}
 			return spawn;
 		}
@@ -75,58 +78,69 @@ public class DeerAgent extends AbstractAgent {
 
 		updateNeighbourList(neutral, preys, predators);
 		Vector predatorForce = getPredatorForce();
-		Vector mutualInteractionForce = new Vector();
-		Vector forwardThrust = new Vector();
-		Vector arrayalForce = new Vector();
-		if (groupBehaviour) {
-			mutualInteractionForce = mutualInteractionForce();
-			forwardThrust = forwardThrust();
-			arrayalForce = arrayalForce();
-		}
-
-		Vector environmentForce = getEnvironmentForce(gridDimension, shape);
-		Vector obstacleForce = getObstacleForce(obstacles);
-		Vector preyForce = getPreyForce();
-
-		/*
-		 * Sum the forces from walls, predators and neutral to form the
-		 * acceleration force. If the acceleration exceeds maximum acceleration
-		 * --> scale it to maxAcceleration, but keep the correct direction of
-		 * the acceleration.
-		 */
-		Vector acceleration = predatorForce.multiply(5)
-				.add(mutualInteractionForce).add(forwardThrust)
-				.add(arrayalForce)
-				.add(preyForce.multiply(5 * (1 - energy / MAX_ENERGY)));
-		double accelerationNorm = acceleration.getNorm();
-		if (accelerationNorm > maxAcceleration) {
-			acceleration.multiply(maxAcceleration / accelerationNorm);
-		}
-
-		acceleration.add(environmentForce).add(obstacleForce);
-
-		/*
-		 * The new velocity is then just: v(t+dt) = (v(t)+a(t+1)*dt)*decay,
-		 * where dt = 1 in this case. There is a decay that says if they are not
-		 * affected by any force, they will eventually stop. If speed exceeds
-		 * maxSpeed --> scale it to maxSpeed, but keep the correct direction.
-		 */
-		Vector newVelocity = Vector
-				.addVectors(this.getVelocity(), acceleration);
-		newVelocity.multiply(VELOCITY_DECAY);
-		double speed = newVelocity.getNorm();
-		if (speed > maxSpeed) {
-			newVelocity.multiply(maxSpeed / speed);
-		}
-
-		this.setVelocity(newVelocity);
-
-		/* Reusing the same position object, for less heap allocations. */
-		if (reUsedPosition == null) {
-			nextPosition = Position.positionPlusVector(position, velocity);
+		if (digesting > 0 && alone) {
+			digesting--;
 		} else {
-			nextPosition = reUsedPosition.setPosition(position.getX()
-					+ velocity.x, position.getY() + velocity.y);
+			Vector mutualInteractionForce = new Vector();
+			Vector forwardThrust = new Vector();
+			Vector arrayalForce = new Vector();
+			if (groupBehaviour) {
+				mutualInteractionForce = mutualInteractionForce();
+				forwardThrust = forwardThrust();
+				arrayalForce = arrayalForce();
+			}
+
+			Vector environmentForce = getEnvironmentForce(gridDimension, shape);
+			Vector obstacleForce = getObstacleForce(obstacles);
+			Vector preyForce = getPreyForce();
+
+			/*
+			 * Sum the forces from walls, predators and neutral to form the
+			 * acceleration force. If the acceleration exceeds maximum
+			 * acceleration --> scale it to maxAcceleration, but keep the
+			 * correct direction of the acceleration.
+			 */
+			Vector acceleration;
+			acceleration = predatorForce.multiply(5)
+					.add(mutualInteractionForce).add(forwardThrust)
+					.add(arrayalForce)
+					.add(preyForce.multiply(5 * (1 - energy / MAX_ENERGY)));
+			double accelerationNorm = acceleration.getNorm();
+			if (accelerationNorm > maxAcceleration) {
+				acceleration.multiply(maxAcceleration / accelerationNorm);
+			}
+
+			acceleration.add(environmentForce).add(obstacleForce);
+
+			/*
+			 * The new velocity is then just: v(t+dt) = (v(t)+a(t+1)*dt)*decay,
+			 * where dt = 1 in this case. There is a decay that says if they are
+			 * not affected by any force, they will eventually stop. If speed
+			 * exceeds maxSpeed --> scale it to maxSpeed, but keep the correct
+			 * direction.
+			 */
+			Vector newVelocity = Vector.addVectors(this.getVelocity(),
+					acceleration);
+			newVelocity.multiply(VELOCITY_DECAY);
+			double speed = newVelocity.getNorm();
+			if (speed > maxSpeed) {
+				newVelocity.multiply(maxSpeed / speed);
+			}
+			if(alone){
+				newVelocity.multiply(0.8);
+			/*}else{
+				newVelocity.multiply(1.05);
+				energy--;*/
+			}
+			this.setVelocity(newVelocity);
+
+			/* Reusing the same position object, for less heap allocations. */
+			if (reUsedPosition == null) {
+				nextPosition = Position.positionPlusVector(position, velocity);
+			} else {
+				nextPosition = reUsedPosition.setPosition(position.getX()
+						+ velocity.x, position.getY() + velocity.y);
+			}
 		}
 	}
 
@@ -143,6 +157,7 @@ public class DeerAgent extends AbstractAgent {
 					focusedPrey = null;
 					hungry = false;
 					energy = MAX_ENERGY;
+					digesting = DIGESTION_TIME;
 				}
 			} else {
 				return new Vector(focusedPrey.getPosition(), position);
@@ -161,6 +176,7 @@ public class DeerAgent extends AbstractAgent {
 					if (a.tryConsumeAgent()) {
 						hungry = false;
 						energy = MAX_ENERGY;
+						digesting = DIGESTION_TIME;
 					}
 				} else if (willFocusPreys && distance <= FOCUS_RANGE) {
 					if (closestFocusPrey != null && a.isAlive()) {
@@ -240,10 +256,12 @@ public class DeerAgent extends AbstractAgent {
 
 		if (nVisiblePredators == 0) { // No predators near --> Be unaffected
 			predatorForce.setVector(0, 0);
+			alone = true;
 		} else { // Else set the force depending on visible predators and
 					// normalize it to maxAcceleration.
 			double norm = predatorForce.getNorm();
 			predatorForce.multiply(maxAcceleration / norm);
+			alone = false;
 		}
 
 		return predatorForce;
@@ -256,5 +274,7 @@ public class DeerAgent extends AbstractAgent {
 	public void updatePosition() {
 		super.updatePosition();
 		this.energy--;
+		if (energy == 0 || lifeLength > MAX_LIFE_LENGTH)
+			isAlive = false;
 	}
 }
