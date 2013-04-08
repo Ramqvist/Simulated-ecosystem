@@ -124,12 +124,12 @@ public class Position {
 	 * @param endPos
 	 * @return
 	 */
-	public static List<Position> getShortestPath(Position startPos, Position endPos /*, List<IObstacle> obsList, IShape simShape*/) {
+	public static List<Position> getShortestPath(Position startPos, Position endPos , List<IObstacle> obsList/*, IShape simShape*/) {
 		double distance = startPos.getDistance(endPos);
 		if(distance > ASTAR_HASHSET_THRESHOLD) {
 			return getShortestPathHashSet(startPos, endPos);
 		} else {
-			return getShortestPathPriorityQueue(startPos, endPos);
+			return getShortestPathPriorityQueue(startPos, endPos, obsList);
 		}
 	}
 	
@@ -185,7 +185,7 @@ public class Position {
 	 * @return
 	 * @author Erik Ramqvist
 	 */
-	public static List<Position> getShortestPathPriorityQueue(Position startPos, Position endPos /*, List<IObstacle> obsList, IShape simShape*/) {
+	public static List<Position> getShortestPathPriorityQueue(Position startPos, Position endPos, List<IObstacle> obsList/*, IShape simShape*/) {
 		AStarPosition start = new AStarPosition(startPos.getX(), startPos.getY());
 		AStarPosition goal = new AStarPosition(endPos.getX(), endPos.getY());
 		start.g_score = 0;
@@ -206,7 +206,7 @@ public class Position {
 			if(current.equals(goal)) {
 				return reconstructPath(current);
 			}
-			for(AStarPosition neighbour : getNeighbours(current)) {
+			for(AStarPosition neighbour : getNeighbours(current, obsList)) {
 				double tentative_g_score = current.g_score + current.getDistance(neighbour);
 				if(closedSet.contains(neighbour)) {
 					if(tentative_g_score >= neighbour.g_score) {
