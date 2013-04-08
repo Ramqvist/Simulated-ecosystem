@@ -32,6 +32,8 @@ public class ShortestPathTester extends JPanel {
 	private static HashSet<AStarPosition> closedSet;
 	private static PriorityQueue<AStarPosition> openSet;
 	private static AStarPosition current;
+	private AStarPosition start;
+	private AStarPosition goal;
 	
 	
 	public ShortestPathTester() {
@@ -72,28 +74,30 @@ public class ShortestPathTester extends JPanel {
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		Log.v("Paint");
 		if(closedSet != null) {
 			for(AStarPosition a : closedSet) {
-				drawAStarPosition(a, g);
+				drawAStarPosition(a, g, Color.BLACK);
 			}
 		}
 		if(openSet != null) {
-			for(AStarPosition a : closedSet) {
-				drawAStarPosition(a, g);
+			for(AStarPosition a : openSet) {
+				drawAStarPosition(a, g, Color.BLUE);
 				
 			}
 		}
 		if(current != null) {
-			drawAStarPosition(current, g);
+			drawAStarPosition(current, g, Color.GREEN);
+		}
+		if(goal != null) {
+			drawAStarPosition(goal, g, Color.PINK);
 		}
 	}
 
 	
 	
-	private void drawAStarPosition(AStarPosition p, Graphics g) {
+	private void drawAStarPosition(AStarPosition p, Graphics g, Color c) {
 		//draw position
-		g.setColor(Color.BLACK);
+		g.setColor(c);
 		g.drawRect((int) p.getX(),(int)  p.getY(), 10, 10);
 	}
 	
@@ -113,8 +117,8 @@ public class ShortestPathTester extends JPanel {
 	 * @author Erik Ramqvist
 	 */
 	public List<Position> getShortestPathPriorityQueue(Position startPos, Position endPos, List<IObstacle> obsList/*, IShape simShape*/) {
-		AStarPosition start = new AStarPosition(startPos.getX(), startPos.getY());
-		AStarPosition goal = new AStarPosition(endPos.getX(), endPos.getY());
+		start = new AStarPosition(startPos.getX(), startPos.getY());
+		goal = new AStarPosition(endPos.getX(), endPos.getY());
 		start.g_score = 0;
 		start.f_score = heuristic_manhattan_distance(start, goal)*HEURISTIC_UPSAMPLE;
 		closedSet = new HashSet<AStarPosition>();
