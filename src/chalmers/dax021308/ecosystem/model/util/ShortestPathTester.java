@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.AbstractObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.RectangularObstacle;
 
 /**
  * Class for testing A* algorithm.
@@ -32,6 +33,12 @@ public class ShortestPathTester extends JPanel {
 	private static HashSet<AStarPosition> closedSet;
 	private static PriorityQueue<AStarPosition> openSet;
 	private static AStarPosition current;
+	
+	private static List<IObstacle> obsList = new ArrayList<IObstacle>();
+	static {
+		obsList.add(new RectangularObstacle(200, 200, new Position(300, 350), Color.GRAY));
+	}
+	
 	private AStarPosition start;
 	private AStarPosition goal;
 	
@@ -51,7 +58,6 @@ public class ShortestPathTester extends JPanel {
 		long time;
 		double elapsed;
 		List<Position> result;
-		List<IObstacle> obsList = new ArrayList<IObstacle>();
 		time = System.nanoTime();
 //		result = getShortestPathHashSet(start, end);
 //		elapsed = (System.nanoTime() - time)*0.000001;
@@ -90,6 +96,11 @@ public class ShortestPathTester extends JPanel {
 		}
 		if(goal != null) {
 			drawAStarPosition(goal, g, Color.PINK);
+		}
+		for(IObstacle o : obsList ) {
+			if(o instanceof RectangularObstacle) {
+				g.drawRect((int) o.getPosition().getX(),(int)  o.getPosition().getY(),(int)  o.getWidth(),(int)  o.getHeight());
+			}
 		}
 	}
 
@@ -263,11 +274,12 @@ public class ShortestPathTester extends JPanel {
 		double g_score;
 		double f_score;
 		AStarPosition came_from;
-		public double getGF() {
-			return g_score+f_score;
-		}
 		public AStarPosition(double x, double y) {
 			super(x,y);
+		}
+
+		public double getGF() {
+			return g_score+f_score;
 		}
 		
 		@Override
