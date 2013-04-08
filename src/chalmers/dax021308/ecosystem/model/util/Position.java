@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 
-import org.jfree.data.ComparableObjectItem;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.AbstractObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
@@ -19,12 +18,13 @@ import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 /**
  * Position class.
  * 
- * @author Henrik, path-finding Erik Ramqvist
+ * @author Henrik, for shortest path Erik Ramqvist
  * 
  */
 
 public class Position {
-	private static final double ASTAR_HASHSET_THRESHOLD = 55;
+	private static final double ASTAR_HASHSET_THRESHOLD = 45;
+	private static final int HEURISTIC_UPSAMPLE = 10;
 	private double x;
 	private double y;
 
@@ -133,6 +133,43 @@ public class Position {
 		}
 	}
 	
+
+	public static List<Position> getShortestPathPriorityQueueLinkedList(Position startPos, Position endPos) {
+		AStarPosition start = new AStarPosition(startPos.getX(), startPos.getY());
+		AStarPosition goal = new AStarPosition(endPos.getX(), endPos.getY());
+		start.g_score = 0;
+		start.f_score = heuristic_manhattan_distance(start, goal)*2;
+		List<AStarPosition> closedSet = new ArrayList<AStarPosition>();
+		PriorityQueue<AStarPosition> openSet = new PriorityQueue<AStarPosition>(100, new AStarPositionComparator());
+		openSet.add(start);
+		AStarPosition current = start;//the node in openset having the lowest f_score[] value
+		while(!openSet.isEmpty()) {
+			current = openSet.poll();
+			closedSet.add(current);
+			if(current.equals(goal)) {
+				return reconstructPath(current);
+			}
+			for(AStarPosition neighbour : getNeighbours(current)) {
+				double tentative_g_score = current.g_score + current.getDistance(neighbour);
+				if(closedSet.contains(neighbour)) {
+					if(tentative_g_score >= neighbour.g_score) {
+						continue;
+					}
+				}
+				if(!openSet.contains(neighbour) || tentative_g_score < neighbour.g_score) {
+					neighbour.came_from = current;
+					neighbour.g_score = tentative_g_score;
+					neighbour.f_score = neighbour.g_score + heuristic_manhattan_distance(goal, neighbour)*2;
+					if(!openSet.contains(neighbour)) {
+						openSet.add(neighbour);
+					}
+				}
+			}
+		}	
+		//Failure to find path.
+		return Collections.emptyList();
+	}
+	
 	/**
 	 * Calculates the shortest path to the target using A* search algorithm.
 	 * <p>
@@ -152,26 +189,12 @@ public class Position {
 		AStarPosition start = new AStarPosition(startPos.getX(), startPos.getY());
 		AStarPosition goal = new AStarPosition(endPos.getX(), endPos.getY());
 		start.g_score = 0;
-		start.f_score = heuristic_manhattan_distance(start, goal)*2;
+		start.f_score = heuristic_manhattan_distance(start, goal)*HEURISTIC_UPSAMPLE;
 		Set<AStarPosition> closedSet = new HashSet<AStarPosition>();
-		//Set<AStarPosition> openSet = new HashSet<AStarPosition>();
-//		Map<AStarPosition, AStarPosition> came_from = new HashMap<AStarPosition, AStarPosition>();
 		PriorityQueue<AStarPosition> openSet = new PriorityQueue<AStarPosition>(100, new AStarPositionComparator());
 		openSet.add(start);
-//		Map<AStarPosition, Double> g_score = new HashMap<AStarPosition, Double>();
-//		g_score.put(start, 0.0);
-//		Map<AStarPosition, Double> f_score = new HashMap<AStarPosition, Double>(); //Prioritets kö?
-//		f_score.put(start, g_score.get(start) + heuristic_manhattan_distance(start, goal));
 		AStarPosition current = start;//the node in openset having the lowest f_score[] value
-		//double lowScore = Integer.MAX_VALUE;
 		while(!openSet.isEmpty()) {
-			//Get the position with the lowest estimated distance to target.
-			/*for(AStarPosition n : openSet) {
-				if(n.f_score + heuristic_manhattan_distance(n, goal) < lowScore) {
-					current = n;
-					lowScore = n.f_score + heuristic_manhattan_distance(n, goal);
-				}
-			}*/
 //			Log.v("openset" + openSet);
 //			Log.v("closedSet" + closedSet);
 ////			Log.v("g_score" + g_score);
@@ -192,9 +215,8 @@ public class Position {
 				}
 				if(!openSet.contains(neighbour) || tentative_g_score < neighbour.g_score) {
 					neighbour.came_from = current;
-//					came_from.put(neighbour, current);
 					neighbour.g_score = tentative_g_score;
-					neighbour.f_score = neighbour.g_score + heuristic_manhattan_distance(goal, neighbour)*2;
+					neighbour.f_score = neighbour.g_score + heuristic_manhattan_distance(goal, neighbour)*HEURISTIC_UPSAMPLE;
 					if(!openSet.contains(neighbour)) {
 						openSet.add(neighbour);
 					}
@@ -430,4 +452,5 @@ public class Position {
 			return "G: " + g_score + " F: " + f_score + " " + super.toString();
 		}
 	}
+
 }
