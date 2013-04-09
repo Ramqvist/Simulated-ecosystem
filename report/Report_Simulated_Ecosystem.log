@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.11.2)  9 APR 2013 11:55
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.11.2)  9 APR 2013 19:33
 entering extended mode
 **Report_Simulated_Ecosystem.tex
 
@@ -493,18 +493,18 @@ Now handling font encoding U ...
 ))
 ("C:\Documents and Settings\Sebbe\Mina dokument\Kandidat\Code\Simulated-ecosyst
 em\report\Report_Simulated_Ecosystem.aux")
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 69.
+LaTeX Font Info:    ... okay on input line 69.
 
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -539,7 +539,7 @@ LaTeX Font Info:    ... okay on input line 70.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Info: Redefining \microtypecontext on input line 70.
+LaTeX Info: Redefining \microtypecontext on input line 69.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -569,35 +569,121 @@ File: mt-cmr.cfg 2011/04/09 v2.1 microtype config. file: Computer Modern Roman
 ) <CTH_GU_Header.png, id=1, 548.0475pt x 51.62143pt>
 File: CTH_GU_Header.png Graphic file (type png)
  <use CTH_GU_Header.png>
-Package pdftex.def Info: CTH_GU_Header.png used on input line 76.
-(pdftex.def)             Requested size: 426.79796pt x 42.67877pt.
-
-Overfull \hbox (8.54428pt too wide) in paragraph at lines 76--76
-[][]  
- []
+Package pdftex.def Info: CTH_GU_Header.png used on input line 75.
+(pdftex.def)             Requested size: 398.34866pt x 36.98859pt.
 
 [1
 
 {C:/Documents and Settings/All Users/Application Data/MiKTeX/2.9/pdftex/config/
 pdftex.map} <C:/Documents and Settings/Sebbe/Mina dokument/Kandidat/Code/Simula
 ted-ecosystem/report/CTH_GU_Header.png (PNG copy)>]
+Package microtype Info: Loading generic settings for font family
+(microtype)             `cmss' (encoding: OT1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+Package tocbasic Info: character protrusion at toc deactivated on input line 80
+.
+
+("C:\Documents and Settings\Sebbe\Mina dokument\Kandidat\Code\Simulated-ecosyst
+em\report\Report_Simulated_Ecosystem.toc"
+LaTeX Font Info:    Try loading font information for U+msa on input line 5.
+
+("C:\Program\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
+File: umsa.fd 2009/06/22 v3.00 AMS symbols A
+)
+("C:\Program\MiKTeX 2.9\tex\latex\microtype\mt-msa.cfg"
+File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 5.
+
+("C:\Program\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
+File: umsb.fd 2009/06/22 v3.00 AMS symbols B
+)
+("C:\Program\MiKTeX 2.9\tex\latex\microtype\mt-msb.cfg"
+File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
+))
+\tf@toc=\write3
+ [2]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 117.
+
+
+("C:\Program\MiKTeX 2.9\tex\latex\base\omscmr.fd"
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 117.
+ [3] [4] [5] [6]
+<heavisideOneDividedByX.png, id=29, 365.86688pt x 244.66406pt>
+File: heavisideOneDividedByX.png Graphic file (type png)
+
+<use heavisideOneDividedByX.png>
+Package pdftex.def Info: heavisideOneDividedByX.png used on input line 209.
+(pdftex.def)             Requested size: 284.5432pt x 284.53474pt.
+ [7 <C:/Documents and Settings/Sebbe/Mina dokument/Kandidat/Code/Simulated-ecos
+ystem/report/heavisideOneDividedByX.png (PNG copy)>] [8] [9] [10]
+<recursiveFunctionPlot.png, id=45, 422.32782pt x 316.18124pt>
+File: recursiveFunctionPlot.png Graphic file (type png)
+
+<use recursiveFunctionPlot.png>
+Package pdftex.def Info: recursiveFunctionPlot.png used on input line 312.
+(pdftex.def)             Requested size: 284.53699pt x 284.546pt.
+ [11 <C:/Documents and Settings/Sebbe/Mina dokument/Kandidat/Code/Simulated-eco
+system/report/recursiveFunctionPlot.png (PNG copy)>]
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 350.
+
+
+LaTeX Warning: Command \textellipsis invalid in math mode on input line 350.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 354.
+
+
+LaTeX Warning: Command \textellipsis invalid in math mode on input line 354.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 360.
+
+[12]
+Overfull \hbox (45.5877pt too wide) in paragraph at lines 369--375
+[][] 
+ []
+
+[13] [14] [15] <Triangle1.png, id=62, 845.40843pt x 597.73312pt>
+File: Triangle1.png Graphic file (type png)
+
+<use Triangle1.png>
+Package pdftex.def Info: Triangle1.png used on input line 453.
+(pdftex.def)             Requested size: 422.70317pt x 298.86583pt.
+
+Overfull \hbox (4.4495pt too wide) in paragraph at lines 453--454
+ [] 
+ []
+
+[16 <C:/Documents and Settings/Sebbe/Mina dokument/Kandidat/Code/Simulated-ecos
+ystem/report/Triangle1.png>]
 ("C:\Documents and Settings\Sebbe\Mina dokument\Kandidat\Code\Simulated-ecosyst
 em\report\Report_Simulated_Ecosystem.aux") ) 
 Here is how much of TeX's memory you used:
- 5636 strings out of 494045
- 82204 string characters out of 3150751
- 203471 words of memory out of 3000000
- 8870 multiletter control sequences out of 15000+200000
- 5710 words of font info for 24 fonts, out of 3000000 for 9000
+ 5839 strings out of 494045
+ 85736 string characters out of 3150751
+ 207506 words of memory out of 3000000
+ 8995 multiletter control sequences out of 15000+200000
+ 12242 words of font info for 64 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 35i,4n,39p,265b,168s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 35i,7n,39p,797b,358s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Program/MiKTeX 2.9/fonts/type1/
 public/amsfonts/cm/cmbx12.pfb><C:/Program/MiKTeX 2.9/fonts/type1/public/amsfont
-s/cm/cmbxti10.pfb><C:/Program/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.p
-fb><C:/Program/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb>
-Output written on Report_Simulated_Ecosystem.pdf (1 page, 58467 bytes).
+s/cm/cmbxti10.pfb><C:/Program/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.
+pfb><C:/Program/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program
+/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program/MiKTeX 2.9/fon
+ts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program/MiKTeX 2.9/fonts/type1/public
+/amsfonts/cm/cmr8.pfb><C:/Program/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cms
+sbx10.pfb><C:/Program/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/
+Program/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
+Output written on Report_Simulated_Ecosystem.pdf (16 pages, 193552 bytes).
 PDF statistics:
- 23 PDF objects out of 1000 (max. 8388607)
+ 100 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 6150 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 10773 words of extra memory for PDF output out of 12000 (max. 10000000)
 
