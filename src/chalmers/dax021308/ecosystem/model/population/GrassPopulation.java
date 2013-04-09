@@ -23,9 +23,7 @@ public class GrassPopulation extends AbstractPopulation {
 	public GrassPopulation(String name, Dimension gridDimension,
 			int initPopulationSize, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange, int capacity, IShape shape, List<IObstacle> obstacles) {
-		super(name, gridDimension, shape, obstacles);
-
-		this.color = color;
+		super(name, gridDimension, shape, obstacles, color);
 		agents = initializePopulation(initPopulationSize, gridDimension, color,
 				maxSpeed, capacity);
 	}

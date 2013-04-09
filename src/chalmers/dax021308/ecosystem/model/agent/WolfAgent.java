@@ -25,11 +25,11 @@ public class WolfAgent extends AbstractAgent {
 	private static final int DIGESTION_TIME = 50;
 	private int digesting = 0;
 
-	public WolfAgent(String name, Position p, Color c, int width, int height,
-			Vector velocity, double maxSpeed, double maxAcceleration,
-			double visionRange, boolean groupBehaviour) {
-		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
-				maxAcceleration);
+	public WolfAgent(String name, Position position, Color color, int width,
+			int height, Vector velocity, double maxSpeed,
+			double maxAcceleration, double visionRange, boolean groupBehaviour) {
+		super(name, position, color, width, height, velocity, maxSpeed,
+				visionRange, maxAcceleration);
 		this.energy = MAX_ENERGY;
 		this.groupBehaviour = groupBehaviour;
 	}
@@ -41,7 +41,7 @@ public class WolfAgent extends AbstractAgent {
 		if (digesting > 0) {
 			digesting--;
 		} else {
-			updateNeighbourList(neutral, preys, predators);	
+			updateNeighbourList(neutral, preys, predators);
 			Vector preyForce = getPreyForce();
 			Vector mutualInteractionForce = new Vector();
 			Vector forwardThrust = new Vector();
@@ -150,7 +150,7 @@ public class WolfAgent extends AbstractAgent {
 			Position p = a.getPosition();
 			double distance = getPosition().getDistance(p);
 			if (distance <= visionRange) {
-				
+
 				if (distance <= EATING_RANGE) {
 					if (a.tryConsumeAgent()) {
 						hungry = false;

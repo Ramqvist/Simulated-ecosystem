@@ -37,13 +37,8 @@ public class MainWindowController implements IController {
 
 	@Override
 	public void init() {
-		int tickDelay = 16;
-		int numIterations = Integer.MAX_VALUE;
-		boolean recordSimulation = false;
-		
 		Dimension d = new Dimension(1300, 1300);
 		d.height = d.height - 40;
-		Dimension f = new Dimension(d.width-16, d.height-39);
 		this.model = new EcoWorld();
 		this.window = new MainWindow(model);
 		window.setVisible(true);

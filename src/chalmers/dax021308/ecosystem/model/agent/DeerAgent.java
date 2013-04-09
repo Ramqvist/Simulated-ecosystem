@@ -103,11 +103,10 @@ public class DeerAgent extends AbstractAgent {
 			acceleration = predatorForce.multiply(5)
 					.add(mutualInteractionForce).add(forwardThrust)
 					.add(arrayalForce);
-			//if (alone) {
-				Vector preyForce = getPreyForce();
-				acceleration.add(preyForce.multiply(5 * (1 - energy
-						/ MAX_ENERGY)));
-			//}
+			// if (alone) {
+			Vector preyForce = getPreyForce();
+			acceleration.add(preyForce.multiply(5 * (1 - energy / MAX_ENERGY)));
+			// }
 			double accelerationNorm = acceleration.getNorm();
 			if (accelerationNorm > maxAcceleration) {
 				acceleration.multiply(maxAcceleration / accelerationNorm);

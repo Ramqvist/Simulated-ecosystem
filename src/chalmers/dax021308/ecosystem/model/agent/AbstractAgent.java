@@ -34,8 +34,8 @@ public abstract class AbstractAgent implements IAgent {
 	protected boolean groupBehaviour;
 	protected int width;
 	protected int height;
-	protected int capacity;
-	protected int lifeLength;
+	protected int capacity = Integer.MAX_VALUE;
+	protected int lifeLength = 0;
 	protected int energy = 1000; // set specific energy level in subclasses
 	protected int trophicLevel;
 	protected Vector velocity;
@@ -65,21 +65,18 @@ public abstract class AbstractAgent implements IAgent {
 	protected static final double VELOCITY_DECAY = 1;
 	protected static final double RANDOM_FORCE_MAGNITUDE = 0.05;
 
-	public AbstractAgent(String name, Position p, Color c, int width,
+	public AbstractAgent(String name, Position position, Color color, int width,
 			int height, Vector velocity, double maxSpeed, double visionRange,
 			double maxAcceleration) {
 		this.name = name;
-		position = p;
-		color = c;
+		this.position = position;
+		this.color = color;
 		this.width = width;
 		this.height = height;
 		this.velocity = velocity;
 		this.maxSpeed = maxSpeed;
 		this.visionRange = visionRange;
 		this.maxAcceleration = maxAcceleration;
-		this.capacity = Integer.MAX_VALUE;
-		this.lifeLength = 0;
-
 		/*
 		 * LinkedList for fast changing of Agents, consider ArrayList for less
 		 * memory
@@ -92,16 +89,6 @@ public abstract class AbstractAgent implements IAgent {
 		neighbourCounter = ran.nextInt(NEIGHBOURS_UPDATE_THRESHOLD);
 	}
 
-	public AbstractAgent(String name, Position p, Color c, int width,
-			int height, Vector velocity, double maxSpeed, double visionRange,
-			double maxAcceleration, int capacity, boolean groupBehaviour) {
-
-		this(name, p, c, width, height, velocity, maxSpeed, visionRange,
-				maxAcceleration);
-		this.capacity = capacity;
-		this.groupBehaviour = groupBehaviour;
-	}
-
 	/**
 	 * Clone constructor. Use this to create a copy.
 	 * 
@@ -112,26 +99,6 @@ public abstract class AbstractAgent implements IAgent {
 		this(a.name, new Position(a.position), a.color, a.width, a.height,
 				new Vector(a.velocity), a.maxSpeed, a.visionRange,
 				a.maxAcceleration);
-	}
-
-	public AbstractAgent(String name, Position pos, Color color, int width,
-			int height) {
-		this.name = name;
-		position = new Position(pos);
-		this.color = color;
-		this.width = width;
-		this.height = height;
-
-		/*
-		 * LinkedList for fast changing of Agents, consider ArrayList for less
-		 * memory
-		 */
-		preyNeighbours = new LinkedList<IAgent>();
-		predNeighbours = new LinkedList<IAgent>();
-		neutralNeighbours = new LinkedList<IAgent>();
-
-		// To update the first time.
-		neighbourCounter = NEIGHBOURS_UPDATE_THRESHOLD;
 	}
 
 	@Override
@@ -432,7 +399,6 @@ public abstract class AbstractAgent implements IAgent {
 		/*
 		 * Only interacts with walls that are closer than INTERACTION_RANGE.
 		 */
-		double distance = 1;
 		double leftWallDistance = this.getPosition().getDistance(xWallLeft);
 		if (leftWallDistance <= INTERACTION_RANGE) {
 			xWallLeftForce = 1 / (leftWallDistance * leftWallDistance);
