@@ -55,7 +55,7 @@ public class CircleShape implements IShape {
 	public Position getRandomPosition(Dimension dim) {
 		// Create a random position, and make sure it lies inside the circle.
 		// Doesn't loop too many times, since only pi/4 of the square area is
-		// outside the circle. Should also only be used during creation of
+		// outside the circle. Should only be used during creation of
 		// agents and thus doesn't really impact the runtime speed.
 		Position pos;
 		do {

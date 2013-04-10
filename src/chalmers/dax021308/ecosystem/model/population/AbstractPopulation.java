@@ -18,13 +18,12 @@ import chalmers.dax021308.ecosystem.model.util.Position;
 public abstract class AbstractPopulation implements IPopulation {
 	protected List<IAgent> agents;
 	protected Dimension gridDimension;
-	protected int capacity = Integer.MAX_VALUE;
 	protected List<IPopulation> preys;
 	protected List<IPopulation> predators;
 	protected List<IPopulation> neutral;
 	protected IShape shape;
 	protected List<IObstacle> obstacles;
-	
+
 	/**
 	 * Remove list for this Population.
 	 * <p>
@@ -36,10 +35,10 @@ public abstract class AbstractPopulation implements IPopulation {
 	 */
 	protected List<IAgent> removeList;
 
-	protected Color color = Color.BLACK; // Standard color for population.
+	protected Color color; // Standard color for population.
 
 	protected List<Integer> lifeLengths;
-	protected boolean groupBehaviour;
+	protected boolean groupBehaviour = true;
 	private String name;
 
 	public AbstractPopulation() {
@@ -50,36 +49,32 @@ public abstract class AbstractPopulation implements IPopulation {
 		lifeLengths = new LinkedList<Integer>();
 	}
 
-	public AbstractPopulation(String name, Dimension gridDimension, IShape shape, List<IObstacle> obstacles) {
+	public AbstractPopulation(String name, Dimension gridDimension,
+			IShape shape, List<IObstacle> obstacles, Color color) {
 		this();
 		this.name = name;
+		this.color = color;
 		this.gridDimension = gridDimension;
-		this.groupBehaviour = true;
 		this.obstacles = obstacles;
 		this.shape = shape;
 
 	}
 
-	public AbstractPopulation(String name, Dimension gridDimension,
-			int capacity, boolean groupBehaviour, IShape shape, List<IObstacle> obstacles) {
-		this(name, gridDimension, shape, obstacles);
-		this.capacity = capacity;
-		this.groupBehaviour = groupBehaviour;
-	}
-
 	/**
 	 * Clone constructor. Use only for cloning.
-	 * @param original - The AbstractPopulation to clone
+	 * 
+	 * @param original
+	 *            - The AbstractPopulation to clone
 	 */
 	public AbstractPopulation(AbstractPopulation original) {
-//		this.gridDimension = original.gridDimension;
+		// this.gridDimension = original.gridDimension;
 		this.color = original.color;
-//		this.groupBehaviour = original.groupBehaviour;
+		// this.groupBehaviour = original.groupBehaviour;
 		this.name = original.name;
-//		this.shape = original.shape;
-//		preys = new ArrayList<IPopulation>();
-//		predators = new ArrayList<IPopulation>();
-//		neutral = new ArrayList<IPopulation>();
+		// this.shape = original.shape;
+		// preys = new ArrayList<IPopulation>();
+		// predators = new ArrayList<IPopulation>();
+		// neutral = new ArrayList<IPopulation>();
 		agents = new ArrayList<IAgent>();
 		for (IAgent a : original.agents) {
 			try {
@@ -93,6 +88,7 @@ public abstract class AbstractPopulation implements IPopulation {
 	/**
 	 * Override if you use linked-list as agentList! (Default is ArrayList.)
 	 * Update the whole population, same as update(0, agents.size())
+	 * 
 	 * @param fromPos
 	 * @param toPos
 	 */
@@ -112,18 +108,18 @@ public abstract class AbstractPopulation implements IPopulation {
 			}
 		}
 	}
-	
-	protected Position getRandomPosition(){
+
+	protected Position getRandomPosition() {
 		boolean validPos = false;
 		Position pos = new Position();
-		while(!validPos){
+		while (!validPos) {
 			validPos = true;
 			pos = shape.getRandomPosition(gridDimension);
-			for(IObstacle o: obstacles){
-				if(o.isInObstacle(pos)){
+			for (IObstacle o : obstacles) {
+				if (o.isInObstacle(pos)) {
 					validPos = false;
 				}
-			}		
+			}
 		}
 		return pos;
 	}
@@ -184,13 +180,15 @@ public abstract class AbstractPopulation implements IPopulation {
 
 	@Override
 	public IPopulation clonePopulation() {
-		return new AbstractPopulation(this) {};
+		return new AbstractPopulation(this) {
+		};
 	}
 
 	/**
 	 * Clones the given list with {@link IPopulation#clonePopulation()} method.
 	 * Use {@link #clonePopulationListWithRecycledList}, instead to reduce
 	 * unnecessary heap-allocations.
+	 * 
 	 * @param original
 	 */
 	public static List<IPopulation> clonePopulationList(
@@ -203,8 +201,9 @@ public abstract class AbstractPopulation implements IPopulation {
 	}
 
 	/**
-	 * Copies the information from the source to the recycled one.
-	 * Creates a new copy if recycled == null.
+	 * Copies the information from the source to the recycled one. Creates a new
+	 * copy if recycled == null.
+	 * 
 	 * @param recycled
 	 * @param source
 	 */
@@ -224,20 +223,22 @@ public abstract class AbstractPopulation implements IPopulation {
 		Color c = new Color(Integer.parseInt(inputArray[1]),
 				Integer.parseInt(inputArray[2]),
 				Integer.parseInt(inputArray[3]));
-//		Dimension dim = new Dimension(Integer.parseInt(inputArray[1]),
-//				Integer.parseInt(inputArray[2]));
-//		int cap = Integer.parseInt(inputArray[3]);
-//		String shapeModel = inputArray[4];
-//		IShape shape = null;
-//		if (shapeModel == EcoWorld.SHAPE_SQUARE) {
-//			shape = new SquareShape();
-//		} else if (shapeModel == EcoWorld.SHAPE_CIRCLE) {
-//			shape = new CircleShape();
-//		}
-//		if (shape == null)
-//			throw new IllegalArgumentException("Illegal Shape from file.");
+		// Dimension dim = new Dimension(Integer.parseInt(inputArray[1]),
+		// Integer.parseInt(inputArray[2]));
+		// int cap = Integer.parseInt(inputArray[3]);
+		// String shapeModel = inputArray[4];
+		// IShape shape = null;
+		// if (shapeModel == EcoWorld.SHAPE_SQUARE) {
+		// shape = new SquareShape();
+		// } else if (shapeModel == EcoWorld.SHAPE_CIRCLE) {
+		// shape = new CircleShape();
+		// }
+		// if (shape == null)
+		// throw new IllegalArgumentException("Illegal Shape from file.");
 
-		AbstractPopulation created = new AbstractPopulation(name, null, 0, true, null, null) {};
+		AbstractPopulation created = new AbstractPopulation(name, null, null,
+				null, Color.black) {
+		};
 		created.agents = new ArrayList<IAgent>();
 		created.setColor(c);
 		return created;
@@ -253,14 +254,14 @@ public abstract class AbstractPopulation implements IPopulation {
 		sb.append(color.getGreen());
 		sb.append(';');
 		sb.append(color.getBlue());
-//		sb.append(';');
-//		sb.append(gridDimension.width);
-//		sb.append(';');
-//		sb.append(gridDimension.height);
-//		sb.append(';');
-//		sb.append(capacity);
-//		sb.append(';');
-//		sb.append(shape.getShape());
+		// sb.append(';');
+		// sb.append(gridDimension.width);
+		// sb.append(';');
+		// sb.append(gridDimension.height);
+		// sb.append(';');
+		// sb.append(capacity);
+		// sb.append(';');
+		// sb.append(shape.getShape());
 		return sb.toString();
 	}
 
@@ -270,14 +271,15 @@ public abstract class AbstractPopulation implements IPopulation {
 		int populationSize = agents.size();
 		for (IAgent a : agents) {
 			a.updatePosition();
-			List<IAgent> spawn = a.reproduce(null, populationSize, obstacles, shape, gridDimension);
+			List<IAgent> spawn = a.reproduce(null, populationSize, obstacles,
+					shape, gridDimension);
 			if (spawn != null) {
 				kids.addAll(spawn);
 			}
 		}
 		if (kids != null) {
 			agents.addAll(kids);
-//			wg.addAll(kids);
+			// wg.addAll(kids);
 		}
 
 		// System.out.println(name + " life length: mean = " +
@@ -287,8 +289,8 @@ public abstract class AbstractPopulation implements IPopulation {
 	}
 
 	/**
-	 * Clears out the agents in the removeList.
-	 * Warning! Use only when no other thread is iterating of the agentlist.
+	 * Clears out the agents in the removeList. Warning! Use only when no other
+	 * thread is iterating of the agentlist.
 	 */
 	public void removeAgentsFromRemoveList() {
 		IAgent a;

@@ -36,8 +36,7 @@ public class PigPopulation extends AbstractPopulation {
 	public PigPopulation(String name, Dimension gridDimension,
 			int initPopulationSize, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange, IShape shape) {
-		super(name, gridDimension, shape, null);
-		this.color = color;
+		super(name, gridDimension, shape, null, color);
 		this.visionRange = visionRange;
 		this.maxSpeed = maxSpeed;
 		this.maxAcceleration = maxAcceleration;

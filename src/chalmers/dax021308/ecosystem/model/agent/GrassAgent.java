@@ -18,7 +18,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class GrassAgent extends AbstractAgent {
 
-	private static final double REPRODUCTION_RATE = 0.02;
+	private static final double REPRODUCTION_RATE = 0.01;
 	private static final int MAX_LIFE_LENGTH = 5000;
 
 	public GrassAgent(String name, Position pos, Color color, int width,

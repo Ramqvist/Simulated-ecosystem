@@ -1,5 +1,6 @@
 package chalmers.dax021308.ecosystem.model.util;
 
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -52,7 +53,7 @@ public class ShortestPathTester extends JPanel {
 //		Position start = new Position(5.0, 5000.0);
 //		Position end = new Position(5.0, -32.0);
 		Position start = new Position(124.0, 121.0);
-		Position end = new Position(563.0, 421.0);
+		Position end = new Position(583.0, 621.0);
 		System.out.println("Distance: " + start.getDistance(end));
 		//Threshold for using PriorityQueue is 45, lower use HashSet!
 		long time;
@@ -67,7 +68,7 @@ public class ShortestPathTester extends JPanel {
 //		elapsed = (System.nanoTime() - time)*0.000001;
 //		System.out.println("LinkedList Completed in: " + elapsed + " ms. Positions: " + result.size()/*  + " Result: " + result*/);
 		time = System.nanoTime();
-		result = getShortestPathPriorityQueue(start, end, obsList);
+		result = getShortestPath(start, end, obsList);
 		elapsed = (System.nanoTime() - time)*0.000001;
 		System.out.println("PriorityQueue Completed in: " + elapsed + " ms. Positions: " + result.size()/*  + " Result: " + result*/);
 //		time = System.nanoTime();
@@ -99,7 +100,7 @@ public class ShortestPathTester extends JPanel {
 		}
 		for(IObstacle o : obsList ) {
 			if(o instanceof RectangularObstacle) {
-				g.drawRect((int) o.getPosition().getX(),(int)  o.getPosition().getY(),(int)  o.getWidth(),(int)  o.getHeight());
+				g.fillRect((int) o.getPosition().getX(),(int)  o.getPosition().getY(),(int)  o.getWidth(),(int)  o.getHeight());
 			}
 		}
 	}
@@ -110,6 +111,24 @@ public class ShortestPathTester extends JPanel {
 		//draw position
 		g.setColor(c);
 		g.drawRect((int) p.getX(),(int)  p.getY(), 10, 10);
+	}
+	
+	public List<Position> getShortestPath(Position startPos, Position endPos, List<IObstacle> obsList) {
+		double distance = startPos.getDistance(endPos);
+		if(distance > 500) {
+			double x = Math.round((endPos.getX() * 0.1))*10;
+			double y = Math.round((endPos.getY() * 0.1))*10;
+			Position newEnd = new Position(x, y);
+			x = Math.round((startPos.getX() * 0.1))*10;
+			y = Math.round((startPos.getY() * 0.1))*10;
+			Position newStartPos = new Position(x, y);
+			return getShortestPathPriorityQueue(newStartPos, newEnd, obsList, 10);
+		} else if(distance > 55) {
+			return getShortestPathPriorityQueue(startPos, endPos, obsList, 1);
+		} else {
+			//Execute hashset version of shortestpath.
+			return getShortestPathPriorityQueue(startPos, endPos, obsList, 1);
+		}
 	}
 	
 	/**
@@ -127,7 +146,7 @@ public class ShortestPathTester extends JPanel {
 	 * @return
 	 * @author Erik Ramqvist
 	 */
-	public List<Position> getShortestPathPriorityQueue(Position startPos, Position endPos, List<IObstacle> obsList/*, IShape simShape*/) {
+	public List<Position> getShortestPathPriorityQueue(Position startPos, Position endPos, List<IObstacle> obsList, int coordinateUpsampling/*, IShape simShape*/) {
 		start = new AStarPosition(startPos.getX(), startPos.getY());
 		goal = new AStarPosition(endPos.getX(), endPos.getY());
 		start.g_score = 0;
@@ -146,6 +165,7 @@ public class ShortestPathTester extends JPanel {
 			current = openSet.poll();
 			
 			//Slow down to see movement.
+			
 			repaint();
 			try {
 				Thread.sleep(ITERATION_TIME);
@@ -156,7 +176,7 @@ public class ShortestPathTester extends JPanel {
 			if(current.equals(goal)) {
 				return reconstructPath(current);
 			}
-			for(AStarPosition neighbour : getNeighbours(current, obsList)) {
+			for(AStarPosition neighbour : getNeighbours(current, obsList, coordinateUpsampling)) {
 				double tentative_g_score = current.g_score + current.getDistance(neighbour);
 				if(closedSet.contains(neighbour)) {
 					if(tentative_g_score >= neighbour.g_score) {
@@ -263,6 +283,71 @@ public class ShortestPathTester extends JPanel {
 		}
 		return neighbours;
 	}
+	
+	
+
+
+	/**
+	 * Gets the neighbours of one AStarPosition.
+	 * <p>
+	 * Is shape really needed here? Since we guarantee Agents are inside the shape.
+	 * 
+	 * @param p1
+	 * @param obsList
+	 * @param shape
+	 * @return
+	 */
+	public static List<AStarPosition> getNeighbours(AStarPosition p1, List<IObstacle> obsList, int upsampleRate/*, IShape shape*/) {
+		List<AStarPosition> neighbours = new ArrayList<AStarPosition>(8);
+		if(obsList.isEmpty()) {
+			neighbours.add(new AStarPosition(p1.getX(), 	p1.getY()+upsampleRate));
+			neighbours.add(new AStarPosition(p1.getX(), 	p1.getY()-upsampleRate));
+			neighbours.add(new AStarPosition(p1.getX()+upsampleRate, p1.getY()));
+			neighbours.add(new AStarPosition(p1.getX()-upsampleRate, p1.getY()));
+			neighbours.add(new AStarPosition(p1.getX()+upsampleRate, p1.getY()-upsampleRate));
+			neighbours.add(new AStarPosition(p1.getX()-upsampleRate, p1.getY()+upsampleRate));
+			neighbours.add(new AStarPosition(p1.getX()+upsampleRate, p1.getY()+upsampleRate));
+			neighbours.add(new AStarPosition(p1.getX()-upsampleRate, p1.getY()-upsampleRate));
+		} else {
+			double x = p1.getX();
+			double y = p1.getY();
+			AStarPosition p2 = new AStarPosition(x, y+upsampleRate);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			p2 = new AStarPosition(x+upsampleRate, y);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			p2 = new AStarPosition(x-upsampleRate, y);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			p2 = new AStarPosition(x, y-upsampleRate);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			p2 = new AStarPosition(x+upsampleRate, y-upsampleRate);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			p2 = new AStarPosition(x-upsampleRate, y+upsampleRate);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			p2 = new AStarPosition(x+upsampleRate, y+upsampleRate);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			p2 = new AStarPosition(x-upsampleRate, y-upsampleRate);
+			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
+				neighbours.add(p2);
+			}
+			
+		}
+		return neighbours;
+	}
+	
 	
 	/**
 	 * Internal Position class for use with A* shortest path algorithm.

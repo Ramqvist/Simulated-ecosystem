@@ -27,11 +27,10 @@ public class WolfPopulation extends AbstractPopulation {
 			double maxAcceleration, double visionRange, boolean groupBehaviour,
 			IShape shape, List<IObstacle> obstacles) {
 
-		super(name, gridDimension, shape, obstacles);
+		super(name, gridDimension, shape, obstacles, color);
 
 		this.visionRange = visionRange;
 		this.groupBehaviour = groupBehaviour;
-		this.color = color;
 		agents = initializePopulation(initPopulationSize, gridDimension, color,
 				maxSpeed, maxAcceleration, visionRange);
 	}

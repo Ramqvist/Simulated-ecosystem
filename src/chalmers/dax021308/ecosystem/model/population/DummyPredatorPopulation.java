@@ -27,9 +27,8 @@ public class DummyPredatorPopulation extends AbstractPopulation {
 	public DummyPredatorPopulation(Dimension gridDimension,
 			int initPopulationSize, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange, IShape shape) {
-		super("Simple Predator", gridDimension, shape, null);
+		super("Simple Predator", gridDimension, shape, null, color);
 		this.visionRange = visionRange;
-		this.color = color;
 		agents = initializePopulation(initPopulationSize, gridDimension, color,
 				maxSpeed, maxAcceleration, visionRange);
 	}

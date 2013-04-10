@@ -9,7 +9,7 @@ package chalmers.dax021308.ecosystem.model.util;
  */
 public class Vector {
 
-	//Make these public?!
+	//Make these public?! No
 	public double x;
 
 	public double y;
@@ -116,10 +116,6 @@ public class Vector {
 	 */
 	public double getNorm(){
 		return Math.sqrt(Math.pow(this.getX(),2)+Math.pow(this.getY(),2));
-	}
-
-	public Vector scaleVector(double scalar) {
-		return null;
 	}
 	
 	/**

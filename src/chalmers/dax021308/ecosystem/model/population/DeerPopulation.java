@@ -19,9 +19,6 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class DeerPopulation extends AbstractPopulation {
 
-	private double maxSpeed;
-	private double visionRange;
-
 	public DeerPopulation(List<IAgent> agentList) {
 		agents = agentList;
 	}
@@ -30,10 +27,8 @@ public class DeerPopulation extends AbstractPopulation {
 			int initPopulationSize, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange, boolean groupBehaviour, IShape shape, List<IObstacle> obstacles) {
 		
-		super(name, gridDimension, shape, obstacles);
-		this.visionRange = visionRange;
+		super(name, gridDimension, shape, obstacles, color);
 		this.groupBehaviour = groupBehaviour;
-		this.color = color;
 		agents = initializePopulation(initPopulationSize, gridDimension, color,
 				maxSpeed, maxAcceleration, visionRange);
 	}
