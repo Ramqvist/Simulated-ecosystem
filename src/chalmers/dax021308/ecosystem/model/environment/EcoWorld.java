@@ -263,6 +263,12 @@ public class EcoWorld implements IModel {
 			obstacles.add(new TriangleObstacle(d.getWidth() * 0.2, d
 					.getHeight() * 0.2, new Position(d.getWidth() / 2, d
 					.getHeight() / 2), new Color(0, 128, 255)));
+		} else if (s.getObstacle() == SimulationSettings.OBSTACLE_RIVERS) {
+			obstacles.add(new RectangularObstacle(d.getWidth()*0.1, d.getHeight() * 0.1, new Position(0, d.getHeight()*0.1), new Color(0, 128, 255)));
+			obstacles.add(new RectangularObstacle(d.getWidth(), d.getHeight() * 0.45, new Position(d.getWidth(), d.getHeight()), new Color(0, 128, 255)));
+		} else if (s.getObstacle() == SimulationSettings.OBSTACLE_TUBE) {
+			obstacles.add(new RectangularObstacle(d.getWidth() * 0.1, d.getHeight() * 0.1, new Position(0, 0), new Color(25, 25, 25)));
+			obstacles.add(new RectangularObstacle(d.getWidth(), d.getHeight() * 0.45, new Position(0, d.getHeight()), new Color(25, 25, 25)));
 		}
 
 		if (s.getShapeModel() == SimulationSettings.SHAPE_SQUARE) {
