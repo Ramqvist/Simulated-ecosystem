@@ -86,13 +86,14 @@ public class WolfAgent extends AbstractAgent {
 			}
 
 			this.setVelocity(newVelocity);
+			
 			/* Reusing the same position object, for less heap allocations. */
-			if (reUsedPosition == null) {
+//			if (reUsedPosition == null) {
 				nextPosition = Position.positionPlusVector(position, velocity);
-			} else {
-				nextPosition = reUsedPosition.setPosition(position.getX()
-						+ velocity.x, position.getY() + velocity.y);
-			}
+//			} else {
+//				nextPosition.setPosition(reUsedPosition.setPosition(position.getX()
+//						+ velocity.x, position.getY() + velocity.y);
+//			}
 		}
 	}
 

@@ -127,7 +127,7 @@ public abstract class AbstractAgent implements IAgent {
 
 	@Override
 	public void setVelocity(Vector velocity) {
-		this.velocity = velocity;
+		this.velocity.setVector(velocity.getX(), velocity.getY());
 
 	}
 

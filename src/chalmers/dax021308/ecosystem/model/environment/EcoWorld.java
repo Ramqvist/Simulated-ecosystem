@@ -267,8 +267,8 @@ public class EcoWorld implements IModel {
 			obstacles.add(new RectangularObstacle(d.getWidth()*0.1, d.getHeight() * 0.1, new Position(0, d.getHeight()*0.1), new Color(0, 128, 255)));
 			obstacles.add(new RectangularObstacle(d.getWidth(), d.getHeight() * 0.45, new Position(d.getWidth(), d.getHeight()), new Color(0, 128, 255)));
 		} else if (s.getObstacle() == SimulationSettings.OBSTACLE_TUBE) {
-			obstacles.add(new RectangularObstacle(d.getWidth() * 0.1, d.getHeight() * 0.1, new Position(0, 0), new Color(25, 25, 25)));
-			obstacles.add(new RectangularObstacle(d.getWidth(), d.getHeight() * 0.45, new Position(0, d.getHeight()), new Color(25, 25, 25)));
+			obstacles.add(new RectangularObstacle(d.getWidth() * 0.5, d.getHeight() * 0.225, new Position(d.getWidth() * 0.5, d.getHeight() * 0.225), new Color(25, 25, 25)));
+			obstacles.add(new RectangularObstacle(d.getWidth() * 0.5, d.getHeight() * 0.225, new Position(d.getWidth() * 0.5, d.getHeight() * 0.775), new Color(25, 25, 25)));
 		}
 
 		if (s.getShapeModel() == SimulationSettings.SHAPE_SQUARE) {
@@ -286,12 +286,12 @@ public class EcoWorld implements IModel {
 					Color.red, 3, 0.75, 275, shape);
 		} else if (s.getPredatorModel() == SimulationSettings.POP_WOLF) {
 			pred = new WolfPopulation("Wolves", d, s.getPredPopSize(),
-					Color.red, 2.2, 0.8, 250, true, shape, obstacles);
+					Color.red, 2.2, 0.5, 250, true, shape, obstacles);
 		}
 
 		if (s.getPreyModel() == SimulationSettings.POP_DEER) {
 			prey = new DeerPopulation("Deers", d, s.getPreyPopSize(),
-					Color.blue, 2.0, 2, 200, true, shape, obstacles);
+					Color.blue, 2.0, 3, 200, true, shape, obstacles);
 		} else if (s.getPreyModel() == SimulationSettings.POP_DUMMYPREY) {
 			prey = new DummyPreyPopulation(d, s.getPreyPopSize(), Color.blue,
 					2.2, 2, 250, shape);

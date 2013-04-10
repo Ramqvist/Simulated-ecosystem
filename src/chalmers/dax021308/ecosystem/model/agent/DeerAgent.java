@@ -25,6 +25,14 @@ public class DeerAgent extends AbstractAgent {
 	private boolean willFocusPreys = false;
 	private static final int DIGESTION_TIME = 10;
 	private int digesting = 0;
+	private double STOTTING_RANGE = 20;
+	private double STOTTING_LENGTH = 30;
+	private double STOTTING_COOLDOWN = 150;
+	private double stottingDuration = STOTTING_LENGTH;
+	private double stottingCoolDown = 0;
+	private boolean isAStottingDeer = true;
+	private boolean isStotting = false;
+	private Vector stottingVector = new Vector();
 	private boolean alone;
 
 	public DeerAgent(String name, Position p, Color c, int width, int height,
@@ -100,12 +108,17 @@ public class DeerAgent extends AbstractAgent {
 			 * correct direction of the acceleration.
 			 */
 			Vector acceleration;
+			if(isAStottingDeer && isStotting){
+				acceleration = predatorForce;
+			} else {
 			acceleration = predatorForce.multiply(5)
-					.add(mutualInteractionForce).add(forwardThrust)
+					.add(mutualInteractionForce)
+					.add(forwardThrust)
 					.add(arrayalForce);
 			// if (alone) {
 			Vector preyForce = getPreyForce();
 			acceleration.add(preyForce.multiply(5 * (1 - energy / MAX_ENERGY)));
+			}
 			// }
 			double accelerationNorm = acceleration.getNorm();
 			if (accelerationNorm > maxAcceleration) {
@@ -128,17 +141,18 @@ public class DeerAgent extends AbstractAgent {
 			if (speed > maxSpeed) {
 				newVelocity.multiply(maxSpeed / speed);
 			}
-			if (alone)
+			if (alone) {
 				newVelocity.multiply(0.9);
+			}
 			this.setVelocity(newVelocity);
 
 			/* Reusing the same position object, for less heap allocations. */
-			if (reUsedPosition == null) {
+			//if (reUsedPosition == null) {
 				nextPosition = Position.positionPlusVector(position, velocity);
-			} else {
-				nextPosition = reUsedPosition.setPosition(position.getX()
-						+ velocity.x, position.getY() + velocity.y);
-			}
+			//} else {
+			//	nextPosition.setPosition(reUsedPosition.setPosition(position.getX()
+			//			+ velocity.x, position.getY() + velocity.y));
+			//}
 		}
 	}
 
@@ -227,41 +241,71 @@ public class DeerAgent extends AbstractAgent {
 	 */
 	private Vector getPredatorForce() {
 		Vector predatorForce = new Vector(0, 0);
-		int nVisiblePredators = 0;
-		int predSize = predNeighbours.size();
-		IAgent predator;
-		for (int i = 0; i < predSize; i++) {
-			predator = predNeighbours.get(i);
-			Position p = predator.getPosition();
-			double distance = getPosition().getDistance(p);
-			if (distance <= visionRange) { // If predator is in vision range
-											// for prey
-				/*
-				 * Create a vector that points away from the predator.
-				 */
-				Vector newForce = new Vector(this.getPosition(), p);
-
-				/*
-				 * Add this vector to the predator force, with proportion to how
-				 * close the predator is. Closer predators will affect the force
-				 * more than those far away.
-				 */
-				double norm = newForce.getNorm();
-				predatorForce.add(newForce.multiply(1 / (norm * distance)));
-				nVisiblePredators++;
+		if(isAStottingDeer && isStotting){
+			stottingDuration--;
+			if(stottingDuration<=0){
+				isStotting = false;
 			}
-		}
-
-		if (nVisiblePredators == 0) { // No predators near --> Be unaffected
-			predatorForce.setVector(0, 0);
-			alone = true;
-		} else { // Else set the force depending on visible predators and
-					// normalize it to maxAcceleration.
+			return stottingVector;
+		} else {
+			boolean predatorClose = false;
+			int predSize = predNeighbours.size();
+			IAgent predator;
+			for (int i = 0; i < predSize; i++) {
+				predator = predNeighbours.get(i);
+				Position p = predator.getPosition();
+				double distance = getPosition().getDistance(p);
+				if (distance <= visionRange) { // If predator is in vision range
+												// for prey
+					
+					/*
+					 * Create a vector that points away from the predator.
+					 */
+					Vector newForce = new Vector(this.getPosition(), p);
+					
+					if(isAStottingDeer && distance<=STOTTING_RANGE) {
+						predatorClose = true;
+					}
+	
+					/*
+					 * Add this vector to the predator force, with proportion to how
+					 * close the predator is. Closer predators will affect the force
+					 * more than those far away.
+					 */
+					double norm = newForce.getNorm();
+					predatorForce.add(newForce.multiply(1 / (norm * distance)));
+				}
+			}
+	
 			double norm = predatorForce.getNorm();
-			predatorForce.multiply(maxAcceleration / norm);
-			alone = false;
+			if (norm <= 0) { // No predators near --> Be unaffected
+				alone = true;
+			} else { // Else set the force depending on visible predators and
+					// normalize it to maxAcceleration.
+				predatorForce.multiply(maxAcceleration / norm);
+				alone = false;
+			}
+			
+			if(isAStottingDeer && stottingCoolDown <= 0 && predatorClose){
+				isStotting = true;
+				stottingCoolDown = STOTTING_COOLDOWN;
+				stottingDuration = STOTTING_LENGTH;
+				double newX = 0;
+				double newY = 0;
+				if(Math.random() < 0.5) {
+					newX = 1;
+					newY = -predatorForce.getX()/predatorForce.getY();
+				} else {
+					newY = 1;
+					newX = -predatorForce.getY()/predatorForce.getX();
+				}
+				stottingVector.setVector(newX, newY);
+				stottingVector.multiply(predatorForce.getNorm()/stottingVector.getNorm());
+				stottingVector.add(predatorForce.multiply(-0.5));
+				return stottingVector;
+			}
+			
 		}
-
 		return predatorForce;
 	}
 
@@ -272,6 +316,7 @@ public class DeerAgent extends AbstractAgent {
 	public void updatePosition() {
 		super.updatePosition();
 		this.energy--;
+		stottingCoolDown--;
 		if (energy == 0 || lifeLength > MAX_LIFE_LENGTH)
 			isAlive = false;
 	}
