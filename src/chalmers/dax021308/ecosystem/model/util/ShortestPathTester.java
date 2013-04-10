@@ -10,7 +10,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -27,7 +26,7 @@ import chalmers.dax021308.ecosystem.model.environment.obstacle.RectangularObstac
  */
 public class ShortestPathTester extends JPanel {
 	private static final long serialVersionUID = 3766084045600317521L;
-	private static final int HEURISTIC_UPSAMPLE = 10;
+	private static final double HEURISTIC_UPSAMPLE = 10;
 	private static final long ITERATION_TIME = 16;
 	private static final Dimension simulationDimension = new Dimension(750, 750);
 	
@@ -38,6 +37,7 @@ public class ShortestPathTester extends JPanel {
 	private static List<IObstacle> obsList = new ArrayList<IObstacle>();
 	static {
 		obsList.add(new RectangularObstacle(200, 200, new Position(300, 350), Color.GRAY));
+	//	obsList.add(new RectangularObstacle(200, 200, new Position(300, 10), Color.GRAY));
 	}
 	
 	private AStarPosition start;
@@ -50,12 +50,12 @@ public class ShortestPathTester extends JPanel {
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(this);
+		setBackground(Color.WHITE);
 //		Position start = new Position(5.0, 5000.0);
 //		Position end = new Position(5.0, -32.0);
 		Position start = new Position(124.0, 121.0);
 		Position end = new Position(583.0, 621.0);
 		System.out.println("Distance: " + start.getDistance(end));
-		//Threshold for using PriorityQueue is 45, lower use HashSet!
 		long time;
 		double elapsed;
 		List<Position> result;
@@ -96,11 +96,12 @@ public class ShortestPathTester extends JPanel {
 			drawAStarPosition(current, g, Color.GREEN);
 		}
 		if(goal != null) {
-			drawAStarPosition(goal, g, Color.PINK);
+			drawAStarPosition(goal, g, Color.RED);
 		}
 		for(IObstacle o : obsList ) {
 			if(o instanceof RectangularObstacle) {
-				g.fillRect((int) o.getPosition().getX(),(int)  o.getPosition().getY(),(int)  o.getWidth(),(int)  o.getHeight());
+				g.setColor(Color.GRAY);
+				g.fillRect((int) (o.getPosition().getX()-o.getWidth()),(int)  ((o.getPosition().getY()-o.getHeight()+10)),(int) o.getWidth()*2 ,(int) o.getHeight()*2 );
 			}
 		}
 	}
@@ -110,7 +111,7 @@ public class ShortestPathTester extends JPanel {
 	private void drawAStarPosition(AStarPosition p, Graphics g, Color c) {
 		//draw position
 		g.setColor(c);
-		g.drawRect((int) p.getX(),(int)  p.getY(), 10, 10);
+		g.fillRect((int) p.getX(),(int)  p.getY(), 10, 10);
 	}
 	
 	public List<Position> getShortestPath(Position startPos, Position endPos, List<IObstacle> obsList) {
@@ -152,16 +153,16 @@ public class ShortestPathTester extends JPanel {
 		start.g_score = 0;
 		start.f_score = heuristic_manhattan_distance(start, goal)*HEURISTIC_UPSAMPLE;
 		closedSet = new HashSet<AStarPosition>();
-		openSet = new PriorityQueue<AStarPosition>(100, new AStarPositionComparator());
+		openSet = new PriorityQueue<AStarPosition>(50, new AStarPositionComparator());
 		openSet.add(start);
 		current = start;//the node in openset having the lowest f_score[] value
 		while(!openSet.isEmpty()) {
-//			Log.v("openset" + openSet);
-//			Log.v("closedSet" + closedSet);
-////			Log.v("g_score" + g_score);
-////			Log.v("f_score" + f_score);
-//			Log.v("current" + current);
-//			Log.v("--------");
+			Log.v("openset" + openSet);
+			Log.v("closedSet" + closedSet);
+//			Log.v("g_score" + g_score);
+//			Log.v("f_score" + f_score);
+			Log.v("current" + current);
+			Log.v("--------");
 			current = openSet.poll();
 			
 			//Slow down to see movement.
@@ -194,6 +195,7 @@ public class ShortestPathTester extends JPanel {
 			}
 		}	
 		//Failure to find path.
+		Log.e("Failed to find path to target!");
 		return Collections.emptyList();
 	}
 	
@@ -380,7 +382,8 @@ public class ShortestPathTester extends JPanel {
 	}
 	
     public static double heuristic_manhattan_distance(AStarPosition a, AStarPosition b /*, List<IObstacle> obsList, IShape simShape*/){
-        return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY());
+       // return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY());
+        return a.getDistance(b);
     }	
 	
 	public static void main(String[] args) {

@@ -66,7 +66,7 @@ public class Log {
 	 */
 	public static void e(String s) {
 		if(enableLog) {
-			System.out.println(s);
+			System.err.println(s);
 		}
 	}
 	
