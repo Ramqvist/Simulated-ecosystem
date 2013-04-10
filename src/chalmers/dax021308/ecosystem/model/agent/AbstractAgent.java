@@ -56,7 +56,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected final static double FOCUS_RANGE = 100;
 	protected final static double ENVIRONMENT_CONSTANT = 50;
 	protected final static double OBSTACLE_CONSTANT = 50;
-	protected static final double VELOCITY_DECAY = 1;
+	protected static final double VELOCITY_DECAY = 0.97;
 	protected static final double RANDOM_FORCE_MAGNITUDE = 0.05;
 
 	public AbstractAgent(String name, Position position, Color color, int width,

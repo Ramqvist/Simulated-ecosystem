@@ -250,6 +250,9 @@ public class HeatMapView extends GLCanvas implements IView {
 //        		//sb.append(totalTime);
 //            	System.out.println(sb.toString());	
         		/* End Information print. */
+          		
+//          		long end = System.currentTimeMillis();
+//          		System.out.println(end-start);
             }
             
             @Override

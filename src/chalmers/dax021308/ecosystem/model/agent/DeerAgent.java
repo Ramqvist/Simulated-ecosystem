@@ -92,7 +92,7 @@ public class DeerAgent extends AbstractAgent {
 			Vector mutualInteractionForce = new Vector();
 			Vector forwardThrust = new Vector();
 			Vector arrayalForce = new Vector();
-			if (groupBehaviour) {
+			if (groupBehaviour && !alone) {
 				mutualInteractionForce = mutualInteractionForce();
 				forwardThrust = forwardThrust();
 				arrayalForce = arrayalForce();
@@ -141,9 +141,9 @@ public class DeerAgent extends AbstractAgent {
 			if (speed > maxSpeed) {
 				newVelocity.multiply(maxSpeed / speed);
 			}
-			if (alone) {
-				newVelocity.multiply(0.9);
-			}
+//			if (alone) {
+//				newVelocity.multiply(0.9);
+//			}
 			this.setVelocity(newVelocity);
 
 			/* Reusing the same position object, for less heap allocations. */
