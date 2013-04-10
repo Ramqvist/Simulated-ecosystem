@@ -55,13 +55,16 @@ public class DeerAgent extends AbstractAgent {
 			hungry = true;
 			List<IAgent> spawn = new ArrayList<IAgent>();
 			if (Math.random() < REPRODUCTION_RATE) {
-				double xSign = Math.signum(-1 + 2 * Math.random());
-				double ySign = Math.signum(-1 + 2 * Math.random());
-				double newX = this.getPosition().getX() + xSign
-						* (0.001 + 0.001 * Math.random());
-				double newY = this.getPosition().getY() + ySign
-						* (0.001 + 0.001 * Math.random());
-				Position pos = new Position(newX, newY);
+				Position pos;
+				do {
+					double xSign = Math.signum(-1 + 2 * Math.random());
+					double ySign = Math.signum(-1 + 2 * Math.random());
+					double newX = this.getPosition().getX() + xSign
+							* (0.001 + 0.001 * Math.random());
+					double newY = this.getPosition().getY() + ySign
+							* (0.001 + 0.001 * Math.random());
+					pos = new Position(newX, newY);
+				} while (!shape.isInside(gridDimension, pos));
 				IAgent child = new DeerAgent(name, pos, color, width, height,
 						new Vector(velocity), maxSpeed, maxAcceleration,
 						visionRange, groupBehaviour);
@@ -108,16 +111,16 @@ public class DeerAgent extends AbstractAgent {
 			 * correct direction of the acceleration.
 			 */
 			Vector acceleration;
-			if(isAStottingDeer && isStotting){
+			if (isAStottingDeer && isStotting) {
 				acceleration = predatorForce;
 			} else {
-			acceleration = predatorForce.multiply(5)
-					.add(mutualInteractionForce)
-					.add(forwardThrust)
-					.add(arrayalForce);
-			// if (alone) {
-			Vector preyForce = getPreyForce();
-			acceleration.add(preyForce.multiply(5 * (1 - energy / MAX_ENERGY)));
+				acceleration = predatorForce.multiply(5)
+						.add(mutualInteractionForce).add(forwardThrust)
+						.add(arrayalForce);
+				// if (alone) {
+				Vector preyForce = getPreyForce();
+				acceleration.add(preyForce.multiply(5 * (1 - energy
+						/ MAX_ENERGY)));
 			}
 			// }
 			double accelerationNorm = acceleration.getNorm();
@@ -147,12 +150,12 @@ public class DeerAgent extends AbstractAgent {
 			this.setVelocity(newVelocity);
 
 			/* Reusing the same position object, for less heap allocations. */
-			//if (reUsedPosition == null) {
-				nextPosition = Position.positionPlusVector(position, velocity);
-			//} else {
-			//	nextPosition.setPosition(reUsedPosition.setPosition(position.getX()
-			//			+ velocity.x, position.getY() + velocity.y));
-			//}
+			// if (reUsedPosition == null) {
+			nextPosition = Position.positionPlusVector(position, velocity);
+			// } else {
+			// nextPosition.setPosition(reUsedPosition.setPosition(position.getX()
+			// + velocity.x, position.getY() + velocity.y));
+			// }
 		}
 	}
 
@@ -241,9 +244,9 @@ public class DeerAgent extends AbstractAgent {
 	 */
 	private Vector getPredatorForce() {
 		Vector predatorForce = new Vector(0, 0);
-		if(isAStottingDeer && isStotting){
+		if (isAStottingDeer && isStotting) {
 			stottingDuration--;
-			if(stottingDuration<=0){
+			if (stottingDuration <= 0) {
 				isStotting = false;
 			}
 			return stottingVector;
@@ -257,54 +260,55 @@ public class DeerAgent extends AbstractAgent {
 				double distance = getPosition().getDistance(p);
 				if (distance <= visionRange) { // If predator is in vision range
 												// for prey
-					
+
 					/*
 					 * Create a vector that points away from the predator.
 					 */
 					Vector newForce = new Vector(this.getPosition(), p);
-					
-					if(isAStottingDeer && distance<=STOTTING_RANGE) {
+
+					if (isAStottingDeer && distance <= STOTTING_RANGE) {
 						predatorClose = true;
 					}
-	
+
 					/*
-					 * Add this vector to the predator force, with proportion to how
-					 * close the predator is. Closer predators will affect the force
-					 * more than those far away.
+					 * Add this vector to the predator force, with proportion to
+					 * how close the predator is. Closer predators will affect
+					 * the force more than those far away.
 					 */
 					double norm = newForce.getNorm();
 					predatorForce.add(newForce.multiply(1 / (norm * distance)));
 				}
 			}
-	
+
 			double norm = predatorForce.getNorm();
 			if (norm <= 0) { // No predators near --> Be unaffected
 				alone = true;
 			} else { // Else set the force depending on visible predators and
-					// normalize it to maxAcceleration.
+						// normalize it to maxAcceleration.
 				predatorForce.multiply(maxAcceleration / norm);
 				alone = false;
 			}
-			
-			if(isAStottingDeer && stottingCoolDown <= 0 && predatorClose){
+
+			if (isAStottingDeer && stottingCoolDown <= 0 && predatorClose) {
 				isStotting = true;
 				stottingCoolDown = STOTTING_COOLDOWN;
 				stottingDuration = STOTTING_LENGTH;
 				double newX = 0;
 				double newY = 0;
-				if(Math.random() < 0.5) {
+				if (Math.random() < 0.5) {
 					newX = 1;
-					newY = -predatorForce.getX()/predatorForce.getY();
+					newY = -predatorForce.getX() / predatorForce.getY();
 				} else {
 					newY = 1;
-					newX = -predatorForce.getY()/predatorForce.getX();
+					newX = -predatorForce.getY() / predatorForce.getX();
 				}
 				stottingVector.setVector(newX, newY);
-				stottingVector.multiply(predatorForce.getNorm()/stottingVector.getNorm());
+				stottingVector.multiply(predatorForce.getNorm()
+						/ stottingVector.getNorm());
 				stottingVector.add(predatorForce.multiply(-0.5));
 				return stottingVector;
 			}
-			
+
 		}
 		return predatorForce;
 	}
