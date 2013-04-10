@@ -95,7 +95,7 @@ public class DeerAgent extends AbstractAgent {
 			Vector mutualInteractionForce = new Vector();
 			Vector forwardThrust = new Vector();
 			Vector arrayalForce = new Vector();
-			if (groupBehaviour && !alone) {
+			if (groupBehaviour) {
 				mutualInteractionForce = mutualInteractionForce();
 				forwardThrust = forwardThrust();
 				arrayalForce = arrayalForce();
