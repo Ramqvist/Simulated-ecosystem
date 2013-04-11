@@ -259,19 +259,15 @@ public class Position {
 		Set<AStarPosition> closedSet = new HashSet<AStarPosition>();
 		Set<AStarPosition> openSet = new HashSet<AStarPosition>();
 		openSet.add(start);
-
-		Map<AStarPosition, Double> g_score = new HashMap<AStarPosition, Double>();
-		g_score.put(start, 0.0);
-		Map<AStarPosition, Double> f_score = new HashMap<AStarPosition, Double>(); 
-		f_score.put(start,
-				g_score.get(start) + heuristic_manhattan_distance(start, goal));
+		start.g_score = 0.0;
+		start.f_score = heuristic_manhattan_distance(start, goal);
 		AStarPosition current = start;// the node in openset having the lowest
 									// f_score[] value
 		double lowScore = Integer.MAX_VALUE;
 		while (!openSet.isEmpty()) {
 			// Get the AStarPosition with the lowest estimated distance to target.
 			for (AStarPosition n : openSet) {
-				double score = f_score.get(n) + heuristic_manhattan_distance(n, goal);
+				double score = n.f_score + heuristic_manhattan_distance(n, goal);
 				if (score < lowScore) {
 					current = n;
 					lowScore = score;
@@ -289,18 +285,16 @@ public class Position {
 			openSet.remove(current);
 			closedSet.add(current);
 			for (AStarPosition neighbour : getNeighbours(current)) {
-				double tentative_g_score = g_score.get(current)
-						+ current.getDistance(neighbour);
+				double tentative_g_score = current.g_score + current.getDistance(neighbour);
 				if (closedSet.contains(neighbour)) {
-					if (tentative_g_score >= g_score.get(neighbour)) {
+					if (tentative_g_score >= neighbour.g_score) {
 						continue;
 					}
 				}
-				if (!openSet.contains(neighbour) || tentative_g_score < g_score.get(neighbour)) {
+				if (!openSet.contains(neighbour) || tentative_g_score < neighbour.g_score) {
 					neighbour.came_from = current;
-					g_score.put(neighbour, tentative_g_score);
-					f_score.put(neighbour, g_score.get(neighbour)
-							+ heuristic_manhattan_distance(goal, neighbour));
+					neighbour.g_score = tentative_g_score;
+					neighbour.f_score = neighbour.g_score + heuristic_manhattan_distance(goal, neighbour);
 					if (!openSet.contains(neighbour)) {
 						openSet.add(neighbour);
 					}

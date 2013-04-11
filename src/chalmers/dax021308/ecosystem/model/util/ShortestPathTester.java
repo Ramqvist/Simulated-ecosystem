@@ -46,32 +46,32 @@ public class ShortestPathTester extends JPanel {
 	
 	
 	public ShortestPathTester() {
-		JFrame frame = new JFrame();
-		frame.setSize(new Dimension(750, 750));
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.add(this);
+//		JFrame frame = new JFrame();
+//		frame.setSize(new Dimension(750, 750));
+//		frame.setVisible(true);
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		frame.add(this);
 		setBackground(Color.WHITE);
 //		Position start = new Position(5.0, 5000.0);
 //		Position end = new Position(5.0, -32.0);
 		Position start = new Position(124.0, 121.0);
-		Position end = new Position(583.0, 621.0);
+		Position end = new Position(58.0, 62.0);
 		System.out.println("Distance: " + start.getDistance(end));
 		long time;
 		double elapsed;
-//		time = System.nanoTime();
-//		result = getShortestPathHashSet(start, end);
-//		elapsed = (System.nanoTime() - time)*0.000001;
-//		System.out.println("HashSet Completed in: " + elapsed + " ms. Positions: " + result.size()/*  + " Result: " + result*/);
+		time = System.nanoTime();
+		result = Position.getShortestPathHashSet(start, end);
+		elapsed = (System.nanoTime() - time)*0.000001;
+		System.out.println("HashSet Completed in: " + elapsed + " ms. Positions: " + result.size()/*  + " Result: " + result*/);
 //		time = System.nanoTime();
 //		result = Position.getShortestPathPriorityQueueLinkedList(start, end);
 //		elapsed = (System.nanoTime() - time)*0.000001;
 //		System.out.println("LinkedList Completed in: " + elapsed + " ms. Positions: " + result.size()/*  + " Result: " + result*/);
-		time = System.nanoTime();
-		result = getShortestPath(start, end, obsList);
-		repaint();
-		elapsed = (System.nanoTime() - time)*0.000001;
-		System.out.println("PriorityQueue Completed in: " + elapsed + " ms. Positions: " + result.size()/*  + " Result: " + result*/);
+//		time = System.nanoTime();
+//		result = getShortestPath(start, end, obsList);
+//		repaint();
+//		elapsed = (System.nanoTime() - time)*0.000001;
+//		System.out.println("PriorityQueue Completed in: " + elapsed + " ms. Positions: " + result.size()/*  + " Result: " + result*/);
 //		time = System.nanoTime();
 //		result = Position.getShortestPath(start, end);
 //		elapsed = (System.nanoTime() - time)*0.000001;
