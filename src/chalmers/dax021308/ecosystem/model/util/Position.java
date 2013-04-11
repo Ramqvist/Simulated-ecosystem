@@ -24,7 +24,7 @@ import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 
 public class Position {
 	private static final double ASTAR_UPSAMPLE_THRESHOLD = 150;
-	private static final int HEURISTIC_UPSAMPLE = 2;
+	private static final int HEURISTIC_UPSAMPLE = 1;
 	protected double x;
 	protected double y;
 
