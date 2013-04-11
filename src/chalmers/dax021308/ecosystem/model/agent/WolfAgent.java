@@ -19,7 +19,7 @@ public class WolfAgent extends AbstractAgent {
 
 	private boolean hungry = true;
 	private boolean willFocusPreys = true;
-	private static final int MAX_ENERGY = 800;
+	private static final int MAX_ENERGY = 1200;
 	private static final int MAX_LIFE_LENGTH = 3000;
 	private static final double REPRODUCTION_RATE = 0.25;
 	private static final int DIGESTION_TIME = 50;
@@ -87,12 +87,12 @@ public class WolfAgent extends AbstractAgent {
 
 			this.setVelocity(newVelocity);
 			/* Reusing the same position object, for less heap allocations. */
-			if (reUsedPosition == null) {
+//			if (reUsedPosition == null) {
 				nextPosition = Position.positionPlusVector(position, velocity);
-			} else {
-				nextPosition = reUsedPosition.setPosition(position.getX()
-						+ velocity.x, position.getY() + velocity.y);
-			}
+//			} else {
+//				nextPosition = reUsedPosition.setPosition(position.getX()
+//						+ velocity.x, position.getY() + velocity.y);
+//			}
 		}
 	}
 

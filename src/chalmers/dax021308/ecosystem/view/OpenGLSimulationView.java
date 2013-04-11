@@ -54,7 +54,7 @@ import com.sun.opengl.util.FPSAnimator;
  * @author Erik Ramqvist
  *
  */
-public class OpenGLSimulationView extends GLJPanel implements IView {
+public class OpenGLSimulationView extends GLCanvas implements IView {
 	
 	private static final long serialVersionUID = 1585638837620985591L;
 	private List<IPopulation> newPops = new ArrayList<IPopulation>();

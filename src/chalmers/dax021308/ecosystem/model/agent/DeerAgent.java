@@ -18,7 +18,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class DeerAgent extends AbstractAgent {
 
-	private static final int MAX_ENERGY = 500;
+	private static final int MAX_ENERGY = 900;
 	private static final int MAX_LIFE_LENGTH = 2500;
 	private boolean hungry = true;
 	private static final double REPRODUCTION_RATE = 0.1;
@@ -134,12 +134,12 @@ public class DeerAgent extends AbstractAgent {
 			this.setVelocity(newVelocity);
 
 			/* Reusing the same position object, for less heap allocations. */
-			if (reUsedPosition == null) {
+//			if (reUsedPosition == null) {
 				nextPosition = Position.positionPlusVector(position, velocity);
-			} else {
-				nextPosition = reUsedPosition.setPosition(position.getX()
-						+ velocity.x, position.getY() + velocity.y);
-			}
+//			} else {
+//				nextPosition = reUsedPosition.setPosition(position.getX()
+//						+ velocity.x, position.getY() + velocity.y);
+//			}
 		}
 	}
 

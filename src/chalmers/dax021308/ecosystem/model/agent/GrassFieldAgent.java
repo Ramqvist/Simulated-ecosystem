@@ -19,13 +19,13 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public class GrassFieldAgent extends AbstractAgent {
 
 	private static final double REPRODUCTION_RATE = 0.1;
-	private static final int MAX_ENERGY = 100;
+	private static final double MAX_ENERGY = 1000;
 
 	public GrassFieldAgent(String name, Position pos, Color color, int width,
 			int height, Vector velocity, double maxSpeed, int capacity) {
 		super(name, pos, color, width, height, velocity, maxSpeed, 0, 0);
 		this.capacity = capacity;
-		energy = 50;
+		energy = 500;
 	}
 
 	@Override
@@ -45,8 +45,11 @@ public class GrassFieldAgent extends AbstractAgent {
 			List<IObstacle> obstacles, IShape shape, Dimension gridDimension) {
 		if (Math.random() < REPRODUCTION_RATE) {
 			if (energy < MAX_ENERGY)
-				energy += 1;
+				energy += 5;
 		}
+		int red = (int) (150.0-150.0*(((double)energy)/MAX_ENERGY));
+		int green = (int) (55.0+200.0*(((double)energy)/MAX_ENERGY));
+		this.color = new Color(red,green,0);
 		return null;
 
 	}
@@ -54,8 +57,8 @@ public class GrassFieldAgent extends AbstractAgent {
 	@Override
 	public synchronized boolean tryConsumeAgent() {
 		// TODO FIX FEEDING
-		if (energy >= 20) {
-			//energy -= 20;
+		if (energy >= 10) {
+			energy -= 5;
 			return true;
 		}
 		return false;
