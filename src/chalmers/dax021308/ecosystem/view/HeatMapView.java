@@ -243,12 +243,12 @@ public class HeatMapView extends GLCanvas implements IView {
           		}
 //        		
 //        		/* Information print, comment out to increase performance. */
-//        		Long totalTime = System.currentTimeMillis() - start;
-//        		StringBuffer sb = new StringBuffer("OpenGL Redraw! Fps: ");
+        		Long totalTime = System.currentTimeMillis() - start;
+        		StringBuffer sb = new StringBuffer("OpenGL Redraw!  ");
 //        		sb.append(getNewFps());
-//        		//sb.append(" Rendertime in ms: ");
-//        		//sb.append(totalTime);
-//            	System.out.println(sb.toString());	
+        		sb.append(" Rendertime in ms: ");
+        		sb.append(totalTime);
+            	System.out.println(sb.toString());	
         		/* End Information print. */
           		
 //          		long end = System.currentTimeMillis();

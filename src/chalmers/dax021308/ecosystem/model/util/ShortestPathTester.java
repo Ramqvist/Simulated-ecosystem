@@ -26,7 +26,7 @@ import chalmers.dax021308.ecosystem.model.environment.obstacle.RectangularObstac
  */
 public class ShortestPathTester extends JPanel {
 	private static final long serialVersionUID = 3766084045600317521L;
-	private static final double HEURISTIC_UPSAMPLE = 10;
+	private static final double HEURISTIC_UPSAMPLE = 2;
 	private static final long ITERATION_TIME = 16;
 	private static final Dimension simulationDimension = new Dimension(750, 750);
 	
@@ -36,12 +36,13 @@ public class ShortestPathTester extends JPanel {
 	
 	private static List<IObstacle> obsList = new ArrayList<IObstacle>();
 	static {
-		obsList.add(new RectangularObstacle(200, 200, new Position(300, 350), Color.GRAY));
-	//	obsList.add(new RectangularObstacle(200, 200, new Position(300, 10), Color.GRAY));
+		obsList.add(new RectangularObstacle(200, 50, new Position(300, 350), Color.GRAY));
+		obsList.add(new RectangularObstacle(50, 200, new Position(400, 200), Color.GRAY));
 	}
 	
 	private AStarPosition start;
 	private AStarPosition goal;
+	private List<Position> result;
 	
 	
 	public ShortestPathTester() {
@@ -58,8 +59,7 @@ public class ShortestPathTester extends JPanel {
 		System.out.println("Distance: " + start.getDistance(end));
 		long time;
 		double elapsed;
-		List<Position> result;
-		time = System.nanoTime();
+//		time = System.nanoTime();
 //		result = getShortestPathHashSet(start, end);
 //		elapsed = (System.nanoTime() - time)*0.000001;
 //		System.out.println("HashSet Completed in: " + elapsed + " ms. Positions: " + result.size()/*  + " Result: " + result*/);
@@ -69,6 +69,7 @@ public class ShortestPathTester extends JPanel {
 //		System.out.println("LinkedList Completed in: " + elapsed + " ms. Positions: " + result.size()/*  + " Result: " + result*/);
 		time = System.nanoTime();
 		result = getShortestPath(start, end, obsList);
+		repaint();
 		elapsed = (System.nanoTime() - time)*0.000001;
 		System.out.println("PriorityQueue Completed in: " + elapsed + " ms. Positions: " + result.size()/*  + " Result: " + result*/);
 //		time = System.nanoTime();
@@ -98,6 +99,13 @@ public class ShortestPathTester extends JPanel {
 		if(goal != null) {
 			drawAStarPosition(goal, g, Color.RED);
 		}
+
+		if(result != null) {
+			for(Position a : result) {
+				drawAStarPosition(a, g, Color.RED);
+				
+			}
+		}
 		for(IObstacle o : obsList ) {
 			if(o instanceof RectangularObstacle) {
 				g.setColor(Color.GRAY);
@@ -108,7 +116,7 @@ public class ShortestPathTester extends JPanel {
 
 	
 	
-	private void drawAStarPosition(AStarPosition p, Graphics g, Color c) {
+	private void drawAStarPosition(Position p, Graphics g, Color c) {
 		//draw position
 		g.setColor(c);
 		g.fillRect((int) p.getX(),(int)  p.getY(), 10, 10);
