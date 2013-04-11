@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -26,12 +27,12 @@ import chalmers.dax021308.ecosystem.model.environment.obstacle.RectangularObstac
  */
 public class ShortestPathTester extends JPanel {
 	private static final long serialVersionUID = 3766084045600317521L;
-	private static final double HEURISTIC_UPSAMPLE = 2;
+	private static final double HEURISTIC_UPSAMPLE = 1;
 	private static final long ITERATION_TIME = 16;
 	private static final Dimension simulationDimension = new Dimension(750, 750);
 	
 	private static HashSet<AStarPosition> closedSet;
-	private static PriorityQueue<AStarPosition> openSet;
+	private static HashSet<AStarPosition> openSet;
 	private static AStarPosition current;
 	
 	private static List<IObstacle> obsList = new ArrayList<IObstacle>();
@@ -46,42 +47,66 @@ public class ShortestPathTester extends JPanel {
 	
 	
 	public ShortestPathTester() {
-//		JFrame frame = new JFrame();
-//		frame.setSize(new Dimension(750, 750));
-//		frame.setVisible(true);
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		frame.add(this);
-		setBackground(Color.WHITE);
 //		Position start = new Position(5.0, 5000.0);
 //		Position end = new Position(5.0, -32.0);
 		Position start = new Position(124.0, 121.0);
-		Position end = new Position(58.0, 62.0);
+		Position end = new Position(510.0, 621.0); 
+		goal = new AStarPosition(end.x, end.y);
+		if(AbstractObstacle.isInsideObstacleList(obsList, start) || AbstractObstacle.isInsideObstacleList(obsList, end)) {
+			Log.e("Either positions is inside obstacle.");
+		}
 		System.out.println("Distance: " + start.getDistance(end));
 		long time;
 		double elapsed;
-		time = System.nanoTime();
-		result = Position.getShortestPathHashSet(start, end);
-		elapsed = (System.nanoTime() - time)*0.000001;
-		System.out.println("HashSet Completed in: " + elapsed + " ms. Positions: " + result.size()/*  + " Result: " + result*/);
-//		time = System.nanoTime();
-//		result = Position.getShortestPathPriorityQueueLinkedList(start, end);
-//		elapsed = (System.nanoTime() - time)*0.000001;
-//		System.out.println("LinkedList Completed in: " + elapsed + " ms. Positions: " + result.size()/*  + " Result: " + result*/);
-//		time = System.nanoTime();
-//		result = getShortestPath(start, end, obsList);
-//		repaint();
-//		elapsed = (System.nanoTime() - time)*0.000001;
-//		System.out.println("PriorityQueue Completed in: " + elapsed + " ms. Positions: " + result.size()/*  + " Result: " + result*/);
-//		time = System.nanoTime();
+		boolean executeHashSet = true;
+		Stat<Double> stat = new Stat<Double>();
+		if(executeHashSet ) {
+			for(int i = 0; i < 1000; i++) {
+				time = System.nanoTime();
+				result = Position.getShortestPath(start, end, obsList);
+				elapsed = (System.nanoTime() - time)*0.000001;
+				System.out.println("HashSet Completed in: " + elapsed + " ms. Positions: " + result.size());
+				stat.addObservation(elapsed);
+			}
+		} else {
+			for(int i = 0; i < 10; i++) {
+				time = System.nanoTime();
+				result = Position.getShortestPathPriorityQueue(start, end, obsList);
+				elapsed = (System.nanoTime() - time)*0.000001;
+				System.out.println("PriorityQueue Completed in: " + elapsed + " ms. Positions: " + result.size());
+				stat.addObservation(elapsed);
+			}
+		}
+		Log.v("Mean value:" + stat.getMean());
+		//		time = System.nanoTime();
 //		result = Position.getShortestPath(start, end);
 //		elapsed = (System.nanoTime() - time)*0.000001;
 //		System.out.println("Optimal solution Completed in: " + elapsed + " ms. Positions: " + result.size() + " Result: " + result);
-//		
+/*
+		time = System.nanoTime();
+		result = getShortestPath(start, end, obsList);
+		elapsed = (System.nanoTime() - time)*0.000001;
+		System.out.println("LinkedList Completed in: " + elapsed + " ms. Positions: " + result.size());*/
+
+		JFrame frame = new JFrame();
+		frame.setSize(new Dimension(750, 750));
+		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.add(this);
+		setBackground(Color.WHITE);
+		repaint();
 	}
 	
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
+
+		for(IObstacle o : obsList ) {
+			if(o instanceof RectangularObstacle) {
+				g.setColor(Color.GRAY);
+				g.fillRect((int) (o.getPosition().getX()-o.getWidth()),(int)  ((o.getPosition().getY()-o.getHeight()+10)),(int) o.getWidth()*2 ,(int) o.getHeight()*2 );
+			}
+		}
 		if(closedSet != null) {
 			for(AStarPosition a : closedSet) {
 				drawAStarPosition(a, g, Color.BLACK);
@@ -96,9 +121,6 @@ public class ShortestPathTester extends JPanel {
 		if(current != null) {
 			drawAStarPosition(current, g, Color.GREEN);
 		}
-		if(goal != null) {
-			drawAStarPosition(goal, g, Color.RED);
-		}
 
 		if(result != null) {
 			for(Position a : result) {
@@ -106,11 +128,9 @@ public class ShortestPathTester extends JPanel {
 				
 			}
 		}
-		for(IObstacle o : obsList ) {
-			if(o instanceof RectangularObstacle) {
-				g.setColor(Color.GRAY);
-				g.fillRect((int) (o.getPosition().getX()-o.getWidth()),(int)  ((o.getPosition().getY()-o.getHeight()+10)),(int) o.getWidth()*2 ,(int) o.getHeight()*2 );
-			}
+
+		if(goal != null) {
+			drawAStarPosition(goal, g, Color.RED);
 		}
 	}
 
@@ -161,7 +181,7 @@ public class ShortestPathTester extends JPanel {
 		start.g_score = 0;
 		start.f_score = heuristic_manhattan_distance(start, goal)*HEURISTIC_UPSAMPLE;
 		closedSet = new HashSet<AStarPosition>();
-		openSet = new PriorityQueue<AStarPosition>(50, new AStarPositionComparator());
+		PriorityQueue<AStarPosition> openSet = new PriorityQueue<AStarPosition>(50, new AStarPositionComparator());
 		openSet.add(start);
 		current = start;//the node in openset having the lowest f_score[] value
 		while(!openSet.isEmpty()) {
@@ -186,7 +206,7 @@ public class ShortestPathTester extends JPanel {
 				return reconstructPath(current);
 			}
 			for(AStarPosition neighbour : getNeighbours(current, obsList, coordinateUpsampling)) {
-				double tentative_g_score = current.g_score + current.getDistance(neighbour);
+				double tentative_g_score = current.g_score + 1;
 				if(closedSet.contains(neighbour)) {
 					if(tentative_g_score >= neighbour.g_score) {
 						continue;
@@ -203,6 +223,90 @@ public class ShortestPathTester extends JPanel {
 			}
 		}	
 		//Failure to find path.
+		Log.e("Failed to find path to target!");
+		return Collections.emptyList();
+	}
+	
+
+	/**
+	 * Calculates the shortest path to the target using A* search algorithm.
+	 * <p>
+	 * Fast for short distances.
+	 * <p>
+	 * TODO: Supply a obstacle-list and Shape?
+	 * TODO: Make private when finished.
+	 * 
+	 * For use with target agents behind obstacles.
+	 * 
+	 * @see <a
+	 *      href="http://en.wikipedia.org/wiki/A*_search_algorithm">http://en.wikipedia.org/wiki/A*_search_algorithm</a>
+	 * @param target
+	 * @return
+	 * @author Erik Ramqvist
+	 */
+	public List<Position> getShortestPathHashSet(Position startPos,
+			Position endPos, List<IObstacle> obsList/*, IShape simShape */) {
+		AStarPosition start = new AStarPosition(startPos.getX(), startPos.getY());
+		AStarPosition goal = new AStarPosition(endPos.getX(), endPos.getY());
+		closedSet = new HashSet<AStarPosition>();
+		openSet = new HashSet<AStarPosition>();
+		openSet.add(start);
+		start.g_score = 0.0;
+		start.f_score = start.getDistance(goal)*HEURISTIC_UPSAMPLE;
+		AStarPosition current = start;// the node in openset having the lowest
+									// f_score[] value
+		double lowScore = Integer.MAX_VALUE;
+		while (!openSet.isEmpty()) {
+			// Get the AStarPosition with the lowest estimated distance to target.
+			lowScore = Integer.MAX_VALUE;
+			for (AStarPosition n : openSet) {
+				double score = n.f_score;
+				if (score < lowScore) {
+					current = n;
+					lowScore = score;
+				} else if(score == lowScore) {
+					if(n != current) {
+						current = n;
+					}
+				}
+			}
+
+			repaint();
+			try {
+				Thread.sleep(ITERATION_TIME);
+			} catch (InterruptedException e) {
+				
+			}
+			 Log.v("openset" + openSet);
+//			 Log.v("closedSet" + closedSet);
+//			 Log.v("g_score" + current.g_score);
+//			 Log.v("f_score" + current.f_score);
+			 Log.v("current: " + current);
+			 Log.v("--------");
+			if (current.equals(goal)) {
+				return reconstructPath(current);
+			}
+			openSet.remove(current);
+			closedSet.add(current);
+			for (AStarPosition neighbour : getNeighbours(current, obsList)) {
+				double tentative_g_score = current.g_score + 1;
+				if (closedSet.contains(neighbour)) {
+					if (tentative_g_score >= neighbour.g_score) {
+						continue;
+					}
+				}
+				if (!openSet.contains(neighbour) || tentative_g_score < neighbour.g_score) {
+					neighbour.came_from = current;
+					neighbour.g_score = tentative_g_score;
+					neighbour.f_score = tentative_g_score + neighbour.getDistance(goal)*HEURISTIC_UPSAMPLE;
+					if (!openSet.contains(neighbour)) {
+						openSet.add(neighbour);
+					}
+				}
+				Log.e(neighbour.toString());
+			}
+		}
+		// Failure to find path.
 		Log.e("Failed to find path to target!");
 		return Collections.emptyList();
 	}
@@ -379,7 +483,7 @@ public class ShortestPathTester extends JPanel {
 		
 		@Override
 		public String toString() {
-			return "G: " + g_score + " F: " + f_score + " " + super.toString();
+			return "AStarPosition G: " + g_score + " F: " + f_score + " " + super.toString();
 		}
 	}
 
@@ -390,7 +494,7 @@ public class ShortestPathTester extends JPanel {
 	}
 	
     public static double heuristic_manhattan_distance(AStarPosition a, AStarPosition b /*, List<IObstacle> obsList, IShape simShape*/){
-       // return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY());
+      //  return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY());
         return a.getDistance(b);
     }	
 	
