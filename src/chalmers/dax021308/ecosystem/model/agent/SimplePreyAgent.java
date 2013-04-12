@@ -75,7 +75,7 @@ public class SimplePreyAgent extends AbstractAgent {
 		Vector predatorForce = getPredatorForce(predators);
 //		Vector separationForce = getSeparationForce(neutral);
 		Vector separationForce = new Vector();
-		Vector environmentForce = getEnvironmentForce(dim, shape);
+		Vector environmentForce = getEnvironmentForce(dim, shape, position);
 		
 		/*
 		 * Sum the forces from walls, predators and neutral to form the acceleration force.
