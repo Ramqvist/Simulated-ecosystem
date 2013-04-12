@@ -1,12 +1,19 @@
 package chalmers.dax021308.ecosystem.model.agent;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.awt.Color;
+import java.awt.Dimension;
 import java.lang.reflect.Field;
-import static org.junit.Assert.*;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
+import chalmers.dax021308.ecosystem.model.util.SquareShape;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
 public class DeerAgentTest {
@@ -22,11 +29,13 @@ public class DeerAgentTest {
 	private double maxAcceleration;
 	private double visionRange;
 	private boolean groupBehaviour;
+	private IShape shape;
+	private Dimension dimension;
 	
 	@Before
 	public void init() {
 		name = "Deer test";
-		p = new Position();
+		p = new Position(20, 20);
 		c = Color.black;
 		width = 8;
 		height = 12;
@@ -36,10 +45,12 @@ public class DeerAgentTest {
 		visionRange = 5;
 		groupBehaviour = true;
 		deerTest = new DeerAgent(name, p, c, width, height, velocity, maxSpeed, maxAcceleration, visionRange, groupBehaviour);
+		shape = new SquareShape();
+		dimension = new Dimension(50, 50);
 	}
 		
 	@Test
-	public void test() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+	public void reproduceTest() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		Field hungryField = DeerAgent.class.getDeclaredField("hungry");
 		hungryField.setAccessible(true);
 		assertTrue(hungryField.get(deerTest).equals(true));
@@ -47,7 +58,23 @@ public class DeerAgentTest {
 		hungryField.set(deerTest, false);
 		assertTrue(hungryField.get(deerTest).equals(false));
 		
+		List<IAgent> children;
+		do {
+			children = deerTest.reproduce(null, 0, null, shape, dimension);
+			hungryField.set(deerTest, false);
+		} while (children.size() == 0); 
 		
+		IAgent child = children.get(0);
+		
+		assertEquals(deerTest.getName(), child.getName());
+		assertTrue(!deerTest.getPosition().equals(child.getPosition()));
+		assertEquals(deerTest.getColor(), child.getColor());
+		assertEquals(deerTest.getWidth(), child.getWidth());
+		assertEquals(deerTest.getHeight(), child.getHeight());
+		assertEquals(deerTest.getVelocity(), child.getVelocity());
+		assertEquals(Double.doubleToLongBits(deerTest.getVisionRange()), Double.doubleToLongBits(child.getVisionRange()));
+		assertEquals(Double.doubleToLongBits(deerTest.getMaxAcceleration()), Double.doubleToLongBits(child.getMaxAcceleration()));
+		assertEquals(Double.doubleToLongBits(deerTest.getMaxSpeed()), Double.doubleToLongBits(child.getMaxSpeed()));
 	}
 }
 

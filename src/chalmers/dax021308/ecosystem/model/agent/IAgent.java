@@ -126,4 +126,10 @@ public interface IAgent extends Cloneable {
 	public boolean isAlive();
 	
 	public Vector getObstacleForce(List<IObstacle> obstacles);
+	
+	public double getMaxAcceleration();
+	
+	public double getMaxSpeed();
+	
+	public double getVisionRange();
 }

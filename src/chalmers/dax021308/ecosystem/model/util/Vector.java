@@ -162,4 +162,17 @@ public class Vector {
 	public static Vector emptyVector() {
 		return new Vector(0,0);
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o == null) {
+			return false;
+		} else if (getClass() != o.getClass()) {
+			return false;
+		}
+		
+		Vector v = (Vector)o;
+		return Double.doubleToLongBits(this.x) == Double.doubleToLongBits(v.getX()) &&
+				Double.doubleToLongBits(this.y) == Double.doubleToLongBits(v.getY());
+	}
 }

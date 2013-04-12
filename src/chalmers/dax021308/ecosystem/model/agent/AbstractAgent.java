@@ -3,7 +3,6 @@ package chalmers.dax021308.ecosystem.model.agent;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -154,6 +153,21 @@ public abstract class AbstractAgent implements IAgent {
 	@Override
 	public int getTrophicLevel() {
 		return trophicLevel;
+	}
+	
+	@Override
+	public double getMaxAcceleration() {
+		return maxAcceleration;
+	}
+	
+	@Override
+	public double getMaxSpeed() {
+		return maxSpeed;
+	}
+	
+	@Override
+	public double getVisionRange() {
+		return visionRange;
 	}
 
 	@Override
