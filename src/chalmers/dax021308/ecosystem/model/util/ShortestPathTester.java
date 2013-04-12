@@ -42,8 +42,8 @@ public class ShortestPathTester extends JPanel {
 	
 	private static List<IObstacle> obsList = new ArrayList<IObstacle>();
 	static {
-		obsList.add(new RectangularObstacle(200, 50, new Position(300, 350), Color.GRAY));
-		obsList.add(new RectangularObstacle(50, 200, new Position(400, 200), Color.GRAY));
+		obsList.add(new RectangularObstacle(200, 50, new Position(250, 400), Color.GRAY));
+		obsList.add(new RectangularObstacle(50, 200, new Position(400, 250), Color.GRAY));
 	}
 	
 	private AStarPosition start;
@@ -75,7 +75,7 @@ public class ShortestPathTester extends JPanel {
 		boolean executeJPS = true;
 		Stat<Double> stat = new Stat<Double>();
 		if(executeJPS ) {
-			for(int i = 0; i < 10; i++) {
+			for(int i = 0; i < 1; i++) {
 				time = System.nanoTime();
 				result = getShortestPath(start, end, obsList);
 				elapsed = (System.nanoTime() - time)*0.000001;
@@ -113,7 +113,10 @@ public class ShortestPathTester extends JPanel {
 		for(IObstacle o : obsList ) {
 			if(o instanceof RectangularObstacle) {
 				g.setColor(Color.GRAY);
-				g.fillRect((int) (o.getPosition().getX()-o.getWidth()),(int)  ((o.getPosition().getY()-o.getHeight()+10)),(int) o.getWidth()*2 ,(int) o.getHeight()*2 );
+				g.fillRect((int)(o.getPosition().getX()-o.getWidth()+1),
+						(int)((o.getPosition().getY()-o.getHeight()+1)),
+						(int)o.getWidth()*2 ,
+						(int)o.getHeight()*2 );
 			}
 		}
 		if(closedSet != null) {
@@ -151,7 +154,10 @@ public class ShortestPathTester extends JPanel {
 	private void drawAStarPosition(Position p, Graphics g, Color c) {
 		//draw position
 		g.setColor(c);
-		g.fillRect((int) p.getX(),(int)  p.getY(),(int) coordinateScaling,(int) coordinateScaling);
+		g.fillRect((int) (p.getX()-coordinateScaling/2),
+				(int)  (p.getY()-coordinateScaling/2),
+				(int) coordinateScaling,
+				(int) coordinateScaling);
 	}
 	
 	public List<Position> getShortestPath(Position startPos, Position endPos, List<IObstacle> obsList) {
@@ -598,7 +604,7 @@ public class ShortestPathTester extends JPanel {
 						}
 					}
 				}
-//				repaint();
+//				();
 //				try {
 //					Thread.sleep(ITERATION_TIME);
 //				} catch (InterruptedException e) {
