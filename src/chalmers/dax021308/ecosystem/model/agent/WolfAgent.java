@@ -19,8 +19,8 @@ public class WolfAgent extends AbstractAgent {
 
 	private boolean hungry = true;
 	private boolean willFocusPreys = true;
-	private static final int MAX_ENERGY = 800;
-	private static final int MAX_LIFE_LENGTH = 3000;
+	private static final int MAX_ENERGY = 1200;
+	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
 	private static final double REPRODUCTION_RATE = 0.25;
 	private static final int DIGESTION_TIME = 50;
 	private int digesting = 0;

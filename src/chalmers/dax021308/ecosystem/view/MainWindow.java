@@ -27,6 +27,7 @@ import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.chart.AbstractGraph2D;
 import chalmers.dax021308.ecosystem.view.chart.IterationTimeGraph;
+import chalmers.dax021308.ecosystem.view.chart.LifeLengthGraph;
 import chalmers.dax021308.ecosystem.view.chart.PopulationAmountGraph;
 
 /**
@@ -71,7 +72,7 @@ public class MainWindow extends JFrame implements IView {
 		//
 		controlView = new ControlView(model);
 		graphView1 = new PopulationAmountGraph(model, 10);
-		graphView2 = new IterationTimeGraph(model, 10);
+		graphView2 = new LifeLengthGraph(model, 10);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);

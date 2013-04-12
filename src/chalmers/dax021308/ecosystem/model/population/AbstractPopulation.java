@@ -10,6 +10,7 @@ import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
+import chalmers.dax021308.ecosystem.model.util.Stat;
 
 /**
  * 
@@ -37,7 +38,7 @@ public abstract class AbstractPopulation implements IPopulation {
 
 	protected Color color; // Standard color for population.
 
-	protected List<Integer> lifeLengths;
+	protected Stat<Integer> lifeLengths;
 	protected boolean groupBehaviour = true;
 	private String name;
 
@@ -46,7 +47,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		predators = new ArrayList<IPopulation>();
 		neutral = new ArrayList<IPopulation>();
 		removeList = new ArrayList<IAgent>();
-		lifeLengths = new LinkedList<Integer>();
+		lifeLengths = new Stat<Integer>();
 	}
 
 	public AbstractPopulation(String name, Dimension gridDimension,
@@ -83,6 +84,11 @@ public abstract class AbstractPopulation implements IPopulation {
 				e.printStackTrace();
 			}
 		}
+		this.lifeLengths = new Stat<Integer>();
+		for(Integer n: original.getLifeLengths()) {
+			this.lifeLengths.addObservation(n);
+		}
+		
 	}
 
 	/**
@@ -181,6 +187,16 @@ public abstract class AbstractPopulation implements IPopulation {
 	@Override
 	public IPopulation clonePopulation() {
 		return new AbstractPopulation(this) {
+
+			@Override
+			public List<Integer> getLifeLengths() {
+				return (List<Integer>) lifeLengths.getSample();
+			}
+
+			@Override
+			public double getLifeLengthMean() {
+				return lifeLengths.getMean();
+			}
 		};
 	}
 
@@ -238,6 +254,16 @@ public abstract class AbstractPopulation implements IPopulation {
 
 		AbstractPopulation created = new AbstractPopulation(name, null, null,
 				null, Color.black) {
+
+					@Override
+					public List<Integer> getLifeLengths() {
+						return (List<Integer>) lifeLengths.getSample();
+					}
+
+					@Override
+					public double getLifeLengthMean() {
+						return lifeLengths.getMean();
+					}
 		};
 		created.agents = new ArrayList<IAgent>();
 		created.setColor(c);
@@ -296,10 +322,20 @@ public abstract class AbstractPopulation implements IPopulation {
 		IAgent a;
 		for (int i = 0; i < removeList.size(); i++) {
 			a = removeList.get(i);
-			lifeLengths.add(a.getLifeLength());
+			lifeLengths.addObservation(a.getLifeLength());
 			agents.remove(a);
 		}
 		removeList.clear();
+	}
+	
+	@Override
+	public List<Integer> getLifeLengths(){
+		return (List<Integer>) lifeLengths.getSample();
+	}
+
+	@Override
+	public double getLifeLengthMean() {
+		return lifeLengths.getMean();
 	}
 
 	@Override

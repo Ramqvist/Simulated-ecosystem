@@ -20,6 +20,10 @@ public class Stat<T extends Number> {
 		mean = 0;
 	}
 	
+	public List<T> getSample(){
+		return sample;
+	}
+	
 	/**
 	 * Add and observation to the Stat sample
 	 * @param obs observation to add.

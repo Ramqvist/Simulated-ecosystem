@@ -18,8 +18,8 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class DeerAgent extends AbstractAgent {
 
-	private static final int MAX_ENERGY = 500;
-	private static final int MAX_LIFE_LENGTH = 2500;
+	private static final int MAX_ENERGY = 1000;
+	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
 	private boolean hungry = true;
 	private static final double REPRODUCTION_RATE = 0.1;
 	private boolean willFocusPreys = false;
