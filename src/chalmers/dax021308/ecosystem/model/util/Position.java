@@ -1,17 +1,8 @@
 package chalmers.dax021308.ecosystem.model.util;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.awt.Dimension;
 import java.util.List;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Set;
 
-
-import chalmers.dax021308.ecosystem.model.environment.obstacle.AbstractObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 
 
@@ -23,8 +14,6 @@ import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
  */
 
 public class Position {
-	private static final double ASTAR_UPSAMPLE_THRESHOLD = 150;
-	private static final int HEURISTIC_UPSAMPLE = 1;
 	protected double x;
 	protected double y;
 
@@ -125,7 +114,7 @@ public class Position {
 			return false;
 		return true;
 	}
-	
+
 	/**
 	 * Optimized version of A* with dynamic datastructure based on distance to target.
 	 * Uses
@@ -133,290 +122,9 @@ public class Position {
 	 * @param endPos
 	 * @return
 	 */
-	public static List<Position> getShortestPath(Position startPos, Position endPos , List<IObstacle> obsList/*, IShape simShape*/) {
-		double distance = startPos.getDistance(endPos);
-		if(distance > ASTAR_UPSAMPLE_THRESHOLD) {
-			double x = Math.round((endPos.getX() * 0.1))*10;
-			double y = Math.round((endPos.getY() * 0.1))*10;
-			Position newEnd = new Position(x, y);
-			x = Math.round((startPos.getX() * 0.1))*10;
-			y = Math.round((startPos.getY() * 0.1))*10;
-			Position newStartPos = new Position(x, y);
-			return getShortestPathHashSet(newStartPos, newEnd, obsList, 10);
-		} else {
-			return getShortestPathHashSet(startPos, endPos, obsList, 1);
-		}
-	}
-	
-
-	
-	/**
-	 * Calculates the shortest path to the target using A* search algorithm.
-	 * <p>
-	 * Fast for long distances.
-	 * <p>
-	 * TODO: Supply a obstacle-list and Shape?
-	 * TODO: Make private when finished.
-	 * 
-	 * For use with target agents behind obstacles.
-	 * 
-	 * @see <a href="http://en.wikipedia.org/wiki/A*_search_algorithm">http://en.wikipedia.org/wiki/A*_search_algorithm</a>
-	 * @param target
-	 * @return
-	 * @author Erik Ramqvist
-	 */
-	public static List<Position> getShortestPathPriorityQueue(Position startPos, Position endPos, List<IObstacle> obsList/*, IShape simShape*/) {
-		AStarPosition start = new AStarPosition(startPos.getX(), startPos.getY());
-		AStarPosition goal = new AStarPosition(endPos.getX(), endPos.getY());
-		start.g_score = 0;
-		start.f_score = heuristic_manhattan_distance(start, goal)*HEURISTIC_UPSAMPLE;
-		Set<AStarPosition> closedSet = new HashSet<AStarPosition>();
-		PriorityQueue<AStarPosition> openSet = new PriorityQueue<AStarPosition>(100, new AStarPositionComparator());
-		openSet.add(start);
-		AStarPosition current = start;//the node in openset having the lowest f_score[] value
-		while(!openSet.isEmpty()) {
-//			Log.v("openset" + openSet);
-//			Log.v("closedSet" + closedSet);
-////			Log.v("g_score" + g_score);
-////			Log.v("f_score" + f_score);
-//			Log.v("current" + current);
-//			Log.v("--------");
-			current = openSet.poll();
-			closedSet.add(current);
-			if(current.equals(goal)) {
-				return reconstructPath(current);
-			}
-			for(AStarPosition neighbour : AStarPosition.getNeighbours(current,obsList, 1)) {
-				double tentative_g_score = current.g_score + 1;
-				if(closedSet.contains(neighbour)) {
-					if(tentative_g_score >= neighbour.g_score) {
-						continue;
-					}
-				}
-				if(!openSet.contains(neighbour) || tentative_g_score < neighbour.g_score) {
-					neighbour.came_from = current;
-					neighbour.g_score = tentative_g_score;
-					neighbour.f_score = neighbour.g_score + heuristic_manhattan_distance(goal, neighbour)*HEURISTIC_UPSAMPLE;
-					if(!openSet.contains(neighbour)) {
-						openSet.add(neighbour);
-					}
-				}
-			}
-		}	
-		//Failure to find path.
-		Log.e("Failed to find path to target!");
-		return Collections.emptyList();
-	}
-	
-	/**
-	 * Calculates the shortest path to the target using A* search algorithm.
-	 * <p>
-	 * Fast for short distances.
-	 * <p>
-	 * TODO: Supply a obstacle-list and Shape?
-	 * TODO: Make private when finished.
-	 * 
-	 * For use with target agents behind obstacles.
-	 * 
-	 * @see <a
-	 *      href="http://en.wikipedia.org/wiki/A*_search_algorithm">http://en.wikipedia.org/wiki/A*_search_algorithm</a>
-	 * @param target
-	 * @return
-	 * @author Erik Ramqvist
-	 */
-	public static List<Position> getShortestPathHashSet(Position startPos, Position endPos, List<IObstacle> obsList, int coordinateUpsampling) {
-		AStarPosition start = new AStarPosition(startPos.getX(), startPos.getY());
-		AStarPosition goal = new AStarPosition(endPos.getX(), endPos.getY());
-		Set<AStarPosition> closedSet = new HashSet<AStarPosition>();
-		Set<AStarPosition> openSet = new HashSet<AStarPosition>();
-		openSet.add(start);
-		start.g_score = 0.0;
-		start.f_score = heuristic_manhattan_distance(start, goal)*HEURISTIC_UPSAMPLE;
-		AStarPosition current = start;// the node in openset having the lowest
-									// f_score[] value
-		double lowScore = Integer.MAX_VALUE;
-		while (!openSet.isEmpty()) {
-			// Get the AStarPosition with the lowest estimated distance to target.
-			lowScore = Integer.MAX_VALUE;
-			for (AStarPosition n : openSet) {
-				double score = n.f_score;
-				if (score < lowScore) {
-					current = n;
-					lowScore = score;
-				}
-			}
-//			 Log.v("openset" + openSet);
-//			 Log.v("closedSet" + closedSet);
-//			 Log.v("g_score" + current.g_score);
-//			 Log.v("f_score" + current.f_score);
-//			 Log.v("current" + current);
-//			 Log.v("--------");
-			if (current.equals(goal)) {
-				return reconstructPath(current);
-			}
-			openSet.remove(current);
-			closedSet.add(current);
-			for (AStarPosition neighbour : AStarPosition.getNeighbours(current, obsList, coordinateUpsampling)) {
-				double tentative_g_score = current.g_score + 1;
-				if (closedSet.contains(neighbour)) {
-					if (tentative_g_score >= neighbour.g_score) {
-						continue;
-					}
-				}
-				if (!openSet.contains(neighbour) || tentative_g_score < neighbour.g_score) {
-					neighbour.came_from = current;
-					neighbour.g_score = tentative_g_score;
-					neighbour.f_score = neighbour.g_score + heuristic_manhattan_distance(goal, neighbour)*HEURISTIC_UPSAMPLE;
-					if (!openSet.contains(neighbour)) {
-						openSet.add(neighbour);
-					}
-				}
-			}
-		}
-		// Failure to find path.
-		Log.e("Failed to find path to target!");
-		return Collections.emptyList();
-	}
-
-	
-	@SuppressWarnings("unused")
-	private static double heuristic_vector_distance(AStarPosition start, AStarPosition goal /*, List<IObstacle> obsList, IShape simShape*/) {
-	    return Math.sqrt(Math.pow(Math.abs(goal.getX() - start.getX()), 2) + Math.pow(Math.abs(goal.getY() - start.getY()), 2));
-	}
-	
-    public static double heuristic_manhattan_distance(AStarPosition a, AStarPosition b /*, List<IObstacle> obsList, IShape simShape*/){
-       return a.getDistance(b);
-    	//return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY());
-    }
-	
-	private static List<Position> reconstructPath(AStarPosition current_node) {
-		List<Position> result = new ArrayList<Position>();
-		AStarPosition current = current_node;
-		while(current != null) {
-			result.add(current);
-			current = current.came_from;
-		}
-	    Collections.reverse(result);
-		return result;
-	}
-	
-
-	public static List<AStarPosition> getNeighbours(AStarPosition p /*, List<IObstacle> obsList, IShape shape*/) {
-		List<AStarPosition> neighbours = new ArrayList<AStarPosition>(8);
-		//TODO: Check here if positions is not inside obstacle. And inside simulation dimension.
-		neighbours.add(new AStarPosition(p.getX(), 	p.getY()+1));
-		neighbours.add(new AStarPosition(p.getX()+1, p.getY()));
-		neighbours.add(new AStarPosition(p.getX()-1, p.getY()));
-		neighbours.add(new AStarPosition(p.getX(), 	p.getY()-1));
-		neighbours.add(new AStarPosition(p.getX()+1, p.getY()-1));
-		neighbours.add(new AStarPosition(p.getX()-1, p.getY()+1));
-		neighbours.add(new AStarPosition(p.getX()+1, p.getY()+1));
-		neighbours.add(new AStarPosition(p.getX()-1, p.getY()-1));
-		return neighbours;
-	}
-	
-	@Override
-	public String toString(){
-		return "("+this.x+","+this.y+")";
-	}
-	
-	private static class AStarPositionComparator implements Comparator<AStarPosition> {
-		@Override
-		public int compare(AStarPosition o1, AStarPosition o2) {
-			if(o1.getGF() > o2.getGF()) {
-				return 1;
-			} else if(o1.getGF() < o2.getGF()) {
-				return -1;
-			}
-			return 0;
-		}
-	}
-	
-	/**
-	 * Internal Position class for use with A* shortest path algorithm.
-	 * <p>
-	 * Should not be used outside of Position class.
-	 * 
-	 * @author Erik Ramqvist
-	 *
-	 */
-	private static class AStarPosition extends Position {
-		double g_score;
-		double f_score;
-		AStarPosition came_from;
-		public double getGF() {
-			return g_score+f_score;
-		}
-		public AStarPosition(double x, double y) {
-			super(x,y);
-		}
-
-		@Override
-		public String toString() {
-			return "G: " + g_score + " F: " + f_score + " " + super.toString();
-		}
-		
-
-		/**
-		 * Gets the neighbours of one AStarPosition.
-		 * <p>
-		 * Is shape really needed here? Since we guarantee Agents are inside the shape.
-		 * 
-		 * @param p1
-		 * @param obsList
-		 * @param shape
-		 * @return
-		 */
-		public static List<AStarPosition> getNeighbours(AStarPosition p1, List<IObstacle> obsList, int upsampleRate/*, IShape shape*/) {
-			List<AStarPosition> neighbours = new ArrayList<AStarPosition>(8);
-			if(obsList.isEmpty()) {
-				neighbours.add(new AStarPosition(p1.getX(), 	p1.getY()+upsampleRate));
-				neighbours.add(new AStarPosition(p1.getX(), 	p1.getY()-upsampleRate));
-				neighbours.add(new AStarPosition(p1.getX()+upsampleRate, p1.getY()));
-				neighbours.add(new AStarPosition(p1.getX()-upsampleRate, p1.getY()));
-				neighbours.add(new AStarPosition(p1.getX()+upsampleRate, p1.getY()-upsampleRate));
-				neighbours.add(new AStarPosition(p1.getX()-upsampleRate, p1.getY()+upsampleRate));
-				neighbours.add(new AStarPosition(p1.getX()+upsampleRate, p1.getY()+upsampleRate));
-				neighbours.add(new AStarPosition(p1.getX()-upsampleRate, p1.getY()-upsampleRate));
-			} else {
-				double x = p1.getX();
-				double y = p1.getY();
-				AStarPosition p2 = new AStarPosition(x, y+upsampleRate);
-				if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
-					neighbours.add(p2);
-				}
-				p2 = new AStarPosition(x+upsampleRate, y);
-				if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
-					neighbours.add(p2);
-				}
-				p2 = new AStarPosition(x-upsampleRate, y);
-				if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
-					neighbours.add(p2);
-				}
-				p2 = new AStarPosition(x, y-upsampleRate);
-				if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
-					neighbours.add(p2);
-				}
-				p2 = new AStarPosition(x+upsampleRate, y-upsampleRate);
-				if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
-					neighbours.add(p2);
-				}
-				p2 = new AStarPosition(x-upsampleRate, y+upsampleRate);
-				if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
-					neighbours.add(p2);
-				}
-				p2 = new AStarPosition(x+upsampleRate, y+upsampleRate);
-				if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
-					neighbours.add(p2);
-				}
-				p2 = new AStarPosition(x-upsampleRate, y-upsampleRate);
-				if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
-					neighbours.add(p2);
-				}
-				
-			}
-			return neighbours;
-		}
+	public static List<Position> getShortestPath(Position startPos, Position endPos , List<IObstacle> obsList, IShape simShape, Dimension simDimension) {
+		JPSPathfinder jps = new JPSPathfinder(obsList, simShape, simDimension);
+		return jps.getShortestPath(startPos, startPos);
 	}
 
 }

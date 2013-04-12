@@ -85,7 +85,7 @@ public class ShortestPathTester extends JPanel {
 		} else {
 			for(int i = 0; i < 10; i++) {
 				time = System.nanoTime();
-				result = Position.getShortestPathHashSet(start, end, obsList, 1);
+				result = getShortestPathHashSet(start, end, obsList);
 				elapsed = (System.nanoTime() - time)*0.000001;
 				System.out.println("HashSet Completed in: " + elapsed + " ms. Positions: " + result.size());
 				stat.addObservation(elapsed);
@@ -700,10 +700,6 @@ public class ShortestPathTester extends JPanel {
 		return nodes.toArray(new AStarPosition[nodes.size()]);
 	}
 
-
-	private enum Direction {
-	    UP, DOWN, LEFT, RIGHT, UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT 
-	}
 	
 	private AStarPosition normalizeDirection(double x, double y, double d, double e) {
 		double dx = x - d, dy = y - e;
