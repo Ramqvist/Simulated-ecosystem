@@ -82,7 +82,7 @@ public class PigAgent extends AbstractAgent {
 		Vector separationForce = getEriksOptimeradeSeparationForce(neutral);
 		// Vector separationForce = getSeparationForce(neutral);
 		// Vector separationForce = new Vector();
-		Vector environmentForce = getEnvironmentForce(gridDimension, shape);
+		Vector environmentForce = getEnvironmentForce(gridDimension, shape, position);
 		Vector preyForce = getPreyForce(preys);
 
 		/*

@@ -96,13 +96,15 @@ public class DeerAgent extends AbstractAgent {
 			Vector forwardThrust = new Vector();
 			Vector arrayalForce = new Vector();
 			if (groupBehaviour) {
-				mutualInteractionForce = mutualInteractionForce();
-				forwardThrust = forwardThrust();
-				arrayalForce = arrayalForce();
+				mutualInteractionForce = mutualInteractionForce(
+						neutralNeighbours, position);
+				forwardThrust = forwardThrust(velocity);
+				arrayalForce = arrayalForce(velocity, neutralNeighbours, position);
 			}
 
-			Vector environmentForce = getEnvironmentForce(gridDimension, shape);
-			Vector obstacleForce = getObstacleForce(obstacles);
+			Vector environmentForce = getEnvironmentForce(gridDimension, shape,
+					position);
+			Vector obstacleForce = getObstacleForce(obstacles, position);
 
 			/*
 			 * Sum the forces from walls, predators and neutral to form the
@@ -144,9 +146,9 @@ public class DeerAgent extends AbstractAgent {
 			if (speed > maxSpeed) {
 				newVelocity.multiply(maxSpeed / speed);
 			}
-//			if (alone) {
-//				newVelocity.multiply(0.9);
-//			}
+			// if (alone) {
+			// newVelocity.multiply(0.9);
+			// }
 			this.setVelocity(newVelocity);
 
 			/* Reusing the same position object, for less heap allocations. */

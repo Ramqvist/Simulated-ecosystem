@@ -124,6 +124,4 @@ public interface IAgent extends Cloneable {
 	 * @return True if alive, otherwise false.
 	 */
 	public boolean isAlive();
-	
-	public Vector getObstacleForce(List<IObstacle> obstacles);
 }
