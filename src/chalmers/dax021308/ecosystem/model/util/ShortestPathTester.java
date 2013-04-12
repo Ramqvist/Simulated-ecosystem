@@ -33,7 +33,7 @@ public class ShortestPathTester extends JPanel {
 	private static final long serialVersionUID = 3766084045600317521L;
 	private static final double HEURISTIC_UPSAMPLE = 1;
 	private static final long ITERATION_TIME = 20;
-	private static final double coordinateScaling = 50;
+	private static final double coordinateScaling = 10;
 	private static final Dimension simulationDimension = new Dimension(750, 750);
 	
 	private static HashSet<AStarPosition> closedSet;
@@ -151,7 +151,7 @@ public class ShortestPathTester extends JPanel {
 	private void drawAStarPosition(Position p, Graphics g, Color c) {
 		//draw position
 		g.setColor(c);
-		g.fillRect((int) p.getX(),(int)  p.getY(), 10, 10);
+		g.fillRect((int) p.getX(),(int)  p.getY(),(int) coordinateScaling,(int) coordinateScaling);
 	}
 	
 	public List<Position> getShortestPath(Position startPos, Position endPos, List<IObstacle> obsList) {
@@ -706,44 +706,12 @@ public class ShortestPathTester extends JPanel {
 		return new AStarPosition(dx, dy);
 	}
 	
-	private void computeDiagonalFirstPath(List<AStarPosition> path) {
-		
-	}
-	
-	/**
-	 * ?!
-	 * @param goal 
-	 * @param start 
-	 * @param aStarPosition 
-	 * @param x 
-	 */
-	private AStarPosition jump2(AStarPosition x, Direction d, AStarPosition start, AStarPosition goal) {
-		AStarPosition n = step(x, d);
-		if(AbstractObstacle.isInsideObstacleList(obsList, n)) {
-			return null;
-		}
-		if(n.equals(goal)) {
-			return n;
-		}
-		for(AStarPosition b : getNeighbours(n, new ArrayList<IObstacle>(0), 1)) {
-			if(isForced(b)) {
-				return b;
-			}
-		}
-		if(isDiagonal(d)) {
-			if(jump2(n, rotate(d), start, goal) != null) {
-				return n;
-			}
-			if(jump2(n, rotate(rotate(d)), start, goal) != null) {
-				return n;
-			}
-		}
-		return jump2(n, d, start, goal);
-	}
-	
 	private AStarPosition jump(AStarPosition node, AStarPosition parent) {
 		double x = node.getX(), y = node.getY(), px = parent.getX(), py = parent.getY();
-		double dx = x - px, dy = y - py;
+		double dx = (x - px);
+		double dy = (y - py);
+		Log.e("Coordinatescaling: " + coordinateScaling);
+		Log.e("dy: " + dy + " dx: " + dx);
 //		Log.e("JUMP! node: " + node.toString() + " parent: " + parent.toString() + " dx: " + dx + " dy: " + dy);
 		if (!walkable(node, obsList)) // check blocked
 			return null;
@@ -765,18 +733,24 @@ public class ShortestPathTester extends JPanel {
 			if (v != null)
 				return new AStarPosition(node);
 			} else if (dx == 0) { // vertical, dx = 0, dy = 1 or -1
-				if ((walkable(temp.setPosition(x + 1, y + dy), obsList) && !walkable(temp.setPosition(x + 1, y), obsList)) ||
-						(walkable(temp.setPosition(x - 1, y + dy), obsList) && !walkable(temp.setPosition(x - 1, y), obsList))) {
+				if ((walkable(temp.setPosition(x + coordinateScaling, y + dy), obsList) && !walkable(temp.setPosition(x + coordinateScaling, y), obsList)) ||
+						(walkable(temp.setPosition(x - coordinateScaling, y + dy), obsList) && !walkable(temp.setPosition(x - coordinateScaling, y), obsList))) {
 					return new AStarPosition(node);
 				}
 		} else { // horizontal, dx = 1 or -1, dy = 0
-			if ((walkable(temp.setPosition(x + dx, y + 1), obsList) && !walkable(temp.setPosition(x, y + 1), obsList)) ||
-					(walkable(temp.setPosition(x + dx, y - 1), obsList) && !walkable(temp.setPosition(x, y - 1), obsList))) {
+			if ((walkable(temp.setPosition(x + dx, y + coordinateScaling), obsList) && !walkable(temp.setPosition(x, y + coordinateScaling), obsList)) ||
+					(walkable(temp.setPosition(x + dx, y - coordinateScaling), obsList) && !walkable(temp.setPosition(x, y - coordinateScaling), obsList))) {
 				return new AStarPosition(node);
 			}
 		}
 		this.jumpNode = node;
 //		repaint();
+		repaint();
+		try {
+			Thread.sleep(ITERATION_TIME);
+		} catch (InterruptedException e) {
+			
+		}
 
 		return jump(node.derive(dx, dy), node);
 	}
@@ -788,80 +762,6 @@ public class ShortestPathTester extends JPanel {
 		return !AbstractObstacle.isInsideObstacleList(obsList, node);
 	}
 
-	private boolean isDiagonal(Direction d) {
-		return (d == Direction.UPLEFT || d == Direction.UPRIGHT || d ==  Direction.DOWNLEFT || d ==  Direction.DOWNRIGHT );
-	}
-
-	private Direction rotate(Direction d) {
-		if(d == Direction.UP) 			return Direction.UPRIGHT;
-		if(d == Direction.UPRIGHT) 		return Direction.RIGHT;
-		if(d == Direction.RIGHT) 		return Direction.DOWNRIGHT;
-		if(d == Direction.DOWNRIGHT) 	return Direction.DOWN;
-		if(d == Direction.DOWN) 		return Direction.DOWNLEFT;
-		if(d == Direction.DOWNLEFT) 	return Direction.LEFT;
-		if(d == Direction.LEFT) 		return Direction.UPLEFT;
-		if(d == Direction.UPLEFT) 		return Direction.UP;
-		//Should never reach here.
-		else 
-			return Direction.UP;
-	}
-
-	/**
-	 * 
-	 * @param b
-	 * @return
-	 */
-	private boolean isForced(AStarPosition b) {
-		
-		return false;
-	}
-
-	/**
-	 * Take direction d from position x
-	 * @param x
-	 * @param d
-	 * @return
-	 */
-	private AStarPosition step(AStarPosition x, Direction d) {
-		return null;
-	}
-
-	/**
-	 * 
-	 * @param x
-	 * @param start
-	 * @param goal
-	 * @return 
-	 */
-	private List<AStarPosition> identifySuccessors(AStarPosition x, AStarPosition start, AStarPosition goal) {
-		List<AStarPosition> successors = new ArrayList<ShortestPathTester.AStarPosition>();
-		List<AStarPosition> neighbours = prune(x);
-		for(AStarPosition n : neighbours) {
-			n = jump2(x, direction(x, n), start, goal);
-			successors.add(n);
-		}
-		return successors;
-	}
-
-	/**
-	 * Gets the direction from x?
-	 * @param x
-	 * @param n
-	 * @return
-	 */
-	private Direction direction(AStarPosition x, AStarPosition n) {
-		return null;
-	}
-
-	
-	/**
-	 * ?!
-	 * @param x
-	 * @return
-	 */
-	private List<AStarPosition> prune(AStarPosition x) {
-		return null;
-	}
 	
 	
 	
