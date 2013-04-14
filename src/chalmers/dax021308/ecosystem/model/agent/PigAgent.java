@@ -125,8 +125,7 @@ public class PigAgent extends AbstractAgent {
 						.add(mutualInteractionForce).add(forwardThrust)
 						.add(arrayalForce);
 				// if (alone) {
-				Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys, focusedPrey,
-						this, preyNeighbours, visionRange, maxAcceleration);
+				Vector preyForce = getPreyForce(shape, gridDimension);
 				acceleration.add(preyForce.multiply(5 * (1 - energy
 						/ MAX_ENERGY)));
 			}

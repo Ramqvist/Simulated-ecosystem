@@ -52,7 +52,7 @@ public abstract class AbstractAgent implements IAgent {
 
 	protected final static double INTERACTION_RANGE = 10;
 	protected final static double EATING_RANGE = 5;
-	protected final static double FOCUS_RANGE = 100;
+	protected final static double FOCUS_RANGE = 500;
 	protected static final double VELOCITY_DECAY = 0.97;
 
 	public AbstractAgent(String name, Position position, Color color,
