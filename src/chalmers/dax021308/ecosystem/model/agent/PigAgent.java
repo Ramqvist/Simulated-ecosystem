@@ -218,14 +218,7 @@ public class PigAgent extends AbstractAgent {
 					/*
 					 * Create a vector that points towards the prey.
 					 */
-					Vector newForce = null;
-					List<Position> pathToTarget = Position.getShortestPath(position, p, obstacles, shape, dim);
-					if(pathToTarget == null || pathToTarget.size() == 0) {
-						//Focused prey cant be reached. Change target.
-						newForce = Vector.emptyVector();
-					} else {
-						newForce = new Vector(pathToTarget.get(0), position);
-					}
+					Vector newForce = new Vector(p, position);
 
 					/*
 					 * Add this vector to the prey force, with proportion to how
