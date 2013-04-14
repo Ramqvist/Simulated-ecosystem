@@ -65,6 +65,7 @@ public class ShortestPathTester extends JPanel {
 		
 		Position start = new Position(140.4120, 149.0);
 		Position end = new Position(602.0, 472.0); 
+		Dimension dim = new Dimension(700, 700);
 		goal = new AStarPosition(end.x, end.y);
 		if(AbstractObstacle.isInsideObstacleList(obsList, start) || AbstractObstacle.isInsideObstacleList(obsList, end)) {
 			Log.e("Either positions is inside obstacle.");
@@ -72,23 +73,35 @@ public class ShortestPathTester extends JPanel {
 		System.out.println("Distance: " + start.getDistance(end));
 		long time;
 		double elapsed;
-		boolean executeJPS = true;
+		boolean executeJPS = false;
+		boolean tryRealShortestPath = true;
 		Stat<Double> stat = new Stat<Double>();
-		if(executeJPS ) {
-			for(int i = 0; i < 1; i++) {
+		IShape shape = new SquareShape();
+		if(tryRealShortestPath) {
+			for(int i = 0; i < 10; i++) {
 				time = System.nanoTime();
-				result = getShortestPath(start, end, obsList);
+				result = Position.getShortestPath(start, end, obsList, shape, dim);
 				elapsed = (System.nanoTime() - time)*0.000001;
-				System.out.println("JumpPointsSearch Completed in: " + elapsed + " ms. Positions: " + result.size());
+				System.out.println("Real GetShortest path Completed in: " + elapsed + " ms. Positions: " + result.size());
 				stat.addObservation(elapsed);
 			}
 		} else {
-			for(int i = 0; i < 10; i++) {
-				time = System.nanoTime();
-				result = getShortestPathHashSet(start, end, obsList);
-				elapsed = (System.nanoTime() - time)*0.000001;
-				System.out.println("HashSet Completed in: " + elapsed + " ms. Positions: " + result.size());
-				stat.addObservation(elapsed);
+			if(executeJPS ) {
+				for(int i = 0; i < 1; i++) {
+					time = System.nanoTime();
+					result = getShortestPath(start, end, obsList);
+					elapsed = (System.nanoTime() - time)*0.000001;
+					System.out.println("JumpPointsSearch Completed in: " + elapsed + " ms. Positions: " + result.size());
+					stat.addObservation(elapsed);
+				}
+			} else {
+				for(int i = 0; i < 10; i++) {
+					time = System.nanoTime();
+					result = getShortestPathHashSet(start, end, obsList);
+					elapsed = (System.nanoTime() - time)*0.000001;
+					System.out.println("HashSet Completed in: " + elapsed + " ms. Positions: " + result.size());
+					stat.addObservation(elapsed);
+				}
 			}
 		}
 		

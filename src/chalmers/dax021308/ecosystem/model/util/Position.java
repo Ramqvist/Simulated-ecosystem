@@ -114,6 +114,11 @@ public class Position {
 			return false;
 		return true;
 	}
+	
+	@Override
+	public String toString() {
+		return "(" + this.x + "," + this.y + ")";
+	}
 
 	/**
 	 * Optimized version of A* with dynamic datastructure based on distance to target.
@@ -124,7 +129,7 @@ public class Position {
 	 */
 	public static List<Position> getShortestPath(Position startPos, Position endPos , List<IObstacle> obsList, IShape simShape, Dimension simDimension) {
 		JPSPathfinder jps = new JPSPathfinder(obsList, simShape, simDimension);
-		return jps.getShortestPath(startPos, startPos);
+		return jps.getShortestPath(startPos, endPos);
 	}
 
 }

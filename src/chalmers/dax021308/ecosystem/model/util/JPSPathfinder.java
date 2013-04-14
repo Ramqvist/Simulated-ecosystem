@@ -26,7 +26,20 @@ public class JPSPathfinder {
 	}
 	
 	public List<Position> getShortestPath(Position start, Position end) {
-		return getShortestPathJumpPointsSearch(start, end);
+		double distance = start.getDistance(end);
+		if(distance > 75) {
+			coordinateScaling = 10;
+			double x = Math.round((end.getX() / coordinateScaling))*coordinateScaling;
+			double y = Math.round((end.getY() / coordinateScaling))*coordinateScaling;
+			Position newEnd = new Position(x, y);
+			x = Math.round((start.getX() / coordinateScaling))*coordinateScaling;
+			y = Math.round((start.getY() / coordinateScaling))*coordinateScaling;
+			Position newStartPos = new Position(x, y);
+			return getShortestPathJumpPointsSearch(newStartPos, newEnd);
+		} else {
+			coordinateScaling = 1;
+			return getShortestPathJumpPointsSearch(start, end);
+		}
 	}
 
 
@@ -36,28 +49,23 @@ public class JPSPathfinder {
 	 * @author Erik
 	 *
 	 */
-	private class AStarPosition extends Position {
+	private class JPSNode extends Position {
 		double g_score;
-		double f_score;
-		AStarPosition came_from;
-		public AStarPosition(double x, double y) {
+		JPSNode came_from;
+		public JPSNode(double x, double y) {
 			super(x,y);
 		}
 
-		public AStarPosition(AStarPosition a) {
+		public JPSNode(JPSNode a) {
 			super(a.x,a.y);
-		}
-
-		public double getGF() {
-			return g_score+f_score;
 		}
 		
 		@Override
 		public String toString() {
-			return "AStarPosition G: " + g_score + " F: " + f_score + " " + super.toString();
+			return "JPSNode G: " + g_score + " " + super.toString();
 		}
 		
-		public AStarPosition shift(double x, double y) {
+		public JPSNode shift(double x, double y) {
 			this.x += x;
 			this.y += y;
 			return this;
@@ -65,13 +73,13 @@ public class JPSPathfinder {
 		
 		protected double getG() {
 			if (g_score == 0) {
-				final AStarPosition parent = came_from;
+				final JPSNode parent = came_from;
 				g_score = parent != null ? parent.getG() + parent.getMoveCost(this) : 0.0D;
 			}
 			return g_score;
 		}
 
-		public double getMoveCost(AStarPosition node) {
+		public double getMoveCost(JPSNode node) {
 			if (node == null)
 				return 0;
 			double x = node.getX(), y = node.getY(), px = getX(), py = getY();
@@ -89,12 +97,12 @@ public class JPSPathfinder {
 			return Math.abs(temp);
 		}
 		
-		public AStarPosition derive(double x, double y) {
+		public JPSNode derive(double x, double y) {
 			return clone().shift(x, y);
 		}
 
 		@Override
-		public AStarPosition setPosition(double x, double y) {
+		public JPSNode setPosition(double x, double y) {
 			this.x = x;
 			this.y = y;
 			return this;
@@ -102,17 +110,17 @@ public class JPSPathfinder {
 
 		
 		@Override
-		public AStarPosition clone() {
-			AStarPosition clone = new AStarPosition(x, y);
+		public JPSNode clone() {
+			JPSNode clone = new JPSNode(x, y);
 			clone.came_from = this;
 			return clone;
 		}
 	}
 	
 
-	private List<Position> reconstructPath(AStarPosition current_node) {
+	private List<Position> reconstructPath(JPSNode current_node) {
 		List<Position> result = new ArrayList<Position>();
-		AStarPosition current = current_node;
+		JPSNode current = current_node;
 		while(current != null) {
 			result.add(current);
 			current = current.came_from;
@@ -122,21 +130,17 @@ public class JPSPathfinder {
 	}
 
 	public List<Position> getShortestPathJumpPointsSearch(Position startPos, Position endPos) {
-			AStarPosition start = new AStarPosition(startPos.getX(), startPos.getY());
-			AStarPosition goal = new AStarPosition(endPos.getX(), endPos.getY());
-			HashSet<AStarPosition> closedSet = new HashSet<AStarPosition>();
-			HashSet<AStarPosition> openSet = new HashSet<AStarPosition>();
+			JPSNode start = new JPSNode(startPos.getX(), startPos.getY());
+			JPSNode goal = new JPSNode(endPos.getX(), endPos.getY());
+			HashSet<JPSNode> closedSet = new HashSet<JPSNode>();
+			HashSet<JPSNode> openSet = new HashSet<JPSNode>();
 			openSet.add(start);
-			//start.g_score = 0.0;
-			//start.f_score = start.getDistance(goal);
-			AStarPosition current = start;// the node in openset having the lowest
-										// f_score[] value
+			JPSNode current = start;
 			double lowScore = Integer.MAX_VALUE;
 			while (!openSet.isEmpty()) {
-				// Get the AStarPosition with the lowest estimated distance to target.
 				lowScore = Integer.MAX_VALUE;
-				for (AStarPosition n : openSet) {
-					double score = n.f_score;
+				for (JPSNode n : openSet) {
+					double score = n.g_score;
 					if (score < lowScore) {
 						current = n;
 						lowScore = score;
@@ -146,7 +150,6 @@ public class JPSPathfinder {
 						}
 					}
 				}
-//				();
 //				try {
 //					Thread.sleep(ITERATION_TIME);
 //				} catch (InterruptedException e) {
@@ -163,8 +166,8 @@ public class JPSPathfinder {
 				}
 				openSet.remove(current);
 				closedSet.add(current);
-				for(AStarPosition neighbour : getJPSNeighbours(current, obsList)) {
-					AStarPosition jumpPoint = jump(neighbour, current, goal, obsList, shape);
+				for(JPSNode neighbour : getJPSNeighbours(current, obsList)) {
+					JPSNode jumpPoint = jump(neighbour, current, goal, obsList, shape);
 					if (jumpPoint != null) {
 						if (closedSet.contains(jumpPoint))
 							continue;
@@ -172,127 +175,123 @@ public class JPSPathfinder {
 							jumpPoint.came_from = current;
 							openSet.add(jumpPoint);
 						} else if ((current.getG() + current.getMoveCost(jumpPoint)) < jumpPoint.getG()) { // G score of node with current node as it's parent
-							AStarPosition instanceNode = retrieveInstance(openSet, jumpPoint);
+							JPSNode instanceNode = retrieveInstance(openSet, jumpPoint);
 							if (instanceNode != null)
 								instanceNode.came_from = current;
 						}
 					}
 				}
 			}
-			// Failure to find path.
-			Log.e("Failed to find path to target!");
+			Log.e("Failed to find path to target! Start: " + start + " End: " + endPos);
 			return Collections.emptyList();
 	}
 	
-	private AStarPosition retrieveInstance(HashSet<AStarPosition> openSet, AStarPosition node) {
+	private JPSNode retrieveInstance(HashSet<JPSNode> openSet, JPSNode node) {
 		if (node == null)
 			return null;
-		final Iterator<AStarPosition> nI = openSet.iterator();
+		final Iterator<JPSNode> nI = openSet.iterator();
 		while (nI.hasNext()) {
-			final AStarPosition n = nI.next();
+			final JPSNode n = nI.next();
 			if (node.equals(n))
 				return n;
 		}
 		return null;
 	}
 
-	private AStarPosition[] getJPSNeighbours(AStarPosition current,	List<IObstacle> obsList) {
+	private JPSNode[] getJPSNeighbours(JPSNode current,	List<IObstacle> obsList) {
 		double x = current.getX();
 		double y = current.getY();
-		LinkedList<AStarPosition> nodes = new LinkedList<AStarPosition>();
-		AStarPosition parent = current.came_from;
+		LinkedList<JPSNode> nodes = new LinkedList<JPSNode>();
+		JPSNode parent = current.came_from;
 		if (parent != null) { // determines whether to prune neighbors
-			// normalize
-			AStarPosition norm = normalizeDirection(x, y, parent.getX(), parent.getY());
+			JPSNode norm = normalizeDirection(x, y, parent.getX(), parent.getY());
 			double dx = norm.getX()*coordinateScaling;
 			double dy = norm.getY()*coordinateScaling;
-			AStarPosition temp = new AStarPosition(current);
+			JPSNode temp = new JPSNode(current);
 			if (((int) dx & (int) dy) != 0) { // diagonal direction
 				// check straight directions in the direction of the diagonal move
-				if (!AbstractObstacle.isInsideObstacleList(obsList, temp.setPosition(x, y + dy)))
-					nodes.add(new AStarPosition(temp));
-				if (!AbstractObstacle.isInsideObstacleList(obsList,temp.setPosition(x + dx, y)))
-					nodes.add(new AStarPosition(temp));
-				if (!AbstractObstacle.isInsideObstacleList(obsList,temp.setPosition(x + dx, y + dy)))
-					nodes.add(new AStarPosition(temp));
+				if (walkable(temp.setPosition(x, y + dy)))
+					nodes.add(new JPSNode(temp));
+				if (walkable(temp.setPosition(x + dx, y)))
+					nodes.add(new JPSNode(temp));
+				if (walkable(temp.setPosition(x + dx, y + dy)))
+					nodes.add(new JPSNode(temp));
 				// forced neighbor checks
-				if (AbstractObstacle.isInsideObstacleList(obsList,temp.setPosition(x - dx, y)))
-					nodes.add(new AStarPosition(temp.shift(0, dy)));
-				if (AbstractObstacle.isInsideObstacleList(obsList,temp.setPosition(x, y - dy)))
-					nodes.add(new AStarPosition(temp.shift(dx, 0)));
+				if (!walkable(temp.setPosition(x - dx, y)))
+					nodes.add(new JPSNode(temp.shift(0, dy)));
+				if (!walkable(temp.setPosition(x, y - dy)))
+					nodes.add(new JPSNode(temp.shift(dx, 0)));
 			} else { // straight direction
-				if (!AbstractObstacle.isInsideObstacleList(obsList,temp.setPosition(x + dx, y + dy))) {
-					nodes.add(new AStarPosition(temp));
+				if (walkable(temp.setPosition(x + dx, y + dy))) {
+					nodes.add(new JPSNode(temp));
 					// forced neighbor checks
-					if (AbstractObstacle.isInsideObstacleList(obsList,temp.setPosition(x + dy, y + dx)))
-						nodes.add(new AStarPosition(temp.shift(dx, dy)));
-					if (AbstractObstacle.isInsideObstacleList(obsList,temp.setPosition(x - dy, y - dx)))
-						nodes.add(new AStarPosition(temp.shift(dx, dy)));
+					if (!walkable(temp.setPosition(x + dy, y + dx)))
+						nodes.add(new JPSNode(temp.shift(dx, dy)));
+					if (!walkable(temp.setPosition(x - dy, y - dx)))
+						nodes.add(new JPSNode(temp.shift(dx, dy)));
 				}
 			}
 		} else {
 		// no parent, return all that aren't blocked
-		AStarPosition[] ns = new AStarPosition[] { new AStarPosition(x, y - coordinateScaling), new AStarPosition(x + coordinateScaling, y - coordinateScaling), new AStarPosition(x + coordinateScaling, y), new AStarPosition(x + coordinateScaling, y + coordinateScaling),
-		new AStarPosition(x, y + coordinateScaling), new AStarPosition(x - coordinateScaling, y + coordinateScaling), new AStarPosition(x - coordinateScaling, y), new AStarPosition(x - coordinateScaling, y - coordinateScaling) };
+		JPSNode[] ns = new JPSNode[] { new JPSNode(x, y - coordinateScaling), new JPSNode(x + coordinateScaling, y - coordinateScaling), new JPSNode(x + coordinateScaling, y), new JPSNode(x + coordinateScaling, y + coordinateScaling),
+		new JPSNode(x, y + coordinateScaling), new JPSNode(x - coordinateScaling, y + coordinateScaling), new JPSNode(x - coordinateScaling, y), new JPSNode(x - coordinateScaling, y - coordinateScaling) };
 		for (int i = 0; i < ns.length; i++) {
-			if (!AbstractObstacle.isInsideObstacleList(obsList, ns[i]))
+			if (walkable(ns[i]))
 				nodes.add(ns[i]);
 			}
 		}
-		return nodes.toArray(new AStarPosition[nodes.size()]);
+		return nodes.toArray(new JPSNode[nodes.size()]);
 	}
 
 	
-	private AStarPosition normalizeDirection(double x, double y, double d, double e) {
+	private JPSNode normalizeDirection(double x, double y, double d, double e) {
 		double dx = x - d, dy = y - e;
 		dx /= Math.max(Math.abs(dx), 1);
 		dy /= Math.max(Math.abs(dy), 1);
-		return new AStarPosition(dx, dy);
+		return new JPSNode(dx, dy);
 	}
 	
-	private AStarPosition jump(AStarPosition node, AStarPosition parent, AStarPosition goal, List<IObstacle> obsList, IShape shape) {
+	private JPSNode jump(JPSNode node, JPSNode parent, JPSNode goal, List<IObstacle> obsList, IShape shape) {
 		double x = node.getX(), y = node.getY(), px = parent.getX(), py = parent.getY();
 		double dx = (x - px);
 		double dy = (y - py);
-		Log.e("Coordinatescaling: " + coordinateScaling);
-		Log.e("dy: " + dy + " dx: " + dx);
+//		Log.e("Coordinatescaling: " + coordinateScaling);
+//		Log.e("dy: " + dy + " dx: " + dx);
 //		Log.e("JUMP! node: " + node.toString() + " parent: " + parent.toString() + " dx: " + dx + " dy: " + dy);
 		if (!walkable(node)) // check blocked
 			return null;
 		if (node.equals(goal)) // reached goal
-			return new AStarPosition(node);
+			return new JPSNode(node);
 		
 		// resolve forced neighbors
-		AStarPosition temp = new AStarPosition(node);
+		JPSNode temp = new JPSNode(node);
 		if (((int) dx & (int) dy) != 0) { // diagonal
 			if ((walkable(temp.setPosition(x - dx, y + dy)) && !walkable(temp.setPosition(x - dx, y))) ||
 			(walkable(temp.setPosition(x + dx, y - dy)) && !walkable(temp.setPosition(x, y - dy)))) {
-				return new AStarPosition(node);
+				return new JPSNode(node);
 			}
 			// recurse
-			AStarPosition h = jump(node.derive(dx, 0), node, goal, obsList, shape);
+			JPSNode h = jump(node.derive(dx, 0), node, goal, obsList, shape);
 			if (h != null)
-				return new AStarPosition(node);
-			AStarPosition v = jump(node.derive(0, dy), node, goal, obsList, shape);
+				return new JPSNode(node);
+			JPSNode v = jump(node.derive(0, dy), node, goal, obsList, shape);
 			if (v != null)
-				return new AStarPosition(node);
+				return new JPSNode(node);
 			} else if (dx == 0) { // vertical, dx = 0, dy = 1 or -1
 				if ((walkable(temp.setPosition(x + coordinateScaling, y + dy)) && !walkable(temp.setPosition(x + coordinateScaling, y))) ||
 						(walkable(temp.setPosition(x - coordinateScaling, y + dy)) && !walkable(temp.setPosition(x - coordinateScaling, y)))) {
-					return new AStarPosition(node);
+					return new JPSNode(node);
 				}
 		} else { // horizontal, dx = 1 or -1, dy = 0
 			if ((walkable(temp.setPosition(x + dx, y + coordinateScaling)) && !walkable(temp.setPosition(x, y + coordinateScaling))) ||
 					(walkable(temp.setPosition(x + dx, y - coordinateScaling)) && !walkable(temp.setPosition(x, y - coordinateScaling)))) {
-				return new AStarPosition(node);
+				return new JPSNode(node);
 			}
 		}
-//		repaint();
-
 		return jump(node.derive(dx, dy), node, goal, obsList, shape);
 	}
 	
-	private boolean walkable(AStarPosition node) {
+	private boolean walkable(JPSNode node) {
 		return !AbstractObstacle.isInsideObstacleList(obsList, node) && shape.isInside(simulationDim, node);
 	}
 }
