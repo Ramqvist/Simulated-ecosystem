@@ -315,7 +315,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 
        
             	increaseUpdateValue();
-            	long start = System.currentTimeMillis();
+//            	long start = System.currentTimeMillis();
             	
                 double frameHeight = (double)getHeight();
                 double frameWidth  = (double)getWidth();

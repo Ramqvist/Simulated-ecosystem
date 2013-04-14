@@ -68,5 +68,11 @@ public class TriangleShape implements IShape {
 				&& p.getX() > getXWallLeft(dim, p).getX()
 				&& p.getX() < getXWallRight(dim, p).getX();
 	}
+	
+
+	@Override
+	public String toString() {
+		return name;
+	}
 
 }

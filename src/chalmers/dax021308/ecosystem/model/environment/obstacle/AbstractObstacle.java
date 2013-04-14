@@ -84,6 +84,9 @@ public abstract class AbstractObstacle implements IObstacle {
 	}
 	
 	public static boolean isInsideObstacleList(List<IObstacle> obsList, Position p) {
+		if(obsList == null) {
+			return false;
+		}
 		for(IObstacle o : obsList) {
 			if(o.isInObstacle(p)) {
 				return true;

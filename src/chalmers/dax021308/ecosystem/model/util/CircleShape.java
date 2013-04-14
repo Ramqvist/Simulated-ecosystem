@@ -75,6 +75,11 @@ public class CircleShape implements IShape {
 	}
 
 	@Override
+	public String toString() {
+		return name;
+	}
+
+	@Override
 	public boolean isInside(Dimension dim, Position p) {
 		// If the distance between the position and the middle of the circle is
 		// smaller than the radius, then it's inside the shape.

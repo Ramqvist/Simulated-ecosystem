@@ -134,6 +134,7 @@ public class Position {
 	 * @return
 	 */
 	public static List<Position> getShortestPath(Position startPos, Position endPos , List<IObstacle> obsList, IShape simShape, Dimension simDimension) {
+		
 		JPSPathfinder jps = new JPSPathfinder(obsList, simShape, simDimension);
 		return jps.getShortestPath(startPos, endPos);
 	}

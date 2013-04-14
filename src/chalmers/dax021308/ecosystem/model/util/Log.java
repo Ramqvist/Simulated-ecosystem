@@ -56,7 +56,8 @@ public class Log {
 	 */
 	public static void v(Object o) {
 		if(enableLog && currentLogLevel == LEVEL_VERBOSE) {
-			System.out.println(o.toString());
+			if(o != null)	System.out.println(o.toString());
+			else 			System.out.println("null");
 		}
 	}
 	

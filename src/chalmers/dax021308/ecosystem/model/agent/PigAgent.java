@@ -8,13 +8,14 @@ import java.util.List;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.IShape;
+import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
- * A basic implementation of the IAgent interface.
+ * Pig Agent.
  * 
- * @author Albin
+ * @author Group 8, path finding edits by Erik Ramqvist
  */
 public class PigAgent extends AbstractAgent {
 
@@ -120,7 +121,7 @@ public class PigAgent extends AbstractAgent {
 						.add(mutualInteractionForce).add(forwardThrust)
 						.add(arrayalForce);
 				// if (alone) {
-				Vector preyForce = getPreyForce();
+				Vector preyForce = getPreyForce(shape, gridDimension);
 				acceleration.add(preyForce.multiply(5 * (1 - energy
 						/ MAX_ENERGY)));
 			}
@@ -160,12 +161,14 @@ public class PigAgent extends AbstractAgent {
 			// }
 		}
 	}
+	
+	
 
 	/**
 	 * @return returns The force the preys attracts the agent with
 	 * @author Sebastian/Henrik
 	 */
-	private Vector getPreyForce() {
+	private Vector getPreyForce(IShape shape, Dimension dim) {
 		if (willFocusPreys && focusedPrey != null && focusedPrey.isAlive()) {
 			Position p = focusedPrey.getPosition();
 			double distance = getPosition().getDistance(p);
@@ -177,7 +180,13 @@ public class PigAgent extends AbstractAgent {
 					digesting = DIGESTION_TIME;
 				}
 			} else {
-				return new Vector(focusedPrey.getPosition(), position);
+				List<Position> pathToTarget = Position.getShortestPath(position, focusedPrey.getPosition(), obstacles, shape, dim);
+				if(pathToTarget == null || pathToTarget.size() == 0) {
+					//Focused prey cant be reached. Change target.
+					focusedPrey = null;
+				} else {
+					return new Vector(pathToTarget.get(0), position);
+				}
 			}
 		}
 
@@ -209,7 +218,14 @@ public class PigAgent extends AbstractAgent {
 					/*
 					 * Create a vector that points towards the prey.
 					 */
-					Vector newForce = new Vector(p, getPosition());
+					Vector newForce = null;
+					List<Position> pathToTarget = Position.getShortestPath(position, p, obstacles, shape, dim);
+					if(pathToTarget == null || pathToTarget.size() == 0) {
+						//Focused prey cant be reached. Change target.
+						newForce = Vector.emptyVector();
+					} else {
+						newForce = new Vector(pathToTarget.get(0), position);
+					}
 
 					/*
 					 * Add this vector to the prey force, with proportion to how
@@ -229,7 +245,12 @@ public class PigAgent extends AbstractAgent {
 
 		if (willFocusPreys && closestFocusPrey != null) {
 			focusedPrey = closestFocusPrey;
-			return new Vector(focusedPrey.getPosition(), position);
+			List<Position> pathToTarget = Position.getShortestPath(position, focusedPrey.getPosition(), obstacles, shape, dim);
+			if(pathToTarget == null || pathToTarget.size() == 0) {
+				return Vector.emptyVector();
+			} else {
+				return new Vector(pathToTarget.get(0), position);
+			}
 		}
 
 		return preyForce;

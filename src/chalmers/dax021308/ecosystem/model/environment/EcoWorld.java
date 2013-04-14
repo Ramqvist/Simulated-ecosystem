@@ -300,7 +300,7 @@ public class EcoWorld implements IModel {
 					2.2, 2, 250, shape);
 		} else if (s.getPreyModel() == SimulationSettings.POP_PIG) {
 			prey = new PigPopulation("Filthy Pigs", d, s.getPreyPopSize(),
-					Color.pink, 2.0, 1.5, 225, shape);
+					Color.pink, 2.0, 3, 200, true, shape, obstacles);
 		}
 
 		if (s.getGrassModel() == SimulationSettings.POP_GRASS) {

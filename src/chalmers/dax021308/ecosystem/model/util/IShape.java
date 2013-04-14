@@ -46,4 +46,5 @@ public interface IShape {
 	 *         dimension, otherwise returns False
 	 */
 	public boolean isInside(Dimension dim, Position p);
+	
 }

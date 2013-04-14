@@ -7,6 +7,7 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.agent.DeerAgent;
+import chalmers.dax021308.ecosystem.model.agent.PigAgent;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -14,7 +15,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
  * 
- * @author Sebastian
+ * @author orignal Deer Population by Sebastian Ånerud
  * 
  */
 public class PigPopulation extends AbstractPopulation {
@@ -48,7 +49,7 @@ public class PigPopulation extends AbstractPopulation {
 				velocity.setVector(-maxSpeed + Math.random() * 2 * maxSpeed,
 						-maxSpeed + Math.random() * 2 * maxSpeed);
 			}
-			IAgent a = new DeerAgent("Deer", randPos,
+			IAgent a = new PigAgent("Deer", randPos,
 					color, 5, 10, velocity, maxSpeed, maxAcceleration,
 					visionRange, groupBehaviour);
 			newAgents.add(a);

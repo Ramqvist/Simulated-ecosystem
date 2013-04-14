@@ -38,7 +38,7 @@ public class JPSPathfinder {
 			return getShortestPathJumpPointsSearch(newStartPos, newEnd);
 		} else {
 			coordinateScaling = 1;
-			return getShortestPathJumpPointsSearch(start, end);
+			return getShortestPathJumpPointsSearch(new Position(Math.round(start.x), Math.round(start.y)), new Position(Math.round(end.x), Math.round(end.y)));
 		}
 	}
 
@@ -150,11 +150,11 @@ public class JPSPathfinder {
 						}
 					}
 				}
-//				try {
-//					Thread.sleep(ITERATION_TIME);
-//				} catch (InterruptedException e) {
-//					
-//				}
+				try {
+					Thread.sleep(16);
+				} catch (InterruptedException e) {
+					
+				}
 //				 Log.v("openset" + openSet);
 ////				 Log.v("closedSet" + closedSet);
 ////				 Log.v("g_score" + current.g_score);
@@ -182,7 +182,7 @@ public class JPSPathfinder {
 					}
 				}
 			}
-			Log.e("Failed to find path to target! Start: " + start + " End: " + endPos);
+			Log.e("Failed to find path to target! Start: " + start + " End: " + endPos + " obsList: " + obsList + " Dimension: "+  simulationDim + " Shape: " + shape);
 			return null;
 	}
 	
