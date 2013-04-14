@@ -7,6 +7,7 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
@@ -77,9 +78,9 @@ public class SimplePredatorAgent extends AbstractAgent {
 		updateNeighbourList(neutral, preys, predators);
 		
 		Vector preyForce = getPreyForce();
-		Vector separationForce = mutualInteractionForce(neutralNeighbours, position);
+		Vector separationForce = ForceCalculator.mutualInteractionForce(neutralNeighbours, this);
 		//Vector separationForce = new Vector();
-		Vector environmentForce = getEnvironmentForce(dim, shape, position);
+		Vector environmentForce = ForceCalculator.getEnvironmentForce(dim, shape, position);
 		
 		/*
 		 * Sum the forces from walls, predators and neutral to form the acceleration force.

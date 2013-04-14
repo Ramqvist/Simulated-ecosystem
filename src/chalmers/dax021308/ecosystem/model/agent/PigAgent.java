@@ -7,6 +7,7 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -88,10 +89,51 @@ public class PigAgent extends AbstractAgent {
 			List<IPopulation> preys, List<IPopulation> neutral,
 			Dimension gridDimension, IShape shape, List<IObstacle> obstacles) {
 
+<<<<<<< HEAD
 		updateNeighbourList(neutral, preys, predators);
 		Vector predatorForce = getPredatorForce();
 		if (digesting > 0 && alone) {
 			digesting--;
+=======
+		Vector predatorForce = getPredatorForce(predators);
+		Vector separationForce = getEriksOptimeradeSeparationForce(neutral);
+		// Vector separationForce = getSeparationForce(neutral);
+		// Vector separationForce = new Vector();
+		Vector environmentForce = ForceCalculator.getEnvironmentForce(gridDimension, shape, position);
+		Vector preyForce = getPreyForce(preys);
+
+		/*
+		 * Sum the forces from walls, predators and neutral to form the
+		 * acceleration force. If the acceleration exceeds maximum acceleration
+		 * --> scale it to maxAcceleration, but keep the correct direction of
+		 * the acceleration.
+		 */
+		Vector acceleration = environmentForce.multiply(100)
+				.add(predatorForce.multiply(3))
+				.add(separationForce.multiply(10).add(preyForce));
+		double accelerationNorm = acceleration.getNorm();
+		if (accelerationNorm > maxAcceleration) {
+			acceleration.multiply(maxAcceleration / accelerationNorm);
+		}
+
+		/*
+		 * The new velocity is then just: v(t+dt) = (v(t)+a(t+1)*dt)*decay,
+		 * where dt = 1 in this case. There is a decay that says if they are not
+		 * affected by any force, they will eventually stop. If speed exceeds
+		 * maxSpeed --> scale it to maxSpeed, but keep the correct direction.
+		 */
+		Vector newVelocity = this.getVelocity().add(acceleration)
+				.multiply(VELOCITY_DECAY);
+		double speed = newVelocity.getNorm();
+		if (speed > maxSpeed) {
+			newVelocity.multiply(maxSpeed / speed);
+		}
+
+		this.setVelocity(newVelocity);
+		if (reUsedPosition == null) {
+			reUsedPosition = Position.positionPlusVector(position, velocity);
+			nextPosition = reUsedPosition;
+>>>>>>> b76a4819ba1c669b419a3e19814cdd0f8774a010
 		} else {
 			Vector mutualInteractionForce = new Vector();
 			Vector forwardThrust = new Vector();

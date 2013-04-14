@@ -18,7 +18,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  * 
  * @author Henrik Abstract class for handling the dummy methods
  */
-public abstract class AbstractAgent extends ForceCalculator implements IAgent {
+public abstract class AbstractAgent implements IAgent {
 	protected Position position;
 	protected Position nextPosition;
 	protected Position reUsedPosition;
@@ -151,17 +151,17 @@ public abstract class AbstractAgent extends ForceCalculator implements IAgent {
 	public int getTrophicLevel() {
 		return trophicLevel;
 	}
-	
+
 	@Override
 	public double getMaxAcceleration() {
 		return maxAcceleration;
 	}
-	
+
 	@Override
 	public double getMaxSpeed() {
 		return maxSpeed;
 	}
-	
+
 	@Override
 	public double getVisionRange() {
 		return visionRange;
@@ -353,4 +353,10 @@ public abstract class AbstractAgent extends ForceCalculator implements IAgent {
 		result = result / 100;
 		return result;
 	}
+
+	@Override
+	public void eat() {
+		// Do nothing special, should be overriden by advanced agents.
+	}
+
 }
