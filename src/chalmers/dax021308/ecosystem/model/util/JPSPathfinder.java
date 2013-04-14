@@ -183,7 +183,7 @@ public class JPSPathfinder {
 				}
 			}
 			Log.e("Failed to find path to target! Start: " + start + " End: " + endPos);
-			return Collections.emptyList();
+			return null;
 	}
 	
 	private JPSNode retrieveInstance(HashSet<JPSNode> openSet, JPSNode node) {

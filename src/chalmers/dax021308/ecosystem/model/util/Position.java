@@ -121,8 +121,14 @@ public class Position {
 	}
 
 	/**
-	 * Optimized version of A* with dynamic datastructure based on distance to target.
-	 * Uses
+	 * Gets the shortest path between start and end.
+	 * <p> 
+	 * Uses the algorithm Jump Point Search by Daniel Harabor 2011
+	 * <p>
+	 * Source: <a href="http://www.nicta.com.au/pub?doc=4856"> link </a>
+	 * <p>
+	 * Returns null if the end position can't be reached.
+	 * 
 	 * @param startPos
 	 * @param endPos
 	 * @return
