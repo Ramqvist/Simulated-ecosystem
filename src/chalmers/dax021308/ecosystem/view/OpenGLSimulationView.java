@@ -51,7 +51,7 @@ import com.sun.opengl.util.FPSAnimator;
  * <p>
  * For Javadoc add the Jogl Javadoc jar as Javadoc refernce to the selected JOGL jar.
  * <p>
- * @author Erik Ramqvist
+ * @author Erik Ramqvist, Sebastian Anerud
  *
  */
 public class OpenGLSimulationView extends GLCanvas implements IView {

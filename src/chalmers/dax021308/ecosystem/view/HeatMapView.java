@@ -112,7 +112,7 @@ public class HeatMapView extends GLCanvas implements IView {
 	}
 	
 	/**
-	 * JOGL Listener, listenes to commands from the GLCanvas.
+	 * JOGL Listener, listens to commands from the GLCanvas.
 	 * 
 	 * @author Erik
 	 *
@@ -243,12 +243,12 @@ public class HeatMapView extends GLCanvas implements IView {
           		}
 //        		
 //        		/* Information print, comment out to increase performance. */
-        		Long totalTime = System.currentTimeMillis() - start;
-        		StringBuffer sb = new StringBuffer("OpenGL Redraw!  ");
-//        		sb.append(getNewFps());
-        		sb.append(" Rendertime in ms: ");
-        		sb.append(totalTime);
-            	System.out.println(sb.toString());	
+//        		Long totalTime = System.currentTimeMillis() - start;
+//        		StringBuffer sb = new StringBuffer("OpenGL Redraw!  ");
+////        		sb.append(getNewFps());
+//        		sb.append(" Rendertime in ms: ");
+//        		sb.append(totalTime);
+//            	System.out.println(sb.toString());	
         		/* End Information print. */
           		
 //          		long end = System.currentTimeMillis();
