@@ -7,6 +7,7 @@ import java.util.Random;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
 import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
@@ -82,7 +83,7 @@ public class PigAgent extends AbstractAgent {
 		Vector separationForce = getEriksOptimeradeSeparationForce(neutral);
 		// Vector separationForce = getSeparationForce(neutral);
 		// Vector separationForce = new Vector();
-		Vector environmentForce = getEnvironmentForce(gridDimension, shape, position);
+		Vector environmentForce = ForceCalculator.getEnvironmentForce(gridDimension, shape, position);
 		Vector preyForce = getPreyForce(preys);
 
 		/*

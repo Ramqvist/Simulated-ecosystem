@@ -1,12 +1,10 @@
-package chalmers.dax021308.ecosystem.model.agent;
+package chalmers.dax021308.ecosystem.model.util;
 
 import java.awt.Dimension;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
-import chalmers.dax021308.ecosystem.model.util.IShape;
-import chalmers.dax021308.ecosystem.model.util.Position;
-import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
  * A class made for containing the methods for the forces which need to be
@@ -16,10 +14,12 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  * 
  */
 public class ForceCalculator {
-	protected static final double RANDOM_FORCE_MAGNITUDE = 0.05;
-	protected final static double INTERACTION_RANGE = 10;
-	protected final static double ENVIRONMENT_CONSTANT = 50;
-	protected final static double OBSTACLE_CONSTANT = 50;
+	private static final double RANDOM_FORCE_MAGNITUDE = 0.05;
+	private final static double INTERACTION_RANGE = 10;
+	private final static double ENVIRONMENT_CONSTANT = 50;
+	private final static double OBSTACLE_CONSTANT = 50;
+	private final static double EATING_RANGE = 5;
+	private final static double FOCUS_RANGE = 100;
 
 	/**
 	 * A random force that the agent gets influenced by. Can be interpreted as
@@ -30,7 +30,7 @@ public class ForceCalculator {
 	 * @author Sebbe
 	 * @param velocity
 	 */
-	protected Vector randomForce(Vector velocity) {
+	public static Vector randomForce(Vector velocity) {
 		double randX = -RANDOM_FORCE_MAGNITUDE + 2 * RANDOM_FORCE_MAGNITUDE
 				* Math.random();
 		double randY = -RANDOM_FORCE_MAGNITUDE + 2 * RANDOM_FORCE_MAGNITUDE
@@ -51,25 +51,25 @@ public class ForceCalculator {
 	 *         agents in that it interacts with.
 	 * @author Sebbe
 	 */
-	protected Vector mutualInteractionForce(List<IAgent> neutralNeighbours,
-			Position pos) {
+	public static Vector mutualInteractionForce(List<IAgent> neutralNeighbours,
+			IAgent currentAgent) {
 		Vector mutualInteractionForce = new Vector(0, 0);
 		Vector newForce = new Vector(0, 0);
 		IAgent agent;
 		int size = neutralNeighbours.size();
 		for (int i = 0; i < size; i++) {
 			agent = neutralNeighbours.get(i);
-			if (agent != this) {
+			if (agent != currentAgent) {
 				Position p = agent.getPosition();
-				double distance = pos.getDistance(p);
+				double distance = currentAgent.getPosition().getDistance(p);
 				double Q = 0; // Q is a function of the distance.
 				if (distance <= INTERACTION_RANGE) {
 					Q = -20 * (INTERACTION_RANGE - distance);
 				} else {
 					Q = 1;
 				}
-				newForce.x = p.getX() - pos.getX();
-				newForce.y = p.getY() - pos.getY();
+				newForce.x = p.getX() - currentAgent.getPosition().getX();
+				newForce.y = p.getY() - currentAgent.getPosition().getY();
 				double norm = newForce.getNorm();
 				double v = Q / (norm * distance);
 				newForce.x = newForce.x * v;
@@ -91,7 +91,7 @@ public class ForceCalculator {
 	 * @return A vector with the force that an agent feel from its environment.
 	 * @author Sebbe
 	 */
-	protected Vector getEnvironmentForce(Dimension dim, IShape shape,
+	public static Vector getEnvironmentForce(Dimension dim, IShape shape,
 			Position position) {
 		/*
 		 * The positions below is just an orthogonal projection on to the walls.
@@ -157,7 +157,7 @@ public class ForceCalculator {
 	 * @return The forward thrust force.
 	 * @author Sebbe
 	 */
-	protected Vector forwardThrust(Vector velocity) {
+	public static Vector forwardThrust(Vector velocity) {
 		double a = 0.1; // Scaling constant
 		double x = velocity.x;
 		double y = velocity.y;
@@ -183,8 +183,8 @@ public class ForceCalculator {
 	 *         same direction as other nearby agents.
 	 * @author Sebbe
 	 */
-	protected Vector arrayalForce(Vector velocity,
-			List<IAgent> neutralNeighbours, Position position) {
+	public static Vector arrayalForce(Vector velocity,
+			List<IAgent> neutralNeighbours,IAgent currentAgent) {
 		Vector arrayalForce = new Vector(0, 0);
 		Vector newForce = new Vector();
 		double nAgentsInVision = 0;
@@ -192,9 +192,9 @@ public class ForceCalculator {
 		IAgent agent;
 		for (int i = 0; i < size; i++) {
 			agent = neutralNeighbours.get(i);
-			if (agent != this) {
+			if (agent != currentAgent) {
 				Position p = agent.getPosition();
-				double distance = position.getDistance(p);
+				double distance = currentAgent.getPosition().getDistance(p);
 				if (distance <= INTERACTION_RANGE * 2) {
 					newForce.setVector(0, 0);
 					newForce.add(agent.getVelocity());
@@ -215,7 +215,7 @@ public class ForceCalculator {
 		return arrayalForce;
 	}
 
-	protected Vector getObstacleForce(List<IObstacle> obstacles,
+	public static Vector getObstacleForce(List<IObstacle> obstacles,
 			Position position) {
 		Vector obstacleForce = new Vector();
 		for (IObstacle o : obstacles) {
@@ -231,5 +231,78 @@ public class ForceCalculator {
 			}
 		}
 		return obstacleForce.multiply(OBSTACLE_CONSTANT);
+	}
+
+	/**
+	 * @author Sebastian/Henrik
+	 * @param preyNeighbours
+	 * @param maxAcceleration 
+	 */
+	public static Vector getPreyForce(boolean willFocusPreys, IAgent focusedPrey,
+			IAgent agent, List<IAgent> preyNeighbours, double visionRange, double maxAcceleration) {
+		if (willFocusPreys && focusedPrey != null && focusedPrey.isAlive()) {
+			Position p = focusedPrey.getPosition();
+			double distance = agent.getPosition().getDistance(p);
+			if (distance <= EATING_RANGE) {
+				if (focusedPrey.tryConsumeAgent()) {
+					focusedPrey = null;
+					agent.eat();
+				}
+			} else {
+				return new Vector(focusedPrey.getPosition(),
+						agent.getPosition());
+			}
+		}
+		Vector preyForce = new Vector(0, 0);
+		IAgent closestFocusPrey = null;
+		int preySize = preyNeighbours.size();
+		for (int i = 0; i < preySize; i++) {
+			IAgent a = preyNeighbours.get(i);
+			Position p = a.getPosition();
+			double distance = agent.getPosition().getDistance(p);
+			if (distance <= visionRange) {
+
+				if (distance <= EATING_RANGE) {
+					if (a.tryConsumeAgent()) {
+						agent.eat();
+					}
+				} else if (willFocusPreys && distance <= FOCUS_RANGE) {
+					if (closestFocusPrey != null && a.isAlive()) {
+						if (closestFocusPrey.getPosition().getDistance(
+								agent.getPosition()) > a.getPosition()
+								.getDistance(agent.getPosition())) {
+							closestFocusPrey = a;
+						}
+					} else {
+						closestFocusPrey = a;
+					}
+				} else if (closestFocusPrey == null) {
+					/*
+					 * Create a vector that points towards the prey.
+					 */
+					Vector newForce = new Vector(p, agent.getPosition());
+
+					/*
+					 * Add this vector to the prey force, with proportion to how
+					 * close the prey is. Closer preys will affect the force
+					 * more than those far away.
+					 */
+					double norm = newForce.getNorm();
+					preyForce.add(newForce.multiply(1 / (norm * distance)));
+				}
+			}
+		}
+
+		double norm = preyForce.getNorm();
+		if (norm != 0) {
+			preyForce.multiply(maxAcceleration / norm);
+		}
+
+		if (willFocusPreys && closestFocusPrey != null) {
+			focusedPrey = closestFocusPrey;
+			return new Vector(focusedPrey.getPosition(), agent.getPosition());
+		}
+
+		return preyForce;
 	}
 }
