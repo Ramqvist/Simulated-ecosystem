@@ -97,6 +97,11 @@ public abstract class AbstractAgent implements IAgent {
 	}
 
 	@Override
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+	
+	@Override
 	public String getName() {
 		return name;
 	}

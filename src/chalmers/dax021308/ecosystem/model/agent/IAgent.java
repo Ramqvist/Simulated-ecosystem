@@ -24,6 +24,11 @@ public interface IAgent extends Cloneable {
 	public Position getPosition();
 
 	/**
+	 * @param p - The new Position.
+	 */
+	public void setPosition(Position p);
+	
+	/**
 	 * Calculates the new position of the IAgent to which it will move when
 	 * calling updatePosition().
 	 */
