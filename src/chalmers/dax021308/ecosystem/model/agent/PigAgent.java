@@ -40,10 +40,10 @@ public class PigAgent extends AbstractAgent {
 
 	public PigAgent(String name, Position p, Color c, int width, int height,
 			Vector velocity, double maxSpeed, double maxAcceleration,
-			double visionRange, boolean groupBehaviour) {
-
+			double visionRange, boolean groupBehaviour, List<IObstacle> obsList) {
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
+		this.obstacles = obsList;
 		this.energy = MAX_ENERGY;
 		this.groupBehaviour = groupBehaviour;
 
@@ -70,7 +70,7 @@ public class PigAgent extends AbstractAgent {
 				} while (!shape.isInside(gridDimension, pos));
 				IAgent child = new PigAgent(name, pos, color, width, height,
 						new Vector(velocity), maxSpeed, maxAcceleration,
-						visionRange, groupBehaviour);
+						visionRange, groupBehaviour, obstacles);
 				spawn.add(child);
 
 			}

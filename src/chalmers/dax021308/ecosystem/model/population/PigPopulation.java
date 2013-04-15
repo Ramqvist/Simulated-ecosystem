@@ -51,7 +51,7 @@ public class PigPopulation extends AbstractPopulation {
 			}
 			IAgent a = new PigAgent("Deer", randPos,
 					color, 5, 10, velocity, maxSpeed, maxAcceleration,
-					visionRange, groupBehaviour);
+					visionRange, groupBehaviour, obstacles);
 			newAgents.add(a);
 		}
 		return newAgents;
