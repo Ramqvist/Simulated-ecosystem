@@ -57,7 +57,7 @@ public class ForceCalculator {
 		Vector mutualInteractionForce = new Vector(0, 0);
 		Vector newForce = new Vector(0, 0);
 		IAgent agent;
-		int size = neutralNeighbours.size();
+		int size = neutralNeighbours.size(); 
 		for (int i = 0; i < size; i++) {
 			agent = neutralNeighbours.get(i);
 			if (agent != currentAgent) {

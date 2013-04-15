@@ -13,9 +13,8 @@ import org.junit.Test;
 
 import chalmers.dax021308.ecosystem.model.agent.DeerAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
-import chalmers.dax021308.ecosystem.model.util.IShape;
+import chalmers.dax021308.ecosystem.model.util.shape.*;
 import chalmers.dax021308.ecosystem.model.util.Position;
-import chalmers.dax021308.ecosystem.model.util.SquareShape;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
 public class DeerAgentTest {

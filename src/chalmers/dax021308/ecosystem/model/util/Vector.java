@@ -54,11 +54,6 @@ public class Vector {
 		this.y = v.y;
 	}
 
-	public Vector(Vector v1, Vector v2) {
-		this.x = v1.x - v2.y;
-		this.y = v1.y - v2.y;
-	}
-
 	public double getX() {
 		return x;
 	}
@@ -162,7 +157,7 @@ public class Vector {
 	 * @return v1 + v2
 	 */
 	public static Vector addVectors(Vector v1, Vector v2) {
-		return new Vector(v1.x + v2.x, v1.y += v2.y);
+		return new Vector(v1.x + v2.x, v1.y + v2.y);
 	}
 
 	@Override
