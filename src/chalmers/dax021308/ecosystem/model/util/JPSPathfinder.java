@@ -10,8 +10,14 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.AbstractObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
-
+/**
+ * Class for calculating the shortest path to target. 
+ * 
+ * @author Erik
+ *
+ */
 public class JPSPathfinder {
 	
 	private List<IObstacle> obsList;
@@ -26,9 +32,9 @@ public class JPSPathfinder {
 	}
 	
 	public List<Position> getShortestPath(Position start, Position end) {
-		double distance = start.getDistance(end);
-		if(distance > 75) {
-			coordinateScaling = 10;
+		//double distance = start.getDistance(end);
+		//if(distance > 75) {
+			coordinateScaling = 5;
 			double x = Math.round((end.getX() / coordinateScaling))*coordinateScaling;
 			double y = Math.round((end.getY() / coordinateScaling))*coordinateScaling;
 			Position newEnd = new Position(x, y);
@@ -36,10 +42,10 @@ public class JPSPathfinder {
 			y = Math.round((start.getY() / coordinateScaling))*coordinateScaling;
 			Position newStartPos = new Position(x, y);
 			return getShortestPathJumpPointsSearch(newStartPos, newEnd);
-		} else {
-			coordinateScaling = 1;
-			return getShortestPathJumpPointsSearch(new Position(Math.round(start.x), Math.round(start.y)), new Position(Math.round(end.x), Math.round(end.y)));
-		}
+		//} else {
+		//	coordinateScaling = 1;
+		//	return getShortestPathJumpPointsSearch(new Position(Math.round(start.x), Math.round(start.y)), new Position(Math.round(end.x), Math.round(end.y)));
+		//}
 	}
 
 
@@ -150,11 +156,6 @@ public class JPSPathfinder {
 						}
 					}
 				}
-				try {
-					Thread.sleep(16);
-				} catch (InterruptedException e) {
-					
-				}
 //				 Log.v("openset" + openSet);
 ////				 Log.v("closedSet" + closedSet);
 ////				 Log.v("g_score" + current.g_score);
@@ -167,7 +168,7 @@ public class JPSPathfinder {
 				openSet.remove(current);
 				closedSet.add(current);
 				for(JPSNode neighbour : getJPSNeighbours(current, obsList)) {
-					JPSNode jumpPoint = jump(neighbour, current, goal, obsList, shape);
+					JPSNode jumpPoint = jump(neighbour, current, goal);
 					if (jumpPoint != null) {
 						if (closedSet.contains(jumpPoint))
 							continue;
@@ -251,7 +252,7 @@ public class JPSPathfinder {
 		return new JPSNode(dx, dy);
 	}
 	
-	private JPSNode jump(JPSNode node, JPSNode parent, JPSNode goal, List<IObstacle> obsList, IShape shape) {
+	private JPSNode jump(JPSNode node, JPSNode parent, JPSNode goal) {
 		double x = node.getX(), y = node.getY(), px = parent.getX(), py = parent.getY();
 		double dx = (x - px);
 		double dy = (y - py);
@@ -271,10 +272,10 @@ public class JPSPathfinder {
 				return new JPSNode(node);
 			}
 			// recurse
-			JPSNode h = jump(node.derive(dx, 0), node, goal, obsList, shape);
+			JPSNode h = jump(node.derive(dx, 0), node, goal);
 			if (h != null)
 				return new JPSNode(node);
-			JPSNode v = jump(node.derive(0, dy), node, goal, obsList, shape);
+			JPSNode v = jump(node.derive(0, dy), node, goal);
 			if (v != null)
 				return new JPSNode(node);
 			} else if (dx == 0) { // vertical, dx = 0, dy = 1 or -1
@@ -288,7 +289,7 @@ public class JPSPathfinder {
 				return new JPSNode(node);
 			}
 		}
-		return jump(node.derive(dx, dy), node, goal, obsList, shape);
+		return jump(node.derive(dx, dy), node, goal);
 	}
 	
 	private boolean walkable(JPSNode node) {

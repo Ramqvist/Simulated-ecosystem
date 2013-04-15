@@ -8,10 +8,10 @@ import java.util.List;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
-import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
+import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
  * Pig Agent.
@@ -24,7 +24,8 @@ public class PigAgent extends AbstractAgent {
 	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
 	private boolean hungry = true;
 	private static final double REPRODUCTION_RATE = 0.1;
-	private boolean willFocusPreys = false;
+	private boolean willFocusPreys = true;
+	private List<Position> focusedPreyPath;
 	private static final int DIGESTION_TIME = 10;
 	private int digesting = 0;
 	private double STOTTING_RANGE = 20;
@@ -39,10 +40,10 @@ public class PigAgent extends AbstractAgent {
 
 	public PigAgent(String name, Position p, Color c, int width, int height,
 			Vector velocity, double maxSpeed, double maxAcceleration,
-			double visionRange, boolean groupBehaviour) {
-
+			double visionRange, boolean groupBehaviour, List<IObstacle> obsList) {
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
+		this.obstacles = obsList;
 		this.energy = MAX_ENERGY;
 		this.groupBehaviour = groupBehaviour;
 
@@ -69,7 +70,7 @@ public class PigAgent extends AbstractAgent {
 				} while (!shape.isInside(gridDimension, pos));
 				IAgent child = new PigAgent(name, pos, color, width, height,
 						new Vector(velocity), maxSpeed, maxAcceleration,
-						visionRange, groupBehaviour);
+						visionRange, groupBehaviour, obstacles);
 				spawn.add(child);
 
 			}
@@ -182,12 +183,20 @@ public class PigAgent extends AbstractAgent {
 					digesting = DIGESTION_TIME;
 				}
 			} else {
-				List<Position> pathToTarget = Position.getShortestPath(position, focusedPrey.getPosition(), obstacles, shape, dim);
-				if(pathToTarget == null || pathToTarget.size() == 0) {
-					//Focused prey cant be reached. Change target.
-					focusedPrey = null;
-				} else {
-					return new Vector(pathToTarget.get(0), position);
+				if(focusedPreyPath != null) {
+					if(!focusedPreyPath.isEmpty()) {
+						Position nextPathPosition = focusedPreyPath.get(0);
+						//If we are not near our current path target, move towards it.
+						if(position.getDistance(nextPathPosition) > EATING_RANGE) {
+							return new Vector(nextPathPosition, position);
+						} else if(focusedPreyPath.size() > 1) {
+							//Remove the next path, we are close to it, and go to next.
+							focusedPreyPath.remove(0);
+							return new Vector(focusedPreyPath.get(0), position);
+						} 
+					} else {
+						return new Vector(focusedPrey.getPosition(), position);
+					}
 				}
 			}
 		}
@@ -240,11 +249,11 @@ public class PigAgent extends AbstractAgent {
 
 		if (willFocusPreys && closestFocusPrey != null) {
 			focusedPrey = closestFocusPrey;
-			List<Position> pathToTarget = Position.getShortestPath(position, focusedPrey.getPosition(), obstacles, shape, dim);
-			if(pathToTarget == null || pathToTarget.size() == 0) {
+			focusedPreyPath = Position.getShortestPath(position, focusedPrey.getPosition(), obstacles, shape, dim);
+			if(focusedPreyPath == null || focusedPreyPath.size() == 0) {
 				return Vector.emptyVector();
 			} else {
-				return new Vector(pathToTarget.get(0), position);
+				return new Vector(focusedPreyPath.get(0), position);
 			}
 		}
 

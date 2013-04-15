@@ -22,6 +22,8 @@ import com.sun.corba.se.impl.orbutil.closure.Constant;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.AbstractObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.RectangularObstacle;
+import chalmers.dax021308.ecosystem.model.util.shape.IShape;
+import chalmers.dax021308.ecosystem.model.util.shape.SquareShape;
 
 /**
  * Class for testing A* algorithm.
