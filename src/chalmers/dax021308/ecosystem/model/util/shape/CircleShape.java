@@ -1,9 +1,10 @@
-package chalmers.dax021308.ecosystem.model.util;
+package chalmers.dax021308.ecosystem.model.util.shape;
 
 import java.awt.Dimension;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
+import chalmers.dax021308.ecosystem.model.util.Position;
 
 /**
  * 

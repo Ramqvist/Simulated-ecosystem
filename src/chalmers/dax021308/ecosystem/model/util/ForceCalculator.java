@@ -5,6 +5,7 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
  * A class made for containing the methods for the forces which need to be

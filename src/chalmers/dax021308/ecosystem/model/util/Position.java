@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 
 /**

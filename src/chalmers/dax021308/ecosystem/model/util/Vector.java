@@ -198,6 +198,8 @@ public class Vector {
 	 * Checks if the vector is a null vector, i.e. if x == 0 and y == 0. Not to
 	 * be confused with the case of the vector object itself being null.
 	 * 
+	 * Rename to isEmpty()?
+	 * 
 	 * @return Returns true if x == 0 and y == 0, otherwise false
 	 */
 	public boolean isNullVector() {
