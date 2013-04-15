@@ -90,8 +90,7 @@ public class DeerAgent extends AbstractAgent {
 
 		updateNeighbourList(neutral, preys, predators);
 		Vector predatorForce = getPredatorForce();
-		if (predatorForce.isNullVector())
-			alone = true;
+		alone = predatorForce.isNullVector();
 		if (digesting > 0 && alone) {
 			digesting--;
 		} else {
@@ -99,16 +98,17 @@ public class DeerAgent extends AbstractAgent {
 			Vector forwardThrust = new Vector();
 			Vector arrayalForce = new Vector();
 			if (groupBehaviour) {
-				mutualInteractionForce = ForceCalculator.mutualInteractionForce(
-						neutralNeighbours, this);
+				mutualInteractionForce = ForceCalculator
+						.mutualInteractionForce(neutralNeighbours, this);
 				forwardThrust = ForceCalculator.forwardThrust(velocity);
-				arrayalForce = ForceCalculator.arrayalForce(velocity, neutralNeighbours,
-						this);
+				arrayalForce = ForceCalculator.arrayalForce(velocity,
+						neutralNeighbours, this);
 			}
 
-			Vector environmentForce = ForceCalculator.getEnvironmentForce(gridDimension, shape,
+			Vector environmentForce = ForceCalculator.getEnvironmentForce(
+					gridDimension, shape, position);
+			Vector obstacleForce = ForceCalculator.getObstacleForce(obstacles,
 					position);
-			Vector obstacleForce = ForceCalculator.getObstacleForce(obstacles, position);
 
 			/*
 			 * Sum the forces from walls, predators and neutral to form the
@@ -124,8 +124,9 @@ public class DeerAgent extends AbstractAgent {
 						.add(mutualInteractionForce).add(forwardThrust)
 						.add(arrayalForce);
 				// if (alone) {
-				Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys, focusedPrey,
-						this, preyNeighbours, visionRange, maxAcceleration);
+				Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys,
+						focusedPrey, this, preyNeighbours, visionRange,
+						maxAcceleration);
 				acceleration.add(preyForce.multiply(5 * (1 - energy
 						/ MAX_ENERGY)));
 			}
@@ -214,12 +215,10 @@ public class DeerAgent extends AbstractAgent {
 			}
 
 			double norm = predatorForce.getNorm();
-			if (norm <= 0) { // No predators near --> Be unaffected
-				alone = true;
-			} else { // Else set the force depending on visible predators and
-						// normalize it to maxAcceleration.
+			if (norm > 0) {
+				// If there are predators near set the force depending on
+				// visible predators and normalize it to maxAcceleration.
 				predatorForce.multiply(maxAcceleration / norm);
-				alone = false;
 			}
 
 			if (isAStottingDeer && stottingCoolDown <= 0 && predatorClose) {
