@@ -29,18 +29,21 @@ public class SettingsMenuView extends JFrame {
 	 */
 	public SettingsMenuView(final MainWindow mw) {
 		setTitle("Simulation settings");
-		setBounds(100, 100, 450, 357);
-		getContentPane().setLayout(new MigLayout("", "[][grow][]", "[][][][][][][][][][][][][][][][][]"));
+		setBounds(100, 100, 515, 480);
+		getContentPane().setLayout(null);
 		
 		JLabel lblShapeOfUniverse = new JLabel("Shape of Universe");
+		lblShapeOfUniverse.setBounds(7, 7, 99, 15);
 		lblShapeOfUniverse.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		getContentPane().add(lblShapeOfUniverse, "cell 0 0");
+		getContentPane().add(lblShapeOfUniverse);
 		
 		JLabel lblNumberOfIterations = new JLabel("Number of Iterations");
+		lblNumberOfIterations.setBounds(207, 7, 114, 15);
 		lblNumberOfIterations.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		getContentPane().add(lblNumberOfIterations, "cell 1 0");
+		getContentPane().add(lblNumberOfIterations);
 		
 		JRadioButton rdbtnSquare = new JRadioButton("Square");
+		rdbtnSquare.setBounds(7, 26, 59, 23);
 		rdbtnSquare.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//SQUARE
@@ -48,18 +51,20 @@ public class SettingsMenuView extends JFrame {
 			}
 		});
 		shapeButtonGroup.add(rdbtnSquare);
-		getContentPane().add(rdbtnSquare, "cell 0 1");
+		getContentPane().add(rdbtnSquare);
 		
 		JSpinner spinnerIterations = new JSpinner(new SpinnerNumberModel(0, 0, 1000, 1)); //vilket spann? nu 0-1000
+		spinnerIterations.setBounds(207, 27, 63, 20);
 		spinnerIterations.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				//NUMBER OF ITERATIONS
 				System.out.println("number of iterations set");
 			}
 		});
-		getContentPane().add(spinnerIterations, "cell 1 1");
+		getContentPane().add(spinnerIterations);
 		
 		JRadioButton rdbtnCircle = new JRadioButton("Circle");
+		rdbtnCircle.setBounds(7, 53, 51, 23);
 		rdbtnCircle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//CIRCLE
@@ -67,9 +72,10 @@ public class SettingsMenuView extends JFrame {
 			}
 		});
 		shapeButtonGroup.add(rdbtnCircle);
-		getContentPane().add(rdbtnCircle, "cell 0 2");
+		getContentPane().add(rdbtnCircle);
 		
 		JRadioButton rdbtnTriangle = new JRadioButton("Triangle");
+		rdbtnTriangle.setBounds(7, 80, 63, 23);
 		rdbtnTriangle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TRIANGLE
@@ -77,13 +83,15 @@ public class SettingsMenuView extends JFrame {
 			}
 		});
 		shapeButtonGroup.add(rdbtnTriangle);
-		getContentPane().add(rdbtnTriangle, "cell 0 3");
+		getContentPane().add(rdbtnTriangle);
 		
 		JLabel lblObstacles = new JLabel("Obstacles");
+		lblObstacles.setBounds(207, 83, 52, 15);
 		lblObstacles.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		getContentPane().add(lblObstacles, "cell 1 3");
+		getContentPane().add(lblObstacles);
 		
 		final JSlider sliderObstacles = new JSlider();  //vilket spann?
+		sliderObstacles.setBounds(207, 107, 195, 23);
 		sliderObstacles.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if(!sliderObstacles.getValueIsAdjusting()) {
@@ -92,13 +100,15 @@ public class SettingsMenuView extends JFrame {
 				}
 			}
 		});
-		getContentPane().add(sliderObstacles, "cell 1 4");
+		getContentPane().add(sliderObstacles);
 		
 		JLabel lblDelay = new JLabel("Delay");
+		lblDelay.setBounds(7, 134, 29, 15);
 		lblDelay.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		getContentPane().add(lblDelay, "cell 0 5");
+		getContentPane().add(lblDelay);
 		
 		JRadioButton rdbtnDelayOn = new JRadioButton("On");
+		rdbtnDelayOn.setBounds(7, 153, 39, 23);
 		rdbtnDelayOn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//DELAY ON
@@ -106,13 +116,15 @@ public class SettingsMenuView extends JFrame {
 			}
 		});
 		delayButtonGroup.add(rdbtnDelayOn);
-		getContentPane().add(rdbtnDelayOn, "cell 0 6");
+		getContentPane().add(rdbtnDelayOn);
 		
 		JLabel lblGraphicsEngine = new JLabel("Graphics Engine");
+		lblGraphicsEngine.setBounds(207, 156, 86, 15);
 		lblGraphicsEngine.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		getContentPane().add(lblGraphicsEngine, "cell 1 6");
+		getContentPane().add(lblGraphicsEngine);
 		
 		JRadioButton rdbtnOff = new JRadioButton("Off");
+		rdbtnOff.setBounds(7, 180, 41, 23);
 		rdbtnOff.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//DELAY OFF
@@ -120,9 +132,10 @@ public class SettingsMenuView extends JFrame {
 			}
 		});
 		delayButtonGroup.add(rdbtnOff);
-		getContentPane().add(rdbtnOff, "cell 0 7");
+		getContentPane().add(rdbtnOff);
 		
 		JRadioButton rdbtnJavaAWT = new JRadioButton("Java AWT");
+		rdbtnJavaAWT.setBounds(207, 180, 75, 23);
 		rdbtnJavaAWT.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//JAVA AWT
@@ -131,9 +144,10 @@ public class SettingsMenuView extends JFrame {
 			}
 		});
 		graphicsButtonGroup.add(rdbtnJavaAWT);
-		getContentPane().add(rdbtnJavaAWT, "cell 1 7");
+		getContentPane().add(rdbtnJavaAWT);
 		
 		JRadioButton rdbtnOpenGL = new JRadioButton("OpenGL");
+		rdbtnOpenGL.setBounds(207, 207, 63, 23);
 		rdbtnOpenGL.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//OPEN GL
@@ -142,13 +156,15 @@ public class SettingsMenuView extends JFrame {
 			}
 		});
 		graphicsButtonGroup.add(rdbtnOpenGL);
-		getContentPane().add(rdbtnOpenGL, "cell 1 8");
+		getContentPane().add(rdbtnOpenGL);
 		
 		JLabel lblDelayLength = new JLabel("Delay length");
+		lblDelayLength.setBounds(7, 234, 68, 15);
 		lblDelayLength.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		getContentPane().add(lblDelayLength, "cell 0 9");
+		getContentPane().add(lblDelayLength);
 		
 		final JSlider sliderDelayLength = new JSlider();  //vilket spann?
+		sliderDelayLength.setBounds(7, 253, 196, 23);
 		sliderDelayLength.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if(!sliderDelayLength.getValueIsAdjusting()) {
@@ -157,17 +173,17 @@ public class SettingsMenuView extends JFrame {
 				}
 			}
 		});
-		getContentPane().add(sliderDelayLength, "cell 0 10");
+		getContentPane().add(sliderDelayLength);
 		
 		JButton btnOk = new JButton("OK");
+		btnOk.setBounds(207, 253, 47, 23);
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mw.setSimulationPanel(graphics);
 				SettingsMenuView.this.dispose();
 			}
 		});
-		getContentPane().add(btnOk, "cell 1 10");
+		getContentPane().add(btnOk);
 
 	}
-
 }

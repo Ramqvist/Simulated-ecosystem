@@ -26,9 +26,9 @@ public class SimulationSettings {
 	
 	
 	/* Shape Constants */
-	public static final String SHAPE_SQUARE   = "Square Shape";
-	public static final String SHAPE_CIRCLE   = "Circle Shape";
-	public static final String SHAPE_TRIANGLE = "Triangle Shape";
+	public static final String SHAPE_SQUARE   = "Square";
+	public static final String SHAPE_CIRCLE   = "Circle";
+	public static final String SHAPE_TRIANGLE = "Triangle";
 
 	/* Population constants */
 	public static final String POP_PIG        = "Pig Population";
@@ -105,6 +105,10 @@ public class SimulationSettings {
 		this.recordSimulation = recordSimulation;
 		this.delayLength = delayLength;
 		this.numIterations = numIterations;
+	}
+	
+	public void updateLiveSettings(int delayLenght) {
+		this.delayLength = delayLenght;
 	}
 	
 	public int getDelayLength() {

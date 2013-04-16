@@ -1,5 +1,6 @@
 package chalmers.dax021308.ecosystem.view;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 
@@ -21,58 +22,32 @@ import net.miginfocom.swing.MigLayout;
 
 public class ControlView extends JPanel {
 	private static final long serialVersionUID = 5134812517352174052L;
-	public JButton btnStartNew;
+	
+	public final JButton btnStartNew;
+	public final JButton btnStart;
+	public final JButton btnStop;
+	public final JButton btnPause;
 
 	/**
 	 * Create the panel.
 	 */
-	public ControlView(final EcoWorld ew) {  
+	public ControlView(EcoWorld model) {  
 		
-		JButton btnStart = new JButton("Start");
+		btnStart = new JButton(new ImageIcon("res/play.png"));
 		btnStart.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnStart.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					ew.start();
-				} catch (IllegalStateException ex) {
-					Log.v("EcoWorld already stopped");
-				}
-			}
-		});
+		btnStop = new JButton(new ImageIcon("res/stop.png"));
+		btnPause = new JButton(new ImageIcon("res/pause.png"));
+		btnPause.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnStartNew = new JButton("Start new Simulation");
+		btnStartNew.setFont(new Font("Tahoma", Font.PLAIN, 14));
+
 		setLayout(new MigLayout("", "[63px][61px][69px][][][]", "[25px]"));
 		add(btnStart, "cell 0 0,alignx left,aligny top");
 		
-		JButton btnStop = new JButton("Stop");
-		btnStop.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					ew.stop();
-				} catch (IllegalStateException ex) {
-					Log.v("EcoWorld already stopped");
-				}
-			}
-		});
-		
-		JButton btnPause = new JButton("Pause");
-		btnPause.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnPause.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					ew.pause();
-				} catch (IllegalStateException ex) {
-					//Don't care.
-				}
-			}
-		});
 		add(btnPause, "flowx,cell 1 0,alignx left,aligny top");
 		btnStop.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(btnStop, "cell 1 0,alignx left,aligny top");
-		
-
-		btnStartNew = new JButton("Start new Simulation");
-		btnStartNew.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(btnStartNew, "cell 5 0,alignx left,aligny top");
-
 	}
 
 }
