@@ -90,6 +90,7 @@ public class NEWSettingsMenuView extends JFrame {
     //public final JSlider sliderPreyPopSize;
     //public final JSlider sliderPredPopSize;
     //public final JSlider sliderVegPopSize;
+    
     public final JSpinner spinnerDelayLength;
     public final JSpinner spinnerNoOfIterations;
     public final JSpinner spinnerPreyPopSize;
@@ -195,12 +196,12 @@ public class NEWSettingsMenuView extends JFrame {
         buttonStart = new JButton();
         buttonCancel = new JButton();
         buttonAdvanced = new JButton();
-
-        spinnerDelayLength = new JSpinner();
-        spinnerNoOfIterations = new JSpinner();
-        spinnerPreyPopSize = new JSpinner();
-        spinnerPredPopSize = new JSpinner();
-        spinnerVegPopSize = new JSpinner();
+        
+        spinnerDelayLength = new JSpinner(new SpinnerNumberModel(DEFAULT_ITERATION_DELAY, 0, 100, 1));
+        spinnerNoOfIterations = new JSpinner(new SpinnerNumberModel(DEFAULT_NO_OF_ITERATIONS, 0, 100000, 100));
+        spinnerPreyPopSize = new JSpinner(new SpinnerNumberModel(DEFAULT_PREY_POP_SIZE, 0, 10000, 1));
+        spinnerPredPopSize = new JSpinner(new SpinnerNumberModel(DEFAULT_PRED_POP_SIZE, 0, 10000, 1));
+        spinnerVegPopSize = new JSpinner(new SpinnerNumberModel(DEFAULT_VEG_POP_SIZE, 0, 10000, 10));
 
         //sliderDelayLength = new JSlider();
         //sliderPreyPopSize = new JSlider();
@@ -221,7 +222,7 @@ public class NEWSettingsMenuView extends JFrame {
         setMyText();
         setMyFonts();
         //setMySliders();
-        setMySpinners();
+        //setMySpinners();
         setMyCheckBoxes();
         setMyLists();
         setMyListeners();
@@ -393,11 +394,8 @@ public class NEWSettingsMenuView extends JFrame {
     }
 
     private void setMySpinners() {
-        spinnerDelayLength.setValue(DEFAULT_ITERATION_DELAY);
-        spinnerPreyPopSize.setValue(DEFAULT_PREY_POP_SIZE);
-        spinnerPredPopSize.setValue(DEFAULT_PRED_POP_SIZE);
-        spinnerVegPopSize.setValue(DEFAULT_VEG_POP_SIZE);
-        spinnerNoOfIterations.setValue(DEFAULT_NO_OF_ITERATIONS);
+    
+
     }
 
     /*
