@@ -1,9 +1,9 @@
-package chalmers.dax021308.ecosystem.model.util;
+package chalmers.dax021308.ecosystem.model.util.shape;
 
 import java.awt.Dimension;
 
-import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
+import chalmers.dax021308.ecosystem.model.util.Position;
 
 /**
  * 
@@ -54,8 +54,8 @@ public class CircleShape implements IShape {
 	@Override
 	public Position getRandomPosition(Dimension dim) {
 		// Create a random position, and make sure it lies inside the circle.
-		// Doesn't loop too many times, since only pi/4 of the square area is
-		// outside the circle. Should also only be used during creation of
+		// Doesn't loop too many times, since pi/4 of the square area is
+		// inside the circle i.e 78.54%. Should only be used during creation of
 		// agents and thus doesn't really impact the runtime speed.
 		Position pos;
 		do {
@@ -72,5 +72,19 @@ public class CircleShape implements IShape {
 	@Override
 	public String getShape() {
 		return name;
+	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
+
+	@Override
+	public boolean isInside(Dimension dim, Position p) {
+		// If the distance between the position and the middle of the circle is
+		// smaller than the radius, then it's inside the shape.
+		double distance = p.getDistance(new Position(dim.getWidth() / 2, dim
+				.getHeight() / 2));
+		return distance < dim.getWidth() / 2;
 	}
 }

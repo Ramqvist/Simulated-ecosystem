@@ -34,15 +34,15 @@ import chalmers.dax021308.ecosystem.model.util.Log;
 public class SimulationRecording {
 
 	/*	Text syntax constants */
-	private static final String headerDividerStart   = "<HEAD>";
-	private static final String obstacleDivider      = "<OBS>";
-	private static final String dimensionDivider     = "<DIM>";
-	private static final String shapeDivider         = "<SHAPE>";
-	private static final String headerDividerEnd     = "</HEAD>";
-	private static final String frameDividerStart    = "<FRAME>";
-	private static final String populationDivider    = "<POP>";
-	private static final String agentDivider         = "<AGE>";
-	private static final String frameDividerEnd      = "</FRAME>";
+	private static final String HEADER_START  = "<H>";
+	private static final String OBSTACLE      = "<O>";
+	private static final String DIMENSION     = "<D>";
+	private static final String SHAPE         = "<S>";
+	private static final String HEADER_END    = "</H>";
+	private static final String FRAME_START   = "<F>";
+	private static final String POPULATION    = "<P>";
+	private static final String AGENT         = "<A>";
+	private static final String FRAME_END     = "</F>";
 	
 	/* Temporary class variables */
 	private File recordedFile;
@@ -117,14 +117,14 @@ public class SimulationRecording {
 	 * @param popList
 	 */
 	public void appendFrame(List<IPopulation> popList) {
-		pw.println(frameDividerStart);
+		pw.println(FRAME_START);
 		for (IPopulation p : popList) {
-			pw.println(populationDivider + ';' + p.toBinaryString());
+			pw.println(POPULATION + ';' + p.toBinaryString());
 			for (IAgent a : p.getAgents()) {
-				pw.println(agentDivider + ';' + a.toBinaryString());
+				pw.println(AGENT + ';' + a.toBinaryString());
 			}
 		}
-		pw.println(frameDividerEnd);
+		pw.println(FRAME_END);
 	}
 	
 	/**
@@ -139,17 +139,17 @@ public class SimulationRecording {
 			e1.printStackTrace();
 		}
 		while (input != null) {
-			if (input.startsWith(headerDividerStart)) {
+			if (input.startsWith(HEADER_START)) {
 				this.obsList = new ArrayList<IObstacle>();
-			} else if (input.startsWith(headerDividerEnd)) {
+			} else if (input.startsWith(HEADER_END)) {
 				return obsList;
-			} else if (input.startsWith(dimensionDivider)) {
+			} else if (input.startsWith(DIMENSION)) {
 				String[] inputArr = input.split(";", 2);
 				this.simDim = readDimension(inputArr[1]);
-			}  else if (input.startsWith(shapeDivider)) {
+			}  else if (input.startsWith(SHAPE)) {
 				String[] inputArr = input.split(";", 2);
 				this.shapeConstant = inputArr[1];
-			}  else if (input.startsWith(obstacleDivider)) {
+			}  else if (input.startsWith(OBSTACLE)) {
 				String[] inputArr = input.split(";", 2);
 				IObstacle o = AbstractObstacle.createFromFile(inputArr[1]);
 				if(obsList != null) obsList.add(o);
@@ -170,18 +170,18 @@ public class SimulationRecording {
 	 * @param obsList
 	 */
 	public void appendHeader(List<IObstacle> obsList, Dimension simDim, String shapeConstant) {
-		pw.println(headerDividerStart);
+		pw.println(HEADER_START);
 		for (IObstacle p : obsList) {
-			pw.println(obstacleDivider + ';' + p.toBinaryString());
+			pw.println(OBSTACLE + ';' + p.toBinaryString());
 		}
 		pw.println(getDimensionBinaryString(simDim));
-		pw.println(shapeDivider + ';' + shapeConstant);
-		pw.println(headerDividerEnd);
+		pw.println(SHAPE + ';' + shapeConstant);
+		pw.println(HEADER_END);
 	}
 	
 	private String getDimensionBinaryString(Dimension d) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(dimensionDivider);
+		sb.append(DIMENSION);
 		sb.append(';');
 		sb.append(d.width);
 		sb.append(';');
@@ -218,20 +218,20 @@ public class SimulationRecording {
 		}
 		IPopulation currentPop = null;
 		while (input != null) {
-			if (input.startsWith(frameDividerStart)) {
+			if (input.startsWith(FRAME_START)) {
 				currentFrame = new ArrayList<IPopulation>();
-			} else if (input.startsWith(frameDividerEnd)) {
+			} else if (input.startsWith(FRAME_END)) {
 				if(currentPop != null) {
 					currentFrame.add(currentPop);
 				}
 				return currentFrame;
-			} else if (input.startsWith(populationDivider)) {
+			} else if (input.startsWith(POPULATION)) {
 				if (currentPop != null) {
 					currentFrame.add(currentPop);
 				}
 				String[] inputArr = input.split(";", 2);
 				currentPop = AbstractPopulation.createFromFile(inputArr[1]);
-			} else if (input.startsWith(agentDivider)) {
+			} else if (input.startsWith(AGENT)) {
 				if (currentPop != null) {
 					String[] inputArr = input.split(";", 2);
 					IAgent newIAgent = AbstractAgent.createFromFile(inputArr[1]);
@@ -293,18 +293,18 @@ public class SimulationRecording {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			if (input.startsWith(frameDividerStart)) {
+			if (input.startsWith(FRAME_START)) {
 				if (currentFrame != null) {
 					result.add(currentFrame);
 				}
 				currentFrame = new ArrayList<IPopulation>();
-			} else if (input.startsWith(populationDivider)) {
+			} else if (input.startsWith(POPULATION)) {
 				if (currentPop != null) {
 					currentFrame.add(currentPop);
 				}
 				String[] inputArr = input.split(";", 2);
 				currentPop = AbstractPopulation.createFromFile(inputArr[1]);
-			} else if (input.startsWith(agentDivider)) {
+			} else if (input.startsWith(AGENT)) {
 				if (currentPop != null) {
 					String[] inputArr = input.split(";", 2);
 					IAgent newIAgent = AbstractAgent.createFromFile(inputArr[1]);
@@ -360,14 +360,14 @@ public class SimulationRecording {
 	public boolean dumpRecordToDisk(List<List<IPopulation>> record,
 			String filePath) {
 		for (List<IPopulation> popList : record) {
-			pw.println(frameDividerStart);
+			pw.println(FRAME_START);
 			for (IPopulation p : popList) {
-				pw.println(populationDivider + ';' + p.toBinaryString());
+				pw.println(POPULATION + ';' + p.toBinaryString());
 				for (IAgent a : p.getAgents()) {
-					pw.println(agentDivider + ';' + a.toBinaryString());
+					pw.println(AGENT + ';' + a.toBinaryString());
 				}
 			}
-			pw.println(frameDividerEnd);
+			pw.println(FRAME_END);
 		}
 		pw.close();
 		return true;

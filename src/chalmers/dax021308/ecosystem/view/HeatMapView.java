@@ -39,13 +39,16 @@ public class HeatMapView extends GLCanvas implements IView {
 	
 	private static final long serialVersionUID = 1585638837620985591L;
 	private List<IPopulation> newPops = new ArrayList<IPopulation>();
-	private int[][] heatMap;
-	private boolean[][] visited;
-	int heatMapWidth;
-	int heatMapHeight;
-	private double samplingConstant;
-	int maxVisited = 1;
-	int minVisited = Integer.MAX_VALUE;
+	private int[][][] heatMap;
+	private boolean[][][] visited;
+	private int heatMapWidth;
+	private int heatMapHeight;
+	private int nPopulations;
+	private int populationID;
+	private double xSamplingConstant;
+	private double ySamplingConstant;
+	int[] maxVisited;
+	int[] minVisited;
 	private Dimension grid;
 	private JOGLListener glListener;
 	private String populationName;
@@ -54,14 +57,24 @@ public class HeatMapView extends GLCanvas implements IView {
 	/**
 	 * Create the heat map.
 	 */
-	public HeatMapView(IModel model, Dimension grid, double samplingConstant, String populationName) {
+	public HeatMapView(IModel model, Dimension grid, Dimension heatMapDim, int nPopulations, String startPopulationName) {
 		this.grid = grid;
-		this.samplingConstant = samplingConstant;
-		this.populationName = populationName;
-		heatMapWidth = (int)(grid.getWidth()/samplingConstant+1);
-		heatMapHeight = (int)(grid.getHeight()/samplingConstant+1);
-		heatMap = new int[heatMapWidth][heatMapHeight];
-		visited = new boolean[heatMapWidth][heatMapHeight];
+		this.xSamplingConstant = grid.getWidth()/(((double)heatMapDim.getWidth())-1);
+		this.ySamplingConstant = grid.getHeight()/(((double)heatMapDim.getHeight())-1);
+		this.populationName = startPopulationName;
+		this.nPopulations = nPopulations;
+		this.populationID = 0;
+		maxVisited = new int[nPopulations];
+		minVisited = new int[nPopulations];
+		for(int i=0; i<nPopulations; i++){
+			maxVisited[i] = 1;
+			minVisited[i] = Integer.MAX_VALUE;
+		}
+		
+		heatMapWidth = (int)(grid.getWidth()/xSamplingConstant+1);
+		heatMapHeight = (int)(grid.getHeight()/ySamplingConstant+1);
+		heatMap = new int[nPopulations][heatMapWidth][heatMapHeight];
+		visited = new boolean[nPopulations][heatMapWidth][heatMapHeight];
 		model.addObserver(this);
      
 		glListener = new JOGLListener();
@@ -73,10 +86,12 @@ public class HeatMapView extends GLCanvas implements IView {
 	public void propertyChange(PropertyChangeEvent event) {
 		String eventName = event.getPropertyName();
 		if(eventName == EcoWorld.EVENT_STOP) {
-			maxVisited = 1;
-			minVisited = Integer.MAX_VALUE;
-			heatMap = new int[heatMapWidth][heatMapHeight];
-			visited = new boolean[heatMapWidth][heatMapHeight];
+			for(int i=0; i<nPopulations; i++){
+				maxVisited[i] = 1;
+				minVisited[i] = Integer.MAX_VALUE;
+			}
+			heatMap = new int[nPopulations][heatMapWidth][heatMapHeight];
+			visited = new boolean[nPopulations][heatMapWidth][heatMapHeight];
 		} else if(eventName == EcoWorld.EVENT_TICK) {
 			//Tick notification recived from model. Do something with the data.
 			if(event.getNewValue() instanceof List<?>) {
@@ -87,17 +102,17 @@ public class HeatMapView extends GLCanvas implements IView {
 			Object o = event.getNewValue();
 			if(o instanceof Dimension) {
 				this.grid = (Dimension) o;
-				heatMapWidth = (int)(grid.getWidth()/samplingConstant+1);
-				heatMapHeight = (int)(grid.getHeight()/samplingConstant+1);
-				heatMap = new int[heatMapWidth][heatMapHeight];
-				visited = new boolean[heatMapWidth][heatMapHeight];
+				heatMapWidth = (int)(grid.getWidth()/xSamplingConstant+1);
+				heatMapHeight = (int)(grid.getHeight()/ySamplingConstant+1);
+				heatMap = new int[nPopulations][heatMapWidth][heatMapHeight];
+				visited = new boolean[nPopulations][heatMapWidth][heatMapHeight];
 			}
 			//Handle dimension change here.
 		}
 	}
 	
 	/**
-	 * JOGL Listener, listenes to commands from the GLCanvas.
+	 * JOGL Listener, listens to commands from the GLCanvas.
 	 * 
 	 * @author Erik
 	 *
@@ -124,48 +139,53 @@ public class HeatMapView extends GLCanvas implements IView {
                  * that box in this iteration. A pixel can only get +1 per iteration to prevent
                  * the corners to dominate too much.
                  */
-                minVisited = Integer.MAX_VALUE;
-                visited = new boolean[heatMapWidth][heatMapHeight];
+                for(int i=0; i<nPopulations; i++){
+        			minVisited[i] = Integer.MAX_VALUE;
+        		}                
+                
+                visited = new boolean[nPopulations][heatMapWidth][heatMapHeight];
                 int popSize = newPops.size();
           		for(int i = 0; i < popSize; i ++) {
           			if(newPops.get(i).getName().equals(populationName)){
-	        			List<IAgent> agents = newPops.get(i).getAgents();
-	        			int size = agents.size();
-	        			IAgent a;
-	        			Position pos;
-	        			int intPosX;
-	        			int intPosY;
-	        			for(int j = 0; j < size; j++) {
-	        				a = agents.get(j);
-	        				pos = a.getPosition();
-	        				intPosX = (int)(pos.getX()/samplingConstant);
-	    					intPosY = (int)(pos.getY()/samplingConstant);
-	    					
-//	    					if(!visited[intPosX][intPosY]){
-	    						heatMap[intPosX][intPosY]++;
-	    						visited[intPosX][intPosY]=true;
-//	    					}
-	    						
-	    					if(heatMap[intPosX][intPosY]>maxVisited){
-	    						maxVisited = heatMap[intPosX][intPosY];
-	    					} 
-	                    }
+          				populationID = i;
           			}
+        			List<IAgent> agents = newPops.get(i).getAgents();
+        			int size = agents.size();
+        			IAgent a;
+        			Position pos;
+        			int intPosX;
+        			int intPosY;
+        			for(int j = 0; j < size; j++) {
+        				a = agents.get(j);
+        				pos = a.getPosition();
+        				intPosX = (int)(pos.getX()/xSamplingConstant);
+    					intPosY = (int)(pos.getY()/ySamplingConstant);
+    					
+//	    					if(!visited[intPosX][intPosY]){
+    						heatMap[i][intPosX][intPosY]++;
+    						visited[i][intPosX][intPosY]=true;
+//	    					}
+    						
+    					if(heatMap[i][intPosX][intPosY]>maxVisited[i]){
+    						maxVisited[i] = heatMap[i][intPosX][intPosY];
+    					} 
+                    }
         		} 
           		
           		/*
           		 * Check which pixel is visited the least.
           		 * Must be able to do in a better way?
           		 */
-          		for(int j=0;j<heatMapHeight;j++){
-          			for(int i=0;i<heatMapWidth;i++){
-          				if(heatMap[i][j]<minVisited && heatMap[i][j] > 0){
-    						minVisited = heatMap[i][j];
-    					} 
-          			}
-          		}	
-          		//System.out.println(minVisited);	
-          		
+          		for(int p=0;p<nPopulations;p++){
+	          		for(int j=0;j<heatMapHeight;j++){
+	          			for(int i=0;i<heatMapWidth;i++){
+	          				if(heatMap[p][i][j]<minVisited[p] && heatMap[p][i][j] > 0){
+	    						minVisited[p] = heatMap[p][i][j];
+	    					} 
+	          			}
+	          		}
+          		}
+          		          		
           		/*
           		 * Draw the heat map.
           		 */
@@ -177,7 +197,8 @@ public class HeatMapView extends GLCanvas implements IView {
           				 * minVisited and maxVisited. If a pixel has minVisited visits, it gets value 0. If a pixel has
           				 * maxVisited visits, it gets value 1.
           				 */
-          				double value = ((double)((double)(heatMap[i][j]-minVisited))/((double)(maxVisited-minVisited)));
+          				double value = ((double)((double)(heatMap[populationID][i][j]-minVisited[populationID]))/
+          						((double)(maxVisited[populationID]-minVisited[populationID])));
           				
           				/*
           				 * Below does the following re-scaling of colors:
@@ -223,12 +244,15 @@ public class HeatMapView extends GLCanvas implements IView {
 //        		
 //        		/* Information print, comment out to increase performance. */
 //        		Long totalTime = System.currentTimeMillis() - start;
-//        		StringBuffer sb = new StringBuffer("OpenGL Redraw! Fps: ");
-//        		sb.append(getNewFps());
-//        		//sb.append(" Rendertime in ms: ");
-//        		//sb.append(totalTime);
+//        		StringBuffer sb = new StringBuffer("OpenGL Redraw!  ");
+////        		sb.append(getNewFps());
+//        		sb.append(" Rendertime in ms: ");
+//        		sb.append(totalTime);
 //            	System.out.println(sb.toString());	
         		/* End Information print. */
+          		
+//          		long end = System.currentTimeMillis();
+//          		System.out.println(end-start);
             }
             
             @Override
@@ -294,6 +318,10 @@ public class HeatMapView extends GLCanvas implements IView {
 	public void release() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void setPopulationNameToShow(String populationName){
+		this.populationName = populationName;
 	}
 
 }

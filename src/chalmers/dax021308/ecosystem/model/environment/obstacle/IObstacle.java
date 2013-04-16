@@ -17,6 +17,8 @@ public interface IObstacle {
 	
 	public boolean isInObstacle(Position p);
 	
+	public boolean isCloseTo(Position p, double interactionRange);
+	
 	public double getWidth();
 	
 	public double getHeight();
@@ -26,4 +28,5 @@ public interface IObstacle {
 	public Color getColor();
 
 	public String toBinaryString();
+	
 }

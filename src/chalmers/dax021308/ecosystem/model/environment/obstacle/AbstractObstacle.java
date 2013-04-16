@@ -1,29 +1,34 @@
 package chalmers.dax021308.ecosystem.model.environment.obstacle;
 
 import java.awt.Color;
+import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 import chalmers.dax021308.ecosystem.model.util.Position;
-import chalmers.dax021308.ecosystem.model.util.SquareShape;
 
 public abstract class AbstractObstacle implements IObstacle {
 	
 	protected Position position;
-	protected double width;
-	protected double height;
+	protected double a;
+	protected double b;
 	protected Color color;
 	
 	@Override
 	public double getWidth() {
-		return width;
+		return a;
 	}
 	@Override
 	public double getHeight() {
-		return height;
+		return b;
 	}
 	@Override
 	public Position getPosition() {
 		return new Position(position);
+	}
+	
+	@Override
+	public Color getColor(){
+		return this.color;
 	}
 	
 	public String toBinaryString() {
@@ -41,9 +46,9 @@ public abstract class AbstractObstacle implements IObstacle {
 		sb.append(';');
 		sb.append(roundTwoDecimals(position.getY()));
 		sb.append(';');
-		sb.append(width);
+		sb.append(a);
 		sb.append(';');
-		sb.append(height);
+		sb.append(b);
 		sb.append(';');
 		sb.append(color.getRed());
 		sb.append(';');
@@ -76,6 +81,18 @@ public abstract class AbstractObstacle implements IObstacle {
 		result = Math.round(result);
 		result = result / 100;
 		return result;
+	}
+	
+	public static boolean isInsideObstacleList(List<IObstacle> obsList, Position p) {
+		if(obsList == null) {
+			return false;
+		}
+		for(IObstacle o : obsList) {
+			if(o.isInObstacle(p)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

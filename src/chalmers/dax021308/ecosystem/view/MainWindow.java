@@ -3,6 +3,7 @@ package chalmers.dax021308.ecosystem.view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -10,6 +11,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
+
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -20,6 +22,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileFilter;  
 
 import chalmers.dax021308.ecosystem.controller.ControlViewController;
 import chalmers.dax021308.ecosystem.controller.LiveSettingsViewController;
@@ -28,6 +31,7 @@ import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.chart.AbstractGraph2D;
 import chalmers.dax021308.ecosystem.view.chart.IterationTimeGraph;
+import chalmers.dax021308.ecosystem.view.chart.LifeLengthGraph;
 import chalmers.dax021308.ecosystem.view.chart.PopulationAmountGraph;
 
 /**
@@ -79,12 +83,21 @@ public class MainWindow extends JFrame implements IView {
 		openGL = new OpenGLSimulationView(model, d, true);
 		openGL.init();
 		//openGL.setSize(new Dimension(980,700));
-		heatMap = new HeatMapView(model, d, 11, "Deers");
+//<<<<<<< HEAD
+		//heatMap = new HeatMapView(model, d, 11, "Deers");
 		controlViewCtrl = new ControlViewController(model);
 		parameterViewCtrl = new LiveSettingsViewController(model);
-		graphView1 = new PopulationAmountGraph(model, 10);
-		graphView2 = new IterationTimeGraph(model, 10);
+//		graphView1 = new PopulationAmountGraph(model, 10);
+//		graphView2 = new IterationTimeGraph(model, 10);
 		smvc = new NEWSettingsMenuViewController(model);
+//=======
+		heatMap = new HeatMapView(model, d, new Dimension(75,75), 3, "Deers");
+//		parameterView = new ParameterView(model);
+		//
+//		controlView = new ControlView(model);
+		graphView1 = new PopulationAmountGraph(model, 10);
+		graphView2 = new LifeLengthGraph(model, 10);
+//>>>>>>> 0a80aae074172894a60ad8cf4ef1d867f0abfd57
 		
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -92,14 +105,70 @@ public class MainWindow extends JFrame implements IView {
 		mnFile = new JMenu("File");
 		menuBar.add(mnFile);
 		
+//<<<<<<< HEAD
 		mntmLoad = new JMenuItem("Load simulation");
 		
+//=======
+
+		
+//		JMenuItem mntmLoad = new JMenuItem("Load simulation");
+		//TODO: MOve this to controller.
+		mntmLoad.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser  fc = new JFileChooser();
+				fc.setFileFilter(new SimFileFilter());
+				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				int ret = fc.showOpenDialog(MainWindow.this);
+				if(ret == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fc.getSelectedFile();
+					if(selectedFile != null) {
+						Log.v(selectedFile.toString());
+						if(!model.loadRecordedSimulation(selectedFile)) {
+							JOptionPane.showMessageDialog(MainWindow.this, "Failed to load simulation file.");
+						} else {
+							model.playRecordedSimulation();
+						}
+					}
+				}
+			}
+		});
+//>>>>>>> 0a80aae074172894a60ad8cf4ef1d867f0abfd57
 		mnFile.add(mntmLoad);
 		
 		mntmSave = new JMenuItem("Save simulation");
 		mnFile.add(mntmSave);
+//<<<<<<< HEAD
 	
 		mntmExit = new JMenuItem("Exit");
+//=======
+		//TODO: MOve this to controller.
+		mntmSave.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser  fc = new JFileChooser();
+				fc.setFileFilter(new SimFileFilter());
+				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				//File selectedFile = null;//Get file from somewhere.
+				//fc.setSelectedFile(selectedFile);
+				int ret = fc.showSaveDialog(MainWindow.this);
+				if(ret == JFileChooser.APPROVE_OPTION) {
+					File savedFileAs = fc.getSelectedFile();
+					String filePath = savedFileAs.getPath();
+					if(!filePath.toLowerCase().endsWith(".sim")) {
+						savedFileAs = new File(filePath + ".sim");
+					}
+					if(!model.saveRecordingToFile(savedFileAs))  {
+						JOptionPane.showMessageDialog(MainWindow.this, "Failed to save recorded simulation file.");
+					} else {
+						JOptionPane.showMessageDialog(MainWindow.this, "File saved succesfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
+			}
+		});
+		
+//		JMenuItem mntmExit = new JMenuItem("Exit");
+//>>>>>>> 0a80aae074172894a60ad8cf4ef1d867f0abfd57
 
 		
 		mnFile.add(mntmExit);
@@ -163,12 +232,32 @@ public class MainWindow extends JFrame implements IView {
 		
 		contentPane.add(left, BorderLayout.CENTER);
 		contentPane.add(right, BorderLayout.EAST);
+//<<<<<<< HEAD
 		addWindowListener(new WindowAdapter() {			
+//=======
+//		addWindowListener(new WindowListener() {
+//			
+//			@Override
+//			public void windowOpened(WindowEvent arg0) {}
+//			@Override
+//			public void windowIconified(WindowEvent arg0) {}
+//			@Override
+//			public void windowDeiconified(WindowEvent arg0) {}
+//			@Override
+//			public void windowDeactivated(WindowEvent arg0) {}
+//>>>>>>> 0a80aae074172894a60ad8cf4ef1d867f0abfd57
 			@Override
 			public void windowClosing(WindowEvent arg0) {
 				//Try to shutdown all worker threads.
 				model.shutdownNow();
 			}
+//<<<<<<< HEAD
+//=======
+//			@Override
+//			public void windowClosed(WindowEvent arg0) {}
+//			@Override
+//			public void windowActivated(WindowEvent arg0) {}
+//>>>>>>> 0a80aae074172894a60ad8cf4ef1d867f0abfd57
 		});
 		//contentPane.add(graphView2);
 	}
@@ -215,4 +304,18 @@ public class MainWindow extends JFrame implements IView {
 	public void setBtnStartNewSimWindowActionListener(ActionListener a) {
 		controlViewCtrl.view.btnStartNew.addActionListener(a);		
 	}
+	
+	private class SimFileFilter extends FileFilter{
+		
+		@Override
+		public boolean accept(File f) {
+			  return f.isDirectory() || f.getName().toLowerCase().endsWith(".sim");  
+		}
+		
+
+		@Override
+		public String getDescription() {
+			  return ".sim files"; 
+		}
+	};
 }

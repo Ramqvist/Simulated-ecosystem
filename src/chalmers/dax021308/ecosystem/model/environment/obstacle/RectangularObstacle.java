@@ -6,65 +6,56 @@ import chalmers.dax021308.ecosystem.model.util.Position;
 
 public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 	
-	private static double nStep = 6;
-	private static double e = 0.01;
-	private static double angleLimit;
+	private static double nStep = 200;
 
 	public RectangularObstacle(double width, double height, Position position, Color color){
 		this.position = position;
-		this.width = width;
-		this.height = height;
+		this.a = width;
+		this.b = height;
 		this.color = color;
-		angleLimit = Math.atan(height/width);
 	}
 	
 	@Override
 	public Position closestBoundary(Position p) {
 		Position agentPos = new Position(p.getX()-this.position.getX(), p.getY()-this.position.getY());	
 		
-		nStep = 200;	
-		Position bestPos = bruteBoundarySearch(agentPos);
-
+		double xSign = Math.signum(agentPos.getX());
+		double ySign = Math.signum(agentPos.getY());
+		agentPos.setPosition(agentPos.getX()*xSign, agentPos.getY()*ySign);
+		
+		double x = agentPos.getX();
+		double y = agentPos.getY();
+		Position bestPos;
+		
+		if(x < a) {
+			bestPos = new Position(x,b);
+		} else if (y < b) {
+			bestPos = new Position(a,y);
+		} else {
+			bestPos = new Position(a,b);
+		}
+		
+		bestPos.setPosition(bestPos.getX()*xSign, bestPos.getY()*ySign);
 		bestPos.setPosition(bestPos.getX()+this.position.getX(), bestPos.getY()+this.position.getY());
-		return bestPos;
-	}
-
-	private Position bruteBoundarySearch(Position agentPos){
-		Position bestPos = new Position(Double.MAX_VALUE, Double.MAX_VALUE);
-		Position rectPos = new Position();
-		for(int i=0; i<nStep/4; i++){
-			rectPos.setPosition(-width + 8*i/nStep*width, -height);
-			if(rectPos.getDistance(agentPos) < bestPos.getDistance(agentPos)) {
-				bestPos.setPosition(rectPos);
-			}
-		}
-		for(int i=0; i<nStep/4; i++){
-			rectPos.setPosition(width, -height + 8*i/nStep*height);
-			if(rectPos.getDistance(agentPos) < bestPos.getDistance(agentPos)) {
-				bestPos.setPosition(rectPos);
-			}
-		}
-		for(int i=0; i<nStep/4; i++){
-			rectPos.setPosition(-width + 8*i/nStep*width, height);
-			if(rectPos.getDistance(agentPos) < bestPos.getDistance(agentPos)) {
-				bestPos.setPosition(rectPos);
-			}
-		}
-		for(int i=0; i<nStep/4; i++){
-			rectPos.setPosition(-width, -height + 8*i/nStep*height);
-			if(rectPos.getDistance(agentPos) < bestPos.getDistance(agentPos)) {
-				bestPos.setPosition(rectPos);
-			}
-		}
+		
 		return bestPos;
 	}
 
 	@Override
 	public boolean isInObstacle(Position p) {
-		if(p.getY() < position.getY()+height && p.getY() > position.getY()-height){
-			if(p.getX() < position.getX()+width && p.getX() > position.getX()-width) {
+		if(p.getY() < position.getY()+b && p.getY() > position.getY()-b){
+			if(p.getX() < position.getX()+a && p.getX() > position.getX()-a) {
 				return true;
 			}
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean isCloseTo(Position p, double interactionRange){
+		double radius = Math.sqrt(a*a + b*b);
+		if(this.position.getDistance(p) <= radius + interactionRange) {
+			return true;
 		}
 		return false;
 	}
