@@ -1,12 +1,19 @@
 package chalmers.dax021308.ecosystem.model.util;
 
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
+
+import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.RectangularObstacle;
 import static org.junit.Assert.*;
 import static java.lang.Double.*;
 
 
 public class PositionTest {
-
+	
 	@Test
 	public void basicTest() {
 		Position p = new Position(5 , 5);

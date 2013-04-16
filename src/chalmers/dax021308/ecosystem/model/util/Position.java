@@ -106,7 +106,7 @@ public class Position {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof Position))
 			return false;
 		Position other = (Position) obj;
 		if (Double.doubleToLongBits(x) != Double.doubleToLongBits(other.x))
