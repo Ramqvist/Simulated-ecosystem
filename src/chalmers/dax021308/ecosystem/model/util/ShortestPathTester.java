@@ -52,8 +52,6 @@ public class ShortestPathTester extends JPanel {
 	
 	
 	public ShortestPathTester() {
-//		Position start = new Position(5.0, 5000.0);
-//		Position end = new Position(5.0, -32.0);
 
 		JFrame frame = new JFrame();
 		frame.setSize(new Dimension(750, 750));
@@ -63,7 +61,7 @@ public class ShortestPathTester extends JPanel {
 		setBackground(Color.WHITE);
 		
 		Position start = new Position(140.4120, 149.0);
-		Position end = new Position(602.0, 472.0); 
+		Position end = new Position(106.0, 249.0); 
 		Dimension dim = new Dimension(700, 700);
 		goal = new AStarPosition(end.x, end.y);
 		if(AbstractObstacle.isInsideObstacleList(obsList, start) || AbstractObstacle.isInsideObstacleList(obsList, end)) {
@@ -103,8 +101,15 @@ public class ShortestPathTester extends JPanel {
 				}
 			}
 		}
-		
 		Log.v("Mean value:" + stat.getMean());
+		time = System.nanoTime();
+		if(AbstractObstacle.isInsidePathList(obsList, start, end)) {
+			Log.v("IS INSIDE PATH");
+		} else {
+			Log.v("IS NOT INSIDE PATH");
+		}
+		elapsed = (System.nanoTime() - time)*0.000001;
+		System.out.println("AbstractObstacle.isInsidePathList Completed in: " + elapsed);
 		//		time = System.nanoTime();
 //		result = Position.getShortestPath(start, end);
 //		elapsed = (System.nanoTime() - time)*0.000001;

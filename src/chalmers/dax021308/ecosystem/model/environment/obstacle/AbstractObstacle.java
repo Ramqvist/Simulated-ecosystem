@@ -94,5 +94,36 @@ public abstract class AbstractObstacle implements IObstacle {
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean isInsidePath(Position start, Position end) {
+		Position current = new Position(start);
+		double path_threshold = 5.0;
+		while(current.getDistance(end) >= path_threshold ) {
+			if(isInObstacle(current)) {
+				return true;
+			}
+			if(end.getX() > current.getX()) {
+				current.setX(current.getX() + path_threshold);
+			} else if(end.getX() < current.getX()) {
+				current.setX(current.getX() - path_threshold);
+			}
+			if(end.getY() > current.getY()) {
+				current.setY(current.getY() + path_threshold);
+			} else if(end.getY() < current.getY()) {
+				current.setY(current.getY() - path_threshold);
+			}
+		}
+		return false;
+	}
+	
+	public static boolean isInsidePathList(List<IObstacle> obsList, Position start, Position end) {
+		for(IObstacle o : obsList) {
+			if(o.isInsidePath(start, end)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 }

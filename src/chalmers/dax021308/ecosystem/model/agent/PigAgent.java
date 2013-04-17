@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.environment.obstacle.AbstractObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
@@ -197,6 +198,8 @@ public class PigAgent extends AbstractAgent {
 					} else {
 						return new Vector(focusedPrey.getPosition(), position);
 					}
+				} else {
+					return new Vector(focusedPrey.getPosition(), position);
 				}
 			}
 		}
@@ -249,12 +252,18 @@ public class PigAgent extends AbstractAgent {
 
 		if (willFocusPreys && closestFocusPrey != null) {
 			focusedPrey = closestFocusPrey;
-			focusedPreyPath = Position.getShortestPath(position, focusedPrey.getPosition(), obstacles, shape, dim);
-			if(focusedPreyPath == null || focusedPreyPath.size() == 0) {
-				return Vector.emptyVector();
+			if(AbstractObstacle.isInsidePathList(obstacles, position, focusedPrey.getPosition())) {
+				focusedPreyPath = Position.getShortestPath(position, focusedPrey.getPosition(), obstacles, shape, dim);
+				if(focusedPreyPath == null || focusedPreyPath.size() == 0) {
+					return Vector.emptyVector();
+				} else {
+					return new Vector(focusedPreyPath.get(0), position);
+				}
 			} else {
-				return new Vector(focusedPreyPath.get(0), position);
+				focusedPreyPath = null;
+				return new Vector(focusedPrey.getPosition(), position);
 			}
+				
 		}
 
 		return preyForce;

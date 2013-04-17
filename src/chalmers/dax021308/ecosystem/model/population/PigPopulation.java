@@ -20,9 +20,6 @@ import chalmers.dax021308.ecosystem.model.util.shape.IShape;
  */
 public class PigPopulation extends AbstractPopulation {
 
-	public PigPopulation(List<IAgent> agentList) {
-		agents = agentList;
-	}
 
 	public PigPopulation(String name, Dimension gridDimension,
 			int initPopulationSize, Color color, double maxSpeed,
