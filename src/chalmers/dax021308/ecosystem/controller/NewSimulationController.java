@@ -193,6 +193,7 @@ public class NewSimulationController implements IController {
 			SimulationSettings s = getSimulationSettingsFromGUI();
 			s.saveToFile();
 			model.loadSimulationSettings(s);
+			// Här kanske livesettings ska uppdateras.
 			try {
 				model.start();
 			} catch (IllegalStateException e) {
@@ -203,6 +204,4 @@ public class NewSimulationController implements IController {
 			view.showErrorMessage();
 		}
 	}
-
-
 }

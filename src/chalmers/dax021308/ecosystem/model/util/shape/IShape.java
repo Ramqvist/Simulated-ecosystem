@@ -1,6 +1,8 @@
-package chalmers.dax021308.ecosystem.model.util;
+package chalmers.dax021308.ecosystem.model.util.shape;
 
 import java.awt.Dimension;
+
+import chalmers.dax021308.ecosystem.model.util.Position;
 
 /**
  * 
@@ -46,4 +48,5 @@ public interface IShape {
 	 *         dimension, otherwise returns False
 	 */
 	public boolean isInside(Dimension dim, Position p);
+	
 }

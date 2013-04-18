@@ -7,9 +7,9 @@ import java.util.List;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Gender;
-import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 import chalmers.dax021308.ecosystem.model.util.Position;
+import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
  * IAgent describes an arbitrary single individual.
@@ -23,6 +23,11 @@ public interface IAgent extends Cloneable {
 	 */
 	public Position getPosition();
 
+	/**
+	 * @param p - The new Position.
+	 */
+	public void setPosition(Position p);
+	
 	/**
 	 * Calculates the new position of the IAgent to which it will move when
 	 * calling updatePosition().
@@ -73,7 +78,8 @@ public interface IAgent extends Cloneable {
 	public Vector getVelocity();
 
 	/**
-	 * @param velocity - The new velocity.
+	 * @param velocity
+	 *            - The new velocity.
 	 */
 	public void setVelocity(Vector velocity);
 
@@ -85,13 +91,18 @@ public interface IAgent extends Cloneable {
 	/**
 	 * Tries to create one or more new IAgents, with data from the two provided
 	 * IAgents.
-	 * @param agent - The IAgent which this IAgent will reproduce with.
-	 * @param shape TODO
-	 * @param gridDimension TODO
+	 * 
+	 * @param agent
+	 *            - The IAgent which this IAgent will reproduce with.
+	 * @param shape
+	 *            TODO
+	 * @param gridDimension
+	 *            TODO
 	 * @return A list of IAgents if the reproduction was successful, otherwise
 	 *         null.
 	 */
-	public List<IAgent> reproduce(IAgent agent, int populationSize, List<IObstacle> obstacles, IShape shape, Dimension gridDimension);
+	public List<IAgent> reproduce(IAgent agent, int populationSize,
+			List<IObstacle> obstacles, IShape shape, Dimension gridDimension);
 
 	/**
 	 * @return The gender of the IAgent specified by some enum. Returns null if
@@ -101,6 +112,7 @@ public interface IAgent extends Cloneable {
 
 	/**
 	 * Clone an agent.
+	 * 
 	 * @return A reference to a new agent with the values of the calling one.
 	 * @throws CloneNotSupportedException
 	 */
@@ -108,6 +120,7 @@ public interface IAgent extends Cloneable {
 
 	/**
 	 * Try to consume this agent.
+	 * 
 	 * @return True if consumed, otherwise false.
 	 */
 	public boolean tryConsumeAgent();
@@ -121,14 +134,34 @@ public interface IAgent extends Cloneable {
 
 	/**
 	 * Checks whether this agent is alive or not.
+	 * 
 	 * @return True if alive, otherwise false.
 	 */
 	public boolean isAlive();
 	
-	public Vector getObstacleForce(List<IObstacle> obstacles);
 	/**
 	 * Checks if this agent has any food available and is desirable to hunt
 	 * @return True if the agent is desirable to hunt and should affect the preyforce, otherwise false
 	 */
 	public boolean hasFood();
+
+	/**
+	 * @return Max acceleration.
+	 */
+	public double getMaxAcceleration();
+
+	/**
+	 * @return Max Speed.
+	 */
+	public double getMaxSpeed();
+
+	/**
+	 * @return Vision range.
+	 */
+	public double getVisionRange();
+
+	/**
+	 * Tells the agent food has been found, and that it should eat
+	 */
+	public void eat();
 }

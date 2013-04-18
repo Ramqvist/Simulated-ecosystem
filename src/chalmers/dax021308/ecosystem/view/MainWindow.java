@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
@@ -23,10 +24,14 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;  
 
+import chalmers.dax021308.ecosystem.controller.ControlViewController;
+import chalmers.dax021308.ecosystem.controller.LiveSettingsViewController;
+import chalmers.dax021308.ecosystem.controller.NEWSettingsMenuViewController;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.chart.AbstractGraph2D;
 import chalmers.dax021308.ecosystem.view.chart.IterationTimeGraph;
+import chalmers.dax021308.ecosystem.view.chart.LifeLengthGraph;
 import chalmers.dax021308.ecosystem.view.chart.PopulationAmountGraph;
 
 /**
@@ -39,18 +44,30 @@ import chalmers.dax021308.ecosystem.view.chart.PopulationAmountGraph;
 public class MainWindow extends JFrame implements IView {
 	private static final long serialVersionUID = -8023060073777907757L;
 	private JPanel contentPane;
-	private ParameterView parameterView; 
-	private ControlView controlView;
 //	private JPanel simulationPanel = new JPanel();
 	private JPanel left = new JPanel();
 	private JPanel right = new JPanel();
-	private SettingsMenuView smv = new SettingsMenuView(this);
 	private AWTSimulationView awt;
 	private OpenGLSimulationView openGL;
 	private HeatMapView heatMap;
 	private AbstractGraph2D graphView1;
 	private AbstractGraph2D graphView2;
 	
+	public final LiveSettingsViewController parameterViewCtrl; 
+	public final ControlViewController controlViewCtrl;
+	public final NEWSettingsMenuViewController smvc;
+	
+	public final JMenuBar menuBar;
+	public final JMenu mnFile;
+	public final JMenuItem mntmLoad;
+	public final JMenuItem mntmSave;
+	public final JMenuItem mntmExit;
+	public final JMenu mnControls;
+	public final JMenuItem mntmStart;
+	public final JMenuItem mntmStop;
+	public final JMenuItem mntmPause;
+	public final JMenu mnSettings;
+	public final JMenuItem mntmSimulationSettings;
 
 	/**
 	 * Create the frame.
@@ -66,22 +83,35 @@ public class MainWindow extends JFrame implements IView {
 		openGL = new OpenGLSimulationView(model, d, true);
 		openGL.init();
 		//openGL.setSize(new Dimension(980,700));
+//<<<<<<< HEAD
+		//heatMap = new HeatMapView(model, d, 11, "Deers");
+		controlViewCtrl = new ControlViewController(model);
+		parameterViewCtrl = new LiveSettingsViewController(model);
+//		graphView1 = new PopulationAmountGraph(model, 10);
+//		graphView2 = new IterationTimeGraph(model, 10);
+		smvc = new NEWSettingsMenuViewController(model);
+//=======
 		heatMap = new HeatMapView(model, d, new Dimension(75,75), 3, "Deers");
-		parameterView = new ParameterView(model);
+//		parameterView = new ParameterView(model);
 		//
-		controlView = new ControlView(model);
+//		controlView = new ControlView(model);
 		graphView1 = new PopulationAmountGraph(model, 10);
-		graphView2 = new IterationTimeGraph(model, 10);
+		graphView2 = new LifeLengthGraph(model, 10);
+//>>>>>>> 0a80aae074172894a60ad8cf4ef1d867f0abfd57
 		
-		JMenuBar menuBar = new JMenuBar();
+		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
-		JMenu mnFile = new JMenu("File");
+		mnFile = new JMenu("File");
 		menuBar.add(mnFile);
 		
+//<<<<<<< HEAD
+		mntmLoad = new JMenuItem("Load simulation");
+		
+//=======
 
 		
-		JMenuItem mntmLoad = new JMenuItem("Load simulation");
+//		JMenuItem mntmLoad = new JMenuItem("Load simulation");
 		//TODO: MOve this to controller.
 		mntmLoad.addActionListener(new ActionListener() {
 			@Override
@@ -103,10 +133,15 @@ public class MainWindow extends JFrame implements IView {
 				}
 			}
 		});
+//>>>>>>> 0a80aae074172894a60ad8cf4ef1d867f0abfd57
 		mnFile.add(mntmLoad);
 		
-		JMenuItem mntmSave = new JMenuItem("Save simulation");
+		mntmSave = new JMenuItem("Save simulation");
 		mnFile.add(mntmSave);
+//<<<<<<< HEAD
+	
+		mntmExit = new JMenuItem("Exit");
+//=======
 		//TODO: MOve this to controller.
 		mntmSave.addActionListener(new ActionListener() {
 			@Override
@@ -132,37 +167,32 @@ public class MainWindow extends JFrame implements IView {
 			}
 		});
 		
-		JMenuItem mntmExit = new JMenuItem("Exit");
+//		JMenuItem mntmExit = new JMenuItem("Exit");
+//>>>>>>> 0a80aae074172894a60ad8cf4ef1d867f0abfd57
 
-		//TODO: MOve this to controller.
-		mntmExit.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				System.exit(0);
-			}
-		});
+		
 		mnFile.add(mntmExit);
 		
-		JMenu mnControls = new JMenu("Controls");
+		mnControls = new JMenu("Controls");
 		menuBar.add(mnControls);
 		
-		JMenuItem mntmStart = new JMenuItem("Start");
+		mntmStart = new JMenuItem("Start");
 		mnControls.add(mntmStart);
 		
-		JMenuItem mntmStop = new JMenuItem("Stop");
+		mntmStop = new JMenuItem("Stop");
 		mnControls.add(mntmStop);
 		
-		JMenuItem mntmPause = new JMenuItem("Pause");
+		mntmPause = new JMenuItem("Pause");
 		mnControls.add(mntmPause);
 		
-		JMenu mnSettings = new JMenu("Settings");
+		mnSettings = new JMenu("Settings");
 		menuBar.add(mnSettings);
 		
-		JMenuItem mntmSimulationSettings = new JMenuItem("Simulation settings");
-		//Only this in this class should be in the Controller
+		mntmSimulationSettings = new JMenuItem("Simulation settings");
+		
 		mntmSimulationSettings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				smv.setVisible(true);
+				smvc.init();
 			}
 		});
 		mnSettings.add(mntmSimulationSettings);
@@ -188,8 +218,9 @@ public class MainWindow extends JFrame implements IView {
 //		simulationPanel.setSize(d);
 		//simulationPanel.add(openGL);
 //		simulationPanel.setBackground(Color.RED);
-		left.add(openGL);
-		left.add(controlView, BorderLayout.SOUTH);  
+		left.add(parameterViewCtrl.view, BorderLayout.NORTH);
+		left.add(openGL, BorderLayout.CENTER);
+		left.add(controlViewCtrl.view, BorderLayout.SOUTH);  
 		//right.add(parameterView, BorderLayout.CENTER);
 		//graphView1.setMinimumSize(new Dimension(500, 400));
 		//graphView1.setPreferredSize(new Dimension(500, 400));
@@ -201,25 +232,32 @@ public class MainWindow extends JFrame implements IView {
 		
 		contentPane.add(left, BorderLayout.CENTER);
 		contentPane.add(right, BorderLayout.EAST);
-		addWindowListener(new WindowListener() {
-			
-			@Override
-			public void windowOpened(WindowEvent arg0) {}
-			@Override
-			public void windowIconified(WindowEvent arg0) {}
-			@Override
-			public void windowDeiconified(WindowEvent arg0) {}
-			@Override
-			public void windowDeactivated(WindowEvent arg0) {}
+//<<<<<<< HEAD
+		addWindowListener(new WindowAdapter() {			
+//=======
+//		addWindowListener(new WindowListener() {
+//			
+//			@Override
+//			public void windowOpened(WindowEvent arg0) {}
+//			@Override
+//			public void windowIconified(WindowEvent arg0) {}
+//			@Override
+//			public void windowDeiconified(WindowEvent arg0) {}
+//			@Override
+//			public void windowDeactivated(WindowEvent arg0) {}
+//>>>>>>> 0a80aae074172894a60ad8cf4ef1d867f0abfd57
 			@Override
 			public void windowClosing(WindowEvent arg0) {
 				//Try to shutdown all worker threads.
 				model.shutdownNow();
 			}
-			@Override
-			public void windowClosed(WindowEvent arg0) {}
-			@Override
-			public void windowActivated(WindowEvent arg0) {}
+//<<<<<<< HEAD
+//=======
+//			@Override
+//			public void windowClosed(WindowEvent arg0) {}
+//			@Override
+//			public void windowActivated(WindowEvent arg0) {}
+//>>>>>>> 0a80aae074172894a60ad8cf4ef1d867f0abfd57
 		});
 		//contentPane.add(graphView2);
 	}
@@ -264,7 +302,7 @@ public class MainWindow extends JFrame implements IView {
 	}
 
 	public void setBtnStartNewSimWindowActionListener(ActionListener a) {
-		controlView.btnStartNew.addActionListener(a);		
+		controlViewCtrl.view.btnStartNew.addActionListener(a);		
 	}
 	
 	private class SimFileFilter extends FileFilter{

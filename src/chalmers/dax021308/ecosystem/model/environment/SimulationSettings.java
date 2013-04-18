@@ -26,9 +26,9 @@ public class SimulationSettings {
 	
 	
 	/* Shape Constants */
-	public static final String SHAPE_SQUARE   = "Square Shape";
-	public static final String SHAPE_CIRCLE   = "Circle Shape";
-	public static final String SHAPE_TRIANGLE = "Triangle Shape";
+	public static final String SHAPE_SQUARE   = "Square";
+	public static final String SHAPE_CIRCLE   = "Circle";
+	public static final String SHAPE_TRIANGLE = "Triangle";
 
 	/* Population constants */
 	public static final String POP_PIG        = "Pig Population";
@@ -48,8 +48,10 @@ public class SimulationSettings {
 	public static final String OBSTACLE_RECTANGULAR = "Rectangular obstacle";
 	public static final String OBSTACLE_ELLIPTICAL  = "Elliptical obstacle";
 	public static final String OBSTACLE_TRIANGLE  = "Triangle obstacle";
+	public static final String OBSTACLE_RIVERS  = "Rivers obstacle";
+	public static final String OBSTACLE_TUBE  = "Tube obstacle";
 	public static final String OBSTACLE_NONE        = "No obstacle";
-	public static final String[] OBSTACLE_VALUES = {OBSTACLE_NONE, OBSTACLE_RECTANGULAR, OBSTACLE_ELLIPTICAL, OBSTACLE_TRIANGLE};
+	public static final String[] OBSTACLE_VALUES = {OBSTACLE_NONE, OBSTACLE_RECTANGULAR, OBSTACLE_ELLIPTICAL, OBSTACLE_TRIANGLE, OBSTACLE_RIVERS, OBSTACLE_TUBE};
 	
 	/* Dimension constants */
 	public static final String DIM_SMALL  = "500  x 500";
@@ -107,6 +109,10 @@ public class SimulationSettings {
 		this.recordSimulation = recordSimulation;
 		this.delayLength = delayLength;
 		this.numIterations = numIterations;
+	}
+	
+	public void updateLiveSettings(int delayLenght) {
+		this.delayLength = delayLenght;
 	}
 	
 	public int getDelayLength() {

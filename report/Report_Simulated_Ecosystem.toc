@@ -1,0 +1,23 @@
+\select@language {english}
+\contentsline {section}{\numberline {1}Introduction}{3}
+\contentsline {section}{\numberline {2}Methods}{3}
+\contentsline {section}{\numberline {3}Theory}{3}
+\contentsline {subsection}{\numberline {3.1}Agent movement and behaviour}{3}
+\contentsline {subsubsection}{\numberline {3.1.1}Predator force}{5}
+\contentsline {subsubsection}{\numberline {3.1.2}Prey force}{6}
+\contentsline {subsubsection}{\numberline {3.1.3}Environment force}{6}
+\contentsline {subsubsection}{\numberline {3.1.4}Mutual interaction force}{7}
+\contentsline {subsubsection}{\numberline {3.1.5}Arrayal force}{8}
+\contentsline {subsubsection}{\numberline {3.1.6}Forward thrust}{8}
+\contentsline {subsection}{\numberline {3.2}Finding the closest point on a boundary}{8}
+\contentsline {subsubsection}{\numberline {3.2.1}Triangle}{9}
+\contentsline {subsubsection}{\numberline {3.2.2}Rectangle/Square}{9}
+\contentsline {subsubsection}{\numberline {3.2.3}Circle}{9}
+\contentsline {subsubsection}{\numberline {3.2.4}Ellipse}{9}
+\contentsline {subsection}{\numberline {3.3}Graphical representation of agents}{13}
+\contentsline {subsubsection}{\numberline {3.3.1}Finding the centroid of a triangle}{13}
+\contentsline {subsubsection}{\numberline {3.3.2}The direction of where the triangle points}{14}
+\contentsline {section}{\numberline {4}Results}{16}
+\contentsline {section}{\numberline {5}Discussion}{16}
+\contentsline {section}{\numberline {6}Appendix}{16}
+\contentsline {section}{\numberline {7}References}{16}

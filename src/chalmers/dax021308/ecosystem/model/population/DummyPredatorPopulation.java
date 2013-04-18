@@ -7,9 +7,9 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.agent.SimplePredatorAgent;
-import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
+import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
  * 
@@ -27,9 +27,8 @@ public class DummyPredatorPopulation extends AbstractPopulation {
 	public DummyPredatorPopulation(Dimension gridDimension,
 			int initPopulationSize, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange, IShape shape) {
-		super("Simple Predator", gridDimension, shape, null);
+		super("Simple Predator", gridDimension, shape, null, color);
 		this.visionRange = visionRange;
-		this.color = color;
 		agents = initializePopulation(initPopulationSize, gridDimension, color,
 				maxSpeed, maxAcceleration, visionRange);
 	}

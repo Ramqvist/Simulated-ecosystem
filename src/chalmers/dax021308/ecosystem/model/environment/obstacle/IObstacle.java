@@ -28,5 +28,7 @@ public interface IObstacle {
 	public Color getColor();
 
 	public String toBinaryString();
+
+	public boolean isInsidePath(Position start, Position end);
 	
 }

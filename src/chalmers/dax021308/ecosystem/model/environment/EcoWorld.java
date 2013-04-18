@@ -6,7 +6,6 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -24,14 +23,14 @@ import chalmers.dax021308.ecosystem.model.population.GrassPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.population.PigPopulation;
 import chalmers.dax021308.ecosystem.model.population.WolfPopulation;
-import chalmers.dax021308.ecosystem.model.util.CircleShape;
-import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
-import chalmers.dax021308.ecosystem.model.util.SquareShape;
 import chalmers.dax021308.ecosystem.model.util.Stat;
 import chalmers.dax021308.ecosystem.model.util.TimerHandler;
-import chalmers.dax021308.ecosystem.model.util.TriangleShape;
+import chalmers.dax021308.ecosystem.model.util.shape.CircleShape;
+import chalmers.dax021308.ecosystem.model.util.shape.IShape;
+import chalmers.dax021308.ecosystem.model.util.shape.SquareShape;
+import chalmers.dax021308.ecosystem.model.util.shape.TriangleShape;
 
 /**
  * Ecosystem main class.
@@ -41,33 +40,31 @@ import chalmers.dax021308.ecosystem.model.util.TriangleShape;
  * <p>
  * Use the proper constructor for the wanted behavior of EcoWorld.
  * 
+ * !!! Please don't auto-indent this class, thanks !!!
  * 
  * @author Erik Ramqvist
  * 
  */
 public class EcoWorld implements IModel {
 
-	// Please don't auto-indent this class, thanks.
-
-	/* Property change events constants */
-	public static final String EVENT_TICK = "chalmers.dax021308.ecosystem.model.Ecoworld.event_tick";
-	public static final String EVENT_STOP = "chalmers.dax021308.ecosystem.model.Ecoworld.event_stop";
-	public static final String EVENT_START = "chalmers.dax021308.ecosystem.model.Ecoworld.event_start";
-	public static final String EVENT_PAUSE = "chalmers.dax021308.ecosystem.model.Ecoworld.event_pause";
-	public static final String EVENT_RECORDING_FINISHED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recording_started";
-	public static final String EVENT_RECORDING_STARTED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_recording_finished";
-	public static final String EVENT_DIMENSIONCHANGED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_dimension_changed";
-	public static final String EVENT_DELAY_CHANGED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_delay_changed";
-	public static final String EVENT_SHAPE_CHANGED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_shape_changed";
-	public static final String EVENT_ITERATION_FINISHED = "chalmers.dax021308.ecosystem.model.Ecoworld.event_iteration_finished";
+	/* Property change events constants */	
+	public static final String EVENT_TICK 					= "chalmers.dax021308.ecosystem.model.Ecoworld.event_tick";
+	public static final String EVENT_STOP 					= "chalmers.dax021308.ecosystem.model.Ecoworld.event_stop";
+	public static final String EVENT_START 					= "chalmers.dax021308.ecosystem.model.Ecoworld.event_start";
+	public static final String EVENT_PAUSE 					= "chalmers.dax021308.ecosystem.model.Ecoworld.event_pause";
+	public static final String EVENT_RECORDING_FINISHED		= "chalmers.dax021308.ecosystem.model.Ecoworld.event_recording_started";
+	public static final String EVENT_RECORDING_STARTED 		= "chalmers.dax021308.ecosystem.model.Ecoworld.event_recording_finished";
+	public static final String EVENT_DIMENSIONCHANGED		= "chalmers.dax021308.ecosystem.model.Ecoworld.event_dimension_changed";
+	public static final String EVENT_DELAY_CHANGED 			= "chalmers.dax021308.ecosystem.model.Ecoworld.event_delay_changed";
+	public static final String EVENT_SHAPE_CHANGED 			= "chalmers.dax021308.ecosystem.model.Ecoworld.event_shape_changed";
+	public static final String EVENT_ITERATION_FINISHED		= "chalmers.dax021308.ecosystem.model.Ecoworld.event_iteration_finished";
 
 	/* State variables */
 	private boolean environmentFinished = false;
-	private boolean timerFinished = false;
-	private boolean shouldRun = false;
+	private boolean timerFinished 		= false;
+	private boolean shouldRun 			= false;
 	private boolean runWithoutTimer;
 	private boolean recordSimulation;
-	private boolean skipBoolean;
 	private boolean playRecording;
 
 	/* Simulation settings */
@@ -76,7 +73,6 @@ public class EcoWorld implements IModel {
 	private EnvironmentScheduler env;
 	private int tickTime;
 	private PropertyChangeSupport observers;
-	private List<IPopulation> recycledPopulationList;
 	private SimulationRecording recording;
 
 	/* Time measurements variables (in ns). */
@@ -84,10 +80,6 @@ public class EcoWorld implements IModel {
 	private double elapsedTime;
 	private Stat<Double> statTime;
 
-	/**
-	 * Each list in the list contains one snapshot of frame;
-	 */
-	private List<List<IPopulation>> recordedSimulation;
 	/**
 	 * Simple object, used for synchronizing the {@link TimerHandler} and the
 	 * {@link IEnvironment} {@link OnFinishListener}. This object makes the
@@ -263,6 +255,16 @@ public class EcoWorld implements IModel {
 			obstacles.add(new TriangleObstacle(d.getWidth() * 0.2, d
 					.getHeight() * 0.2, new Position(d.getWidth() / 2, d
 					.getHeight() / 2), new Color(0, 128, 255)));
+		} else if (s.getObstacle() == SimulationSettings.OBSTACLE_RIVERS) {
+			obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.3, d.getHeight()*0.2), new Color(0, 128, 255)));
+			obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.7, d.getHeight()*0.4), new Color(0, 128, 255)));
+
+			obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.3, d.getHeight()*0.6), new Color(0, 128, 255)));
+			obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.7, d.getHeight()*0.8), new Color(0, 128, 255)));
+			
+		} else if (s.getObstacle() == SimulationSettings.OBSTACLE_TUBE) {
+			obstacles.add(new RectangularObstacle(d.getWidth() * 0.5, d.getHeight() * 0.225, new Position(d.getWidth() * 0.5, d.getHeight() * 0.225), new Color(25, 25, 25)));
+			obstacles.add(new RectangularObstacle(d.getWidth() * 0.5, d.getHeight() * 0.225, new Position(d.getWidth() * 0.5, d.getHeight() * 0.775), new Color(25, 25, 25)));
 		}
 
 		if (s.getShapeModel() == SimulationSettings.SHAPE_SQUARE) {
@@ -280,18 +282,18 @@ public class EcoWorld implements IModel {
 					Color.red, 3, 0.75, 275, shape);
 		} else if (s.getPredatorModel() == SimulationSettings.POP_WOLF) {
 			pred = new WolfPopulation("Wolves", d, s.getPredPopSize(),
-					Color.red, 2.6, 0.8, 250, true, shape, obstacles);
+					Color.red, 2.2, 0.5, 250, true, shape, obstacles);
 		}
 
 		if (s.getPreyModel() == SimulationSettings.POP_DEER) {
 			prey = new DeerPopulation("Deers", d, s.getPreyPopSize(),
-					Color.blue, 2.0, 2, 200, true, shape, obstacles);
+					Color.blue, 2.0, 3, 200, true, shape, obstacles);
 		} else if (s.getPreyModel() == SimulationSettings.POP_DUMMYPREY) {
 			prey = new DummyPreyPopulation(d, s.getPreyPopSize(), Color.blue,
 					2.2, 2, 250, shape);
 		} else if (s.getPreyModel() == SimulationSettings.POP_PIG) {
 			prey = new PigPopulation("Filthy Pigs", d, s.getPreyPopSize(),
-					Color.pink, 2.0, 1.5, 225, shape);
+					Color.pink, 2.0, 3, 200, false, shape, obstacles);
 		}
 
 		if (s.getGrassModel() == SimulationSettings.POP_GRASS) {

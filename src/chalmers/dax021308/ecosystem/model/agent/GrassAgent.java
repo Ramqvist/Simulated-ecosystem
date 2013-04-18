@@ -7,9 +7,9 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
-import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
+import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
  * Simple grass, lowest part of the food chain
@@ -18,7 +18,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class GrassAgent extends AbstractAgent {
 
-	private static final double REPRODUCTION_RATE = 0.02;
+	private static final double REPRODUCTION_RATE = 0.01;
 	private static final int MAX_LIFE_LENGTH = 5000;
 
 	public GrassAgent(String name, Position pos, Color color, int width,

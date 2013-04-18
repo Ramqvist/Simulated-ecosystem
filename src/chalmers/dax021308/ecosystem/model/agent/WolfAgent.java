@@ -7,9 +7,10 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
-import chalmers.dax021308.ecosystem.model.util.IShape;
+import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
+import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
  * @author Henrik Its purpose is to hunt down Agentsof lower trophic level in a
@@ -20,16 +21,16 @@ public class WolfAgent extends AbstractAgent {
 	private boolean hungry = true;
 	private boolean willFocusPreys = true;
 	private static final int MAX_ENERGY = 1200;
-	private static final int MAX_LIFE_LENGTH = 3000;
-	private static final double REPRODUCTION_RATE = 0.25;
+	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
+	private static final double REPRODUCTION_RATE = 0.10;
 	private static final int DIGESTION_TIME = 50;
 	private int digesting = 0;
 
-	public WolfAgent(String name, Position p, Color c, int width, int height,
-			Vector velocity, double maxSpeed, double maxAcceleration,
-			double visionRange, boolean groupBehaviour) {
-		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
-				maxAcceleration);
+	public WolfAgent(String name, Position position, Color color, int width,
+			int height, Vector velocity, double maxSpeed,
+			double maxAcceleration, double visionRange, boolean groupBehaviour) {
+		super(name, position, color, width, height, velocity, maxSpeed,
+				visionRange, maxAcceleration);
 		this.energy = MAX_ENERGY;
 		this.groupBehaviour = groupBehaviour;
 	}
@@ -41,18 +42,22 @@ public class WolfAgent extends AbstractAgent {
 		if (digesting > 0) {
 			digesting--;
 		} else {
-			updateNeighbourList(neutral, preys, predators);	
-			Vector preyForce = getPreyForce();
+			updateNeighbourList(neutral, preys, predators);
+			Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys, focusedPrey, this,
+					preyNeighbours, visionRange, maxAcceleration);
 			Vector mutualInteractionForce = new Vector();
 			Vector forwardThrust = new Vector();
 			Vector arrayalForce = new Vector();
 			if (groupBehaviour) {
-				mutualInteractionForce = mutualInteractionForce();
-				forwardThrust = forwardThrust();
-				arrayalForce = arrayalForce();
+				mutualInteractionForce = ForceCalculator.mutualInteractionForce(
+						neutralNeighbours, this);
+				forwardThrust = ForceCalculator.forwardThrust(velocity);
+				arrayalForce = ForceCalculator.arrayalForce(velocity, neutralNeighbours,
+						this);
 			}
-			Vector environmentForce = getEnvironmentForce(gridDimension, shape);
-			Vector obstacleForce = getObstacleForce(obstacles);
+			Vector environmentForce = ForceCalculator.getEnvironmentForce(gridDimension, shape,
+					position);
+			Vector obstacleForce = ForceCalculator.getObstacleForce(obstacles, position);
 
 			/*
 			 * Sum the forces from walls, predators and neutral to form the
@@ -86,13 +91,14 @@ public class WolfAgent extends AbstractAgent {
 			}
 
 			this.setVelocity(newVelocity);
+
 			/* Reusing the same position object, for less heap allocations. */
-//			if (reUsedPosition == null) {
-				nextPosition = Position.positionPlusVector(position, velocity);
-//			} else {
-//				nextPosition = reUsedPosition.setPosition(position.getX()
-//						+ velocity.x, position.getY() + velocity.y);
-//			}
+			// if (reUsedPosition == null) {
+			nextPosition = Position.positionPlusVector(position, velocity);
+			// } else {
+			// nextPosition.setPosition(reUsedPosition.setPosition(position.getX()
+			// + velocity.x, position.getY() + velocity.y);
+			// }
 		}
 	}
 
@@ -124,82 +130,7 @@ public class WolfAgent extends AbstractAgent {
 		}
 	}
 
-	/**
-	 * @author Sebastian/Henrik
-	 */
-	private Vector getPreyForce() {
-		if (willFocusPreys && focusedPrey != null && focusedPrey.isAlive()) {
-			Position p = focusedPrey.getPosition();
-			double distance = getPosition().getDistance(p);
-			if (distance <= EATING_RANGE) {
-				if (focusedPrey.tryConsumeAgent()) {
-					focusedPrey = null;
-					hungry = false;
-					energy = MAX_ENERGY;
-					digesting = DIGESTION_TIME;
-				}
-			} else {
-				return new Vector(focusedPrey.getPosition(), position);
-			}
-		}
-		Vector preyForce = new Vector(0, 0);
-		IAgent closestFocusPrey = null;
-		int preySize = preyNeighbours.size();
-		for (int i = 0; i < preySize; i++) {
-			IAgent a = preyNeighbours.get(i);
-			Position p = a.getPosition();
-			double distance = getPosition().getDistance(p);
-			if (distance <= visionRange) {
-				
-				if (distance <= EATING_RANGE) {
-					if (a.tryConsumeAgent()) {
-						hungry = false;
-						energy = MAX_ENERGY;
-						digesting = DIGESTION_TIME;
-					}
-				} else if (willFocusPreys && distance <= FOCUS_RANGE) {
-					if (closestFocusPrey != null && a.isAlive()) {
-						if (closestFocusPrey.getPosition().getDistance(
-								this.position) > a.getPosition().getDistance(
-								this.position)) {
-							closestFocusPrey = a;
-						}
-					} else {
-						closestFocusPrey = a;
-					}
-				} else if (closestFocusPrey == null) {
-					/*
-					 * Create a vector that points towards the prey.
-					 */
-					Vector newForce = new Vector(p, getPosition());
-
-					/*
-					 * Add this vector to the prey force, with proportion to how
-					 * close the prey is. Closer preys will affect the force
-					 * more than those far away.
-					 */
-					double norm = newForce.getNorm();
-					preyForce.add(newForce.multiply(1 / (norm * distance)));
-				}
-			}
-		}
-
-		double norm = preyForce.getNorm();
-		if (norm != 0) {
-			preyForce.multiply(maxAcceleration / norm);
-		}
-
-		if (willFocusPreys && closestFocusPrey != null) {
-			focusedPrey = closestFocusPrey;
-			return new Vector(focusedPrey.getPosition(), position);
-		}
-
-		return preyForce;
-	}
-
-	/**
-	 * This also decreases the wolfs energy.
-	 */
+	// This also decreases the deer's energy.
 	@Override
 	public void updatePosition() {
 		super.updatePosition();
@@ -207,4 +138,12 @@ public class WolfAgent extends AbstractAgent {
 		if (energy == 0 || lifeLength > MAX_LIFE_LENGTH)
 			isAlive = false;
 	}
+
+	@Override
+	public void eat() {
+		hungry = false;
+		energy = MAX_ENERGY;
+		digesting = DIGESTION_TIME;
+	}
+
 }

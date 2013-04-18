@@ -8,9 +8,9 @@ import java.util.List;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.agent.WolfAgent;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
-import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
+import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
  * 
@@ -27,11 +27,10 @@ public class WolfPopulation extends AbstractPopulation {
 			double maxAcceleration, double visionRange, boolean groupBehaviour,
 			IShape shape, List<IObstacle> obstacles) {
 
-		super(name, gridDimension, shape, obstacles);
+		super(name, gridDimension, shape, obstacles, color);
 
 		this.visionRange = visionRange;
 		this.groupBehaviour = groupBehaviour;
-		this.color = color;
 		agents = initializePopulation(initPopulationSize, gridDimension, color,
 				maxSpeed, maxAcceleration, visionRange);
 	}

@@ -8,9 +8,11 @@ import java.util.List;
 import chalmers.dax021308.ecosystem.model.agent.GrassFieldAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
-import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
+import chalmers.dax021308.ecosystem.model.util.Position;
+import chalmers.dax021308.ecosystem.model.util.Vector;
+import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
  * The population for the grass, the lowest part of the food chain
@@ -24,8 +26,7 @@ public class GrassFieldPopulation extends AbstractPopulation {
 			int initPopulationSize, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange, int capacity,
 			IShape shape, List<IObstacle> obstacles) {
-		super(name, gridDimension, shape, obstacles);
-		this.color = color;
+		super(name, gridDimension, shape, obstacles, color);
 		agents = new ArrayList<IAgent>(initPopulationSize * 100);
 		initializePopulation(initPopulationSize, capacity);
 	}

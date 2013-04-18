@@ -27,12 +27,12 @@ import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.RectangularObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.TriangleObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
-import chalmers.dax021308.ecosystem.model.util.CircleShape;
-import chalmers.dax021308.ecosystem.model.util.IShape;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
-import chalmers.dax021308.ecosystem.model.util.SquareShape;
-import chalmers.dax021308.ecosystem.model.util.TriangleShape;
+import chalmers.dax021308.ecosystem.model.util.shape.CircleShape;
+import chalmers.dax021308.ecosystem.model.util.shape.IShape;
+import chalmers.dax021308.ecosystem.model.util.shape.SquareShape;
+import chalmers.dax021308.ecosystem.model.util.shape.TriangleShape;
 
 import com.sun.opengl.util.FPSAnimator;
 
@@ -51,7 +51,7 @@ import com.sun.opengl.util.FPSAnimator;
  * <p>
  * For Javadoc add the Jogl Javadoc jar as Javadoc refernce to the selected JOGL jar.
  * <p>
- * @author Erik Ramqvist
+ * @author Erik Ramqvist, Sebastian Anerud
  *
  */
 public class OpenGLSimulationView extends GLCanvas implements IView {
@@ -315,7 +315,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 
        
             	increaseUpdateValue();
-            	long start = System.currentTimeMillis();
+//            	long start = System.currentTimeMillis();
             	
                 double frameHeight = (double)getHeight();
                 double frameWidth  = (double)getWidth();

@@ -3,22 +3,16 @@ package chalmers.dax021308.ecosystem.model.agent;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Gender;
-import chalmers.dax021308.ecosystem.model.util.IShape;
-import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
+import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
  * AbstractAgent with neighbourlist.
@@ -34,8 +28,8 @@ public abstract class AbstractAgent implements IAgent {
 	protected boolean groupBehaviour;
 	protected int width;
 	protected int height;
-	protected int capacity;
-	protected int lifeLength;
+	protected int capacity = Integer.MAX_VALUE;
+	protected int lifeLength = 0;
 	protected int energy = 1000; // set specific energy level in subclasses
 	protected int trophicLevel;
 	protected Vector velocity;
@@ -59,27 +53,21 @@ public abstract class AbstractAgent implements IAgent {
 
 	protected final static double INTERACTION_RANGE = 10;
 	protected final static double EATING_RANGE = 5;
-	protected final static double FOCUS_RANGE = 100;
-	protected final static double ENVIRONMENT_CONSTANT = 50;
-	protected final static double OBSTACLE_CONSTANT = 50;
-	protected static final double VELOCITY_DECAY = 1;
-	protected static final double RANDOM_FORCE_MAGNITUDE = 0.05;
+	protected final static double FOCUS_RANGE = 500;
+	protected static final double VELOCITY_DECAY = 0.97;
 
-	public AbstractAgent(String name, Position p, Color c, int width,
-			int height, Vector velocity, double maxSpeed, double visionRange,
-			double maxAcceleration) {
+	public AbstractAgent(String name, Position position, Color color,
+			int width, int height, Vector velocity, double maxSpeed,
+			double visionRange, double maxAcceleration) {
 		this.name = name;
-		position = p;
-		color = c;
+		this.position = position;
+		this.color = color;
 		this.width = width;
 		this.height = height;
 		this.velocity = velocity;
 		this.maxSpeed = maxSpeed;
 		this.visionRange = visionRange;
 		this.maxAcceleration = maxAcceleration;
-		this.capacity = Integer.MAX_VALUE;
-		this.lifeLength = 0;
-
 		/*
 		 * LinkedList for fast changing of Agents, consider ArrayList for less
 		 * memory
@@ -96,10 +84,8 @@ public abstract class AbstractAgent implements IAgent {
 			int height, Vector velocity, double maxSpeed, double visionRange,
 			double maxAcceleration, int capacity, boolean groupBehaviour) {
 
-		this(name, p, c, width, height, velocity, maxSpeed, visionRange,
-				maxAcceleration);
-		this.capacity = capacity;
-		this.groupBehaviour = groupBehaviour;
+		// To update the first time.
+		neighbourCounter = ran.nextInt(NEIGHBOURS_UPDATE_THRESHOLD);
 	}
 
 	/**
@@ -140,6 +126,11 @@ public abstract class AbstractAgent implements IAgent {
 	}
 
 	@Override
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+	
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -166,7 +157,7 @@ public abstract class AbstractAgent implements IAgent {
 
 	@Override
 	public void setVelocity(Vector velocity) {
-		this.velocity = velocity;
+		this.velocity.setVector(velocity.getX(), velocity.getY());
 
 	}
 
@@ -193,6 +184,21 @@ public abstract class AbstractAgent implements IAgent {
 	@Override
 	public int getTrophicLevel() {
 		return trophicLevel;
+	}
+
+	@Override
+	public double getMaxAcceleration() {
+		return maxAcceleration;
+	}
+
+	@Override
+	public double getMaxSpeed() {
+		return maxSpeed;
+	}
+
+	@Override
+	public double getVisionRange() {
+		return visionRange;
 	}
 
 	@Override
@@ -282,206 +288,6 @@ public abstract class AbstractAgent implements IAgent {
 				}
 			}
 		}
-	}
-
-	/**
-	 * A random force that the agent gets influenced by. Can be interpreted as
-	 * an estimation error that the agent does in where to head.
-	 * 
-	 * @return A vector pointing approximately in the same direction as the
-	 *         agents velocity.
-	 * @author Sebbe
-	 */
-	protected Vector randomForce() {
-		double randX = -RANDOM_FORCE_MAGNITUDE + 2 * RANDOM_FORCE_MAGNITUDE
-				* Math.random();
-		double randY = -RANDOM_FORCE_MAGNITUDE + 2 * RANDOM_FORCE_MAGNITUDE
-				* Math.random();
-		return new Vector(velocity.x + randX, velocity.y + randY);
-	}
-
-	/**
-	 * The agent is influences by the mutual interaction force because it is
-	 * subject to attraction and repulsion from other individuals that it wants
-	 * to group with. This force describes the relationship between the tendency
-	 * to steer towards other groups of agents, but not be to close to them
-	 * either.
-	 * 
-	 * @param neutral
-	 *            - The population of neutral agents.
-	 * @return A vector with the force that this agent feels from other neutral
-	 *         agents in that it interacts with.
-	 * @author Sebbe
-	 */
-	protected Vector mutualInteractionForce() {
-		Vector mutualInteractionForce = new Vector(0, 0);
-		Vector newForce = new Vector(0, 0);
-		IAgent agent;
-		int size = neutralNeighbours.size();
-		for (int i = 0; i < size; i++) {
-			agent = neutralNeighbours.get(i);
-			if (agent != this) {
-				Position p = agent.getPosition();
-				double distance = getPosition().getDistance(p);
-				double Q = 0; // Q is a function of the distance.
-				if (distance <= INTERACTION_RANGE) {
-					Q = -20 * (INTERACTION_RANGE - distance);
-				} else {
-					Q = 1;
-				}
-				newForce.x = p.getX() - this.getPosition().getX();
-				newForce.y = p.getY() - this.getPosition().getY();
-				double norm = newForce.getNorm();
-				double v = Q / (norm * distance);
-				newForce.x = newForce.x * v;
-				newForce.y = newForce.y * v;
-				mutualInteractionForce.x = (mutualInteractionForce.x + newForce.x);
-				mutualInteractionForce.y = (mutualInteractionForce.y + newForce.y);
-			}
-		}
-		return mutualInteractionForce;
-	}
-
-	/**
-	 * The tendency of an agent to continue moving forward with its velocity.
-	 * 
-	 * @return The forward thrust force.
-	 * @author Sebbe
-	 */
-	protected Vector forwardThrust() {
-		double a = 0.1; // Scaling constant
-		double x = velocity.x;
-		double y = velocity.y;
-		double norm = velocity.getNorm();
-		Vector forwardThrust = new Vector(a * x / norm, a * y / norm);
-		return forwardThrust;
-	}
-
-	/**
-	 * This is the force that makes neighbouring agents to equalize their
-	 * velocities and therefore go in the same direction. The sphere of
-	 * incluence is defined as 2*INTERACTION_RANGE at the moment.
-	 * 
-	 * @param neutral
-	 *            - The population of neutral agents.
-	 * @return a vector with the force influencing the agents to steer in the
-	 *         same direction as other nearby agents.
-	 * @author Sebbe
-	 */
-	protected Vector arrayalForce() {
-		Vector arrayalForce = new Vector(0, 0);
-		Vector newForce = new Vector();
-		double nAgentsInVision = 0;
-		int size = neutralNeighbours.size();
-		IAgent agent;
-		for (int i = 0; i < size; i++) {
-			agent = neutralNeighbours.get(i);
-			if (agent != this) {
-				Position p = agent.getPosition();
-				double distance = getPosition().getDistance(p);
-				if (distance <= INTERACTION_RANGE * 2) {
-					newForce.setVector(0, 0);
-					newForce.add(agent.getVelocity());
-					newForce.add(velocity);
-					double h = 4; // Scaling constant
-					newForce.x *= h;
-					newForce.y *= h;
-					arrayalForce.x = (arrayalForce.x + newForce.x);
-					arrayalForce.y = (arrayalForce.y + newForce.y);
-					nAgentsInVision = nAgentsInVision + 1.0;
-				}
-			}
-		}
-		if (nAgentsInVision > 0) {
-			arrayalForce.x /= nAgentsInVision;
-			arrayalForce.y /= nAgentsInVision;
-		}
-		return arrayalForce;
-	}
-
-	/**
-	 * The environment force is at the moment defined as
-	 * 1/((wall-constant)*(distance to wall))^2. The agents feel the forces from
-	 * the wall directly to the left, right, top and bottom.
-	 * 
-	 * @param dim
-	 *            - The dimensions of the rectangular environment.
-	 * @return A vector with the force that an agent feel from its environment.
-	 * @author Sebbe
-	 */
-	protected Vector getEnvironmentForce(Dimension dim, IShape shape) {
-		/*
-		 * The positions below is just an orthogonal projection on to the walls.
-		 */
-		Position xWallLeft = shape.getXWallLeft(dim, position);
-		Position xWallRight = shape.getXWallRight(dim, position);
-		Position yWallBottom = shape.getYWallBottom(dim, position);
-		Position yWallTop = shape.getYWallTop(dim, position);
-
-		/*
-		 * There is a "-1" in the equation just to make it more unlikely that
-		 * they actually make it to the wall, despite the force they feel (can
-		 * be interpreted as they stop 1 pixel before the wall).
-		 */
-		Vector environmentForce = new Vector(0, 0);
-		double xWallLeftForce = 0;
-		double xWallRightForce = 0;
-		double yWallBottomForce = 0;
-		double yWallTopForce = 0;
-
-		/*
-		 * Only interacts with walls that are closer than INTERACTION_RANGE.
-		 */
-		double distance = 1;
-		double leftWallDistance = this.getPosition().getDistance(xWallLeft);
-		if (leftWallDistance <= INTERACTION_RANGE) {
-			xWallLeftForce = 1 / (leftWallDistance * leftWallDistance);
-		}
-
-		double rightWallDistance = this.getPosition().getDistance(xWallRight);
-		if (rightWallDistance <= INTERACTION_RANGE) {
-			xWallRightForce = -1 / (rightWallDistance * rightWallDistance);
-		}
-
-		double bottomWallDistance = this.getPosition().getDistance(yWallBottom);
-		if (bottomWallDistance <= INTERACTION_RANGE) {
-			yWallBottomForce = 1 / (bottomWallDistance * bottomWallDistance);
-		}
-
-		double topWallDistance = this.getPosition().getDistance(yWallTop);
-		if (topWallDistance <= INTERACTION_RANGE) {
-			yWallBottomForce = yWallTopForce = -1
-					/ (topWallDistance * topWallDistance);
-		}
-
-		/*
-		 * Add the forces from left and right to form the total force from walls
-		 * in x-axis. Add the forces from top and bottom to form the total force
-		 * from walls in y-axis. Create a force vector of the forces.
-		 */
-		double xForce = (xWallLeftForce + xWallRightForce);
-		double yForce = (yWallBottomForce + yWallTopForce);
-		environmentForce.setVector(xForce, yForce);
-
-		return environmentForce.multiply(ENVIRONMENT_CONSTANT);
-	}
-
-	@Override
-	public Vector getObstacleForce(List<IObstacle> obstacles) {
-		Vector obstacleForce = new Vector();
-		for (IObstacle o : obstacles) {
-			if (o.isCloseTo(this.position, INTERACTION_RANGE)) {
-				Position obstaclePos = o.closestBoundary(this.position);
-				double distance = position.getDistance(obstaclePos);
-				if (distance <= INTERACTION_RANGE) {
-					Vector singleForce = new Vector(position, obstaclePos);
-					singleForce.toUnitVector().multiply(
-							1 / (distance * distance));
-					obstacleForce.add(singleForce);
-				}
-			}
-		}
-		return obstacleForce.multiply(OBSTACLE_CONSTANT);
 	}
 
 	@Override
@@ -588,4 +394,10 @@ public abstract class AbstractAgent implements IAgent {
 		// it desirable to eat
 		return true;
 	}
+	
+	@Override
+	public void eat() {
+		// Do nothing special, should be overriden by advanced agents.
+	}
+
 }
