@@ -581,4 +581,11 @@ public abstract class AbstractAgent implements IAgent {
 		result = result / 100;
 		return result;
 	}
+
+	@Override
+	public boolean hasFood() {
+		// If nothing else is specified, the fact that the agent is alive makes
+		// it desirable to eat
+		return true;
+	}
 }

@@ -126,4 +126,9 @@ public interface IAgent extends Cloneable {
 	public boolean isAlive();
 	
 	public Vector getObstacleForce(List<IObstacle> obstacles);
+	/**
+	 * Checks if this agent has any food available and is desirable to hunt
+	 * @return True if the agent is desirable to hunt and should affect the preyforce, otherwise false
+	 */
+	public boolean hasFood();
 }

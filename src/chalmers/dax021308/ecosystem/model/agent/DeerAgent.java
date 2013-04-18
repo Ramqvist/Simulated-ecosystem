@@ -170,7 +170,7 @@ public class DeerAgent extends AbstractAgent {
 			IAgent a = preyNeighbours.get(i);
 			Position p = a.getPosition();
 			double distance = getPosition().getDistance(p);
-			if (distance <= visionRange) {
+			if (distance <= visionRange && a.hasFood()) {
 				if (distance <= EATING_RANGE) {
 					if (a.tryConsumeAgent()) {
 						hungry = false;

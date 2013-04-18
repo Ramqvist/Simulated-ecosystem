@@ -47,9 +47,9 @@ public class GrassFieldAgent extends AbstractAgent {
 			if (energy < MAX_ENERGY)
 				energy += 5;
 		}
-		int red = (int) (150.0-150.0*(((double)energy)/MAX_ENERGY));
-		int green = (int) (55.0+200.0*(((double)energy)/MAX_ENERGY));
-		this.color = new Color(red,green,0);
+		int red = (int) (150.0 - 150.0 * (((double) energy) / MAX_ENERGY));
+		int green = (int) (55.0 + 200.0 * (((double) energy) / MAX_ENERGY));
+		this.color = new Color(red, green, 0);
 		return null;
 
 	}
@@ -61,6 +61,13 @@ public class GrassFieldAgent extends AbstractAgent {
 			energy -= 5;
 			return true;
 		}
+		return false;
+	}
+
+	@Override
+	public boolean hasFood() {
+		if (energy >= 100)
+			return true;
 		return false;
 	}
 }
