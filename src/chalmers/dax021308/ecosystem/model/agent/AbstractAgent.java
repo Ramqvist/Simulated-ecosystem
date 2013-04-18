@@ -129,7 +129,7 @@ public abstract class AbstractAgent implements IAgent {
 	public void setPosition(Position position) {
 		this.position = position;
 	}
-	
+
 	@Override
 	public String getName() {
 		return name;
@@ -389,12 +389,13 @@ public abstract class AbstractAgent implements IAgent {
 	}
 
 	@Override
-	public boolean hasFood() {
-		// If nothing else is specified, the fact that the agent is alive makes
-		// it desirable to eat
-		return true;
+	public boolean looksTasty(IAgent agent, double visionRange) {
+		// If nothing else is specified, the fact that the agent is alive and in
+		// vision range makes it desirable to eat
+		double distance = agent.getPosition().getDistance(position);
+		return distance <= visionRange;
 	}
-	
+
 	@Override
 	public void eat() {
 		// Do nothing special, should be overriden by advanced agents.

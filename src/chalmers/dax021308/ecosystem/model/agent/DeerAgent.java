@@ -26,14 +26,6 @@ public class DeerAgent extends AbstractAgent {
 	private boolean willFocusPreys = false;
 	private static final int DIGESTION_TIME = 10;
 	private int digesting = 0;
-	private double STOTTING_RANGE = 20;
-	private double STOTTING_LENGTH = 30;
-	private double STOTTING_COOLDOWN = 150;
-	private double stottingDuration = STOTTING_LENGTH;
-	private double stottingCoolDown = 0;
-	private boolean isAStottingDeer = true;
-	private boolean isStotting = false;
-	private Vector stottingVector = new Vector();
 	private boolean alone;
 
 	public DeerAgent(String name, Position p, Color c, int width, int height,
@@ -215,7 +207,6 @@ public class DeerAgent extends AbstractAgent {
 	public void updatePosition() {
 		super.updatePosition();
 		this.energy--;
-		stottingCoolDown--;
 		if (energy == 0 || lifeLength > MAX_LIFE_LENGTH)
 			isAlive = false;
 	}
