@@ -5,6 +5,7 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 import chalmers.dax021308.ecosystem.model.util.Position;
+import chalmers.dax021308.ecosystem.model.util.Vector;
 
 public abstract class AbstractObstacle implements IObstacle {
 	
@@ -95,7 +96,28 @@ public abstract class AbstractObstacle implements IObstacle {
 		return false;
 	}
 	
-	@Override
+//	@Override
+//	public boolean isInsidePath(Position start, Position end) {
+//		Position current = new Position(start);
+//		double path_threshold = 5.0;
+//		while(current.getDistance(end) >= path_threshold ) {
+//			if(isInObstacle(current)) {
+//				return true;
+//			}
+//			if(end.getX() > current.getX()) {
+//				current.setX(current.getX() + path_threshold);
+//			} else if(end.getX() < current.getX()) {
+//				current.setX(current.getX() - path_threshold);
+//			}
+//			if(end.getY() > current.getY()) {
+//				current.setY(current.getY() + path_threshold);
+//			} else if(end.getY() < current.getY()) {
+//				current.setY(current.getY() - path_threshold);
+//			}
+//		}
+//		return false;
+//	}
+	
 	public boolean isInsidePath(Position start, Position end) {
 		Position current = new Position(start);
 		double path_threshold = 5.0;
@@ -117,12 +139,44 @@ public abstract class AbstractObstacle implements IObstacle {
 		return false;
 	}
 	
+//	public static boolean isInsidePathList(List<IObstacle> obsList, Position start, Position end) {
+//		for(IObstacle o : obsList) {
+//			if(o.isInsidePath(start, end)) {
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
+	
 	public static boolean isInsidePathList(List<IObstacle> obsList, Position start, Position end) {
-		for(IObstacle o : obsList) {
-			if(o.isInsidePath(start, end)) {
-				return true;
+		
+		double time = System.nanoTime();
+		
+		double stepConstant = 1;
+		Vector dirVec = new Vector(end, start);
+		double distance = dirVec.getNorm();
+		dirVec.multiply(stepConstant/distance);
+		
+		int nIterations = (int) (distance/stepConstant);
+		System.out.println("Max number of iterations: " + nIterations);
+		
+		Position currentPos = new Position(start);
+		
+		double elapsed = (System.nanoTime() - time)*0.000001;
+		
+		System.out.println("Time: " + elapsed);
+		
+		for(int i=0;i<nIterations;i++){
+			currentPos.addVector(dirVec);
+			for(IObstacle o : obsList) {
+				if(o.isInObstacle(currentPos)) {
+					System.out.println("Completed in: " + i + " iterations.");
+					return true;
+				}
 			}
+			
 		}
+		
 		return false;
 	}
 
