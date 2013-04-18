@@ -392,7 +392,9 @@ public abstract class AbstractAgent implements IAgent {
 	public boolean looksTasty(IAgent agent, double visionRange) {
 		// If nothing else is specified, the fact that the agent is alive and in
 		// vision range makes it desirable to eat
-		double distance = agent.getPosition().getDistance(position);
+		double distance = agent.getPosition().getDistance(position)
+				- (width + height);
+
 		return distance <= visionRange;
 	}
 

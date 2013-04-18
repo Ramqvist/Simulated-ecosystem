@@ -22,6 +22,7 @@ import javax.media.opengl.GLJPanel;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
+import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.EllipticalObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.RectangularObstacle;
@@ -437,14 +438,14 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
           				gl.glColor3d((double)c.getRed()/(double)255, (double)c.getGreen()/(double)255, (double)c.getBlue()/(double)255);
           				gl.glLineWidth(2.5F);
     	          		gl.glBegin(GL.GL_TRIANGLES); 
-    	          		gl.glVertex2d(frameWidth*(x+w)/size.width,
-    	          				frameHeight - frameHeight*(y-h)/size.height);
+    	          		gl.glVertex2d(scaleX*(x+w),
+    	          				frameHeight - scaleY*(y-h));
     	          		
-    	          		gl.glVertex2d(frameWidth*(x-w)/size.width, 
-    	          				frameHeight - frameHeight*(y-h)/size.height);
+    	          		gl.glVertex2d(scaleX*(x-w), 
+    	          				frameHeight - scaleY*(y-h));
     	          		
-    	          		gl.glVertex2d(frameWidth*(x)/size.width, 
-    	          				frameHeight - frameHeight*(y+h)/size.height);
+    	          		gl.glVertex2d(scaleX*(x), 
+    	          				frameHeight - scaleY*(y+h));
     	          		
     	          		gl.glEnd();
           			}
@@ -458,6 +459,22 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
         			IAgent a;
         			for(int j = 0; j < size; j++) {
         				a = agents.get(j);
+        				if (a != null && a.getName() == SimulationSettings.NAME_GRASS_FIELD) {
+							double increment = 2.0*Math.PI/50.0;
+	    	                double w = scaleX* a.getWidth();
+	    	                double h = scaleY*a.getHeight();
+	    	                double x = scaleX*a.getPosition().getX();
+	    	                double y = scaleY*a.getPosition().getY();
+	    	                Color c = a.getColor();
+	    	                gl.glColor3d((double)c.getRed()/(double)255, (double)c.getGreen()/(double)255, (double)c.getBlue()/(double)255);
+	    	                gl.glLineWidth(2.5F);
+	    	          		gl.glBegin(GL.GL_POLYGON); 
+	    		          	for(double angle = 0; angle < 2.0*Math.PI; angle+=increment){
+	    		          		gl.glVertex2d(x + w*Math.cos(angle),frameHeight - (y + h*Math.sin(angle)));
+	    		          	}
+	    		          	gl.glEnd();
+							
+						}else{
                         Color c = a.getColor();
         				gl.glColor4f((1.0f/255)*c.getRed(), COLOR_FACTOR*c.getGreen(), COLOR_FACTOR*c.getBlue(), COLOR_FACTOR*c.getAlpha());
 
@@ -521,6 +538,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 	        	          		gl.glEnd();
 	        	          	}
                         }*/
+						}
         			}
         		}      
 //        		

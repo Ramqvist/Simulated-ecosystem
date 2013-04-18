@@ -300,7 +300,7 @@ public class EcoWorld implements IModel {
 			grass = new GrassPopulation("Grass", d, s.getGrassPopSize(),
 					new Color(69, 139, 00), 1, 1, 0, 800, shape, obstacles);
 		} else if (s.getGrassModel() == SimulationSettings.POP_GRASS_FIELD) {
-			grass = new GrassFieldPopulation("Grass_Fields", d, s.getGrassPopSize(),
+			grass = new GrassFieldPopulation(SimulationSettings.NAME_GRASS_FIELD, d, s.getGrassPopSize(),
 					Color.green, 1, 1, 0, 80, shape, obstacles);
 		}
 
