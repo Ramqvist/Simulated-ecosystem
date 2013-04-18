@@ -150,24 +150,22 @@ public abstract class AbstractObstacle implements IObstacle {
 	
 	public static boolean isInsidePathList(List<IObstacle> obsList, Position start, Position end) {
 		
-		double time = System.nanoTime();
-		
-		double stepConstant = 1;
-		Vector dirVec = new Vector(end, start);
-		double distance = dirVec.getNorm();
-		dirVec.multiply(stepConstant/distance);
-		
+		double stepConstant = 5;
+		double dirX = end.getX() - start.getX();
+		double dirY = end.getY() - start.getY();
+		double distance = Math.sqrt(dirX*dirX + dirY*dirY);
+		dirX /= distance;
+		dirY /= distance;
 		int nIterations = (int) (distance/stepConstant);
-		System.out.println("Max number of iterations: " + nIterations);
 		
 		Position currentPos = new Position(start);
-		
-		double elapsed = (System.nanoTime() - time)*0.000001;
-		
-		System.out.println("Time: " + elapsed);
+		double currentX = currentPos.getX();
+		double currentY = currentPos.getY();
 		
 		for(int i=0;i<nIterations;i++){
-			currentPos.addVector(dirVec);
+			currentX += dirX;
+			currentY += dirY;
+			currentPos.setPosition(currentX, currentY);
 			for(IObstacle o : obsList) {
 				if(o.isInObstacle(currentPos)) {
 					System.out.println("Completed in: " + i + " iterations.");
