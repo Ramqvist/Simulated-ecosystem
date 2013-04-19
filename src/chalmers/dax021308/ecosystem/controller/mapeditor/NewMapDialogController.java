@@ -41,6 +41,8 @@ public class NewMapDialogController implements IController {
 			public void keyPressed(KeyEvent e) {
 	            if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 	            	finishActionListener.actionPerformed(null);
+	            } else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+	            	release();
 	            }
 			}
 		});
@@ -53,6 +55,8 @@ public class NewMapDialogController implements IController {
 
 	@Override
 	public void release() {
+		view.dispose();
+		listener = null;
 	}
 
 	@Override

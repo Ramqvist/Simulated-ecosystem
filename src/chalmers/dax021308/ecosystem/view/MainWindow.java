@@ -45,7 +45,6 @@ public class MainWindow extends JFrame implements IView {
 //	private JPanel simulationPanel = new JPanel();
 	private JPanel left = new JPanel();
 	private JPanel right = new JPanel();
-	private AWTSimulationView awt;
 	private OpenGLSimulationView openGL;
 	private HeatMapView heatMap;
 	private AbstractGraph2D graphView1;
@@ -107,7 +106,7 @@ public class MainWindow extends JFrame implements IView {
 		
 
 		mnView = new JMenu("View");
-		mntmMapEditor = new JMenuItem("Open Map Editor");
+		mntmMapEditor = new JMenuItem("Map Editor");
 		menuBar.add(mnView);
 		mnView.add(mntmMapEditor);
 		
@@ -270,41 +269,27 @@ public class MainWindow extends JFrame implements IView {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void addController(ActionListener controller) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onTick() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void release() {
-		// TODO Auto-generated method stub
 		
-	}
-	
-	public void setSimulationPanel(int i) {
-		if(i == 0) {
-//			simulationPanel.add(awt);
-		}
-		else if(i == 1) {
-//			simulationPanel.add(openGL);
-		}
 	}
 
 	public void setBtnStartNewSimWindowActionListener(ActionListener a) {

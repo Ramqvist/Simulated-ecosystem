@@ -1,5 +1,8 @@
 package chalmers.dax021308.ecosystem.controller.mapeditor;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import chalmers.dax021308.ecosystem.controller.IController;
 import chalmers.dax021308.ecosystem.controller.mapeditor.NewMapDialogController.OnNameSelectedListener;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
@@ -17,7 +20,7 @@ public class MapEditorController implements IController {
 	
 	private final MapEditorView view;
 	private final MapEditorModel model;
-	private OnNameSelectedListener nameSelectedListener = new OnNameSelectedListener() {
+	private final OnNameSelectedListener nameSelectedListener = new OnNameSelectedListener() {
 		@Override
 		public void onSelectedName(String name) {
 			model.createNewMap(name);
@@ -28,14 +31,25 @@ public class MapEditorController implements IController {
 		model = new MapEditorModel();
 		view = new MapEditorView(model);
 		view.setVisible(true);
-		new NewMapDialogController(view, nameSelectedListener);
+		init();
 	}
+	
 	
 	@Override
 	public void init() {
-		
+		showSelectNameDialog();
+		view.mntmNew.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				showSelectNameDialog();
+			}
+		});
 	}
 
+	private void showSelectNameDialog() {
+		new NewMapDialogController(view, nameSelectedListener);
+	}
+	
 	@Override
 	public void release() {
 		
