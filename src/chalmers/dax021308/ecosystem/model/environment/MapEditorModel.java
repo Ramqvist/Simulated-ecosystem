@@ -1,10 +1,8 @@
-package chalmers.dax021308.ecosystem.model.util;
+package chalmers.dax021308.ecosystem.model.environment;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-import chalmers.dax021308.ecosystem.model.environment.IModel;
-import chalmers.dax021308.ecosystem.model.environment.SimulationMap;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 
 /**
@@ -20,25 +18,38 @@ public class MapEditorModel implements IModel {
 	
 	private PropertyChangeSupport pcs;
 	private SimulationMap currentMap;
+	
+	private Object syncObject = new Object();
 
 	public MapEditorModel() {
 		pcs = new PropertyChangeSupport(this);
 	}
 	
 	public void createNewMap(String name) {
-		currentMap = new SimulationMap(name);
+		synchronized (syncObject) {
+			currentMap = new SimulationMap(name);
+			fireObstaclesChanged();
+		}
 	}
-	
 	
 	public void addObstacle(IObstacle o) {
-		currentMap.addObstacle(o);
+		synchronized (syncObject) {
+			currentMap.addObstacle(o);
+			fireObstaclesChanged();
+		}
 	}
 	
-	private void fireObstaclesUpdate() {
-		
+	public void removeObstacle(IObstacle o) {
+		synchronized (syncObject) {
+			currentMap.removeObstacle(o);
+			fireObstaclesChanged();
+		}
 	}
 	
-
+	private synchronized void fireObstaclesChanged() {
+		pcs.firePropertyChange(EcoWorld.EVENT_TICK, currentMap.getObsList(), null);
+	}
+	
 	@Override
 	public void addObserver(PropertyChangeListener observer) {
 		pcs.addPropertyChangeListener(observer);

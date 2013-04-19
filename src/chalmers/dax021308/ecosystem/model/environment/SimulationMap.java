@@ -46,4 +46,10 @@ public class SimulationMap {
 			obsList.add(o);
 		}
 	}
+
+	public void removeObstacle(IObstacle o) {
+		if(obsList != null) {
+			obsList.remove(o);
+		}
+	}
 }

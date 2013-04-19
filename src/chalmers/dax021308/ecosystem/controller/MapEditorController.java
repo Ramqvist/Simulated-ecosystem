@@ -1,7 +1,7 @@
 package chalmers.dax021308.ecosystem.controller;
 
 import chalmers.dax021308.ecosystem.model.environment.IModel;
-import chalmers.dax021308.ecosystem.model.util.MapEditorModel;
+import chalmers.dax021308.ecosystem.model.environment.MapEditorModel;
 import chalmers.dax021308.ecosystem.view.MapEditorView;
 
 public class MapEditorController implements IController {
