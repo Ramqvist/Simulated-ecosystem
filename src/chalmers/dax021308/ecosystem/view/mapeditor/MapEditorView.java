@@ -139,10 +139,13 @@ public class MapEditorView extends JFrame implements IView {
 		right.setLayout(new GridLayout(3,1));
 		right.setMinimumSize(new Dimension(500, 400));
 		right.setPreferredSize(new Dimension(500, 400));
-		setContentPane(contentPane);
 		
-		left.add(parameterViewCtrl.view, BorderLayout.NORTH);
+		AddObstacleView addObstacleView = new AddObstacleView(model);
+		right.add(addObstacleView);
+		setContentPane(contentPane);
+
 		left.add(openGL, BorderLayout.CENTER);
+//		left.add(parameterViewCtrl.view, BorderLayout.NORTH);
 //		left.add(controlViewCtrl.view, BorderLayout.SOUTH);  
 		
 		contentPane.add(left, BorderLayout.CENTER);
