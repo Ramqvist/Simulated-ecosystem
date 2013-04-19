@@ -9,16 +9,42 @@ package chalmers.dax021308.ecosystem.model.chromosome;
 public class DeerGenome extends AbstractGenome<DeerGenes>{
 	
 	private BitSetChromosome chromosome;
+	// Random value.
 	private final double MUTATION_PROBABILITY = 0.1;
 	
+	/**
+	 * Creates a new DeerGenome.
+	 * Number of genes depends on DeerGenes.
+	 * All genes are set to false initially. 
+	 * Use {@link #setGene(DeerGenes, boolean)} to change gene value.
+	 * @see {@link #DeerGenome(boolean, boolean)}
+	 */
 	public DeerGenome() {	
 		this.chromosome = new BitSetChromosome(DeerGenes.getNumberOfGenes(), MUTATION_PROBABILITY);
 	}
 	
+	/**
+	 * Creates a new DeerGenome.
+	 * @param stotting
+	 * @param female
+	 */
+	public DeerGenome(boolean stotting, boolean female) {	
+		this();
+		this.setGene(DeerGenes.STOTTING, stotting);
+		this.setGene(DeerGenes.FEMALE, female);
+	}
+	
+	/*
+	 * Used privately only.
+	 */
 	private DeerGenome(BitSetChromosome chromosome) {
 		this.chromosome = chromosome;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 **/
 	@Override
 	public AbstractGenome<DeerGenes> mateWithMutation(AbstractGenome<DeerGenes> other){
 		if (other instanceof DeerGenome) {
@@ -31,8 +57,7 @@ public class DeerGenome extends AbstractGenome<DeerGenes>{
 	}
 	
 	/**
-	 * 
-	 * @return a mutated version of this genome. The original genome is unchanged.
+	 * {@inheritDoc}
 	 */
 	@Override
 	public AbstractGenome<DeerGenes> onlyMutate(){
@@ -42,21 +67,33 @@ public class DeerGenome extends AbstractGenome<DeerGenes>{
 		return newGenome;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isGeneSet(DeerGenes gene) {
 		return chromosome.findGene(gene.getValue());
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Object getChromosome(){
 		return this.chromosome;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int numberOfGenes() {
 		return DeerGenes.getNumberOfGenes();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setGene(DeerGenes gene, boolean allele) {
 		this.chromosome.setGene(gene.getValue(), allele);
