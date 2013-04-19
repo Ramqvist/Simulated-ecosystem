@@ -179,7 +179,6 @@ public class SettingsMenuView extends JFrame {
 		btnOk.setBounds(207, 253, 47, 23);
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				mw.setSimulationPanel(graphics);
 				SettingsMenuView.this.dispose();
 			}
 		});
