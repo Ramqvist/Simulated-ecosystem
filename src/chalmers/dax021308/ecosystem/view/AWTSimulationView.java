@@ -30,6 +30,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  * @author Erik Ramqvist
  *
  */
+@Deprecated
 public class AWTSimulationView extends JPanel implements IView {
 	
 	private static final long serialVersionUID = 1585638837620985591L;
