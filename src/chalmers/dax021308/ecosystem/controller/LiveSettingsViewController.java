@@ -38,7 +38,7 @@ public class LiveSettingsViewController implements IController {
 					updateSimulation(simSettings);
 				}
 			};
-			view.buttonUpdate.addActionListener(listenerUpdateButton);
+			//view.buttonUpdate.addActionListener(listenerUpdateButton);
 			/*
 			SimulationSettings simSettings = SimulationSettings.loadFromFile();
 			if (simSettings == null) {

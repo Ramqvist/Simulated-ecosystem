@@ -234,7 +234,7 @@ public class NEWSettingsMenuView extends JFrame {
         setResizable(false);
         setTitle("Simulation Settings");
         setIconImage(new ImageIcon("res/Simulated ecosystem icon.png").getImage());
-        //setBounds(100, 100, 500, 500);
+        setLocation(300, 150);
         pack();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
