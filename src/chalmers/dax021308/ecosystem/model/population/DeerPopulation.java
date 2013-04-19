@@ -10,6 +10,7 @@ import chalmers.dax021308.ecosystem.model.agent.DeerAgent;
 import chalmers.dax021308.ecosystem.model.chromosome.DeerGenome;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.util.Position;
+import chalmers.dax021308.ecosystem.model.util.Stat;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
@@ -55,5 +56,25 @@ public class DeerPopulation extends AbstractPopulation {
 			newAgents.add(a);
 		}
 		return newAgents;
+	}
+	
+	public double stottingProportion(){
+		double stottingCount = 0;
+		DeerAgent da = null;
+		for(IAgent a: agents) {
+			if(a instanceof DeerAgent) {
+				da = (DeerAgent) a;
+			} 
+			if(da.isAStottingDeer()){
+				stottingCount++;
+			}
+		}
+		return stottingCount/((double)agents.size());
+	}
+	
+	@Override
+	public void updatePositions() {
+		super.updatePositions();
+		System.out.println("------ Stotting proportion: " + Stat.roundNDecimals(stottingProportion(),3));
 	}
 }

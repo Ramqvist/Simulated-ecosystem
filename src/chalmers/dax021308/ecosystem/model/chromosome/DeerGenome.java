@@ -9,7 +9,7 @@ package chalmers.dax021308.ecosystem.model.chromosome;
 public class DeerGenome extends AbstractGenome<DeerGenes>{
 	
 	private BitSetChromosome chromosome;
-	private final double MUTATION_PROBABILITY = 0.01;
+	private final double MUTATION_PROBABILITY = 0.1;
 	
 	public DeerGenome() {	
 		this.chromosome = new BitSetChromosome(DeerGenes.getNumberOfGenes(), MUTATION_PROBABILITY);

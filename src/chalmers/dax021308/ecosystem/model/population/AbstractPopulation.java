@@ -379,4 +379,5 @@ public abstract class AbstractPopulation implements IPopulation {
 	public double getComputationalFactor() {
 		return 1;
 	}
+	
 }

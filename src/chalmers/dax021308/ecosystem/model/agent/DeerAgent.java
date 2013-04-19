@@ -35,7 +35,7 @@ public class DeerAgent extends AbstractAgent {
 	private double STOTTING_COOLDOWN = 150;
 	private double stottingDuration = STOTTING_LENGTH;
 	private double stottingCoolDown = 0;
-	private boolean isAStottingDeer = true;
+	private boolean isAStottingDeer;
 	private boolean isStotting = false;
 	private Vector stottingVector = new Vector();
 	private boolean alone;
@@ -48,6 +48,10 @@ public class DeerAgent extends AbstractAgent {
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
 		this.genome = genome;
+		isAStottingDeer = genome.isGeneSet(DeerGenes.STOTTING);
+		if(isAStottingDeer) {
+			this.color = Color.magenta;
+		}
 		this.energy = MAX_ENERGY;
 		this.groupBehaviour = groupBehaviour;
 
@@ -267,5 +271,9 @@ public class DeerAgent extends AbstractAgent {
 		hungry = false;
 		energy = MAX_ENERGY;
 		digesting = DIGESTION_TIME;
+	}
+	
+	public boolean isAStottingDeer(){
+		return isAStottingDeer;
 	}
 }

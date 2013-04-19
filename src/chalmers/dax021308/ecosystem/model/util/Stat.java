@@ -91,13 +91,14 @@ public class Stat<T extends Number> {
 
 	@Override
 	public String toString(){
-		return "mean = " + roundTwoDecimals(this.mean) + " | std = " + roundTwoDecimals(this.getSampleVariance());
+		return "mean = " + roundNDecimals(this.mean, 3) + " | std = " + roundNDecimals(this.getSampleVariance(), 3);
 	}
 	
-	public static double roundTwoDecimals(double d) {
-		double result = d * 100;
+	public static double roundNDecimals(double d, int N) {
+		double factor = Math.pow(10, N);
+		double result = d * factor;
 		result = Math.round(result);
-		result = result / 100;
+		result = result / factor;
 		return result;
 	}
 	
