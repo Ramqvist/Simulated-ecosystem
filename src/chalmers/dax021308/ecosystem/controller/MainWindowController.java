@@ -10,6 +10,7 @@ import javax.naming.event.NamingExceptionEvent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import chalmers.dax021308.ecosystem.controller.mapeditor.MapEditorController;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;

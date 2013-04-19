@@ -1,9 +1,10 @@
-package chalmers.dax021308.ecosystem.controller;
+package chalmers.dax021308.ecosystem.controller.mapeditor;
 
-import chalmers.dax021308.ecosystem.controller.NewMapDialogController.OnNameSelectedListener;
+import chalmers.dax021308.ecosystem.controller.IController;
+import chalmers.dax021308.ecosystem.controller.mapeditor.NewMapDialogController.OnNameSelectedListener;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
-import chalmers.dax021308.ecosystem.model.environment.MapEditorModel;
-import chalmers.dax021308.ecosystem.view.MapEditorView;
+import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapEditorModel;
+import chalmers.dax021308.ecosystem.view.mapeditor.MapEditorView;
 
 
 /**

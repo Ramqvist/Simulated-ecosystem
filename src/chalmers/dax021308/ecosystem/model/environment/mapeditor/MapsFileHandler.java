@@ -1,4 +1,4 @@
-package chalmers.dax021308.ecosystem.model.environment;
+package chalmers.dax021308.ecosystem.model.environment.mapeditor;
 
 import java.io.BufferedReader;
 import java.io.File;

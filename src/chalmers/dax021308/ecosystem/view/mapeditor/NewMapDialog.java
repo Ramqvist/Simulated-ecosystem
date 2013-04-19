@@ -1,4 +1,4 @@
-package chalmers.dax021308.ecosystem.view;
+package chalmers.dax021308.ecosystem.view.mapeditor;
 
 import javax.swing.JDialog;
 import javax.swing.GroupLayout;

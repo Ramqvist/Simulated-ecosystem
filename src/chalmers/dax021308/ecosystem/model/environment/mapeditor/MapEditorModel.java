@@ -1,8 +1,10 @@
-package chalmers.dax021308.ecosystem.model.environment;
+package chalmers.dax021308.ecosystem.model.environment.mapeditor;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 
 /**
@@ -33,13 +35,21 @@ public class MapEditorModel implements IModel {
 	}
 	
 	public void addObstacle(IObstacle o) {
+		if(currentMap == null || o == null) {
+			return;
+		}
 		synchronized (syncObject) {
-			currentMap.addObstacle(o);
-			fireObstaclesChanged();
+			if(!currentMap.contains(o)) {
+				currentMap.addObstacle(o);
+				fireObstaclesChanged();
+			}
 		}
 	}
 	
 	public void removeObstacle(IObstacle o) {
+		if(currentMap == null || o == null) {
+			return;
+		}
 		synchronized (syncObject) {
 			currentMap.removeObstacle(o);
 			fireObstaclesChanged();

@@ -1,4 +1,4 @@
-package chalmers.dax021308.ecosystem.model.environment;
+package chalmers.dax021308.ecosystem.model.environment.mapeditor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,9 +47,17 @@ public class SimulationMap {
 		}
 	}
 
-	public void removeObstacle(IObstacle o) {
+	public boolean removeObstacle(IObstacle o) {
 		if(obsList != null) {
-			obsList.remove(o);
+			return obsList.remove(o);
 		}
+		return false;
+	}
+
+	public boolean contains(IObstacle o) {
+		if(obsList != null) {
+			return obsList.contains(o);
+		}
+		return false;
 	}
 }

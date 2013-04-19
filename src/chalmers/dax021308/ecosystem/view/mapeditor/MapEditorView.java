@@ -1,4 +1,4 @@
-package chalmers.dax021308.ecosystem.view;
+package chalmers.dax021308.ecosystem.view.mapeditor;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -26,6 +26,8 @@ import chalmers.dax021308.ecosystem.controller.LiveSettingsViewController;
 import chalmers.dax021308.ecosystem.controller.NEWSettingsMenuViewController;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
+import chalmers.dax021308.ecosystem.view.IView;
+import chalmers.dax021308.ecosystem.view.OpenGLSimulationView;
 
 /**
  * Map editor view
