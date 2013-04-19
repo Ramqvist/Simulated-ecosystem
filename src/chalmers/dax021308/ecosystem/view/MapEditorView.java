@@ -38,12 +38,12 @@ import chalmers.dax021308.ecosystem.view.chart.PopulationAmountGraph;
 /**
  * Map editor view
  * 
- * @author Hanna, Erik Ramqvist
+ * @author original MainWindow by Hanna, edits by Erik Ramqvist
  *
  */
 
 public class MapEditorView extends JFrame implements IView {
-	private static final long serialVersionUID = -8023060073777907757L;
+	private static final long serialVersionUID = -8023217907757L;
 	private JPanel contentPane;
 	private JPanel left = new JPanel();
 	private JPanel right = new JPanel();
@@ -69,10 +69,9 @@ public class MapEditorView extends JFrame implements IView {
 	 * Create the frame.
 	 */
 	public MapEditorView(final IModel model) {
-		setTitle("Simulated Ecosystem");
+		setTitle("Map Editor");
 		setIconImage(new ImageIcon("res/Simulated ecosystem icon.png").getImage());
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 613, 516);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setExtendedState(MAXIMIZED_BOTH);
 		//OpenGL   
 	    Dimension d = new Dimension(1000, 1000);
@@ -89,7 +88,7 @@ public class MapEditorView extends JFrame implements IView {
 		mnFile = new JMenu("File");
 		menuBar.add(mnFile);
 		
-		mntmLoad = new JMenuItem("Load simulation");
+		mntmLoad = new JMenuItem("Load map");
 		
 
 		
@@ -97,7 +96,7 @@ public class MapEditorView extends JFrame implements IView {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser  fc = new JFileChooser();
-				fc.setFileFilter(new SimFileFilter());
+				fc.setFileFilter(new MapFileFilter());
 				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				int ret = fc.showOpenDialog(MapEditorView.this);
 				if(ret == JFileChooser.APPROVE_OPTION) {
@@ -110,7 +109,7 @@ public class MapEditorView extends JFrame implements IView {
 		});
 		mnFile.add(mntmLoad);
 		
-		mntmSave = new JMenuItem("Save simulation");
+		mntmSave = new JMenuItem("Save map");
 		mnFile.add(mntmSave);
 	
 		mntmExit = new JMenuItem("Exit");
@@ -120,7 +119,7 @@ public class MapEditorView extends JFrame implements IView {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser  fc = new JFileChooser();
-				fc.setFileFilter(new SimFileFilter());
+				fc.setFileFilter(new MapFileFilter());
 				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				//File selectedFile = null;//Get file from somewhere.
 				//fc.setSelectedFile(selectedFile);
@@ -185,7 +184,6 @@ public class MapEditorView extends JFrame implements IView {
 		addWindowListener(new WindowAdapter() {			
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				System.exit(0);
 			}
 		});
 	}
@@ -215,7 +213,7 @@ public class MapEditorView extends JFrame implements IView {
 		controlViewCtrl.view.btnStartNew.addActionListener(a);		
 	}
 	
-	private class SimFileFilter extends FileFilter{
+	private class MapFileFilter extends FileFilter{
 		
 		@Override
 		public boolean accept(File f) {
