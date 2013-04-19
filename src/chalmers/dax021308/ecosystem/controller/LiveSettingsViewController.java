@@ -16,7 +16,7 @@ public class LiveSettingsViewController implements IController {
 	public final LiveSettingsView view;
 	private ActionListener listenerUpdateButton;
 	private SimulationSettings simSettings;
-	//TODO: den här borde typ ta in aktuella SimulationsSettings på nåt sätt, så att den bara kan uppdatera det som ändrats
+	//TODO: den hï¿½r borde typ ta in aktuella SimulationsSettings pï¿½ nï¿½t sï¿½tt, sï¿½ att den bara kan uppdatera det som ï¿½ndrats
 	
 	public LiveSettingsViewController(EcoWorld model) {
 		this.model = model;
@@ -24,7 +24,7 @@ public class LiveSettingsViewController implements IController {
 		view.setVisible(true);
 	}
 	
-	public void setSimulationSettingsObject(SimulationSettings s) { //se till att det här är samma simsettingsobjekt som är aktivt	
+	public void setSimulationSettingsObject(SimulationSettings s) { //se till att det hï¿½r ï¿½r samma simsettingsobjekt som ï¿½r aktivt	
 		simSettings = s;
 		
 		if(model == null) {
@@ -35,6 +35,15 @@ public class LiveSettingsViewController implements IController {
 			listenerUpdateButton = new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					int newDelay = (int) view.spinnerDelayLength.getValue();
+					if(newDelay > 0) {
+						model.setDelayLength(newDelay);
+						if(newDelay == 0) {
+							model.setRunWithoutTimer(true);
+						} else {
+							model.setRunWithoutTimer(false);
+						}
+					}
 					updateSimulation(simSettings);
 				}
 			};
@@ -57,7 +66,7 @@ public class LiveSettingsViewController implements IController {
 		
 	}
 
-	private void updateSimulation(SimulationSettings s) { //TODO: det här måste ses över, har bara trollat ihop nåt
+	private void updateSimulation(SimulationSettings s) { //TODO: det hï¿½r mï¿½ste ses ï¿½ver, har bara trollat ihop nï¿½t
 		SimulationSettings simSettings = getSettings(s);
 		simSettings.saveToFile();
 		model.loadSimulationSettings(simSettings);
