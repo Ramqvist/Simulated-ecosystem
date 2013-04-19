@@ -26,6 +26,7 @@ import chalmers.dax021308.ecosystem.controller.LiveSettingsViewController;
 import chalmers.dax021308.ecosystem.controller.NEWSettingsMenuViewController;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
+import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapEditorModel;
 import chalmers.dax021308.ecosystem.view.IView;
 import chalmers.dax021308.ecosystem.view.OpenGLSimulationView;
 
@@ -57,6 +58,7 @@ public class MapEditorView extends JFrame implements IView {
 	 * Create the frame.
 	 */
 	public MapEditorView(final IModel model) {
+		model.addObserver(this);
 		setTitle("Map Editor");
 		setIconImage(new ImageIcon("res/Simulated ecosystem icon.png").getImage());
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -142,6 +144,8 @@ public class MapEditorView extends JFrame implements IView {
 		
 		AddObstacleView addObstacleView = new AddObstacleView(model);
 		right.add(addObstacleView);
+		EditObstaclesView editObstacles = new EditObstaclesView(model);
+		right.add(editObstacles);
 		setContentPane(contentPane);
 
 		left.add(openGL, BorderLayout.CENTER);
@@ -159,6 +163,16 @@ public class MapEditorView extends JFrame implements IView {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+		if(evt.getPropertyName() == MapEditorModel.EVENT_MAPNAME_CHANGED) {
+			if(evt.getNewValue() != null && evt.getNewValue() instanceof String) {
+				String str = (String) evt.getNewValue();
+				if(str.isEmpty()) {
+					setTitle("Map Editor") ;
+				} else {
+					setTitle("Map Editor - " + str) ;
+				}
+			}
+		}
 	}
 
 	@Override
