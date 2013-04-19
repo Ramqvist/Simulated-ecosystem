@@ -1,5 +1,6 @@
 package chalmers.dax021308.ecosystem.model.environment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
@@ -22,6 +23,11 @@ public class SimulationMap {
 		this.name = name;
 	}
 	
+	public SimulationMap(String name) {
+		this.obsList = new ArrayList<IObstacle>();
+		this.name = name;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -33,5 +39,11 @@ public class SimulationMap {
 	}
 	public void setObsList(List<IObstacle> obsList) {
 		this.obsList = obsList;
+	}
+
+	public void addObstacle(IObstacle o) {
+		if(obsList != null) {
+			obsList.add(o);
+		}
 	}
 }
