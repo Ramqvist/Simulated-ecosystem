@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.chromosome.AbstractGenome;
+import chalmers.dax021308.ecosystem.model.chromosome.BitSetChromosome;
 import chalmers.dax021308.ecosystem.model.chromosome.DeerGenes;
 import chalmers.dax021308.ecosystem.model.chromosome.DeerGenome;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
@@ -38,14 +39,15 @@ public class DeerAgent extends AbstractAgent {
 	private boolean isStotting = false;
 	private Vector stottingVector = new Vector();
 	private boolean alone;
-	private AbstractGenome<DeerGenes> genome = new DeerGenome();
+	private AbstractGenome<DeerGenes> genome;
 
 	public DeerAgent(String name, Position p, Color c, int width, int height,
 			Vector velocity, double maxSpeed, double maxAcceleration,
-			double visionRange, boolean groupBehaviour) {
+			double visionRange, boolean groupBehaviour, AbstractGenome<DeerGenes> genome) {
 
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
+		this.genome = genome;
 		this.energy = MAX_ENERGY;
 		this.groupBehaviour = groupBehaviour;
 
@@ -72,7 +74,8 @@ public class DeerAgent extends AbstractAgent {
 				} while (!shape.isInside(gridDimension, pos));
 				IAgent child = new DeerAgent(name, pos, color, width, height,
 						new Vector(velocity), maxSpeed, maxAcceleration,
-						visionRange, groupBehaviour);
+						visionRange, groupBehaviour, genome.onlyMutate());
+				
 				spawn.add(child);
 
 			}
