@@ -41,23 +41,17 @@ public class MapEditorView extends JFrame implements IView {
 	private JPanel contentPane;
 	private JPanel left = new JPanel();
 	private JPanel right = new JPanel();
-	private OpenGLSimulationView openGL;
+	private MapEditorGLView openGL;
 	
 	public final LiveSettingsViewController parameterViewCtrl; 
-	public final ControlViewController controlViewCtrl;
 	public final NEWSettingsMenuViewController smvc;
 	
 	public final JMenuBar menuBar;
 	public final JMenu mnFile;
 	public final JMenuItem mntmLoad;
 	public final JMenuItem mntmSave;
+	public final JMenuItem mntmNew;
 	public final JMenuItem mntmExit;
-	public final JMenu mnControls;
-	public final JMenuItem mntmStart;
-	public final JMenuItem mntmStop;
-	public final JMenuItem mntmPause;
-	public final JMenu mnSettings;
-	public final JMenuItem mntmSimulationSettings;
 
 	/**
 	 * Create the frame.
@@ -66,21 +60,23 @@ public class MapEditorView extends JFrame implements IView {
 		setTitle("Map Editor");
 		setIconImage(new ImageIcon("res/Simulated ecosystem icon.png").getImage());
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		this.setExtendedState(MAXIMIZED_BOTH);
-		//OpenGL   
+		setExtendedState(MAXIMIZED_BOTH);
 	    Dimension d = new Dimension(1000, 1000);
-		openGL = new OpenGLSimulationView(model, d, true);
+		openGL = new MapEditorGLView(model, d);
 		openGL.init();
 		EcoWorld fakeEcoWOrld = new EcoWorld();
-		controlViewCtrl = new ControlViewController(fakeEcoWOrld);
 		parameterViewCtrl = new LiveSettingsViewController(fakeEcoWOrld);
 		smvc = new NEWSettingsMenuViewController(fakeEcoWOrld);
 		
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
+
 		
 		mnFile = new JMenu("File");
 		menuBar.add(mnFile);
+
+		mntmNew = new JMenuItem("New map");
+		mnFile.add(mntmNew);
 		
 		mntmLoad = new JMenuItem("Load map");
 		
@@ -107,6 +103,8 @@ public class MapEditorView extends JFrame implements IView {
 		mnFile.add(mntmSave);
 	
 		mntmExit = new JMenuItem("Exit");
+		mnFile.add(mntmExit);
+		
 		
 		//TODO: MOve this to controller.
 		mntmSave.addActionListener(new ActionListener() {
@@ -115,8 +113,6 @@ public class MapEditorView extends JFrame implements IView {
 				JFileChooser  fc = new JFileChooser();
 				fc.setFileFilter(new MapFileFilter());
 				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				//File selectedFile = null;//Get file from somewhere.
-				//fc.setSelectedFile(selectedFile);
 				int ret = fc.showSaveDialog(MapEditorView.this);
 				if(ret == JFileChooser.APPROVE_OPTION) {
 					File savedFileAs = fc.getSelectedFile();
@@ -131,31 +127,7 @@ public class MapEditorView extends JFrame implements IView {
 		
 
 		
-		mnFile.add(mntmExit);
 		
-		mnControls = new JMenu("Controls");
-		menuBar.add(mnControls);
-		
-		mntmStart = new JMenuItem("Start");
-		mnControls.add(mntmStart);
-		
-		mntmStop = new JMenuItem("Stop");
-		mnControls.add(mntmStop);
-		
-		mntmPause = new JMenuItem("Pause");
-		mnControls.add(mntmPause);
-		
-		mnSettings = new JMenu("Settings");
-		menuBar.add(mnSettings);
-		
-		mntmSimulationSettings = new JMenuItem("Simulation settings");
-		
-		mntmSimulationSettings.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				smvc.init();
-			}
-		});
-		mnSettings.add(mntmSimulationSettings);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -171,7 +143,7 @@ public class MapEditorView extends JFrame implements IView {
 		
 		left.add(parameterViewCtrl.view, BorderLayout.NORTH);
 		left.add(openGL, BorderLayout.CENTER);
-		left.add(controlViewCtrl.view, BorderLayout.SOUTH);  
+//		left.add(controlViewCtrl.view, BorderLayout.SOUTH);  
 		
 		contentPane.add(left, BorderLayout.CENTER);
 		contentPane.add(right, BorderLayout.EAST);
@@ -202,12 +174,8 @@ public class MapEditorView extends JFrame implements IView {
 	public void release() {
 	}
 	
-
-	public void setBtnStartNewSimWindowActionListener(ActionListener a) {
-		controlViewCtrl.view.btnStartNew.addActionListener(a);		
-	}
 	
-	private class MapFileFilter extends FileFilter{
+	private class MapFileFilter extends FileFilter {
 		
 		@Override
 		public boolean accept(File f) {
