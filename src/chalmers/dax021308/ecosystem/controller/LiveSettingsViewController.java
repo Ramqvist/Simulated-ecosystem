@@ -35,7 +35,7 @@ public class LiveSettingsViewController implements IController {
 			listenerUpdateButton = new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					int newDelay = (int) view.spinnerDelayLength.getValue();
+					int newDelay = (Integer) view.spinnerDelayLength.getValue();
 					if(newDelay > 0) {
 						model.setDelayLength(newDelay);
 						if(newDelay == 0) {
