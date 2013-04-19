@@ -281,7 +281,7 @@ public class EcoWorld implements IModel {
 					Color.red, 3, 0.75, 275, shape);
 		} else if (s.getPredatorModel() == SimulationSettings.POP_WOLF) {
 			pred = new WolfPopulation("Wolves", d, s.getPredPopSize(),
-					Color.red, 2.2, 0.5, 250, true, shape, obstacles);
+					Color.red, 2.3, 0.4, 250, true, shape, obstacles);
 		}
 
 		if (s.getPreyModel() == SimulationSettings.POP_DEER) {

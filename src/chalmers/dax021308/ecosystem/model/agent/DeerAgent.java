@@ -30,9 +30,9 @@ public class DeerAgent extends AbstractAgent {
 	private boolean willFocusPreys = false;
 	private static final int DIGESTION_TIME = 10;
 	private int digesting = 0;
-	private double STOTTING_RANGE = 20;
-	private double STOTTING_LENGTH = 30;
-	private double STOTTING_COOLDOWN = 150;
+	private double STOTTING_RANGE = 10;
+	private double STOTTING_LENGTH = 8;
+	private double STOTTING_COOLDOWN = 50;
 	private double stottingDuration = STOTTING_LENGTH;
 	private double stottingCoolDown = 0;
 	private boolean isAStottingDeer;
@@ -51,6 +51,8 @@ public class DeerAgent extends AbstractAgent {
 		isAStottingDeer = genome.isGeneSet(DeerGenes.STOTTING);
 		if(isAStottingDeer) {
 			this.color = Color.magenta;
+		} else {
+			this.color = Color.blue;
 		}
 		this.energy = MAX_ENERGY;
 		this.groupBehaviour = groupBehaviour;
