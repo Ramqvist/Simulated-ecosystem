@@ -17,6 +17,7 @@ import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 public class MapEditorModel implements IModel {
 	
 	public static final String EVENT_OBSTACLESCHANGED = "chalmers.dox021308.ecosystem.MapEditorModel.event_obstacles_changed";
+	public static final String EVENT_MAPNAME_CHANGED = "chalmers.dox021308.ecosystem.MapEditorModel.event_mapname_changed";
 	
 	private PropertyChangeSupport pcs;
 	private SimulationMap currentMap;
@@ -31,6 +32,7 @@ public class MapEditorModel implements IModel {
 		synchronized (syncObject) {
 			currentMap = new SimulationMap(name);
 			fireObstaclesChanged();
+			pcs.firePropertyChange(EVENT_MAPNAME_CHANGED, null, name);
 		}
 	}
 	
