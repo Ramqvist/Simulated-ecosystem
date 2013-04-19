@@ -5,6 +5,7 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 import chalmers.dax021308.ecosystem.model.util.Position;
+import chalmers.dax021308.ecosystem.model.util.Vector;
 
 public abstract class AbstractObstacle implements IObstacle {
 	
@@ -95,7 +96,28 @@ public abstract class AbstractObstacle implements IObstacle {
 		return false;
 	}
 	
-	@Override
+//	@Override
+//	public boolean isInsidePath(Position start, Position end) {
+//		Position current = new Position(start);
+//		double path_threshold = 5.0;
+//		while(current.getDistance(end) >= path_threshold ) {
+//			if(isInObstacle(current)) {
+//				return true;
+//			}
+//			if(end.getX() > current.getX()) {
+//				current.setX(current.getX() + path_threshold);
+//			} else if(end.getX() < current.getX()) {
+//				current.setX(current.getX() - path_threshold);
+//			}
+//			if(end.getY() > current.getY()) {
+//				current.setY(current.getY() + path_threshold);
+//			} else if(end.getY() < current.getY()) {
+//				current.setY(current.getY() - path_threshold);
+//			}
+//		}
+//		return false;
+//	}
+	
 	public boolean isInsidePath(Position start, Position end) {
 		Position current = new Position(start);
 		double path_threshold = 5.0;
@@ -117,12 +139,42 @@ public abstract class AbstractObstacle implements IObstacle {
 		return false;
 	}
 	
+//	public static boolean isInsidePathList(List<IObstacle> obsList, Position start, Position end) {
+//		for(IObstacle o : obsList) {
+//			if(o.isInsidePath(start, end)) {
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
+	
 	public static boolean isInsidePathList(List<IObstacle> obsList, Position start, Position end) {
-		for(IObstacle o : obsList) {
-			if(o.isInsidePath(start, end)) {
-				return true;
+		
+		double stepConstant = 5;
+		double dirX = end.getX() - start.getX();
+		double dirY = end.getY() - start.getY();
+		double distance = Math.sqrt(dirX*dirX + dirY*dirY);
+		dirX /= distance;
+		dirY /= distance;
+		int nIterations = (int) (distance/stepConstant);
+		
+		Position currentPos = new Position(start);
+		double currentX = currentPos.getX();
+		double currentY = currentPos.getY();
+		
+		for(int i=0;i<nIterations;i++){
+			currentX += dirX;
+			currentY += dirY;
+			currentPos.setPosition(currentX, currentY);
+			for(IObstacle o : obsList) {
+				if(o.isInObstacle(currentPos)) {
+					System.out.println("Completed in: " + i + " iterations.");
+					return true;
+				}
 			}
+			
 		}
+		
 		return false;
 	}
 
