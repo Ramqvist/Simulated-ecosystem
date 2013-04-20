@@ -7,6 +7,8 @@ import chalmers.dax021308.ecosystem.controller.IController;
 import chalmers.dax021308.ecosystem.controller.mapeditor.NewMapDialogController.OnNameSelectedListener;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapEditorModel;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.mapeditor.MapEditorView;
 
 
@@ -20,16 +22,30 @@ public class MapEditorController implements IController {
 	
 	private final MapEditorView view;
 	private final MapEditorModel model;
+	
+	private final AddObstacleController addObstacle;
+	
 	private final OnNameSelectedListener nameSelectedListener = new OnNameSelectedListener() {
 		@Override
 		public void onSelectedName(String name) {
 			model.createNewMap(name);
 		}
 	};
+	
+	private final ObstacleInjectListener obstacleListener = new ObstacleInjectListener() {
+		@Override
+		public void onObstacleAdd(IObstacle o) {
+			if(o != null) {
+				model.addObstacle(o);
+			}
+		}
+	};
 
 	public MapEditorController() {
 		model = new MapEditorModel();
 		view = new MapEditorView(model);
+		addObstacle = new AddObstacleController(model, obstacleListener);
+		view.right.add(addObstacle.view);
 		view.setVisible(true);
 		init();
 	}
@@ -58,6 +74,10 @@ public class MapEditorController implements IController {
 	@Override
 	public void setModel(IModel m) {
 		
+	}
+	
+	public interface ObstacleInjectListener {
+		public void onObstacleAdd(IObstacle o);
 	}
 	
 }

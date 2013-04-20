@@ -40,8 +40,8 @@ import chalmers.dax021308.ecosystem.view.OpenGLSimulationView;
 public class MapEditorView extends JFrame implements IView {
 	private static final long serialVersionUID = -8023217907757L;
 	private JPanel contentPane;
-	private JPanel left = new JPanel();
-	private JPanel right = new JPanel();
+	public final JPanel left = new JPanel();
+	public final JPanel right = new JPanel();
 	private MapEditorGLView openGL;
 	
 	public final LiveSettingsViewController parameterViewCtrl; 
@@ -142,8 +142,6 @@ public class MapEditorView extends JFrame implements IView {
 		right.setMinimumSize(new Dimension(500, 400));
 		right.setPreferredSize(new Dimension(500, 400));
 		
-		AddObstacleView addObstacleView = new AddObstacleView(model);
-		right.add(addObstacleView);
 		EditObstaclesView editObstacles = new EditObstaclesView(model);
 		right.add(editObstacles);
 		setContentPane(contentPane);

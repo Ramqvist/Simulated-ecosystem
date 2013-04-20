@@ -18,10 +18,14 @@ import javax.swing.JButton;
 
 public class AddObstacleView extends JPanel implements IView {
 	private static final long serialVersionUID = 4214212142L;
-	private JTextField tbxWidth;
-	private JTextField tbxHeight;
-	private JTextField tbxXPosition;
-	private JTextField tbxYPosition;
+	public final JTextField tbxWidth;
+	public final JTextField tbxHeight;
+	public final JTextField tbxXPosition;
+	public final JTextField tbxYPosition;
+	public final JRadioButton rdbtnTypeTriangle;
+	public final JRadioButton rdbtnTypeRectangle;
+	public final JRadioButton rdbtnTypeCircle;
+	public final JButton btnAddObstacle;
 
 	public AddObstacleView(IModel m) {
 		m.addObserver(this);
@@ -32,12 +36,12 @@ public class AddObstacleView extends JPanel implements IView {
 		JLabel lblType = new JLabel("Type");
 		lblType.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
-		JRadioButton rdbtnTypeSquare = new JRadioButton("Square");
-		rdbtnTypeSquare.setSelected(true);
+		rdbtnTypeTriangle = new JRadioButton("Triangle");
+		rdbtnTypeTriangle.setSelected(true);
 		
-		JRadioButton rdbtnTypeRectangle = new JRadioButton("Rectangle");
+		rdbtnTypeRectangle = new JRadioButton("Rectangle");
 		
-		JRadioButton rdbtnTypeCircle = new JRadioButton("Circle");
+		rdbtnTypeCircle = new JRadioButton("Ellipse");
 		
 		JLabel lblSize = new JLabel("Width");
 		lblSize.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -67,7 +71,7 @@ public class AddObstacleView extends JPanel implements IView {
 		tbxYPosition.setText("0");
 		tbxYPosition.setColumns(10);
 		
-		JButton btnAddObstacle = new JButton("Add obstacle");
+		btnAddObstacle = new JButton("Add obstacle");
 		btnAddObstacle.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
@@ -86,7 +90,7 @@ public class AddObstacleView extends JPanel implements IView {
 								.addComponent(rdbtnTypeCircle, Alignment.LEADING)
 								.addComponent(lblAddNewObstacle, Alignment.LEADING)
 								.addComponent(rdbtnTypeRectangle, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(rdbtnTypeSquare, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
+								.addComponent(rdbtnTypeTriangle, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
 								.addComponent(lblType, Alignment.LEADING)
 								.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
 									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
@@ -108,7 +112,7 @@ public class AddObstacleView extends JPanel implements IView {
 					.addGap(26)
 					.addComponent(lblType)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(rdbtnTypeSquare)
+					.addComponent(rdbtnTypeTriangle)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(rdbtnTypeRectangle)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
