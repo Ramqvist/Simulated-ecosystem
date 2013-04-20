@@ -21,10 +21,10 @@ import info.monitorenter.util.Range;
  * @author Loanne Berggren
  * 
  */
-public class StottingDeerProportionGraph extends AbstractGraph2D {
+public class GroupingProportionGraph extends AbstractGraph2D {
 
-	public StottingDeerProportionGraph(IModel model, int updateFrequency) {
-		super(model, updateFrequency, "Iterations", "Interesting property proportion");
+	public GroupingProportionGraph(IModel model, int updateFrequency) {
+		super(model, updateFrequency, "Iterations", "Grouping proportion");
 		init();
 	}
 
