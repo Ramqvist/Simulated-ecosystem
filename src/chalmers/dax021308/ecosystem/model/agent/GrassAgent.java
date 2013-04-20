@@ -8,6 +8,7 @@ import java.util.List;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Position;
+import chalmers.dax021308.ecosystem.model.util.Stat;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
@@ -20,6 +21,7 @@ public class GrassAgent extends AbstractAgent {
 
 	private static final double REPRODUCTION_RATE = 0.01;
 	private static final int MAX_LIFE_LENGTH = 5000;
+	private static final double SPAWNING_STD = 130;
 
 	public GrassAgent(String name, Position pos, Color color, int width,
 			int height, Vector velocity, double maxSpeed, int capacity) {
@@ -70,11 +72,9 @@ public class GrassAgent extends AbstractAgent {
 		// current position, and if it lies inside the shape and not inside any
 		// obstacle, return it.
 		Position p;
-		Vector v = new Vector(Math.random() * 400, 0);
 		boolean validPos;
 		do {
-			v.rotate(Math.random() * Math.PI * 2);
-			p = Position.positionPlusVector(position, v);
+			p = Position.positionPlusVector(position, Stat.getNormallyDistributedVector(SPAWNING_STD));
 			validPos = shape.isInside(gridDimension, p);
 			for (IObstacle o : obstacles) {
 				if (o.isInObstacle(p)) {

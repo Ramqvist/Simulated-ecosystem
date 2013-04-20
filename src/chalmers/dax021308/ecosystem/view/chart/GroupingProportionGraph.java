@@ -21,17 +21,17 @@ import info.monitorenter.util.Range;
  * @author Loanne Berggren
  * 
  */
-public class StottingDeerProportionGraph extends AbstractGraph2D {
+public class GroupingProportionGraph extends AbstractGraph2D {
 
-	public StottingDeerProportionGraph(IModel model, int updateFrequency) {
-		super(model, updateFrequency, "Iterations", "Population amount");
+	public GroupingProportionGraph(IModel model, int updateFrequency) {
+		super(model, updateFrequency, "Iterations", "Grouping proportion");
 		init();
 	}
 
 	@Override
 	public void init() {    
 		this.rangeX = new Range(0, 1000);
-		this.rangeY = new Range(0, 1.1);
+		this.rangeY = new Range(0, 1.0001);
 		super.init();
 		xAxis.setMinorTickSpacing(2000);
 		yAxis.setMinorTickSpacing(1);
@@ -109,7 +109,7 @@ public class StottingDeerProportionGraph extends AbstractGraph2D {
 		for (IPopulation p: populations) {
 			ap = (AbstractPopulation) p;
 			if (it.hasNext()) {
-				((ITrace2D) it.next()).addPoint(nIterationsPassed, 0);
+				((ITrace2D) it.next()).addPoint(nIterationsPassed, ap.getInterestingPropertyProportion());
 			} else {
 				return;
 			}

@@ -5,10 +5,10 @@ package chalmers.dax021308.ecosystem.model.chromosome;
  * @author Loanne Berggren
  *
  */
-public enum DeerGenes
+public enum WolfGenes
 {
-	STOTTING(0),
-	GROUPING(1),
+	GROUPING(0),
+	FEMALE(1),
 	JUNK(3);
 	
 	private int value;
@@ -23,7 +23,7 @@ public enum DeerGenes
 		return numberOfGenes;
 	}
 	
-	private DeerGenes(int value) {
+	private WolfGenes(int value) {
 		this.value = value;
 	}
 }

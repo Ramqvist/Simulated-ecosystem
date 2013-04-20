@@ -10,10 +10,14 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import chalmers.dax021308.ecosystem.model.util.Position;
+import chalmers.dax021308.ecosystem.model.util.Stat;
+import chalmers.dax021308.ecosystem.model.util.Vector;
 
 public class RectangularObstacleTest extends JPanel {
 	
 	public static List<Position> positions;
+	
+	public static List<Position> positions2;
 	
 	public static void main(String[] args) {
 	
@@ -72,6 +76,7 @@ public class RectangularObstacleTest extends JPanel {
 			g.drawOval((int)p.getX(), 1000-(int)p.getY(), 1, 1);
 //			System.out.println(p);
 		}
+		
 	}
 
 }

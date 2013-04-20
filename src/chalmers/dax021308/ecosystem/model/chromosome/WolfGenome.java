@@ -6,38 +6,38 @@ package chalmers.dax021308.ecosystem.model.chromosome;
  * @author Loanne Berggren
  *
  */
-public class DeerGenome extends AbstractGenome<DeerGenes>{
+public class WolfGenome extends AbstractGenome<WolfGenes>{
 	
 	private BitSetChromosome chromosome;
 	// Random value.
-	private final double MUTATION_PROBABILITY = 0.05;
+	private final double MUTATION_PROBABILITY = 0.1;
 	
 	/**
-	 * Creates a new DeerGenome.
-	 * Number of genes depends on DeerGenes.
+	 * Creates a new WolfGenome.
+	 * Number of genes depends on WolfGenes.
 	 * All genes are set to false initially. 
-	 * Use {@link #setGene(DeerGenes, boolean)} to change gene value.
-	 * @see {@link #DeerGenome(boolean, boolean)}
+	 * Use {@link #setGene(WolfGenes, boolean)} to change gene value.
+	 * @see {@link #WolfGenome(boolean, boolean)}
 	 */
-	public DeerGenome() {	
-		this.chromosome = new BitSetChromosome(DeerGenes.getNumberOfGenes(), MUTATION_PROBABILITY);
+	public WolfGenome() {	
+		this.chromosome = new BitSetChromosome(WolfGenes.getNumberOfGenes(), MUTATION_PROBABILITY);
 	}
 	
 	/**
-	 * Creates a new DeerGenome.
+	 * Creates a new WolfGenome.
 	 * @param stotting
 	 * @param female
 	 */
-	public DeerGenome(boolean stotting, boolean grouping) {	
+	public WolfGenome(boolean stotting, boolean female) {	
 		this();
-		this.setGene(DeerGenes.STOTTING, stotting);
-		this.setGene(DeerGenes.GROUPING, grouping);
+		this.setGene(WolfGenes.GROUPING, stotting);
+		this.setGene(WolfGenes.FEMALE, female);
 	}
 	
 	/*
 	 * Used privately only.
 	 */
-	private DeerGenome(BitSetChromosome chromosome) {
+	private WolfGenome(BitSetChromosome chromosome) {
 		this.chromosome = chromosome;
 	}
 	
@@ -46,11 +46,11 @@ public class DeerGenome extends AbstractGenome<DeerGenes>{
 	 * 
 	 **/
 	@Override
-	public AbstractGenome<DeerGenes> mateWithMutation(AbstractGenome<DeerGenes> other){
-		if (other instanceof DeerGenome) {
+	public AbstractGenome<WolfGenes> mateWithMutation(AbstractGenome<WolfGenes> other){
+		if (other instanceof WolfGenome) {
 			BitSetChromosome nChrom = chromosome.crossChromosomes((BitSetChromosome)other.getChromosome());
 			nChrom.mutateChromosome();
-			AbstractGenome<DeerGenes> newGenome = new DeerGenome(nChrom);
+			AbstractGenome<WolfGenes> newGenome = new WolfGenome(nChrom);
 			return newGenome;
 		}
 		return null;
@@ -60,10 +60,10 @@ public class DeerGenome extends AbstractGenome<DeerGenes>{
 	 * {@inheritDoc}
 	 */
 	@Override
-	public AbstractGenome<DeerGenes> onlyMutate(){
+	public AbstractGenome<WolfGenes> onlyMutate(){
 		BitSetChromosome nChrom = (BitSetChromosome) this.chromosome.clone();
 		nChrom.mutateChromosome();
-		AbstractGenome<DeerGenes> newGenome = new DeerGenome(nChrom);	
+		AbstractGenome<WolfGenes> newGenome = new WolfGenome(nChrom);	
 		return newGenome;
 	}
 	
@@ -71,7 +71,7 @@ public class DeerGenome extends AbstractGenome<DeerGenes>{
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean isGeneSet(DeerGenes gene) {
+	public boolean isGeneSet(WolfGenes gene) {
 		return chromosome.findGene(gene.getValue());
 	}
 	
@@ -88,14 +88,14 @@ public class DeerGenome extends AbstractGenome<DeerGenes>{
 	 */
 	@Override
 	public int numberOfGenes() {
-		return DeerGenes.getNumberOfGenes();
+		return WolfGenes.getNumberOfGenes();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setGene(DeerGenes gene, boolean allele) {
+	public void setGene(WolfGenes gene, boolean allele) {
 		this.chromosome.setGene(gene.getValue(), allele);
 	}
 

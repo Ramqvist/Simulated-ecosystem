@@ -30,12 +30,8 @@ public class Stat<T extends Number> {
 	 */
 	public void addObservation(T obs){
 		sample.add(obs);
-		double sampleSize = sample.size();
-		if(sampleSize <= 1){
-			mean = obs.doubleValue();
-		} else {
-			mean = ((mean)*(sampleSize-1)+obs.doubleValue())/sampleSize;
-		}
+		double n = sample.size();
+		mean = ((mean)*(n-1)+obs.doubleValue())/n;
 	}
 	
 	public double getMean(){
@@ -43,15 +39,15 @@ public class Stat<T extends Number> {
 	}
 	
 	public double getSampleVariance(){
-		int sampleSize = sample.size();
-		if(sampleSize<2){
+		double n = sample.size();
+		if(n<=1){
 			return 0;
 		}
-		int sum = 0;
-		for(int i=0; i<sampleSize; i++){
+		double sum = 0;
+		for(int i=0; i<n; i++){
 			sum += (sample.get(i).doubleValue()-mean)*(sample.get(i).doubleValue()-mean);
 		}
-		return sum/(sampleSize-1.0);
+		return sum/(n-1.0);
 	}
 	
 	/**
@@ -100,6 +96,18 @@ public class Stat<T extends Number> {
 		result = Math.round(result);
 		result = result / factor;
 		return result;
+	}
+	
+	public static Vector getNormallyDistributedVector(){
+		return getNormallyDistributedVector(1);
+	}
+	
+	public static Vector getNormallyDistributedVector(double std){
+		double U = Math.random();
+		double V = Math.random();
+		double x = Math.sqrt(-2*Math.log(U))*Math.cos(2*Math.PI*V);
+		double y = Math.sqrt(-2*Math.log(U))*Math.sin(2*Math.PI*V);
+		return new Vector(std*x,std*y);
 	}
 	
 }
