@@ -2,6 +2,7 @@ package chalmers.dax021308.ecosystem.view.mapeditor;
 
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
+import java.text.NumberFormat;
 
 import javax.swing.JPanel;
 
@@ -11,6 +12,8 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import java.awt.Font;
+
+import javax.swing.JFormattedTextField;
 import javax.swing.JRadioButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
@@ -46,29 +49,29 @@ public class AddObstacleView extends JPanel implements IView {
 		JLabel lblSize = new JLabel("Width");
 		lblSize.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
-		tbxWidth = new JTextField();
-		tbxWidth.setText("0");
+		tbxWidth = new JFormattedTextField(NumberFormat.getInstance());
+		tbxWidth.setText("120");
 		tbxWidth.setColumns(10);
 		
 		JLabel lblHeight = new JLabel("Height");
 		lblHeight.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
-		tbxHeight = new JTextField();
-		tbxHeight.setText("0");
+		tbxHeight = new JFormattedTextField(NumberFormat.getInstance());
+		tbxHeight.setText("120");
 		tbxHeight.setColumns(10);
 		
 		JLabel lblXPosition = new JLabel("X position");
 		lblXPosition.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
-		tbxXPosition = new JTextField();
-		tbxXPosition.setText("0");
+		tbxXPosition = new JFormattedTextField(NumberFormat.getInstance());
+		tbxXPosition.setText("400");
 		tbxXPosition.setColumns(10);
 		
 		JLabel lblYPosition = new JLabel("Y position");
 		lblYPosition.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
-		tbxYPosition = new JTextField();
-		tbxYPosition.setText("0");
+		tbxYPosition = new JFormattedTextField(NumberFormat.getInstance());
+		tbxYPosition.setText("400");
 		tbxYPosition.setColumns(10);
 		
 		btnAddObstacle = new JButton("Add obstacle");

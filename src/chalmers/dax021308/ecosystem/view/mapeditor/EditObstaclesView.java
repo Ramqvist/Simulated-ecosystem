@@ -135,6 +135,5 @@ public class EditObstaclesView extends JPanel implements IView {
 
 	@Override
 	public void release() {
-		
 	}
 }
