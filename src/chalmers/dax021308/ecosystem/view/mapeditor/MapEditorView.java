@@ -127,9 +127,6 @@ public class MapEditorView extends JFrame implements IView {
 			}
 		});
 		
-
-		
-		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -141,14 +138,9 @@ public class MapEditorView extends JFrame implements IView {
 		right.setLayout(new GridLayout(3,1));
 		right.setMinimumSize(new Dimension(500, 400));
 		right.setPreferredSize(new Dimension(500, 400));
-		
-		EditObstaclesView editObstacles = new EditObstaclesView(model);
-		right.add(editObstacles);
 		setContentPane(contentPane);
 
 		left.add(openGL, BorderLayout.CENTER);
-//		left.add(parameterViewCtrl.view, BorderLayout.NORTH);
-//		left.add(controlViewCtrl.view, BorderLayout.SOUTH);  
 		
 		contentPane.add(left, BorderLayout.CENTER);
 		contentPane.add(right, BorderLayout.EAST);

@@ -10,17 +10,17 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public abstract class AbstractObstacle implements IObstacle {
 	
 	protected Position position;
-	protected double a;
-	protected double b;
+	protected double width;
+	protected double height;
 	protected Color color;
 	
 	@Override
 	public double getWidth() {
-		return a;
+		return width;
 	}
 	@Override
 	public double getHeight() {
-		return b;
+		return height;
 	}
 	@Override
 	public Position getPosition() {
@@ -47,9 +47,9 @@ public abstract class AbstractObstacle implements IObstacle {
 		sb.append(';');
 		sb.append(roundTwoDecimals(position.getY()));
 		sb.append(';');
-		sb.append(a);
+		sb.append(width);
 		sb.append(';');
-		sb.append(b);
+		sb.append(height);
 		sb.append(';');
 		sb.append(color.getRed());
 		sb.append(';');

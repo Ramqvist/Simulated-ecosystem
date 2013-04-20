@@ -22,6 +22,7 @@ import javax.media.opengl.GLJPanel;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
+import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapEditorModel;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.EllipticalObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.RectangularObstacle;
@@ -46,7 +47,6 @@ import com.sun.opengl.util.FPSAnimator;
 public class MapEditorGLView extends GLCanvas implements IView {
 	
 	private static final long serialVersionUID = 158552837620985591L;
-	private List<IPopulation> newPops = new ArrayList<IPopulation>();
 	private List<IObstacle> newObs = new ArrayList<IObstacle>();
 	private Dimension size;
 	private JOGLListener glListener;
@@ -117,21 +117,11 @@ public class MapEditorGLView extends GLCanvas implements IView {
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
 		String eventName = event.getPropertyName();
-		if(eventName == EcoWorld.EVENT_TICK) {
+		if(eventName == MapEditorModel.EVENT_OBSTACLES_CHANGED) {
 			//Tick notification recived from model. Do something with the data.
 			if(event.getNewValue() instanceof List<?>) {
-				this.newPops = (List<IPopulation>) event.getNewValue();
+				this.newObs = (List<IObstacle>) event.getNewValue();
 			}
-			if(event.getOldValue() instanceof List<?>) {
-				this.newObs = (List<IObstacle>) event.getOldValue();
-			}
-			//repaint();
-			//display();
-			//removeAll();
-			//repaint();
-		} else if(eventName == EcoWorld.EVENT_STOP) {
-			//Model has stopped. Maybe hide view?
-			//frame.setVisible(false);
 		} else if(eventName == EcoWorld.EVENT_DIMENSIONCHANGED) {
 			Object o = event.getNewValue();
 			if(o instanceof Dimension) {
@@ -348,78 +338,6 @@ public class MapEditorGLView extends GLCanvas implements IView {
           			
           		}
           		
-          		int popSize = newPops.size();
-          		for(int i = 0; i < popSize; i ++) {
-        			List<IAgent> agents = newPops.get(i).getAgents();
-        			int size = agents.size();
-        			IAgent a;
-        			for(int j = 0; j < size; j++) {
-        				a = agents.get(j);
-                        Color c = a.getColor();
-        				gl.glColor4f((1.0f/255)*c.getRed(), COLOR_FACTOR*c.getGreen(), COLOR_FACTOR*c.getBlue(), COLOR_FACTOR*c.getAlpha());
-
-        				Position p = a.getPosition();
-                        /*double cx = p.getX();
-                        double cy = getHeight() - p.getY();
-                        double radius = a.getWidth()/2 + 5;*/
-                        double height = (double)a.getHeight();
-                        double width = (double)a.getWidth();
-    	          		
-                        double originalX = a.getVelocity().x;
-                        double originalY = a.getVelocity().y;
-                        double originalNorm = getNorm(originalX, originalY);
-                        //if(v.getX() != 0 && v.getY() != 0) {
-                  		gl.glBegin(GL.GL_TRIANGLES);
-                  		
-                  		double x = originalX * 2.0*height/(3.0*originalNorm);
-                  		double y = originalY * 2.0*height/(3.0*originalNorm);
-      	          		 
-          				//Vector bodyCenter = new Vector(p.getX(), p.getY());
-      	      	        double xBodyCenter = p.getX();
-      	      	        double yBodyCenter = p.getY();
-      	          		//Vector nose = new Vector(x+xBodyCenter, y+yBodyCenter);
-      	          		double noseX = x+xBodyCenter;
-  	          			double noseY = y+yBodyCenter;
-      	          		
-      	          		double bottomX = (originalX * -1.0*height/(3.0*originalNorm)) + xBodyCenter;
-      	          		double bottomY = (originalY * -1.0*height/(3.0*originalNorm)) + yBodyCenter ;
-      	          		
-      	          		//Vector legLengthVector = new Vector(-originalY/originalX,1);
-      	          		double legLengthX1 = -originalY/originalX;
-      	          		double legLengthY1 = 1;
-      	          		double legLenthVectorNorm2 = width/(2*getNorm(legLengthX1,legLengthY1 ));
-      	          		//legLengthVector = legLengthVector.multiply(legLenthVectorNorm2);
-      	          		legLengthX1 = legLengthX1 * legLenthVectorNorm2;
-      	          		legLengthY1 = legLengthY1 * legLenthVectorNorm2;
-      	          		//Vector rightLeg = legLengthVector;
-      	          		double rightLegX = legLengthX1 + bottomX;
-      	          		double rightLegY = legLengthY1 + bottomY;
-      	          		
-      	          		//v = new Vector(a.getVelocity());
-      	          	    double legLengthX2 = originalY/originalX * legLenthVectorNorm2;
-      	          	    double legLengthY2 = -1 * legLenthVectorNorm2;
-      	          	    //legLengthVector = new Vector(originalY/originalX,-1);
-      	          	   // legLengthVector = legLengthVector.multiply(legLenthVectorNorm2);
-      	          		//Vector leftLeg = legLengthVector.add(bottom);
-      	          		//Vector leftLeg = legLengthVector;
-  	          			double leftLegX = legLengthX2 + bottomX;
-      	          		double leftLegY = legLengthY2 + bottomY;
-      	          		
-      	          		gl.glVertex2d(scaleX*noseX, frameHeight - scaleY*noseY);
-      	          		gl.glVertex2d(scaleX*rightLegX, frameHeight - scaleY*rightLegY);
-      	          		gl.glVertex2d(scaleX*leftLegX, frameHeight - scaleY*leftLegY);
-      	          		gl.glEnd();
-	      	          	/*} else {
-	        	          	for(double angle = 0; angle < PI_TIMES_TWO; angle+=increment){
-	        	          		gl.glBegin(GL.GL_TRIANGLES);
-	        	          		gl.glVertex2d(cx, cy);
-	        	          		gl.glVertex2d(cx + Math.cos(angle)* radius, cy + Math.sin(angle)*radius);
-	        	          		gl.glVertex2d(cx + Math.cos(angle + increment)*radius, cy + Math.sin(angle + increment)*radius);
-	        	          		gl.glEnd();
-	        	          	}
-                        }*/
-        			}
-        		}      
 //        		
 //        		/* Information print, comment out to increase performance. */
 //        		Long totalTime = System.currentTimeMillis() - start;

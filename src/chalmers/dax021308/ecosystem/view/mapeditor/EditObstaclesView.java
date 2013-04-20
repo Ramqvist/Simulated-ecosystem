@@ -2,10 +2,13 @@ package chalmers.dax021308.ecosystem.view.mapeditor;
 
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
+import java.util.List;
 
 import javax.swing.JPanel;
 
 import chalmers.dax021308.ecosystem.model.environment.IModel;
+import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapEditorModel;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.view.IView;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -16,9 +19,21 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListDataListener;
 
+/**
+ * Edit obstacles panel in MapEditor
+ * 
+ * @author Erik Ramqvist
+ *
+ */
 public class EditObstaclesView extends JPanel implements IView {
 	private static final long serialVersionUID = 4214212142L;
+	public final JList<IObstacle> obstaclesJList;
+	public final JButton btnDelete;
+	public final JButton btnEditObstacle;
 
 	public EditObstaclesView(IModel m) {
 		m.addObserver(this);
@@ -26,12 +41,13 @@ public class EditObstaclesView extends JPanel implements IView {
 		JLabel lblAddNewObstacle = new JLabel("Edit obstacles");
 		lblAddNewObstacle.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
-		JButton btnEditObstacle = new JButton("Edit");
+		btnEditObstacle = new JButton("Edit");
 		btnEditObstacle.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
-		JList list = new JList();
+		obstaclesJList = new JList<IObstacle>();
+		obstaclesJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
-		JButton btnDelete = new JButton("Delete");
+		btnDelete = new JButton("Delete");
 		btnDelete.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
@@ -40,7 +56,7 @@ public class EditObstaclesView extends JPanel implements IView {
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(list, GroupLayout.PREFERRED_SIZE, 299, GroupLayout.PREFERRED_SIZE)
+							.addComponent(obstaclesJList, GroupLayout.PREFERRED_SIZE, 299, GroupLayout.PREFERRED_SIZE)
 							.addContainerGap())
 						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 							.addGroup(groupLayout.createSequentialGroup()
@@ -58,7 +74,7 @@ public class EditObstaclesView extends JPanel implements IView {
 					.addContainerGap()
 					.addComponent(lblAddNewObstacle)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(list, GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
+					.addComponent(obstaclesJList, GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnEditObstacle, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
@@ -70,7 +86,36 @@ public class EditObstaclesView extends JPanel implements IView {
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+		if(evt.getPropertyName() == MapEditorModel.EVENT_OBSTACLES_CHANGED) {
+			if(evt.getNewValue() instanceof List<?>) {
+				@SuppressWarnings("unchecked")
+				final List<IObstacle> tempList = (List<IObstacle>) evt.getNewValue();
+				ListModel<IObstacle> model = new ListModel<IObstacle>() {
+					List<IObstacle> obsList = tempList;
+					@Override
+					public int getSize() {
+						return obsList.size();
+					}
 		
+					@Override
+					public IObstacle getElementAt(int index) {
+						return obsList.get(index);
+					}
+		
+					@Override
+					public void addListDataListener(ListDataListener l) {
+						
+					}
+		
+					@Override
+					public void removeListDataListener(ListDataListener l) {
+						
+					}
+				};
+				obstaclesJList.setModel(model);
+				
+			}
+		}
 	}
 
 	@Override

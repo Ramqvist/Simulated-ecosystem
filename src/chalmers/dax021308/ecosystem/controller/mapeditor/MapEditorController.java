@@ -24,6 +24,7 @@ public class MapEditorController implements IController {
 	private final MapEditorModel model;
 	
 	private final AddObstacleController addObstacle;
+	private final EditObstaclesController editObstacle;
 	
 	private final OnNameSelectedListener nameSelectedListener = new OnNameSelectedListener() {
 		@Override
@@ -45,7 +46,9 @@ public class MapEditorController implements IController {
 		model = new MapEditorModel();
 		view = new MapEditorView(model);
 		addObstacle = new AddObstacleController(model, obstacleListener);
+		editObstacle = new EditObstaclesController(model);
 		view.right.add(addObstacle.view);
+		view.right.add(editObstacle.view);
 		view.setVisible(true);
 		init();
 	}

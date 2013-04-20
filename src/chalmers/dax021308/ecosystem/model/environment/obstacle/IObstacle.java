@@ -31,4 +31,5 @@ public interface IObstacle {
 
 	public boolean isInsidePath(Position start, Position end);
 	
+	
 }
