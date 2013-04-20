@@ -1,8 +1,14 @@
 package chalmers.dax021308.ecosystem.model.chromosome;
 
-public class DeerGenome extends AbstractGenome<DeerGenes> {
-
-	private static double MUTATION_PROBABILITY = 0.1;
+/**
+ * 
+ * @author Loanne Berggren
+ *
+ */
+public class DeerGenome extends AbstractGenome<DeerGenes>{
+	
+	// Random value.
+	private static final double MUTATION_PROBABILITY = 0.05;
 	
 	/**
 	 * Creates a new DeerGenome.
@@ -11,8 +17,16 @@ public class DeerGenome extends AbstractGenome<DeerGenes> {
 	 * Use {@link #setGene(DeerGenes, boolean)} to change gene value.
 	 * 
 	 */
+
 	public DeerGenome() {
-		super(new BitSetChromosome(DeerGenes.getNumberOfGenes2(), MUTATION_PROBABILITY));
+		super(new BitSetChromosome(DeerGenes.getNumberOfGenes(), MUTATION_PROBABILITY));
+	}
+	
+	public DeerGenome(boolean stotting, boolean grouping) {	
+		this();
+		this.setGene(DeerGenes.STOTTING, stotting);
+		this.setGene(DeerGenes.GROUPING, grouping);
+
 	}
 	
 	/*
@@ -55,14 +69,6 @@ public class DeerGenome extends AbstractGenome<DeerGenes> {
 		return true;
 	}
 	
-	/**
-	 * @throws CloneNotSupportedException
-	 */
-	@Override 
-	public final Object clone() throws CloneNotSupportedException {
-	    throw new CloneNotSupportedException();
-	}
-
 	@Override
 	protected IGenome<DeerGenes> genomeFactory(IChromosome chromosome) {
 		return new DeerGenome(chromosome);

@@ -98,5 +98,13 @@ public abstract class AbstractGenome<E extends Enum<E>> implements IGenome<E> {
 	@Override
 	public abstract boolean equals(Object other);
 	
+	/**
+	 * @throws CloneNotSupportedException
+	 */
+	@Override 
+	public Object clone() throws CloneNotSupportedException {
+	    throw new CloneNotSupportedException();
+	}
+	
 }
 
