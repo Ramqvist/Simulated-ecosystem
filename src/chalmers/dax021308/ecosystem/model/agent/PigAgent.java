@@ -8,6 +8,7 @@ import java.util.List;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.AbstractObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.util.AgentPath;
 import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -26,7 +27,7 @@ public class PigAgent extends AbstractAgent {
 	private boolean hungry = true;
 	private static final double REPRODUCTION_RATE = 0.1;
 	private boolean willFocusPreys = true;
-	private List<Position> focusedPreyPath;
+	private AgentPath focusedPreyPath;
 	private static final int DIGESTION_TIME = 10;
 	private int digesting = 0;
 	private double STOTTING_RANGE = 20;
@@ -47,6 +48,7 @@ public class PigAgent extends AbstractAgent {
 		this.obstacles = obsList;
 		this.energy = MAX_ENERGY;
 		this.groupBehaviour = groupBehaviour;
+		this.focusedPreyPath = new AgentPath();
 
 	}
 
@@ -167,12 +169,17 @@ public class PigAgent extends AbstractAgent {
 			// }
 		}
 	}
+	
 
 	/**
+	 * Special version of getPreyForce. Determines the shortest path if any obstacles is blocking the way.
+	 * <p>
+	 * The path_ttl value should scale with the distance to the target.
+	 * <p>
 	 * @return returns The force the preys attracts the agent with
-	 * @author Sebastian/Henrik
+	 * @author Sebastian/Henrik/Erik
 	 */
-	private Vector getPreyForce(IShape shape, Dimension dim) {
+	private Vector getPreyForce(IShape shape, Dimension dim, List<IObstacle> obsList, AgentPath path, int initial_ttl) {
 		if (willFocusPreys && focusedPrey != null && focusedPrey.isAlive()) {
 			Position p = focusedPrey.getPosition();
 			double distance = getPosition().getDistance(p);
@@ -184,20 +191,23 @@ public class PigAgent extends AbstractAgent {
 					digesting = DIGESTION_TIME;
 				}
 			} else {
-				if(focusedPreyPath != null) {
-					if(!focusedPreyPath.isEmpty()) {
-						Position nextPathPosition = focusedPreyPath.get(0);
-						//If we are not near our current path target, move towards it.
-						if(position.getDistance(nextPathPosition) > EATING_RANGE) {
-							return new Vector(nextPathPosition, position);
-						} else if(focusedPreyPath.size() > 1) {
-							//Remove the next path, we are close to it, and go to next.
-							focusedPreyPath.remove(0);
-							return new Vector(focusedPreyPath.get(0), position);
-						} 
-					} else {
-						return new Vector(focusedPrey.getPosition(), position);
-					}
+				if(!focusedPreyPath.isEmpty()) {
+					Position nextPathPosition = focusedPreyPath.peek();
+					//If we are not near our current path target, move towards it.
+					if(position.getDistance(nextPathPosition) > EATING_RANGE) {
+						return new Vector(nextPathPosition, position);
+					} else if(focusedPreyPath.size() > 1) {
+						//Remove the next path, we are close to it, and go to next.
+						focusedPreyPath.pop();
+						focusedPreyPath.decreaseTTL();
+						if(!focusedPreyPath.isValid()) {
+							Vector v = new Vector(focusedPreyPath.peek(), position);
+							focusedPreyPath.clearPath();
+							return v;
+						} else {
+							return new Vector(focusedPreyPath.peek(), position);
+						}
+					} 
 				} else {
 					return new Vector(focusedPrey.getPosition(), position);
 				}
@@ -253,19 +263,114 @@ public class PigAgent extends AbstractAgent {
 		if (willFocusPreys && closestFocusPrey != null) {
 			focusedPrey = closestFocusPrey;
 			if(AbstractObstacle.isInsidePathList(obstacles, position, focusedPrey.getPosition())) {
-				focusedPreyPath = Position.getShortestPath(position, focusedPrey.getPosition(), obstacles, shape, dim);
-				if(focusedPreyPath == null || focusedPreyPath.size() == 0) {
+				focusedPreyPath.setPath(Position.getShortestPath(position, focusedPrey.getPosition(), obstacles, shape, dim), initial_ttl);
+				if(focusedPreyPath.isEmpty()) {
 					return Vector.emptyVector();
 				} else {
-					return new Vector(focusedPreyPath.get(0), position);
+					return new Vector(focusedPreyPath.peek(), position);
 				}
 			} else {
-				focusedPreyPath = null;
+				focusedPreyPath.clearPath();
 				return new Vector(focusedPrey.getPosition(), position);
 			}
 				
 		}
+		return preyForce;
+	}
 
+	/**
+	 * @return returns The force the preys attracts the agent with
+	 * @author Sebastian/Henrik
+	 */
+	private Vector getPreyForce(IShape shape, Dimension dim) {
+		if (willFocusPreys && focusedPrey != null && focusedPrey.isAlive()) {
+			Position p = focusedPrey.getPosition();
+			double distance = getPosition().getDistance(p);
+			if (distance <= EATING_RANGE) {
+				if (focusedPrey.tryConsumeAgent()) {
+					focusedPrey = null;
+					hungry = false;
+					energy = MAX_ENERGY;
+					digesting = DIGESTION_TIME;
+				}
+			} else {
+				if(!focusedPreyPath.isEmpty()) {
+					Position nextPathPosition = focusedPreyPath.peek();
+					//If we are not near our current path target, move towards it.
+					if(position.getDistance(nextPathPosition) > EATING_RANGE) {
+						return new Vector(nextPathPosition, position);
+					} else if(focusedPreyPath.size() > 1) {
+						//Remove the next path, we are close to it, and go to next.
+						focusedPreyPath.pop();
+						return new Vector(focusedPreyPath.peek(), position);
+					} 
+				} else {
+					return new Vector(focusedPrey.getPosition(), position);
+				}
+			}
+		}
+
+		Vector preyForce = new Vector(0, 0);
+		IAgent closestFocusPrey = null;
+		int preySize = preyNeighbours.size();
+		for (int i = 0; i < preySize; i++) {
+			IAgent a = preyNeighbours.get(i);
+			Position p = a.getPosition();
+			double distance = getPosition().getDistance(p);
+			if (distance <= visionRange) {
+				if (distance <= EATING_RANGE) {
+					if (a.tryConsumeAgent()) {
+						hungry = false;
+						energy = MAX_ENERGY;
+						digesting = DIGESTION_TIME;
+					}
+				} else if (willFocusPreys && distance <= FOCUS_RANGE) {
+					if (closestFocusPrey != null && a.isAlive()) {
+						if (closestFocusPrey.getPosition().getDistance(
+								this.position) > a.getPosition().getDistance(
+								this.position)) {
+							closestFocusPrey = a;
+						}
+					} else {
+						closestFocusPrey = a;
+					}
+				} else if (closestFocusPrey == null) {
+					/*
+					 * Create a vector that points towards the prey.
+					 */
+					Vector newForce = new Vector(p, position);
+
+					/*
+					 * Add this vector to the prey force, with proportion to how
+					 * close the prey is. Closer preys will affect the force
+					 * more than those far away.
+					 */
+					double norm = newForce.getNorm();
+					preyForce.add(newForce.multiply(1 / (norm * distance)));
+				}
+			}
+		}
+
+		double norm = preyForce.getNorm();
+		if (norm != 0) {
+			preyForce.multiply(maxAcceleration / norm);
+		}
+
+		if (willFocusPreys && closestFocusPrey != null) {
+			focusedPrey = closestFocusPrey;
+			if(AbstractObstacle.isInsidePathList(obstacles, position, focusedPrey.getPosition())) {
+				focusedPreyPath.setPath(Position.getShortestPath(position, focusedPrey.getPosition(), obstacles, shape, dim));
+				if(focusedPreyPath.isEmpty()) {
+					return Vector.emptyVector();
+				} else {
+					return new Vector(focusedPreyPath.peek(), position);
+				}
+			} else {
+				focusedPreyPath.clearPath();
+				return new Vector(focusedPrey.getPosition(), position);
+			}
+				
+		}
 		return preyForce;
 	}
 

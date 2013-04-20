@@ -4,19 +4,34 @@ import java.util.List;
 
 /**
  * Class representing path to a specific target.
+ * <p>
+ * Has an internal ttl value to determine how long this path is valid.
  * 
  * @author Erik Ramqvist
  *
  */
 public class AgentPath {
+	
 	private List<Position> path;
+	private int ttl;
+	
+	public AgentPath() {
+	}
 	
 	public AgentPath(List<Position> path) {
 		this.path = path;
 	}
 	
+
+	public AgentPath(List<Position> path, int initial_ttl) {
+		this.ttl = initial_ttl;
+		this.path = path;
+	}
+	
 	public void clearPath() {
-		path.clear();
+		if(path != null) {
+			path.clear();
+		}
 		path = null;
 	}
 
@@ -24,11 +39,20 @@ public class AgentPath {
 		return path;
 	}
 	
+	public void setPath(List<Position> path) {
+		this.path = path;
+	}
+
+	public void setPath(List<Position> path, int initial_ttl) {
+		this.ttl = initial_ttl;
+		this.path = path;
+	}
+	
 	public boolean isEmpty() {
-		if(path == null || path.isEmpty()) {
-			return false;
+		if(path == null) { 
+			return true;
 		}
-		return true;
+		return path.isEmpty();
 	}
 	
 	public Position peek() {
@@ -54,10 +78,26 @@ public class AgentPath {
 		}
 	}
 
-	private int size() {
+	public int size() {
 		if(path != null) {
 			return path.size();
 		}
 		return 0;
+	}
+	
+	public boolean isValid() {
+		return ttl < 0;
+	}
+	
+	public int getTTL() {
+		return ttl;
+	}
+	
+	public void setTTL(int ttl) {
+		this.ttl = ttl;
+	}
+	
+	public void decreaseTTL() {
+		ttl--;
 	}
 }
