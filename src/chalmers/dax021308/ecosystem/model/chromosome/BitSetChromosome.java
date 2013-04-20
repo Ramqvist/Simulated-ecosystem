@@ -9,7 +9,7 @@ import java.util.Random;
  * @author Loanne Berggren
  *
  */
-public class BitSetChromosome {
+public class BitSetChromosome implements IChromosome{
 
 	private final double MUTATION_PROBABILITY;
 	private BitSet chromosome;
@@ -29,7 +29,8 @@ public class BitSetChromosome {
 		MUTATION_PROBABILITY = mutationProbability;
 	}
 	
-	public BitSetChromosome crossChromosomes(final BitSetChromosome other) {
+	@Override
+	public BitSetChromosome crossChromosomes(final IChromosome other) {
 
 		// Not the same chromosome size, meaning it's definitively not the same species.
 		if ( other.getChromosomeSize() != this.getChromosomeSize())
@@ -60,6 +61,7 @@ public class BitSetChromosome {
 		return new BitSetChromosome(nChrom, this.numberOfGenes, MUTATION_PROBABILITY);
 	}
 
+	@Override
 	public void mutateChromosome() {
 		// mutation probability Pmut
 				// for each gene
@@ -77,41 +79,60 @@ public class BitSetChromosome {
 		}
 	}
 
+	@Override
 	public int getChromosomeSize() {
 		return this.numberOfGenes;
 	}
 	
+	@Override
 	public Object clone() {
 		return new BitSetChromosome((BitSet)chromosome.clone(), this.numberOfGenes, MUTATION_PROBABILITY);
 	}
 
-	public boolean equals(BitSetChromosome other) {
-		if ( this.numberOfGenes != other.getChromosomeSize() )
+	@Override
+	public boolean equals(Object other) {
+		BitSetChromosome o;
+		if (other instanceof BitSetChromosome)
+			o = (BitSetChromosome)other;
+		else return false;
+		if ( this.numberOfGenes != o.getChromosomeSize() )
 			return false;
-		if ( !this.chromosome.equals(other.getGenes()) )
+		if ( this.MUTATION_PROBABILITY != o.getMutationProbabilty() )
+			return false;
+		if ( !this.chromosome.equals(o.getGenes()) )
 			return false;
 		
 		return true;
 	}
 	
-	/**
-	 * 
-	 * @return a clone of the chromosome.
-	 */
+	@Override
 	public Object getGenes() {
 		return this.chromosome.clone();
 	}
 	
+	@Override
 	public boolean findGene(int geneID) {
 		return this.chromosome.get(geneID);
 	}
 
+	@Override
 	public void setGene(int id, boolean allele){
 		this.chromosome.set(id, allele);
 	}
 	
+	@Override
 	public void setAll(boolean allele){
 		this.chromosome.set(0, this.numberOfGenes, allele);
+	}
+
+	@Override
+	public double getMutationProbabilty() {
+		return this.MUTATION_PROBABILITY;
+	}
+
+	@Override
+	public int getNumberOfGenes() {
+		return this.numberOfGenes;
 	}
 
 }

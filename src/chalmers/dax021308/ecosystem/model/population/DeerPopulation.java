@@ -54,6 +54,7 @@ public class DeerPopulation extends AbstractPopulation {
 			IAgent a = new DeerAgent("Deer", randPos,
 					color, 5, 10, velocity, maxSpeed, maxAcceleration,
 					visionRange, groupBehaviour, new DeerGenome());
+
 			newAgents.add(a);
 		}
 		return newAgents;

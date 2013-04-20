@@ -5,25 +5,29 @@ package chalmers.dax021308.ecosystem.model.chromosome;
  * @author Loanne Berggren
  *
  */
+
 public enum DeerGenes
 {
 	STOTTING(0),
 	GROUPING(1),
-	JUNK(3);
+	// To add gene: genename(#)
+	// ex JUNK(2)
+	;
+
 	
-	private int value;
+	private int index;
+	private static final int numberOfGenes = DeerGenes.values().length;
 	
-	public int getValue() {
-		return value;
+	public int getIndex() {
+		return index;
 	}
-	
-	private static final int numberOfGenes = 3;
 	
 	public static int getNumberOfGenes() {
 		return numberOfGenes;
 	}
 	
-	private DeerGenes(int value) {
-		this.value = value;
+	private DeerGenes(int index) {
+		this.index = index;
 	}
+
 }

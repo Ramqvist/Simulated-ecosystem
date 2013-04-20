@@ -8,7 +8,6 @@ package chalmers.dax021308.ecosystem.model.chromosome;
  */
 public class WolfGenome extends AbstractGenome<WolfGenes>{
 	
-	private BitSetChromosome chromosome;
 	// Random value.
 	private final double MUTATION_PROBABILITY = 0.1;
 	
@@ -28,44 +27,19 @@ public class WolfGenome extends AbstractGenome<WolfGenes>{
 	 * @param stotting
 	 * @param female
 	 */
-	public WolfGenome(boolean stotting, boolean female) {	
+	public WolfGenome(boolean grouping, boolean female) {	
 		this();
-		this.setGene(WolfGenes.GROUPING, stotting);
+		this.setGene(WolfGenes.GROUPING, grouping);
 		this.setGene(WolfGenes.FEMALE, female);
 	}
 	
 	/*
 	 * Used privately only.
 	 */
-	private WolfGenome(BitSetChromosome chromosome) {
+	private WolfGenome(IChromosome chromosome) {
 		this.chromosome = chromosome;
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 **/
-	@Override
-	public AbstractGenome<WolfGenes> mateWithMutation(AbstractGenome<WolfGenes> other){
-		if (other instanceof WolfGenome) {
-			BitSetChromosome nChrom = chromosome.crossChromosomes((BitSetChromosome)other.getChromosome());
-			nChrom.mutateChromosome();
-			AbstractGenome<WolfGenes> newGenome = new WolfGenome(nChrom);
-			return newGenome;
-		}
-		return null;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public AbstractGenome<WolfGenes> onlyMutate(){
-		BitSetChromosome nChrom = (BitSetChromosome) this.chromosome.clone();
-		nChrom.mutateChromosome();
-		AbstractGenome<WolfGenes> newGenome = new WolfGenome(nChrom);	
-		return newGenome;
-	}
 	
 	/**
 	 * {@inheritDoc}
@@ -73,22 +47,6 @@ public class WolfGenome extends AbstractGenome<WolfGenes>{
 	@Override
 	public boolean isGeneSet(WolfGenes gene) {
 		return chromosome.findGene(gene.getValue());
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Object getChromosome(){
-		return this.chromosome;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int numberOfGenes() {
-		return WolfGenes.getNumberOfGenes();
 	}
 
 	/**
@@ -99,4 +57,23 @@ public class WolfGenome extends AbstractGenome<WolfGenes>{
 		this.chromosome.setGene(gene.getValue(), allele);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean equals(Object other) {
+		WolfGenome o;
+		if (other instanceof WolfGenome)
+			o = (WolfGenome)other;
+		else return false;
+		if ( !this.chromosome.equals(o.getChromosomes()) )
+			return false;		
+		return true;
+	}
+	
+	@Override
+	protected IGenome<WolfGenes> genomeFactory(IChromosome chromosome) {
+		return new WolfGenome(chromosome);
+	}
+	
 }
