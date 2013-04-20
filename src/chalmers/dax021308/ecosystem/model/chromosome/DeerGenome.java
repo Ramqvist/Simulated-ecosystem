@@ -28,10 +28,10 @@ public class DeerGenome extends AbstractGenome<DeerGenes>{
 	 * @param stotting
 	 * @param female
 	 */
-	public DeerGenome(boolean stotting, boolean female) {	
+	public DeerGenome(boolean stotting, boolean grouping) {	
 		this();
 		this.setGene(DeerGenes.STOTTING, stotting);
-		this.setGene(DeerGenes.FEMALE, female);
+		this.setGene(DeerGenes.GROUPING, grouping);
 	}
 	
 	/*

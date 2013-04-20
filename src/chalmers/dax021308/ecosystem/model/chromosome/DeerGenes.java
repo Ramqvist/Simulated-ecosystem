@@ -8,7 +8,7 @@ package chalmers.dax021308.ecosystem.model.chromosome;
 public enum DeerGenes
 {
 	STOTTING(0),
-	FEMALE(1),
+	GROUPING(1),
 	JUNK(3);
 	
 	private int value;

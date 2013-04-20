@@ -53,7 +53,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected final static double INTERACTION_RANGE = 10;
 	protected final static double EATING_RANGE = 5;
 	protected final static double FOCUS_RANGE = 500;
-	protected static final double VELOCITY_DECAY = 0.97;
+	protected static final double VELOCITY_DECAY = 1;
 
 	public AbstractAgent(String name, Position position, Color color,
 			int width, int height, Vector velocity, double maxSpeed,
@@ -362,6 +362,18 @@ public abstract class AbstractAgent implements IAgent {
 	@Override
 	public void eat() {
 		// Do nothing special, should be overriden by advanced agents.
+	}
+	
+	public int getPreyNeighbourSize(){
+		return preyNeighbours.size();
+	}
+	
+	public int getPredatorNeighbourSize(){
+		return predNeighbours.size();
+	}
+	
+	public int getNeutralNeighbourSize(){
+		return neutralNeighbours.size();
 	}
 
 }

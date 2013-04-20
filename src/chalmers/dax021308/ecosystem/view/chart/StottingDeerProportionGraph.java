@@ -31,7 +31,7 @@ public class StottingDeerProportionGraph extends AbstractGraph2D {
 	@Override
 	public void init() {    
 		this.rangeX = new Range(0, 1000);
-		this.rangeY = new Range(0, 1.1);
+		this.rangeY = new Range(0, 1.0001);
 		super.init();
 		xAxis.setMinorTickSpacing(2000);
 		yAxis.setMinorTickSpacing(1);

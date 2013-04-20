@@ -40,7 +40,7 @@ public class StatTest extends JPanel {
 	@Override
     public void paintComponent(Graphics g) {
 		for(int i = 0; i < 100000; i++){
-			Vector v = Stat.getNormallyDistributedVector(100);
+			Vector v = Stat.getNormallyDistributedVector(130);
 			g.drawOval((int)(500+v.x), (int)(500+v.y), 1, 1);
 		}
 	}

@@ -7,6 +7,7 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.agent.DeerAgent;
+import chalmers.dax021308.ecosystem.model.agent.WolfAgent;
 import chalmers.dax021308.ecosystem.model.chromosome.DeerGenome;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -72,9 +73,23 @@ public class DeerPopulation extends AbstractPopulation {
 		return stottingCount/((double)agents.size());
 	}
 	
+	public double agentsGroupingProportion(){
+		double groupCount = 0;
+		DeerAgent da = null;
+		for(IAgent a: agents) {
+			if(a instanceof DeerAgent) {
+				da = (DeerAgent) a;
+			} 
+			if(da.isAGroupingDeer()){
+				groupCount++;
+			}
+		}
+		return groupCount/((double)agents.size());
+	}
+	
 	@Override
 	public void updatePositions() {
 		super.updatePositions();
-		interestingPropertyProportion = stottingProportion();
+		interestingPropertyProportion = agentsGroupingProportion();
 	}
 }

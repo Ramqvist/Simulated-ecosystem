@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.agent.AbstractAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -25,6 +26,10 @@ public abstract class AbstractPopulation implements IPopulation {
 	protected IShape shape;
 	protected List<IObstacle> obstacles;
 	protected double interestingPropertyProportion = 0;
+	
+	private Stat<Integer> preyNeighbourSize = new Stat<Integer>();
+	private Stat<Integer> predNeighbourSize = new Stat<Integer>();
+	private Stat<Integer> neutralNeighbourSize = new Stat<Integer>();
 
 	/**
 	 * Remove list for this Population.
@@ -111,10 +116,18 @@ public abstract class AbstractPopulation implements IPopulation {
 			a = agents.get(i);
 			a.calculateNextPosition(predators, preys, neutral, gridDimension,
 					shape, obstacles);
+			
+//			AbstractAgent aa = (AbstractAgent) a;
+//			preyNeighbourSize.addObservation(aa.getPreyNeighbourSize());
+//			predNeighbourSize.addObservation(aa.getPredatorNeighbourSize());
+//			neutralNeighbourSize.addObservation(aa.getNeutralNeighbourSize());
+			
 			if (!a.isAlive()) {
 				addToRemoveList(a);
 			}
 		}
+		
+		
 	}
 
 	protected Position getRandomPosition() {
@@ -309,6 +322,10 @@ public abstract class AbstractPopulation implements IPopulation {
 			agents.addAll(kids);
 			// wg.addAll(kids);
 		}
+		
+//		System.out.println(this.name + " Prey: " + preyNeighbourSize.getMean());
+//		System.out.println(this.name + " Pred: " + predNeighbourSize.getMean());
+//		System.out.println(this.name + " Neut: " + neutralNeighbourSize.getMean());
 
 		// System.out.println(name + " life length: mean = " +
 		// Stat.mean(lifeLengths) +
