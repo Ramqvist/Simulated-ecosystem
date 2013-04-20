@@ -5,8 +5,10 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.agent.DeerAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.agent.WolfAgent;
+import chalmers.dax021308.ecosystem.model.chromosome.WolfGenome;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
@@ -54,10 +56,30 @@ public class WolfPopulation extends AbstractPopulation {
 			}
 			IAgent a = new WolfAgent("Wolf", randPos, color, 10, 20,
 					velocity, maxSpeed, maxAcceleration, visionRange,
-					groupBehaviour);
+					groupBehaviour, new WolfGenome());
 			newAgents.add(a);
 		}
 		return newAgents;
+	}
+	
+	public double agentsGroupingProportion(){
+		double groupCount = 0;
+		WolfAgent da = null;
+		for(IAgent a: agents) {
+			if(a instanceof WolfAgent) {
+				da = (WolfAgent) a;
+			} 
+			if(da.isAGroupingWolf()){
+				groupCount++;
+			}
+		}
+		return groupCount/((double)agents.size());
+	}
+	
+	@Override
+	public void updatePositions() {
+		super.updatePositions();
+		this.interestingPropertyProportion = agentsGroupingProportion();
 	}
 
 	/*

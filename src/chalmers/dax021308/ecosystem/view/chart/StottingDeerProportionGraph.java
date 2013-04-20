@@ -24,7 +24,7 @@ import info.monitorenter.util.Range;
 public class StottingDeerProportionGraph extends AbstractGraph2D {
 
 	public StottingDeerProportionGraph(IModel model, int updateFrequency) {
-		super(model, updateFrequency, "Iterations", "Population amount");
+		super(model, updateFrequency, "Iterations", "Interesting property proportion");
 		init();
 	}
 
@@ -109,7 +109,7 @@ public class StottingDeerProportionGraph extends AbstractGraph2D {
 		for (IPopulation p: populations) {
 			ap = (AbstractPopulation) p;
 			if (it.hasNext()) {
-				((ITrace2D) it.next()).addPoint(nIterationsPassed, 0);
+				((ITrace2D) it.next()).addPoint(nIterationsPassed, ap.getInterestingPropertyProportion());
 			} else {
 				return;
 			}

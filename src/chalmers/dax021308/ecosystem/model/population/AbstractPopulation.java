@@ -24,6 +24,7 @@ public abstract class AbstractPopulation implements IPopulation {
 	protected List<IPopulation> neutral;
 	protected IShape shape;
 	protected List<IObstacle> obstacles;
+	protected double interestingPropertyProportion = 0;
 
 	/**
 	 * Remove list for this Population.
@@ -72,6 +73,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		this.color = original.color;
 		// this.groupBehaviour = original.groupBehaviour;
 		this.name = original.name;
+		this.interestingPropertyProportion = original.interestingPropertyProportion;
 		// this.shape = original.shape;
 		// preys = new ArrayList<IPopulation>();
 		// predators = new ArrayList<IPopulation>();
@@ -373,6 +375,10 @@ public abstract class AbstractPopulation implements IPopulation {
 			return agents.size();
 		else
 			return 0;
+	}
+	
+	public double getInterestingPropertyProportion(){
+		return interestingPropertyProportion;
 	}
 
 	@Override

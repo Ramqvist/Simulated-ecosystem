@@ -75,6 +75,6 @@ public class DeerPopulation extends AbstractPopulation {
 	@Override
 	public void updatePositions() {
 		super.updatePositions();
-		System.out.println("Stotting proportion: " + Stat.roundNDecimals(stottingProportion(),3));
+		interestingPropertyProportion = stottingProportion();
 	}
 }

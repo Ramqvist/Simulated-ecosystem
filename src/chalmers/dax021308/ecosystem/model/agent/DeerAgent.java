@@ -48,7 +48,7 @@ public class DeerAgent extends AbstractAgent {
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
 		this.genome = genome;
-		isAStottingDeer = genome.isGeneSet(DeerGenes.STOTTING);
+		isAStottingDeer = this.genome.isGeneSet(DeerGenes.STOTTING);
 		if(isAStottingDeer) {
 			this.color = Color.magenta;
 		} else {
