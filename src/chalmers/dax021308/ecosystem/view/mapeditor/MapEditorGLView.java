@@ -5,11 +5,13 @@ import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -52,12 +54,16 @@ public class MapEditorGLView extends GLCanvas implements IView {
 	private JOGLListener glListener;
 	private IShape shape;
 	private boolean isZoomed;
+	
 	private MouseEvent lastZoomEvent;
+	
+	private IObstacle selectedObstacle = null;
+	private Position startClick = null;
 	
 	/**
 	 * Create the panel.
 	 */
-	public MapEditorGLView(IModel model, Dimension size) {
+	public MapEditorGLView(IModel model, final Dimension size) {
 		this.size = size;
 		model.addObserver(this);
 		glListener = new JOGLListener();
@@ -74,45 +80,85 @@ public class MapEditorGLView extends GLCanvas implements IView {
 				e.consume();
 			}
 		});
+		addMouseMotionListener(new MouseMotionListener() {
+			
+			@Override
+			public void mouseMoved(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				if(selectedObstacle != null) {
+					double x = size.width*(e.getX())/getWidth();
+					double y = size.height - size.height*(e.getY())/getHeight();
+					double dx = x - startClick.getX();
+					double dy = y - startClick.getY();
+					startClick = new Position(x, y);
+					selectedObstacle.moveObstacle(dx, dy);
+				}
+			}
+		});
 		addMouseListener(new MouseListener() {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				
+				selectedObstacle = null;
 			}
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
 				
+				double x = size.width*(e.getX())/getWidth();
+				double y = size.height - size.height*(e.getY())/getHeight();
+				
+				selectedObstacle = getObstacleFromCoordinates(x, y);
+				if(selectedObstacle != null) {
+					startClick = new Position(x, y);
+					Random ran = new Random();
+					selectedObstacle.setColor(new Color(ran.nextInt(255), ran.nextInt(255), ran.nextInt(255)));
+				}
 			}
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
-				
+				selectedObstacle = null;
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				
+				selectedObstacle = null;
 			}
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				glListener.clearZoom();
-				if(isZoomed) {
-					isZoomed = false;
-					lastZoomEvent = null;
-				} else {
-					lastZoomEvent = e;
-					isZoomed = true;
-				}
 			}
 		});
 		FPSAnimator animator = new FPSAnimator(this, 30);
 		animator.start();
 	}
 	
-
+	
+	private IObstacle getObstacleFromCoordinates(double x, double y) {
+		if(newObs == null ) {
+			return null;
+		}
+		if(newObs.isEmpty()) {
+			return null;
+		}
+		Position p = new Position(x, y);
+		for(IObstacle o : newObs) {
+			if(o.isInObstacle(p)) {
+				return o;
+			}
+		}
+		return null;
+	}
+	
+	private void moveObstacle(double dx, double dy, IObstacle o) {
+		if(o != null) {
+			o.moveObstacle(dx, dy);
+		}
+	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {

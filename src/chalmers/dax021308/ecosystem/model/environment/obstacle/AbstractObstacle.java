@@ -28,8 +28,22 @@ public abstract class AbstractObstacle implements IObstacle {
 	}
 	
 	@Override
+	public void moveObstacle(double x, double y) {
+		this.position = new Position(position.getX() + x, position.getY() + y);
+	}
+	
+	@Override
+	public void setPosition(Position p) {
+		this.position = p;
+	}
+	
+	@Override
 	public Color getColor(){
 		return this.color;
+	}
+	
+	public void setColor(Color c) {
+		this.color = c;
 	}
 	
 	public String toBinaryString() {

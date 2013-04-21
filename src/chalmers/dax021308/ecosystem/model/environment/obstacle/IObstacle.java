@@ -25,11 +25,18 @@ public interface IObstacle {
 	
 	public Position getPosition();
 	
+	public void moveObstacle(double x, double y);
+
+	public void setColor(Color c);
+	
+	public void setPosition(Position p);
+	
 	public Color getColor();
 
 	public String toBinaryString();
 
 	public boolean isInsidePath(Position start, Position end);
+	
 	
 	
 }
