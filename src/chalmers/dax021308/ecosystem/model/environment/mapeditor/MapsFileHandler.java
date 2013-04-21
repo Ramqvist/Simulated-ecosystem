@@ -1,4 +1,4 @@
-package chalmers.dax021308.ecosystem.model.environment;
+package chalmers.dax021308.ecosystem.model.environment.mapeditor;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,7 +26,8 @@ public class MapsFileHandler {
 	
 	/**
 	 * Gets all maps from the maps folder.
-	 * @return
+	 * @return null or empty list of no maps where found, otherwise the found maps.
+	 * 
 	 */
 	public static List<SimulationMap> readMapsFromMapsFolder() {
 		List<File> fileList = getMapFiles();
@@ -49,7 +50,7 @@ public class MapsFileHandler {
 	 * @param fileMap
 	 * @return null if no map is found, otherwise the read SimulationMap.
 	 */
-	private static SimulationMap readMapFromFile(File fileMap) {
+	public static SimulationMap readMapFromFile(File fileMap) {
 		if (!fileMap.exists()) {
 			return null;
 		}
@@ -82,7 +83,7 @@ public class MapsFileHandler {
 	 * Gets all map files in maps-folder. 
 	 * 
 	 */
-	private static List<File> getMapFiles() {
+	public static List<File> getMapFiles() {
 		File fileDir = new File("/maps");
 		if(fileDir.exists() && fileDir.isDirectory()) {
 			File[] files = fileDir.listFiles();

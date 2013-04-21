@@ -12,11 +12,14 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.util.ButtonGroupWrapper;
 
 public class LiveSettingsView extends JPanel {
+	static final int DEFAULT_ITERATION_DELAY = 16;
+	
 	private JPanel panelFirst;
 	private JPanel panelSecond;
 	private JPanel panelThird;
@@ -38,7 +41,7 @@ public class LiveSettingsView extends JPanel {
 	public final ButtonGroupWrapper buttonGroupDelay;
 	*/
 	
-	public final JButton buttonUpdate;
+	//public final JButton buttonUpdate;
 	
 	public LiveSettingsView(EcoWorld model) {
 		setLayout(new GridBagLayout());
@@ -52,6 +55,7 @@ public class LiveSettingsView extends JPanel {
 		labelHeatMapPop = new JLabel("Populations shown on heat map");
 		
 		spinnerDelayLength = new JSpinner();
+		spinnerDelayLength.setModel(new SpinnerNumberModel(DEFAULT_ITERATION_DELAY, 0, 100, 1));
 		
 		comboBoxHeatMapPop = new JComboBox(comboTest);
 		
@@ -62,7 +66,7 @@ public class LiveSettingsView extends JPanel {
 		buttonGroupDelay = new ButtonGroupWrapper();
 		*/
 		
-		buttonUpdate = new JButton("Update");
+		//buttonUpdate = new JButton("Update");
 		
 		/*
 		buttonGroupDelay.add(radioButtonDelayOn);
@@ -125,6 +129,7 @@ public class LiveSettingsView extends JPanel {
 		c.gridy = 0;
 		panelSecond.add(comboBoxHeatMapPop, c);
 		
+		/*
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.5;
@@ -132,6 +137,7 @@ public class LiveSettingsView extends JPanel {
 		c.gridx = 0;
 		c.gridy = 0;
 		panelFourth.add(buttonUpdate, c);
+		*/
 		
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.VERTICAL;

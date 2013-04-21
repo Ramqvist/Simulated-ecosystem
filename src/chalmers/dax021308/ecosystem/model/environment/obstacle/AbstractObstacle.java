@@ -5,21 +5,28 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 import chalmers.dax021308.ecosystem.model.util.Position;
+import chalmers.dax021308.ecosystem.model.util.Vector;
 
+/**
+ * Abstract class for obstacles
+ * 
+ * @author Sebastian Anerud, Erik Ramqvist
+ *
+ */
 public abstract class AbstractObstacle implements IObstacle {
 	
 	protected Position position;
-	protected double a;
-	protected double b;
+	protected double width;
+	protected double height;
 	protected Color color;
 	
 	@Override
 	public double getWidth() {
-		return a;
+		return width;
 	}
 	@Override
 	public double getHeight() {
-		return b;
+		return height;
 	}
 	@Override
 	public Position getPosition() {
@@ -27,16 +34,43 @@ public abstract class AbstractObstacle implements IObstacle {
 	}
 	
 	@Override
+	public void moveObstacle(double x, double y) {
+		this.position = new Position(position.getX() + x, position.getY() + y);
+	}
+	
+	@Override
+	public void setPosition(Position p) {
+		this.position = p;
+	}
+	
+	@Override
 	public Color getColor(){
 		return this.color;
 	}
 	
+	public void setColor(Color c) {
+		this.color = c;
+	}
+	
+	/**
+	 * Scale the obstacle to a specific scalar value.
+	 */
+	@Override
+	public IObstacle scale(double scaleX, double scaleY) {
+		position.setX(position.getX() * scaleX);
+		position.setY(position.getY() * scaleY);
+		width = width * scaleX;
+		height = height * scaleY;
+		return this;
+	}
 	public String toBinaryString() {
 		StringBuilder sb = new StringBuilder();
 		if(this instanceof EllipticalObstacle) {
 		sb.append(SimulationSettings.OBSTACLE_ELLIPTICAL); //TODO: Needs shape here.
 		} else if(this instanceof RectangularObstacle) {
 			sb.append(SimulationSettings.OBSTACLE_RECTANGULAR); //TODO: Needs shape here.
+		} else if(this instanceof TriangleObstacle) {
+			sb.append(SimulationSettings.OBSTACLE_TRIANGLE);
 		} else {
 			sb.append(SimulationSettings.OBSTACLE_NONE);
 			return sb.toString();
@@ -46,9 +80,9 @@ public abstract class AbstractObstacle implements IObstacle {
 		sb.append(';');
 		sb.append(roundTwoDecimals(position.getY()));
 		sb.append(';');
-		sb.append(a);
+		sb.append(width);
 		sb.append(';');
-		sb.append(b);
+		sb.append(height);
 		sb.append(';');
 		sb.append(color.getRed());
 		sb.append(';');
@@ -70,7 +104,11 @@ public abstract class AbstractObstacle implements IObstacle {
 			obs = new EllipticalObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
 					new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
 					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), Integer.parseInt(inputArray[7])));
-		} else if (shape.equals(SimulationSettings.OBSTACLE_NONE)) {
+		} else if (shape.equals(SimulationSettings.OBSTACLE_TRIANGLE)) {
+			obs = new TriangleObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
+					new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
+					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), Integer.parseInt(inputArray[7])));
+		}  else if (shape.equals(SimulationSettings.OBSTACLE_NONE)) {
 			return null;
 		}
 		return obs;
@@ -95,7 +133,28 @@ public abstract class AbstractObstacle implements IObstacle {
 		return false;
 	}
 	
-	@Override
+//	@Override
+//	public boolean isInsidePath(Position start, Position end) {
+//		Position current = new Position(start);
+//		double path_threshold = 5.0;
+//		while(current.getDistance(end) >= path_threshold ) {
+//			if(isInObstacle(current)) {
+//				return true;
+//			}
+//			if(end.getX() > current.getX()) {
+//				current.setX(current.getX() + path_threshold);
+//			} else if(end.getX() < current.getX()) {
+//				current.setX(current.getX() - path_threshold);
+//			}
+//			if(end.getY() > current.getY()) {
+//				current.setY(current.getY() + path_threshold);
+//			} else if(end.getY() < current.getY()) {
+//				current.setY(current.getY() - path_threshold);
+//			}
+//		}
+//		return false;
+//	}
+	
 	public boolean isInsidePath(Position start, Position end) {
 		Position current = new Position(start);
 		double path_threshold = 5.0;
@@ -117,12 +176,42 @@ public abstract class AbstractObstacle implements IObstacle {
 		return false;
 	}
 	
+//	public static boolean isInsidePathList(List<IObstacle> obsList, Position start, Position end) {
+//		for(IObstacle o : obsList) {
+//			if(o.isInsidePath(start, end)) {
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
+	
 	public static boolean isInsidePathList(List<IObstacle> obsList, Position start, Position end) {
-		for(IObstacle o : obsList) {
-			if(o.isInsidePath(start, end)) {
-				return true;
+		
+		double stepConstant = 5;
+		double dirX = end.getX() - start.getX();
+		double dirY = end.getY() - start.getY();
+		double distance = Math.sqrt(dirX*dirX + dirY*dirY);
+		dirX /= distance;
+		dirY /= distance;
+		int nIterations = (int) (distance/stepConstant);
+		
+		Position currentPos = new Position(start);
+		double currentX = currentPos.getX();
+		double currentY = currentPos.getY();
+		
+		for(int i=0;i<nIterations;i++){
+			currentX += dirX;
+			currentY += dirY;
+			currentPos.setPosition(currentX, currentY);
+			for(IObstacle o : obsList) {
+				if(o.isInObstacle(currentPos)) {
+					System.out.println("Completed in: " + i + " iterations.");
+					return true;
+				}
 			}
+			
 		}
+		
 		return false;
 	}
 

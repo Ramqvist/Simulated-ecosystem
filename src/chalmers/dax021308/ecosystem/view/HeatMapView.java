@@ -39,7 +39,7 @@ public class HeatMapView extends GLCanvas implements IView {
 	
 	private static final long serialVersionUID = 1585638837620985591L;
 	private List<IPopulation> newPops = new ArrayList<IPopulation>();
-	private int[][][] heatMap;
+	private double[][][] heatMap;
 	private boolean[][][] visited;
 	private int heatMapWidth;
 	private int heatMapHeight;
@@ -47,8 +47,8 @@ public class HeatMapView extends GLCanvas implements IView {
 	private int populationID;
 	private double xSamplingConstant;
 	private double ySamplingConstant;
-	int[] maxVisited;
-	int[] minVisited;
+	double[] maxVisited;
+	double[] minVisited;
 	private Dimension grid;
 	private JOGLListener glListener;
 	private String populationName;
@@ -64,8 +64,8 @@ public class HeatMapView extends GLCanvas implements IView {
 		this.populationName = startPopulationName;
 		this.nPopulations = nPopulations;
 		this.populationID = 0;
-		maxVisited = new int[nPopulations];
-		minVisited = new int[nPopulations];
+		maxVisited = new double[nPopulations];
+		minVisited = new double[nPopulations];
 		for(int i=0; i<nPopulations; i++){
 			maxVisited[i] = 1;
 			minVisited[i] = Integer.MAX_VALUE;
@@ -73,7 +73,7 @@ public class HeatMapView extends GLCanvas implements IView {
 		
 		heatMapWidth = (int)(grid.getWidth()/xSamplingConstant+1);
 		heatMapHeight = (int)(grid.getHeight()/ySamplingConstant+1);
-		heatMap = new int[nPopulations][heatMapWidth][heatMapHeight];
+		heatMap = new double[nPopulations][heatMapWidth][heatMapHeight];
 		visited = new boolean[nPopulations][heatMapWidth][heatMapHeight];
 		model.addObserver(this);
      
@@ -90,7 +90,7 @@ public class HeatMapView extends GLCanvas implements IView {
 				maxVisited[i] = 1;
 				minVisited[i] = Integer.MAX_VALUE;
 			}
-			heatMap = new int[nPopulations][heatMapWidth][heatMapHeight];
+			heatMap = new double[nPopulations][heatMapWidth][heatMapHeight];
 			visited = new boolean[nPopulations][heatMapWidth][heatMapHeight];
 		} else if(eventName == EcoWorld.EVENT_TICK) {
 			//Tick notification recived from model. Do something with the data.
@@ -104,7 +104,7 @@ public class HeatMapView extends GLCanvas implements IView {
 				this.grid = (Dimension) o;
 				heatMapWidth = (int)(grid.getWidth()/xSamplingConstant+1);
 				heatMapHeight = (int)(grid.getHeight()/ySamplingConstant+1);
-				heatMap = new int[nPopulations][heatMapWidth][heatMapHeight];
+				heatMap = new double[nPopulations][heatMapWidth][heatMapHeight];
 				visited = new boolean[nPopulations][heatMapWidth][heatMapHeight];
 			}
 			//Handle dimension change here.
@@ -140,7 +140,7 @@ public class HeatMapView extends GLCanvas implements IView {
                  * the corners to dominate too much.
                  */
                 for(int i=0; i<nPopulations; i++){
-        			minVisited[i] = Integer.MAX_VALUE;
+        			minVisited[i] = Double.MAX_VALUE;
         		}                
                 
                 visited = new boolean[nPopulations][heatMapWidth][heatMapHeight];
@@ -162,8 +162,8 @@ public class HeatMapView extends GLCanvas implements IView {
     					intPosY = (int)(pos.getY()/ySamplingConstant);
     					
 //	    					if(!visited[intPosX][intPosY]){
-    						heatMap[i][intPosX][intPosY]++;
-    						visited[i][intPosX][intPosY]=true;
+						heatMap[i][intPosX][intPosY]++;
+						visited[i][intPosX][intPosY]=true;
 //	    					}
     						
     					if(heatMap[i][intPosX][intPosY]>maxVisited[i]){
@@ -197,8 +197,12 @@ public class HeatMapView extends GLCanvas implements IView {
           				 * minVisited and maxVisited. If a pixel has minVisited visits, it gets value 0. If a pixel has
           				 * maxVisited visits, it gets value 1.
           				 */
-          				double value = ((double)((double)(heatMap[populationID][i][j]-minVisited[populationID]))/
-          						((double)(maxVisited[populationID]-minVisited[populationID])));
+          				double value = (heatMap[populationID][i][j]-minVisited[populationID])/
+          						(maxVisited[populationID]-minVisited[populationID]);
+          				
+          				if(value < 0) {
+          					value = 0;
+          				}
           				
           				/*
           				 * Below does the following re-scaling of colors:

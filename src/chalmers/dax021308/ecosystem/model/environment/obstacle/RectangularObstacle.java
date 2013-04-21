@@ -10,8 +10,8 @@ public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 
 	public RectangularObstacle(double width, double height, Position position, Color color){
 		this.position = position;
-		this.a = width;
-		this.b = height;
+		this.width = width;
+		this.height = height;
 		this.color = color;
 	}
 	
@@ -27,12 +27,12 @@ public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 		double y = agentPos.getY();
 		Position bestPos;
 		
-		if(x < a) {
-			bestPos = new Position(x,b);
-		} else if (y < b) {
-			bestPos = new Position(a,y);
+		if(x < width) {
+			bestPos = new Position(x,height);
+		} else if (y < height) {
+			bestPos = new Position(width,y);
 		} else {
-			bestPos = new Position(a,b);
+			bestPos = new Position(width,height);
 		}
 		
 		bestPos.setPosition(bestPos.getX()*xSign, bestPos.getY()*ySign);
@@ -43,8 +43,8 @@ public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 
 	@Override
 	public boolean isInObstacle(Position p) {
-		if(p.getY() < position.getY()+b && p.getY() > position.getY()-b){
-			if(p.getX() < position.getX()+a && p.getX() > position.getX()-a) {
+		if(p.getY() < position.getY()+height && p.getY() > position.getY()-height){
+			if(p.getX() < position.getX()+width && p.getX() > position.getX()-width) {
 				return true;
 			}
 		}
@@ -53,7 +53,7 @@ public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 	
 	@Override
 	public boolean isCloseTo(Position p, double interactionRange){
-		double radius = Math.sqrt(a*a + b*b);
+		double radius = Math.sqrt(width*width + height*height);
 		if(this.position.getDistance(p) <= radius + interactionRange) {
 			return true;
 		}
@@ -64,5 +64,15 @@ public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 	public Color getColor() {
 		return color;
 	}
+	
 
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer("Rectangular Width: ");
+		sb.append(width);
+		sb.append(" Height: ");
+		sb.append(height);
+		sb.append(' ');
+		return sb.toString();
+	}
 }

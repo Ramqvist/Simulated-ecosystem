@@ -10,6 +10,7 @@ import javax.naming.event.NamingExceptionEvent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import chalmers.dax021308.ecosystem.controller.mapeditor.MapEditorController;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
@@ -53,7 +54,13 @@ public class MainWindowController implements IController {
 		window.setVisible(true);
 		window.setBtnStartNewSimWindowActionListener(listenerStartNewSimButton);
 		addActionListeners();
-		//showNewSimulationWindow();
+		//showNewSimulationWindow();	
+		window.mntmMapEditor.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new MapEditorController();
+			}
+		});
 	}
 	
 	private void addActionListeners() {
