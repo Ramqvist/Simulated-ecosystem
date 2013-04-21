@@ -91,7 +91,7 @@ public class MainWindow extends JFrame implements IView {
 //		graphView2 = new IterationTimeGraph(model, 10);
 		smvc = new NEWSettingsMenuViewController(model);
 //=======
-		heatMap = new HeatMapView(model, d, new Dimension(75,75), 3, "Deers");
+		heatMap = new HeatMapView(model, d, new Dimension(50,50), 3, "Deers");
 //		parameterView = new ParameterView(model);
 		//
 //		controlView = new ControlView(model);
