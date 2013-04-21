@@ -5,12 +5,15 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
 import chalmers.dax021308.ecosystem.controller.IController;
 import chalmers.dax021308.ecosystem.controller.mapeditor.NewMapDialogController.OnNameSelectedListener;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapEditorModel;
+import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapsFileHandler;
+import chalmers.dax021308.ecosystem.model.environment.mapeditor.SimulationMap;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.mapeditor.MapEditorView;
@@ -70,6 +73,12 @@ public class MapEditorController implements IController {
 		view.mntmSave.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				if(!model.hasValidMap()) {
+					JOptionPane.showMessageDialog(view,
+						    "No map to save!",
+						    "Error",
+						    JOptionPane.ERROR_MESSAGE);
+				}
 				JFileChooser  fc = new JFileChooser();
 				fc.setFileFilter(new MapFileFilter());
 				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -80,7 +89,12 @@ public class MapEditorController implements IController {
 					if(!filePath.toLowerCase().endsWith(".map")) {
 						savedFileAs = new File(filePath + ".map");
 					}
-					//TODO: IMplement saving maps.
+					if(!MapsFileHandler.saveSimulationMap(savedFileAs, model.getCurrentMap())) {
+						JOptionPane.showMessageDialog(view,
+							    "Error saving file to disk!",
+							    "Error",
+							    JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			}
 		});
@@ -95,7 +109,20 @@ public class MapEditorController implements IController {
 				if(ret == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = fc.getSelectedFile();
 					if(selectedFile != null) {
-						//TODO: IMplement load file.
+						SimulationMap loaded = MapsFileHandler.readMapFromFile(selectedFile);
+						if(loaded == null) {
+							JOptionPane.showMessageDialog(view,
+								    "Error loading map from disk.",
+								    "Error",
+								    JOptionPane.ERROR_MESSAGE);
+						} else {
+							model.loadMap(loaded);
+						}
+					} else {
+						JOptionPane.showMessageDialog(view,
+							    "Error loading map from disk.",
+							    "Error",
+							    JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}

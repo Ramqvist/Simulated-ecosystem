@@ -49,7 +49,7 @@ public class MapsFileHandler {
 	 * @param fileMap
 	 * @return null if no map is found, otherwise the read SimulationMap.
 	 */
-	private static SimulationMap readMapFromFile(File fileMap) {
+	public static SimulationMap readMapFromFile(File fileMap) {
 		if (!fileMap.exists()) {
 			return null;
 		}
@@ -82,7 +82,7 @@ public class MapsFileHandler {
 	 * Gets all map files in maps-folder. 
 	 * 
 	 */
-	private static List<File> getMapFiles() {
+	public static List<File> getMapFiles() {
 		File fileDir = new File("/maps");
 		if(fileDir.exists() && fileDir.isDirectory()) {
 			File[] files = fileDir.listFiles();

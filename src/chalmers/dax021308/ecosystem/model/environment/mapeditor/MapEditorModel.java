@@ -110,5 +110,9 @@ public class MapEditorModel implements IModel {
 	public void removeObserver(PropertyChangeListener observer) {
 		pcs.removePropertyChangeListener(observer);
 	}
+
+	public SimulationMap getCurrentMap() {
+		return currentMap;
+	}
 	
 }
