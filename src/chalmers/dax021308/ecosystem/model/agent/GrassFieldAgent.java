@@ -56,8 +56,8 @@ public class GrassFieldAgent extends AbstractAgent {
 
 	@Override
 	public synchronized boolean tryConsumeAgent() {
-		// TODO FIX FEEDING
-		if (energy >= 20) {
+		// Let the current agent be eaten if it has any energy
+		if (energy >= 8) {
 			energy -= 8;
 			return true;
 		}
@@ -69,7 +69,8 @@ public class GrassFieldAgent extends AbstractAgent {
 
 		double distance = agent.getPosition().getDistance(position)
 				- (width + height) / 2;
-		if (energy >= 20)
+		// If the agent has enough food for three agents, then it looks tasty!
+		if (energy >= 24)
 			return distance <= visionRange;
 		return false;
 	}

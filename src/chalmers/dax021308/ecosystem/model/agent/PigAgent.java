@@ -107,8 +107,7 @@ public class PigAgent extends AbstractAgent {
 				mutualInteractionForce = ForceCalculator.mutualInteractionForce(
 						neutralNeighbours, this);
 				forwardThrust = ForceCalculator.forwardThrust(velocity);
-				arrayalForce = ForceCalculator.arrayalForce(velocity, neutralNeighbours,
-						this);
+				arrayalForce = ForceCalculator.arrayalForce(neutralNeighbours, this);
 			}
 
 			Vector environmentForce = ForceCalculator.getEnvironmentForce(gridDimension, shape,
