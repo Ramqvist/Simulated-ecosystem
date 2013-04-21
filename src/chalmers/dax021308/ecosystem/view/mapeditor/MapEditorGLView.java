@@ -116,6 +116,7 @@ public class MapEditorGLView extends GLCanvas implements IView {
 					startClick = new Position(x, y);
 					Random ran = new Random();
 					selectedObstacle.setColor(new Color(ran.nextInt(255), ran.nextInt(255), ran.nextInt(255)));
+					e.consume();
 				}
 			}
 			

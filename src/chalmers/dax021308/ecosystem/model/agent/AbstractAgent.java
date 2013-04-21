@@ -43,7 +43,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected double maxAcceleration;
 	protected IAgent focusedPrey;
 	protected boolean isAlive = true;
-	protected static final boolean USE_PRIORITY_NEIGHBOURS = true;
+	protected static final boolean USE_PRIORITY_NEIGHBOURS = false;
 	protected static final int K_NEAREST_NEIGHBOURS = 20; 
 
 	/* Neighbour list module variables */

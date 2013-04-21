@@ -33,7 +33,7 @@ import chalmers.dax021308.ecosystem.view.OpenGLSimulationView;
 /**
  * Map editor view
  * 
- * @author original MainWindow by Hanna, edits by Erik Ramqvist
+ * @author original MainWindow class by Hanna, edits by Erik Ramqvist
  *
  */
 
@@ -43,9 +43,6 @@ public class MapEditorView extends JFrame implements IView {
 	public final JPanel left = new JPanel();
 	public final JPanel right = new JPanel();
 	private MapEditorGLView openGL;
-	
-	public final LiveSettingsViewController parameterViewCtrl; 
-	public final NEWSettingsMenuViewController smvc;
 	
 	public final JMenuBar menuBar;
 	public final JMenu mnFile;
@@ -66,75 +63,25 @@ public class MapEditorView extends JFrame implements IView {
 	    Dimension d = new Dimension(1000, 1000);
 		openGL = new MapEditorGLView(model, d);
 		openGL.init();
-		EcoWorld fakeEcoWOrld = new EcoWorld();
-		parameterViewCtrl = new LiveSettingsViewController(fakeEcoWOrld);
-		smvc = new NEWSettingsMenuViewController(fakeEcoWOrld);
 		
 		menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
-
-		
 		mnFile = new JMenu("File");
 		menuBar.add(mnFile);
-
 		mntmNew = new JMenuItem("New map");
 		mnFile.add(mntmNew);
-		
 		mntmLoad = new JMenuItem("Load map");
-		
-
-		
-		mntmLoad.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser  fc = new JFileChooser();
-				fc.setFileFilter(new MapFileFilter());
-				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				int ret = fc.showOpenDialog(MapEditorView.this);
-				if(ret == JFileChooser.APPROVE_OPTION) {
-					File selectedFile = fc.getSelectedFile();
-					if(selectedFile != null) {
-						//TODO: IMplement load file.
-					}
-				}
-			}
-		});
 		mnFile.add(mntmLoad);
-		
 		mntmSave = new JMenuItem("Save map");
 		mnFile.add(mntmSave);
-	
 		mntmExit = new JMenuItem("Exit");
 		mnFile.add(mntmExit);
-		
-		
-		//TODO: MOve this to controller.
-		mntmSave.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser  fc = new JFileChooser();
-				fc.setFileFilter(new MapFileFilter());
-				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				int ret = fc.showSaveDialog(MapEditorView.this);
-				if(ret == JFileChooser.APPROVE_OPTION) {
-					File savedFileAs = fc.getSelectedFile();
-					String filePath = savedFileAs.getPath();
-					if(!filePath.toLowerCase().endsWith(".map")) {
-						savedFileAs = new File(filePath + ".map");
-					}
-					//TODO: IMplement saving maps.
-				}
-			}
-		});
+		setJMenuBar(menuBar);
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		left.setLayout(new BorderLayout(0,0));
-		
-		/*
-		 * Quick fix...
-		 */
+	
 		right.setLayout(new GridLayout(3,1));
 		right.setMinimumSize(new Dimension(500, 400));
 		right.setPreferredSize(new Dimension(500, 400));
@@ -144,11 +91,6 @@ public class MapEditorView extends JFrame implements IView {
 		
 		contentPane.add(left, BorderLayout.CENTER);
 		contentPane.add(right, BorderLayout.EAST);
-		addWindowListener(new WindowAdapter() {			
-			@Override
-			public void windowClosing(WindowEvent arg0) {
-			}
-		});
 	}
 
 	@Override
@@ -182,17 +124,4 @@ public class MapEditorView extends JFrame implements IView {
 	}
 	
 	
-	private class MapFileFilter extends FileFilter {
-		
-		@Override
-		public boolean accept(File f) {
-			  return f.isDirectory() || f.getName().toLowerCase().endsWith(".map");  
-		}
-		
-
-		@Override
-		public String getDescription() {
-			  return ".map files"; 
-		}
-	};
 }

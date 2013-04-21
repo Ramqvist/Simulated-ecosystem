@@ -32,8 +32,47 @@ public class MapEditorModel implements IModel {
 		synchronized (syncObject) {
 			currentMap = new SimulationMap(name);
 			fireObstaclesChanged();
-			pcs.firePropertyChange(EVENT_MAPNAME_CHANGED, null, name);
+			notifyMapNameChanged();
 		}
+	}
+	
+	public boolean hasValidMap() {
+		if(currentMap == null) {
+			return false;
+		}
+		if(currentMap.getObsList() == null) {
+			return false;
+		}
+		if(currentMap.getName() == null) {
+			return false;
+		}
+		if(currentMap.getName().equals("")) {
+			return false;
+		}
+		if(currentMap.getObsList().isEmpty()) {
+			return false;
+		}
+		return true;
+	}
+	
+	public void notifyMapNameChanged() {
+		pcs.firePropertyChange(EVENT_MAPNAME_CHANGED, null, currentMap.getName());
+	}
+	
+	public boolean loadMap(SimulationMap m) {
+		if(m == null) {
+			return false;
+		}
+		if(m.getName() == null || m.getObsList() == null) {
+			return false;
+		}
+		if(m.getObsList().isEmpty()) {
+			return false;
+		}
+		currentMap = m;
+		fireObstaclesChanged();
+		notifyMapNameChanged();
+		return true;
 	}
 	
 	public void addObstacle(IObstacle o) {
