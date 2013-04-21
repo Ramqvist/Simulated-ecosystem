@@ -256,14 +256,16 @@ public abstract class AbstractAgent implements IAgent {
 
 		for (IPopulation p : neutral) {
 			for (IAgent a : p.getAgents()) {
-				double distance = a.getPosition().getDistance(position);
-				if (distance <= visionRange) {
-					if(USE_PRIORITY_NEIGHBOURS) {
-						neutralNeighboursQueue.add(new AgentQueueObject(a, distance));
-					} else {
-						neutralNeighbours.add(a);
+				if(a != this) {
+					double distance = a.getPosition().getDistance(position);
+					if (distance != 0 && distance <= visionRange) {
+						if(USE_PRIORITY_NEIGHBOURS) {
+							neutralNeighboursQueue.add(new AgentQueueObject(a, distance));
+						} else {
+							neutralNeighbours.add(a);
+						}
+						
 					}
-					
 				}
 			}
 		}
@@ -299,26 +301,46 @@ public abstract class AbstractAgent implements IAgent {
 		}
 		
 		if(USE_PRIORITY_NEIGHBOURS) {
-			Iterator<AgentQueueObject> it = neutralNeighboursQueue.iterator();
+			
+//			System.out.println("--------- " + this.name + " NEUTRAL ---------");
+//			System.out.println("---------------------------------------------------------------");
+//			System.out.println("");
+			
+			AgentQueueObject aqo = neutralNeighboursQueue.poll();
 			int i = 0;
-			while(it.hasNext() && i < K_NEAREST_NEIGHBOURS){
-				neutralNeighbours.add(it.next().getAgent());
+			while(aqo != null && i < K_NEAREST_NEIGHBOURS){
+				neutralNeighbours.add(aqo.getAgent());
+//				System.out.println(aqo.getDistance());
+				aqo = neutralNeighboursQueue.poll();
 				i++;
 			}
 			
-			it = preyNeighboursQueue.iterator();
+//			System.out.println("--------- " + this.name + " PREY ---------");
+//			System.out.println("---------------------------------------------------------------");
+//			System.out.println("");
+			
+			aqo = preyNeighboursQueue.poll();
 			i = 0;
-			while(it.hasNext() && i < K_NEAREST_NEIGHBOURS){
-				preyNeighbours.add(it.next().getAgent());
+			while(aqo != null && i < K_NEAREST_NEIGHBOURS){
+				preyNeighbours.add(aqo.getAgent());
+//				System.out.println(aqo.getDistance());
+				aqo = preyNeighboursQueue.poll();
 				i++;
 			}
 			
-			it = predNeighboursQueue.iterator();
+//			System.out.println("--------- " + this.name + " PREDATOR ---------");
+//			System.out.println("---------------------------------------------------------------");
+//			System.out.println("");
+			
+			aqo = predNeighboursQueue.poll();
 			i = 0;
-			while(it.hasNext() && i < K_NEAREST_NEIGHBOURS){
-				predNeighbours.add(it.next().getAgent());
+			while(aqo != null && i < K_NEAREST_NEIGHBOURS){
+				predNeighbours.add(aqo.getAgent());
+//				System.out.println(aqo.getDistance());
+				aqo = predNeighboursQueue.poll();
 				i++;
 			}
+			
 		}
 		
 	}
