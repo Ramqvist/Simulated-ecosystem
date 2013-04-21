@@ -7,6 +7,12 @@ import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
+/**
+ * Abstract class for obstacles
+ * 
+ * @author Sebastian Anerud, Erik Ramqvist
+ *
+ */
 public abstract class AbstractObstacle implements IObstacle {
 	
 	protected Position position;

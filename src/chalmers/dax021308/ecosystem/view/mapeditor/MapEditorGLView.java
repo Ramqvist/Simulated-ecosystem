@@ -50,8 +50,8 @@ public class MapEditorGLView extends GLCanvas implements IView {
 	
 	private static final long serialVersionUID = 158552837620985591L;
 	private List<IObstacle> newObs = new ArrayList<IObstacle>();
-	private Dimension size;
-	private JOGLListener glListener;
+	public final Dimension size;
+	public final JOGLListener glListener;
 	private IShape shape;
 	private boolean isZoomed;
 	
@@ -71,7 +71,6 @@ public class MapEditorGLView extends GLCanvas implements IView {
 		addMouseWheelListener(new MouseWheelListener() {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
-				lastZoomEvent = null;
 				if(e.getWheelRotation() < 0) {
 					glListener.zoomIn();
 				} else {
@@ -139,7 +138,7 @@ public class MapEditorGLView extends GLCanvas implements IView {
 	}
 	
 	
-	private IObstacle getObstacleFromCoordinates(double x, double y) {
+	public IObstacle getObstacleFromCoordinates(double x, double y) {
 		if(newObs == null ) {
 			return null;
 		}
@@ -169,11 +168,6 @@ public class MapEditorGLView extends GLCanvas implements IView {
 			if(event.getNewValue() instanceof List<?>) {
 				this.newObs = (List<IObstacle>) event.getNewValue();
 			}
-		} else if(eventName == EcoWorld.EVENT_DIMENSIONCHANGED) {
-			Object o = event.getNewValue();
-			if(o instanceof Dimension) {
-				this.size = (Dimension) o;
-			}
 		} else if(eventName == EcoWorld.EVENT_SHAPE_CHANGED) {
 			Object o = event.getNewValue();
 			if(o instanceof IShape) {
@@ -189,7 +183,7 @@ public class MapEditorGLView extends GLCanvas implements IView {
 	 * @author Erik
 	 *
 	 */
-    private class JOGLListener implements GLEventListener {
+    public class JOGLListener implements GLEventListener {
     	
         	private final float  COLOR_FACTOR        = (1.0f/255);
         	private int zoomValue = 0;
