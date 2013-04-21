@@ -247,24 +247,28 @@ public abstract class AbstractAgent implements IAgent {
 		if(USE_PRIORITY_NEIGHBOURS) {
 			preyNeighboursQueue.clear();
 			predNeighboursQueue.clear();
-			neutralNeighboursQueue.clear();
+			if(groupBehaviour)
+				neutralNeighboursQueue.clear();
 		} else {
-			neutralNeighbours.clear();
 			predNeighbours.clear();
 			preyNeighbours.clear();
+			if(groupBehaviour)
+				neutralNeighbours.clear();
 		}
 
-		for (IPopulation p : neutral) {
-			for (IAgent a : p.getAgents()) {
-				if(a != this) {
-					double distance = a.getPosition().getDistance(position);
-					if (distance <= visionRange) {
-						if(USE_PRIORITY_NEIGHBOURS) {
-							neutralNeighboursQueue.insertWithOverflow(new AgentQueueObject(a, distance));
-						} else {
-							neutralNeighbours.add(a);
+		if(groupBehaviour){
+			for (IPopulation p : neutral) {
+				for (IAgent a : p.getAgents()) {
+					if(a != this) {
+						double distance = a.getPosition().getDistance(position);
+						if (distance <= visionRange) {
+							if(USE_PRIORITY_NEIGHBOURS) {
+								neutralNeighboursQueue.insertWithOverflow(new AgentQueueObject(a, distance));
+							} else {
+								neutralNeighbours.add(a);
+							}
+							
 						}
-						
 					}
 				}
 			}
@@ -301,9 +305,10 @@ public abstract class AbstractAgent implements IAgent {
 		}
 		
 		if(USE_PRIORITY_NEIGHBOURS) {
-			neutralNeighbours = neutralNeighboursQueue.getAgentsInHeapAsList();
 			preyNeighbours = preyNeighboursQueue.getAgentsInHeapAsList();
-			predNeighbours = predNeighboursQueue.getAgentsInHeapAsList(); 
+			predNeighbours = predNeighboursQueue.getAgentsInHeapAsList();
+			if(groupBehaviour)
+				neutralNeighbours = neutralNeighboursQueue.getAgentsInHeapAsList();
 			
 //			System.out.println("--------- " + this.name + " NEUTRAL ---------");
 //			System.out.println(neutralNeighboursQueue.getHeapAsList().toString());

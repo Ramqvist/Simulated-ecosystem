@@ -47,7 +47,8 @@ public class DeerAgent extends AbstractAgent {
 				maxAcceleration);
 		this.genome = genome;
 		this.groupBehaviour = this.genome.isGeneSet(DeerGenes.GROUPING);
-		this.groupBehaviour = groupBehaviour;
+//		this.groupBehaviour = groupBehaviour;
+//		this.groupBehaviour = false;
 		if(this.groupBehaviour) {
 			this.color = Color.BLUE;
 		} else {

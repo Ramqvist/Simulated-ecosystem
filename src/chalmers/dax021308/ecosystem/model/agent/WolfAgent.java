@@ -41,7 +41,8 @@ public class WolfAgent extends AbstractAgent {
 		this.energy = MAX_ENERGY;
 		this.genome = genome;
 		this.groupBehaviour = this.genome.isGeneSet(WolfGenes.GROUPING);
-		this.groupBehaviour = groupBehaviour;
+//		this.groupBehaviour = groupBehaviour;
+//		this.groupBehaviour = false;
 		if(this.groupBehaviour){
 			this.color = Color.RED;
 		} else {
