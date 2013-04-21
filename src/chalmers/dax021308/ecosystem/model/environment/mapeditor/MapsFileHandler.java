@@ -26,7 +26,8 @@ public class MapsFileHandler {
 	
 	/**
 	 * Gets all maps from the maps folder.
-	 * @return
+	 * @return null or empty list of no maps where found, otherwise the found maps.
+	 * 
 	 */
 	public static List<SimulationMap> readMapsFromMapsFolder() {
 		List<File> fileList = getMapFiles();

@@ -63,10 +63,7 @@ public class MapEditorModel implements IModel {
 		if(m == null) {
 			return false;
 		}
-		if(m.getName() == null || m.getObsList() == null) {
-			return false;
-		}
-		if(m.getObsList().isEmpty()) {
+		if(!m.isValidMap()) {
 			return false;
 		}
 		currentMap = m;

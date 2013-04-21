@@ -37,6 +37,6 @@ public interface IObstacle {
 
 	public boolean isInsidePath(Position start, Position end);
 	
-	
+	public IObstacle scale(double x, double y);
 	
 }

@@ -1,5 +1,6 @@
 package chalmers.dax021308.ecosystem.model.environment.mapeditor;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,8 @@ import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
  *
  */
 public class SimulationMap {
+	public static final Dimension DEFAULT_OBSTACLE_DIMENSION = new Dimension(1000, 1000);
+	
 	private List<IObstacle> obsList;
 	private String name;
 	
@@ -37,6 +40,26 @@ public class SimulationMap {
 	public List<IObstacle> getObsList() {
 		return obsList;
 	}
+	/**
+	 * Use this method in simulation program to get the correct scaled versions of the obstacles. 
+	 * <p>
+	 * Maps are encoded using 1000 x 1000 dimension.
+	 * 
+	 * @param dim The Dimension to scale to.
+	 * @return the up-scaled obstacles, or null or empty list if this is not a valid map.
+	 */
+	public List<IObstacle> getScaledObstacles(Dimension dim) {
+		if(!isValidMap()) {
+			return null;
+		}
+		double scaleX = DEFAULT_OBSTACLE_DIMENSION.width / dim.getWidth();
+		double scaleY = DEFAULT_OBSTACLE_DIMENSION.height / dim.getHeight() ;
+		List<IObstacle> result = new ArrayList<IObstacle>(obsList.size());
+		for(IObstacle o: obsList) {
+			result.add(o.scale(scaleX, scaleY));
+		}
+		return result;
+	}
 	public void setObsList(List<IObstacle> obsList) {
 		this.obsList = obsList;
 	}
@@ -57,6 +80,19 @@ public class SimulationMap {
 	public boolean contains(IObstacle o) {
 		if(obsList != null) {
 			return obsList.contains(o);
+		}
+		return false;
+	}
+
+	public boolean isValidMap() {
+		if(getName() == null || getObsList() == null) {
+			return false;
+		}
+		if(getObsList().isEmpty()) {
+			return false;
+		}
+		if(name.equals("")) {
+			return false;
 		}
 		return false;
 	}

@@ -46,6 +46,17 @@ public abstract class AbstractObstacle implements IObstacle {
 		this.color = c;
 	}
 	
+	/**
+	 * Scale the obstacle to a specific scalar value.
+	 */
+	@Override
+	public IObstacle scale(double scaleX, double scaleY) {
+		position.setX(position.getX() * scaleX);
+		position.setY(position.getY() * scaleY);
+		width = width * scaleX;
+		height = height * scaleY;
+		return this;
+	}
 	public String toBinaryString() {
 		StringBuilder sb = new StringBuilder();
 		if(this instanceof EllipticalObstacle) {
