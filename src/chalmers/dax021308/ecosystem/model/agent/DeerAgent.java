@@ -109,16 +109,16 @@ public class DeerAgent extends AbstractAgent {
 			 * correct direction of the acceleration.
 			 */
 			Vector acceleration;
-			
-				acceleration = predatorForce.multiply(5)
-						.add(mutualInteractionForce).add(forwardThrust)
-						.add(arrayalForce);
-				// if (alone) {
-				Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys,
-						focusedPrey, this, preyNeighbours, visionRange,
-						maxAcceleration);
-				acceleration.add(preyForce.multiply(5 * (1 - energy
-						/ MAX_ENERGY)));
+
+			acceleration = predatorForce.multiply(5)
+					.add(mutualInteractionForce).add(forwardThrust)
+					.add(arrayalForce);
+			// if (alone) {
+			Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys,
+					focusedPrey, this, preyNeighbours, visionRange,
+					maxAcceleration);
+			acceleration
+					.add(preyForce.multiply(5 * (1 - energy / MAX_ENERGY)));
 			// }
 			double accelerationNorm = acceleration.getNorm();
 			if (accelerationNorm > maxAcceleration) {
@@ -144,12 +144,12 @@ public class DeerAgent extends AbstractAgent {
 			this.setVelocity(newVelocity);
 
 			/* Reusing the same position object, for less heap allocations. */
-//			if (reUsedPosition == null) {
-				nextPosition = Position.positionPlusVector(position, velocity);
-//			} else {
-//				nextPosition = reUsedPosition.setPosition(position.getX()
-//						+ velocity.x, position.getY() + velocity.y);
-//			}
+			// if (reUsedPosition == null) {
+			nextPosition = Position.positionPlusVector(position, velocity);
+			// } else {
+			// nextPosition = reUsedPosition.setPosition(position.getX()
+			// + velocity.x, position.getY() + velocity.y);
+			// }
 		}
 	}
 

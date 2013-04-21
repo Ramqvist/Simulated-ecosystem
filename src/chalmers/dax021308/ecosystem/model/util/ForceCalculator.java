@@ -258,15 +258,14 @@ public class ForceCalculator {
 		}
 		Vector preyForce = new Vector(0, 0);
 		IAgent closestFocusPrey = null;
-		int preySize = preyNeighbours.size();
-		for (int i = 0; i < preySize; i++) {
+		int nrOfPreys = preyNeighbours.size();
+		for (int i = 0; i < nrOfPreys; i++) {
 			IAgent a = preyNeighbours.get(i);
 			Position p = a.getPosition();
-			double size = (agent.getHeight() + agent.getWidth()) / 4;
-			double distance = agent.getPosition().getDistance(p) - size;
+			double preySize = (a.getHeight() + a.getWidth()) / 4;
+			double distance = agent.getPosition().getDistance(p) - preySize;
 			if (a.looksTasty(agent, visionRange)) {
-				
-				if (distance - size <= EATING_RANGE) {
+				if (distance <= EATING_RANGE) {
 					if (a.tryConsumeAgent()) {
 						agent.eat();
 					}
@@ -280,7 +279,7 @@ public class ForceCalculator {
 					} else {
 						closestFocusPrey = a;
 					}
-				} else if (closestFocusPrey == null) {
+				} else if (willFocusPreys && closestFocusPrey == null) {
 					/*
 					 * Create a vector that points towards the prey.
 					 */

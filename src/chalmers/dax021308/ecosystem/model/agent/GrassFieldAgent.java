@@ -19,13 +19,13 @@ import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 public class GrassFieldAgent extends AbstractAgent {
 
 	private static final double REPRODUCTION_RATE = 0.1;
-	private static final double MAX_ENERGY = 1000;
+	private static final double MAX_ENERGY = 200;
 
 	public GrassFieldAgent(String name, Position pos, Color color, int width,
 			int height, Vector velocity, double maxSpeed, int capacity) {
 		super(name, pos, color, width, height, velocity, maxSpeed, 0, 0);
 		this.capacity = capacity;
-		energy = 500;
+		energy = 50;
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class GrassFieldAgent extends AbstractAgent {
 			List<IObstacle> obstacles, IShape shape, Dimension gridDimension) {
 		if (Math.random() < REPRODUCTION_RATE) {
 			if (energy < MAX_ENERGY)
-				energy += 5;
+				energy += 1;
 		}
 		int red = (int) (150.0 - 150.0 * (((double) energy) / MAX_ENERGY));
 		int green = (int) (55.0 + 200.0 * (((double) energy) / MAX_ENERGY));
@@ -57,8 +57,8 @@ public class GrassFieldAgent extends AbstractAgent {
 	@Override
 	public synchronized boolean tryConsumeAgent() {
 		// TODO FIX FEEDING
-		if (energy >= 50) {
-			energy -= 30;
+		if (energy >= 20) {
+			energy -= 8;
 			return true;
 		}
 		return false;
@@ -66,9 +66,10 @@ public class GrassFieldAgent extends AbstractAgent {
 
 	@Override
 	public boolean looksTasty(IAgent agent, double visionRange) {
-		
-		double distance = agent.getPosition().getDistance(position); 
-		if (energy >= 50)
+
+		double distance = agent.getPosition().getDistance(position)
+				- (width + height) / 2;
+		if (energy >= 20)
 			return distance <= visionRange;
 		return false;
 	}

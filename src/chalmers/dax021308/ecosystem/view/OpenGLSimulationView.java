@@ -461,8 +461,8 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
         				a = agents.get(j);
         				if (a != null && a.getName() == SimulationSettings.NAME_GRASS_FIELD) {
 							double increment = 2.0*Math.PI/50.0;
-	    	                double w = scaleX* a.getWidth();
-	    	                double h = scaleY*a.getHeight();
+	    	                double w = scaleX* a.getWidth()/2;
+	    	                double h = scaleY*a.getHeight()/2;
 	    	                double x = scaleX*a.getPosition().getX();
 	    	                double y = scaleY*a.getPosition().getY();
 	    	                Color c = a.getColor();
