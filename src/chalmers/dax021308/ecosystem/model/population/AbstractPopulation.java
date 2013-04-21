@@ -117,17 +117,19 @@ public abstract class AbstractPopulation implements IPopulation {
 			a.calculateNextPosition(predators, preys, neutral, gridDimension,
 					shape, obstacles);
 			
+
 //			AbstractAgent aa = (AbstractAgent) a;
 //			preyNeighbourSize.addObservation(aa.getPreyNeighbourSize());
 //			predNeighbourSize.addObservation(aa.getPredatorNeighbourSize());
 //			neutralNeighbourSize.addObservation(aa.getNeutralNeighbourSize());
+
+			
 			
 			if (!a.isAlive()) {
 				addToRemoveList(a);
 			}
 		}
-		
-		
+	
 	}
 
 	protected Position getRandomPosition() {
