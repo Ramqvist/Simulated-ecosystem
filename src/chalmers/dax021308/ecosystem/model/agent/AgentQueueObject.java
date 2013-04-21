@@ -27,4 +27,9 @@ public class AgentQueueObject implements Comparable<AgentQueueObject> {
 		return distance;
 	}
 	
+	@Override
+	public String toString(){
+		return ""+distance;
+	}
+	
 }

@@ -6,15 +6,16 @@ import java.util.AbstractQueue;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Random;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.util.FixedSizeAgentQueueObjectPriorityQueue;
 import chalmers.dax021308.ecosystem.model.util.Gender;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 import chalmers.dax021308.ecosystem.model.util.shape.IShape;
+import chalmers.dax021308.ecosystem.model.util.AgentQueueObjectPriorityQueue;
 
 /**
  * AbstractAgent with neighbourlist.
@@ -50,9 +51,9 @@ public abstract class AbstractAgent implements IAgent {
 	protected List<IAgent> predNeighbours;
 	protected List<IAgent> neutralNeighbours;
 	
-	protected AbstractQueue<AgentQueueObject> preyNeighboursQueue;
-	protected AbstractQueue<AgentQueueObject> predNeighboursQueue;
-	protected AbstractQueue<AgentQueueObject> neutralNeighboursQueue;
+	protected FixedSizeAgentQueueObjectPriorityQueue preyNeighboursQueue;
+	protected FixedSizeAgentQueueObjectPriorityQueue predNeighboursQueue;
+	protected FixedSizeAgentQueueObjectPriorityQueue neutralNeighboursQueue;
 
 	protected List<IObstacle> obstacles;
 	private int neighbourCounter;
@@ -83,9 +84,9 @@ public abstract class AbstractAgent implements IAgent {
 		preyNeighbours = new ArrayList<IAgent>(256);
 		predNeighbours = new ArrayList<IAgent>(256);
 		neutralNeighbours = new ArrayList<IAgent>(256);
-		preyNeighboursQueue = new PriorityQueue<AgentQueueObject>(256);
-		predNeighboursQueue = new PriorityQueue<AgentQueueObject>(256);
-		neutralNeighboursQueue = new PriorityQueue<AgentQueueObject>(256);
+		preyNeighboursQueue = new FixedSizeAgentQueueObjectPriorityQueue(K_NEAREST_NEIGHBOURS);
+		predNeighboursQueue = new FixedSizeAgentQueueObjectPriorityQueue(K_NEAREST_NEIGHBOURS);
+		neutralNeighboursQueue = new FixedSizeAgentQueueObjectPriorityQueue(K_NEAREST_NEIGHBOURS);
 
 		// To update the first time.
 		neighbourCounter = ran.nextInt(NEIGHBOURS_UPDATE_THRESHOLD);
@@ -244,14 +245,16 @@ public abstract class AbstractAgent implements IAgent {
 		// predNeighbours = new ArrayList<IAgent>(2*predNeighbours.size());
 		// preyNeighbours = new ArrayList<IAgent>(2*preyNeighbours.size());
 
-		neutralNeighbours.clear();
-		predNeighbours.clear();
-		preyNeighbours.clear();
+		
 		
 		if(USE_PRIORITY_NEIGHBOURS) {
 			preyNeighboursQueue.clear();
 			predNeighboursQueue.clear();
 			neutralNeighboursQueue.clear();
+		} else {
+			neutralNeighbours.clear();
+			predNeighbours.clear();
+			preyNeighbours.clear();
 		}
 
 		for (IPopulation p : neutral) {
@@ -260,7 +263,7 @@ public abstract class AbstractAgent implements IAgent {
 					double distance = a.getPosition().getDistance(position);
 					if (distance != 0 && distance <= visionRange) {
 						if(USE_PRIORITY_NEIGHBOURS) {
-							neutralNeighboursQueue.add(new AgentQueueObject(a, distance));
+							neutralNeighboursQueue.insertWithOverflow(new AgentQueueObject(a, distance));
 						} else {
 							neutralNeighbours.add(a);
 						}
@@ -275,7 +278,7 @@ public abstract class AbstractAgent implements IAgent {
 				double distance = a.getPosition().getDistance(position);
 				if (distance <= visionRange) {
 					if(USE_PRIORITY_NEIGHBOURS) {
-						preyNeighboursQueue.add(new AgentQueueObject(a, distance));
+						preyNeighboursQueue.insertWithOverflow(new AgentQueueObject(a, distance));
 					} else {
 						preyNeighbours.add(a);
 					}
@@ -290,7 +293,7 @@ public abstract class AbstractAgent implements IAgent {
 				double distance = a.getPosition().getDistance(position);
 				if (distance <= visionRange) {
 					if(USE_PRIORITY_NEIGHBOURS) {
-						predNeighboursQueue.add(new AgentQueueObject(a, distance));
+						predNeighboursQueue.insertWithOverflow(new AgentQueueObject(a, distance));
 					} else {
 						predNeighbours.add(a);
 					}
@@ -301,46 +304,21 @@ public abstract class AbstractAgent implements IAgent {
 		}
 		
 		if(USE_PRIORITY_NEIGHBOURS) {
+			neutralNeighbours = neutralNeighboursQueue.getAgentsInHeapAsList();
+			preyNeighbours = preyNeighboursQueue.getAgentsInHeapAsList();
+			predNeighbours = predNeighboursQueue.getAgentsInHeapAsList(); 
 			
 //			System.out.println("--------- " + this.name + " NEUTRAL ---------");
+//			System.out.println(neutralNeighboursQueue.getHeapAsList().toString());
 //			System.out.println("---------------------------------------------------------------");
-//			System.out.println("");
-			
-			AgentQueueObject aqo = neutralNeighboursQueue.poll();
-			int i = 0;
-			while(aqo != null && i < K_NEAREST_NEIGHBOURS){
-				neutralNeighbours.add(aqo.getAgent());
-//				System.out.println(aqo.getDistance());
-				aqo = neutralNeighboursQueue.poll();
-				i++;
-			}
-			
+//			
 //			System.out.println("--------- " + this.name + " PREY ---------");
+//			System.out.println(preyNeighboursQueue.getHeapAsList().toString());
 //			System.out.println("---------------------------------------------------------------");
-//			System.out.println("");
-			
-			aqo = preyNeighboursQueue.poll();
-			i = 0;
-			while(aqo != null && i < K_NEAREST_NEIGHBOURS){
-				preyNeighbours.add(aqo.getAgent());
-//				System.out.println(aqo.getDistance());
-				aqo = preyNeighboursQueue.poll();
-				i++;
-			}
-			
+//			
 //			System.out.println("--------- " + this.name + " PREDATOR ---------");
+//			System.out.println(predNeighboursQueue.getHeapAsList().toString());
 //			System.out.println("---------------------------------------------------------------");
-//			System.out.println("");
-			
-			aqo = predNeighboursQueue.poll();
-			i = 0;
-			while(aqo != null && i < K_NEAREST_NEIGHBOURS){
-				predNeighbours.add(aqo.getAgent());
-//				System.out.println(aqo.getDistance());
-				aqo = predNeighboursQueue.poll();
-				i++;
-			}
-			
 		}
 		
 	}
