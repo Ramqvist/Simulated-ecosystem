@@ -27,12 +27,20 @@ public class WolfAgent extends AbstractAgent {
 	private static final double REPRODUCTION_RATE = 0.0005;
 	private static final int DIGESTION_TIME = 50;
 	private static final int PREY_FORCE_WEIGHT = 10;
-	private static final int SPRINT_INTERVALL = 10;
+	private static final int SPRINT_INTERVAL = 20;
+	private static final int MAX_SPRINT_DURATION = 5;
+	private static final int SPRINT_BOOST = 3;
+	private static final int EXHAUSTED_DURATION = 5;
+	private static final double EXHAUST_FACTOR = 0.4;
 	private int digesting = 0;
 	private IGenome<WolfGenes> genome;
 	private int preyForceFactor = 0;
-	private boolean isSprinting = false;
-	private int sprintTimer = SPRINT_INTERVALL;
+	private boolean sprinting = false;
+	private int sprintIntervalTimer = SPRINT_INTERVAL;
+	private int sprintDurationTimer = MAX_SPRINT_DURATION;
+	private int exhaustedTimer = EXHAUSTED_DURATION;
+	private boolean exhausted = false;
+	
 
 	public WolfAgent(String name, Position position, Color color, int width,
 			int height, Vector velocity, double maxSpeed,
@@ -110,6 +118,24 @@ public class WolfAgent extends AbstractAgent {
 				newVelocity.multiply(maxSpeed / speed);
 			}
 
+			if (sprinting && sprintDurationTimer > 0) {
+				newVelocity.multiply(SPRINT_BOOST);
+				sprintDurationTimer--;
+			} else if (sprintDurationTimer == 0) {
+				sprinting = false;
+				sprintDurationTimer = MAX_SPRINT_DURATION;
+				sprintIntervalTimer = SPRINT_INTERVAL;
+				exhausted = true;
+			}
+			
+			if (exhausted && exhaustedTimer > 0) {
+				newVelocity.multiply(EXHAUST_FACTOR);
+				exhaustedTimer--;
+			} else if (exhaustedTimer == 0) {
+				exhaustedTimer = EXHAUSTED_DURATION;
+				exhausted = false;
+			}
+			
 			this.setVelocity(newVelocity);
 
 			/* Reusing the same position object, for less heap allocations. */
@@ -160,8 +186,10 @@ public class WolfAgent extends AbstractAgent {
 			hungry = true;
 		}
 		
-		if (sprintTimer-- == 0) {
-			isSprinting = true;
+		if (!exhausted) { //Should also depend on whether a prey has been focused.
+			if (sprintIntervalTimer-- == 0) {
+				sprinting = true;
+			}
 		}
 	}
 
