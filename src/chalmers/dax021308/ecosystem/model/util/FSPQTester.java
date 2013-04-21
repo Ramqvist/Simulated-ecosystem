@@ -13,12 +13,8 @@ public class FSPQTester {
 		for(int i=0; i<100; i++) {
 			asdf.insertWithOverflow(new AgentQueueObject(null,i));
 		}
-		
-		for(int i=-50; i<150; i++) {
-			asdf.insertWithOverflow(new AgentQueueObject(null,i));
-		}
-		
-		System.out.println(asdf.getHeapAsList());
+	
+		System.out.println(asdf.top());
 		
 	}
 

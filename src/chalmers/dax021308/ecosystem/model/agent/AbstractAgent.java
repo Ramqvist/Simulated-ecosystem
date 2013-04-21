@@ -2,9 +2,7 @@ package chalmers.dax021308.ecosystem.model.agent;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.util.AbstractQueue;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -15,7 +13,6 @@ import chalmers.dax021308.ecosystem.model.util.Gender;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 import chalmers.dax021308.ecosystem.model.util.shape.IShape;
-import chalmers.dax021308.ecosystem.model.util.AgentQueueObjectPriorityQueue;
 
 /**
  * AbstractAgent with neighbourlist.
@@ -261,7 +258,7 @@ public abstract class AbstractAgent implements IAgent {
 			for (IAgent a : p.getAgents()) {
 				if(a != this) {
 					double distance = a.getPosition().getDistance(position);
-					if (distance != 0 && distance <= visionRange) {
+					if (distance <= visionRange) {
 						if(USE_PRIORITY_NEIGHBOURS) {
 							neutralNeighboursQueue.insertWithOverflow(new AgentQueueObject(a, distance));
 						} else {
