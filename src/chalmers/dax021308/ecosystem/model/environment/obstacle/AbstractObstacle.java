@@ -69,6 +69,8 @@ public abstract class AbstractObstacle implements IObstacle {
 		sb.append(SimulationSettings.OBSTACLE_ELLIPTICAL); //TODO: Needs shape here.
 		} else if(this instanceof RectangularObstacle) {
 			sb.append(SimulationSettings.OBSTACLE_RECTANGULAR); //TODO: Needs shape here.
+		} else if(this instanceof TriangleObstacle) {
+			sb.append(SimulationSettings.OBSTACLE_TRIANGLE);
 		} else {
 			sb.append(SimulationSettings.OBSTACLE_NONE);
 			return sb.toString();
@@ -102,7 +104,11 @@ public abstract class AbstractObstacle implements IObstacle {
 			obs = new EllipticalObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
 					new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
 					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), Integer.parseInt(inputArray[7])));
-		} else if (shape.equals(SimulationSettings.OBSTACLE_NONE)) {
+		} else if (shape.equals(SimulationSettings.OBSTACLE_TRIANGLE)) {
+			obs = new TriangleObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
+					new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
+					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), Integer.parseInt(inputArray[7])));
+		}  else if (shape.equals(SimulationSettings.OBSTACLE_NONE)) {
 			return null;
 		}
 		return obs;
