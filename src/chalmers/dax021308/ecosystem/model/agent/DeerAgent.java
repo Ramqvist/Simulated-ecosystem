@@ -53,7 +53,7 @@ public class DeerAgent extends AbstractAgent {
 			this.color = Color.blue;
 		}
 		this.energy = MAX_ENERGY;
-		//this.groupBehaviour = groupBehaviour;
+		this.groupBehaviour = groupBehaviour;
 
 	}
 

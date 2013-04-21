@@ -2,8 +2,11 @@ package chalmers.dax021308.ecosystem.model.agent;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.AbstractQueue;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Random;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
@@ -39,11 +42,17 @@ public abstract class AbstractAgent implements IAgent {
 	protected double maxAcceleration;
 	protected IAgent focusedPrey;
 	protected boolean isAlive = true;
+	protected static final boolean USE_PRIORITY_NEIGHBOURS = true;
+	protected static final int K_NEAREST_NEIGHBOURS = 20; 
 
 	/* Neighbour list module variables */
 	protected List<IAgent> preyNeighbours;
 	protected List<IAgent> predNeighbours;
 	protected List<IAgent> neutralNeighbours;
+	
+	protected AbstractQueue<AgentQueueObject> preyNeighboursQueue;
+	protected AbstractQueue<AgentQueueObject> predNeighboursQueue;
+	protected AbstractQueue<AgentQueueObject> neutralNeighboursQueue;
 
 	protected List<IObstacle> obstacles;
 	private int neighbourCounter;
@@ -74,6 +83,9 @@ public abstract class AbstractAgent implements IAgent {
 		preyNeighbours = new ArrayList<IAgent>(256);
 		predNeighbours = new ArrayList<IAgent>(256);
 		neutralNeighbours = new ArrayList<IAgent>(256);
+		preyNeighboursQueue = new PriorityQueue<AgentQueueObject>(256);
+		predNeighboursQueue = new PriorityQueue<AgentQueueObject>(256);
+		neutralNeighboursQueue = new PriorityQueue<AgentQueueObject>(256);
 
 		// To update the first time.
 		neighbourCounter = ran.nextInt(NEIGHBOURS_UPDATE_THRESHOLD);
@@ -235,30 +247,80 @@ public abstract class AbstractAgent implements IAgent {
 		neutralNeighbours.clear();
 		predNeighbours.clear();
 		preyNeighbours.clear();
+		
+		if(USE_PRIORITY_NEIGHBOURS) {
+			preyNeighboursQueue.clear();
+			predNeighboursQueue.clear();
+			neutralNeighboursQueue.clear();
+		}
 
 		for (IPopulation p : neutral) {
 			for (IAgent a : p.getAgents()) {
-				if (a.getPosition().getDistance(position) <= visionRange) {
-					neutralNeighbours.add(a);
+				double distance = a.getPosition().getDistance(position);
+				if (distance <= visionRange) {
+					if(USE_PRIORITY_NEIGHBOURS) {
+						neutralNeighboursQueue.add(new AgentQueueObject(a, distance));
+					} else {
+						neutralNeighbours.add(a);
+					}
+					
 				}
 			}
 		}
-
+		
 		for (IPopulation p : prey) {
 			for (IAgent a : p.getAgents()) {
-				if (a.getPosition().getDistance(position) <= visionRange) {
-					preyNeighbours.add(a);
+				double distance = a.getPosition().getDistance(position);
+				if (distance <= visionRange) {
+					if(USE_PRIORITY_NEIGHBOURS) {
+						preyNeighboursQueue.add(new AgentQueueObject(a, distance));
+					} else {
+						preyNeighbours.add(a);
+					}
+					
+					
 				}
 			}
 		}
 
 		for (IPopulation p : pred) {
 			for (IAgent a : p.getAgents()) {
-				if (a.getPosition().getDistance(position) <= visionRange) {
-					predNeighbours.add(a);
+				double distance = a.getPosition().getDistance(position);
+				if (distance <= visionRange) {
+					if(USE_PRIORITY_NEIGHBOURS) {
+						predNeighboursQueue.add(new AgentQueueObject(a, distance));
+					} else {
+						predNeighbours.add(a);
+					}
+					
+					
 				}
 			}
 		}
+		
+		if(USE_PRIORITY_NEIGHBOURS) {
+			Iterator<AgentQueueObject> it = neutralNeighboursQueue.iterator();
+			int i = 0;
+			while(it.hasNext() && i < K_NEAREST_NEIGHBOURS){
+				neutralNeighbours.add(it.next().getAgent());
+				i++;
+			}
+			
+			it = preyNeighboursQueue.iterator();
+			i = 0;
+			while(it.hasNext() && i < K_NEAREST_NEIGHBOURS){
+				preyNeighbours.add(it.next().getAgent());
+				i++;
+			}
+			
+			it = predNeighboursQueue.iterator();
+			i = 0;
+			while(it.hasNext() && i < K_NEAREST_NEIGHBOURS){
+				predNeighbours.add(it.next().getAgent());
+				i++;
+			}
+		}
+		
 	}
 
 	@Override
