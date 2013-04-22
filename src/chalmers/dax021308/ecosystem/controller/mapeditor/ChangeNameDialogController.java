@@ -8,6 +8,7 @@ import java.awt.event.KeyListener;
 
 import chalmers.dax021308.ecosystem.controller.IController;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
+import chalmers.dax021308.ecosystem.view.mapeditor.ChangeNameDialog;
 import chalmers.dax021308.ecosystem.view.mapeditor.NewMapDialog;
 
 /**
@@ -16,11 +17,10 @@ import chalmers.dax021308.ecosystem.view.mapeditor.NewMapDialog;
  * @author Erik Ramqvist
  *
  */
-public class NewMapDialogController implements IController {
+public class ChangeNameDialogController implements IController {
 	
-	private final NewMapDialog view;
+	private final ChangeNameDialog view;
 	private OnNameSelectedListener listener;
-		
 	
 	private ActionListener finishActionListener = new ActionListener() {
 		@Override
@@ -30,10 +30,10 @@ public class NewMapDialogController implements IController {
 		}
 	};
 	
-	public NewMapDialogController(Frame superFrame, OnNameSelectedListener listener) {
+	public ChangeNameDialogController(Frame superFrame, OnNameSelectedListener listener) {
 		this.listener = listener;
-		view = new NewMapDialog(superFrame);
-		view.btnCreateNewMap.addActionListener(finishActionListener);
+		view = new ChangeNameDialog(superFrame);
+		view.btnRename.addActionListener(finishActionListener);
 		view.tbxMapName.addKeyListener(new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {
