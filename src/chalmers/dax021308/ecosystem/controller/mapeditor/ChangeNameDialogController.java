@@ -20,7 +20,7 @@ import chalmers.dax021308.ecosystem.view.mapeditor.NewMapDialog;
 public class ChangeNameDialogController implements IController {
 	
 	private final ChangeNameDialog view;
-	private OnNameSelectedListener listener;
+	private OnChangeNameSelectedListener listener;
 	
 	private ActionListener finishActionListener = new ActionListener() {
 		@Override
@@ -30,7 +30,7 @@ public class ChangeNameDialogController implements IController {
 		}
 	};
 	
-	public ChangeNameDialogController(Frame superFrame, OnNameSelectedListener listener) {
+	public ChangeNameDialogController(Frame superFrame, OnChangeNameSelectedListener listener) {
 		this.listener = listener;
 		view = new ChangeNameDialog(superFrame);
 		view.btnRename.addActionListener(finishActionListener);
@@ -70,7 +70,7 @@ public class ChangeNameDialogController implements IController {
 		
 	}
 
-	public interface OnNameSelectedListener {
+	public interface OnChangeNameSelectedListener {
 		public void onSelectedName(String name);
 	}
 

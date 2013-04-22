@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
 import chalmers.dax021308.ecosystem.controller.IController;
+import chalmers.dax021308.ecosystem.controller.mapeditor.ChangeNameDialogController.OnChangeNameSelectedListener;
 import chalmers.dax021308.ecosystem.controller.mapeditor.ChooseMapDialogController.OnLoadedMapSelectedListener;
 import chalmers.dax021308.ecosystem.controller.mapeditor.NewMapDialogController.OnNameSelectedListener;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
@@ -179,6 +180,43 @@ public class MapEditorController implements IController {
 						    "Saved",
 						    JOptionPane.INFORMATION_MESSAGE);
 				}
+			}
+		});
+
+		view.mntmSaveAs.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				new ChangeNameDialogController(view, new OnChangeNameSelectedListener() {
+					@Override
+					public void onSelectedName(String name) {
+						if(name == null) {
+							JOptionPane.showMessageDialog(view,
+								    "Invalid file name.",
+								    "Error",
+								    JOptionPane.ERROR_MESSAGE);
+							return;
+						} 
+						if(name.equals("")) {
+							JOptionPane.showMessageDialog(view,
+								    "Invalid file name.",
+								    "Error",
+								    JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						model.getCurrentMap().setName(name);
+						if(!MapFileHandler.saveSimulationMap(model.getCurrentMap())) {
+							JOptionPane.showMessageDialog(view,
+								    "Error saving file to disk!",
+								    "Error",
+								    JOptionPane.ERROR_MESSAGE);
+						} else {
+							JOptionPane.showMessageDialog(view,
+								    "Map saved to Maps folder successfully.",
+								    "Saved",
+								    JOptionPane.INFORMATION_MESSAGE);
+						}
+					}
+				});
 			}
 		});
 	}

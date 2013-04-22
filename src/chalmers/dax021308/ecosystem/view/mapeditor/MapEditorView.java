@@ -51,6 +51,7 @@ public class MapEditorView extends JFrame implements IView {
 	public final JMenuItem mntmNew;
 	public final JMenuItem mntmExit;
 	public final JMenuItem mntmSave;
+	public final JMenuItem mntmSaveAs;
 	public final JMenuItem mntmLoad;
 
 	/**
@@ -73,6 +74,8 @@ public class MapEditorView extends JFrame implements IView {
 		mnFile.add(mntmNew);
 		mntmSave = new JMenuItem("Save");
 		mnFile.add(mntmSave);
+		mntmSaveAs = new JMenuItem("Save as...");
+		mnFile.add(mntmSaveAs);
 		mntmLoad = new JMenuItem("Load...");
 		mnFile.add(mntmLoad);
 		mnFile.addSeparator();
