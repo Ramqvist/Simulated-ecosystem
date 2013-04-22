@@ -5,9 +5,9 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
-import chalmers.dax021308.ecosystem.model.chromosome.DeerGenes;
-import chalmers.dax021308.ecosystem.model.chromosome.IGenome;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.genetics.DeerGenes;
+import chalmers.dax021308.ecosystem.model.genetics.IGenome;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
 import chalmers.dax021308.ecosystem.model.util.Position;
