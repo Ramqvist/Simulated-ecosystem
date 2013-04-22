@@ -80,7 +80,6 @@ public class MapEditorController implements IController {
 	
 	@Override
 	public void init() {
-		showSelectNameDialog();
 		view.mntmNew.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

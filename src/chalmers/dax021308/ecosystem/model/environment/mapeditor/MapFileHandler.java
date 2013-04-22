@@ -108,16 +108,14 @@ public class MapFileHandler {
 	 */
 	public static boolean saveSimulationMap(SimulationMap map) {
 		if(map == null) {
-			Log.e("map is NULL");
 			return false;
 		}
 		if(!map.isValidMap()) {
-			Log.e("isNotValidMap");
 			return false;
 		}
 		if(!mapsFolder.exists()) {
 			if(!mapsFolder.mkdir()) {
-				Log.e("error creating maps folder");
+				return false;
 			}
 		}
 		return saveSimulationMap(new File(mapsFolder.getAbsolutePath() + "/" + map.getName() + ".map"), map);

@@ -7,6 +7,7 @@ import java.text.NumberFormat;
 import javax.swing.JPanel;
 
 import chalmers.dax021308.ecosystem.model.environment.IModel;
+import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapEditorModel;
 import chalmers.dax021308.ecosystem.view.IView;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -76,6 +77,16 @@ public class AddObstacleView extends JPanel implements IView {
 		
 		btnAddObstacle = new JButton("Add obstacle");
 		btnAddObstacle.setFont(new Font("Tahoma", Font.PLAIN, 14));
+
+		tbxWidth.setEnabled(false);
+		tbxHeight.setEnabled(false);
+		tbxXPosition.setEnabled(false);
+		tbxYPosition.setEnabled(false);
+		rdbtnTypeTriangle.setEnabled(false);
+		rdbtnTypeRectangle.setEnabled(false);
+		rdbtnTypeCircle.setEnabled(false);
+		btnAddObstacle.setEnabled(false);
+		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -145,7 +156,40 @@ public class AddObstacleView extends JPanel implements IView {
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		
+		 if(evt.getPropertyName() == MapEditorModel.EVENT_MAPNAME_CHANGED) {
+				if(evt.getNewValue() instanceof String) {
+					String newName = (String) evt.getNewValue();
+					if(newName == null) {
+						tbxWidth.setEnabled(false);
+						tbxHeight.setEnabled(false);
+						tbxXPosition.setEnabled(false);
+						tbxYPosition.setEnabled(false);
+						rdbtnTypeTriangle.setEnabled(false);
+						rdbtnTypeRectangle.setEnabled(false);
+						rdbtnTypeCircle.setEnabled(false);
+						btnAddObstacle.setEnabled(false);
+
+					} else if(newName.equals("")) {
+						tbxWidth.setEnabled(false);
+						tbxHeight.setEnabled(false);
+						tbxXPosition.setEnabled(false);
+						tbxYPosition.setEnabled(false);
+						rdbtnTypeTriangle.setEnabled(false);
+						rdbtnTypeRectangle.setEnabled(false);
+						rdbtnTypeCircle.setEnabled(false);
+						btnAddObstacle.setEnabled(false);
+					} else {
+						tbxWidth.setEnabled(true);
+						tbxHeight.setEnabled(true);
+						tbxXPosition.setEnabled(true);
+						tbxYPosition.setEnabled(true);
+						rdbtnTypeTriangle.setEnabled(true);
+						rdbtnTypeRectangle.setEnabled(true);
+						rdbtnTypeCircle.setEnabled(true);
+						btnAddObstacle.setEnabled(true);
+					}
+				}
+			}
 	}
 
 	@Override
