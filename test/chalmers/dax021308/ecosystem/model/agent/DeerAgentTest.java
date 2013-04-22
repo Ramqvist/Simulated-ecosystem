@@ -45,7 +45,7 @@ public class DeerAgentTest {
 		maxAcceleration = 3;
 		visionRange = 5;
 		groupBehaviour = true;
-		deerTest = new DeerAgent(name, p, c, width, height, velocity, maxSpeed, maxAcceleration, visionRange, groupBehaviour);
+		deerTest = new DeerAgent(name, p, c, width, height, velocity, maxSpeed, maxAcceleration, visionRange, groupBehaviour, null);
 		shape = new SquareShape();
 		dimension = new Dimension(50, 50);
 	}

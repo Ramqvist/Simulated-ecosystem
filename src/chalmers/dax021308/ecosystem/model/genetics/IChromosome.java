@@ -1,7 +1,7 @@
 /**
  * @author Loanne Berggren
  */
-package chalmers.dax021308.ecosystem.model.chromosome;
+package chalmers.dax021308.ecosystem.model.genetics;
 
 
 /**
