@@ -128,7 +128,6 @@ public class MapFileHandler {
 	 * @return
 	 */
 	public static boolean saveSimulationMap(File dest, SimulationMap map) {
-		Log.e(dest.toString());
 		PrintWriter pw = null;
 		try {
 			dest.createNewFile();
