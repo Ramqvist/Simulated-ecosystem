@@ -9,10 +9,11 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
 import chalmers.dax021308.ecosystem.controller.IController;
+import chalmers.dax021308.ecosystem.controller.mapeditor.ChooseMapDialogController.OnLoadedMapSelectedListener;
 import chalmers.dax021308.ecosystem.controller.mapeditor.NewMapDialogController.OnNameSelectedListener;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapEditorModel;
-import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapsFileHandler;
+import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapFileHandler;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.SimulationMap;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.util.Log;
@@ -48,6 +49,22 @@ public class MapEditorController implements IController {
 			}
 		}
 	};
+	
+	private final OnLoadedMapSelectedListener loadedMapListener = new OnLoadedMapSelectedListener() {
+		
+		@Override
+		public void onSelect(SimulationMap map) {
+			if(map == null) {
+				JOptionPane.showMessageDialog(view, "Error loading map.", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			if(!map.isValidMap()) {
+				JOptionPane.showMessageDialog(view, "Error loading map.", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			model.loadMap(map);
+		}
+	};
 
 	public MapEditorController() {
 		model = new MapEditorModel();
@@ -70,7 +87,7 @@ public class MapEditorController implements IController {
 				showSelectNameDialog();
 			}
 		});
-		view.mntmSave.addActionListener(new ActionListener() {
+		view.mntmExport.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(!model.hasValidMap()) {
@@ -78,6 +95,7 @@ public class MapEditorController implements IController {
 						    "No map to save!",
 						    "Error",
 						    JOptionPane.ERROR_MESSAGE);
+					return;
 				}
 				JFileChooser  fc = new JFileChooser();
 				fc.setFileFilter(new MapFileFilter());
@@ -89,7 +107,7 @@ public class MapEditorController implements IController {
 					if(!filePath.toLowerCase().endsWith(".map")) {
 						savedFileAs = new File(filePath + ".map");
 					}
-					if(!MapsFileHandler.saveSimulationMap(savedFileAs, model.getCurrentMap())) {
+					if(!MapFileHandler.saveSimulationMap(savedFileAs, model.getCurrentMap())) {
 						JOptionPane.showMessageDialog(view,
 							    "Error saving file to disk!",
 							    "Error",
@@ -99,7 +117,7 @@ public class MapEditorController implements IController {
 			}
 		});
 
-		view.mntmLoad.addActionListener(new ActionListener() {
+		view.mntmImport.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser  fc = new JFileChooser();
@@ -109,14 +127,21 @@ public class MapEditorController implements IController {
 				if(ret == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = fc.getSelectedFile();
 					if(selectedFile != null) {
-						SimulationMap loaded = MapsFileHandler.readMapFromFile(selectedFile);
+						SimulationMap loaded = MapFileHandler.readMapFromFile(selectedFile);
 						if(loaded == null) {
 							JOptionPane.showMessageDialog(view,
 								    "Error loading map from disk.",
 								    "Error",
 								    JOptionPane.ERROR_MESSAGE);
 						} else {
-							model.loadMap(loaded);
+							if(!MapFileHandler.saveSimulationMap(loaded)) {
+								JOptionPane.showMessageDialog(view,
+									    "Error loading map from disk.",
+									    "Error",
+									    JOptionPane.ERROR_MESSAGE);
+							} else {
+								model.loadMap(loaded);
+							}
 						}
 					} else {
 						JOptionPane.showMessageDialog(view,
@@ -124,6 +149,37 @@ public class MapEditorController implements IController {
 							    "Error",
 							    JOptionPane.ERROR_MESSAGE);
 					}
+				}
+			}
+		});
+		
+		view.mntmExit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				MapEditorController.this.release();
+			}
+		});
+
+		view.mntmLoad.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				new ChooseMapDialogController(view, loadedMapListener);
+			}
+		});
+
+		view.mntmSave.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(!MapFileHandler.saveSimulationMap(model.getCurrentMap())) {
+					JOptionPane.showMessageDialog(view,
+						    "Error saving file to disk!",
+						    "Error",
+						    JOptionPane.ERROR_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(view,
+						    "Map saved to Maps folder successfully.",
+						    "Saved",
+						    JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		});
@@ -135,7 +191,7 @@ public class MapEditorController implements IController {
 	
 	@Override
 	public void release() {
-		
+		view.dispose();
 	}
 
 	@Override

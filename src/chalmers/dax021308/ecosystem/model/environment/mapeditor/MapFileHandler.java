@@ -12,6 +12,7 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.AbstractObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.util.Log;
 
 /**
  * Class for handling map files. Reading and writing on them.
@@ -21,8 +22,8 @@ import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
  * @author Erik Ramqvist
  *
  */
-public class MapsFileHandler {
-	
+public class MapFileHandler {
+	private static final File mapsFolder = new File(System.getProperty("user.dir") + "/maps");
 	
 	/**
 	 * Gets all maps from the maps folder.
@@ -84,9 +85,8 @@ public class MapsFileHandler {
 	 * 
 	 */
 	public static List<File> getMapFiles() {
-		File fileDir = new File("/maps");
-		if(fileDir.exists() && fileDir.isDirectory()) {
-			File[] files = fileDir.listFiles();
+		if(mapsFolder.exists() && mapsFolder.isDirectory()) {
+			File[] files = mapsFolder.listFiles();
 			List<File> result = new ArrayList<File>(files.length);
 			for(File e : files) {
 				if(e.getName().endsWith(".map")) {
@@ -98,6 +98,30 @@ public class MapsFileHandler {
 		return null;
 	}
 	
+	/**
+	 * Saves the SimulationMap to the Maps folder.
+	 * <p> 
+	 * Overwrites if there is already a file with that name.
+	 * 
+	 * @param map
+	 * @return
+	 */
+	public static boolean saveSimulationMap(SimulationMap map) {
+		if(map == null) {
+			Log.e("map is NULL");
+			return false;
+		}
+		if(!map.isValidMap()) {
+			Log.e("isNotValidMap");
+			return false;
+		}
+		if(!mapsFolder.exists()) {
+			if(!mapsFolder.mkdir()) {
+				Log.e("error creating maps folder");
+			}
+		}
+		return saveSimulationMap(new File(mapsFolder.getAbsolutePath() + "/" + map.getName() + ".map"), map);
+	}
 	
 	/**
 	 * Saves the given SimulationMap to the given File destination.
@@ -106,6 +130,7 @@ public class MapsFileHandler {
 	 * @return
 	 */
 	public static boolean saveSimulationMap(File dest, SimulationMap map) {
+		Log.e(dest.toString());
 		PrintWriter pw = null;
 		try {
 			dest.createNewFile();

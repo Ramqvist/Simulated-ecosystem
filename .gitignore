@@ -12,6 +12,7 @@ Makefile.in
 /install-sh
 /missing
 /bin
+/maps
 .classpath
 Testrecording1.sim
 saved_settings.property

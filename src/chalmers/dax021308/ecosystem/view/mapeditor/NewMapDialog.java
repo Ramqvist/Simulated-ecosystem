@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 /**
- * Dialog for settting a map name.
+ * Dialog for setting a map name.
  * @author Erik
  *
  */
