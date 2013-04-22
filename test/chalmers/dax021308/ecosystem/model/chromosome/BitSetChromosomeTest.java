@@ -10,13 +10,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import chalmers.dax021308.ecosystem.model.genetics.BitSetChromosome;
+
 /**
  * 
  * @author Loanne Berggren
  *
  */
 @RunWith(JUnit4.class)
-public class Test_BitSetChromosome {
+public class BitSetChromosomeTest {
 	BitSetChromosome deer1;
 	BitSetChromosome deer2;
 	
