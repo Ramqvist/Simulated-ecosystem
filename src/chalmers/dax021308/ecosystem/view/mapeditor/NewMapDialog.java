@@ -33,7 +33,8 @@ public class NewMapDialog extends JDialog {
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 		setSize(new Dimension(280, 190));
-		
+		setMinimumSize(new Dimension(280, 190));
+		setResizable(false);
 		tbxMapName = new JTextField();
 		tbxMapName.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		tbxMapName.setColumns(10);

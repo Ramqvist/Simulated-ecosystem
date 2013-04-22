@@ -3,7 +3,6 @@ package chalmers.dax021308.ecosystem.view.mapeditor;
 import javax.swing.JDialog;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JTextField;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -16,7 +15,6 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JList;
 
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.SimulationMap;
-import java.awt.Window.Type;
 
 /**
  * Dialog for selecting a view to load.
@@ -33,13 +31,14 @@ public class ChooseMapDialog extends JDialog {
 	
 	public ChooseMapDialog(Frame owner) {
 		super(owner);
-		setType(Type.POPUP);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setTitle("Load map");
 		setVisible(true);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 		setSize(new Dimension(327, 426));
+		setMinimumSize(new Dimension(327, 426));
+		setResizable(false);
 		
 		btnLoadMap = new JButton("Load");
 		

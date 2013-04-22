@@ -64,6 +64,7 @@ public class MapEditorView extends JFrame implements IView {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setExtendedState(MAXIMIZED_BOTH);
 	    Dimension d = new Dimension(1000, 1000);
+	    setMinimumSize(new Dimension(500, 500));
 		openGL = new MapEditorGLView(model, d);
 		openGL.init();
 		
