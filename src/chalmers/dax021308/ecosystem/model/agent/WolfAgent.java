@@ -5,8 +5,6 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
-import chalmers.dax021308.ecosystem.model.chromosome.AbstractGenome;
-import chalmers.dax021308.ecosystem.model.chromosome.DeerGenes;
 import chalmers.dax021308.ecosystem.model.chromosome.IGenome;
 import chalmers.dax021308.ecosystem.model.chromosome.WolfGenes;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
@@ -17,8 +15,8 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
- * @author Henrik Its purpose is to hunt down Agentsof lower trophic level in a
- *         simple way
+ * Hunts other agents at lower trophic levels.
+ * @author Henrik 
  */
 public class WolfAgent extends AbstractAgent {
 
@@ -26,10 +24,23 @@ public class WolfAgent extends AbstractAgent {
 	private boolean willFocusPreys = true;
 	private static final int MAX_ENERGY = 1200;
 	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
-	private static final double REPRODUCTION_RATE = 0.10;
+	private static final double REPRODUCTION_RATE = 0.0005;
 	private static final int DIGESTION_TIME = 50;
+	private static final int PREY_FORCE_WEIGHT = 10;
+	private static final int SPRINT_INTERVAL = 20;
+	private static final int MAX_SPRINT_DURATION = 5;
+	private static final int SPRINT_BOOST = 3;
+	private static final int EXHAUSTED_DURATION = 5;
+	private static final double EXHAUST_FACTOR = 0.4;
 	private int digesting = 0;
 	private IGenome<WolfGenes> genome;
+	private int preyForceFactor = 0;
+	private boolean sprinting = false;
+	private int sprintIntervalTimer = SPRINT_INTERVAL;
+	private int sprintDurationTimer = MAX_SPRINT_DURATION;
+	private int exhaustedTimer = EXHAUSTED_DURATION;
+	private boolean exhausted = false;
+	
 
 	public WolfAgent(String name, Position position, Color color, int width,
 			int height, Vector velocity, double maxSpeed,
@@ -81,8 +92,11 @@ public class WolfAgent extends AbstractAgent {
 			 * correct direction of the acceleration.
 			 */
 
-			Vector acceleration = preyForce.multiply(10)
-					.add(mutualInteractionForce).add(forwardThrust)
+			preyForceFactor = hungry ? PREY_FORCE_WEIGHT : 0;
+			
+			Vector acceleration = preyForce.multiply(preyForceFactor)
+					.add(mutualInteractionForce)
+					.add(forwardThrust)
 					.add(arrayalForce);
 			double accelerationNorm = acceleration.getNorm();
 			if (accelerationNorm > maxAcceleration) {
@@ -105,6 +119,24 @@ public class WolfAgent extends AbstractAgent {
 				newVelocity.multiply(maxSpeed / speed);
 			}
 
+			if (sprinting && sprintDurationTimer > 0) {
+				newVelocity.multiply(SPRINT_BOOST);
+				sprintDurationTimer--;
+			} else if (sprintDurationTimer == 0) {
+				sprinting = false;
+				sprintDurationTimer = MAX_SPRINT_DURATION;
+				sprintIntervalTimer = SPRINT_INTERVAL;
+				exhausted = true;
+			}
+			
+			if (exhausted && exhaustedTimer > 0) {
+				newVelocity.multiply(EXHAUST_FACTOR);
+				exhaustedTimer--;
+			} else if (exhaustedTimer == 0) {
+				exhaustedTimer = EXHAUSTED_DURATION;
+				exhausted = false;
+			}
+			
 			this.setVelocity(newVelocity);
 
 			/* Reusing the same position object, for less heap allocations. */
@@ -123,7 +155,6 @@ public class WolfAgent extends AbstractAgent {
 		if (hungry)
 			return null;
 		else {
-			hungry = true;
 			List<IAgent> spawn = new ArrayList<IAgent>();
 			if (Math.random() < REPRODUCTION_RATE) {
 				Position pos;
@@ -145,13 +176,22 @@ public class WolfAgent extends AbstractAgent {
 		}
 	}
 
-	// This also decreases the deer's energy.
+	// This also decreases the wolfs energy.
 	@Override
 	public void updatePosition() {
 		super.updatePosition();
 		this.energy--;
-		if (energy == 0 || lifeLength > MAX_LIFE_LENGTH)
+		if (energy == 0 || lifeLength > MAX_LIFE_LENGTH) {
 			isAlive = false;
+		} else if (energy <= MAX_ENERGY * 0.6) {
+			hungry = true;
+		}
+		
+		if (!exhausted) { //Should also depend on whether a prey has been focused.
+			if (sprintIntervalTimer-- == 0) {
+				sprinting = true;
+			}
+		}
 	}
 
 	@Override
