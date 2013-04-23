@@ -94,6 +94,6 @@ public class SimulationMap {
 		if(name.equals("")) {
 			return false;
 		}
-		return false;
+		return true;
 	}
 }

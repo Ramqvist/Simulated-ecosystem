@@ -19,16 +19,16 @@ import javax.swing.LayoutStyle.ComponentPlacement;
  * @author Erik
  *
  */
-public class NewMapDialog extends JDialog {
+public class ChangeNameDialog extends JDialog {
 	
 	private static final long serialVersionUID = 6207313344198929629L;
 	public JTextField tbxMapName;
-	public JButton btnCreateNewMap;
+	public JButton btnRename;
 	
 	
-	public NewMapDialog(Frame owner) {
+	public ChangeNameDialog(Frame owner) {
 		super(owner);
-		setTitle("Create new Map");
+		setTitle("Change map name");
 		setVisible(true);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
@@ -39,7 +39,7 @@ public class NewMapDialog extends JDialog {
 		tbxMapName.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		tbxMapName.setColumns(10);
 		
-		btnCreateNewMap = new JButton("Create new map");
+		btnRename = new JButton("Rename");
 		
 		JLabel lblMapName = new JLabel("Map name");
 		lblMapName.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -49,7 +49,7 @@ public class NewMapDialog extends JDialog {
 				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
 					.addContainerGap(35, Short.MAX_VALUE)
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-						.addComponent(btnCreateNewMap, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(btnRename, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(lblMapName, Alignment.LEADING)
 						.addComponent(tbxMapName, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE))
 					.addGap(33))
@@ -62,7 +62,7 @@ public class NewMapDialog extends JDialog {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(tbxMapName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
-					.addComponent(btnCreateNewMap, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+					.addComponent(btnRename, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(23, Short.MAX_VALUE))
 		);
 		getContentPane().setLayout(groupLayout);

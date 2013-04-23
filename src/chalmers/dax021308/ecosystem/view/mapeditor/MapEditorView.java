@@ -46,10 +46,13 @@ public class MapEditorView extends JFrame implements IView {
 	
 	public final JMenuBar menuBar;
 	public final JMenu mnFile;
-	public final JMenuItem mntmLoad;
-	public final JMenuItem mntmSave;
+	public final JMenuItem mntmImport;
+	public final JMenuItem mntmExport;
 	public final JMenuItem mntmNew;
 	public final JMenuItem mntmExit;
+	public final JMenuItem mntmSave;
+	public final JMenuItem mntmSaveAs;
+	public final JMenuItem mntmLoad;
 
 	/**
 	 * Create the frame.
@@ -61,18 +64,27 @@ public class MapEditorView extends JFrame implements IView {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setExtendedState(MAXIMIZED_BOTH);
 	    Dimension d = new Dimension(1000, 1000);
+	    setMinimumSize(new Dimension(500, 500));
 		openGL = new MapEditorGLView(model, d);
 		openGL.init();
 		
 		menuBar = new JMenuBar();
 		mnFile = new JMenu("File");
 		menuBar.add(mnFile);
-		mntmNew = new JMenuItem("New map");
+		mntmNew = new JMenuItem("New");
 		mnFile.add(mntmNew);
-		mntmLoad = new JMenuItem("Load map");
-		mnFile.add(mntmLoad);
-		mntmSave = new JMenuItem("Save map");
+		mntmSave = new JMenuItem("Save");
 		mnFile.add(mntmSave);
+		mntmSaveAs = new JMenuItem("Save as...");
+		mnFile.add(mntmSaveAs);
+		mntmLoad = new JMenuItem("Load...");
+		mnFile.add(mntmLoad);
+		mnFile.addSeparator();
+		mntmImport = new JMenuItem("Import...");
+		mnFile.add(mntmImport);
+		mntmExport = new JMenuItem("Export...");
+		mnFile.add(mntmExport);
+		mnFile.addSeparator();
 		mntmExit = new JMenuItem("Exit");
 		mnFile.add(mntmExit);
 		setJMenuBar(menuBar);

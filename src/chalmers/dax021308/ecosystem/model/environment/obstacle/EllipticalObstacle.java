@@ -9,6 +9,14 @@ public class EllipticalObstacle extends AbstractObstacle{
 	private static double e = 0.1;
 	private static double nStep = 6;
 	
+	/**
+	 * The ellipse is defined as (x/width)^2 + (y/height)^2 + 1 = 0. Therefore width and height is the half
+	 * of the total width and height of the ellipse.
+	 * @param width the total width of the ellipse/2
+	 * @param height the total height of the ellipse/2
+	 * @param position 
+	 * @param color
+	 */
 	public EllipticalObstacle(double width, double height, Position position, Color color){
 		this.position = position;
 		this.width = width;
@@ -57,6 +65,14 @@ public class EllipticalObstacle extends AbstractObstacle{
 		return bestPos;
 	}
 
+	/**
+	 * Not used. Newtons is better.
+	 * @param agentPos
+	 * @param startAngle
+	 * @param step
+	 * @param iteration
+	 * @return
+	 */
 	private Position recursiveBoundarySearch(Position agentPos ,double startAngle, double step, int iteration){
 		Position elipPos1 = new Position(Double.MAX_VALUE, Double.MAX_VALUE);
 		Position elipPos2 = new Position(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -84,6 +100,11 @@ public class EllipticalObstacle extends AbstractObstacle{
 		
 	}
 	
+	/**
+	 * Not used. Newtons is better.
+	 * @param agentPos
+	 * @return
+	 */
 	private Position bruteBoundarySearch(Position agentPos){
 		Position bestPos = new Position(Double.MAX_VALUE, Double.MAX_VALUE);
 		Position elipPos = new Position();
@@ -96,6 +117,14 @@ public class EllipticalObstacle extends AbstractObstacle{
 		return bestPos;
 	}
 	
+	/**
+	 * Given a position, this funtion finds the closest point on the ellipse boundary to the given position.
+	 * The function finds the best position using Newton's method for approximating a rational function.
+	 * @param p the position.
+	 * @param a The width of the ellipse.
+	 * @param b the height of the ellipse.
+	 * @return
+	 */
 	private Position newtonsMethod(Position p, double a, double b){	
 		double u = p.getX();
 		double v = p.getY();
@@ -131,11 +160,18 @@ public class EllipticalObstacle extends AbstractObstacle{
 		return false;
 	}
 	
+	/**
+	 * Returns the color of the obstacle.
+	 */
 	@Override
 	public Color getColor() {
 		return color;
 	}
 	
+	/**
+	 * Returns true of the given position is inside the enveloping circle of the obstacles, 
+	 * plus the interaction range.
+	 */
 	@Override
 	public boolean isCloseTo(Position p, double interactionRange){
 		double ab = Math.max(width, height);
