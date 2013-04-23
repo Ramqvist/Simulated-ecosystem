@@ -83,7 +83,11 @@ public class SimulationMap {
 		}
 		return false;
 	}
-
+	
+	@Override
+	public String toString() {
+		return name;
+	}
 	public boolean isValidMap() {
 		if(getName() == null || getObsList() == null) {
 			return false;

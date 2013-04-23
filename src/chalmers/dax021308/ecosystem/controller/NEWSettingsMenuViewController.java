@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
+import chalmers.dax021308.ecosystem.model.environment.mapeditor.SimulationMap;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.NEWSettingsMenuView;
 
@@ -75,7 +76,7 @@ public class NEWSettingsMenuViewController implements IController {
 		String veg;
 		int vegPopSize;
 		String shape;
-		String obstacle;
+		SimulationMap map;
 		int noOfThreads;
 		boolean isRunningWithoutTimer;
 		boolean isRecording;	
@@ -92,7 +93,8 @@ public class NEWSettingsMenuViewController implements IController {
 		veg = (String) view.listVegetation.getSelectedValue();
 		vegPopSize = (Integer) view.spinnerVegPopSize.getValue();
 		shape = view.buttonGroupShape.getSelectedButtonText(); //TODO: test
-		obstacle = (String) view.listObstacle.getSelectedValue();
+		map = (SimulationMap) view.listMap.getSelectedValue();
+		
 		noOfThreads = Integer.parseInt(view.buttonGroupThread.getSelectedButtonText());
 		tickDelay = (Integer) view.spinnerDelayLength.getValue();
 		isRunningWithoutTimer = false;
@@ -105,7 +107,7 @@ public class NEWSettingsMenuViewController implements IController {
 			noOfIterations = (Integer) view.spinnerNoOfIterations.getValue();
 		}
 		
-		SimulationSettings simSettings = new SimulationSettings(settingsName, pred, predPopSize, prey, preyPopSize, veg, vegPopSize, shape, obstacle, noOfThreads, isRunningWithoutTimer, isRecording, tickDelay, noOfIterations);
+		SimulationSettings simSettings = new SimulationSettings(settingsName, pred, predPopSize, prey, preyPopSize, veg, vegPopSize, shape, noOfThreads, isRunningWithoutTimer, isRecording, tickDelay, noOfIterations, map);
 		if (view.checkBoxCustomSize.isSelected()) {
 			width = Integer.parseInt(view.textFieldWidth.getText());
 			height = Integer.parseInt(view.textFieldHeight.getText());
@@ -128,7 +130,10 @@ public class NEWSettingsMenuViewController implements IController {
 		view.listVegetation.setSelectedValue(s.getGrassModel(), true);
 		view.listPred.setSelectedValue(s.getPredatorModel(), true);
 		view.listPrey.setSelectedValue(s.getPreyModel(), true);
-		view.listObstacle.setSelectedValue(s.getObstacle(), true);
+		SimulationMap map = s.getMap();
+		if(map != null) {
+			view.listMap.setSelectedValue(map, true);
+		}
 		
 		view.spinnerPredPopSize.setValue(s.getPredPopSize());
 		view.spinnerPreyPopSize.setValue(s.getPreyPopSize());

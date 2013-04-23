@@ -89,11 +89,12 @@ public class NewSimulationController implements IController {
 				Integer.parseInt(view.tvPreyPopSize.getText()),
 				(String) view.grassList.getSelectedValue(),
 				Integer.parseInt(view.tvGrassPopSize.getText()), shape, 
-				(String) view.obstacleList.getSelectedValue(), numThreads, 
+				 numThreads, 
 				runWithoutTimer, 
 				view.chckbxRecordSimulation.isSelected(), 
 				tickDelay, 
-				numIterations);
+				numIterations,
+				view.mapList.getSelectedValue());
 		if(view.chckbxCustomSize.isSelected()) {
 			int width = Integer.parseInt(view.tfCustomWidth.getText());
 			int height = Integer.parseInt(view.tfCustomHeight.getText());
@@ -165,7 +166,7 @@ public class NewSimulationController implements IController {
 		view.grassList.setSelectedValue(s.getGrassModel(), true);
 		view.predList.setSelectedValue(s.getPredatorModel(), true);
 		view.preyList.setSelectedValue(s.getPreyModel(), true);
-		view.obstacleList.setSelectedValue(s.getObstacle(), true);
+		//view.obstacleList.setSelectedValue(s.getObstacle(), true);
 		
 		view.chckbxRecordSimulation.setSelected(s.isRecordSimulation());
 		view.tvPredPopSize.setText(s.getPredPopSize() + "");

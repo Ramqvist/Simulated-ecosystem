@@ -15,11 +15,17 @@ import java.awt.peer.ButtonPeer;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListDataListener;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
+import chalmers.dax021308.ecosystem.model.environment.mapeditor.DefaultMaps;
+import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapFileHandler;
+import chalmers.dax021308.ecosystem.model.environment.mapeditor.SimulationMap;
 import chalmers.dax021308.ecosystem.model.util.ButtonGroupWrapper;
 import java.awt.BorderLayout;
+import java.util.List;
+
 import javax.swing.border.Border;
 
 public class NEWSettingsMenuView extends JFrame {
@@ -98,7 +104,7 @@ public class NEWSettingsMenuView extends JFrame {
     public final JSpinner spinnerVegPopSize;
     
     public final JList listSimDimension;
-    public final JList listObstacle;
+    public final JList<SimulationMap> listMap;
     public final JList listPred;
     public final JList listPrey;
     public final JList listVegetation;
@@ -210,7 +216,7 @@ public class NEWSettingsMenuView extends JFrame {
         //sliderNoOfIterations = new JSlider();
 
         listSimDimension = new JList();
-        listObstacle = new JList();
+        listMap = new JList<SimulationMap>();
         listPred = new JList();
         listPrey = new JList();
         listVegetation = new JList();
@@ -529,19 +535,33 @@ public class NEWSettingsMenuView extends JFrame {
         });
         listSimDimension.setSelectedIndex(1);
 
-        listObstacle.setValueIsAdjusting(true);
-        listObstacle.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        listObstacle.setSelectedIndices(new int[]{3});
-        listObstacle.setModel(new AbstractListModel() {
-            public int getSize() {
-                return SimulationSettings.OBSTACLE_VALUES.length;
-            }
+        listMap.setValueIsAdjusting(true);
+        listMap.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listMap.setSelectedIndices(new int[]{3});
+        final List<SimulationMap> foundMaps = DefaultMaps.defaultMaps;
+        List<SimulationMap> readMaps = MapFileHandler.readMapsFromMapsFolder();
+        if(readMaps != null) {
+        	foundMaps.addAll(readMaps);
+        }
+        listMap.setModel(new ListModel<SimulationMap> () {
+        	List<SimulationMap> mapList = foundMaps;
+			@Override
+			public int getSize() {
+				return mapList.size();
+			}
+			@Override
+			public SimulationMap getElementAt(int index) {
+				return mapList.get(index);
+			}
+			@Override
+			public void addListDataListener(ListDataListener l) {
+			}
 
-            public Object getElementAt(int index) {
-                return SimulationSettings.OBSTACLE_VALUES[index];
-            }
+			@Override
+			public void removeListDataListener(ListDataListener l) {
+			}
         });
-        listObstacle.setSelectedIndex(0);
+        listMap.setSelectedIndex(0);
     }
 
     private void setMyBorders() {
@@ -550,7 +570,7 @@ public class NEWSettingsMenuView extends JFrame {
         //panelButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         shapeRadioPanel.setBorder(createTitledBorder("Shape of Universe"));
-        listObstacle.setBorder(createTitledBorder("Obstacles"));
+        listMap.setBorder(createTitledBorder("Obstacles"));
         
         listPred.setBorder(createTitledBorder("Predators"));
         listPrey.setBorder(createTitledBorder("Preys"));
@@ -585,7 +605,7 @@ public class NEWSettingsMenuView extends JFrame {
         //c.weighty = 0;
         c.gridx = 0;
         c.gridy = 2;
-        left.add(listObstacle, c);
+        left.add(listMap, c);
         
         c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
