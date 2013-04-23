@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapEditorModel;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.view.IView;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -20,7 +21,13 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-public class AddObstacleView extends JPanel implements IView {
+/**
+ * Panel for editing a selected obstacle.
+ * 
+ * @author Erik Ramqvist
+ *
+ */
+public class SelectedObstacleView extends JPanel implements IView {
 	private static final long serialVersionUID = 4214212142L;
 	public final JTextField tbxWidth;
 	public final JTextField tbxHeight;
@@ -31,10 +38,10 @@ public class AddObstacleView extends JPanel implements IView {
 	public final JRadioButton rdbtnTypeCircle;
 	public final JButton btnAddObstacle;
 
-	public AddObstacleView(IModel m) {
+	public SelectedObstacleView(IModel m) {
 		m.addObserver(this);
-		
-		JLabel lblAddNewObstacle = new JLabel("Add new obstacle");
+		setVisible(false);
+		JLabel lblAddNewObstacle = new JLabel("Selected obstacle");
 		lblAddNewObstacle.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
 		rdbtnTypeTriangle = new JRadioButton("Triangle");
@@ -93,34 +100,32 @@ public class AddObstacleView extends JPanel implements IView {
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(rdbtnTypeCircle)
 							.addContainerGap())
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(rdbtnTypeRectangle, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addContainerGap())
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(lblAddNewObstacle)
-								.addContainerGap(315, Short.MAX_VALUE))
-							.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-									.addComponent(btnAddObstacle, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
-									.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-										.addComponent(rdbtnTypeTriangle, GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
-										.addGap(31))
-									.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addComponent(tbxXPosition, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-											.addComponent(lblXPosition, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE))
-										.addGap(49)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addComponent(tbxYPosition, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-											.addComponent(lblYPosition, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)))
-									.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-										.addComponent(tbxWidth, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-										.addGap(49)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addComponent(lblHeight, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
-											.addComponent(tbxHeight, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE))))
-								.addGap(201)))
+						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+							.addComponent(rdbtnTypeRectangle, GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
+							.addContainerGap())
+						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(btnAddObstacle, GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(tbxXPosition, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblXPosition, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE))
+									.addGap(49)
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(tbxYPosition, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblYPosition, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(tbxWidth, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+									.addGap(49)
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(lblHeight, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
+										.addComponent(tbxHeight, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)))
+								.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+									.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+										.addComponent(lblAddNewObstacle, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+										.addComponent(rdbtnTypeTriangle, GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE))
+									.addGap(31)))
+							.addGap(201))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(lblSize, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
 							.addContainerGap(380, Short.MAX_VALUE))))
@@ -128,10 +133,11 @@ public class AddObstacleView extends JPanel implements IView {
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(19)
+					.addComponent(lblAddNewObstacle)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(19)
-							.addComponent(lblAddNewObstacle)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(rdbtnTypeTriangle)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
@@ -151,11 +157,11 @@ public class AddObstacleView extends JPanel implements IView {
 								.addComponent(tbxXPosition, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(tbxYPosition, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(115)
+							.addGap(76)
 							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblSize, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblHeight, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))))
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGap(211)
 					.addComponent(btnAddObstacle, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(64, Short.MAX_VALUE))
 		);
@@ -197,7 +203,26 @@ public class AddObstacleView extends JPanel implements IView {
 						btnAddObstacle.setEnabled(true);
 					}
 				}
+			} else if(evt.getPropertyName() == MapEditorModel.EVENT_MAPNAME_CHANGED) {
+				IObstacle selectedObstacle = (IObstacle) evt.getNewValue();
+				if(selectedObstacle == null) {
+					setVisible(false);
+					loadObstacle(selectedObstacle);
+				} else {
+					setVisible(true);
+				}
 			}
+	}
+
+	private void loadObstacle(IObstacle selectedObstacle) {
+		tbxWidth.setText("" + selectedObstacle.getWidth());
+		tbxHeight.setText("" + selectedObstacle.getHeight());
+		tbxXPosition.setText("" + selectedObstacle.getPosition().getX());
+		tbxYPosition.setText("" + selectedObstacle.getPosition().getY());
+		rdbtnTypeTriangle.setText("" + selectedObstacle.getPosition().getY());
+		rdbtnTypeRectangle.setEnabled(false);
+		rdbtnTypeCircle.setEnabled(false);
+		btnAddObstacle.setEnabled(false);
 	}
 
 	@Override

@@ -41,6 +41,9 @@ public class SimulationSettings {
 	public static final String POP_DUMMYPRED  = "Dummy Predator Population";
 	public static final String POP_WOLF       = "Wolf Population";
 	public static final String POP_GRASS_FIELD = "Grass Field Population";
+	
+	/* Population names */
+	public static final String NAME_GRASS_FIELD = "Grass Field";
 
 	/* Population array based on predator-prey model, the view uses these values. */
 	public static final String[] PREY_VALUES  = { POP_DEER, POP_PIG, POP_DUMMYPREY };

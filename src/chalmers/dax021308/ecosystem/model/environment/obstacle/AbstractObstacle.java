@@ -30,33 +30,55 @@ public abstract class AbstractObstacle implements IObstacle {
 	protected Color color;
 	
 	@Override
+	/**
+	 * returns the width of the obstacle.
+	 */
 	public double getWidth() {
 		return width;
 	}
 	@Override
+	/**
+	 * returns the height of the obstacle.
+	 */
 	public double getHeight() {
 		return height;
 	}
+	
 	@Override
+	/**
+	 * returns the position of the obstacle
+	 */
 	public Position getPosition() {
 		return new Position(position);
 	}
 	
 	@Override
+	/**
+	 * Moves the obstacle +x and +y distance.
+	 */
 	public void moveObstacle(double x, double y) {
 		this.position = new Position(position.getX() + x, position.getY() + y);
 	}
 	
 	@Override
+	/**
+	 * Sets the position of the obstacle to (x,y).
+	 */
 	public void setPosition(Position p) {
 		this.position = p;
 	}
 	
 	@Override
+	/**
+	 * returns the color of the obstacle
+	 */
 	public Color getColor(){
 		return this.color;
 	}
 	
+	/**
+	 * Sets the color of the obstacle
+	 */
 	public void setColor(Color c) {
 		this.color = c;
 	}
@@ -72,6 +94,10 @@ public abstract class AbstractObstacle implements IObstacle {
 		height = height * scaleY;
 		return this;
 	}
+	
+	/**
+	 * Used to export an obstacle.
+	 */
 	public String toBinaryString() {
 		StringBuilder sb = new StringBuilder();
 		if(this instanceof EllipticalObstacle) {
@@ -101,6 +127,11 @@ public abstract class AbstractObstacle implements IObstacle {
 		return sb.toString();
 	}
 	
+	/**
+	 * Used to import an obstacle.
+	 * @param input
+	 * @return
+	 */
 	public static AbstractObstacle createFromFile(String input) {
 		String[] inputArray = input.split(";");
 		String shape = inputArray[0];
@@ -123,6 +154,11 @@ public abstract class AbstractObstacle implements IObstacle {
 		return obs;
 	}
 	
+	/**
+	 * Rounds a double to two decimals.
+	 * @param num
+	 * @return
+	 */
 	public static double roundTwoDecimals(double num) {
 		double result = num * 100;
 		result = Math.round(result);
@@ -130,6 +166,13 @@ public abstract class AbstractObstacle implements IObstacle {
 		return result;
 	}
 	
+	/**
+	 * checks if a position is inside the list of obstacles.
+	 * @param obsList The list of obstacles.
+	 * @param p the position.
+	 * @return true if the position is inside any of the obstacles. 
+	 * False if the position is not inside any of the obstacles.
+	 */
 	public static boolean isInsideObstacleList(List<IObstacle> obsList, Position p) {
 		if(obsList == null) {
 			return false;
@@ -164,6 +207,10 @@ public abstract class AbstractObstacle implements IObstacle {
 //		return false;
 //	}
 	
+	/**
+	 * Checks of a linear path is cutting the obstacle at any point.
+	 * @return true if the path cuts the obstacle. False otherwise.
+	 */
 	public boolean isInsidePath(Position start, Position end) {
 		Position current = new Position(start);
 		double path_threshold = 5.0;
@@ -194,6 +241,9 @@ public abstract class AbstractObstacle implements IObstacle {
 //		return false;
 //	}
 	
+	/**
+	 * Checks if a path is inside a list of obstacles.
+	 */
 	public static boolean isInsidePathList(List<IObstacle> obsList, Position start, Position end) {
 		
 		double stepConstant = 5;

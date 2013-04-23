@@ -3,6 +3,7 @@ package chalmers.dax021308.ecosystem.model.agent;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -89,6 +90,14 @@ public abstract class AbstractAgent implements IAgent {
 		neighbourCounter = ran.nextInt(NEIGHBOURS_UPDATE_THRESHOLD);
 	}
 
+	public AbstractAgent(String name, Position p, Color c, int width,
+			int height, Vector velocity, double maxSpeed, double visionRange,
+			double maxAcceleration, int capacity, boolean groupBehaviour) {
+
+		// To update the first time.
+		neighbourCounter = ran.nextInt(NEIGHBOURS_UPDATE_THRESHOLD);
+	}
+
 	/**
 	 * Clone constructor. Use this to create a copy.
 	 * 
@@ -101,6 +110,26 @@ public abstract class AbstractAgent implements IAgent {
 				a.maxAcceleration);
 	}
 
+	public AbstractAgent(String name, Position pos, Color color, int width,
+			int height) {
+		this.name = name;
+		position = new Position(pos);
+		this.color = color;
+		this.width = width;
+		this.height = height;
+
+		/*
+		 * LinkedList for fast changing of Agents, consider ArrayList for less
+		 * memory
+		 */
+		preyNeighbours = new LinkedList<IAgent>();
+		predNeighbours = new LinkedList<IAgent>();
+		neutralNeighbours = new LinkedList<IAgent>();
+
+		// To update the first time.
+		neighbourCounter = NEIGHBOURS_UPDATE_THRESHOLD;
+	}
+
 	@Override
 	public Position getPosition() {
 		return position;
@@ -110,7 +139,7 @@ public abstract class AbstractAgent implements IAgent {
 	public void setPosition(Position position) {
 		this.position = position;
 	}
-	
+
 	@Override
 	public String getName() {
 		return name;
@@ -421,6 +450,16 @@ public abstract class AbstractAgent implements IAgent {
 		result = Math.round(result);
 		result = result / 100;
 		return result;
+	}
+
+	@Override
+	public boolean looksTasty(IAgent agent, double visionRange) {
+		// If nothing else is specified, the fact that the agent is alive and in
+		// vision range makes it desirable to eat
+		double distance = agent.getPosition().getDistance(position)
+				- (width + height);
+
+		return distance <= visionRange;
 	}
 
 	@Override

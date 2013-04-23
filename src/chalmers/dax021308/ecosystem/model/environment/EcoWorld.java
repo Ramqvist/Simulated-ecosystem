@@ -58,6 +58,7 @@ public class EcoWorld implements IModel {
 	public static final String EVENT_DELAY_CHANGED 			= "chalmers.dax021308.ecosystem.model.Ecoworld.event_delay_changed";
 	public static final String EVENT_SHAPE_CHANGED 			= "chalmers.dax021308.ecosystem.model.Ecoworld.event_shape_changed";
 	public static final String EVENT_ITERATION_FINISHED		= "chalmers.dax021308.ecosystem.model.Ecoworld.event_iteration_finished";
+	public static final String EVENT_HEATMAP_POPCHANGE		= "chalmers.dax021308.ecosystem.model.Ecoworld.event_heatmap_popchange";
 
 	/* State variables */
 	private boolean environmentFinished = false;
@@ -89,7 +90,8 @@ public class EcoWorld implements IModel {
 	private int numUpdates = 0;
 	private Dimension d;
 	private ExecutorService executor;
-	private ExecutorService notifierExecutor = Executors.newSingleThreadExecutor();
+	private ExecutorService notifierExecutor = Executors
+			.newSingleThreadExecutor();
 
 	private ObserverNotifier notifier = new ObserverNotifier();
 
@@ -280,8 +282,8 @@ public class EcoWorld implements IModel {
 			grass = new GrassPopulation("Grass", d, s.getGrassPopSize(),
 					new Color(69, 139, 00), 1, 1, 0, 800, shape, obstacles);
 		} else if (s.getGrassModel() == SimulationSettings.POP_GRASS_FIELD) {
-			grass = new GrassFieldPopulation("Grass_Fields", d, s.getGrassPopSize(),
-					new Color(69, 139, 00), 1, 1, 0, 80, shape, obstacles);
+			grass = new GrassFieldPopulation(SimulationSettings.NAME_GRASS_FIELD, d, s.getGrassPopSize(),
+					Color.green, 1, 1, 0, 80, shape, obstacles);
 		}
 
 		if (prey == null || pred == null || grass == null || shape == null) {
@@ -354,6 +356,12 @@ public class EcoWorld implements IModel {
 			return recording.saveToFile(f);
 		}
 		return false;
+	}
+
+	private List<IObstacle> readObsticlesFromFile() {
+		List<IObstacle> obsList = new ArrayList<IObstacle>();
+		obsList.add(new EllipticalObstacle(0, 0, new Position(), Color.black));
+		return obsList;
 	}
 
 	/**
@@ -506,7 +514,7 @@ public class EcoWorld implements IModel {
 				sb.append(" sample variance: ");
 				sb.append(roundTwoDecimals(statTime.getSampleVariance()));
 			}
-			Log.v(sb.toString());
+			//Log.v(sb.toString());
 			executor.execute(env);
 			startIterationTime = System.nanoTime();
 		} else {
@@ -582,6 +590,10 @@ public class EcoWorld implements IModel {
 	@Override
 	public void removeObserver(PropertyChangeListener listener) {
 		observers.removePropertyChangeListener(listener);
+	}
+
+	public void setHeapmatPopulation(String selectedPop) {
+		observers.firePropertyChange(EVENT_HEATMAP_POPCHANGE, null, selectedPop);
 	}
 
 }

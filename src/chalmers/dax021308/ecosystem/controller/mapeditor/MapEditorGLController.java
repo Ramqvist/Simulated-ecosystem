@@ -21,9 +21,11 @@ public class MapEditorGLController implements IController {
 	public final MapEditorGLView view;
 	private Position startClick;
 	private IObstacle selectedObstacle;
+	private MapEditorModel model;
 	
 	public MapEditorGLController(MapEditorModel model) {
 		view = new MapEditorGLView(model, SimulationMap.DEFAULT_OBSTACLE_DIMENSION);
+		this.model = model;
 	}
 
 	@Override
@@ -73,6 +75,7 @@ public class MapEditorGLController implements IController {
 				double y = view.size.height - view.size.height*(e.getY())/view.getHeight();
 				
 				selectedObstacle = view.getObstacleFromCoordinates(x, y);
+				model.setSelectedObstacle(selectedObstacle);
 				if(selectedObstacle != null) {
 					startClick = new Position(x, y);
 					Random ran = new Random();

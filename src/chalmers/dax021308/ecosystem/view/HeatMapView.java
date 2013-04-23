@@ -108,6 +108,12 @@ public class HeatMapView extends GLCanvas implements IView {
 				visited = new boolean[nPopulations][heatMapWidth][heatMapHeight];
 			}
 			//Handle dimension change here.
+		} else if(eventName == EcoWorld.EVENT_HEATMAP_POPCHANGE) {
+			Object o = event.getNewValue();
+			if(o instanceof String){
+				String popName  = (String) o;
+				setPopulationNameToShow(popName);
+			}
 		}
 	}
 	
