@@ -30,9 +30,9 @@ public class LiveSettingsView extends JPanel {
 	
 	public final JSpinner spinnerDelayLength;
 	
-	public final JComboBox comboBoxHeatMapPop;
+	public final JComboBox<String> comboBoxHeatMapPop;
 	
-	public final String[] comboTest = {"all", "not all"};
+	public String[] populationNames = {"Deers","Wolves","Grass"};
 	/*
 	public final JRadioButton radioButtonDelayOn;
 	public final JRadioButton radioButtonDelayOff;
@@ -57,7 +57,7 @@ public class LiveSettingsView extends JPanel {
 		spinnerDelayLength = new JSpinner();
 		spinnerDelayLength.setModel(new SpinnerNumberModel(DEFAULT_ITERATION_DELAY, 0, 100, 1));
 		
-		comboBoxHeatMapPop = new JComboBox(comboTest);
+		comboBoxHeatMapPop = new JComboBox<String>(populationNames);
 		
 		/*
 		radioButtonDelayOn = new JRadioButton("Delay On");
