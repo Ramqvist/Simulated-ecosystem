@@ -613,7 +613,6 @@ public class EcoWorld implements IModel {
 
 	public void setHeapmatPopulation(String selectedPop) {
 		observers.firePropertyChange(EVENT_HEATMAP_POPCHANGE, null, selectedPop);
-		Log.v(selectedPop);
 	}
 
 }

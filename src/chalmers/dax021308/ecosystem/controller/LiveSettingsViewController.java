@@ -31,7 +31,6 @@ public class LiveSettingsViewController implements IController {
 				if(item instanceof String) {
 					String selectedPop = (String) item;
 					model.setHeapmatPopulation(selectedPop);
-					Log.v(selectedPop);
 				}
 			}
 		});

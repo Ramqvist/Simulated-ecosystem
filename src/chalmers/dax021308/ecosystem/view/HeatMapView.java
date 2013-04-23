@@ -331,7 +331,6 @@ public class HeatMapView extends GLCanvas implements IView {
 	}
 	
 	public void setPopulationNameToShow(String populationName){
-		System.out.println("Heatmap changed population to: " + populationName);
 		this.populationName = populationName;
 	}
 
