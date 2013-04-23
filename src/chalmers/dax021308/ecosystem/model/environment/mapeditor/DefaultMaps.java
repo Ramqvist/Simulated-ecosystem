@@ -39,14 +39,12 @@ public class DefaultMaps {
 				.getHeight() / 2), new Color(0, 128, 255)));
 		triangle_map = new SimulationMap(obstacles, "Triangle obstacle");
 		obstacles = new ArrayList<IObstacle>(1);
-		obstacles.add(new TriangleObstacle(d.getWidth() * 0.2, d
-				.getHeight() * 0.2, new Position(d.getWidth() / 2, d
-				.getHeight() / 2), new Color(0, 128, 255)));
+		obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.3, d.getHeight()*0.2), new Color(0, 128, 255)));
+		obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.7, d.getHeight()*0.4), new Color(0, 128, 255)));
+		obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.3, d.getHeight()*0.6), new Color(0, 128, 255)));
+		obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.7, d.getHeight()*0.8), new Color(0, 128, 255)));
 		rivers_map = new SimulationMap(obstacles, "Rivers");
 		obstacles = new ArrayList<IObstacle>(3);
-		obstacles.add(new TriangleObstacle(d.getWidth() * 0.2, d
-				.getHeight() * 0.2, new Position(d.getWidth() / 2, d
-				.getHeight() / 2), new Color(0, 128, 255)));
 		obstacles.add(new RectangularObstacle(d.getWidth() * 0.5, d.getHeight() * 0.225, new Position(d.getWidth() * 0.5, d.getHeight() * 0.225), new Color(25, 25, 25)));
 		obstacles.add(new RectangularObstacle(d.getWidth() * 0.5, d.getHeight() * 0.225, new Position(d.getWidth() * 0.5, d.getHeight() * 0.775), new Color(25, 25, 25)));
 		tube_map = new SimulationMap(obstacles, "Tube");
