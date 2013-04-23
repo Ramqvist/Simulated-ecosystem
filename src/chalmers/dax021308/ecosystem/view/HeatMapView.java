@@ -108,7 +108,7 @@ public class HeatMapView extends GLCanvas implements IView {
 				visited = new boolean[nPopulations][heatMapWidth][heatMapHeight];
 			}
 			//Handle dimension change here.
-		} else if(eventName == "") {
+		} else if(eventName == EcoWorld.EVENT_HEATMAP_POPCHANGE) {
 			Object o = event.getNewValue();
 			if(o instanceof String){
 				String popName  = (String) o;
@@ -331,6 +331,7 @@ public class HeatMapView extends GLCanvas implements IView {
 	}
 	
 	public void setPopulationNameToShow(String populationName){
+		System.out.println("Heatmap changed population to: " + populationName);
 		this.populationName = populationName;
 	}
 

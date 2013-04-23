@@ -526,7 +526,7 @@ public class EcoWorld implements IModel {
 				sb.append(" sample variance: ");
 				sb.append(roundTwoDecimals(statTime.getSampleVariance()));
 			}
-			Log.v(sb.toString());
+			//Log.v(sb.toString());
 			executor.execute(env);
 			startIterationTime = System.nanoTime();
 		} else {
