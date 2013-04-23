@@ -79,7 +79,6 @@ public class MapEditorGLView extends GLCanvas implements IView {
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
-				Log.v(e.toString());
 				if(selectedObstacle == null) {
 					return;
 				}
@@ -134,7 +133,6 @@ public class MapEditorGLView extends GLCanvas implements IView {
 				this.shape = (IShape) o;
 			}
 		} else if(eventName == MapEditorModel.EVENT_SELECTED_CHANGED) {
-			Log.v(event.toString());
 			selectedObstacle = (IObstacle) event.getNewValue();
 		}
 	}
