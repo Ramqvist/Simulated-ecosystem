@@ -121,6 +121,8 @@ public class MapEditorGLController implements IController {
 				} else if(e.getKeyCode() == KeyEvent.VK_DELETE) {
 					model.removeObstacle(view.selectedObstacle);
 					model.setSelectedObstacle(null);
+				} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					model.setSelectedObstacle(null);
 				}
 				e.consume();
 			}
