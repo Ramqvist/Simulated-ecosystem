@@ -97,7 +97,7 @@ public class MapEditorGLController implements IController {
 			}
 		});
 		
-
+		view.setFocusTraversalKeysEnabled(false);
 		view.addKeyListener(new KeyListener() {
 			
 
@@ -123,13 +123,15 @@ public class MapEditorGLController implements IController {
 					model.setSelectedObstacle(null);
 				} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 					model.setSelectedObstacle(null);
-				}
-				e.consume();
+				} 
 			}
 			
 			@Override
 			public void keyPressed(KeyEvent e) {
-
+				if(e.getKeyCode() == KeyEvent.VK_TAB) {
+					model.switchSelectedObstacle();
+					e.consume();
+				}
 			}
 		});
 	}
