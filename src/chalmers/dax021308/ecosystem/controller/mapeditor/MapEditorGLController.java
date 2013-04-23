@@ -1,6 +1,8 @@
 package chalmers.dax021308.ecosystem.controller.mapeditor;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -44,13 +46,9 @@ public class MapEditorGLController implements IController {
 			}
 		});
 		view.addMouseMotionListener(new MouseMotionListener() {
-			
-
-
 			@Override
 			public void mouseMoved(MouseEvent e) {
 			}
-			
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				if(mouseSelectedObstacle != null) {
@@ -82,10 +80,8 @@ public class MapEditorGLController implements IController {
 				if(mouseSelectedObstacle != null) {
 					startClick = new Position(x, y);
 					Random ran = new Random();
-					e.consume();
 				}
 			}
-			
 			@Override
 			public void mouseExited(MouseEvent e) {
 				mouseSelectedObstacle = null;
@@ -98,6 +94,40 @@ public class MapEditorGLController implements IController {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
+			}
+		});
+		
+
+		view.addKeyListener(new KeyListener() {
+			
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(view.selectedObstacle == null) {
+					return;
+				}
+				if(e.getKeyCode() == KeyEvent.VK_UP) {
+					view.selectedObstacle.moveObstacle(0, 2);
+				} else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+					view.selectedObstacle.moveObstacle(0, -2);
+				} else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+					view.selectedObstacle.moveObstacle(-2, 0);
+				} else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+					view.selectedObstacle.moveObstacle(2, 0);
+				} else if(e.getKeyCode() == KeyEvent.VK_DELETE) {
+					model.removeObstacle(view.selectedObstacle);
+					model.setSelectedObstacle(null);
+				}
+				e.consume();
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+
 			}
 		});
 	}

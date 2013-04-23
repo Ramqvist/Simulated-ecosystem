@@ -54,7 +54,7 @@ public class MapEditorGLView extends GLCanvas implements IView {
 	private List<IObstacle> newObs = new ArrayList<IObstacle>();
 	public final Dimension size;
 	public final JOGLListener glListener;
-	private IObstacle selectedObstacle;
+	public IObstacle selectedObstacle;
 	private IShape shape;
 	
 	private MouseEvent lastZoomEvent;
@@ -70,35 +70,6 @@ public class MapEditorGLView extends GLCanvas implements IView {
 		addGLEventListener(glListener);
 		FPSAnimator animator = new FPSAnimator(this, 60);
 		animator.start();
-		
-		addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyTyped(KeyEvent e) {
-			}
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if(selectedObstacle == null) {
-					return;
-				}
-				if(e.getKeyCode() == KeyEvent.VK_UP) {
-					selectedObstacle.moveObstacle(0, 2);
-				} else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-					selectedObstacle.moveObstacle(0, -2);
-				} else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-					selectedObstacle.moveObstacle(-2, 0);
-				} else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-					selectedObstacle.moveObstacle(2, 0);
-				}
-				e.consume();
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-
-			}
-		});
 	}
 	
 	
