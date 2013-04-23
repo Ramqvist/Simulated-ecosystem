@@ -3,6 +3,8 @@ package chalmers.dax021308.ecosystem.view.mapeditor;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -52,6 +54,7 @@ public class MapEditorGLView extends GLCanvas implements IView {
 	private List<IObstacle> newObs = new ArrayList<IObstacle>();
 	public final Dimension size;
 	public final JOGLListener glListener;
+	private IObstacle selectedObstacle;
 	private IShape shape;
 	
 	private MouseEvent lastZoomEvent;
@@ -67,6 +70,36 @@ public class MapEditorGLView extends GLCanvas implements IView {
 		addGLEventListener(glListener);
 		FPSAnimator animator = new FPSAnimator(this, 60);
 		animator.start();
+		
+		addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				Log.v(e.toString());
+				if(selectedObstacle == null) {
+					return;
+				}
+				if(e.getKeyCode() == KeyEvent.VK_UP) {
+					selectedObstacle.moveObstacle(0, 2);
+				} else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+					selectedObstacle.moveObstacle(0, -2);
+				} else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+					selectedObstacle.moveObstacle(-2, 0);
+				} else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+					selectedObstacle.moveObstacle(2, 0);
+				}
+				e.consume();
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+
+			}
+		});
 	}
 	
 	
@@ -86,12 +119,6 @@ public class MapEditorGLView extends GLCanvas implements IView {
 		}
 		return null;
 	}
-	
-	private void moveObstacle(double dx, double dy, IObstacle o) {
-		if(o != null) {
-			o.moveObstacle(dx, dy);
-		}
-	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
@@ -106,6 +133,9 @@ public class MapEditorGLView extends GLCanvas implements IView {
 			if(o instanceof IShape) {
 				this.shape = (IShape) o;
 			}
+		} else if(eventName == MapEditorModel.EVENT_SELECTED_CHANGED) {
+			Log.v(event.toString());
+			selectedObstacle = (IObstacle) event.getNewValue();
 		}
 	}
 	

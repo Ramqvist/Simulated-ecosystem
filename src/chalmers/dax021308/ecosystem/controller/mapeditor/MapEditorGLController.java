@@ -21,7 +21,7 @@ public class MapEditorGLController implements IController {
 	
 	public final MapEditorGLView view;
 	private Position startClick;
-	private IObstacle selectedObstacle;
+	private IObstacle mouseSelectedObstacle;
 	private MapEditorModel model;
 	
 	public MapEditorGLController(MapEditorModel model) {
@@ -53,14 +53,14 @@ public class MapEditorGLController implements IController {
 			
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				if(selectedObstacle != null) {
+				if(mouseSelectedObstacle != null) {
 					double x = view.size.width*(e.getX())/view.getWidth();
 					double y = view.size.height - view.size.height*(e.getY())/view.getHeight();
 					double dx = x - startClick.getX();
 					double dy = y - startClick.getY();
 					startClick = new Position(x, y);
-					selectedObstacle.moveObstacle(dx, dy);
-					model.setSelectedObstacle(selectedObstacle);
+					mouseSelectedObstacle.moveObstacle(dx, dy);
+					model.setSelectedObstacle(mouseSelectedObstacle);
 				}
 			}
 		});
@@ -68,7 +68,7 @@ public class MapEditorGLController implements IController {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				selectedObstacle = null;
+				mouseSelectedObstacle = null;
 			}
 			
 			@Override
@@ -77,24 +77,24 @@ public class MapEditorGLController implements IController {
 				double x = view.size.width*(e.getX())/view.getWidth();
 				double y = view.size.height - view.size.height*(e.getY())/view.getHeight();
 				
-				selectedObstacle = view.getObstacleFromCoordinates(x, y);
-				model.setSelectedObstacle(selectedObstacle);
-				if(selectedObstacle != null) {
+				mouseSelectedObstacle = view.getObstacleFromCoordinates(x, y);
+				model.setSelectedObstacle(mouseSelectedObstacle);
+				if(mouseSelectedObstacle != null) {
 					startClick = new Position(x, y);
 					Random ran = new Random();
-					selectedObstacle.setColor(new Color(ran.nextInt(255), ran.nextInt(255), ran.nextInt(255)));
+					mouseSelectedObstacle.setColor(new Color(ran.nextInt(255), ran.nextInt(255), ran.nextInt(255)));
 					e.consume();
 				}
 			}
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
-				selectedObstacle = null;
+				mouseSelectedObstacle = null;
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				selectedObstacle = null;
+				mouseSelectedObstacle = null;
 			}
 			
 			@Override
