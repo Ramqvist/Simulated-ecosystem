@@ -9,7 +9,6 @@ import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.LiveSettingsView;
-import chalmers.dax021308.ecosystem.view.NEWSettingsMenuView;
 
 public class LiveSettingsViewController implements IController {
 	private EcoWorld model;
@@ -18,10 +17,21 @@ public class LiveSettingsViewController implements IController {
 	private SimulationSettings simSettings;
 	//TODO: den h�r borde typ ta in aktuella SimulationsSettings p� n�t s�tt, s� att den bara kan uppdatera det som �ndrats
 	
-	public LiveSettingsViewController(EcoWorld model) {
+	public LiveSettingsViewController(final EcoWorld model) {
 		this.model = model;
 		view = new LiveSettingsView(model);
 		view.setVisible(true);
+		view.comboBoxHeatMapPop.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Object item = view.comboBoxHeatMapPop.getSelectedItem();
+				if(item instanceof String) {
+					String selectedPop = (String) item;
+					model.setHeapmatPopulation(selectedPop);
+					Log.v(selectedPop);
+				}
+			}
+		});
 	}
 	
 	public void setSimulationSettingsObject(SimulationSettings s) { //se till att det h�r �r samma simsettingsobjekt som �r aktivt	
@@ -44,7 +54,6 @@ public class LiveSettingsViewController implements IController {
 							model.setRunWithoutTimer(false);
 						}
 					}
-					updateSimulation(simSettings);
 				}
 			};
 			//view.buttonUpdate.addActionListener(listenerUpdateButton);
@@ -96,5 +105,6 @@ public class LiveSettingsViewController implements IController {
 			this.model = (EcoWorld) m;
 		}			
 	}
+	
 
 }
