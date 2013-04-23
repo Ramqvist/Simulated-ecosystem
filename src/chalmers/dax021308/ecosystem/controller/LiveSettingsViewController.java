@@ -4,6 +4,9 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
@@ -32,6 +35,21 @@ public class LiveSettingsViewController implements IController {
 				}
 			}
 		});
+		view.spinnerDelayLength.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				int newDelay = (Integer) view.spinnerDelayLength.getValue();
+				if(newDelay > 0) {
+					model.setDelayLength(newDelay);
+					if(newDelay == 0) {
+						model.setRunWithoutTimer(true);
+					} else {
+						model.setRunWithoutTimer(false);
+					}
+				}
+			}
+			
+		});
 	}
 	
 	public void setSimulationSettingsObject(SimulationSettings s) { //se till att det h�r �r samma simsettingsobjekt som �r aktivt	
@@ -56,7 +74,6 @@ public class LiveSettingsViewController implements IController {
 					}
 				}
 			};
-			//view.buttonUpdate.addActionListener(listenerUpdateButton);
 			/*
 			SimulationSettings simSettings = SimulationSettings.loadFromFile();
 			if (simSettings == null) {
@@ -95,7 +112,6 @@ public class LiveSettingsViewController implements IController {
 	
 	@Override
 	public void release() {
-		// TODO Auto-generated method stub
 		
 	}
 

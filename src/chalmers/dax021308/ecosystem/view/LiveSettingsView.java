@@ -2,20 +2,14 @@ package chalmers.dax021308.ecosystem.view;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
 
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
-import chalmers.dax021308.ecosystem.model.util.ButtonGroupWrapper;
 
 public class LiveSettingsView extends JPanel {
 	static final int DEFAULT_ITERATION_DELAY = 16;
