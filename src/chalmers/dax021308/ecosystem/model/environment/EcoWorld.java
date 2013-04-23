@@ -237,7 +237,7 @@ public class EcoWorld implements IModel {
 		 * later.
 		 */
 		if(s.getMap().getObsList() != null) {
-			obstacles = s.getMap().getObsList();
+			obstacles = s.getMap().getScaledObstacles(d);
 		} else {
 			obstacles = new ArrayList<IObstacle>();
 		}
