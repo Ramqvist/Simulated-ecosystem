@@ -44,7 +44,6 @@ public class LiveSettingsViewController implements IController {
 							model.setRunWithoutTimer(false);
 						}
 					}
-					updateSimulation(simSettings);
 				}
 			};
 			//view.buttonUpdate.addActionListener(listenerUpdateButton);
@@ -57,6 +56,16 @@ public class LiveSettingsViewController implements IController {
 			setSettings(simSettings);
 			*/
 		}
+		view.comboBoxHeatMapPop.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Object item = view.comboBoxHeatMapPop.getSelectedItem();
+				if(item instanceof String) {
+					String selectedPop = (String) item;
+					model.setHeapmatPopulation(selectedPop);
+				}
+			}
+		});
 		view.setVisible(true);
 	}
 	
@@ -96,5 +105,6 @@ public class LiveSettingsViewController implements IController {
 			this.model = (EcoWorld) m;
 		}			
 	}
+	
 
 }
