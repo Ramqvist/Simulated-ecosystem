@@ -11,22 +11,34 @@ import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
  * Model class for the map editor.
  * <p>
  * 
- * @author Erik
+ * @author Erik Ramqvist
  *
  */
 public class MapEditorModel implements IModel {
 	
-	public static final String EVENT_OBSTACLES_CHANGED = "chalmers.dox021308.ecosystem.MapEditorModel.event_obstacles_changed";
-	public static final String EVENT_MAPNAME_CHANGED = "chalmers.dox021308.ecosystem.MapEditorModel.event_mapname_changed";
+	public static final String EVENT_OBSTACLES_CHANGED 	= "chalmers.dox021308.ecosystem.MapEditorModel.event_obstacles_changed";
+	public static final String EVENT_MAPNAME_CHANGED 	= "chalmers.dox021308.ecosystem.MapEditorModel.event_mapname_changed";
+	public static final String EVENT_SELECTED_CHANGED 	= "chalmers.dox021308.ecosystem.MapEditorModel.event_selected_changed";
 	
 	private PropertyChangeSupport pcs;
 	private SimulationMap currentMap;
+	private IObstacle selectedObstacle;
 	
 	private Object syncObject = new Object();
 
 	public MapEditorModel() {
 		pcs = new PropertyChangeSupport(this);
 	}
+	
+	public void setSelectedObstacle(IObstacle selectedObstacle) {
+		this.selectedObstacle = selectedObstacle;
+		pcs.firePropertyChange(EVENT_SELECTED_CHANGED, null, selectedObstacle);
+	}
+	
+	public IObstacle getSelectedObstacle() {
+		return selectedObstacle;
+	}
+	
 	
 	public void createNewMap(String name) {
 		synchronized (syncObject) {
