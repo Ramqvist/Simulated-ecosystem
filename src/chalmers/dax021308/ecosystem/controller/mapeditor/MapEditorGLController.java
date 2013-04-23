@@ -82,7 +82,6 @@ public class MapEditorGLController implements IController {
 				if(mouseSelectedObstacle != null) {
 					startClick = new Position(x, y);
 					Random ran = new Random();
-					mouseSelectedObstacle.setColor(new Color(ran.nextInt(255), ran.nextInt(255), ran.nextInt(255)));
 					e.consume();
 				}
 			}
