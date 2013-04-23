@@ -130,11 +130,11 @@ public class MapFileHandler {
 	public static boolean saveSimulationMap(File dest, SimulationMap map) {
 		PrintWriter pw = null;
 		try {
-			dest.createNewFile();
-			 pw = new PrintWriter(dest);
 			if(dest.exists()) {
 				dest.delete();
 			}
+			dest.createNewFile();
+			pw = new PrintWriter(dest);
 			pw.println(map.getName());
 			for(IObstacle o : map.getObsList()) {
 				pw.println(o.toBinaryString());
