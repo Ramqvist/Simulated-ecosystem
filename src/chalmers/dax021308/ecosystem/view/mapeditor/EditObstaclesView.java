@@ -37,7 +37,7 @@ public class EditObstaclesView extends JPanel implements IView {
 
 	public EditObstaclesView(IModel m) {
 		m.addObserver(this);
-		
+		setEnabled(false);
 		JLabel lblAddNewObstacle = new JLabel("Edit obstacles");
 		lblAddNewObstacle.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
@@ -49,6 +49,11 @@ public class EditObstaclesView extends JPanel implements IView {
 		
 		btnDelete = new JButton("Delete");
 		btnDelete.setFont(new Font("Tahoma", Font.PLAIN, 14));
+
+		obstaclesJList.setEnabled(false);
+		btnDelete.setEnabled(false);
+		btnEditObstacle.setEnabled(false);
+		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -113,10 +118,32 @@ public class EditObstaclesView extends JPanel implements IView {
 					}
 				};
 				obstaclesJList.setModel(model);
-				
+			}
+		} else if(evt.getPropertyName() == MapEditorModel.EVENT_MAPNAME_CHANGED) {
+			if(evt.getNewValue() instanceof String) {
+				String newName = (String) evt.getNewValue();
+				if(newName == null) {
+					setEnabled(false);
+					obstaclesJList.setEnabled(false);
+					btnDelete.setEnabled(false);
+					btnEditObstacle.setEnabled(false);
+				} else if(newName.equals("")) {
+					setEnabled(false);
+					setEnabled(false);
+					obstaclesJList.setEnabled(false);
+					btnDelete.setEnabled(false);
+					btnEditObstacle.setEnabled(false);
+				} else {
+					setEnabled(true);
+					setEnabled(true);
+					obstaclesJList.setEnabled(true);
+					btnDelete.setEnabled(true);
+					btnEditObstacle.setEnabled(true);
+				}
 			}
 		}
 	}
+	
 
 	@Override
 	public void init() {
