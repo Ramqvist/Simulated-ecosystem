@@ -13,6 +13,7 @@ import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapEditorModel;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.SimulationMap;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.view.mapeditor.MapEditorGLView;
 
@@ -26,6 +27,7 @@ public class MapEditorGLController implements IController {
 	public MapEditorGLController(MapEditorModel model) {
 		view = new MapEditorGLView(model, SimulationMap.DEFAULT_OBSTACLE_DIMENSION);
 		this.model = model;
+		init();
 	}
 
 	@Override
@@ -58,6 +60,7 @@ public class MapEditorGLController implements IController {
 					double dy = y - startClick.getY();
 					startClick = new Position(x, y);
 					selectedObstacle.moveObstacle(dx, dy);
+					model.setSelectedObstacle(selectedObstacle);
 				}
 			}
 		});

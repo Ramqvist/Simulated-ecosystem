@@ -53,12 +53,9 @@ public class MapEditorGLView extends GLCanvas implements IView {
 	public final Dimension size;
 	public final JOGLListener glListener;
 	private IShape shape;
-	private boolean isZoomed;
 	
 	private MouseEvent lastZoomEvent;
 	
-	private IObstacle selectedObstacle = null;
-	private Position startClick = null;
 	
 	/**
 	 * Create the panel.
@@ -68,71 +65,6 @@ public class MapEditorGLView extends GLCanvas implements IView {
 		model.addObserver(this);
 		glListener = new JOGLListener();
 		addGLEventListener(glListener);
-		addMouseWheelListener(new MouseWheelListener() {
-			@Override
-			public void mouseWheelMoved(MouseWheelEvent e) {
-				if(e.getWheelRotation() < 0) {
-					glListener.zoomIn();
-				} else {
-					glListener.zoomOut();
-				}
-				e.consume();
-			}
-		});
-		addMouseMotionListener(new MouseMotionListener() {
-			
-			@Override
-			public void mouseMoved(MouseEvent e) {
-			}
-			
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				if(selectedObstacle != null) {
-					double x = size.width*(e.getX())/getWidth();
-					double y = size.height - size.height*(e.getY())/getHeight();
-					double dx = x - startClick.getX();
-					double dy = y - startClick.getY();
-					startClick = new Position(x, y);
-					selectedObstacle.moveObstacle(dx, dy);
-				}
-			}
-		});
-		addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				selectedObstacle = null;
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				
-				double x = size.width*(e.getX())/getWidth();
-				double y = size.height - size.height*(e.getY())/getHeight();
-				
-				selectedObstacle = getObstacleFromCoordinates(x, y);
-				if(selectedObstacle != null) {
-					startClick = new Position(x, y);
-					Random ran = new Random();
-					selectedObstacle.setColor(new Color(ran.nextInt(255), ran.nextInt(255), ran.nextInt(255)));
-					e.consume();
-				}
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				selectedObstacle = null;
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				selectedObstacle = null;
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
-		});
 		FPSAnimator animator = new FPSAnimator(this, 30);
 		animator.start();
 	}

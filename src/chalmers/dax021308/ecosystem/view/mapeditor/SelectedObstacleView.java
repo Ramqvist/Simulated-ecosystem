@@ -8,7 +8,11 @@ import javax.swing.JPanel;
 
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapEditorModel;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.EllipticalObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.RectangularObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.TriangleObstacle;
+import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.IView;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -82,14 +86,6 @@ public class SelectedObstacleView extends JPanel implements IView {
 		btnAddObstacle = new JButton("Add obstacle");
 		btnAddObstacle.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
-		tbxWidth.setEnabled(false);
-		tbxHeight.setEnabled(false);
-		tbxXPosition.setEnabled(false);
-		tbxYPosition.setEnabled(false);
-		rdbtnTypeTriangle.setEnabled(false);
-		rdbtnTypeRectangle.setEnabled(false);
-		rdbtnTypeCircle.setEnabled(false);
-		btnAddObstacle.setEnabled(false);
 		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
@@ -170,48 +166,48 @@ public class SelectedObstacleView extends JPanel implements IView {
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		 if(evt.getPropertyName() == MapEditorModel.EVENT_MAPNAME_CHANGED) {
-				if(evt.getNewValue() instanceof String) {
-					String newName = (String) evt.getNewValue();
-					if(newName == null) {
-						tbxWidth.setEnabled(false);
-						tbxHeight.setEnabled(false);
-						tbxXPosition.setEnabled(false);
-						tbxYPosition.setEnabled(false);
-						rdbtnTypeTriangle.setEnabled(false);
-						rdbtnTypeRectangle.setEnabled(false);
-						rdbtnTypeCircle.setEnabled(false);
-						btnAddObstacle.setEnabled(false);
-
-					} else if(newName.equals("")) {
-						tbxWidth.setEnabled(false);
-						tbxHeight.setEnabled(false);
-						tbxXPosition.setEnabled(false);
-						tbxYPosition.setEnabled(false);
-						rdbtnTypeTriangle.setEnabled(false);
-						rdbtnTypeRectangle.setEnabled(false);
-						rdbtnTypeCircle.setEnabled(false);
-						btnAddObstacle.setEnabled(false);
-					} else {
-						tbxWidth.setEnabled(true);
-						tbxHeight.setEnabled(true);
-						tbxXPosition.setEnabled(true);
-						tbxYPosition.setEnabled(true);
-						rdbtnTypeTriangle.setEnabled(true);
-						rdbtnTypeRectangle.setEnabled(true);
-						rdbtnTypeCircle.setEnabled(true);
-						btnAddObstacle.setEnabled(true);
-					}
-				}
-			} else if(evt.getPropertyName() == MapEditorModel.EVENT_MAPNAME_CHANGED) {
-				IObstacle selectedObstacle = (IObstacle) evt.getNewValue();
-				if(selectedObstacle == null) {
-					setVisible(false);
-					loadObstacle(selectedObstacle);
+	 if(evt.getPropertyName() == MapEditorModel.EVENT_MAPNAME_CHANGED) {
+			if(evt.getNewValue() instanceof String) {
+				String newName = (String) evt.getNewValue();
+				if(newName == null) {
+					tbxWidth.setEnabled(false);
+					tbxHeight.setEnabled(false);
+					tbxXPosition.setEnabled(false);
+					tbxYPosition.setEnabled(false);
+					rdbtnTypeTriangle.setEnabled(false);
+					rdbtnTypeRectangle.setEnabled(false);
+					rdbtnTypeCircle.setEnabled(false);
+					btnAddObstacle.setEnabled(false);
+	
+				} else if(newName.equals("")) {
+					tbxWidth.setEnabled(false);
+					tbxHeight.setEnabled(false);
+					tbxXPosition.setEnabled(false);
+					tbxYPosition.setEnabled(false);
+					rdbtnTypeTriangle.setEnabled(false);
+					rdbtnTypeRectangle.setEnabled(false);
+					rdbtnTypeCircle.setEnabled(false);
+					btnAddObstacle.setEnabled(false);
 				} else {
-					setVisible(true);
+					tbxWidth.setEnabled(true);
+					tbxHeight.setEnabled(true);
+					tbxXPosition.setEnabled(true);
+					tbxYPosition.setEnabled(true);
+					rdbtnTypeTriangle.setEnabled(true);
+					rdbtnTypeRectangle.setEnabled(true);
+					rdbtnTypeCircle.setEnabled(true);
+					btnAddObstacle.setEnabled(true);
 				}
-			}
+		}
+	} else if(evt.getPropertyName() == MapEditorModel.EVENT_SELECTED_CHANGED) {
+		IObstacle selectedObstacle = (IObstacle) evt.getNewValue();
+		if(selectedObstacle == null) {
+			setVisible(false);
+		} else {
+			setVisible(true);
+			loadObstacle(selectedObstacle);
+		}
+	}
 	}
 
 	private void loadObstacle(IObstacle selectedObstacle) {
@@ -219,10 +215,23 @@ public class SelectedObstacleView extends JPanel implements IView {
 		tbxHeight.setText("" + selectedObstacle.getHeight());
 		tbxXPosition.setText("" + selectedObstacle.getPosition().getX());
 		tbxYPosition.setText("" + selectedObstacle.getPosition().getY());
-		rdbtnTypeTriangle.setText("" + selectedObstacle.getPosition().getY());
-		rdbtnTypeRectangle.setEnabled(false);
-		rdbtnTypeCircle.setEnabled(false);
-		btnAddObstacle.setEnabled(false);
+		if(selectedObstacle instanceof EllipticalObstacle) {
+			rdbtnTypeTriangle.setSelected(false);
+			rdbtnTypeRectangle.setSelected(false);
+			rdbtnTypeCircle.setSelected(true);
+		} else if(selectedObstacle instanceof TriangleObstacle) {
+			rdbtnTypeTriangle.setSelected(true);
+			rdbtnTypeRectangle.setSelected(false);
+			rdbtnTypeCircle.setSelected(false);
+		} else if(selectedObstacle instanceof RectangularObstacle) {
+			rdbtnTypeTriangle.setSelected(false);
+			rdbtnTypeRectangle.setSelected(true);
+			rdbtnTypeCircle.setSelected(false);
+		}
+	}
+	
+	private void updateObstacle() {
+		
 	}
 
 	@Override

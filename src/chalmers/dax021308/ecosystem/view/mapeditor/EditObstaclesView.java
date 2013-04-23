@@ -33,16 +33,12 @@ public class EditObstaclesView extends JPanel implements IView {
 	private static final long serialVersionUID = 4214212142L;
 	public final JList<IObstacle> obstaclesJList;
 	public final JButton btnDelete;
-	public final JButton btnEditObstacle;
 
 	public EditObstaclesView(IModel m) {
 		m.addObserver(this);
 		setEnabled(false);
 		JLabel lblAddNewObstacle = new JLabel("Edit obstacles");
 		lblAddNewObstacle.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		
-		btnEditObstacle = new JButton("Edit");
-		btnEditObstacle.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
 		obstaclesJList = new JList<IObstacle>();
 		obstaclesJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -52,7 +48,6 @@ public class EditObstaclesView extends JPanel implements IView {
 
 		obstaclesJList.setEnabled(false);
 		btnDelete.setEnabled(false);
-		btnEditObstacle.setEnabled(false);
 		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
@@ -63,15 +58,13 @@ public class EditObstaclesView extends JPanel implements IView {
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(obstaclesJList, GroupLayout.PREFERRED_SIZE, 299, GroupLayout.PREFERRED_SIZE)
 							.addContainerGap())
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(lblAddNewObstacle)
-								.addContainerGap(344, Short.MAX_VALUE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(btnEditObstacle, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
-								.addGap(141)))))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblAddNewObstacle)
+							.addContainerGap(344, Short.MAX_VALUE))
+						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+							.addGap(10)
+							.addComponent(btnDelete, GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
+							.addGap(141))))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -81,9 +74,7 @@ public class EditObstaclesView extends JPanel implements IView {
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(obstaclesJList, GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnEditObstacle, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
+					.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
 					.addGap(38))
 		);
 		setLayout(groupLayout);
@@ -126,19 +117,16 @@ public class EditObstaclesView extends JPanel implements IView {
 					setEnabled(false);
 					obstaclesJList.setEnabled(false);
 					btnDelete.setEnabled(false);
-					btnEditObstacle.setEnabled(false);
 				} else if(newName.equals("")) {
 					setEnabled(false);
 					setEnabled(false);
 					obstaclesJList.setEnabled(false);
 					btnDelete.setEnabled(false);
-					btnEditObstacle.setEnabled(false);
 				} else {
 					setEnabled(true);
 					setEnabled(true);
 					obstaclesJList.setEnabled(true);
 					btnDelete.setEnabled(true);
-					btnEditObstacle.setEnabled(true);
 				}
 			}
 		}

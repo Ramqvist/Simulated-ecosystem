@@ -4,6 +4,9 @@ package chalmers.dax021308.ecosystem.controller.mapeditor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import chalmers.dax021308.ecosystem.controller.IController;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapEditorModel;
@@ -29,6 +32,13 @@ public class EditObstaclesController implements IController {
 				if(selectedObstacle != null) {
 					m.removeObstacle(selectedObstacle);
 				}
+			}
+		});
+		view.obstaclesJList.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				IObstacle selected = view.obstaclesJList.getSelectedValue();
+				m.setSelectedObstacle(selected);
 			}
 		});
 	}
