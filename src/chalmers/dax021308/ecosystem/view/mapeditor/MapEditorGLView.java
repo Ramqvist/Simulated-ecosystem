@@ -65,7 +65,7 @@ public class MapEditorGLView extends GLCanvas implements IView {
 		model.addObserver(this);
 		glListener = new JOGLListener();
 		addGLEventListener(glListener);
-		FPSAnimator animator = new FPSAnimator(this, 30);
+		FPSAnimator animator = new FPSAnimator(this, 60);
 		animator.start();
 	}
 	
