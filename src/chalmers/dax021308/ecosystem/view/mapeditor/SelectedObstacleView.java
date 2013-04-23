@@ -21,6 +21,12 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
+/**
+ * Panel for editing a selected obstacle.
+ * 
+ * @author Erik Ramqvist
+ *
+ */
 public class SelectedObstacleView extends JPanel implements IView {
 	private static final long serialVersionUID = 4214212142L;
 	public final JTextField tbxWidth;

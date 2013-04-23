@@ -3,7 +3,6 @@ package chalmers.dax021308.ecosystem.model.environment.mapeditor;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 
