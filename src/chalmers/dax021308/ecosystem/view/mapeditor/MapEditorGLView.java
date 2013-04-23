@@ -282,6 +282,69 @@ public class MapEditorGLView extends GLCanvas implements IView {
           		 * Draw Obstacles
           		 */
           		for(IObstacle o: newObs){
+          			if(selectedObstacle != null) {
+          				if(o == selectedObstacle) {
+              				double selectionSize = 5;
+              				Color selectionColor = Color.BLACK;
+                  			if(o != null && o instanceof EllipticalObstacle){
+                  				
+                  				
+                  				double increment = 2.0*Math.PI/50.0;
+            	                double w = (frameWidth*o.getWidth()/size.width) + selectionSize;
+            	                double h = (frameHeight*o.getHeight()/size.height)+ selectionSize;
+            	                double x = frameWidth*o.getPosition().getX()/size.width;
+            	                double y = frameHeight*o.getPosition().getY()/size.height;
+                  				Color c = selectionColor;
+            	                gl.glColor3d((double)c.getRed()/(double)255, (double)c.getGreen()/(double)255, (double)c.getBlue()/(double)255);
+            	                gl.glLineWidth(2.5F);
+            	          		gl.glBegin(GL.GL_POLYGON); 
+            		          	for(double angle = 0; angle < 2.0*Math.PI; angle+=increment){
+            		          		gl.glVertex2d(x + w*Math.cos(angle),frameHeight - (y + h*Math.sin(angle)));
+            		          	}
+            		          	gl.glEnd();
+                  			} else if (o != null && o instanceof RectangularObstacle){
+                  				double x = o.getPosition().getX();
+                  				double y = o.getPosition().getY();
+                  				double w = o.getWidth() + selectionSize;
+                  				double h = o.getHeight() + selectionSize;
+                  				Color c = selectionColor;
+                  				gl.glColor3d((double)c.getRed()/(double)255, (double)c.getGreen()/(double)255, (double)c.getBlue()/(double)255);
+                  				gl.glLineWidth(2.5F);
+            	          		gl.glBegin(GL.GL_POLYGON); 
+            	          		gl.glVertex2d(frameWidth*(x-w)/size.width,
+            	          				frameHeight - frameHeight*(y-h)/size.height);
+            	          		
+            	          		gl.glVertex2d(frameWidth*(x+w)/size.width, 
+            	          				frameHeight - frameHeight*(y-h)/size.height);
+            	          		
+            	          		gl.glVertex2d(frameWidth*(x+w)/size.width, 
+            	          				frameHeight - frameHeight*(y+h)/size.height);
+            	          		
+            	          		gl.glVertex2d(frameWidth*(x-w)/size.width, 
+            	          				frameHeight - frameHeight*(y+h)/size.height);
+            	          		gl.glEnd();
+                  			} else if(o != null && o instanceof TriangleObstacle){
+                  				double x = o.getPosition().getX();
+                  				double y = o.getPosition().getY();
+                  				double w = o.getWidth() + selectionSize;
+                  				double h = o.getHeight() + selectionSize;
+                  				Color c = selectionColor;
+                  				gl.glColor3d((double)c.getRed()/(double)255, (double)c.getGreen()/(double)255, (double)c.getBlue()/(double)255);
+                  				gl.glLineWidth(2.5F);
+            	          		gl.glBegin(GL.GL_TRIANGLES); 
+            	          		gl.glVertex2d(frameWidth*(x+w)/size.width,
+            	          				frameHeight - frameHeight*(y-h)/size.height);
+            	          		
+            	          		gl.glVertex2d(frameWidth*(x-w)/size.width, 
+            	          				frameHeight - frameHeight*(y-h)/size.height);
+            	          		
+            	          		gl.glVertex2d(frameWidth*(x)/size.width, 
+            	          				frameHeight - frameHeight*(y+h)/size.height);
+            	          		
+            	          		gl.glEnd();
+                  			}
+          				}
+          			}
           			if(o != null && o instanceof EllipticalObstacle){
           				double increment = 2.0*Math.PI/50.0;
     	                double w = frameWidth*o.getWidth()/size.width;
