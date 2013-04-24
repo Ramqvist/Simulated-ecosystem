@@ -25,7 +25,7 @@ public class DeerAgent extends AbstractAgent {
 	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
 	private boolean hungry = true;
 	private static final double REPRODUCTION_RATE = 0.1;
-	private boolean willFocusPreys = false;
+	private boolean willFocusPreys = true;
 	private static final int DIGESTION_TIME = 10;
 	private int digesting = 0;
 	private double STOTTING_RANGE = 10;
@@ -134,7 +134,8 @@ public class DeerAgent extends AbstractAgent {
 				acceleration = predatorForce;
 			} else {
 				acceleration = predatorForce.multiply(5)
-						.add(mutualInteractionForce).add(forwardThrust)
+						.add(mutualInteractionForce)
+						.add(forwardThrust)
 						.add(arrayalForce);
 				Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys,
 						focusedPrey, this, preyNeighbours, visionRange,

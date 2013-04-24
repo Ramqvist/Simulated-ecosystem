@@ -9,6 +9,7 @@ import java.util.Random;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.util.Container;
 import chalmers.dax021308.ecosystem.model.util.FixedSizeAgentQueueObjectPriorityQueue;
 import chalmers.dax021308.ecosystem.model.util.Gender;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -39,7 +40,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected double maxSpeed;
 	protected double visionRange;
 	protected double maxAcceleration;
-	protected IAgent focusedPrey;
+	protected Container<IAgent> focusedPrey;
 	protected boolean isAlive = true;
 	protected static final boolean USE_PRIORITY_NEIGHBOURS = false;
 	protected static final int K_NEAREST_NEIGHBOURS = 20; 
@@ -85,7 +86,8 @@ public abstract class AbstractAgent implements IAgent {
 		preyNeighboursQueue = new FixedSizeAgentQueueObjectPriorityQueue(K_NEAREST_NEIGHBOURS);
 		predNeighboursQueue = new FixedSizeAgentQueueObjectPriorityQueue(K_NEAREST_NEIGHBOURS);
 		neutralNeighboursQueue = new FixedSizeAgentQueueObjectPriorityQueue(K_NEAREST_NEIGHBOURS);
-
+		
+		focusedPrey = new Container<IAgent>(null);
 		// To update the first time.
 		neighbourCounter = ran.nextInt(NEIGHBOURS_UPDATE_THRESHOLD);
 	}
