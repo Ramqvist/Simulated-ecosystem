@@ -231,11 +231,16 @@ public class EcoWorld implements IModel {
 		}
 
 		List<IPopulation> populations = new ArrayList<IPopulation>();
+		List<IObstacle> obstacles;
 		/*
 		 * Creating obstacles here for test. This should be done in a proper way
 		 * later.
 		 */
-		List<IObstacle> obstacles = new ArrayList<IObstacle>();
+		if(s.getMap().getObsList() != null) {
+			obstacles = s.getMap().getScaledObstacles(d);
+		} else {
+			obstacles = new ArrayList<IObstacle>();
+		}
 
 		statTime = new Stat<Double>();
 
@@ -243,30 +248,6 @@ public class EcoWorld implements IModel {
 		IPopulation pred = null;
 		IPopulation grass = null;
 		IShape shape = null;
-
-		if (s.getObstacle() == SimulationSettings.OBSTACLE_ELLIPTICAL) {
-			obstacles.add(new EllipticalObstacle(d.getWidth() * 0.2, d
-					.getHeight() * 0.15, new Position(d.getWidth() / 2, d
-					.getHeight() / 2), new Color(0, 128, 255)));
-		} else if (s.getObstacle() == SimulationSettings.OBSTACLE_RECTANGULAR) {
-			obstacles.add(new RectangularObstacle(d.getWidth() * 0.2, d
-					.getHeight() * 0.1, new Position(d.getWidth() / 2, d
-					.getHeight() / 2), new Color(0, 128, 255)));
-		} else if (s.getObstacle() == SimulationSettings.OBSTACLE_TRIANGLE) {
-			obstacles.add(new TriangleObstacle(d.getWidth() * 0.2, d
-					.getHeight() * 0.2, new Position(d.getWidth() / 2, d
-					.getHeight() / 2), new Color(0, 128, 255)));
-		} else if (s.getObstacle() == SimulationSettings.OBSTACLE_RIVERS) {
-			obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.3, d.getHeight()*0.2), new Color(0, 128, 255)));
-			obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.7, d.getHeight()*0.4), new Color(0, 128, 255)));
-
-			obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.3, d.getHeight()*0.6), new Color(0, 128, 255)));
-			obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.7, d.getHeight()*0.8), new Color(0, 128, 255)));
-			
-		} else if (s.getObstacle() == SimulationSettings.OBSTACLE_TUBE) {
-			obstacles.add(new RectangularObstacle(d.getWidth() * 0.5, d.getHeight() * 0.225, new Position(d.getWidth() * 0.5, d.getHeight() * 0.225), new Color(25, 25, 25)));
-			obstacles.add(new RectangularObstacle(d.getWidth() * 0.5, d.getHeight() * 0.225, new Position(d.getWidth() * 0.5, d.getHeight() * 0.775), new Color(25, 25, 25)));
-		}
 
 		if (s.getShapeModel() == SimulationSettings.SHAPE_SQUARE) {
 			shape = new SquareShape();

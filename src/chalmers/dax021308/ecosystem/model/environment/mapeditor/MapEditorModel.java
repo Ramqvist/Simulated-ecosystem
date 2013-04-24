@@ -3,9 +3,9 @@ package chalmers.dax021308.ecosystem.model.environment.mapeditor;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.util.Log;
 
 /**
  * Model class for the map editor.
@@ -122,6 +122,24 @@ public class MapEditorModel implements IModel {
 
 	public SimulationMap getCurrentMap() {
 		return currentMap;
+	}
+
+	public void switchSelectedObstacle() {
+		if(currentMap == null) {
+			return;
+		}
+		if(!currentMap.getObsList().isEmpty()) {
+			if(selectedObstacle == null) {
+				setSelectedObstacle(currentMap.getObsList().get(0));
+			} else {
+				int index = currentMap.getObsList().indexOf(selectedObstacle);
+				index = (index+1) % (currentMap.getObsList().size());
+				Log.v(index);
+				IObstacle newSelected = currentMap.getObsList().get(index);
+				setSelectedObstacle(newSelected);
+				Log.v(selectedObstacle);
+			}	
+		}
 	}
 	
 }

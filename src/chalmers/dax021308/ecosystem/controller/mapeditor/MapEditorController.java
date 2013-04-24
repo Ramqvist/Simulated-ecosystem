@@ -1,5 +1,6 @@
 package chalmers.dax021308.ecosystem.controller.mapeditor;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -33,6 +34,8 @@ public class MapEditorController implements IController {
 	
 	private final AddObstacleController addObstacle;
 	private final EditObstaclesController editObstacle;
+	private final SelectedObstacleController selectedObstacle;
+	private final MapEditorGLController glController;
 	
 	private final OnNameSelectedListener nameSelectedListener = new OnNameSelectedListener() {
 		@Override
@@ -69,10 +72,14 @@ public class MapEditorController implements IController {
 	public MapEditorController() {
 		model = new MapEditorModel();
 		view = new MapEditorView(model);
+		glController = new MapEditorGLController(model);
+		view.left.add(glController.view, BorderLayout.CENTER);
 		addObstacle = new AddObstacleController(model, obstacleListener);
 		editObstacle = new EditObstaclesController(model);
+		selectedObstacle = new SelectedObstacleController(model);
 		view.right.add(addObstacle.view);
 		view.right.add(editObstacle.view);
+		view.right.add(selectedObstacle.view);
 		view.setVisible(true);
 		init();
 	}

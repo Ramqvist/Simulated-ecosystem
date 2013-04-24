@@ -14,7 +14,16 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  *
  */
 public abstract class AbstractObstacle implements IObstacle {
-	
+ 	
+	/*Obstacle constants */
+	public static final String OBSTACLE_RECTANGULAR = "Rectangular obstacle";
+	public static final String OBSTACLE_ELLIPTICAL  = "Elliptical obstacle";
+	public static final String OBSTACLE_TRIANGLE  	= "Triangle obstacle";
+	public static final String OBSTACLE_RIVERS 		= "Rivers obstacle";
+	public static final String OBSTACLE_TUBE  		= "Tube obstacle";
+	public static final String OBSTACLE_NONE        = "No obstacle";
+	public static final String[] OBSTACLE_VALUES 	= {OBSTACLE_NONE, OBSTACLE_RECTANGULAR, OBSTACLE_ELLIPTICAL, OBSTACLE_TRIANGLE, OBSTACLE_RIVERS, OBSTACLE_TUBE};
+
 	protected Position position;
 	protected double width;
 	protected double height;
@@ -74,17 +83,6 @@ public abstract class AbstractObstacle implements IObstacle {
 		this.color = c;
 	}
 	
-	/**
-	 * Scale the obstacle to a specific scalar value.
-	 */
-	@Override
-	public IObstacle scale(double scaleX, double scaleY) {
-		position.setX(position.getX() * scaleX);
-		position.setY(position.getY() * scaleY);
-		width = width * scaleX;
-		height = height * scaleY;
-		return this;
-	}
 	
 	/**
 	 * Used to export an obstacle.
@@ -92,13 +90,13 @@ public abstract class AbstractObstacle implements IObstacle {
 	public String toBinaryString() {
 		StringBuilder sb = new StringBuilder();
 		if(this instanceof EllipticalObstacle) {
-		sb.append(SimulationSettings.OBSTACLE_ELLIPTICAL); //TODO: Needs shape here.
+		sb.append(OBSTACLE_ELLIPTICAL); //TODO: Needs shape here.
 		} else if(this instanceof RectangularObstacle) {
-			sb.append(SimulationSettings.OBSTACLE_RECTANGULAR); //TODO: Needs shape here.
+			sb.append(OBSTACLE_RECTANGULAR); //TODO: Needs shape here.
 		} else if(this instanceof TriangleObstacle) {
-			sb.append(SimulationSettings.OBSTACLE_TRIANGLE);
+			sb.append(OBSTACLE_TRIANGLE);
 		} else {
-			sb.append(SimulationSettings.OBSTACLE_NONE);
+			sb.append(OBSTACLE_NONE);
 			return sb.toString();
 		}
 		sb.append(';');
@@ -127,19 +125,19 @@ public abstract class AbstractObstacle implements IObstacle {
 		String[] inputArray = input.split(";");
 		String shape = inputArray[0];
 		AbstractObstacle obs = null;
-		if (shape.equals(SimulationSettings.OBSTACLE_RECTANGULAR)) {
+		if (shape.equals(OBSTACLE_RECTANGULAR)) {
 			obs = new RectangularObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
 					new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
 					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), Integer.parseInt(inputArray[7])));
-		} else if (shape.equals(SimulationSettings.OBSTACLE_ELLIPTICAL)) {
+		} else if (shape.equals(OBSTACLE_ELLIPTICAL)) {
 			obs = new EllipticalObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
 					new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
 					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), Integer.parseInt(inputArray[7])));
-		} else if (shape.equals(SimulationSettings.OBSTACLE_TRIANGLE)) {
+		} else if (shape.equals(OBSTACLE_TRIANGLE)) {
 			obs = new TriangleObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
 					new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
 					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), Integer.parseInt(inputArray[7])));
-		}  else if (shape.equals(SimulationSettings.OBSTACLE_NONE)) {
+		}  else if (shape.equals(OBSTACLE_NONE)) {
 			return null;
 		}
 		return obs;

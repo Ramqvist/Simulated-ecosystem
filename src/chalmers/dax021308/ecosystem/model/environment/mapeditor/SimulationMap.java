@@ -4,7 +4,9 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.util.Log;
 
 
 /**
@@ -52,8 +54,9 @@ public class SimulationMap {
 		if(!isValidMap()) {
 			return null;
 		}
-		double scaleX = DEFAULT_OBSTACLE_DIMENSION.width / dim.getWidth();
-		double scaleY = DEFAULT_OBSTACLE_DIMENSION.height / dim.getHeight() ;
+		double scaleX = dim.getWidth() / DEFAULT_OBSTACLE_DIMENSION.width;
+		double scaleY = dim.getHeight() / DEFAULT_OBSTACLE_DIMENSION.height;
+
 		List<IObstacle> result = new ArrayList<IObstacle>(obsList.size());
 		for(IObstacle o: obsList) {
 			result.add(o.scale(scaleX, scaleY));
@@ -83,7 +86,11 @@ public class SimulationMap {
 		}
 		return false;
 	}
-
+	
+	@Override
+	public String toString() {
+		return name;
+	}
 	public boolean isValidMap() {
 		if(getName() == null || getObsList() == null) {
 			return false;

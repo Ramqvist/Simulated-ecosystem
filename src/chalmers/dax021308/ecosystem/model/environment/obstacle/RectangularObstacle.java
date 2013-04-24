@@ -75,4 +75,17 @@ public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 		sb.append(' ');
 		return sb.toString();
 	}
+	
+
+	/**
+	 * Scale the obstacle to a specific scalar value. 
+	 * And return a clone of the newly scaled obstacle
+	 */
+	@Override
+	public IObstacle scale(double scaleX, double scaleY) {
+		Position newPos = new Position(position.getX() * scaleX, position.getY() * scaleY);
+		double newWidth = width * scaleX;
+		double newHeight = height * scaleY;
+		return new RectangularObstacle(newWidth, newHeight, newPos, new Color(color.getRGB()));
+	}
 }

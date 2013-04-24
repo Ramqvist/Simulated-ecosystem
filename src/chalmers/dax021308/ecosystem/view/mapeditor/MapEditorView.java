@@ -63,10 +63,7 @@ public class MapEditorView extends JFrame implements IView {
 		setIconImage(new ImageIcon("res/Simulated ecosystem icon.png").getImage());
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setExtendedState(MAXIMIZED_BOTH);
-	    Dimension d = new Dimension(1000, 1000);
 	    setMinimumSize(new Dimension(500, 500));
-		openGL = new MapEditorGLView(model, d);
-		openGL.init();
 		
 		menuBar = new JMenuBar();
 		mnFile = new JMenu("File");
@@ -99,8 +96,6 @@ public class MapEditorView extends JFrame implements IView {
 		right.setPreferredSize(new Dimension(500, 400));
 		setContentPane(contentPane);
 
-		left.add(openGL, BorderLayout.CENTER);
-		
 		contentPane.add(left, BorderLayout.CENTER);
 		contentPane.add(right, BorderLayout.EAST);
 	}

@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.AbstractListModel;
 import javax.swing.GroupLayout;
@@ -19,13 +20,18 @@ import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListDataListener;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
+import chalmers.dax021308.ecosystem.model.environment.mapeditor.DefaultMaps;
+import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapFileHandler;
+import chalmers.dax021308.ecosystem.model.environment.mapeditor.SimulationMap;
 
 /**
  * Window for starting a new simulation.
@@ -58,7 +64,7 @@ public class NewSimulationView {
 	public JTextField tfCustomHeight;
 	public JCheckBox chckbxCustomSize;
 	public JButton btnRunSim;
-	public JList obstacleList;
+	public JList<SimulationMap> mapList;
 
 
 	/**
@@ -386,20 +392,34 @@ public class NewSimulationView {
 		JLabel lblSimulationObstacle = new JLabel("Simulation obstacle");
 		lblSimulationObstacle.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
-		obstacleList = new JList();
-		obstacleList.setValueIsAdjusting(true);
-		obstacleList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		obstacleList.setSelectedIndices(new int[] {3});
-		obstacleList.setModel(new AbstractListModel() {
+		mapList = new JList<SimulationMap>();
+		mapList.setValueIsAdjusting(true);
+		mapList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		mapList.setSelectedIndices(new int[] {3});
+        final List<SimulationMap> foundMaps = DefaultMaps.defaultMaps;
+        List<SimulationMap> readMaps = MapFileHandler.readMapsFromMapsFolder();
+        if(readMaps != null) {
+        	foundMaps.addAll(readMaps);
+        }
+        mapList.setModel(new ListModel<SimulationMap> () {
+        	List<SimulationMap> mapList = foundMaps;
+			@Override
 			public int getSize() {
-				return SimulationSettings.OBSTACLE_VALUES.length;
+				return mapList.size();
+			}
+			@Override
+			public SimulationMap getElementAt(int index) {
+				return mapList.get(index);
+			}
+			@Override
+			public void addListDataListener(ListDataListener l) {
 			}
 
-			public Object getElementAt(int index) {
-				return SimulationSettings.OBSTACLE_VALUES[index];
+			@Override
+			public void removeListDataListener(ListDataListener l) {
 			}
-		});
-		obstacleList.setSelectedIndex(0);
+        });
+		mapList.setSelectedIndex(0);
 		
 		GroupLayout groupLayout = new GroupLayout(
 				frmSimulatedEcosystem.getContentPane());
@@ -455,7 +475,7 @@ public class NewSimulationView {
 										.addComponent(lblSimulationObstacle, GroupLayout.PREFERRED_SIZE, 158, GroupLayout.PREFERRED_SIZE)
 										.addPreferredGap(ComponentPlacement.RELATED)))
 								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(obstacleList, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
+									.addComponent(mapList, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED)))
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 								.addGroup(groupLayout.createSequentialGroup()
@@ -605,7 +625,7 @@ public class NewSimulationView {
 							.addGap(18)
 							.addComponent(lblSimulationObstacle, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(obstacleList, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
+							.addComponent(mapList, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
 							.addGap(56))))
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(194)
