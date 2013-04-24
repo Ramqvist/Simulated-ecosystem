@@ -110,15 +110,7 @@ public class MapEditorGLController implements IController {
 				if(view.selectedObstacle == null) {
 					return;
 				}
-				if(e.getKeyCode() == KeyEvent.VK_UP) {
-					view.selectedObstacle.moveObstacle(0, 2);
-				} else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-					view.selectedObstacle.moveObstacle(0, -2);
-				} else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-					view.selectedObstacle.moveObstacle(-2, 0);
-				} else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-					view.selectedObstacle.moveObstacle(2, 0);
-				} else if(e.getKeyCode() == KeyEvent.VK_DELETE) {
+				if(e.getKeyCode() == KeyEvent.VK_DELETE) {
 					model.removeObstacle(view.selectedObstacle);
 					model.setSelectedObstacle(null);
 				} else if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -131,6 +123,18 @@ public class MapEditorGLController implements IController {
 				if(e.getKeyCode() == KeyEvent.VK_TAB) {
 					model.switchSelectedObstacle();
 					e.consume();
+				} else if(e.getKeyCode() == KeyEvent.VK_UP) {
+					view.selectedObstacle.moveObstacle(0, 2);
+					model.setSelectedObstacle(view.selectedObstacle);
+				} else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+					view.selectedObstacle.moveObstacle(0, -2);
+					model.setSelectedObstacle(view.selectedObstacle);
+				} else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+					view.selectedObstacle.moveObstacle(-2, 0);
+					model.setSelectedObstacle(view.selectedObstacle);
+				} else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+					view.selectedObstacle.moveObstacle(2, 0);
+					model.setSelectedObstacle(view.selectedObstacle);
 				}
 			}
 		});
