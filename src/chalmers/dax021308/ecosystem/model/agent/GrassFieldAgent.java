@@ -44,8 +44,10 @@ public class GrassFieldAgent extends AbstractAgent {
 	public List<IAgent> reproduce(IAgent agent, int populationSize,
 			List<IObstacle> obstacles, IShape shape, Dimension gridDimension) {
 		if (Math.random() < REPRODUCTION_RATE) {
-			if (energy < MAX_ENERGY)
-				energy += 1;
+			double energyProportion = (double)energy/(double)MAX_ENERGY;
+			double newEnergy = energy*energyProportion*(1-energyProportion)*0.1;
+			System.out.println(newEnergy);
+			energy += newEnergy;
 		}
 		int red = (int) (150.0 - 150.0 * (((double) energy) / MAX_ENERGY));
 		int green = (int) (55.0 + 200.0 * (((double) energy) / MAX_ENERGY));

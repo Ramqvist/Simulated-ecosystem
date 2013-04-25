@@ -292,7 +292,7 @@ public class ForceCalculator {
 					} else {
 						closestFocusPrey = a;
 					}
-				} else if (willFocusPreys && closestFocusPrey == null) {
+				} else if (closestFocusPrey == null) {
 					/*
 					 * Create a vector that points towards the prey.
 					 */

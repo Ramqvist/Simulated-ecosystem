@@ -103,6 +103,10 @@ public class DeerAgent extends AbstractAgent {
 			Dimension gridDimension, IShape shape, List<IObstacle> obstacles) {
 
 		updateNeighbourList(neutral, preys, predators);
+		
+		Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys,
+				focusedPrey, this, preyNeighbours, visionRange,
+				maxAcceleration);
 		Vector predatorForce = getPredatorForce();
 		alone = predatorForce.isNullVector();
 		if (digesting > 0 && alone) {
@@ -135,14 +139,11 @@ public class DeerAgent extends AbstractAgent {
 				acceleration = predatorForce;
 			} else {
 				acceleration = predatorForce.multiply(5)
-						.add(mutualInteractionForce)
-						.add(forwardThrust)
-						.add(arrayalForce);
-				Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys,
-						focusedPrey, this, preyNeighbours, visionRange,
-						maxAcceleration);
-				acceleration.add(preyForce.multiply(5 * (1 - energy
-						/ MAX_ENERGY)));
+					.add(mutualInteractionForce)
+					.add(forwardThrust)
+					.add(arrayalForce)
+					.add(preyForce.multiply(5 * (1.0 - (double)energy
+					/ (double)MAX_ENERGY)));
 			}
 			double accelerationNorm = acceleration.getNorm();
 			if (accelerationNorm > maxAcceleration) {
