@@ -125,7 +125,7 @@ public class JPSPathfinder {
 	
 
 	private List<Position> reconstructPath(JPSNode current_node) {
-		List<Position> result = new ArrayList<Position>();
+		List<Position> result = new LinkedList<Position>();
 		JPSNode current = current_node;
 		while(current != null) {
 			result.add(current);

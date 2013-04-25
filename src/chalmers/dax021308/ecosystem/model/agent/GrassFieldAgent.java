@@ -19,7 +19,7 @@ import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 public class GrassFieldAgent extends AbstractAgent {
 
 	private static final double REPRODUCTION_RATE = 0.1;
-	private static final int MAX_ENERGY = 100;
+	private static final double MAX_ENERGY = 200;
 
 	public GrassFieldAgent(String name, Position pos, Color color, int width,
 			int height, Vector velocity, double maxSpeed, int capacity) {
@@ -47,17 +47,31 @@ public class GrassFieldAgent extends AbstractAgent {
 			if (energy < MAX_ENERGY)
 				energy += 1;
 		}
+		int red = (int) (150.0 - 150.0 * (((double) energy) / MAX_ENERGY));
+		int green = (int) (55.0 + 200.0 * (((double) energy) / MAX_ENERGY));
+		this.color = new Color(red, green, 0);
 		return null;
 
 	}
 
 	@Override
 	public synchronized boolean tryConsumeAgent() {
-		// TODO FIX FEEDING
-		if (energy >= 20) {
-			//energy -= 20;
+		// Let the current agent be eaten if it has any energy
+		if (energy >= 8) {
+			energy -= 8;
 			return true;
 		}
+		return false;
+	}
+
+	@Override
+	public boolean looksTasty(IAgent agent, double visionRange) {
+
+		double distance = agent.getPosition().getDistance(position)
+				- (width + height) / 2;
+		// If the agent has enough food for three agents, then it looks tasty!
+		if (energy >= 24)
+			return distance <= visionRange;
 		return false;
 	}
 }

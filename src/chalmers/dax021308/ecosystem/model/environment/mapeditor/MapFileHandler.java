@@ -1,4 +1,4 @@
-package chalmers.dax021308.ecosystem.model.environment;
+package chalmers.dax021308.ecosystem.model.environment.mapeditor;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,6 +12,7 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.AbstractObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.util.Log;
 
 /**
  * Class for handling map files. Reading and writing on them.
@@ -21,12 +22,13 @@ import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
  * @author Erik Ramqvist
  *
  */
-public class MapsFileHandler {
-	
+public class MapFileHandler {
+	private static final File mapsFolder = new File(System.getProperty("user.dir") + "/maps");
 	
 	/**
 	 * Gets all maps from the maps folder.
-	 * @return
+	 * @return null or empty list of no maps where found, otherwise the found maps.
+	 * 
 	 */
 	public static List<SimulationMap> readMapsFromMapsFolder() {
 		List<File> fileList = getMapFiles();
@@ -49,7 +51,7 @@ public class MapsFileHandler {
 	 * @param fileMap
 	 * @return null if no map is found, otherwise the read SimulationMap.
 	 */
-	private static SimulationMap readMapFromFile(File fileMap) {
+	public static SimulationMap readMapFromFile(File fileMap) {
 		if (!fileMap.exists()) {
 			return null;
 		}
@@ -82,10 +84,9 @@ public class MapsFileHandler {
 	 * Gets all map files in maps-folder. 
 	 * 
 	 */
-	private static List<File> getMapFiles() {
-		File fileDir = new File("/maps");
-		if(fileDir.exists() && fileDir.isDirectory()) {
-			File[] files = fileDir.listFiles();
+	public static List<File> getMapFiles() {
+		if(mapsFolder.exists() && mapsFolder.isDirectory()) {
+			File[] files = mapsFolder.listFiles();
 			List<File> result = new ArrayList<File>(files.length);
 			for(File e : files) {
 				if(e.getName().endsWith(".map")) {
@@ -97,6 +98,28 @@ public class MapsFileHandler {
 		return null;
 	}
 	
+	/**
+	 * Saves the SimulationMap to the Maps folder.
+	 * <p> 
+	 * Overwrites if there is already a file with that name.
+	 * 
+	 * @param map
+	 * @return
+	 */
+	public static boolean saveSimulationMap(SimulationMap map) {
+		if(map == null) {
+			return false;
+		}
+		if(!map.isValidMap()) {
+			return false;
+		}
+		if(!mapsFolder.exists()) {
+			if(!mapsFolder.mkdir()) {
+				return false;
+			}
+		}
+		return saveSimulationMap(new File(mapsFolder.getAbsolutePath() + "/" + map.getName() + ".map"), map);
+	}
 	
 	/**
 	 * Saves the given SimulationMap to the given File destination.
@@ -107,11 +130,11 @@ public class MapsFileHandler {
 	public static boolean saveSimulationMap(File dest, SimulationMap map) {
 		PrintWriter pw = null;
 		try {
-			dest.createNewFile();
-			 pw = new PrintWriter(dest);
 			if(dest.exists()) {
 				dest.delete();
 			}
+			dest.createNewFile();
+			pw = new PrintWriter(dest);
 			pw.println(map.getName());
 			for(IObstacle o : map.getObsList()) {
 				pw.println(o.toBinaryString());

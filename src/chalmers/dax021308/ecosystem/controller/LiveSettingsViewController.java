@@ -4,27 +4,54 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.LiveSettingsView;
-import chalmers.dax021308.ecosystem.view.NEWSettingsMenuView;
 
 public class LiveSettingsViewController implements IController {
 	private EcoWorld model;
 	public final LiveSettingsView view;
 	private ActionListener listenerUpdateButton;
 	private SimulationSettings simSettings;
-	//TODO: den här borde typ ta in aktuella SimulationsSettings på nåt sätt, så att den bara kan uppdatera det som ändrats
+	//TODO: den hï¿½r borde typ ta in aktuella SimulationsSettings pï¿½ nï¿½t sï¿½tt, sï¿½ att den bara kan uppdatera det som ï¿½ndrats
 	
-	public LiveSettingsViewController(EcoWorld model) {
+	public LiveSettingsViewController(final EcoWorld model) {
 		this.model = model;
 		view = new LiveSettingsView(model);
 		view.setVisible(true);
+		view.comboBoxHeatMapPop.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Object item = view.comboBoxHeatMapPop.getSelectedItem();
+				if(item instanceof String) {
+					String selectedPop = (String) item;
+					model.setHeapmatPopulation(selectedPop);
+				}
+			}
+		});
+		view.spinnerDelayLength.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				int newDelay = (Integer) view.spinnerDelayLength.getValue();
+				if(newDelay > 0) {
+					model.setDelayLength(newDelay);
+					if(newDelay == 0) {
+						model.setRunWithoutTimer(true);
+					} else {
+						model.setRunWithoutTimer(false);
+					}
+				}
+			}
+			
+		});
 	}
 	
-	public void setSimulationSettingsObject(SimulationSettings s) { //se till att det här är samma simsettingsobjekt som är aktivt	
+	public void setSimulationSettingsObject(SimulationSettings s) { //se till att det hï¿½r ï¿½r samma simsettingsobjekt som ï¿½r aktivt	
 		simSettings = s;
 		
 		if(model == null) {
@@ -35,10 +62,17 @@ public class LiveSettingsViewController implements IController {
 			listenerUpdateButton = new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					updateSimulation(simSettings);
+					int newDelay = (Integer) view.spinnerDelayLength.getValue();
+					if(newDelay > 0) {
+						model.setDelayLength(newDelay);
+						if(newDelay == 0) {
+							model.setRunWithoutTimer(true);
+						} else {
+							model.setRunWithoutTimer(false);
+						}
+					}
 				}
 			};
-			//view.buttonUpdate.addActionListener(listenerUpdateButton);
 			/*
 			SimulationSettings simSettings = SimulationSettings.loadFromFile();
 			if (simSettings == null) {
@@ -57,7 +91,7 @@ public class LiveSettingsViewController implements IController {
 		
 	}
 
-	private void updateSimulation(SimulationSettings s) { //TODO: det här måste ses över, har bara trollat ihop nåt
+	private void updateSimulation(SimulationSettings s) { //TODO: det hï¿½r mï¿½ste ses ï¿½ver, har bara trollat ihop nï¿½t
 		SimulationSettings simSettings = getSettings(s);
 		simSettings.saveToFile();
 		model.loadSimulationSettings(simSettings);
@@ -77,7 +111,6 @@ public class LiveSettingsViewController implements IController {
 	
 	@Override
 	public void release() {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -87,5 +120,6 @@ public class LiveSettingsViewController implements IController {
 			this.model = (EcoWorld) m;
 		}			
 	}
+	
 
 }

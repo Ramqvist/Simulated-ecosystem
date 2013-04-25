@@ -3,12 +3,10 @@ package chalmers.dax021308.ecosystem.view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 
@@ -24,15 +22,18 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;  
 
+
 import chalmers.dax021308.ecosystem.controller.ControlViewController;
 import chalmers.dax021308.ecosystem.controller.LiveSettingsViewController;
 import chalmers.dax021308.ecosystem.controller.NEWSettingsMenuViewController;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.chart.AbstractGraph2D;
-import chalmers.dax021308.ecosystem.view.chart.IterationTimeGraph;
+import chalmers.dax021308.ecosystem.view.chart.ChartProvider;
+import chalmers.dax021308.ecosystem.view.chart.IChart;
 import chalmers.dax021308.ecosystem.view.chart.LifeLengthGraph;
 import chalmers.dax021308.ecosystem.view.chart.PopulationAmountGraph;
+import chalmers.dax021308.ecosystem.view.chart.GroupingProportionGraph;
 
 /**
  * The view that holds the entire application.
@@ -47,11 +48,10 @@ public class MainWindow extends JFrame implements IView {
 //	private JPanel simulationPanel = new JPanel();
 	private JPanel left = new JPanel();
 	private JPanel right = new JPanel();
-	private AWTSimulationView awt;
 	private OpenGLSimulationView openGL;
 	private HeatMapView heatMap;
-	private AbstractGraph2D graphView1;
-	private AbstractGraph2D graphView2;
+	private IChart graphView1;
+	private IChart graphView2;
 	
 	public final LiveSettingsViewController parameterViewCtrl; 
 	public final ControlViewController controlViewCtrl;
@@ -67,6 +67,8 @@ public class MainWindow extends JFrame implements IView {
 	public final JMenuItem mntmStop;
 	public final JMenuItem mntmPause;
 	public final JMenu mnSettings;
+	public final JMenu mnView;
+	public final JMenuItem mntmMapEditor;
 	public final JMenuItem mntmSimulationSettings;
 
 	/**
@@ -91,12 +93,12 @@ public class MainWindow extends JFrame implements IView {
 //		graphView2 = new IterationTimeGraph(model, 10);
 		smvc = new NEWSettingsMenuViewController(model);
 //=======
-		heatMap = new HeatMapView(model, d, new Dimension(75,75), 3, "Deers");
+		heatMap = new HeatMapView(model, d, new Dimension(50,50), 3, "Deers");
 //		parameterView = new ParameterView(model);
 		//
 //		controlView = new ControlView(model);
-		graphView1 = new PopulationAmountGraph(model, 10);
-		graphView2 = new LifeLengthGraph(model, 10);
+		graphView1 = ChartProvider.makeChart(ChartProvider.ChartType.POPULATION_AMOUNT_GRAPH, model);
+		graphView2 = ChartProvider.makeChart(ChartProvider.ChartType.GROUPING_PROPORTION_GRAPH, model);
 //>>>>>>> 0a80aae074172894a60ad8cf4ef1d867f0abfd57
 		
 		menuBar = new JMenuBar();
@@ -104,6 +106,12 @@ public class MainWindow extends JFrame implements IView {
 		
 		mnFile = new JMenu("File");
 		menuBar.add(mnFile);
+		
+
+		mnView = new JMenu("View");
+		mntmMapEditor = new JMenuItem("Map Editor");
+		menuBar.add(mnView);
+		mnView.add(mntmMapEditor);
 		
 //<<<<<<< HEAD
 		mntmLoad = new JMenuItem("Load simulation");
@@ -224,8 +232,8 @@ public class MainWindow extends JFrame implements IView {
 		//right.add(parameterView, BorderLayout.CENTER);
 		//graphView1.setMinimumSize(new Dimension(500, 400));
 		//graphView1.setPreferredSize(new Dimension(500, 400));
-		right.add(graphView2, BorderLayout.CENTER); // during development.
-		right.add(graphView1, BorderLayout.CENTER);
+		right.add(graphView2.toComponent(), BorderLayout.CENTER); // during development.
+		right.add(graphView1.toComponent(), BorderLayout.CENTER);
 		right.add(heatMap, BorderLayout.CENTER); 
 //		right.setBackground(Color.BLUE);
 //		parameterView.setBackground(Color.GREEN);
@@ -264,41 +272,27 @@ public class MainWindow extends JFrame implements IView {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void addController(ActionListener controller) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onTick() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void release() {
-		// TODO Auto-generated method stub
 		
-	}
-	
-	public void setSimulationPanel(int i) {
-		if(i == 0) {
-//			simulationPanel.add(awt);
-		}
-		else if(i == 1) {
-//			simulationPanel.add(openGL);
-		}
 	}
 
 	public void setBtnStartNewSimWindowActionListener(ActionListener a) {

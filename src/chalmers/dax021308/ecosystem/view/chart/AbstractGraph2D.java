@@ -1,5 +1,6 @@
 package chalmers.dax021308.ecosystem.view.chart;
 
+import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 
@@ -22,7 +23,7 @@ import info.monitorenter.util.Range;
  * @author Loanne Berggren
  * 
  */
-public abstract class AbstractGraph2D extends Chart2D implements IView{
+public abstract class AbstractGraph2D extends Chart2D implements IChart{
 	// Values for axis. More values are set in init()
 	protected IAxis<IAxisScalePolicy> xAxis;
 	protected IAxis<IAxisScalePolicy> yAxis;
@@ -98,7 +99,9 @@ public abstract class AbstractGraph2D extends Chart2D implements IView{
 		nIterationsPassed++;
 	}
 
-	
+	public Component toComponent(){
+		return this;
+	}
 	
 
 }

@@ -2,20 +2,14 @@ package chalmers.dax021308.ecosystem.view;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
 
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
-import chalmers.dax021308.ecosystem.model.util.ButtonGroupWrapper;
 
 public class LiveSettingsView extends JPanel {
 	static final int DEFAULT_ITERATION_DELAY = 16;
@@ -30,9 +24,9 @@ public class LiveSettingsView extends JPanel {
 	
 	public final JSpinner spinnerDelayLength;
 	
-	public final JComboBox comboBoxHeatMapPop;
+	public final JComboBox<String> comboBoxHeatMapPop;
 	
-	public final String[] comboTest = {"all", "not all"};
+	public String[] populationNames = {"Deers","Wolves","Grass"};
 	/*
 	public final JRadioButton radioButtonDelayOn;
 	public final JRadioButton radioButtonDelayOff;
@@ -57,7 +51,7 @@ public class LiveSettingsView extends JPanel {
 		spinnerDelayLength = new JSpinner();
 		spinnerDelayLength.setModel(new SpinnerNumberModel(DEFAULT_ITERATION_DELAY, 0, 100, 1));
 		
-		comboBoxHeatMapPop = new JComboBox(comboTest);
+		comboBoxHeatMapPop = new JComboBox<String>(populationNames);
 		
 		/*
 		radioButtonDelayOn = new JRadioButton("Delay On");

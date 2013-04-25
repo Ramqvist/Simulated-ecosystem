@@ -46,8 +46,10 @@ public class ForceCalculator {
 	 * to steer towards other groups of agents, but not be to close to them
 	 * either.
 	 * 
-	 * @param neutral
+	 * @param neutralNeighbours
 	 *            - The population of neutral agents.
+	 * @param currentAgent
+	 *            - The current agent, who the force impacts
 	 * @return A vector with the force that this agent feels from other neutral
 	 *         agents in that it interacts with.
 	 * @author Sebbe
@@ -57,7 +59,7 @@ public class ForceCalculator {
 		Vector mutualInteractionForce = new Vector(0, 0);
 		Vector newForce = new Vector(0, 0);
 		IAgent agent;
-		int size = neutralNeighbours.size(); 
+		int size = neutralNeighbours.size();
 		for (int i = 0; i < size; i++) {
 			agent = neutralNeighbours.get(i);
 			if (agent != currentAgent) {
@@ -153,7 +155,7 @@ public class ForceCalculator {
 	 * The tendency of an agent to continue moving forward with its velocity.
 	 * 
 	 * @param velocity
-	 *            TODO
+	 *            The velocity of the agent who calls upon this method
 	 * 
 	 * @return The forward thrust force.
 	 * @author Sebbe
@@ -172,20 +174,18 @@ public class ForceCalculator {
 	 * velocities and therefore go in the same direction. The sphere of
 	 * incluence is defined as 2*INTERACTION_RANGE at the moment.
 	 * 
-	 * @param velocity
-	 *            TODO
 	 * @param neutralNeighbours
-	 *            TODO
-	 * @param position
-	 *            TODO
-	 * @param neutral
-	 *            - The population of neutral agents.
+	 *            - The list of neutral agents
+	 * 
+	 * @param currentAgent
+	 *            - The current agent
+	 * 
 	 * @return a vector with the force influencing the agents to steer in the
 	 *         same direction as other nearby agents.
 	 * @author Sebbe
 	 */
-	public static Vector arrayalForce(Vector velocity,
-			List<IAgent> neutralNeighbours,IAgent currentAgent) {
+	public static Vector arrayalForce(List<IAgent> neutralNeighbours,
+			IAgent currentAgent) {
 		Vector arrayalForce = new Vector(0, 0);
 		Vector newForce = new Vector();
 		double nAgentsInVision = 0;
@@ -199,7 +199,7 @@ public class ForceCalculator {
 				if (distance <= INTERACTION_RANGE * 2) {
 					newForce.setVector(0, 0);
 					newForce.add(agent.getVelocity());
-					newForce.add(velocity);
+					newForce.add(currentAgent.getVelocity());
 					double h = 4; // Scaling constant
 					newForce.x *= h;
 					newForce.y *= h;
@@ -216,6 +216,15 @@ public class ForceCalculator {
 		return arrayalForce;
 	}
 
+	/**
+	 * This is the force that obstacles have upon the agent
+	 * 
+	 * @param obstacles
+	 *            The list of obstacles
+	 * @param position
+	 *            The position of the agent
+	 * @return
+	 */
 	public static Vector getObstacleForce(List<IObstacle> obstacles,
 			Position position) {
 		Vector obstacleForce = new Vector();
@@ -235,34 +244,40 @@ public class ForceCalculator {
 	}
 
 	/**
-	 * @author Sebastian/Henrik
-	 * @param preyNeighbours
-	 * @param maxAcceleration 
+	 * This is the force that all the preys together have on the agent
+	 * @param willFocusPreys - True if the agent focuses on one prey, otherwise false
+	 * @param focusedPrey - The prey the agent focuses on, if willFocusPreys is true.
+	 * @param agent - The current agent
+	 * @param preyNeighbours - The list of preys
+	 * @param visionRange - The visionrange of the agent
+	 * @param maxAcceleration - The maxAcceleration of the agent
+	 * @return
 	 */
-	public static Vector getPreyForce(boolean willFocusPreys, IAgent focusedPrey,
-			IAgent agent, List<IAgent> preyNeighbours, double visionRange, double maxAcceleration) {
-		if (willFocusPreys && focusedPrey != null && focusedPrey.isAlive()) {
-			Position p = focusedPrey.getPosition();
+	public static Vector getPreyForce(boolean willFocusPreys,
+			Container<IAgent> focusedPreyContainer, IAgent agent, List<IAgent> preyNeighbours,
+			double visionRange, double maxAcceleration) {
+		if (willFocusPreys && focusedPreyContainer.get() != null && focusedPreyContainer.get().isAlive()) {
+			Position p = focusedPreyContainer.get().getPosition();
 			double distance = agent.getPosition().getDistance(p);
-			if (distance <= EATING_RANGE) {
-				if (focusedPrey.tryConsumeAgent()) {
-					focusedPrey = null;
+			double size = (agent.getHeight() + agent.getWidth()) / 4;
+			if (distance <= EATING_RANGE - size) {
+				if (focusedPreyContainer.get().tryConsumeAgent()) {
+					focusedPreyContainer.set(null);
 					agent.eat();
 				}
 			} else {
-				return new Vector(focusedPrey.getPosition(),
-						agent.getPosition());
+				return new Vector(focusedPreyContainer.get().getPosition(), agent.getPosition());
 			}
 		}
 		Vector preyForce = new Vector(0, 0);
 		IAgent closestFocusPrey = null;
-		int preySize = preyNeighbours.size();
-		for (int i = 0; i < preySize; i++) {
+		int nrOfPreys = preyNeighbours.size();
+		for (int i = 0; i < nrOfPreys; i++) {
 			IAgent a = preyNeighbours.get(i);
 			Position p = a.getPosition();
-			double distance = agent.getPosition().getDistance(p);
-			if (distance <= visionRange) {
-
+			double preySize = (a.getHeight() + a.getWidth()) / 4;
+			double distance = agent.getPosition().getDistance(p) - preySize;
+			if (a.looksTasty(agent, visionRange)) {
 				if (distance <= EATING_RANGE) {
 					if (a.tryConsumeAgent()) {
 						agent.eat();
@@ -277,7 +292,7 @@ public class ForceCalculator {
 					} else {
 						closestFocusPrey = a;
 					}
-				} else if (closestFocusPrey == null) {
+				} else if (willFocusPreys && closestFocusPrey == null) {
 					/*
 					 * Create a vector that points towards the prey.
 					 */
@@ -293,17 +308,14 @@ public class ForceCalculator {
 				}
 			}
 		}
-
 		double norm = preyForce.getNorm();
 		if (norm != 0) {
 			preyForce.multiply(maxAcceleration / norm);
 		}
-
 		if (willFocusPreys && closestFocusPrey != null) {
-			focusedPrey = closestFocusPrey;
-			return new Vector(focusedPrey.getPosition(), agent.getPosition());
+			focusedPreyContainer.set(closestFocusPrey);
+			return new Vector(closestFocusPrey.getPosition(), agent.getPosition());
 		}
-
 		return preyForce;
 	}
 }

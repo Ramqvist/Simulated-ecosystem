@@ -58,6 +58,7 @@ public class EcoWorld implements IModel {
 	public static final String EVENT_DELAY_CHANGED 			= "chalmers.dax021308.ecosystem.model.Ecoworld.event_delay_changed";
 	public static final String EVENT_SHAPE_CHANGED 			= "chalmers.dax021308.ecosystem.model.Ecoworld.event_shape_changed";
 	public static final String EVENT_ITERATION_FINISHED		= "chalmers.dax021308.ecosystem.model.Ecoworld.event_iteration_finished";
+	public static final String EVENT_HEATMAP_POPCHANGE		= "chalmers.dax021308.ecosystem.model.Ecoworld.event_heatmap_popchange";
 
 	/* State variables */
 	private boolean environmentFinished = false;
@@ -89,7 +90,8 @@ public class EcoWorld implements IModel {
 	private int numUpdates = 0;
 	private Dimension d;
 	private ExecutorService executor;
-	private ExecutorService notifierExecutor = Executors.newSingleThreadExecutor();
+	private ExecutorService notifierExecutor = Executors
+			.newSingleThreadExecutor();
 
 	private ObserverNotifier notifier = new ObserverNotifier();
 
@@ -229,11 +231,16 @@ public class EcoWorld implements IModel {
 		}
 
 		List<IPopulation> populations = new ArrayList<IPopulation>();
+		List<IObstacle> obstacles;
 		/*
 		 * Creating obstacles here for test. This should be done in a proper way
 		 * later.
 		 */
-		List<IObstacle> obstacles = new ArrayList<IObstacle>();
+		if(s.getMap().getObsList() != null) {
+			obstacles = s.getMap().getScaledObstacles(d);
+		} else {
+			obstacles = new ArrayList<IObstacle>();
+		}
 
 		statTime = new Stat<Double>();
 
@@ -241,30 +248,6 @@ public class EcoWorld implements IModel {
 		IPopulation pred = null;
 		IPopulation grass = null;
 		IShape shape = null;
-
-		if (s.getObstacle() == SimulationSettings.OBSTACLE_ELLIPTICAL) {
-			obstacles.add(new EllipticalObstacle(d.getWidth() * 0.2, d
-					.getHeight() * 0.15, new Position(d.getWidth() / 2, d
-					.getHeight() / 2), new Color(0, 128, 255)));
-		} else if (s.getObstacle() == SimulationSettings.OBSTACLE_RECTANGULAR) {
-			obstacles.add(new RectangularObstacle(d.getWidth() * 0.2, d
-					.getHeight() * 0.1, new Position(d.getWidth() / 2, d
-					.getHeight() / 2), new Color(0, 128, 255)));
-		} else if (s.getObstacle() == SimulationSettings.OBSTACLE_TRIANGLE) {
-			obstacles.add(new TriangleObstacle(d.getWidth() * 0.2, d
-					.getHeight() * 0.2, new Position(d.getWidth() / 2, d
-					.getHeight() / 2), new Color(0, 128, 255)));
-		} else if (s.getObstacle() == SimulationSettings.OBSTACLE_RIVERS) {
-			obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.3, d.getHeight()*0.2), new Color(0, 128, 255)));
-			obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.7, d.getHeight()*0.4), new Color(0, 128, 255)));
-
-			obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.3, d.getHeight()*0.6), new Color(0, 128, 255)));
-			obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.7, d.getHeight()*0.8), new Color(0, 128, 255)));
-			
-		} else if (s.getObstacle() == SimulationSettings.OBSTACLE_TUBE) {
-			obstacles.add(new RectangularObstacle(d.getWidth() * 0.5, d.getHeight() * 0.225, new Position(d.getWidth() * 0.5, d.getHeight() * 0.225), new Color(25, 25, 25)));
-			obstacles.add(new RectangularObstacle(d.getWidth() * 0.5, d.getHeight() * 0.225, new Position(d.getWidth() * 0.5, d.getHeight() * 0.775), new Color(25, 25, 25)));
-		}
 
 		if (s.getShapeModel() == SimulationSettings.SHAPE_SQUARE) {
 			shape = new SquareShape();
@@ -281,7 +264,7 @@ public class EcoWorld implements IModel {
 					Color.red, 3, 0.75, 275, shape);
 		} else if (s.getPredatorModel() == SimulationSettings.POP_WOLF) {
 			pred = new WolfPopulation("Wolves", d, s.getPredPopSize(),
-					Color.red, 2.2, 0.5, 250, true, shape, obstacles);
+					Color.red, 2.3, 0.4, 250, true, shape, obstacles);
 		}
 
 		if (s.getPreyModel() == SimulationSettings.POP_DEER) {
@@ -299,8 +282,8 @@ public class EcoWorld implements IModel {
 			grass = new GrassPopulation("Grass", d, s.getGrassPopSize(),
 					new Color(69, 139, 00), 1, 1, 0, 800, shape, obstacles);
 		} else if (s.getGrassModel() == SimulationSettings.POP_GRASS_FIELD) {
-			grass = new GrassFieldPopulation("Grass_Fields", d, s.getGrassPopSize(),
-					new Color(69, 139, 00), 1, 1, 0, 80, shape, obstacles);
+			grass = new GrassFieldPopulation(SimulationSettings.NAME_GRASS_FIELD, d, s.getGrassPopSize(),
+					Color.green, 1, 1, 0, 80, shape, obstacles);
 		}
 
 		if (prey == null || pred == null || grass == null || shape == null) {
@@ -373,6 +356,12 @@ public class EcoWorld implements IModel {
 			return recording.saveToFile(f);
 		}
 		return false;
+	}
+
+	private List<IObstacle> readObsticlesFromFile() {
+		List<IObstacle> obsList = new ArrayList<IObstacle>();
+		obsList.add(new EllipticalObstacle(0, 0, new Position(), Color.black));
+		return obsList;
 	}
 
 	/**
@@ -525,7 +514,7 @@ public class EcoWorld implements IModel {
 				sb.append(" sample variance: ");
 				sb.append(roundTwoDecimals(statTime.getSampleVariance()));
 			}
-			Log.v(sb.toString());
+			//Log.v(sb.toString());
 			executor.execute(env);
 			startIterationTime = System.nanoTime();
 		} else {
@@ -601,6 +590,10 @@ public class EcoWorld implements IModel {
 	@Override
 	public void removeObserver(PropertyChangeListener listener) {
 		observers.removePropertyChangeListener(listener);
+	}
+
+	public void setHeapmatPopulation(String selectedPop) {
+		observers.firePropertyChange(EVENT_HEATMAP_POPCHANGE, null, selectedPop);
 	}
 
 }

@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.genetics.DeerGenes;
+import chalmers.dax021308.ecosystem.model.genetics.IGenes;
+import chalmers.dax021308.ecosystem.model.genetics.IGenome;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -23,27 +26,37 @@ public class DeerAgent extends AbstractAgent {
 	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
 	private boolean hungry = true;
 	private static final double REPRODUCTION_RATE = 0.1;
-	private boolean willFocusPreys = false;
+	private boolean willFocusPreys = true;
 	private static final int DIGESTION_TIME = 10;
 	private int digesting = 0;
-	private double STOTTING_RANGE = 20;
-	private double STOTTING_LENGTH = 30;
-	private double STOTTING_COOLDOWN = 150;
+	private double STOTTING_RANGE = 10;
+	private double STOTTING_LENGTH = 8;
+	private double STOTTING_COOLDOWN = 50;
 	private double stottingDuration = STOTTING_LENGTH;
 	private double stottingCoolDown = 0;
-	private boolean isAStottingDeer = true;
+	private boolean isAStottingDeer = false;
 	private boolean isStotting = false;
 	private Vector stottingVector = new Vector();
 	private boolean alone;
-
+	private IGenome<IGenes> genome;
+	
 	public DeerAgent(String name, Position p, Color c, int width, int height,
 			Vector velocity, double maxSpeed, double maxAcceleration,
-			double visionRange, boolean groupBehaviour) {
+			double visionRange, boolean groupBehaviour,
+			IGenome<IGenes> genome) {
 
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
+		this.genome = genome;
+		this.groupBehaviour = this.genome.isGeneSet(DeerGenes.GROUPING);
+		// this.groupBehaviour = groupBehaviour;
+		// this.groupBehaviour = false;
+		if (this.groupBehaviour) {
+			this.color = Color.BLUE;
+		} else {
+			this.color = Color.MAGENTA;
+		}
 		this.energy = MAX_ENERGY;
-		this.groupBehaviour = groupBehaviour;
 
 	}
 
@@ -68,7 +81,8 @@ public class DeerAgent extends AbstractAgent {
 				} while (!shape.isInside(gridDimension, pos));
 				IAgent child = new DeerAgent(name, pos, color, width, height,
 						new Vector(velocity), maxSpeed, maxAcceleration,
-						visionRange, groupBehaviour);
+						visionRange, groupBehaviour, genome.onlyMutate());
+
 				spawn.add(child);
 
 			}
@@ -101,8 +115,8 @@ public class DeerAgent extends AbstractAgent {
 				mutualInteractionForce = ForceCalculator
 						.mutualInteractionForce(neutralNeighbours, this);
 				forwardThrust = ForceCalculator.forwardThrust(velocity);
-				arrayalForce = ForceCalculator.arrayalForce(velocity,
-						neutralNeighbours, this);
+				arrayalForce = ForceCalculator.arrayalForce(neutralNeighbours,
+						this);
 			}
 
 			Vector environmentForce = ForceCalculator.getEnvironmentForce(
@@ -121,23 +135,20 @@ public class DeerAgent extends AbstractAgent {
 				acceleration = predatorForce;
 			} else {
 				acceleration = predatorForce.multiply(5)
-						.add(mutualInteractionForce).add(forwardThrust)
+						.add(mutualInteractionForce)
+						.add(forwardThrust)
 						.add(arrayalForce);
-				// if (alone) {
 				Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys,
 						focusedPrey, this, preyNeighbours, visionRange,
 						maxAcceleration);
 				acceleration.add(preyForce.multiply(5 * (1 - energy
 						/ MAX_ENERGY)));
 			}
-			// }
 			double accelerationNorm = acceleration.getNorm();
 			if (accelerationNorm > maxAcceleration) {
 				acceleration.multiply(maxAcceleration / accelerationNorm);
 			}
-
 			acceleration.add(environmentForce).add(obstacleForce);
-
 			/*
 			 * The new velocity is then just: v(t+dt) = (v(t)+a(t+1)*dt)*decay,
 			 * where dt = 1 in this case. There is a decay that says if they are
@@ -152,17 +163,16 @@ public class DeerAgent extends AbstractAgent {
 			if (speed > maxSpeed) {
 				newVelocity.multiply(maxSpeed / speed);
 			}
-			// if (alone) {
+			// if (alone)
 			// newVelocity.multiply(0.9);
-			// }
 			this.setVelocity(newVelocity);
 
 			/* Reusing the same position object, for less heap allocations. */
 			// if (reUsedPosition == null) {
 			nextPosition = Position.positionPlusVector(position, velocity);
 			// } else {
-			// nextPosition.setPosition(reUsedPosition.setPosition(position.getX()
-			// + velocity.x, position.getY() + velocity.y));
+			// nextPosition = reUsedPosition.setPosition(position.getX()
+			// + velocity.x, position.getY() + velocity.y);
 			// }
 		}
 	}
@@ -177,7 +187,7 @@ public class DeerAgent extends AbstractAgent {
 	 * @author Sebbe
 	 */
 	private Vector getPredatorForce() {
-		Vector predatorForce = new Vector();
+		Vector predatorForce = new Vector(0, 0);
 		if (isAStottingDeer && isStotting) {
 			stottingDuration--;
 			if (stottingDuration <= 0) {
@@ -186,9 +196,9 @@ public class DeerAgent extends AbstractAgent {
 			return stottingVector;
 		} else {
 			boolean predatorClose = false;
-			int predSize = predNeighbours.size();
+			int nrOfPredators = predNeighbours.size();
 			IAgent predator;
-			for (int i = 0; i < predSize; i++) {
+			for (int i = 0; i < nrOfPredators; i++) {
 				predator = predNeighbours.get(i);
 				Position p = predator.getPosition();
 				double distance = getPosition().getDistance(p);
@@ -250,7 +260,6 @@ public class DeerAgent extends AbstractAgent {
 	public void updatePosition() {
 		super.updatePosition();
 		this.energy--;
-		stottingCoolDown--;
 		if (energy == 0 || lifeLength > MAX_LIFE_LENGTH)
 			isAlive = false;
 	}
@@ -260,5 +269,13 @@ public class DeerAgent extends AbstractAgent {
 		hungry = false;
 		energy = MAX_ENERGY;
 		digesting = DIGESTION_TIME;
+	}
+
+	public boolean isAStottingDeer() {
+		return isAStottingDeer;
+	}
+
+	public boolean isAGroupingDeer() {
+		return groupBehaviour;
 	}
 }

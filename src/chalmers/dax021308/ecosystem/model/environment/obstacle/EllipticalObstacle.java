@@ -9,10 +9,18 @@ public class EllipticalObstacle extends AbstractObstacle{
 	private static double e = 0.1;
 	private static double nStep = 6;
 	
+	/**
+	 * The ellipse is defined as (x/width)^2 + (y/height)^2 + 1 = 0. Therefore width and height is the half
+	 * of the total width and height of the ellipse.
+	 * @param width the total width of the ellipse/2
+	 * @param height the total height of the ellipse/2
+	 * @param position 
+	 * @param color
+	 */
 	public EllipticalObstacle(double width, double height, Position position, Color color){
 		this.position = position;
-		this.a = width;
-		this.b = height;
+		this.width = width;
+		this.height = height;
 		this.color = color;
 	}
 	@Override
@@ -22,7 +30,7 @@ public class EllipticalObstacle extends AbstractObstacle{
 	public Position closestBoundary(Position p) {
 		Position agentPos = new Position(p.getX()-this.position.getX(), p.getY()-this.position.getY());
 		
-		if(a<b) {
+		if(width<height) {
 			agentPos = new Position(-agentPos.getY(), agentPos.getX());
 		} else {
 			agentPos = new Position(agentPos.getX(), agentPos.getY());
@@ -33,15 +41,15 @@ public class EllipticalObstacle extends AbstractObstacle{
 		agentPos.setPosition(agentPos.getX()*xSign, agentPos.getY()*ySign);
 		
 		Position bestPos;
-		if(a<b) {
-			bestPos = newtonsMethod(agentPos, b, a);
+		if(width<height) {
+			bestPos = newtonsMethod(agentPos, height, width);
 		} else {
-			bestPos = newtonsMethod(agentPos, a, b);
+			bestPos = newtonsMethod(agentPos, width, height);
 		}
 		
 		bestPos.setPosition(bestPos.getX()*xSign, bestPos.getY()*ySign);
 		
-		if(a<b) {
+		if(width<height) {
 			bestPos.setPosition(bestPos.getY(), -bestPos.getX());
 		}
 		
@@ -57,14 +65,22 @@ public class EllipticalObstacle extends AbstractObstacle{
 		return bestPos;
 	}
 
+	/**
+	 * Not used. Newtons is better.
+	 * @param agentPos
+	 * @param startAngle
+	 * @param step
+	 * @param iteration
+	 * @return
+	 */
 	private Position recursiveBoundarySearch(Position agentPos ,double startAngle, double step, int iteration){
 		Position elipPos1 = new Position(Double.MAX_VALUE, Double.MAX_VALUE);
 		Position elipPos2 = new Position(Double.MAX_VALUE, Double.MAX_VALUE);
-		Position bestPos = new Position(a*Math.cos(startAngle), b*Math.sin(startAngle));
+		Position bestPos = new Position(width*Math.cos(startAngle), height*Math.sin(startAngle));
 		double bestI = 0;
 		for(double i=1; i<=nStep/2; i++){
-			elipPos1 = new Position(a*Math.cos(startAngle+i*step), b*Math.sin(startAngle+i*step));
-			elipPos2 = new Position(a*Math.cos(startAngle-i*step), b*Math.sin(startAngle-i*step));
+			elipPos1 = new Position(width*Math.cos(startAngle+i*step), height*Math.sin(startAngle+i*step));
+			elipPos2 = new Position(width*Math.cos(startAngle-i*step), height*Math.sin(startAngle-i*step));
 			if(elipPos1.getDistance(agentPos)<bestPos.getDistance(agentPos)){
 				bestPos = new Position(elipPos1);
 				bestI = i;
@@ -84,11 +100,16 @@ public class EllipticalObstacle extends AbstractObstacle{
 		
 	}
 	
+	/**
+	 * Not used. Newtons is better.
+	 * @param agentPos
+	 * @return
+	 */
 	private Position bruteBoundarySearch(Position agentPos){
 		Position bestPos = new Position(Double.MAX_VALUE, Double.MAX_VALUE);
 		Position elipPos = new Position();
 		for(int i=0; i<nStep; i++){
-			elipPos.setPosition(a*Math.cos(i*2*Math.PI/nStep), b*Math.sin(i*2*Math.PI/nStep));
+			elipPos.setPosition(width*Math.cos(i*2*Math.PI/nStep), height*Math.sin(i*2*Math.PI/nStep));
 			if(elipPos.getDistance(agentPos) < bestPos.getDistance(agentPos)) {
 				bestPos.setPosition(elipPos);
 			}
@@ -96,6 +117,14 @@ public class EllipticalObstacle extends AbstractObstacle{
 		return bestPos;
 	}
 	
+	/**
+	 * Given a position, this funtion finds the closest point on the ellipse boundary to the given position.
+	 * The function finds the best position using Newton's method for approximating a rational function.
+	 * @param p the position.
+	 * @param a The width of the ellipse.
+	 * @param b the height of the ellipse.
+	 * @return
+	 */
 	private Position newtonsMethod(Position p, double a, double b){	
 		double u = p.getX();
 		double v = p.getY();
@@ -121,9 +150,9 @@ public class EllipticalObstacle extends AbstractObstacle{
 	
 	@Override
 	public boolean isInObstacle(Position p) {
-		if(p.getY() < position.getY()+b && p.getY() > position.getY()-b){
+		if(p.getY() < position.getY()+height && p.getY() > position.getY()-height){
 			double y = p.getY()-position.getY();
-			double x = a*Math.sqrt(1-(y*y)/(b*b));
+			double x = width*Math.sqrt(1-(y*y)/(height*height));
 			if(p.getX() < position.getX()+x && p.getX() > position.getX()-x) {
 				return true;
 			}
@@ -131,17 +160,47 @@ public class EllipticalObstacle extends AbstractObstacle{
 		return false;
 	}
 	
+	/**
+	 * Returns the color of the obstacle.
+	 */
 	@Override
 	public Color getColor() {
 		return color;
 	}
 	
+	/**
+	 * Returns true of the given position is inside the enveloping circle of the obstacles, 
+	 * plus the interaction range.
+	 */
 	@Override
 	public boolean isCloseTo(Position p, double interactionRange){
-		double ab = Math.max(a, b);
+		double ab = Math.max(width, height);
 		if(this.position.getDistance(p) <= ab + interactionRange) {
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer("EllipticalObstacle Width: ");
+		sb.append(width);
+		sb.append(" Height: ");
+		sb.append(height);
+		sb.append(' ');
+		return sb.toString();
+	}
+	
+
+	/**
+	 * Scale the obstacle to a specific scalar value. 
+	 * And return a clone of the newly scaled obstacle
+	 */
+	@Override
+	public IObstacle scale(double scaleX, double scaleY) {
+		Position newPos = new Position(position.getX() * scaleX, position.getY() * scaleY);
+		double newWidth = width * scaleX;
+		double newHeight = height * scaleY;
+		return new EllipticalObstacle(newWidth, newHeight, newPos, new Color(color.getRGB()));
 	}
 }

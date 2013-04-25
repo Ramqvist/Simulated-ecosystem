@@ -9,6 +9,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 
+import chalmers.dax021308.ecosystem.model.environment.mapeditor.DefaultMaps;
+import chalmers.dax021308.ecosystem.model.environment.mapeditor.SimulationMap;
+
 /**
  * Container class for various simulation settings.
  * 
@@ -38,20 +41,14 @@ public class SimulationSettings {
 	public static final String POP_DUMMYPRED  = "Dummy Predator Population";
 	public static final String POP_WOLF       = "Wolf Population";
 	public static final String POP_GRASS_FIELD = "Grass Field Population";
+	
+	/* Population names */
+	public static final String NAME_GRASS_FIELD = "Grass Field";
 
 	/* Population array based on predator-prey model, the view uses these values. */
 	public static final String[] PREY_VALUES  = { POP_DEER, POP_PIG, POP_DUMMYPREY };
 	public static final String[] PRED_VALUES  = { POP_WOLF, POP_DUMMYPRED };
 	public static final String[] GRASS_VALUES = { POP_GRASS, POP_GRASS_FIELD };
-	
-	/*Obstacle constants */
-	public static final String OBSTACLE_RECTANGULAR = "Rectangular obstacle";
-	public static final String OBSTACLE_ELLIPTICAL  = "Elliptical obstacle";
-	public static final String OBSTACLE_TRIANGLE  = "Triangle obstacle";
-	public static final String OBSTACLE_RIVERS  = "Rivers obstacle";
-	public static final String OBSTACLE_TUBE  = "Tube obstacle";
-	public static final String OBSTACLE_NONE        = "No obstacle";
-	public static final String[] OBSTACLE_VALUES = {OBSTACLE_NONE, OBSTACLE_RECTANGULAR, OBSTACLE_ELLIPTICAL, OBSTACLE_TRIANGLE, OBSTACLE_RIVERS, OBSTACLE_TUBE};
 	
 	/* Dimension constants */
 	public static final String DIM_SMALL  = "500  x 500";
@@ -68,9 +65,9 @@ public class SimulationSettings {
 	
 	/* Simulation profiles settings */
 	static {
-		DEFAULT = new SimulationSettings("Default", POP_WOLF, 10, POP_DEER, 100, POP_GRASS, 400, SHAPE_SQUARE, OBSTACLE_ELLIPTICAL, 4, false, false, 16, Integer.MAX_VALUE);
+		DEFAULT = new SimulationSettings("Default", POP_WOLF, 10, POP_DEER, 100, POP_GRASS, 400, SHAPE_SQUARE, 4, false, false, 16, Integer.MAX_VALUE, DefaultMaps.empty_map);
 		DEFAULT.setSimulationDimension(DIM_MEDIUM);
-		LARGESIM = new SimulationSettings("Large simulation", POP_WOLF, 100, POP_DEER, 1000, POP_GRASS, 4000, SHAPE_SQUARE, OBSTACLE_NONE, 4, false, false, 16, Integer.MAX_VALUE);
+		LARGESIM = new SimulationSettings("Large simulation", POP_WOLF, 100, POP_DEER, 1000, POP_GRASS, 4000, SHAPE_SQUARE, 4, false, false, 16, Integer.MAX_VALUE, DefaultMaps.elliptical_map);
 		LARGESIM.setSimulationDimension(DIM_XLARGE);
 		PROFILE_VALUES = new SimulationSettings[2];
 		PROFILE_VALUES[0] = DEFAULT;
@@ -85,7 +82,6 @@ public class SimulationSettings {
 	private String grassModel;
 	private int grassPopSize;
 	private String shapeModel;
-	private String obstacle;
 	private Dimension simDimension;
 	private String simDimensionConstant;
 	private int numThreads;
@@ -93,8 +89,9 @@ public class SimulationSettings {
 	private boolean recordSimulation;
 	private int delayLength;
 	private int numIterations;
+	private SimulationMap map;
 
-	public SimulationSettings(String simulationProfileName, String predatorModel, int predPopSize, String preyModel, int preyPopSize, String grassModel, int grassPopSize, String shapeModel, String obstacle, int numThreads, boolean runWithoutTimer, boolean recordSimulation, int delayLength, int numIterations) {
+	public SimulationSettings(String simulationProfileName, String predatorModel, int predPopSize, String preyModel, int preyPopSize, String grassModel, int grassPopSize, String shapeModel, int numThreads, boolean runWithoutTimer, boolean recordSimulation, int delayLength, int numIterations, SimulationMap map) {
 		this.simulationProfileName = simulationProfileName;
 		this.predatorModel = predatorModel;
 		this.predPopSize = predPopSize;
@@ -103,12 +100,12 @@ public class SimulationSettings {
 		this.grassModel = grassModel;
 		this.grassPopSize = grassPopSize;
 		this.shapeModel = shapeModel;
-		this.obstacle = obstacle;
 		this.numThreads = numThreads;
 		this.runWithoutTimer = runWithoutTimer;
 		this.recordSimulation = recordSimulation;
 		this.delayLength = delayLength;
 		this.numIterations = numIterations;
+		this.map = map;
 	}
 	
 	public void updateLiveSettings(int delayLenght) {
@@ -213,14 +210,14 @@ public class SimulationSettings {
 		this.shapeModel = shapeModel;
 	}
 
-	public String getObstacle() {
-		return obstacle;
+	public SimulationMap getMap() {
+		return map;
 	}
-
-	public void setObstacle(String obstacle) {
-		this.obstacle = obstacle;
+	
+	public void setMap(SimulationMap map) {
+		this.map = map;
 	}
-
+	
 	public void setNumThreads(int numThreads) {
 		this.numThreads = numThreads;
 	}
@@ -317,12 +314,13 @@ public class SimulationSettings {
 				input[++i],
 				Integer.parseInt(input[++i]),
 				input[++i],
-				input[++i],
 				Integer.parseInt(input[++i]),
 				Boolean.valueOf(input[++i]),
 				Boolean.valueOf(input[++i]),
 				Integer.parseInt(input[++i]),
-				Integer.parseInt(input[++i]));
+				Integer.parseInt(input[++i]),
+				null);
+				//TODO: Add map here.
 		i++;
 		int pos = i;
 		try {
@@ -357,8 +355,6 @@ public class SimulationSettings {
 		sb.append(grassPopSize);
 		sb.append(';');
 		sb.append(shapeModel);
-		sb.append(';');
-		sb.append(obstacle);
 		sb.append(';');
 		sb.append(numThreads);
 		sb.append(';');

@@ -60,7 +60,7 @@ public class ShortestPathTester extends JPanel {
 		frame.add(this);
 		setBackground(Color.WHITE);
 		
-		Position start = new Position(140.4120, 149.0);
+		Position start = new Position(140.4120, 149.0); 
 		Position end = new Position(500, 500); 
 		Dimension dim = new Dimension(700, 700);
 		goal = new AStarPosition(end.x, end.y);

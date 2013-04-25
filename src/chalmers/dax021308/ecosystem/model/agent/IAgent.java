@@ -24,13 +24,28 @@ public interface IAgent extends Cloneable {
 	public Position getPosition();
 
 	/**
-	 * @param p - The new Position.
+	 * @param p
+	 *            - The new Position.
 	 */
 	public void setPosition(Position p);
-	
+
 	/**
 	 * Calculates the new position of the IAgent to which it will move when
 	 * calling updatePosition().
+	 * 
+	 * @param predators
+	 *            The predators who hunt this agent
+	 * @param preys
+	 *            The preys this agents hunts
+	 * @param neutral
+	 *            The 'neutral' agents, i.e. the agents of the same trophic
+	 *            level
+	 * @param dim
+	 *            The dimension of the environment
+	 * @param shape
+	 *            The shape of the environment
+	 * @param obstacles
+	 *            The obstacles inside the environment
 	 */
 	public void calculateNextPosition(List<IPopulation> predators,
 			List<IPopulation> preys, List<IPopulation> neutral, Dimension dim,
@@ -95,9 +110,9 @@ public interface IAgent extends Cloneable {
 	 * @param agent
 	 *            - The IAgent which this IAgent will reproduce with.
 	 * @param shape
-	 *            TODO
+	 *            - The shape of the environment the agent reproduces in
 	 * @param gridDimension
-	 *            TODO
+	 *            - The dimension of the environment the agent reproduces in
 	 * @return A list of IAgents if the reproduction was successful, otherwise
 	 *         null.
 	 */
@@ -138,6 +153,18 @@ public interface IAgent extends Cloneable {
 	 * @return True if alive, otherwise false.
 	 */
 	public boolean isAlive();
+
+	/**
+	 * Checks if this agent has any food available and is desirable to hunt
+	 * 
+	 * @param agent
+	 *            The agent looking for food
+	 * @param visionRange
+	 *            The visionrange of the agent looking for food
+	 * @return True if the agent is desirable to hunt and should affect the
+	 *         preyforce, otherwise false
+	 */
+	public boolean looksTasty(IAgent agent, double visionRange);
 
 	/**
 	 * @return Max acceleration.
