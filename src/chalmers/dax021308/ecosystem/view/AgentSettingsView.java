@@ -3,13 +3,12 @@ package chalmers.dax021308.ecosystem.view;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 
 /**
+ * A tabbed view to modify specific parameters for our current agents.
+ * 
  * General props: maxSpeed, visionRange, maxAcceleration, max energy, max life length, reproduction rate, digestion time
  * Wolf: sprinting.
  * Deer: stotting.
@@ -19,26 +18,13 @@ import javax.swing.JTabbedPane;
 @SuppressWarnings("serial")
 public class AgentSettingsView extends JTabbedPane implements IView {
 
-	private JPanel wolfPanel;
-	private JPanel deerPanel;
-	private JPanel grassPanel;
-	private JSpinner maxSpeedWolf;
-	private JSpinner visionRangeWolf;
-	private JSpinner maxAccelerationWolf;
+	private WolfSettingsPanel wolfPanel;
+	private DeerSettingsPanel deerPanel;
+	private GrassSettingsPanel grassPanel;
+	
 	
 	public AgentSettingsView() {
-		maxSpeedWolf = new JSpinner();
-		maxAccelerationWolf = new JSpinner();
-		visionRangeWolf = new JSpinner();
-		
-		wolfPanel = new JPanel();
-		wolfPanel.setLayout(new BoxLayout(wolfPanel, BoxLayout.Y_AXIS));
-		wolfPanel.add(maxSpeedWolf);
-		wolfPanel.add(visionRangeWolf);
-		wolfPanel.add(maxAccelerationWolf);
-		
-		this.addTab("Wolf", wolfPanel);
-		
+		init();
 	}
 	
 	@Override
@@ -49,8 +35,12 @@ public class AgentSettingsView extends JTabbedPane implements IView {
 
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
-		
+		wolfPanel = new WolfSettingsPanel();
+		deerPanel = new DeerSettingsPanel();
+		grassPanel = new GrassSettingsPanel();
+		this.addTab("Wolf", wolfPanel);
+		this.addTab("Deer", deerPanel);
+		this.addTab("Grass", grassPanel);
 	}
 
 	@Override
@@ -80,5 +70,7 @@ public class AgentSettingsView extends JTabbedPane implements IView {
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.pack();
 		f.setVisible(true);
+		
+		
 	}
 }

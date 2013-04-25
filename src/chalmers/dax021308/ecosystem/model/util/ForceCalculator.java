@@ -254,20 +254,19 @@ public class ForceCalculator {
 	 * @return
 	 */
 	public static Vector getPreyForce(boolean willFocusPreys,
-			IAgent focusedPrey, IAgent agent, List<IAgent> preyNeighbours,
+			Container<IAgent> focusedPreyContainer, IAgent agent, List<IAgent> preyNeighbours,
 			double visionRange, double maxAcceleration) {
-		if (willFocusPreys && focusedPrey != null && focusedPrey.isAlive()) {
-			Position p = focusedPrey.getPosition();
+		if (willFocusPreys && focusedPreyContainer.get() != null && focusedPreyContainer.get().isAlive()) {
+			Position p = focusedPreyContainer.get().getPosition();
 			double distance = agent.getPosition().getDistance(p);
 			double size = (agent.getHeight() + agent.getWidth()) / 4;
 			if (distance <= EATING_RANGE - size) {
-				if (focusedPrey.tryConsumeAgent()) {
-					focusedPrey = null;
+				if (focusedPreyContainer.get().tryConsumeAgent()) {
+					focusedPreyContainer.set(null);
 					agent.eat();
 				}
 			} else {
-				return new Vector(focusedPrey.getPosition(),
-						agent.getPosition());
+				return new Vector(focusedPreyContainer.get().getPosition(), agent.getPosition());
 			}
 		}
 		Vector preyForce = new Vector(0, 0);
@@ -309,17 +308,14 @@ public class ForceCalculator {
 				}
 			}
 		}
-
 		double norm = preyForce.getNorm();
 		if (norm != 0) {
 			preyForce.multiply(maxAcceleration / norm);
 		}
-
 		if (willFocusPreys && closestFocusPrey != null) {
-			focusedPrey = closestFocusPrey;
-			return new Vector(focusedPrey.getPosition(), agent.getPosition());
+			focusedPreyContainer.set(closestFocusPrey);
+			return new Vector(closestFocusPrey.getPosition(), agent.getPosition());
 		}
-
 		return preyForce;
 	}
 }

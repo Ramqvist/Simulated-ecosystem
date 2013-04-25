@@ -253,7 +253,7 @@ public abstract class AbstractObstacle implements IObstacle {
 			currentPos.setPosition(currentX, currentY);
 			for(IObstacle o : obsList) {
 				if(o.isInObstacle(currentPos)) {
-					System.out.println("Completed in: " + i + " iterations.");
+//					System.out.println("Completed in: " + i + " iterations.");
 					return true;
 				}
 			}

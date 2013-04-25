@@ -94,7 +94,6 @@ public class MapEditorGLView extends GLCanvas implements IView {
 	public void propertyChange(PropertyChangeEvent event) {
 		String eventName = event.getPropertyName();
 		if(eventName == MapEditorModel.EVENT_OBSTACLES_CHANGED) {
-			//Tick notification recived from model. Do something with the data.
 			if(event.getNewValue() instanceof List<?>) {
 				this.newObs = (List<IObstacle>) event.getNewValue();
 			}
