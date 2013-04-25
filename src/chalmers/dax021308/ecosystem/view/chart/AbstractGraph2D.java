@@ -1,5 +1,6 @@
 package chalmers.dax021308.ecosystem.view.chart;
 
+import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 
@@ -98,7 +99,9 @@ public abstract class AbstractGraph2D extends Chart2D implements IChart{
 		nIterationsPassed++;
 	}
 
-	
+	public Component toComponent(){
+		return this;
+	}
 	
 
 }

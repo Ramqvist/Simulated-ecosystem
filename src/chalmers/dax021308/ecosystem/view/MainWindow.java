@@ -29,6 +29,8 @@ import chalmers.dax021308.ecosystem.controller.NEWSettingsMenuViewController;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.chart.AbstractGraph2D;
+import chalmers.dax021308.ecosystem.view.chart.ChartProvider;
+import chalmers.dax021308.ecosystem.view.chart.IChart;
 import chalmers.dax021308.ecosystem.view.chart.LifeLengthGraph;
 import chalmers.dax021308.ecosystem.view.chart.PopulationAmountGraph;
 import chalmers.dax021308.ecosystem.view.chart.GroupingProportionGraph;
@@ -48,8 +50,8 @@ public class MainWindow extends JFrame implements IView {
 	private JPanel right = new JPanel();
 	private OpenGLSimulationView openGL;
 	private HeatMapView heatMap;
-	private AbstractGraph2D graphView1;
-	private AbstractGraph2D graphView2;
+	private IChart graphView1;
+	private IChart graphView2;
 	
 	public final LiveSettingsViewController parameterViewCtrl; 
 	public final ControlViewController controlViewCtrl;
@@ -95,8 +97,8 @@ public class MainWindow extends JFrame implements IView {
 //		parameterView = new ParameterView(model);
 		//
 //		controlView = new ControlView(model);
-		graphView1 = new PopulationAmountGraph(model, 10);
-		graphView2 = new GroupingProportionGraph(model, 10);
+		graphView1 = ChartProvider.makeChart(ChartProvider.ChartType.POPULATION_AMOUNT_GRAPH, model);
+		graphView2 = ChartProvider.makeChart(ChartProvider.ChartType.GROUPING_PROPORTION_GRAPH, model);
 //>>>>>>> 0a80aae074172894a60ad8cf4ef1d867f0abfd57
 		
 		menuBar = new JMenuBar();
@@ -230,8 +232,8 @@ public class MainWindow extends JFrame implements IView {
 		//right.add(parameterView, BorderLayout.CENTER);
 		//graphView1.setMinimumSize(new Dimension(500, 400));
 		//graphView1.setPreferredSize(new Dimension(500, 400));
-		right.add(graphView2, BorderLayout.CENTER); // during development.
-		right.add(graphView1, BorderLayout.CENTER);
+		right.add(graphView2.toComponent(), BorderLayout.CENTER); // during development.
+		right.add(graphView1.toComponent(), BorderLayout.CENTER);
 		right.add(heatMap, BorderLayout.CENTER); 
 //		right.setBackground(Color.BLUE);
 //		parameterView.setBackground(Color.GREEN);

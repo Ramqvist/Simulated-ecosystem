@@ -9,7 +9,7 @@ import chalmers.dax021308.ecosystem.model.environment.IModel;
  * @author Loanne Berggren
  *
  */
-public class ChartFactory {
+public class ChartProvider {
 
 	public static enum ChartType {
 		LIFE_LENGTH_GRAPH, 
@@ -29,7 +29,7 @@ public class ChartFactory {
 			return new IterationTimeGraph(model, updatefrequency);
 		case GROUPING_PROPORTION_GRAPH:
 			return new GroupingProportionGraph(model, updatefrequency);
-		default: // Although shouldn't be necessary to have this.
+		default:
 			return null;
 		}
 	}
