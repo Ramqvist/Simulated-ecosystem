@@ -1,7 +1,7 @@
 package chalmers.dax021308.ecosystem.view;
 
 import java.awt.Color;
-import java.awt.Container;
+//import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -33,7 +33,7 @@ public class NEWSettingsMenuView extends JFrame {
     static final int DEFAULT_WIDTH = 750;
     static final int DEFAULT_HEIGHT = 750;
     
-    private Container contentPane;
+    private JPanel contentPane;
     private JPanel left;
     private JPanel right;
     private JPanel panelButton1;
@@ -70,7 +70,7 @@ public class NEWSettingsMenuView extends JFrame {
     public final JCheckBox checkBoxLimitIterations;
     public final JCheckBox checkBoxCustomSize;
     
-    //de hï¿½r kanske kan vara privata nu..?
+    //de här kanske kan vara privata nu..?
     public final JRadioButton radioButton2Threads;
     public final JRadioButton radioButton4Threads;
     public final JRadioButton radioButton8Threads;
@@ -137,7 +137,7 @@ public class NEWSettingsMenuView extends JFrame {
         this.model = model;
 
         //initializing the graphical objects - done here since most of them are final		
-        contentPane = new Container();
+        contentPane = new JPanel();
         left = new JPanel();
         right = new JPanel();
         panelButton1 = new JPanel();
@@ -251,7 +251,7 @@ public class NEWSettingsMenuView extends JFrame {
         listenerAdvanced = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AdvancedSettings advs = new AdvancedSettings();
+				new AdvancedSettings(); 
             }
         };
 
@@ -292,7 +292,7 @@ public class NEWSettingsMenuView extends JFrame {
     }
 
     private void setMyLayout() {
-        contentPane = this.getContentPane();
+        setContentPane(contentPane);
         contentPane.setLayout(new GridBagLayout());
 
         left.setLayout(new GridBagLayout());
@@ -565,7 +565,7 @@ public class NEWSettingsMenuView extends JFrame {
 
     private Border createTitledBorder(String title) {
         Border actualBorder = BorderFactory.createTitledBorder(title);
-        Border padding = BorderFactory.createEmptyBorder(0, 0, 10, 0);
+        Border padding = BorderFactory.createEmptyBorder(10, 10, 20, 0);
 
         return BorderFactory.createCompoundBorder(padding, actualBorder);
     }
@@ -720,10 +720,9 @@ public class NEWSettingsMenuView extends JFrame {
 
     class AdvancedSettings extends JFrame {
 
-        private Container advContentPane;
+        private JPanel advContentPane;
         private JPanel advLeft;
         private JPanel advRight;
-        private JPanel advCenter;
         private JPanel advPanelButton;
         private JPanel advPanelIterations;
         private JPanel advPanelDelay;
@@ -738,7 +737,8 @@ public class NEWSettingsMenuView extends JFrame {
         private ActionListener advListenerApply;
 
         public AdvancedSettings() {
-            advContentPane = this.getContentPane();
+        	advContentPane = new JPanel();
+            setContentPane(advContentPane);
             advLeft = new JPanel();
             advRight = new JPanel();
             advPanelButton = new JPanel();
@@ -911,6 +911,7 @@ public class NEWSettingsMenuView extends JFrame {
             c.gridx = 0;
             c.gridy = 3;
             advLeft.add(advPanelNumThreads, c);
+            
 
             c = new GridBagConstraints();
             c.fill = GridBagConstraints.HORIZONTAL;

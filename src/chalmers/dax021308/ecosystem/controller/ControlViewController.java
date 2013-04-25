@@ -26,7 +26,7 @@ public class ControlViewController implements IController {
 	}
 	
 	private void addActionListeners() {
-		view.btnStart.addActionListener(new ActionListener() {
+		view.buttonPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					model.start();
@@ -36,7 +36,7 @@ public class ControlViewController implements IController {
 			}
 		});
 		
-		view.btnStop.addActionListener(new ActionListener() {
+		view.buttonStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					model.stop();
@@ -46,7 +46,7 @@ public class ControlViewController implements IController {
 			}
 		});
 		
-		view.btnPause.addActionListener(new ActionListener() {
+		view.buttonPause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					model.pause();

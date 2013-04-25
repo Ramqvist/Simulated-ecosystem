@@ -302,7 +302,7 @@ public class MainWindow extends JFrame implements IView {
 	}
 
 	public void setBtnStartNewSimWindowActionListener(ActionListener a) {
-		controlViewCtrl.view.btnStartNew.addActionListener(a);		
+		controlViewCtrl.view.buttonStartNew.addActionListener(a);		
 	}
 	
 	private class SimFileFilter extends FileFilter{
