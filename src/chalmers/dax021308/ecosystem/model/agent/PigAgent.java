@@ -192,12 +192,10 @@ public class PigAgent extends AbstractAgent {
 					digesting = DIGESTION_TIME;
 				}
 			} else {
-				if(!focusedPreyPath.isEmpty()) {
+				if(!focusedPreyPath.isEmpty() && focusedPreyPath.isValid()) {
 					Position nextPathPosition = focusedPreyPath.peek();
 					focusedPreyPath.decreaseTTL();
-					if(!focusedPreyPath.isValid()) {
-						focusedPreyPath.clearPath();
-					} 
+
 					//If we are not near our current path target, move towards it.
 					if(position.getDistance(nextPathPosition) > EATING_RANGE) {
 						return new Vector(nextPathPosition, position);
