@@ -3,6 +3,8 @@ package chalmers.dax021308.ecosystem.controller;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -28,6 +30,17 @@ public class LiveSettingsViewController implements IController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Object item = view.comboBoxHeatMapPop.getSelectedItem();
+				if(item instanceof String) {
+					String selectedPop = (String) item;
+					model.setHeapmatPopulation(selectedPop);
+				}
+			}
+		});
+
+		view.choiceHeatMapPop.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				Object item = e.getItem();
 				if(item instanceof String) {
 					String selectedPop = (String) item;
 					model.setHeapmatPopulation(selectedPop);

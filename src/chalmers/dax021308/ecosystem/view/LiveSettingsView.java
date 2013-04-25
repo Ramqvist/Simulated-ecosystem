@@ -1,7 +1,10 @@
 package chalmers.dax021308.ecosystem.view;
 
+import java.awt.Choice;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -10,6 +13,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.util.Log;
 
 public class LiveSettingsView extends JPanel {
 	static final int DEFAULT_ITERATION_DELAY = 16;
@@ -25,6 +29,7 @@ public class LiveSettingsView extends JPanel {
 	public final JSpinner spinnerDelayLength;
 	
 	public final JComboBox<String> comboBoxHeatMapPop;
+	public final Choice choiceHeatMapPop;
 	
 	public String[] populationNames = {"Deers","Wolves","Grass"};
 	/*
@@ -39,7 +44,10 @@ public class LiveSettingsView extends JPanel {
 	
 	public LiveSettingsView(EcoWorld model) {
 		setLayout(new GridBagLayout());
-		
+		choiceHeatMapPop = new Choice();
+		for(int i = 0 ; i < populationNames.length; i++) {
+			choiceHeatMapPop.add(populationNames[i]);
+		}
 		panelFirst = new JPanel();
 		panelSecond = new JPanel();
 		panelThird = new JPanel();
@@ -121,7 +129,7 @@ public class LiveSettingsView extends JPanel {
 		//c.weighty = 0;
 		c.gridx = 1;
 		c.gridy = 0;
-		panelSecond.add(comboBoxHeatMapPop, c);
+		panelSecond.add(choiceHeatMapPop, c);
 		
 		/*
 		c = new GridBagConstraints();
