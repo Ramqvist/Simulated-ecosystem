@@ -96,6 +96,7 @@ public class PigAgent extends AbstractAgent {
 
 		updateNeighbourList(neutral, preys, predators);
 		Vector predatorForce = getPredatorForce();
+		Vector preyForce = getPreyForce(shape, gridDimension, obstacles, focusedPrey);
 		if (predatorForce.isNullVector())
 			alone = true;
 		if (digesting > 0 && alone) {
@@ -130,7 +131,6 @@ public class PigAgent extends AbstractAgent {
 						.add(arrayalForce);
 				// if (alone) {
 				//Vector preyForce = getPreyForce(shape, gridDimension, obstacles, focusedPreyPath, 20);
-				Vector preyForce = getPreyForce(shape, gridDimension, obstacles, focusedPrey);
 				acceleration.add(preyForce.multiply(5 * (1 - energy
 						/ MAX_ENERGY)));
 			}
@@ -312,7 +312,7 @@ public class PigAgent extends AbstractAgent {
 					if(!focusedPreyPath.isEmpty()) {
 						Position nextPathPosition = focusedPreyPath.peek();
 						//If we are not near our current path target, move towards it.
-						if(position.getDistance(nextPathPosition) > EATING_RANGE) {
+						if(position.getDistance(nextPathPosition) > maxSpeed) {
 							return new Vector(nextPathPosition, position);
 						} else if(focusedPreyPath.size() > 1) {
 							//Remove the next path, we are close to it, and go to next.
