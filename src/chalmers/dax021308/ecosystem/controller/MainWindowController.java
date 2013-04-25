@@ -2,6 +2,7 @@ package chalmers.dax021308.ecosystem.controller;
 
 
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -44,6 +45,7 @@ public class MainWindowController implements IController {
 	public MainWindowController() {
 		init();
 		window.smvc.init();
+		window.setExtendedState(Frame.MAXIMIZED_BOTH);
 	}
 
 	@Override

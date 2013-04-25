@@ -73,7 +73,6 @@ public class MainWindow extends JFrame implements IView {
 		setIconImage(new ImageIcon("res/Simulated ecosystem icon.png").getImage());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 613, 516);
-		this.setExtendedState(MAXIMIZED_BOTH);
 		//OpenGL   
 	    Dimension d = model.getSize();
 		openGL = new OpenGLSimulationView(model, d, true);
@@ -109,6 +108,7 @@ public class MainWindow extends JFrame implements IView {
 		
 //<<<<<<< HEAD
 		mntmLoad = new MenuItem("Load simulation");
+		setExtendedState(MAXIMIZED_BOTH);
 		
 //=======
 
