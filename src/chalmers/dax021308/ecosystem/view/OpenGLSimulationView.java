@@ -57,7 +57,7 @@ import com.sun.opengl.util.FPSAnimator;
  * 
  */
 
-public class OpenGLSimulationView extends GLJPanel implements IView {
+public class OpenGLSimulationView extends GLCanvas implements IView {
 	
 	private static final long serialVersionUID = 1585638837620985591L;
 	private List<IPopulation> newPops = new ArrayList<IPopulation>();
@@ -81,7 +81,6 @@ public class OpenGLSimulationView extends GLJPanel implements IView {
 	public OpenGLSimulationView(IModel model, Dimension size, boolean showFPS) {
 		this.size = size;
 		model.addObserver(this);
-
 		// setVisible(true);
 		// setSize(size);
 

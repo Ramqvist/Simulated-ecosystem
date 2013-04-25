@@ -3,32 +3,25 @@ package chalmers.dax021308.ecosystem.view.mapeditor;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
+import java.awt.Menu;
+import java.awt.MenuBar;
+import java.awt.MenuItem;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
-import java.io.File;
 
 
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.filechooser.FileFilter;  
 
-import chalmers.dax021308.ecosystem.controller.ControlViewController;
-import chalmers.dax021308.ecosystem.controller.LiveSettingsViewController;
-import chalmers.dax021308.ecosystem.controller.NEWSettingsMenuViewController;
-import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapEditorModel;
 import chalmers.dax021308.ecosystem.view.IView;
-import chalmers.dax021308.ecosystem.view.OpenGLSimulationView;
 
 /**
  * Map editor view
@@ -42,17 +35,18 @@ public class MapEditorView extends JFrame implements IView {
 	private JPanel contentPane;
 	public final JPanel left = new JPanel();
 	public final JPanel right = new JPanel();
+	public JLayeredPane mainPanel = new JLayeredPane();
 	private MapEditorGLView openGL;
 	
-	public final JMenuBar menuBar;
-	public final JMenu mnFile;
-	public final JMenuItem mntmImport;
-	public final JMenuItem mntmExport;
-	public final JMenuItem mntmNew;
-	public final JMenuItem mntmExit;
-	public final JMenuItem mntmSave;
-	public final JMenuItem mntmSaveAs;
-	public final JMenuItem mntmLoad;
+	public final MenuBar menuBar;
+	public final Menu mnFile;
+	public final MenuItem mntmImport;
+	public final MenuItem mntmExport;
+	public final MenuItem mntmNew;
+	public final MenuItem mntmExit;
+	public final MenuItem mntmSave;
+	public final MenuItem mntmSaveAs;
+	public final MenuItem mntmLoad;
 
 	/**
 	 * Create the frame.
@@ -65,26 +59,26 @@ public class MapEditorView extends JFrame implements IView {
 		setExtendedState(MAXIMIZED_BOTH);
 	    setMinimumSize(new Dimension(500, 500));
 		
-		menuBar = new JMenuBar();
-		mnFile = new JMenu("File");
+		menuBar = new MenuBar();
+		mnFile = new Menu("File");
 		menuBar.add(mnFile);
-		mntmNew = new JMenuItem("New");
+		mntmNew = new MenuItem("New");
 		mnFile.add(mntmNew);
-		mntmSave = new JMenuItem("Save");
+		mntmSave = new MenuItem("Save");
 		mnFile.add(mntmSave);
-		mntmSaveAs = new JMenuItem("Save as...");
+		mntmSaveAs = new MenuItem("Save as...");
 		mnFile.add(mntmSaveAs);
-		mntmLoad = new JMenuItem("Load...");
+		mntmLoad = new MenuItem("Load...");
 		mnFile.add(mntmLoad);
 		mnFile.addSeparator();
-		mntmImport = new JMenuItem("Import...");
+		mntmImport = new MenuItem("Import...");
 		mnFile.add(mntmImport);
-		mntmExport = new JMenuItem("Export...");
+		mntmExport = new MenuItem("Export...");
 		mnFile.add(mntmExport);
 		mnFile.addSeparator();
-		mntmExit = new JMenuItem("Exit");
+		mntmExit = new MenuItem("Exit");
 		mnFile.add(mntmExit);
-		setJMenuBar(menuBar);
+		setMenuBar(menuBar);
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -95,7 +89,6 @@ public class MapEditorView extends JFrame implements IView {
 		right.setMinimumSize(new Dimension(500, 400));
 		right.setPreferredSize(new Dimension(500, 400));
 		setContentPane(contentPane);
-
 		contentPane.add(left, BorderLayout.CENTER);
 		contentPane.add(right, BorderLayout.EAST);
 	}

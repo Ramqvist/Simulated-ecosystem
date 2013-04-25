@@ -3,6 +3,9 @@ package chalmers.dax021308.ecosystem.view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Menu;
+import java.awt.MenuBar;
+import java.awt.MenuItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -10,30 +13,21 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 
-
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.filechooser.FileFilter;  
-
+import javax.swing.filechooser.FileFilter;
 
 import chalmers.dax021308.ecosystem.controller.ControlViewController;
 import chalmers.dax021308.ecosystem.controller.LiveSettingsViewController;
 import chalmers.dax021308.ecosystem.controller.NEWSettingsMenuViewController;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.util.Log;
-import chalmers.dax021308.ecosystem.view.chart.AbstractGraph2D;
 import chalmers.dax021308.ecosystem.view.chart.ChartProvider;
 import chalmers.dax021308.ecosystem.view.chart.IChart;
-import chalmers.dax021308.ecosystem.view.chart.LifeLengthGraph;
-import chalmers.dax021308.ecosystem.view.chart.PopulationAmountGraph;
-import chalmers.dax021308.ecosystem.view.chart.GroupingProportionGraph;
 
 /**
  * The view that holds the entire application.
@@ -57,19 +51,19 @@ public class MainWindow extends JFrame implements IView {
 	public final ControlViewController controlViewCtrl;
 	public final NEWSettingsMenuViewController smvc;
 	
-	public final JMenuBar menuBar;
-	public final JMenu mnFile;
-	public final JMenuItem mntmLoad;
-	public final JMenuItem mntmSave;
-	public final JMenuItem mntmExit;
-	public final JMenu mnControls;
-	public final JMenuItem mntmStart;
-	public final JMenuItem mntmStop;
-	public final JMenuItem mntmPause;
-	public final JMenu mnSettings;
-	public final JMenu mnView;
-	public final JMenuItem mntmMapEditor;
-	public final JMenuItem mntmSimulationSettings;
+	public final MenuBar menuBar;
+	public final Menu mnFile;
+	public final MenuItem mntmLoad;
+	public final MenuItem mntmSave;
+	public final MenuItem mntmExit;
+	public final Menu mnControls;
+	public final MenuItem mntmStart;
+	public final MenuItem mntmStop;
+	public final MenuItem mntmPause;
+	public final Menu mnSettings;
+	public final Menu mnView;
+	public final MenuItem mntmMapEditor;
+	public final MenuItem mntmSimulationSettings;
 
 	/**
 	 * Create the frame.
@@ -101,25 +95,25 @@ public class MainWindow extends JFrame implements IView {
 		graphView2 = ChartProvider.makeChart(ChartProvider.ChartType.GROUPING_PROPORTION_GRAPH, model);
 //>>>>>>> 0a80aae074172894a60ad8cf4ef1d867f0abfd57
 		
-		menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
+		menuBar = new MenuBar();
+		setMenuBar(menuBar);
 		
-		mnFile = new JMenu("File");
+		mnFile = new Menu("File");
 		menuBar.add(mnFile);
 		
 
-		mnView = new JMenu("View");
-		mntmMapEditor = new JMenuItem("Map Editor");
+		mnView = new Menu("View");
+		mntmMapEditor = new MenuItem("Map Editor");
 		menuBar.add(mnView);
 		mnView.add(mntmMapEditor);
 		
 //<<<<<<< HEAD
-		mntmLoad = new JMenuItem("Load simulation");
+		mntmLoad = new MenuItem("Load simulation");
 		
 //=======
 
 		
-//		JMenuItem mntmLoad = new JMenuItem("Load simulation");
+//		MenuItem mntmLoad = new MenuItem("Load simulation");
 		//TODO: MOve this to controller.
 		mntmLoad.addActionListener(new ActionListener() {
 			@Override
@@ -144,11 +138,11 @@ public class MainWindow extends JFrame implements IView {
 //>>>>>>> 0a80aae074172894a60ad8cf4ef1d867f0abfd57
 		mnFile.add(mntmLoad);
 		
-		mntmSave = new JMenuItem("Save simulation");
+		mntmSave = new MenuItem("Save simulation");
 		mnFile.add(mntmSave);
 //<<<<<<< HEAD
 	
-		mntmExit = new JMenuItem("Exit");
+		mntmExit = new MenuItem("Exit");
 //=======
 		//TODO: MOve this to controller.
 		mntmSave.addActionListener(new ActionListener() {
@@ -175,28 +169,28 @@ public class MainWindow extends JFrame implements IView {
 			}
 		});
 		
-//		JMenuItem mntmExit = new JMenuItem("Exit");
+//		MenuItem mntmExit = new MenuItem("Exit");
 //>>>>>>> 0a80aae074172894a60ad8cf4ef1d867f0abfd57
 
 		
 		mnFile.add(mntmExit);
 		
-		mnControls = new JMenu("Controls");
+		mnControls = new Menu("Controls");
 		menuBar.add(mnControls);
 		
-		mntmStart = new JMenuItem("Start");
+		mntmStart = new MenuItem("Start");
 		mnControls.add(mntmStart);
 		
-		mntmStop = new JMenuItem("Stop");
+		mntmStop = new MenuItem("Stop");
 		mnControls.add(mntmStop);
 		
-		mntmPause = new JMenuItem("Pause");
+		mntmPause = new MenuItem("Pause");
 		mnControls.add(mntmPause);
 		
-		mnSettings = new JMenu("Settings");
+		mnSettings = new Menu("Settings");
 		menuBar.add(mnSettings);
 		
-		mntmSimulationSettings = new JMenuItem("Simulation settings");
+		mntmSimulationSettings = new MenuItem("Simulation settings");
 		
 		mntmSimulationSettings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
