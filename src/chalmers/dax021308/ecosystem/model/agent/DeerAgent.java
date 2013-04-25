@@ -26,7 +26,7 @@ public class DeerAgent extends AbstractAgent {
 	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
 	private boolean hungry = true;
 	private static final double REPRODUCTION_RATE = 0.1;
-	private boolean willFocusPreys = true;
+	private boolean willFocusPreys = false;
 	private static final int DIGESTION_TIME = 10;
 	private int digesting = 0;
 	private double STOTTING_RANGE = 10;
