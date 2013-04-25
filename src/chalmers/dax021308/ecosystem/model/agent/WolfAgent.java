@@ -6,8 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
-import chalmers.dax021308.ecosystem.model.genetics.AbstractGenome;
-import chalmers.dax021308.ecosystem.model.genetics.DeerGenes;
+import chalmers.dax021308.ecosystem.model.genetics.IGenes;
 import chalmers.dax021308.ecosystem.model.genetics.IGenome;
 import chalmers.dax021308.ecosystem.model.genetics.WolfGenes;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
@@ -29,12 +28,12 @@ public class WolfAgent extends AbstractAgent {
 	private static final double REPRODUCTION_RATE = 0.10;
 	private static final int DIGESTION_TIME = 50;
 	private int digesting = 0;
-	private IGenome<WolfGenes> genome;
-
+	private IGenome<IGenes> genome;
+	
 	public WolfAgent(String name, Position position, Color color, int width,
 			int height, Vector velocity, double maxSpeed,
 			double maxAcceleration, double visionRange, boolean groupBehaviour,
-			IGenome<WolfGenes> genome) {
+			IGenome<IGenes> genome) {
 		
 		super(name, position, color, width, height, velocity, maxSpeed,
 				visionRange, maxAcceleration);

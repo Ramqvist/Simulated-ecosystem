@@ -7,11 +7,11 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.agent.DeerAgent;
-import chalmers.dax021308.ecosystem.model.agent.WolfAgent;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
-import chalmers.dax021308.ecosystem.model.genetics.DeerGenome;
+import chalmers.dax021308.ecosystem.model.genetics.DeerGenes;
+import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
+import chalmers.dax021308.ecosystem.model.genetics.IGenes;
 import chalmers.dax021308.ecosystem.model.util.Position;
-import chalmers.dax021308.ecosystem.model.util.Stat;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
@@ -53,7 +53,7 @@ public class DeerPopulation extends AbstractPopulation {
 			}
 			IAgent a = new DeerAgent("Deer", randPos,
 					color, 5, 10, velocity, maxSpeed, maxAcceleration,
-					visionRange, groupBehaviour, new DeerGenome());
+					visionRange, groupBehaviour, GenomeFactory.deerGenomeFactory());
 
 			newAgents.add(a);
 		}

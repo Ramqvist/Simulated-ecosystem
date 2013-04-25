@@ -16,6 +16,7 @@ import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.MainWindow;
+import chalmers.dax021308.ecosystem.view.chart.ChartFactory;
 
 /**
  * Controller class

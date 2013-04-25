@@ -40,12 +40,12 @@ public class BitSetChromosomeTest {
 	@Test
 	public void crossChromosomes() {
 		BitSetChromosome newChrom = (BitSetChromosome)deer1.crossChromosomes(deer2);
-		assertEquals(deer1.getChromosomeSize(), deer2.getChromosomeSize());
-		assertEquals(deer1.getChromosomeSize(), newChrom.getChromosomeSize());
+		assertEquals(deer1.getChromosomeLength(), deer2.getChromosomeLength());
+		assertEquals(deer1.getChromosomeLength(), newChrom.getChromosomeLength());
 		
 		BitSet expected = new BitSet(4);
 		expected.set(0, 4); // 1111
-		assertEquals(4, newChrom.getChromosomeSize());
+		assertEquals(4, newChrom.getChromosomeLength());
 		assertEquals(expected, (BitSet)(newChrom.getGenes()));
 	}
 	
@@ -56,7 +56,7 @@ public class BitSetChromosomeTest {
 		deer2.setAll(true);
 		
 		BitSetChromosome newChrom = (BitSetChromosome)deer1.crossChromosomes(deer2);
-		assertEquals(4, newChrom.getChromosomeSize());
+		assertEquals(4, newChrom.getChromosomeLength());
 		
 		BitSet expected = new BitSet(4);
 		expected.set(1, 4);
@@ -65,11 +65,11 @@ public class BitSetChromosomeTest {
 	
 	@Test
 	public void mutateChromosome() {
-		int length = deer1.getChromosomeSize();
+		int length = deer1.getChromosomeLength();
 		deer1.mutateChromosome();
 		// can check length, and perhaps values being 0 or 1.
 		
-		assertEquals(deer1.getChromosomeSize(), length);
+		assertEquals(deer1.getChromosomeLength(), length);
 	}
 	
 	

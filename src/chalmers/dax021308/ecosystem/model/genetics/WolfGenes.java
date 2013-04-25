@@ -1,29 +1,67 @@
 package chalmers.dax021308.ecosystem.model.genetics;
 
+
 /**
  * 
  * @author Loanne Berggren
  *
  */
-public enum WolfGenes
+public enum WolfGenes implements IGenes
 {
-	GROUPING(0),
-	FEMALE(1),
-	JUNK(3);
+	GROUPING(0, 1),
+	FEMALE(1, 1),
+	JUNK(2, 1);
 	
-	private int value;
+	public static final double MUTATION_PROBABILITY = 0.1;
+	public static final int NUMBER_OF_GENES = WolfGenes.values().length;
+	private static int totalLengthOfGenes = 0;
+	private int startIndex;
+	private int geneSize;
 	
-	public int getValue() {
-		return value;
+	
+	private WolfGenes(int index, int geneSize) {
+		this.startIndex = index;
+		this.geneSize = geneSize;
 	}
 	
-	private static final int numberOfGenes = 3;
-	
-	public static int getNumberOfGenes() {
-		return numberOfGenes;
+	@Override
+	public int getGeneStartIndex() {
+		return startIndex;
 	}
 	
-	private WolfGenes(int value) {
-		this.value = value;
+	@Override
+	public int getGeneSize() { 
+		return geneSize; 
 	}
+	
+	@Override
+	public int getNumberOfGenes() {
+		return NUMBER_OF_GENES;
+	}
+	
+	/* (non-Javadoc)
+	 * @see chalmers.dax021308.ecosystem.model.genetics.IGenes#getTotalSizeOfGenes()
+	 */
+	@Override
+	public int getTotalLengthOfGenes() {
+		return totalLengthOfGenes();
+	}
+	
+	public static int totalLengthOfGenes(){
+		if (WolfGenes.totalLengthOfGenes == 0){
+			for (WolfGenes e : WolfGenes.values()) {
+				WolfGenes.totalLengthOfGenes += e.geneSize;
+			}
+		}
+		return totalLengthOfGenes;
+	}
+
+	/* (non-Javadoc)
+	 * @see chalmers.dax021308.ecosystem.model.genetics.IGenes#getMutationProbability()
+	 */
+	@Override
+	public double getMutationProbability() {
+		return MUTATION_PROBABILITY;
+	}
+
 }

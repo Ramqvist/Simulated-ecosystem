@@ -22,7 +22,7 @@ import info.monitorenter.util.Range;
  * @author Loanne Berggren
  * 
  */
-public abstract class AbstractGraph2D extends Chart2D implements IView{
+public abstract class AbstractGraph2D extends Chart2D implements IChart{
 	// Values for axis. More values are set in init()
 	protected IAxis<IAxisScalePolicy> xAxis;
 	protected IAxis<IAxisScalePolicy> yAxis;

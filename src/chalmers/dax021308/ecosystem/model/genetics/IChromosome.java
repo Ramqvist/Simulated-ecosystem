@@ -11,29 +11,71 @@ package chalmers.dax021308.ecosystem.model.genetics;
  */
 public interface IChromosome {
 
-	public IChromosome crossChromosomes(final IChromosome other);
-
-	public void mutateChromosome();
-
-	public int getChromosomeSize();
-	
-	public Object clone();
-
-	public boolean equals(Object other);
+	/**
+	 * 
+	 * @return
+	 */
+	public double getMutationProbabilty();
 	
 	/**
 	 * 
-	 * @return a clone of the chromosome.
+	 * @return The length of the chromosome.
+	 */
+	public int getChromosomeLength();
+	
+	/**
+	 * 
+	 * @return A clone of the chromosome.
 	 */
 	public Object getGenes();
 	
-	public boolean findGene(int geneID);
+	/**
+	 * 
+	 * @param geneID
+	 * @return
+	 */
+	public boolean getValue(int index);
+	
+	/**
+	 * 
+	 * @param index
+	 * @param length
+	 * @return
+	 */
+	public boolean[] getSegment(int index, int length);
 
-	public void setGene(int id, boolean allele);
+	/**
+	 * 
+	 * @param id
+	 * @param allele
+	 */
+	public void setValue(int index, boolean value);
 	
-	public void setAll(boolean allele);
+	/**
+	 * 
+	 * @param id
+	 * @param allele
+	 */
+	public void setSegment(int index, boolean[] segment);
 	
-	public double getMutationProbabilty();
+	/**
+	 * 
+	 * @param allele
+	 */
+	public void setAll(boolean value);
 	
-	public int getNumberOfGenes();
+	/**
+	 * 
+	 * @param other
+	 * @return
+	 */
+	public IChromosome crossChromosomes(final IChromosome other);
+
+	/**
+	 * 
+	 */
+	public void mutateChromosome();
+
+	
+	public Object clone();
 }

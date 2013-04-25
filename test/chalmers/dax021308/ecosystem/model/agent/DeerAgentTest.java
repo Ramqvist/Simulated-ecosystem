@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import chalmers.dax021308.ecosystem.model.agent.DeerAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
+import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
 import chalmers.dax021308.ecosystem.model.util.shape.*;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
@@ -45,7 +46,7 @@ public class DeerAgentTest {
 		maxAcceleration = 3;
 		visionRange = 5;
 		groupBehaviour = true;
-		deerTest = new DeerAgent(name, p, c, width, height, velocity, maxSpeed, maxAcceleration, visionRange, groupBehaviour, null);
+		deerTest = new DeerAgent(name, p, c, width, height, velocity, maxSpeed, maxAcceleration, visionRange, groupBehaviour, GenomeFactory.deerGenomeFactory());
 		shape = new SquareShape();
 		dimension = new Dimension(50, 50);
 	}

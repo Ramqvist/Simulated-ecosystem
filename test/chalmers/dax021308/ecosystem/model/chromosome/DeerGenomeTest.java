@@ -9,8 +9,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import chalmers.dax021308.ecosystem.model.genetics.DeerGenes;
-import chalmers.dax021308.ecosystem.model.genetics.DeerGenome;
+import chalmers.dax021308.ecosystem.model.genetics.Genome;
+import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
 import chalmers.dax021308.ecosystem.model.genetics.IChromosome;
+import chalmers.dax021308.ecosystem.model.genetics.IGenes;
 import chalmers.dax021308.ecosystem.model.genetics.IGenome;
 
 /**
@@ -20,13 +22,13 @@ import chalmers.dax021308.ecosystem.model.genetics.IGenome;
  */
 @RunWith(JUnit4.class)
 public class DeerGenomeTest {
-	IGenome<DeerGenes> deer1;
-	IGenome<DeerGenes> deer2;
+	IGenome<IGenes> deer1;
+	IGenome<IGenes> deer2;
 	
 	@Before
 	public void initialize() {
-		deer1 = new DeerGenome();
-		deer2 = new DeerGenome();
+		deer1 = GenomeFactory.deerGenomeFactory();
+		deer2 = GenomeFactory.deerGenomeFactory();
 	}
 	
 	@Test
@@ -38,10 +40,11 @@ public class DeerGenomeTest {
 	
 	@Test
 	public void crossChromosomes() {
-		int expectedSize = deer1.numberOfGenes();
-		
-		IGenome<DeerGenes> result = deer1.mateWithMutation(deer2);
-		int actualSize = ((IChromosome)result.getChromosomes()).getChromosomeSize();
+		int expectedSize = deer1.length();
+		assertEquals(expectedSize, DeerGenes.values().length);
+		IGenome<IGenes> result = deer1.mateWithMutation(deer2);
+		int actualSize = ((IChromosome)result.getChromosomes()).getChromosomeLength();
+		assertEquals(DeerGenes.values().length, actualSize);
 		assertEquals(expectedSize, actualSize);
 	}
 	
