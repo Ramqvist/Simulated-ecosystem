@@ -27,7 +27,7 @@ public abstract class AbstractPopulation implements IPopulation {
 	private Stat<Integer> preyNeighbourSize = new Stat<Integer>();
 	private Stat<Integer> predNeighbourSize = new Stat<Integer>();
 	private Stat<Integer> neutralNeighbourSize = new Stat<Integer>();
-	protected final static double OBSTACLE_SAFETY_DISTANCE = 5;
+	protected final static double OBSTACLE_SAFETY_DISTANCE = 8;
 
 	/**
 	 * Remove list for this Population.

@@ -256,7 +256,7 @@ public class ForceCalculator {
 	 * @param maxAcceleration
 	 *            - The maxAcceleration of the agent
 	 * @return
-	 */
+	 */	
 	public static Vector getPreyForce(boolean willFocusPreys,
 			Container<IAgent> focusedPreyContainer, IAgent currentAgent,
 			List<IAgent> preyNeighbours, double visionRange,
@@ -336,6 +336,7 @@ public class ForceCalculator {
 			List<IAgent> preyNeighbours, double visionRange, double focusRange,
 			double maxAcceleration, double maxSpeed, double safetyDistance,
 			AgentPath focusedPreyPath, int initial_ttl) {
+		
 		if (willFocusPreys && focusedPreyContainer.get() != null && focusedPreyContainer.get().isAlive()) {
 			Position p = focusedPreyContainer.get().getPosition();
 			double distance = currentAgent.getPosition().getDistance(p);
@@ -380,10 +381,12 @@ public class ForceCalculator {
 //							System.out.println(currentAgent.getPosition());
 //							System.out.println(focusedPreyPath);
 							focusedPreyPath.pop();
+							focusedPreyPath.pop();
 							return new Vector(focusedPreyPath.peek(), currentAgent.getPosition()).toUnitVector();
 						}
 					} else {
 //						System.out.println("No Path");
+						focusedPreyPath.clearPath();
 						return new Vector(focusedPreyContainer.get().getPosition(), currentAgent.getPosition()).toUnitVector();
 					}
 				}
@@ -445,6 +448,7 @@ public class ForceCalculator {
 					return Vector.emptyVector();
 				} else {
 //					System.out.println("New focused prey needs path");
+					focusedPreyPath.pop();
 					focusedPreyPath.pop();
 					return new Vector(focusedPreyPath.peek(), currentAgent.getPosition()).toUnitVector();
 				}

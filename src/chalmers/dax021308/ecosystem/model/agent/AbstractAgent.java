@@ -112,6 +112,7 @@ public abstract class AbstractAgent implements IAgent {
 		this(a.name, new Position(a.position), a.color, a.width, a.height,
 				new Vector(a.velocity), a.maxSpeed, a.visionRange,
 				a.maxAcceleration);
+		this.focusedPreyPath = a.focusedPreyPath;
 	}
 
 	public AbstractAgent(String name, Position pos, Color color, int width,
@@ -237,6 +238,7 @@ public abstract class AbstractAgent implements IAgent {
 				return null;
 			}
 		};
+		a.focusedPreyPath = focusedPreyPath;
 		return a;
 	}
 
@@ -484,6 +486,11 @@ public abstract class AbstractAgent implements IAgent {
 	
 	public int getNeutralNeighbourSize(){
 		return neutralNeighbours.size();
+	}
+	
+	@Override
+	public List<Position> getFocusedPath(){
+		return focusedPreyPath.getPath();
 	}
 
 }
