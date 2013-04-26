@@ -222,11 +222,11 @@ public class NEWSettingsMenuView extends JDialog {
         buttonCancel = new JButton();
         buttonAdvanced = new JButton();
         
-        spinnerDelayLength = new JSpinner(new SpinnerNumberModel(DEFAULT_ITERATION_DELAY, 0, 100, 1));
-        spinnerNoOfIterations = new JSpinner(new SpinnerNumberModel(DEFAULT_NO_OF_ITERATIONS, 0, 100000, 100));
-        spinnerPreyPopSize = new JSpinner(new SpinnerNumberModel(DEFAULT_PREY_POP_SIZE, 0, 10000, 1));
-        spinnerPredPopSize = new JSpinner(new SpinnerNumberModel(DEFAULT_PRED_POP_SIZE, 0, 10000, 1));
-        spinnerVegPopSize = new JSpinner(new SpinnerNumberModel(DEFAULT_VEG_POP_SIZE, 0, 10000, 10));
+        spinnerDelayLength = new JSpinner(new SpinnerNumberModel(DEFAULT_ITERATION_DELAY, 0, Integer.MAX_VALUE, 1));
+        spinnerNoOfIterations = new JSpinner(new SpinnerNumberModel(DEFAULT_NO_OF_ITERATIONS, 0, Integer.MAX_VALUE, 100));
+        spinnerPreyPopSize = new JSpinner(new SpinnerNumberModel(DEFAULT_PREY_POP_SIZE, 0, Integer.MAX_VALUE, 1));
+        spinnerPredPopSize = new JSpinner(new SpinnerNumberModel(DEFAULT_PRED_POP_SIZE, 0, Integer.MAX_VALUE, 1));
+        spinnerVegPopSize = new JSpinner(new SpinnerNumberModel(DEFAULT_VEG_POP_SIZE, 0, Integer.MAX_VALUE, 10));
 
         //sliderDelayLength = new JSlider();
         //sliderPreyPopSize = new JSlider();

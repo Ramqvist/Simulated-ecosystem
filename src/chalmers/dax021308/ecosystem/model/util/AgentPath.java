@@ -86,7 +86,7 @@ public class AgentPath {
 	}
 	
 	public boolean isValid() {
-		return ttl < 0;
+		return ttl > 0;
 	}
 	
 	public int getTTL() {
@@ -99,5 +99,14 @@ public class AgentPath {
 	
 	public void decreaseTTL() {
 		ttl--;
+	}
+
+	@Override
+	public String toString() {
+		if(path != null){
+			return path.toString();
+		} else {
+			return null;
+		}
 	}
 }

@@ -149,14 +149,17 @@ public class EllipticalObstacle extends AbstractObstacle{
 	}
 	
 	@Override
-	public boolean isInObstacle(Position p) {
-		if(p.getY() < position.getY()+height && p.getY() > position.getY()-height){
-			double y = p.getY()-position.getY();
-			double x = width*Math.sqrt(1-(y*y)/(height*height));
-			if(p.getX() < position.getX()+x && p.getX() > position.getX()-x) {
+	public boolean isInObstacle(Position p, double sd) {
+		double px = p.getX()-position.getX();
+		double py = p.getY()-position.getY();
+		
+		if(px<width+sd && px > -width-sd){
+			double y = (height+sd)*Math.sqrt(1-px*px/((width+sd)*(width+sd)));
+			if(py<y && py > -y) {
 				return true;
 			}
 		}
+		
 		return false;
 	}
 	

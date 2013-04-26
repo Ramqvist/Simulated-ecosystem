@@ -15,7 +15,7 @@ public interface IObstacle {
 	
 	public Position closestBoundary(Position p);
 	
-	public boolean isInObstacle(Position p);
+	public boolean isInObstacle(Position p, double safetyDistance);
 	
 	public boolean isCloseTo(Position p, double interactionRange);
 	

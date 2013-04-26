@@ -42,9 +42,9 @@ public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 	}
 
 	@Override
-	public boolean isInObstacle(Position p) {
-		if(p.getY() < position.getY()+height && p.getY() > position.getY()-height){
-			if(p.getX() < position.getX()+width && p.getX() > position.getX()-width) {
+	public boolean isInObstacle(Position p, double sd) {
+		if(p.getY() < position.getY()+height+sd && p.getY() > position.getY()-height-sd){
+			if(p.getX() < position.getX()+width+sd && p.getX() > position.getX()-width-sd) {
 				return true;
 			}
 		}

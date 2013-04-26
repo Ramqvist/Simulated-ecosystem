@@ -134,10 +134,11 @@ public class Position {
 	 * @param endPos
 	 * @return
 	 */
-	public static List<Position> getShortestPath(Position startPos, Position endPos , List<IObstacle> obsList, IShape simShape, Dimension simDimension) {
+	public static List<Position> getShortestPath(Position startPos, Position endPos , 
+			List<IObstacle> obsList, IShape simShape, Dimension simDimension, double safetyDistance) {
 		
 		JPSPathfinder jps = new JPSPathfinder(obsList, simShape, simDimension);
-		return jps.getShortestPath(startPos, endPos);
+		return jps.getShortestPath(startPos, endPos, safetyDistance);
 	}
 
 }

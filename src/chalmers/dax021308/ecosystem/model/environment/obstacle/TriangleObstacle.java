@@ -55,7 +55,7 @@ public class TriangleObstacle extends AbstractObstacle {
 	}
 
 	@Override
-	public boolean isInObstacle(Position p) {
+	public boolean isInObstacle(Position p, double sd) {
 		Position agentPos = new Position(p.getX()-this.position.getX(), p.getY()-this.position.getY());
 		
 		double xSign = Math.signum(agentPos.getX());
@@ -64,17 +64,24 @@ public class TriangleObstacle extends AbstractObstacle {
 		double x = agentPos.getX();
 		double y = agentPos.getY();
 		
-		if(y > height || y < -height){
+		if(y > height+sd || y < -height-sd){
 			return false;
 		}
 		
 		
-		if(x > width) {
+		if(x > width+sd) {
 			return false;
 		} 
-		
-		double yVal = height - 2*height/width*x;
-		if(y > yVal){
+		double k = - 2*height/width;
+		double addx = 1;
+		double addy = -1/k;
+		double length = Math.sqrt(addx*addx + addy*addy);
+		addx *= sd/length;
+		addy *= sd/length;
+		double newx = x-addx;
+		double newy = y-addy;
+		double yVal = height + k*newx;
+		if(newy > yVal){
 			return false;
 		}
 		

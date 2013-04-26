@@ -74,7 +74,7 @@ public class GrassAgent extends AbstractAgent {
 			p = Position.positionPlusVector(position, Stat.getNormallyDistributedVector(SPAWNING_STD));
 			validPos = surroundings.getWorldShape().isInside(surroundings.getGridDimension(), p);
 			for (IObstacle o : surroundings.getObstacles()) {
-				if (o.isInObstacle(p)) {
+				if (o.isInObstacle(p, OBSTACLE_SAFETY_DISTANCE)) {
 					validPos = false;
 				}
 			}

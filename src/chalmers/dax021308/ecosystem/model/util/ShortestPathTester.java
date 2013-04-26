@@ -77,7 +77,7 @@ public class ShortestPathTester extends JPanel {
 		if(tryRealShortestPath) {
 			for(int i = 0; i < 10; i++) {
 				time = System.nanoTime();
-				result = Position.getShortestPath(start, end, obsList, shape, dim);
+				result = Position.getShortestPath(start, end, obsList, shape, dim, 0);
 				elapsed = (System.nanoTime() - time)*0.000001;
 				System.out.println("Real GetShortest path Completed in: " + elapsed + " ms. Positions: " + result.size());
 				stat.addObservation(elapsed);

@@ -163,11 +163,22 @@ public abstract class AbstractObstacle implements IObstacle {
 	 * False if the position is not inside any of the obstacles.
 	 */
 	public static boolean isInsideObstacleList(List<IObstacle> obsList, Position p) {
+		return AbstractObstacle.isInsideObstacleList(obsList, p, 0);
+	}
+	
+	/**
+	 * checks if a position is inside the list of obstacles.
+	 * @param obsList The list of obstacles.
+	 * @param p the position.
+	 * @return true if the position is inside any of the obstacles. 
+	 * False if the position is not inside any of the obstacles.
+	 */
+	public static boolean isInsideObstacleList(List<IObstacle> obsList, Position p, double safetyDistance) {
 		if(obsList == null) {
 			return false;
 		}
 		for(IObstacle o : obsList) {
-			if(o.isInObstacle(p)) {
+			if(o.isInObstacle(p, safetyDistance)) {
 				return true;
 			}
 		}
@@ -204,7 +215,7 @@ public abstract class AbstractObstacle implements IObstacle {
 		Position current = new Position(start);
 		double path_threshold = 5.0;
 		while(current.getDistance(end) >= path_threshold ) {
-			if(isInObstacle(current)) {
+			if(isInObstacle(current, 0)) {
 				return true;
 			}
 			if(end.getX() > current.getX()) {
@@ -252,7 +263,7 @@ public abstract class AbstractObstacle implements IObstacle {
 			currentY += dirY;
 			currentPos.setPosition(currentX, currentY);
 			for(IObstacle o : obsList) {
-				if(o.isInObstacle(currentPos)) {
+				if(o.isInObstacle(currentPos, 0)) {
 //					System.out.println("Completed in: " + i + " iterations.");
 					return true;
 				}

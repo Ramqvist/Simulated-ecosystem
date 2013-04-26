@@ -135,7 +135,7 @@ public abstract class AbstractPopulation implements IPopulation {
 			validPos = true;
 			pos = surroundings.getWorldShape().getRandomPosition(surroundings.getGridDimension());
 			for (IObstacle o : surroundings.getObstacles()) {
-				if (o.isInObstacle(pos)) {
+				if (o.isInObstacle(pos, 5)) {
 					validPos = false;
 				}
 			}

@@ -27,7 +27,7 @@ public class RectangularObstacleTimeTest {
 				double x = Math.random()*dim.getWidth();
 				double y = Math.random()*dim.getHeight();
 				Position p = new Position(x,y);
-				while(ro.isInObstacle(p)){
+				while(ro.isInObstacle(p,0)){
 					x = Math.random()*dim.getWidth();
 					y = Math.random()*dim.getHeight();
 					p = new Position(x,y);

@@ -60,6 +60,7 @@ public class PigAgent extends AbstractAgent {
 		this.energy = MAX_ENERGY;
 		this.groupBehaviour = groupBehaviour;
 		this.focusedPreyPath = new AgentPath();
+		this.color = Color.black;
 
 	}
 
@@ -109,7 +110,7 @@ public class PigAgent extends AbstractAgent {
 
 		updateNeighbourList(neutral, preys, predators);
 		Vector predatorForce = getPredatorForce();
-		Vector preyForce = getPreyForce(surroundings, focusedPrey);
+		Vector preyForce = getPreyForce(surroundings, focusedPrey, 10);
 		if (predatorForce.isNullVector())
 			alone = true;
 		if (digesting > 0 && alone) {
@@ -140,11 +141,12 @@ public class PigAgent extends AbstractAgent {
 				acceleration = predatorForce;
 			} else {
 				acceleration = predatorForce.multiply(5)
-						.add(mutualInteractionForce).add(forwardThrust)
+						.add(mutualInteractionForce)
+						.add(forwardThrust)
 						.add(arrayalForce);
 				// if (alone) {
 				//Vector preyForce = getPreyForce(shape, gridDimension, obstacles, focusedPreyPath, 20);
-				acceleration.add(preyForce.multiply(5 * (1 - energy
+				acceleration.add(preyForce.multiply(1000000000 * (1 - energy
 						/ MAX_ENERGY)));
 			}
 			// }
@@ -224,7 +226,11 @@ public class PigAgent extends AbstractAgent {
 				} else {
 					if(AbstractObstacle.isInsidePathList(surroundings.getObstacles(), position, focusedPreyContainer.get().getPosition())) {
 						//focusedPreyPath.setPath(Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), obstacles, surroundings.getWorldShape(), surroundings.getGridDimension()), initial_ttl);
-						focusedPreyPath.setPath(Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), surroundings.getObstacles(), surroundings.getWorldShape(), surroundings.getGridDimension()), initial_ttl);
+						focusedPreyPath.setPath(
+								Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), 
+										surroundings.getObstacles(), surroundings.getWorldShape(), 
+										surroundings.getGridDimension(), OBSTACLE_SAFETY_DISTANCE), 
+										initial_ttl);
 						if(focusedPreyPath.isEmpty()) {
 							//Unreachable target.
 							return Vector.emptyVector();
@@ -288,7 +294,7 @@ public class PigAgent extends AbstractAgent {
 		if (willFocusPreys && closestFocusPrey != null) {
 			focusedPreyContainer.set(closestFocusPrey);
 			if(AbstractObstacle.isInsidePathList(surroundings.getObstacles(), position, focusedPreyContainer.get().getPosition())) {
-				focusedPreyPath.setPath(Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), surroundings.getObstacles(), surroundings.getWorldShape(), surroundings.getGridDimension()), initial_ttl);
+				focusedPreyPath.setPath(Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), surroundings.getObstacles(), surroundings.getWorldShape(), surroundings.getGridDimension(), 5), initial_ttl);
 				if(focusedPreyPath.isEmpty()) {
 					return Vector.emptyVector();
 				} else {
@@ -303,6 +309,130 @@ public class PigAgent extends AbstractAgent {
 		return preyForce;
 	}
 
+	
+	private Vector getPreyForce(SurroundingsSettings surroundings, Container<IAgent> focusedPreyContainer, int initial_ttl) {
+		if (willFocusPreys && focusedPreyContainer.get() != null && focusedPreyContainer.get().isAlive()) {
+			Position p = focusedPreyContainer.get().getPosition();
+			double distance = this.getPosition().getDistance(p);
+			//double size = (agent.getHeight() + agent.getWidth()) / 4;
+			double size = 0;
+			if (distance <= EATING_RANGE - size) {
+				if (focusedPreyContainer.get().tryConsumeAgent()) {
+					focusedPreyContainer.set(null);
+					this.eat();
+				}
+			} else {
+				if(!focusedPreyPath.isEmpty() && focusedPreyPath.isValid()) {
+					Position nextPathPosition = focusedPreyPath.peek();
+					if(nextPathPosition.getDistance(position) < maxSpeed) {
+						if(focusedPreyPath.size() > 1) {
+							//Remove the next path, we are close to it, and go to next.
+//							System.out.println("Go to next point in path.");
+							focusedPreyPath.pop();
+							nextPathPosition = focusedPreyPath.peek();
+						} else {
+//							System.out.println("Last point in path reached.");
+							nextPathPosition = focusedPreyPath.pop();
+						}
+					}
+					focusedPreyPath.decreaseTTL();
+					
+//					System.out.println(focusedPreyPath.getTTL());
+//					System.out.println(position + " to " +nextPathPosition);
+					return new Vector(nextPathPosition, position);
+				} else {
+					if(AbstractObstacle.isInsidePathList(surroundings.getObstacles(), position, focusedPreyContainer.get().getPosition())) {
+						focusedPreyPath.setPath(
+								Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), 
+										surroundings.getObstacles(), surroundings.getWorldShape(), 
+										surroundings.getGridDimension(), OBSTACLE_SAFETY_DISTANCE)
+								,initial_ttl);
+						if(focusedPreyPath.isEmpty()) {
+//							System.out.println("NULL VECTOR");
+							return Vector.emptyVector();
+						} else {
+//							System.out.println("New Path");
+//							System.out.println(position);
+//							System.out.println(focusedPreyPath);
+							focusedPreyPath.pop();
+							return new Vector(focusedPreyPath.peek(), position);
+						}
+					} else {
+//						System.out.println("No Path");
+						return new Vector(focusedPreyContainer.get().getPosition(), position);
+					}
+				}
+			}
+		}
+		
+		Vector preyForce = new Vector(0, 0);
+		IAgent closestFocusPrey = null;
+		int nrOfPreys = preyNeighbours.size();
+		for (int i = 0; i < nrOfPreys; i++) {
+			IAgent a = preyNeighbours.get(i);
+			Position p = a.getPosition();
+//			double preySize = (a.getHeight() + a.getWidth()) / 4;
+			double distance = this.getPosition().getDistance(p); // - preySize;
+			if (a.isLookingTasty(this, visionRange)) {
+				if (distance <= EATING_RANGE) {
+					if (a.tryConsumeAgent()) {
+						this.eat();
+					}
+				} else if (willFocusPreys && distance <= FOCUS_RANGE) {
+					if (closestFocusPrey != null && a.isAlive()) {
+						if (closestFocusPrey.getPosition().getDistance(
+								this.getPosition()) > a.getPosition()
+								.getDistance(this.getPosition())) {
+							closestFocusPrey = a;
+						}
+					} else {
+						closestFocusPrey = a;
+					}
+				} else if (closestFocusPrey == null) {
+					/*
+					 * Create a vector that points towards the prey.
+					 */
+					Vector newForce = new Vector(p, this.getPosition());
+	
+					/*
+					 * Add this vector to the prey force, with proportion to how
+					 * close the prey is. Closer preys will affect the force
+					 * more than those far away.
+					 */
+					double norm = newForce.getNorm();
+					preyForce.add(newForce.multiply(1 / (norm * distance)));
+				}
+			}
+		}
+		double norm = preyForce.getNorm();
+		if (norm != 0) {
+			preyForce.multiply(maxAcceleration / norm);
+		}
+		if (willFocusPreys && closestFocusPrey != null) {
+			focusedPreyContainer.set(closestFocusPrey);
+			if(AbstractObstacle.isInsidePathList(surroundings.getObstacles(), position, focusedPreyContainer.get().getPosition())) {
+				focusedPreyPath.setPath(
+						Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), 
+								surroundings.getObstacles(), surroundings.getWorldShape(), 
+								surroundings.getGridDimension(), OBSTACLE_SAFETY_DISTANCE)
+						,initial_ttl);
+				if(focusedPreyPath.isEmpty()) {
+					return Vector.emptyVector();
+				} else {
+//					System.out.println("New focused prey needs path");
+					focusedPreyPath.pop();
+					return new Vector(focusedPreyPath.peek(), position);
+				}
+			} else {
+				focusedPreyPath.clearPath();
+				return new Vector(focusedPreyContainer.get().getPosition(), position);
+			}
+		}
+		return preyForce;
+	}
+	
+	
+	
 	/**
 	 * @return returns The force the preys attracts the agent with
 	 * @author Sebastian/Henrik
@@ -389,7 +519,10 @@ public class PigAgent extends AbstractAgent {
 		if (willFocusPreys && closestFocusPrey != null) {
 			focusedPreyContainer.set(closestFocusPrey);
 			if(AbstractObstacle.isInsidePathList(surroundings.getObstacles(), position, focusedPreyContainer.get().getPosition())) {
-				focusedPreyPath.setPath(Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), surroundings.getObstacles(), surroundings.getWorldShape(), surroundings.getGridDimension()));
+				focusedPreyPath.setPath(
+						Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), 
+								surroundings.getObstacles(), surroundings.getWorldShape(), 
+								surroundings.getGridDimension(),OBSTACLE_SAFETY_DISTANCE));
 				if(focusedPreyPath.isEmpty()) {
 					return Vector.emptyVector();
 				} else {
@@ -494,5 +627,12 @@ public class PigAgent extends AbstractAgent {
 		stottingCoolDown--;
 		if (energy == 0 || lifeLength > MAX_LIFE_LENGTH)
 			isAlive = false;
+	}
+	
+	@Override
+	public void eat() {
+		hungry = false;
+		energy = MAX_ENERGY;
+		digesting = DIGESTION_TIME;
 	}
 }

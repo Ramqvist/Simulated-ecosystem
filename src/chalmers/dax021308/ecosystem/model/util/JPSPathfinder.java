@@ -24,6 +24,7 @@ public class JPSPathfinder {
 	private IShape shape;
 	private Dimension simulationDim;
 	private double coordinateScaling;
+	private double safetyDistance = 0;
 
 	public JPSPathfinder(List<IObstacle> obsList, IShape shape, Dimension simulationDim) {
 		this.obsList = obsList;
@@ -31,17 +32,17 @@ public class JPSPathfinder {
 		this.simulationDim = simulationDim;
 	}
 	
-	public List<Position> getShortestPath(Position start, Position end) {
+	public List<Position> getShortestPath(Position start, Position end, double safetyDistance) {
 		//double distance = start.getDistance(end);
 		//if(distance > 75) {
-			coordinateScaling = 5;
+			coordinateScaling = 7;
 			double x = Math.round((end.getX() / coordinateScaling))*coordinateScaling;
 			double y = Math.round((end.getY() / coordinateScaling))*coordinateScaling;
 			Position newEnd = new Position(x, y);
 			x = Math.round((start.getX() / coordinateScaling))*coordinateScaling;
 			y = Math.round((start.getY() / coordinateScaling))*coordinateScaling;
 			Position newStartPos = new Position(x, y);
-			return getShortestPathJumpPointsSearch(newStartPos, newEnd);
+			return getShortestPathJumpPointsSearch(newStartPos, newEnd, safetyDistance);
 		//} else {
 		//	coordinateScaling = 1;
 		//	return getShortestPathJumpPointsSearch(new Position(Math.round(start.x), Math.round(start.y)), new Position(Math.round(end.x), Math.round(end.y)));
@@ -135,56 +136,57 @@ public class JPSPathfinder {
 		return result;
 	}
 
-	public List<Position> getShortestPathJumpPointsSearch(Position startPos, Position endPos) {
-			JPSNode start = new JPSNode(startPos.getX(), startPos.getY());
-			JPSNode goal = new JPSNode(endPos.getX(), endPos.getY());
-			HashSet<JPSNode> closedSet = new HashSet<JPSNode>();
-			HashSet<JPSNode> openSet = new HashSet<JPSNode>();
-			openSet.add(start);
-			JPSNode current = start;
-			double lowScore = Integer.MAX_VALUE;
-			while (!openSet.isEmpty()) {
-				lowScore = Integer.MAX_VALUE;
-				for (JPSNode n : openSet) {
-					double score = n.g_score;
-					if (score < lowScore) {
+	public List<Position> getShortestPathJumpPointsSearch(Position startPos, Position endPos, double safetyDistance) {
+		this.safetyDistance = safetyDistance;
+		JPSNode start = new JPSNode(startPos.getX(), startPos.getY());
+		JPSNode goal = new JPSNode(endPos.getX(), endPos.getY());
+		HashSet<JPSNode> closedSet = new HashSet<JPSNode>();
+		HashSet<JPSNode> openSet = new HashSet<JPSNode>();
+		openSet.add(start);
+		JPSNode current = start;
+		double lowScore = Integer.MAX_VALUE;
+		while (!openSet.isEmpty()) {
+			lowScore = Integer.MAX_VALUE;
+			for (JPSNode n : openSet) {
+				double score = n.g_score;
+				if (score < lowScore) {
+					current = n;
+					lowScore = score;
+				} else if(score == lowScore) {
+					if(n != current) {
 						current = n;
-						lowScore = score;
-					} else if(score == lowScore) {
-						if(n != current) {
-							current = n;
-						}
 					}
 				}
+			}
 //				 Log.v("openset" + openSet);
 ////				 Log.v("closedSet" + closedSet);
 ////				 Log.v("g_score" + current.g_score);
 ////				 Log.v("f_score" + current.f_score);
 //				 Log.v("current: " + current);
 //				 Log.v("--------");
-				if (current.equals(goal)) {
-					return reconstructPath(current);
-				}
-				openSet.remove(current);
-				closedSet.add(current);
-				for(JPSNode neighbour : getJPSNeighbours(current, obsList)) {
-					JPSNode jumpPoint = jump(neighbour, current, goal);
-					if (jumpPoint != null) {
-						if (closedSet.contains(jumpPoint))
-							continue;
-						if (!openSet.contains(jumpPoint)) {
-							jumpPoint.came_from = current;
-							openSet.add(jumpPoint);
-						} else if ((current.getG() + current.getMoveCost(jumpPoint)) < jumpPoint.getG()) { // G score of node with current node as it's parent
-							JPSNode instanceNode = retrieveInstance(openSet, jumpPoint);
-							if (instanceNode != null)
-								instanceNode.came_from = current;
-						}
+			if (current.equals(goal)) {
+				return reconstructPath(current);
+			}
+			openSet.remove(current);
+			closedSet.add(current);
+			for(JPSNode neighbour : getJPSNeighbours(current, obsList)) {
+				JPSNode jumpPoint = jump(neighbour, current, goal);
+				if (jumpPoint != null) {
+					if (closedSet.contains(jumpPoint))
+						continue;
+					if (!openSet.contains(jumpPoint)) {
+						jumpPoint.came_from = current;
+						openSet.add(jumpPoint);
+					} else if ((current.getG() + current.getMoveCost(jumpPoint)) < jumpPoint.getG()) { // G score of node with current node as it's parent
+						JPSNode instanceNode = retrieveInstance(openSet, jumpPoint);
+						if (instanceNode != null)
+							instanceNode.came_from = current;
 					}
 				}
 			}
-			Log.e("Failed to find path to target! Start: " + start + " End: " + endPos + " obsList: " + obsList + " Dimension: "+  simulationDim + " Shape: " + shape);
-			return null;
+		}
+		Log.e("Failed to find path to target! Start: " + start + " End: " + endPos + " obsList: " + obsList + " Dimension: "+  simulationDim + " Shape: " + shape);
+		return null;
 	}
 	
 	private JPSNode retrieveInstance(HashSet<JPSNode> openSet, JPSNode node) {
@@ -293,6 +295,6 @@ public class JPSPathfinder {
 	}
 	
 	private boolean walkable(JPSNode node) {
-		return !AbstractObstacle.isInsideObstacleList(obsList, node) && shape.isInside(simulationDim, node);
+		return !AbstractObstacle.isInsideObstacleList(obsList, node, safetyDistance) && shape.isInside(simulationDim, node);
 	}
 }

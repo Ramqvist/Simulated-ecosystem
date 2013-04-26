@@ -83,7 +83,7 @@ public class MapEditorGLView extends GLCanvas implements IView {
 		Position p = new Position(x, y);
 		for(int i = newObs.size()-1 ; i >= 0 ; i--) {
 			IObstacle o = newObs.get(i);
-			if(o.isInObstacle(p)) {
+			if(o.isInObstacle(p, 0)) {
 				return o;
 			}
 		}
