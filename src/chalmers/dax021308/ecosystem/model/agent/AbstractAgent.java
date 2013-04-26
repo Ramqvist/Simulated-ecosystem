@@ -31,7 +31,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected int capacity = Integer.MAX_VALUE;
 	protected int lifeLength = 0;
 	protected double energy = 1000; // set specific energy level in subclasses
-	protected int trophicLevel;
+	protected int trophicLevel; //Is this used?
 	protected Vector velocity;
 	protected Gender gender;
 	protected double fitness;
