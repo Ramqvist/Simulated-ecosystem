@@ -7,9 +7,9 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.agent.SimplePredatorAgent;
+import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
-import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
  * 
@@ -22,24 +22,22 @@ public class DummyPredatorPopulation extends AbstractPopulation {
 	private double maxSpeed;
 	private double visionRange;
 	
-	
-
-	public DummyPredatorPopulation(Dimension gridDimension,
-			int initPopulationSize, Color color, double maxSpeed,
-			double maxAcceleration, double visionRange, IShape shape) {
-		super("Simple Predator", gridDimension, shape, null, color);
+	public DummyPredatorPopulation(int initPopulationSize, Color color, double maxSpeed,
+			double maxAcceleration, double visionRange, SurroundingsSettings surroundings) {
+		super("Simple Predator", color, surroundings);
 		this.visionRange = visionRange;
-		agents = initializePopulation(initPopulationSize, gridDimension, color,
+		agents = initializePopulation(initPopulationSize, surroundings.getGridDimension(), color,
 				maxSpeed, maxAcceleration, visionRange);
 	}
 
+	// TODO (surroundings) why does this take a gridDimension?
 	private List<IAgent> initializePopulation(int populationSize,
 			Dimension gridDimension, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange) {
 		List<IAgent> newAgents = new ArrayList<IAgent>(populationSize);
 		addNeutralPopulation(this);
 		for (int i = 0; i < populationSize; i++) {
-			Position randPos = shape.getRandomPosition(gridDimension);
+			Position randPos = this.surroundings.getWorldShape().getRandomPosition(gridDimension);
 			Vector velocity = new Vector(maxSpeed, maxSpeed);
 			
 			//Create a random vector (uniformly) inside a circle with radius maxSpeed.

@@ -6,28 +6,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
-import chalmers.dax021308.ecosystem.model.agent.DeerAgent;
 import chalmers.dax021308.ecosystem.model.agent.PigAgent;
-import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
-import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
  * 
- * @author orignal Deer Population by Sebastian Ånerud
+ * @author orignal Deer Population by Sebastian ï¿½nerud
  * 
  */
 public class PigPopulation extends AbstractPopulation {
 
 
-	public PigPopulation(String name, Dimension gridDimension,
-			int initPopulationSize, Color color, double maxSpeed,
-			double maxAcceleration, double visionRange, boolean groupBehaviour, IShape shape, List<IObstacle> obstacles) {
+	public PigPopulation(String name, int initPopulationSize, Color color, 
+			double maxSpeed, double maxAcceleration, double visionRange, 
+			boolean groupBehaviour, SurroundingsSettings surroundings) {
 		
-		super(name, gridDimension, shape, obstacles, color);
+		super(name, color, surroundings);
 		this.groupBehaviour = groupBehaviour;
-		agents = initializePopulation(initPopulationSize, gridDimension, color,
+		agents = initializePopulation(initPopulationSize, surroundings.getGridDimension(), color,
 				maxSpeed, maxAcceleration, visionRange);
 	}
 
@@ -48,7 +46,7 @@ public class PigPopulation extends AbstractPopulation {
 			}
 			IAgent a = new PigAgent("Deer", randPos,
 					color, 5, 10, velocity, maxSpeed, maxAcceleration,
-					visionRange, groupBehaviour, obstacles);
+					visionRange, groupBehaviour);
 			newAgents.add(a);
 		}
 		return newAgents;

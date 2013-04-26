@@ -1,16 +1,15 @@
 package chalmers.dax021308.ecosystem.model.agent;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Stat;
 import chalmers.dax021308.ecosystem.model.util.Vector;
-import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
  * Simple grass, lowest part of the food chain
@@ -31,8 +30,7 @@ public class GrassAgent extends AbstractAgent {
 
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
-			List<IPopulation> preys, List<IPopulation> neutral, Dimension dim,
-			IShape shape, List<IObstacle> obstacles) {
+			List<IPopulation> preys, List<IPopulation> neutral, SurroundingsSettings surroundings) {
 		// Do nothing, grass shouldn't move!
 	}
 
@@ -45,12 +43,12 @@ public class GrassAgent extends AbstractAgent {
 
 	@Override
 	public List<IAgent> reproduce(IAgent agent, int populationSize,
-			List<IObstacle> obstacles, IShape shape, Dimension gridDimension) {
+			SurroundingsSettings surroundings) {
 		double popSize = (double) populationSize;
 		double cap = (double) capacity;
 		if (Math.random() < REPRODUCTION_RATE * (1.0 - popSize / cap)) {
 			List<IAgent> spawn = new ArrayList<IAgent>();
-			Position p = getSpawnPosition(gridDimension, shape, obstacles);
+			Position p = getSpawnPosition(surroundings);
 			IAgent a = new GrassAgent(name, p, color, 5, 5, velocity, maxSpeed,
 					capacity);
 			spawn.add(a);
@@ -66,8 +64,7 @@ public class GrassAgent extends AbstractAgent {
 	 * 
 	 * @return The position found
 	 */
-	private Position getSpawnPosition(Dimension gridDimension, IShape shape,
-			List<IObstacle> obstacles) {
+	private Position getSpawnPosition(SurroundingsSettings surroundings) {
 		// create a random position which lies within __ pixels of the
 		// current position, and if it lies inside the shape and not inside any
 		// obstacle, return it.
@@ -75,8 +72,8 @@ public class GrassAgent extends AbstractAgent {
 		boolean validPos;
 		do {
 			p = Position.positionPlusVector(position, Stat.getNormallyDistributedVector(SPAWNING_STD));
-			validPos = shape.isInside(gridDimension, p);
-			for (IObstacle o : obstacles) {
+			validPos = surroundings.getWorldShape().isInside(surroundings.getGridDimension(), p);
+			for (IObstacle o : surroundings.getObstacles()) {
 				if (o.isInObstacle(p)) {
 					validPos = false;
 				}
@@ -84,4 +81,5 @@ public class GrassAgent extends AbstractAgent {
 		} while (!validPos);
 		return p;
 	}
+
 }

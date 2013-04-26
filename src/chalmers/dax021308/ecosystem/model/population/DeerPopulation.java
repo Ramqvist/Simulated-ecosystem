@@ -7,13 +7,10 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.agent.DeerAgent;
-import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
-import chalmers.dax021308.ecosystem.model.genetics.DeerGenes;
+import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
-import chalmers.dax021308.ecosystem.model.genetics.IGenes;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
-import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
  * 
@@ -26,13 +23,12 @@ public class DeerPopulation extends AbstractPopulation {
 		agents = agentList;
 	}
 
-	public DeerPopulation(String name, Dimension gridDimension,
-			int initPopulationSize, Color color, double maxSpeed,
-			double maxAcceleration, double visionRange, boolean groupBehaviour, IShape shape, List<IObstacle> obstacles) {
+	public DeerPopulation(String name, int initPopulationSize, Color color, double maxSpeed,
+			double maxAcceleration, double visionRange, boolean groupBehaviour, SurroundingsSettings surroundings) {
 		
-		super(name, gridDimension, shape, obstacles, color);
+		super(name, color, surroundings);
 		this.groupBehaviour = groupBehaviour;
-		agents = initializePopulation(initPopulationSize, gridDimension, color,
+		agents = initializePopulation(initPopulationSize, surroundings.getGridDimension(), color,
 				maxSpeed, maxAcceleration, visionRange);
 	}
 

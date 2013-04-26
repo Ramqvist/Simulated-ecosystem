@@ -1,20 +1,18 @@
 package chalmers.dax021308.ecosystem.model.agent;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Container;
 import chalmers.dax021308.ecosystem.model.util.FixedSizeAgentQueueObjectPriorityQueue;
 import chalmers.dax021308.ecosystem.model.util.Gender;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
-import chalmers.dax021308.ecosystem.model.util.shape.IShape;
+import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 
 /**
  * AbstractAgent with neighbourlist.
@@ -54,7 +52,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected FixedSizeAgentQueueObjectPriorityQueue predNeighboursQueue;
 	protected FixedSizeAgentQueueObjectPriorityQueue neutralNeighboursQueue;
 
-	protected List<IObstacle> obstacles;
+	//protected List<IObstacle> obstacles; // TODO remove this? Was only used by PigAgent
 	private int neighbourCounter;
 	private static final int NEIGHBOURS_UPDATE_THRESHOLD = 10;
 	protected static Random ran = new Random();
@@ -225,13 +223,12 @@ public abstract class AbstractAgent implements IAgent {
 			@Override
 			public void calculateNextPosition(List<IPopulation> predators,
 					List<IPopulation> preys, List<IPopulation> neutral,
-					Dimension dim, IShape shape, List<IObstacle> obstacles) {
+					SurroundingsSettings surroundings) {
 			}
 
 			@Override
 			public List<IAgent> reproduce(IAgent agent, int populationSize,
-					List<IObstacle> obstacles, IShape shape,
-					Dimension gridDimension) {
+					SurroundingsSettings surroundings) {
 				// TODO Auto-generated method stub
 				return null;
 			}
@@ -397,14 +394,13 @@ public abstract class AbstractAgent implements IAgent {
 			@Override
 			public void calculateNextPosition(List<IPopulation> predators,
 					List<IPopulation> preys, List<IPopulation> neutral,
-					Dimension dim, IShape shape, List<IObstacle> obstacles) {
+					SurroundingsSettings surroundings) {
 
 			}
 
 			@Override
 			public List<IAgent> reproduce(IAgent agent, int populationSize,
-					List<IObstacle> obstacles, IShape shape,
-					Dimension gridDimension) {
+					SurroundingsSettings surroundings) {
 				// TODO Auto-generated method stub
 				return null;
 			}
@@ -455,7 +451,7 @@ public abstract class AbstractAgent implements IAgent {
 	}
 
 	@Override
-	public boolean looksTasty(IAgent agent, double visionRange) {
+	public boolean isLookingTasty(IAgent agent, double visionRange) {
 		// If nothing else is specified, the fact that the agent is alive and in
 		// vision range makes it desirable to eat
 		double distance = agent.getPosition().getDistance(position)

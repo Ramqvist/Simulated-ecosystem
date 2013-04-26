@@ -1,16 +1,14 @@
 package chalmers.dax021308.ecosystem.model.agent;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.LinkedList;
 import java.util.List;
 
-import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
-import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
  * 
@@ -26,7 +24,7 @@ public class SimplePredatorAgent extends AbstractAgent {
 	}
 
 	@Override
-	public List<IAgent> reproduce(IAgent agent, int populationSize, List<IObstacle> obstacles, IShape shape, Dimension gridDimension) {
+	public List<IAgent> reproduce(IAgent agent, int populationSize, SurroundingsSettings surroundings) {
 		return new LinkedList<IAgent>();
 	}
 
@@ -73,14 +71,14 @@ public class SimplePredatorAgent extends AbstractAgent {
 
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
-			List<IPopulation> preys, List<IPopulation> neutral, Dimension dim, IShape shape, List<IObstacle> obstacles) {
+			List<IPopulation> preys, List<IPopulation> neutral, SurroundingsSettings surroundings) {
 		
 		updateNeighbourList(neutral, preys, predators);
 		
 		Vector preyForce = getPreyForce();
 		Vector separationForce = ForceCalculator.mutualInteractionForce(neutralNeighbours, this);
 		//Vector separationForce = new Vector();
-		Vector environmentForce = ForceCalculator.getEnvironmentForce(dim, shape, position);
+		Vector environmentForce = ForceCalculator.getEnvironmentForce(surroundings.getGridDimension(), surroundings.getWorldShape(), position);
 		
 		/*
 		 * Sum the forces from walls, predators and neutral to form the acceleration force.

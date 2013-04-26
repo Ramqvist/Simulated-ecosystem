@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import chalmers.dax021308.ecosystem.model.agent.DeerAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
+import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
 import chalmers.dax021308.ecosystem.model.util.shape.*;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -31,8 +32,9 @@ public class DeerAgentTest {
 	private double maxAcceleration;
 	private double visionRange;
 	private boolean groupBehaviour;
-	private IShape shape;
-	private Dimension dimension;
+	//private IShape shape;
+	//private Dimension dimension;
+	private SurroundingsSettings surroundings;
 	
 	@Before
 	public void init() {
@@ -47,8 +49,10 @@ public class DeerAgentTest {
 		visionRange = 5;
 		groupBehaviour = true;
 		deerTest = new DeerAgent(name, p, c, width, height, velocity, maxSpeed, maxAcceleration, visionRange, groupBehaviour, GenomeFactory.deerGenomeFactory());
-		shape = new SquareShape();
-		dimension = new Dimension(50, 50);
+		//shape = new SquareShape();
+		//dimension = new Dimension(50, 50);
+		surroundings = new SurroundingsSettings(new Dimension(50, 50), new SquareShape(), null);
+		
 	}
 		
 	@Test
@@ -56,13 +60,15 @@ public class DeerAgentTest {
 		Field hungryField = DeerAgent.class.getDeclaredField("hungry");
 		hungryField.setAccessible(true);
 		assertTrue(hungryField.get(deerTest).equals(true));
-		assertEquals(null, deerTest.reproduce(null, 0, null, null, null));
+		//assertEquals(null, deerTest.reproduce(null, 0, null, null, null));
+		SurroundingsSettings temp = new SurroundingsSettings(null, null, null);
+		assertEquals(null, deerTest.reproduce(null, 0, temp));
 		hungryField.set(deerTest, false);
 		assertTrue(hungryField.get(deerTest).equals(false));
 		
 		List<IAgent> children;
 		do {
-			children = deerTest.reproduce(null, 0, null, shape, dimension);
+			children = deerTest.reproduce(null, 0, surroundings);
 			hungryField.set(deerTest, false);
 		} while (children.size() == 0); 
 		

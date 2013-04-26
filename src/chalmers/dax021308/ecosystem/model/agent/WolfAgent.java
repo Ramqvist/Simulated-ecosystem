@@ -1,11 +1,10 @@
 package chalmers.dax021308.ecosystem.model.agent;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
-import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 import chalmers.dax021308.ecosystem.model.genetics.IGenes;
 import chalmers.dax021308.ecosystem.model.genetics.IGenome;
 import chalmers.dax021308.ecosystem.model.genetics.WolfGenes;
@@ -13,10 +12,9 @@ import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
-import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
- * @author Henrik Its purpose is to hunt down Agentsof lower trophic level in a
+ * @author Henrik Its purpose is to hunt down Agents of lower trophic level in a
  *         simple way
  */
 public class WolfAgent extends AbstractAgent {
@@ -52,7 +50,7 @@ public class WolfAgent extends AbstractAgent {
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
 			List<IPopulation> preys, List<IPopulation> neutral,
-			Dimension gridDimension, IShape shape, List<IObstacle> obstacles) {
+			SurroundingsSettings surroundings) {
 		if (digesting > 0) {
 			digesting--;
 		} else {
@@ -68,9 +66,9 @@ public class WolfAgent extends AbstractAgent {
 				forwardThrust = ForceCalculator.forwardThrust(velocity);
 				arrayalForce = ForceCalculator.arrayalForce(neutralNeighbours, this);
 			}
-			Vector environmentForce = ForceCalculator.getEnvironmentForce(gridDimension, shape,
+			Vector environmentForce = ForceCalculator.getEnvironmentForce(surroundings.getGridDimension(), surroundings.getWorldShape(),
 					position);
-			Vector obstacleForce = ForceCalculator.getObstacleForce(obstacles, position);
+			Vector obstacleForce = ForceCalculator.getObstacleForce(surroundings.getObstacles(), position);
 
 			/*
 			 * Sum the forces from walls, predators and neutral to form the
@@ -117,7 +115,7 @@ public class WolfAgent extends AbstractAgent {
 
 	@Override
 	public List<IAgent> reproduce(IAgent agent, int populationSize,
-			List<IObstacle> obstacles, IShape shape, Dimension gridDimension) {
+			SurroundingsSettings surroundings) {
 		if (hungry)
 			return null;
 		else {
@@ -133,7 +131,7 @@ public class WolfAgent extends AbstractAgent {
 					double newY = this.getPosition().getY() + ySign
 							* (0.001 + 0.001 * Math.random());
 					pos = new Position(newX, newY);
-				} while (!shape.isInside(gridDimension, pos));
+				} while (!surroundings.getWorldShape().isInside(surroundings.getGridDimension(), pos));
 				IAgent child = new WolfAgent(name, pos, color, width, height,
 						new Vector(velocity), maxSpeed, maxAcceleration,
 						visionRange, groupBehaviour, genome.onlyMutate());

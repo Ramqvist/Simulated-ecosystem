@@ -11,6 +11,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
@@ -48,14 +49,13 @@ public class AbstractAgentTest {
 			
 			@Override
 			public List<IAgent> reproduce(IAgent agent, int populationSize,
-					List<IObstacle> obstacles, IShape shape, Dimension gridDimension) {
+					SurroundingsSettings surroundings) {
 				return null;
 			}
 			
 			@Override
 			public void calculateNextPosition(List<IPopulation> predators,
-					List<IPopulation> preys, List<IPopulation> neutral, Dimension dim,
-					IShape shape, List<IObstacle> obstacles) {
+					List<IPopulation> preys, List<IPopulation> neutral, SurroundingsSettings surroundings) {
 			}
 		};
 	}
@@ -66,14 +66,13 @@ public class AbstractAgentTest {
 			
 			@Override
 			public List<IAgent> reproduce(IAgent agent, int populationSize,
-					List<IObstacle> obstacles, IShape shape, Dimension gridDimension) {
+					SurroundingsSettings surroundings) {
 				return null;
 			}
 			
 			@Override
 			public void calculateNextPosition(List<IPopulation> predators,
-					List<IPopulation> preys, List<IPopulation> neutral, Dimension dim,
-					IShape shape, List<IObstacle> obstacles) {
+					List<IPopulation> preys, List<IPopulation> neutral, SurroundingsSettings surroundings) {
 			}
 		};
 		

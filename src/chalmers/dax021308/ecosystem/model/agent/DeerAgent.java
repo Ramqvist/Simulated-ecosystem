@@ -1,11 +1,10 @@
 package chalmers.dax021308.ecosystem.model.agent;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
-import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 import chalmers.dax021308.ecosystem.model.genetics.DeerGenes;
 import chalmers.dax021308.ecosystem.model.genetics.IGenes;
 import chalmers.dax021308.ecosystem.model.genetics.IGenome;
@@ -13,7 +12,6 @@ import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
-import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
  * A basic implementation of the IAgent interface.
@@ -24,11 +22,13 @@ public class DeerAgent extends AbstractAgent {
 
 	private static final int MAX_ENERGY = 1000;
 	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
-	private boolean hungry = true;
-	private static final double REPRODUCTION_RATE = 0.1;
-	private boolean willFocusPreys = false;
 	private static final int DIGESTION_TIME = 10;
+	private static final double REPRODUCTION_RATE = 0.1;
+	
 	private int digesting = 0;
+	private boolean alone;
+	private boolean hungry = true;
+	private boolean willFocusPreys = false;
 	private double STOTTING_RANGE = 10;
 	private double STOTTING_LENGTH = 8;
 	private double STOTTING_COOLDOWN = 50;
@@ -37,7 +37,6 @@ public class DeerAgent extends AbstractAgent {
 	private boolean isAStottingDeer = false;
 	private boolean isStotting = false;
 	private Vector stottingVector = new Vector();
-	private boolean alone;
 	private IGenome<IGenes> genome;
 	
 	public DeerAgent(String name, Position p, Color c, int width, int height,
@@ -62,7 +61,7 @@ public class DeerAgent extends AbstractAgent {
 
 	@Override
 	public List<IAgent> reproduce(IAgent agent, int populationSize,
-			List<IObstacle> obstacles, IShape shape, Dimension gridDimension) {
+			SurroundingsSettings surroundings) {
 		if (hungry)
 			return null;
 		else {
@@ -78,7 +77,7 @@ public class DeerAgent extends AbstractAgent {
 					double newY = this.getPosition().getY() + ySign
 							* (0.001 + 0.001 * Math.random());
 					pos = new Position(newX, newY);
-				} while (!shape.isInside(gridDimension, pos));
+				} while (!surroundings.getWorldShape().isInside(surroundings.getGridDimension(), pos));
 				IAgent child = new DeerAgent(name, pos, color, width, height,
 						new Vector(velocity), maxSpeed, maxAcceleration,
 						visionRange, groupBehaviour, genome.onlyMutate());
@@ -100,7 +99,7 @@ public class DeerAgent extends AbstractAgent {
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
 			List<IPopulation> preys, List<IPopulation> neutral,
-			Dimension gridDimension, IShape shape, List<IObstacle> obstacles) {
+			SurroundingsSettings surroundings) {
 
 		updateNeighbourList(neutral, preys, predators);
 		
@@ -124,8 +123,8 @@ public class DeerAgent extends AbstractAgent {
 			}
 
 			Vector environmentForce = ForceCalculator.getEnvironmentForce(
-					gridDimension, shape, position);
-			Vector obstacleForce = ForceCalculator.getObstacleForce(obstacles,
+					surroundings.getGridDimension(), surroundings.getWorldShape(), position);
+			Vector obstacleForce = ForceCalculator.getObstacleForce(surroundings.getObstacles(),
 					position);
 
 			/*

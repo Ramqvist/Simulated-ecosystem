@@ -1,15 +1,12 @@
 package chalmers.dax021308.ecosystem.model.agent;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.util.ArrayList;
 import java.util.List;
 
-import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
-import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
  * Simple grass, lowest part of the food chain
@@ -30,8 +27,7 @@ public class GrassFieldAgent extends AbstractAgent {
 
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
-			List<IPopulation> preys, List<IPopulation> neutral, Dimension dim,
-			IShape shape, List<IObstacle> obstacles) {
+			List<IPopulation> preys, List<IPopulation> neutral, SurroundingsSettings surroundings) {
 		// Do nothing, grass shouldn't move!
 	}
 
@@ -42,7 +38,7 @@ public class GrassFieldAgent extends AbstractAgent {
 
 	@Override
 	public List<IAgent> reproduce(IAgent agent, int populationSize,
-			List<IObstacle> obstacles, IShape shape, Dimension gridDimension) {
+			SurroundingsSettings surroundings) {
 		if (Math.random() < REPRODUCTION_RATE) {
 			double energyProportion = (double)energy/(double)MAX_ENERGY;
 			double newEnergy = energy*energyProportion*(1-energyProportion)*0.1;
@@ -67,7 +63,7 @@ public class GrassFieldAgent extends AbstractAgent {
 	}
 
 	@Override
-	public boolean looksTasty(IAgent agent, double visionRange) {
+	public boolean isLookingTasty(IAgent agent, double visionRange) {
 
 		double distance = agent.getPosition().getDistance(position)
 				- (width + height) / 2;

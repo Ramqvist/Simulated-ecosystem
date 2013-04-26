@@ -278,7 +278,7 @@ public class ForceCalculator {
 			Position p = a.getPosition();
 			double preySize = (a.getHeight() + a.getWidth()) / 4;
 			double distance = agent.getPosition().getDistance(p); // - preySize;
-			if (a.looksTasty(agent, visionRange)) {
+			if (a.isLookingTasty(agent, visionRange)) {
 				if (distance <= EATING_RANGE) {
 					if (a.tryConsumeAgent()) {
 						agent.eat();

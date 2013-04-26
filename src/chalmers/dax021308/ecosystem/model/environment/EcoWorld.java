@@ -12,8 +12,6 @@ import java.util.concurrent.Executors;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.EllipticalObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
-import chalmers.dax021308.ecosystem.model.environment.obstacle.RectangularObstacle;
-import chalmers.dax021308.ecosystem.model.environment.obstacle.TriangleObstacle;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.DeerPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPredatorPopulation;
@@ -229,19 +227,20 @@ public class EcoWorld implements IModel {
 				&& s.getSimDimensionConstant() == null) {
 			setSimulationDimension(s.getSimDimension());
 		}
-
+		
 		List<IPopulation> populations = new ArrayList<IPopulation>();
-		List<IObstacle> obstacles;
+
+		SurroundingsSettings surroundings = new SurroundingsSettings(d, null, null);
 		/*
 		 * Creating obstacles here for test. This should be done in a proper way
 		 * later.
 		 */
 		if(s.getMap().getObsList() != null) {
-			obstacles = s.getMap().getScaledObstacles(d);
+			surroundings.setObstacles(s.getMap().getScaledObstacles(d));
 		} else {
-			obstacles = new ArrayList<IObstacle>();
+			surroundings.setObstacles(new ArrayList<IObstacle>());
 		}
-
+		
 		statTime = new Stat<Double>();
 
 		IPopulation prey = null;
@@ -259,34 +258,37 @@ public class EcoWorld implements IModel {
 			shape = new TriangleShape();
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
 		}
+		surroundings.setWorldShape(shape);
+		
 		if (s.getPredatorModel() == SimulationSettings.POP_DUMMYPRED) {
-			pred = new DummyPredatorPopulation(d, s.getPredPopSize(),
-					Color.red, 3, 0.75, 275, shape);
+			pred = new DummyPredatorPopulation(s.getPredPopSize(),
+					Color.red, 3, 0.75, 275, surroundings);
 		} else if (s.getPredatorModel() == SimulationSettings.POP_WOLF) {
-			pred = new WolfPopulation("Wolves", d, s.getPredPopSize(),
-					Color.red, 2.3, 0.4, 250, true, shape, obstacles);
+			pred = new WolfPopulation("Wolves", s.getPredPopSize(),
+					Color.red, 2.3, 0.4, 250, true, surroundings);
 		}
 
 		if (s.getPreyModel() == SimulationSettings.POP_DEER) {
-			prey = new DeerPopulation("Deers", d, s.getPreyPopSize(),
-					Color.blue, 2.0, 3, 200, true, shape, obstacles);
+			prey = new DeerPopulation("Deers", s.getPreyPopSize(),
+					Color.blue, 2.0, 3, 200, true, surroundings);
 		} else if (s.getPreyModel() == SimulationSettings.POP_DUMMYPREY) {
-			prey = new DummyPreyPopulation(d, s.getPreyPopSize(), Color.blue,
-					2.2, 2, 250, shape);
+			prey = new DummyPreyPopulation(s.getPreyPopSize(), Color.blue,
+					2.2, 2, 250, surroundings);
 		} else if (s.getPreyModel() == SimulationSettings.POP_PIG) {
-			prey = new PigPopulation("Filthy Pigs", d, s.getPreyPopSize(),
-					Color.pink, 2.0, 3, 200, false, shape, obstacles);
+			prey = new PigPopulation("Filthy Pigs", s.getPreyPopSize(),
+					Color.pink, 2.0, 3, 200, false, surroundings);
 		}
 
 		if (s.getGrassModel() == SimulationSettings.POP_GRASS) {
-			grass = new GrassPopulation("Grass", d, s.getGrassPopSize(),
-					new Color(69, 139, 00), 1, 1, 0, 800, shape, obstacles);
+			grass = new GrassPopulation("Grass", s.getGrassPopSize(),
+					new Color(69, 139, 00), 1, 1, 0, 800, surroundings);
 		} else if (s.getGrassModel() == SimulationSettings.POP_GRASS_FIELD) {
-			grass = new GrassFieldPopulation(SimulationSettings.NAME_GRASS_FIELD, d, s.getGrassPopSize(),
-					Color.green, 1, 1, 0, 80, shape, obstacles);
+			grass = new GrassFieldPopulation(SimulationSettings.NAME_GRASS_FIELD, s.getGrassPopSize(),
+					Color.green, 1, 1, 0, 80, surroundings);
 		}
-
-		if (prey == null || pred == null || grass == null || shape == null) {
+		
+		// TODO Shouldn't shape == null be before creating populations?
+		if (prey == null || pred == null || grass == null || surroundings.getWorldShape() == null) {
 			throw new IllegalArgumentException("Wrong populations set.");
 		}
 
@@ -304,9 +306,9 @@ public class EcoWorld implements IModel {
 		if (recordSimulation) {
 			this.recording = new SimulationRecording();
 			recording.initWriting("Testrecording1.sim");
-			recording.appendHeader(obstacles, d, s.getShapeModel());
+			recording.appendHeader(surroundings.getObstacles(), d, s.getShapeModel());
 		}
-		this.env = new EnvironmentScheduler(populations, obstacles,
+		this.env = new EnvironmentScheduler(populations, surroundings.getObstacles(),
 				mOnFinishListener, d.height, d.width, s.getNumThreads());
 	}
 

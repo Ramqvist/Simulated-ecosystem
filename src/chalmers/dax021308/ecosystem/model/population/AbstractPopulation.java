@@ -1,32 +1,29 @@
 package chalmers.dax021308.ecosystem.model.population;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
-import chalmers.dax021308.ecosystem.model.agent.AbstractAgent;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
+import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Stat;
-import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
  * 
  * @author Henrik Abstract class for handling the dummy methods
  */
 public abstract class AbstractPopulation implements IPopulation {
+	protected SurroundingsSettings surroundings;
+	//protected Dimension gridDimension;	// TODO remove. Use SurroundingsSettings instead.
+	//protected IShape shape;				// TODO remove. Use SurroundingsSettings instead.
+	//protected List<IObstacle> obstacles;	// TODO remove. Use SurroundingsSettings instead.
 	protected List<IAgent> agents;
-	protected Dimension gridDimension;
 	protected List<IPopulation> preys;
 	protected List<IPopulation> predators;
 	protected List<IPopulation> neutral;
-	protected IShape shape;
-	protected List<IObstacle> obstacles;
-	protected double interestingPropertyProportion = 0;
-	
+	protected double interestingPropertyProportion = 0;	
 	private Stat<Integer> preyNeighbourSize = new Stat<Integer>();
 	private Stat<Integer> predNeighbourSize = new Stat<Integer>();
 	private Stat<Integer> neutralNeighbourSize = new Stat<Integer>();
@@ -56,14 +53,14 @@ public abstract class AbstractPopulation implements IPopulation {
 		lifeLengths = new Stat<Integer>();
 	}
 
-	public AbstractPopulation(String name, Dimension gridDimension,
-			IShape shape, List<IObstacle> obstacles, Color color) {
+	public AbstractPopulation(String name, Color color, SurroundingsSettings surroundings) {
 		this();
 		this.name = name;
 		this.color = color;
-		this.gridDimension = gridDimension;
-		this.obstacles = obstacles;
-		this.shape = shape;
+		//this.gridDimension = gridDimension;
+		//this.obstacles = obstacles;
+		//this.shape = shape;
+		this.surroundings = surroundings;
 
 	}
 
@@ -114,8 +111,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		IAgent a;
 		for (int i = fromPos; i < toPos; i++) {
 			a = agents.get(i);
-			a.calculateNextPosition(predators, preys, neutral, gridDimension,
-					shape, obstacles);
+			a.calculateNextPosition(predators, preys, neutral, surroundings);
 			
 
 //			AbstractAgent aa = (AbstractAgent) a;
@@ -137,8 +133,8 @@ public abstract class AbstractPopulation implements IPopulation {
 		Position pos = new Position();
 		while (!validPos) {
 			validPos = true;
-			pos = shape.getRandomPosition(gridDimension);
-			for (IObstacle o : obstacles) {
+			pos = surroundings.getWorldShape().getRandomPosition(surroundings.getGridDimension());
+			for (IObstacle o : surroundings.getObstacles()) {
 				if (o.isInObstacle(pos)) {
 					validPos = false;
 				}
@@ -269,8 +265,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		// if (shape == null)
 		// throw new IllegalArgumentException("Illegal Shape from file.");
 
-		AbstractPopulation created = new AbstractPopulation(name, null, null,
-				null, Color.black) {
+		AbstractPopulation created = new AbstractPopulation(name, Color.black, null) {
 
 					@Override
 					public List<Integer> getLifeLengths() {
@@ -314,8 +309,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		int populationSize = agents.size();
 		for (IAgent a : agents) {
 			a.updatePosition();
-			List<IAgent> spawn = a.reproduce(null, populationSize, obstacles,
-					shape, gridDimension);
+			List<IAgent> spawn = a.reproduce(null, populationSize, surroundings);
 			if (spawn != null) {
 				kids.addAll(spawn);
 			}

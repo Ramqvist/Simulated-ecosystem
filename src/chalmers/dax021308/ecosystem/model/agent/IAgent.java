@@ -1,15 +1,13 @@
 package chalmers.dax021308.ecosystem.model.agent;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.List;
 
-import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Gender;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 import chalmers.dax021308.ecosystem.model.util.Position;
-import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
  * IAgent describes an arbitrary single individual.
@@ -28,7 +26,7 @@ public interface IAgent extends Cloneable {
 	 *            - The new Position.
 	 */
 	public void setPosition(Position p);
-
+	// TODO (Surroundings) update javadoc
 	/**
 	 * Calculates the new position of the IAgent to which it will move when
 	 * calling updatePosition().
@@ -48,8 +46,7 @@ public interface IAgent extends Cloneable {
 	 *            The obstacles inside the environment
 	 */
 	public void calculateNextPosition(List<IPopulation> predators,
-			List<IPopulation> preys, List<IPopulation> neutral, Dimension dim,
-			IShape shape, List<IObstacle> obstacles);
+			List<IPopulation> preys, List<IPopulation> neutral, SurroundingsSettings surroundings);
 
 	/**
 	 * Updates the position of the IAgent
@@ -102,7 +99,7 @@ public interface IAgent extends Cloneable {
 	 * @return the life length of an agent.
 	 */
 	public int getLifeLength();
-
+// TODO (Surroundings) update javadoc
 	/**
 	 * Tries to create one or more new IAgents, with data from the two provided
 	 * IAgents.
@@ -117,7 +114,7 @@ public interface IAgent extends Cloneable {
 	 *         null.
 	 */
 	public List<IAgent> reproduce(IAgent agent, int populationSize,
-			List<IObstacle> obstacles, IShape shape, Dimension gridDimension);
+			SurroundingsSettings surroundings);
 
 	/**
 	 * @return The gender of the IAgent specified by some enum. Returns null if
@@ -164,7 +161,7 @@ public interface IAgent extends Cloneable {
 	 * @return True if the agent is desirable to hunt and should affect the
 	 *         preyforce, otherwise false
 	 */
-	public boolean looksTasty(IAgent agent, double visionRange);
+	public boolean isLookingTasty(IAgent agent, double visionRange);
 
 	/**
 	 * @return Max acceleration.

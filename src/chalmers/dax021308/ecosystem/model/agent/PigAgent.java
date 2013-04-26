@@ -1,12 +1,11 @@
 package chalmers.dax021308.ecosystem.model.agent;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.AbstractObstacle;
-import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.AgentPath;
 import chalmers.dax021308.ecosystem.model.util.Container;
@@ -14,7 +13,6 @@ import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
-import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
  * Pig Agent.
@@ -41,12 +39,24 @@ public class PigAgent extends AbstractAgent {
 	private Vector stottingVector = new Vector();
 	private boolean alone;
 
-	public PigAgent(String name, Position p, Color c, int width, int height,
+	/*public PigAgent(String name, Position p, Color c, int width, int height,
 			Vector velocity, double maxSpeed, double maxAcceleration,
 			double visionRange, boolean groupBehaviour, List<IObstacle> obsList) {
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
-		this.obstacles = obsList;
+		this.obstacles = obsList; // TODO Is this necessary?
+		this.energy = MAX_ENERGY;
+		this.groupBehaviour = groupBehaviour;
+		this.focusedPreyPath = new AgentPath();
+
+	}*/
+	
+	// TODO I removed obsList. 
+	public PigAgent(String name, Position p, Color c, int width, int height,
+			Vector velocity, double maxSpeed, double maxAcceleration,
+			double visionRange, boolean groupBehaviour) {
+		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
+				maxAcceleration);
 		this.energy = MAX_ENERGY;
 		this.groupBehaviour = groupBehaviour;
 		this.focusedPreyPath = new AgentPath();
@@ -55,7 +65,7 @@ public class PigAgent extends AbstractAgent {
 
 	@Override
 	public List<IAgent> reproduce(IAgent agent, int populationSize,
-			List<IObstacle> obstacles, IShape shape, Dimension gridDimension) {
+			SurroundingsSettings surroundings) {
 		if (hungry)
 			return null;
 		else {
@@ -71,10 +81,13 @@ public class PigAgent extends AbstractAgent {
 					double newY = this.getPosition().getY() + ySign
 							* (0.001 + 0.001 * Math.random());
 					pos = new Position(newX, newY);
-				} while (!shape.isInside(gridDimension, pos));
+				} while (!surroundings.getWorldShape().isInside(surroundings.getGridDimension(), pos));
+				/*IAgent child = new PigAgent(name, pos, color, width, height,
+						new Vector(velocity), maxSpeed, maxAcceleration,
+						visionRange, groupBehaviour, surroundings.getObstacles());*/
 				IAgent child = new PigAgent(name, pos, color, width, height,
 						new Vector(velocity), maxSpeed, maxAcceleration,
-						visionRange, groupBehaviour, obstacles);
+						visionRange, groupBehaviour);
 				spawn.add(child);
 
 			}
@@ -92,11 +105,11 @@ public class PigAgent extends AbstractAgent {
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
 			List<IPopulation> preys, List<IPopulation> neutral,
-			Dimension gridDimension, IShape shape, List<IObstacle> obstacles) {
+			SurroundingsSettings surroundings) {
 
 		updateNeighbourList(neutral, preys, predators);
 		Vector predatorForce = getPredatorForce();
-		Vector preyForce = getPreyForce(shape, gridDimension, obstacles, focusedPrey);
+		Vector preyForce = getPreyForce(surroundings, focusedPrey);
 		if (predatorForce.isNullVector())
 			alone = true;
 		if (digesting > 0 && alone) {
@@ -112,9 +125,9 @@ public class PigAgent extends AbstractAgent {
 				arrayalForce = ForceCalculator.arrayalForce(neutralNeighbours, this);
 			}
 			
-			Vector environmentForce = ForceCalculator.getEnvironmentForce(gridDimension, shape,
+			Vector environmentForce = ForceCalculator.getEnvironmentForce(surroundings.getGridDimension(), surroundings.getWorldShape(),
 					position);
-			Vector obstacleForce = ForceCalculator.getObstacleForce(obstacles, position);
+			Vector obstacleForce = ForceCalculator.getObstacleForce(surroundings.getObstacles(), position);
 
 			/*
 			 * Sum the forces from walls, predators and neutral to form the
@@ -170,8 +183,9 @@ public class PigAgent extends AbstractAgent {
 			// }
 		}
 	}
-	
 
+// TODO ändrade denna metod. Den använde sig av obstacles i AbstractAgent, men tror den ej skulle det.
+	// metoden används visserligen ej förtillfället.
 	/**
 	 * Special version of getPreyForce. Determines the shortest path if any obstacles is blocking the way.
 	 * <p>
@@ -180,7 +194,8 @@ public class PigAgent extends AbstractAgent {
 	 * @return returns The force the preys attracts the agent with
 	 * @author Sebastian/Henrik/Erik
 	 */
-	private Vector getPreyForce(IShape shape, Dimension dim, List<IObstacle> obsList, Container<IAgent> focusedPreyContainer, AgentPath path, int initial_ttl) {
+	private Vector getPreyForce(SurroundingsSettings surroundings, Container<IAgent> focusedPreyContainer, AgentPath path, int initial_ttl) {
+	//private Vector getPreyForce(IShape shape, Dimension dim, List<IObstacle> obsList, Container<IAgent> focusedPreyContainer, AgentPath path, int initial_ttl){
 		if (willFocusPreys && focusedPreyContainer.get() != null && focusedPreyContainer.get().isAlive()) {
 			Position p = focusedPreyContainer.get().getPosition();
 			double distance = getPosition().getDistance(p);
@@ -207,8 +222,9 @@ public class PigAgent extends AbstractAgent {
 						return new Vector(focusedPreyPath.pop(), position);
 					}
 				} else {
-					if(AbstractObstacle.isInsidePathList(obstacles, position, focusedPreyContainer.get().getPosition())) {
-						focusedPreyPath.setPath(Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), obstacles, shape, dim), initial_ttl);
+					if(AbstractObstacle.isInsidePathList(surroundings.getObstacles(), position, focusedPreyContainer.get().getPosition())) {
+						//focusedPreyPath.setPath(Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), obstacles, surroundings.getWorldShape(), surroundings.getGridDimension()), initial_ttl);
+						focusedPreyPath.setPath(Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), surroundings.getObstacles(), surroundings.getWorldShape(), surroundings.getGridDimension()), initial_ttl);
 						if(focusedPreyPath.isEmpty()) {
 							//Unreachable target.
 							return Vector.emptyVector();
@@ -271,8 +287,8 @@ public class PigAgent extends AbstractAgent {
 
 		if (willFocusPreys && closestFocusPrey != null) {
 			focusedPreyContainer.set(closestFocusPrey);
-			if(AbstractObstacle.isInsidePathList(obstacles, position, focusedPreyContainer.get().getPosition())) {
-				focusedPreyPath.setPath(Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), obstacles, shape, dim), initial_ttl);
+			if(AbstractObstacle.isInsidePathList(surroundings.getObstacles(), position, focusedPreyContainer.get().getPosition())) {
+				focusedPreyPath.setPath(Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), surroundings.getObstacles(), surroundings.getWorldShape(), surroundings.getGridDimension()), initial_ttl);
 				if(focusedPreyPath.isEmpty()) {
 					return Vector.emptyVector();
 				} else {
@@ -291,7 +307,7 @@ public class PigAgent extends AbstractAgent {
 	 * @return returns The force the preys attracts the agent with
 	 * @author Sebastian/Henrik
 	 */
-	private Vector getPreyForce(IShape shape, Dimension dim, List<IObstacle> obstacles, Container<IAgent> focusedPreyContainer) {
+	private Vector getPreyForce(SurroundingsSettings surroundings, Container<IAgent> focusedPreyContainer) {
 		if(focusedPreyContainer == null) {
 			Log.v("NULL CONTAINER");
 		}
@@ -372,8 +388,8 @@ public class PigAgent extends AbstractAgent {
 
 		if (willFocusPreys && closestFocusPrey != null) {
 			focusedPreyContainer.set(closestFocusPrey);
-			if(AbstractObstacle.isInsidePathList(obstacles, position, focusedPreyContainer.get().getPosition())) {
-				focusedPreyPath.setPath(Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), obstacles, shape, dim));
+			if(AbstractObstacle.isInsidePathList(surroundings.getObstacles(), position, focusedPreyContainer.get().getPosition())) {
+				focusedPreyPath.setPath(Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), surroundings.getObstacles(), surroundings.getWorldShape(), surroundings.getGridDimension()));
 				if(focusedPreyPath.isEmpty()) {
 					return Vector.emptyVector();
 				} else {
