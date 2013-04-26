@@ -1,7 +1,6 @@
 package chalmers.dax021308.ecosystem.view;
 
-import java.awt.Color;
-//import java.awt.Container;
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -10,9 +9,28 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.peer.ButtonPeer;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.*;
+import javax.swing.AbstractListModel;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListDataListener;
@@ -23,10 +41,8 @@ import chalmers.dax021308.ecosystem.model.environment.mapeditor.DefaultMaps;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapFileHandler;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.SimulationMap;
 import chalmers.dax021308.ecosystem.model.util.ButtonGroupWrapper;
-import java.awt.BorderLayout;
-import java.util.List;
-
-import javax.swing.border.Border;
+import chalmers.dax021308.ecosystem.model.util.Log;
+//import java.awt.Container;
 
 public class NEWSettingsMenuView extends JFrame {
 
@@ -76,7 +92,7 @@ public class NEWSettingsMenuView extends JFrame {
     public final JCheckBox checkBoxLimitIterations;
     public final JCheckBox checkBoxCustomSize;
     
-    //de här kanske kan vara privata nu..?
+    //de hï¿½r kanske kan vara privata nu..?
     public final JRadioButton radioButton2Threads;
     public final JRadioButton radioButton4Threads;
     public final JRadioButton radioButton8Threads;
@@ -538,13 +554,30 @@ public class NEWSettingsMenuView extends JFrame {
         listMap.setValueIsAdjusting(true);
         listMap.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         listMap.setSelectedIndices(new int[]{3});
-        final List<SimulationMap> foundMaps = DefaultMaps.defaultMaps;
-        List<SimulationMap> readMaps = MapFileHandler.readMapsFromMapsFolder();
-        if(readMaps != null) {
-        	foundMaps.addAll(readMaps);
-        }
-        listMap.setModel(new ListModel<SimulationMap> () {
-        	List<SimulationMap> mapList = foundMaps;
+        loadSimulationMaps();
+        addWindowListener(new WindowAdapter() {
+        	@Override
+        	public void windowActivated(WindowEvent e) {
+                loadSimulationMaps();
+        	}
+        });
+    }
+    
+    private void loadSimulationMaps() {
+    	listMap.setModel(new SimulationMapListModel());
+    	listMap.invalidate();
+    }
+    
+    private class SimulationMapListModel implements ListModel<SimulationMap> {
+        	List<SimulationMap> mapList;
+    		public SimulationMapListModel() {
+    	        final List<SimulationMap> foundMaps = DefaultMaps.getDefaultMaps();
+    	        List<SimulationMap> readMaps = MapFileHandler.readMapsFromMapsFolder();
+    	        if(readMaps != null) {
+    	        	foundMaps.addAll(readMaps);
+    	        }
+    	        mapList = foundMaps;
+    		}
 			@Override
 			public int getSize() {
 				return mapList.size();
@@ -560,8 +593,6 @@ public class NEWSettingsMenuView extends JFrame {
 			@Override
 			public void removeListDataListener(ListDataListener l) {
 			}
-        });
-        listMap.setSelectedIndex(0);
     }
 
     private void setMyBorders() {

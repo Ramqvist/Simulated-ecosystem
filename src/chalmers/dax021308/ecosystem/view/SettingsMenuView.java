@@ -21,7 +21,6 @@ public class SettingsMenuView extends JFrame {
 	private final ButtonGroup shapeButtonGroup = new ButtonGroup();
 	private final ButtonGroup delayButtonGroup = new ButtonGroup();
 	private final ButtonGroup graphicsButtonGroup = new ButtonGroup();
-	private int graphics; 
 
 
 	/**
@@ -68,7 +67,7 @@ public class SettingsMenuView extends JFrame {
 		rdbtnCircle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//CIRCLE
-				System.out.println("Circle shaped universe");
+//				System.out.println("Circle shaped universe");
 			}
 		});
 		shapeButtonGroup.add(rdbtnCircle);
@@ -79,7 +78,7 @@ public class SettingsMenuView extends JFrame {
 		rdbtnTriangle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TRIANGLE
-				System.out.println("Triangle shaped universe");
+//				System.out.println("Triangle shaped universe");
 			}
 		});
 		shapeButtonGroup.add(rdbtnTriangle);
@@ -96,7 +95,7 @@ public class SettingsMenuView extends JFrame {
 			public void stateChanged(ChangeEvent e) {
 				if(!sliderObstacles.getValueIsAdjusting()) {
 					//OBSTACLES
-					System.out.println("obstacles set");
+//					System.out.println("obstacles set");
 				}
 			}
 		});
@@ -140,7 +139,7 @@ public class SettingsMenuView extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				//JAVA AWT
 				System.out.println("awt graphics");
-				graphics = 0;
+//				graphics = 0;
 			}
 		});
 		graphicsButtonGroup.add(rdbtnJavaAWT);
@@ -152,7 +151,7 @@ public class SettingsMenuView extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				//OPEN GL
 				System.out.println("openGL graphics");
-				graphics = 1;
+//				graphics = 1;
 			}
 		});
 		graphicsButtonGroup.add(rdbtnOpenGL);

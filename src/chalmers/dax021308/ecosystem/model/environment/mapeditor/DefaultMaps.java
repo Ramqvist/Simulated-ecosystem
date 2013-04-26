@@ -56,4 +56,14 @@ public class DefaultMaps {
 		defaultMaps.add(rivers_map);
 		defaultMaps.add(tube_map);
 	}
+
+	public static List<SimulationMap> getDefaultMaps() {
+		List<SimulationMap> mapList = new ArrayList<SimulationMap>();
+		mapList.add(elliptical_map);
+		mapList.add(rectangular_map);
+		mapList.add(triangle_map);
+		mapList.add(rivers_map);
+		mapList.add(tube_map);
+		return mapList;
+	}
 }

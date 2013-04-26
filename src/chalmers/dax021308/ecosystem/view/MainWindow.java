@@ -253,6 +253,7 @@ public class MainWindow extends JFrame implements IView {
 				//Try to shutdown all worker threads.
 				model.shutdownNow();
 			}
+
 //<<<<<<< HEAD
 //=======
 //			@Override
