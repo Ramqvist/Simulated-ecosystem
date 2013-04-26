@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
+import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.AbstractObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
@@ -325,6 +327,131 @@ public class ForceCalculator {
 			focusedPreyContainer.set(closestFocusPrey);
 			return new Vector(closestFocusPrey.getPosition(),
 					currentAgent.getPosition());
+		}
+		return preyForce;
+	}
+	
+	public static Vector getPreyForce(boolean willFocusPreys, SurroundingsSettings surroundings, 
+			Container<IAgent> focusedPreyContainer, IAgent currentAgent,
+			List<IAgent> preyNeighbours, double visionRange, double focusRange,
+			double maxAcceleration, double maxSpeed, double safetyDistance,
+			AgentPath focusedPreyPath, int initial_ttl) {
+		if (willFocusPreys && focusedPreyContainer.get() != null && focusedPreyContainer.get().isAlive()) {
+			Position p = focusedPreyContainer.get().getPosition();
+			double distance = currentAgent.getPosition().getDistance(p);
+			//double size = (agent.getHeight() + agent.getWidth()) / 4;
+			double size = 0;
+			if (distance <= EATING_RANGE - size) {
+				if (focusedPreyContainer.get().tryConsumeAgent()) {
+					focusedPreyContainer.set(null);
+					currentAgent.eat();
+				}
+			} else {
+				if(!focusedPreyPath.isEmpty() && focusedPreyPath.isValid()) {
+					Position nextPathPosition = focusedPreyPath.peek();
+					if(nextPathPosition.getDistance(currentAgent.getPosition()) < maxSpeed) {
+						if(focusedPreyPath.size() > 1) {
+							//Remove the next path, we are close to it, and go to next.
+//							System.out.println("Go to next point in path.");
+							focusedPreyPath.pop();
+							nextPathPosition = focusedPreyPath.peek();
+						} else {
+//							System.out.println("Last point in path reached.");
+							nextPathPosition = focusedPreyPath.pop();
+						}
+					}
+					focusedPreyPath.decreaseTTL();
+					
+//					System.out.println(focusedPreyPath.getTTL());
+//					System.out.println(position + " to " +nextPathPosition);
+					return new Vector(nextPathPosition, currentAgent.getPosition()).toUnitVector();
+				} else {
+					if(AbstractObstacle.isInsidePathList(surroundings.getObstacles(), currentAgent.getPosition(), focusedPreyContainer.get().getPosition())) {
+						focusedPreyPath.setPath(
+								Position.getShortestPath(currentAgent.getPosition(), focusedPreyContainer.get().getPosition(), 
+										surroundings.getObstacles(), surroundings.getWorldShape(), 
+										surroundings.getGridDimension(), safetyDistance)
+								,initial_ttl);
+						if(focusedPreyPath.isEmpty()) {
+//							System.out.println("NULL VECTOR");
+							return Vector.emptyVector();
+						} else {
+//							System.out.println("New Path");
+//							System.out.println(currentAgent.getPosition());
+//							System.out.println(focusedPreyPath);
+							focusedPreyPath.pop();
+							return new Vector(focusedPreyPath.peek(), currentAgent.getPosition()).toUnitVector();
+						}
+					} else {
+//						System.out.println("No Path");
+						return new Vector(focusedPreyContainer.get().getPosition(), currentAgent.getPosition()).toUnitVector();
+					}
+				}
+			}
+		}
+		
+		Vector preyForce = new Vector(0, 0);
+		IAgent closestFocusPrey = null;
+		int nrOfPreys = preyNeighbours.size();
+		for (int i = 0; i < nrOfPreys; i++) {
+			IAgent a = preyNeighbours.get(i);
+			Position p = a.getPosition();
+//			double preySize = (a.getHeight() + a.getWidth()) / 4;
+			double distance = currentAgent.getPosition().getDistance(p); // - preySize;
+			if (a.isLookingTasty(currentAgent, visionRange)) {
+				if (distance <= EATING_RANGE) {
+					if (a.tryConsumeAgent()) {
+						currentAgent.eat();
+					}
+				} else if (willFocusPreys && distance <= focusRange) {
+					if (closestFocusPrey != null && a.isAlive()) {
+						if (closestFocusPrey.getPosition().getDistance(
+								currentAgent.getPosition()) > a.getPosition()
+								.getDistance(currentAgent.getPosition())) {
+							closestFocusPrey = a;
+						}
+					} else {
+						closestFocusPrey = a;
+					}
+				} else if (closestFocusPrey == null) {
+					/*
+					 * Create a vector that points towards the prey.
+					 */
+					Vector newForce = new Vector(p, currentAgent.getPosition());
+	
+					/*
+					 * Add this vector to the prey force, with proportion to how
+					 * close the prey is. Closer preys will affect the force
+					 * more than those far away.
+					 */
+					double norm = newForce.getNorm();
+					preyForce.add(newForce.multiply(1 / (norm * distance)));
+				}
+			}
+		}
+		double norm = preyForce.getNorm();
+		if (norm != 0) {
+			preyForce.multiply(maxAcceleration / norm);
+		}
+		if (willFocusPreys && closestFocusPrey != null) {
+			focusedPreyContainer.set(closestFocusPrey);
+			if(AbstractObstacle.isInsidePathList(surroundings.getObstacles(), currentAgent.getPosition(), focusedPreyContainer.get().getPosition())) {
+				focusedPreyPath.setPath(
+						Position.getShortestPath(currentAgent.getPosition(), focusedPreyContainer.get().getPosition(), 
+								surroundings.getObstacles(), surroundings.getWorldShape(), 
+								surroundings.getGridDimension(), safetyDistance)
+						,initial_ttl);
+				if(focusedPreyPath.isEmpty()) {
+					return Vector.emptyVector();
+				} else {
+//					System.out.println("New focused prey needs path");
+					focusedPreyPath.pop();
+					return new Vector(focusedPreyPath.peek(), currentAgent.getPosition()).toUnitVector();
+				}
+			} else {
+				focusedPreyPath.clearPath();
+				return new Vector(focusedPreyContainer.get().getPosition(), currentAgent.getPosition()).toUnitVector();
+			}
 		}
 		return preyForce;
 	}

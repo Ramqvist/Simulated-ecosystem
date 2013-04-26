@@ -146,7 +146,7 @@ public class PigAgent extends AbstractAgent {
 						.add(arrayalForce);
 				// if (alone) {
 				//Vector preyForce = getPreyForce(shape, gridDimension, obstacles, focusedPreyPath, 20);
-				acceleration.add(preyForce.multiply(1000000000 * (1 - energy
+				acceleration.add(preyForce.multiply(10 * (1 - energy
 						/ MAX_ENERGY)));
 			}
 			// }
