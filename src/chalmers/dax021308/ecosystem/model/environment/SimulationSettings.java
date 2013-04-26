@@ -8,9 +8,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
+import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.DefaultMaps;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.SimulationMap;
+import chalmers.dax021308.ecosystem.model.population.IPopulation;
 
 /**
  * Container class for various simulation settings.
@@ -90,6 +92,8 @@ public class SimulationSettings {
 	private int delayLength;
 	private int numIterations;
 	private SimulationMap map;
+
+	private List<IPopulation> finalPopulations;
 
 	public SimulationSettings(String simulationProfileName, String predatorModel, int predPopSize, String preyModel, int preyPopSize, String grassModel, int grassPopSize, String shapeModel, int numThreads, boolean runWithoutTimer, boolean recordSimulation, int delayLength, int numIterations, SimulationMap map) {
 		this.simulationProfileName = simulationProfileName;
@@ -229,6 +233,14 @@ public class SimulationSettings {
 	@Override
 	public String toString() {
 		return simulationProfileName;
+	}
+	
+	public List<IPopulation> getFinalPopulations() {
+		return finalPopulations;
+	}
+	
+	public void setFinalPopulations(List<IPopulation> finalPopulations) {
+		this.finalPopulations = finalPopulations;
 	}
 	
 

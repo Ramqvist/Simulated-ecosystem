@@ -45,7 +45,8 @@ public class MainWindow extends JFrame implements IView {
 	private JPanel left = new JPanel();
 	private JPanel right = new JPanel();
 	private OpenGLSimulationView openGL;
-	private HeatMapView heatMap;
+//	private HeatMapView heatMap;
+	private HeatmapTabHolder heatMap;
 	private BottomChartTabs bottomTabbedGraphs;
 	private IChart graphView2;
 	
@@ -89,7 +90,8 @@ public class MainWindow extends JFrame implements IView {
 //		graphView2 = new IterationTimeGraph(model, 10);
 		smvc = new NEWSettingsMenuViewController(model, this);
 //=======
-		heatMap = new HeatMapView(model, d, new Dimension(50,50), 3, "Deers");
+//		heatMap = new HeatMapView(model, d, new Dimension(50,50), 3, "Deers");
+		heatMap = new HeatmapTabHolder(model);
 //		parameterView = new ParameterView(model);
 		//
 //		controlView = new ControlView(model);

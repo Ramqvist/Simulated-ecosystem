@@ -57,6 +57,7 @@ public class EcoWorld implements IModel {
 	public static final String EVENT_SHAPE_CHANGED 			= "chalmers.dax021308.ecosystem.model.Ecoworld.event_shape_changed";
 	public static final String EVENT_ITERATION_FINISHED		= "chalmers.dax021308.ecosystem.model.Ecoworld.event_iteration_finished";
 	public static final String EVENT_HEATMAP_POPCHANGE		= "chalmers.dax021308.ecosystem.model.Ecoworld.event_heatmap_popchange";
+	public static final String EVENT_SETTINGS_CHANGED		= "chalmers.dax021308.ecosystem.model.Ecoworld.event_settings_changed";
 
 	/* State variables */
 	private boolean environmentFinished = false;
@@ -310,6 +311,9 @@ public class EcoWorld implements IModel {
 		}
 		this.env = new EnvironmentScheduler(populations, surroundings.getObstacles(),
 				mOnFinishListener, d.height, d.width, s.getNumThreads());
+		s.setFinalPopulations(populations);
+		s.setSimulationDimension(d);
+		observers.firePropertyChange(EVENT_SETTINGS_CHANGED, null, s);
 	}
 
 	/**
