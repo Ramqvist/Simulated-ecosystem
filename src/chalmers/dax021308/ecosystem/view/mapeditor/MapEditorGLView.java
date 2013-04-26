@@ -254,7 +254,7 @@ public class MapEditorGLView extends GLCanvas implements IView {
           		for(IObstacle o: newObs){
           			if(selectedObstacle != null) {
           				if(o == selectedObstacle) {
-              				double selectionSize = 5;
+              				double selectionSize = 4;
               				Color selectionColor = Color.BLACK;
                   			if(o != null && o instanceof EllipticalObstacle){
                   				double increment = 2.0*Math.PI/50.0;

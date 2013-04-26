@@ -29,17 +29,17 @@ public abstract class AbstractObstacle implements IObstacle {
 	protected double height;
 	protected Color color;
 	
-	@Override
 	/**
 	 * returns the width of the obstacle.
 	 */
+	@Override
 	public double getWidth() {
 		return width;
 	}
-	@Override
 	/**
 	 * returns the height of the obstacle.
 	 */
+	@Override
 	public double getHeight() {
 		return height;
 	}
@@ -55,34 +55,34 @@ public abstract class AbstractObstacle implements IObstacle {
 		this.height = height;
 	}
 	
-	@Override
 	/**
 	 * returns the position of the obstacle
 	 */
+	@Override
 	public Position getPosition() {
 		return new Position(position);
 	}
 	
-	@Override
 	/**
 	 * Moves the obstacle +x and +y distance.
 	 */
+	@Override
 	public void moveObstacle(double x, double y) {
 		this.position = new Position(position.getX() + x, position.getY() + y);
 	}
 	
-	@Override
 	/**
 	 * Sets the position of the obstacle to (x,y).
 	 */
+	@Override
 	public void setPosition(Position p) {
 		this.position = p;
 	}
 	
-	@Override
 	/**
 	 * returns the color of the obstacle
 	 */
+	@Override
 	public Color getColor(){
 		return this.color;
 	}

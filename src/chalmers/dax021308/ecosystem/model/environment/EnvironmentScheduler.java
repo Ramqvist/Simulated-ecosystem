@@ -86,15 +86,15 @@ public class EnvironmentScheduler implements Runnable {
 	 */
 	@Override
 	public void run() {
-		int size = 0;
-		for(int i = 0 ; i < populations.size(); i ++) {
-			size = size + populations.get(i).getSize();
-		}
-		if(size < 1.5 * NUMAGENTS_PER_WORKPOOL) {
-			executeFastPopulationDividedAlgorithm();
-		} else {
+//		int size = 0;
+//		for(int i = 0 ; i < populations.size(); i ++) {
+//			size = size + populations.get(i).getSize();
+//		}
+//		if(size < 1.5 * NUMAGENTS_PER_WORKPOOL) {
+//			executeFastPopulationDividedAlgorithm();
+//		} else {
 			executeAgentDividedAlgorithm();
-		}
+//		}
 
 		// Callback function called to inform EcoWorld that the current update
 		// is run
