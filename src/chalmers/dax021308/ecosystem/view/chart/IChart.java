@@ -13,5 +13,6 @@ import chalmers.dax021308.ecosystem.view.IView;
  */
 public interface IChart extends IView{
 	public Component toComponent();
+	//TODO: add public String getTitle(); here? Check BottomChartTabs.
 
 }

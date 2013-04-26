@@ -28,6 +28,7 @@ import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.chart.ChartProvider;
 import chalmers.dax021308.ecosystem.view.chart.IChart;
+import chalmers.dax021308.ecosystem.view.chart.BottomChartTabs;
 import chalmers.dax021308.ecosystem.view.populationsettings.PopulationSettingsDialog;
 
 /**
@@ -45,7 +46,7 @@ public class MainWindow extends JFrame implements IView {
 	private JPanel right = new JPanel();
 	private OpenGLSimulationView openGL;
 	private HeatMapView heatMap;
-	private IChart graphView1;
+	private BottomChartTabs bottomTabbedGraphs;
 	private IChart graphView2;
 	
 	public final LiveSettingsViewController parameterViewCtrl; 
@@ -92,7 +93,8 @@ public class MainWindow extends JFrame implements IView {
 //		parameterView = new ParameterView(model);
 		//
 //		controlView = new ControlView(model);
-		graphView1 = ChartProvider.makeChart(ChartProvider.ChartType.POPULATION_AMOUNT_GRAPH, model);
+		bottomTabbedGraphs = new BottomChartTabs(model);
+//		graphView1 = ChartProvider.makeChart(ChartProvider.ChartType.POPULATION_AMOUNT_GRAPH, model);
 		graphView2 = ChartProvider.makeChart(ChartProvider.ChartType.GROUPING_PROPORTION_GRAPH, model);
 //>>>>>>> 0a80aae074172894a60ad8cf4ef1d867f0abfd57
 		
@@ -236,7 +238,7 @@ public class MainWindow extends JFrame implements IView {
 		//graphView1.setMinimumSize(new Dimension(500, 400));
 		//graphView1.setPreferredSize(new Dimension(500, 400));
 		right.add(graphView2.toComponent(), BorderLayout.CENTER); // during development.
-		right.add(graphView1.toComponent(), BorderLayout.CENTER);
+		right.add(bottomTabbedGraphs, BorderLayout.CENTER);
 		right.add(heatMap, BorderLayout.CENTER); 
 //		right.setBackground(Color.BLUE);
 //		parameterView.setBackground(Color.GREEN);
