@@ -27,6 +27,7 @@ public abstract class AbstractPopulation implements IPopulation {
 	private Stat<Integer> preyNeighbourSize = new Stat<Integer>();
 	private Stat<Integer> predNeighbourSize = new Stat<Integer>();
 	private Stat<Integer> neutralNeighbourSize = new Stat<Integer>();
+	protected final static double OBSTACLE_SAFETY_DISTANCE = 5;
 
 	/**
 	 * Remove list for this Population.
@@ -135,7 +136,7 @@ public abstract class AbstractPopulation implements IPopulation {
 			validPos = true;
 			pos = surroundings.getWorldShape().getRandomPosition(surroundings.getGridDimension());
 			for (IObstacle o : surroundings.getObstacles()) {
-				if (o.isInObstacle(pos, 5)) {
+				if (o.isInObstacle(pos, OBSTACLE_SAFETY_DISTANCE)) {
 					validPos = false;
 				}
 			}

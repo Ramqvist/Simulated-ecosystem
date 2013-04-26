@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.util.AgentPath;
 import chalmers.dax021308.ecosystem.model.util.Container;
 import chalmers.dax021308.ecosystem.model.util.FixedSizeAgentQueueObjectPriorityQueue;
 import chalmers.dax021308.ecosystem.model.util.Gender;
@@ -34,6 +35,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected int trophicLevel; //Is this used?
 	protected Vector velocity;
 	protected Gender gender;
+	protected AgentPath focusedPreyPath;
 	protected double fitness;
 	protected double maxSpeed;
 	protected double visionRange;
@@ -75,6 +77,7 @@ public abstract class AbstractAgent implements IAgent {
 		this.maxSpeed = maxSpeed;
 		this.visionRange = visionRange;
 		this.maxAcceleration = maxAcceleration;
+		this.focusedPreyPath = new AgentPath();
 		/*
 		 * LinkedList for fast changing of Agents, consider ArrayList for less
 		 * memory

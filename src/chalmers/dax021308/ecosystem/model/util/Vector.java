@@ -162,7 +162,7 @@ public class Vector {
 
 	@Override
 	public String toString() {
-		return "(" + this.x + "," + this.y + ")";
+		return "(" + Stat.roundNDecimals(this.x,3) + "," + Stat.roundNDecimals(this.y,3) + ")";
 	}
 
 	/**

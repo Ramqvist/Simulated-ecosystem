@@ -35,7 +35,7 @@ public class JPSPathfinder {
 	public List<Position> getShortestPath(Position start, Position end, double safetyDistance) {
 		//double distance = start.getDistance(end);
 		//if(distance > 75) {
-			coordinateScaling = 7;
+			coordinateScaling = 5;
 			double x = Math.round((end.getX() / coordinateScaling))*coordinateScaling;
 			double y = Math.round((end.getY() / coordinateScaling))*coordinateScaling;
 			Position newEnd = new Position(x, y);
