@@ -9,7 +9,9 @@ import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
- * Simple grass, lowest part of the food chain
+ * Grass field, lowest part of the food chain. Instead of dying and getting
+ * removed like the normal grassAgent, it stores a limited amount of energy
+ * which decreases when another agent eats it.
  * 
  * @author Henrik
  */
@@ -27,7 +29,8 @@ public class GrassFieldAgent extends AbstractAgent {
 
 	@Override
 	public void calculateNextPosition(List<IPopulation> predators,
-			List<IPopulation> preys, List<IPopulation> neutral, SurroundingsSettings surroundings) {
+			List<IPopulation> preys, List<IPopulation> neutral,
+			SurroundingsSettings surroundings) {
 		// Do nothing, grass shouldn't move!
 	}
 
@@ -40,9 +43,10 @@ public class GrassFieldAgent extends AbstractAgent {
 	public List<IAgent> reproduce(IAgent agent, int populationSize,
 			SurroundingsSettings surroundings) {
 		if (Math.random() < REPRODUCTION_RATE) {
-			double energyProportion = (double)energy/(double)MAX_ENERGY;
-			double newEnergy = energy*energyProportion*(1-energyProportion)*0.1;
-			System.out.println(newEnergy);
+			double energyProportion = (double) energy / (double) MAX_ENERGY;
+			double newEnergy = energy * energyProportion
+					* (1 - energyProportion) * 0.1;
+			// System.out.println(newEnergy);
 			energy += newEnergy;
 		}
 		int red = (int) (150.0 - 150.0 * (((double) energy) / MAX_ENERGY));
@@ -54,7 +58,7 @@ public class GrassFieldAgent extends AbstractAgent {
 
 	@Override
 	public synchronized boolean tryConsumeAgent() {
-		// Let the current agent be eaten if it has any energy
+		// Let the current agent be eaten if it has enough energy
 		if (energy >= 8) {
 			energy -= 8;
 			return true;
@@ -64,12 +68,20 @@ public class GrassFieldAgent extends AbstractAgent {
 
 	@Override
 	public boolean isLookingTasty(IAgent agent, double visionRange) {
-
 		double distance = agent.getPosition().getDistance(position)
 				- (width + height) / 2;
 		// If the agent has enough food for three agents, then it looks tasty!
 		if (energy >= 24)
 			return distance <= visionRange;
 		return false;
+	}
+
+	@Override
+	public double impactForcesBy() {
+		// if it has a low amount of food it should negatively impact the agents
+		// who wants to eat it
+		// return 1.5 - energy / 100;
+		//but for now it just means less food = less impact
+		return energy/200;
 	}
 }

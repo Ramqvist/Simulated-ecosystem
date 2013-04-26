@@ -26,6 +26,7 @@ public interface IAgent extends Cloneable {
 	 *            - The new Position.
 	 */
 	public void setPosition(Position p);
+
 	// TODO (Surroundings) update javadoc
 	/**
 	 * Calculates the new position of the IAgent to which it will move when
@@ -46,7 +47,8 @@ public interface IAgent extends Cloneable {
 	 *            The obstacles inside the environment
 	 */
 	public void calculateNextPosition(List<IPopulation> predators,
-			List<IPopulation> preys, List<IPopulation> neutral, SurroundingsSettings surroundings);
+			List<IPopulation> preys, List<IPopulation> neutral,
+			SurroundingsSettings surroundings);
 
 	/**
 	 * Updates the position of the IAgent
@@ -99,7 +101,8 @@ public interface IAgent extends Cloneable {
 	 * @return the life length of an agent.
 	 */
 	public int getLifeLength();
-// TODO (Surroundings) update javadoc
+
+	// TODO (Surroundings) update javadoc
 	/**
 	 * Tries to create one or more new IAgents, with data from the two provided
 	 * IAgents.
@@ -182,4 +185,13 @@ public interface IAgent extends Cloneable {
 	 * Tells the agent food has been found, and that it should eat
 	 */
 	public void eat();
+
+	/**
+	 * Returns a number, influenced by the amount of food, which should be
+	 * multiplied with preyforce to see how it influences it
+	 * 
+	 * @return 1 if unspecified, otherwise a positive or negative number
+	 *         depending on the amount of food available in this agent
+	 */
+	public double impactForcesBy();
 }

@@ -491,9 +491,9 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 			int popSize = newPops.size();
 			for (int i = 0; i < popSize; i++) {
 				List<IAgent> agents = newPops.get(i).getAgents();
-				int size = agents.size();
+				int nrOfAgents = agents.size();
 				IAgent a;
-				for (int j = 0; j < size; j++) {
+				for (int j = 0; j < nrOfAgents; j++) {
 					a = agents.get(j);
 					if (a != null
 							&& a.getName() == SimulationSettings.NAME_GRASS_FIELD) {

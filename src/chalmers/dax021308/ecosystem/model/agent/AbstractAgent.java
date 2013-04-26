@@ -455,7 +455,7 @@ public abstract class AbstractAgent implements IAgent {
 		// If nothing else is specified, the fact that the agent is alive and in
 		// vision range makes it desirable to eat
 		double distance = agent.getPosition().getDistance(position)
-				- (width + height);
+				- (width + height)/2;
 
 		return distance <= visionRange;
 	}
@@ -463,6 +463,11 @@ public abstract class AbstractAgent implements IAgent {
 	@Override
 	public void eat() {
 		// Do nothing special, should be overriden by advanced agents.
+	}
+	
+	@Override
+	public double impactForcesBy(){
+		return 1;
 	}
 	
 	public int getPreyNeighbourSize(){

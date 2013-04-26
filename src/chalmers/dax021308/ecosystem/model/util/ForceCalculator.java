@@ -59,8 +59,8 @@ public class ForceCalculator {
 		Vector mutualInteractionForce = new Vector(0, 0);
 		Vector newForce = new Vector(0, 0);
 		IAgent agent;
-		int size = neutralNeighbours.size();
-		for (int i = 0; i < size; i++) {
+		int nrOfNeighbours = neutralNeighbours.size();
+		for (int i = 0; i < nrOfNeighbours; i++) {
 			agent = neutralNeighbours.get(i);
 			if (agent != currentAgent) {
 				Position p = agent.getPosition();
@@ -104,12 +104,7 @@ public class ForceCalculator {
 		Position yWallBottom = shape.getYWallBottom(dim, position);
 		Position yWallTop = shape.getYWallTop(dim, position);
 
-		/*
-		 * There is a "-1" in the equation just to make it more unlikely that
-		 * they actually make it to the wall, despite the force they feel (can
-		 * be interpreted as they stop 1 pixel before the wall).
-		 */
-		Vector environmentForce = new Vector(0, 0);
+		Vector environmentForce = new Vector();
 		double xWallLeftForce = 0;
 		double xWallRightForce = 0;
 		double yWallBottomForce = 0;
@@ -189,9 +184,9 @@ public class ForceCalculator {
 		Vector arrayalForce = new Vector(0, 0);
 		Vector newForce = new Vector();
 		double nAgentsInVision = 0;
-		int size = neutralNeighbours.size();
+		int nrOfNeighbours = neutralNeighbours.size();
 		IAgent agent;
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < nrOfNeighbours; i++) {
 			agent = neutralNeighbours.get(i);
 			if (agent != currentAgent) {
 				Position p = agent.getPosition();
@@ -245,29 +240,39 @@ public class ForceCalculator {
 
 	/**
 	 * This is the force that all the preys together have on the agent
-	 * @param willFocusPreys - True if the agent focuses on one prey, otherwise false
-	 * @param focusedPrey - The prey the agent focuses on, if willFocusPreys is true.
-	 * @param agent - The current agent
-	 * @param preyNeighbours - The list of preys
-	 * @param visionRange - The visionrange of the agent
-	 * @param maxAcceleration - The maxAcceleration of the agent
+	 * 
+	 * @param willFocusPreys
+	 *            - True if the agent focuses on one prey, otherwise false
+	 * @param focusedPrey
+	 *            - The prey the agent focuses on, if willFocusPreys is true.
+	 * @param currentAgent
+	 *            - The current agent
+	 * @param preyNeighbours
+	 *            - The list of preys
+	 * @param visionRange
+	 *            - The visionrange of the agent
+	 * @param maxAcceleration
+	 *            - The maxAcceleration of the agent
 	 * @return
 	 */
 	public static Vector getPreyForce(boolean willFocusPreys,
-			Container<IAgent> focusedPreyContainer, IAgent agent, List<IAgent> preyNeighbours,
-			double visionRange, double maxAcceleration) {
-		if (willFocusPreys && focusedPreyContainer.get() != null && focusedPreyContainer.get().isAlive()) {
+			Container<IAgent> focusedPreyContainer, IAgent currentAgent,
+			List<IAgent> preyNeighbours, double visionRange,
+			double maxAcceleration) {
+		if (willFocusPreys && focusedPreyContainer.get() != null
+				&& focusedPreyContainer.get().isAlive()) {
 			Position p = focusedPreyContainer.get().getPosition();
-			double distance = agent.getPosition().getDistance(p);
-			//double size = (agent.getHeight() + agent.getWidth()) / 4;
+			double distance = currentAgent.getPosition().getDistance(p);
+			// double size = (agent.getHeight() + agent.getWidth()) / 4;
 			double size = 0;
 			if (distance <= EATING_RANGE - size) {
 				if (focusedPreyContainer.get().tryConsumeAgent()) {
 					focusedPreyContainer.set(null);
-					agent.eat();
+					currentAgent.eat();
 				}
 			} else {
-				return new Vector(focusedPreyContainer.get().getPosition(), agent.getPosition());
+				return new Vector(focusedPreyContainer.get().getPosition(),
+						currentAgent.getPosition());
 			}
 		}
 		Vector preyForce = new Vector(0, 0);
@@ -277,17 +282,18 @@ public class ForceCalculator {
 			IAgent a = preyNeighbours.get(i);
 			Position p = a.getPosition();
 			double preySize = (a.getHeight() + a.getWidth()) / 4;
-			double distance = agent.getPosition().getDistance(p); // - preySize;
-			if (a.isLookingTasty(agent, visionRange)) {
+			double distance = currentAgent.getPosition().getDistance(p)
+					- preySize;
+			if (a.isLookingTasty(currentAgent, visionRange)) {
 				if (distance <= EATING_RANGE) {
 					if (a.tryConsumeAgent()) {
-						agent.eat();
+						currentAgent.eat();
 					}
 				} else if (willFocusPreys && distance <= FOCUS_RANGE) {
 					if (closestFocusPrey != null && a.isAlive()) {
 						if (closestFocusPrey.getPosition().getDistance(
-								agent.getPosition()) > a.getPosition()
-								.getDistance(agent.getPosition())) {
+								currentAgent.getPosition()) > a.getPosition()
+								.getDistance(currentAgent.getPosition())) {
 							closestFocusPrey = a;
 						}
 					} else {
@@ -297,7 +303,8 @@ public class ForceCalculator {
 					/*
 					 * Create a vector that points towards the prey.
 					 */
-					Vector newForce = new Vector(p, agent.getPosition());
+					Vector newForce = new Vector(p, currentAgent.getPosition());
+					
 
 					/*
 					 * Add this vector to the prey force, with proportion to how
@@ -305,6 +312,7 @@ public class ForceCalculator {
 					 * more than those far away.
 					 */
 					double norm = newForce.getNorm();
+					newForce.multiply(a.impactForcesBy());
 					preyForce.add(newForce.multiply(1 / (norm * distance)));
 				}
 			}
@@ -315,7 +323,8 @@ public class ForceCalculator {
 		}
 		if (willFocusPreys && closestFocusPrey != null) {
 			focusedPreyContainer.set(closestFocusPrey);
-			return new Vector(closestFocusPrey.getPosition(), agent.getPosition());
+			return new Vector(closestFocusPrey.getPosition(),
+					currentAgent.getPosition());
 		}
 		return preyForce;
 	}
