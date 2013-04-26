@@ -1,6 +1,7 @@
 package chalmers.dax021308.ecosystem.controller.mapeditor;
 
 import java.awt.BorderLayout;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -80,8 +81,9 @@ public class MapEditorController implements IController {
 		view.right.add(addObstacle.view);
 		view.right.add(editObstacle.view);
 		view.right.add(selectedObstacle.view);
-		view.setVisible(true);
 		init();
+		view.setVisible(true);
+		view.setExtendedState(Frame.MAXIMIZED_BOTH);
 	}
 	
 	
