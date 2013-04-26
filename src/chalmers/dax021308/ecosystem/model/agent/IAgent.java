@@ -20,6 +20,8 @@ public interface IAgent extends Cloneable {
 	 * @return The position of the IAgent.
 	 */
 	public Position getPosition();
+	
+	public List<Position> getFocusedPath();
 
 	/**
 	 * @param p

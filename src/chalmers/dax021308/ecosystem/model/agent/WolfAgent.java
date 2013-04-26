@@ -162,5 +162,5 @@ public class WolfAgent extends AbstractAgent {
 	public boolean isAGroupingWolf() {
 		return groupBehaviour;
 	}
-
+	
 }

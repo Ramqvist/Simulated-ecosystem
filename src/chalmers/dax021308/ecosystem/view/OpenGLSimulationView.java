@@ -73,6 +73,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 	// private GLCanvas canvas;
 	private IShape shape;
 	private boolean isZoomed;
+	private boolean showFocusedPath = true;
 	private MouseEvent lastZoomEvent;
 
 	/**
@@ -594,6 +595,28 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 						 * Math.cos(angle + increment)*radius, cy +
 						 * Math.sin(angle + increment)*radius); gl.glEnd(); } }
 						 */
+						
+						if(showFocusedPath) {
+							List<Position> path = a.getFocusedPath();
+							if(path != null) {
+								for(Position pos: path){
+									gl.glColor3f(0, 0, 0);
+									gl.glBegin(GL.GL_POLYGON);
+									gl.glVertex2d(frameWidth * (pos.getX() - 2) / size.width,
+											frameHeight - frameHeight * (pos.getY() - 2) / size.height);
+	
+									gl.glVertex2d(frameWidth * (pos.getX() + 2) / size.width,
+											frameHeight - frameHeight * (pos.getY() - 2) / size.height);
+	
+									gl.glVertex2d(frameWidth * (pos.getX() + 2) / size.width,
+											frameHeight - frameHeight * (pos.getY() + 2) / size.height);
+	
+									gl.glVertex2d(frameWidth * (pos.getX() - 2) / size.width,
+											frameHeight - frameHeight * (pos.getY() + 2) / size.height);
+									gl.glEnd();
+								}
+							}
+						}
 					}
 				}
 			}

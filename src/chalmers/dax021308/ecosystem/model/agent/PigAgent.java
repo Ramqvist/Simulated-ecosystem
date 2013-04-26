@@ -26,7 +26,6 @@ public class PigAgent extends AbstractAgent {
 	private boolean hungry = true;
 	private static final double REPRODUCTION_RATE = 0.1;
 	private boolean willFocusPreys = true;
-	private AgentPath focusedPreyPath;
 	private static final int DIGESTION_TIME = 10;
 	private int digesting = 0;
 	private double STOTTING_RANGE = 20;
@@ -60,7 +59,6 @@ public class PigAgent extends AbstractAgent {
 		this.energy = MAX_ENERGY;
 		this.groupBehaviour = groupBehaviour;
 		this.focusedPreyPath = new AgentPath();
-		this.color = Color.black;
 
 	}
 
@@ -110,7 +108,10 @@ public class PigAgent extends AbstractAgent {
 
 		updateNeighbourList(neutral, preys, predators);
 		Vector predatorForce = getPredatorForce();
-		Vector preyForce = getPreyForce(surroundings, focusedPrey, 10);
+		Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys, surroundings, focusedPrey, 
+				this, preyNeighbours, visionRange, visionRange,
+				maxAcceleration, maxSpeed, 
+				OBSTACLE_SAFETY_DISTANCE, focusedPreyPath, 10);
 		if (predatorForce.isNullVector())
 			alone = true;
 		if (digesting > 0 && alone) {
