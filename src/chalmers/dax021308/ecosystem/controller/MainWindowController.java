@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-import javax.naming.event.NamingExceptionEvent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -17,7 +16,6 @@ import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.MainWindow;
-import chalmers.dax021308.ecosystem.view.chart.ChartProvider;
 
 /**
  * Controller class

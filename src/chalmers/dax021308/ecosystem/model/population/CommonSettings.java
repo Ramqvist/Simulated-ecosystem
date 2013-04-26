@@ -22,7 +22,6 @@ public class CommonSettings {
 	private boolean groupBehavior;
 	
 	public CommonSettings() {
-		
 	}
 	
 	public int getCapacity() {
@@ -91,6 +90,4 @@ public class CommonSettings {
 	public void setGroupBehavior(boolean groupBehavior) {
 		this.groupBehavior = groupBehavior;
 	}
-	
-	
 }

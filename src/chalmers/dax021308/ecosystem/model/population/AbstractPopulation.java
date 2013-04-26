@@ -399,4 +399,8 @@ public abstract class AbstractPopulation implements IPopulation {
 		return 1;
 	}
 	
+	public CommonSettings getDefaultSettings() {
+		return null;
+	}
+	
 }

@@ -15,13 +15,11 @@ import chalmers.dax021308.ecosystem.model.environment.obstacle.EllipticalObstacl
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.RectangularObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.TriangleObstacle;
-import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.IView;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 
-import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.JFormattedTextField;
@@ -29,9 +27,16 @@ import javax.swing.JRadioButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.event.ListDataListener;
 import javax.swing.ComboBoxModel;
+import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.ListModel;
+
+import net.miginfocom.swing.MigLayout;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.JList;
 
 /**
  * Panel for editing a selected obstacle.
@@ -41,69 +46,91 @@ import javax.swing.JComboBox;
  */
 public class SelectedObstacleView extends JPanel implements IView {
 	private static final long serialVersionUID = 4214212142L;
-	public final JTextField tbxWidth;
-	public final JTextField tbxHeight;
-	public final JTextField tbxXPosition;
-	public final JTextField tbxYPosition;
+	private IObstacle selectedObstacle;
+	public final JLabel lblSelectedObstacle;
 	public final JRadioButton rdbtnTypeTriangle;
 	public final JRadioButton rdbtnTypeRectangle;
 	public final JRadioButton rdbtnTypeCircle;
-	public final JButton btnAddObstacle;
-	public final JComboBox<ObstacleColorContainer> colorComboBox;
-	private IObstacle selectedObstacle;
+	public final JLabel lblWidth;
+	public final JTextField tbxHeight;
+	public final JSlider sliderWidth;
+	public final JLabel lblHeight;
+	public final JTextField tbxWidth;
+	public final JSlider sliderHeight;
+	public final JLabel lblXPosition;
+	public final JTextField tbxXPosition;
+	public final JTextField tbxYPosition;
+	public final JLabel lblWidth_1;
+	public final JLabel lblNewLabel;
+	public final JList<ObstacleColorContainer> colorList;
 
 	public SelectedObstacleView(IModel m) {
-		m.addObserver(this);
 		setVisible(false);
-		JLabel lblAddNewObstacle = new JLabel("Selected obstacle");
-		lblAddNewObstacle.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		m.addObserver(this);
+		setLayout(new MigLayout("", "[][135.00,grow][165.00,grow][98.00]", "[][][][][][][][][][][grow][][][][][][]"));
+		
+		lblSelectedObstacle = new JLabel("Selected Obstacle");
+		lblSelectedObstacle.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		add(lblSelectedObstacle, "cell 1 0 2 1");
 		
 		rdbtnTypeTriangle = new JRadioButton("Triangle");
-		rdbtnTypeTriangle.setSelected(true);
-		
-		rdbtnTypeRectangle = new JRadioButton("Rectangle");
+		rdbtnTypeTriangle.setEnabled(false);
+		add(rdbtnTypeTriangle, "flowx,cell 1 1");
 		
 		rdbtnTypeCircle = new JRadioButton("Ellipse");
+		rdbtnTypeCircle.setEnabled(false);
+		add(rdbtnTypeCircle, "cell 2 1");
 		
-		JLabel lblSize = new JLabel("Width");
-		lblSize.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblWidth = new JLabel("Width");
+		add(lblWidth, "cell 1 2");
 		
-		tbxWidth = new JFormattedTextField(NumberFormat.getInstance());
-		tbxWidth.setText("120");
+		tbxWidth = new JTextField();
+		tbxWidth.setText("100");
 		tbxWidth.setColumns(10);
+		add(tbxWidth, "cell 1 3,growx");
 		
-		JLabel lblHeight = new JLabel("Height");
-		lblHeight.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		sliderWidth = new JSlider();
+		sliderWidth.setMinimum(1);
+		sliderWidth.setMaximum(1300);
+		add(sliderWidth, "cell 2 3");
 		
-		tbxHeight = new JFormattedTextField(NumberFormat.getInstance());
-		tbxHeight.setText("120");
-		tbxHeight.setColumns(10);
+		lblHeight = new JLabel("Height");
+		add(lblHeight, "cell 1 4");
 		
-		JLabel lblXPosition = new JLabel("X position");
-		lblXPosition.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		sliderHeight = new JSlider();
+		sliderHeight.setMinimum(1);
+		sliderHeight.setMaximum(1300);
+		add(sliderHeight, "cell 2 5");
 		
-		tbxXPosition = new JFormattedTextField(NumberFormat.getInstance());
-		tbxXPosition.setText("500");
+		lblXPosition = new JLabel("X Position");
+		add(lblXPosition, "cell 1 7");
+		
+		lblWidth_1 = new JLabel("Y Position");
+		add(lblWidth_1, "cell 2 7");
+		
+		tbxXPosition = new JTextField();
+		tbxXPosition.setText("100");
 		tbxXPosition.setColumns(10);
+		add(tbxXPosition, "cell 1 8,growx");
 		
-		JLabel lblYPosition = new JLabel("Y position");
-		lblYPosition.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		
-		tbxYPosition = new JFormattedTextField(NumberFormat.getInstance());
-		tbxYPosition.setText("500");
+		tbxYPosition = new JTextField();
+		tbxYPosition.setText("100");
 		tbxYPosition.setColumns(10);
+		add(tbxYPosition, "cell 2 8,growx");
 		
-		btnAddObstacle = new JButton("Add obstacle");
-		btnAddObstacle.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel = new JLabel("Color");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		add(lblNewLabel, "cell 1 9");
 		
-		colorComboBox = new JComboBox<ObstacleColorContainer>();
-		colorComboBox.setModel(new ComboBoxModel<ObstacleColorContainer>() {
+		rdbtnTypeRectangle = new JRadioButton("Rectangle");
+		rdbtnTypeRectangle.setEnabled(false);
+		add(rdbtnTypeRectangle, "cell 1 1");
+		
+		colorList = new JList<ObstacleColorContainer>();
+		colorList.setModel(new ListModel<ObstacleColorContainer>() {
 			List<ObstacleColorContainer> colorList = ObstacleColorContainer.COLOR_LIST;
-			Object selected;
-			
 			@Override
 			public void removeListDataListener(ListDataListener l) {
-				
 			}
 			
 			@Override
@@ -119,112 +146,13 @@ public class SelectedObstacleView extends JPanel implements IView {
 			@Override
 			public void addListDataListener(ListDataListener l) {
 			}
-			
-			@Override
-			public void setSelectedItem(Object anItem) {
-				selected = anItem;
-			}
-			
-			@Override
-			public Object getSelectedItem() {
-				return selected;
-			}
 		});
-		colorComboBox.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				updateColorObstacle();
-			}
-		});
+		add(colorList, "cell 1 10 1 7,grow");
 		
-		JLabel lblColor = new JLabel("Color");
-		lblColor.setFont(new Font("Tahoma", Font.PLAIN, 14));
-
-		
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(rdbtnTypeCircle)
-							.addContainerGap())
-						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(rdbtnTypeRectangle, GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
-								.addContainerGap())
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(lblSize, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(380, Short.MAX_VALUE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-									.addComponent(btnAddObstacle, GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addComponent(tbxWidth, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-										.addGap(49)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addComponent(lblHeight, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
-											.addComponent(tbxHeight, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-											.addComponent(lblAddNewObstacle, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
-											.addComponent(rdbtnTypeTriangle, GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE))
-										.addGap(31))
-									.addGroup(groupLayout.createSequentialGroup()
-										.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-											.addComponent(colorComboBox, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-											.addComponent(tbxXPosition, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
-											.addComponent(lblXPosition, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE))
-										.addGap(49)
-										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addComponent(tbxYPosition, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-											.addComponent(lblYPosition, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE))))
-								.addGap(201)))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblColor, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap(400, Short.MAX_VALUE))))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(19)
-					.addComponent(lblAddNewObstacle)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(rdbtnTypeTriangle)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(rdbtnTypeRectangle)
-					.addGap(2)
-					.addComponent(rdbtnTypeCircle)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(21)
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(tbxWidth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(tbxHeight, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblYPosition, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblXPosition, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(tbxXPosition, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(tbxYPosition, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblSize, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblHeight, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(lblColor)
-					.addGap(2)
-					.addComponent(colorComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(164)
-					.addComponent(btnAddObstacle, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
-		setLayout(groupLayout);
+		tbxHeight = new JTextField();
+		tbxHeight.setText("100");
+		add(tbxHeight, "cell 1 5,growx");
+		tbxHeight.setColumns(10);
 	}
 	
 	@Override
@@ -240,7 +168,6 @@ public class SelectedObstacleView extends JPanel implements IView {
 					rdbtnTypeTriangle.setEnabled(false);
 					rdbtnTypeRectangle.setEnabled(false);
 					rdbtnTypeCircle.setEnabled(false);
-					btnAddObstacle.setEnabled(false);
 				} else if(newName.equals("")) {
 					tbxWidth.setEnabled(false);
 					tbxHeight.setEnabled(false);
@@ -249,16 +176,14 @@ public class SelectedObstacleView extends JPanel implements IView {
 					rdbtnTypeTriangle.setEnabled(false);
 					rdbtnTypeRectangle.setEnabled(false);
 					rdbtnTypeCircle.setEnabled(false);
-					btnAddObstacle.setEnabled(false);
 				} else {
-					tbxWidth.setEnabled(true);
-					tbxHeight.setEnabled(true);
-					tbxXPosition.setEnabled(true);
-					tbxYPosition.setEnabled(true);
-					rdbtnTypeTriangle.setEnabled(true);
-					rdbtnTypeRectangle.setEnabled(true);
-					rdbtnTypeCircle.setEnabled(true);
-					btnAddObstacle.setEnabled(true);
+					tbxWidth.setEnabled(false);
+					tbxHeight.setEnabled(false);
+					tbxXPosition.setEnabled(false);
+					tbxYPosition.setEnabled(false);
+					rdbtnTypeTriangle.setEnabled(false);
+					rdbtnTypeRectangle.setEnabled(false);
+					rdbtnTypeCircle.setEnabled(false);
 				}
 		}
 	} else if(evt.getPropertyName() == MapEditorModel.EVENT_SELECTED_CHANGED) {
@@ -290,26 +215,13 @@ public class SelectedObstacleView extends JPanel implements IView {
 			rdbtnTypeRectangle.setSelected(true);
 			rdbtnTypeCircle.setSelected(false);
 		}
+		sliderWidth.setValue((int) selectedObstacle.getWidth());
+		sliderHeight.setValue((int) selectedObstacle.getHeight());
 		ObstacleColorContainer obsColor = ObstacleColorContainer.getObstacleColorContainerFromColor(selectedObstacle.getColor());
 		if(obsColor != null) {
-			colorComboBox.setSelectedItem(obsColor);
-			colorComboBox.repaint();
+			colorList.setSelectedValue(obsColor, true);
+			colorList.repaint();
 		}
-	}
-	
-	private void updateColorObstacle() {
-		if(selectedObstacle != null) {
-			Object o = colorComboBox.getSelectedItem();
-			if(o != null) {
-				if(o instanceof ObstacleColorContainer) {
-					ObstacleColorContainer container = (ObstacleColorContainer) o;
-					if(container.c != null ) {
-						selectedObstacle.setColor(container.c);
-					}
-				}
-			}
-		}
-		
 	}
 
 	@Override

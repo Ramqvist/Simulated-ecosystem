@@ -23,6 +23,10 @@ public interface IObstacle {
 	
 	public double getHeight();
 	
+	public void setHeight(double height);
+	
+	public void setWidth(double width);
+	
 	public Position getPosition();
 	
 	public void moveObstacle(double x, double y);
