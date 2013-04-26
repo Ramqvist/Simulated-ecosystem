@@ -1,4 +1,4 @@
-package chalmers.dax021308.ecosystem.view;
+package chalmers.dax021308.ecosystem.view.populationsettings;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -13,9 +13,11 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-@SuppressWarnings("serial")
-public class WolfSettingsPanel extends JPanel implements IView {
+import chalmers.dax021308.ecosystem.view.IView;
 
+@SuppressWarnings("serial")
+public class DeerSettingsPanel extends JPanel implements IView {
+	
 	private JPanel labelPanel;
 	private JPanel componentPanel;
 	private JSpinner maxSpeedSpinner;
@@ -25,7 +27,7 @@ public class WolfSettingsPanel extends JPanel implements IView {
 	private JSpinner maxLifeLengthSpinner;
 	private JSpinner maxReproductionRateSpinner;
 	private JSpinner maxDigestionTimeSpinner;
-	private JCheckBox sprintingCheckBox;
+	private JCheckBox stottingCheckBox;
 	private JLabel maxSpeedLabel;
 	private JLabel maxAccelerationLabel;
 	private JLabel visionRangeLabelWolf;
@@ -33,7 +35,7 @@ public class WolfSettingsPanel extends JPanel implements IView {
 	private JLabel maxLifeLengthLabel;
 	private JLabel maxReproductionRateLabel;
 	private JLabel maxDigestionRateLabel;
-	private JLabel sprintingLabel;
+	private JLabel stottingLabel;
 	private SpinnerNumberModel maxSpeedModel;
 	private SpinnerNumberModel maxAccelerationModel;
 	private SpinnerNumberModel visionRangeModel;
@@ -42,10 +44,10 @@ public class WolfSettingsPanel extends JPanel implements IView {
 	private SpinnerNumberModel maxReproductionRateModel;
 	private SpinnerNumberModel maxDigestionRateModel;
 	
-	public WolfSettingsPanel() {
+	public DeerSettingsPanel() {
 		init();
 	}
-
+	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		// TODO Auto-generated method stub
@@ -69,8 +71,8 @@ public class WolfSettingsPanel extends JPanel implements IView {
 		maxLifeLengthSpinner = new JSpinner(maxLifeLengthModel);
 		maxReproductionRateSpinner = new JSpinner(maxReproductionRateModel);
 		maxDigestionTimeSpinner = new JSpinner(maxDigestionRateModel);
-		sprintingCheckBox = new JCheckBox();
-		sprintingCheckBox.setAlignmentX(CENTER_ALIGNMENT);
+		stottingCheckBox = new JCheckBox();
+		stottingCheckBox.setAlignmentX(CENTER_ALIGNMENT);
 		
 		maxSpeedLabel = new JLabel("Max Speed: ");
 		maxSpeedLabel.setAlignmentX(RIGHT_ALIGNMENT);
@@ -86,8 +88,8 @@ public class WolfSettingsPanel extends JPanel implements IView {
 		maxReproductionRateLabel.setAlignmentX(RIGHT_ALIGNMENT);
 		maxDigestionRateLabel = new JLabel("Max Digestion Time: ");
 		maxDigestionRateLabel.setAlignmentX(RIGHT_ALIGNMENT);
-		sprintingLabel = new JLabel("Sprinting: ");
-		sprintingLabel.setAlignmentX(RIGHT_ALIGNMENT);
+		stottingLabel = new JLabel("Stotting: ");
+		stottingLabel.setAlignmentX(RIGHT_ALIGNMENT);
 
 		componentPanel = new JPanel();
 		componentPanel.setLayout(new BoxLayout(componentPanel, BoxLayout.Y_AXIS));
@@ -105,7 +107,7 @@ public class WolfSettingsPanel extends JPanel implements IView {
 		componentPanel.add(Box.createRigidArea(new Dimension(0, 4)));
 		componentPanel.add(maxDigestionTimeSpinner);
 		componentPanel.add(Box.createRigidArea(new Dimension(0, 4)));
-		componentPanel.add(sprintingCheckBox);
+		componentPanel.add(stottingCheckBox);
 		
 		labelPanel = new JPanel();
 		labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
@@ -124,11 +126,12 @@ public class WolfSettingsPanel extends JPanel implements IView {
 		labelPanel.add(Box.createRigidArea(new Dimension(0, 8)));
 		labelPanel.add(maxDigestionRateLabel);
 		labelPanel.add(Box.createRigidArea(new Dimension(0, 8)));
-		labelPanel.add(sprintingLabel);
+		labelPanel.add(stottingLabel);
 		
 		this.setLayout(new BorderLayout());
 		this.add(labelPanel, BorderLayout.WEST);
 		this.add(componentPanel, BorderLayout.EAST);
+		
 	}
 
 	@Override
@@ -148,4 +151,5 @@ public class WolfSettingsPanel extends JPanel implements IView {
 		// TODO Auto-generated method stub
 		
 	}
+
 }

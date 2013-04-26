@@ -1,6 +1,7 @@
 package chalmers.dax021308.ecosystem.controller;
 
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,8 +17,10 @@ public class NEWSettingsMenuViewController implements IController {
 	private NEWSettingsMenuView view;
 	private ActionListener listenerStartButton;
 	private SimulationSettings s;
+	private Frame superFrame;
 	
-	public NEWSettingsMenuViewController(EcoWorld model) {
+	public NEWSettingsMenuViewController(EcoWorld model, Frame superFrame) {
+		this.superFrame = superFrame;
 		this.model = model;
 	}
 	
@@ -27,7 +30,7 @@ public class NEWSettingsMenuViewController implements IController {
 			throw new NullPointerException("Model not set.");
 		}
 		if(view == null) {
-			view = new NEWSettingsMenuView(model);
+			view = new NEWSettingsMenuView(model, superFrame);
 			listenerStartButton = new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -86,8 +89,8 @@ public class NEWSettingsMenuViewController implements IController {
 		int height;
 		
 		settingsName = "Custom";
-		pred = (String) view.listPred.getSelectedValue(); //TODO: göra snyggare?
-		predPopSize = (Integer) view.spinnerPredPopSize.getValue(); //TODO: säker på att det är en int?
+		pred = (String) view.listPred.getSelectedValue(); //TODO: gï¿½ra snyggare?
+		predPopSize = (Integer) view.spinnerPredPopSize.getValue(); //TODO: sï¿½ker pï¿½ att det ï¿½r en int?
 		prey = (String) view.listPrey.getSelectedValue();
 		preyPopSize = (Integer) view.spinnerPreyPopSize.getValue();
 		veg = (String) view.listVegetation.getSelectedValue();
@@ -102,7 +105,7 @@ public class NEWSettingsMenuViewController implements IController {
 			isRunningWithoutTimer = true;
 		}
 		isRecording = view.checkBoxRecordSim.isSelected();
-		noOfIterations = Integer.MAX_VALUE; //den här borde kanske vara konstant nån annanstans
+		noOfIterations = Integer.MAX_VALUE; //den hï¿½r borde kanske vara konstant nï¿½n annanstans
 		if (view.checkBoxLimitIterations.isSelected()) {
 			noOfIterations = (Integer) view.spinnerNoOfIterations.getValue();
 		}

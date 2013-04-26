@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -19,6 +20,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -44,7 +46,7 @@ import chalmers.dax021308.ecosystem.model.util.ButtonGroupWrapper;
 import chalmers.dax021308.ecosystem.model.util.Log;
 //import java.awt.Container;
 
-public class NEWSettingsMenuView extends JFrame {
+public class NEWSettingsMenuView extends JDialog {
 
     private EcoWorld model;
     static final int DEFAULT_ITERATION_DELAY = 16;
@@ -142,7 +144,7 @@ public class NEWSettingsMenuView extends JFrame {
 
             public void run() {
                 try {
-                    NEWSettingsMenuView frame = new NEWSettingsMenuView(model);
+                    NEWSettingsMenuView frame = new NEWSettingsMenuView(model, null);
                     frame.setVisible(true);
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 } catch (Exception e) {
@@ -155,7 +157,8 @@ public class NEWSettingsMenuView extends JFrame {
     /**
      * Create the frame.
      */
-    public NEWSettingsMenuView(EcoWorld model) {
+    public NEWSettingsMenuView(EcoWorld model, Frame superFrame) {
+    	super(superFrame);
         this.model = model;
 
         //initializing the graphical objects - done here since most of them are final		

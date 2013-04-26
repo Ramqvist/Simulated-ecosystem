@@ -1,4 +1,4 @@
-package chalmers.dax021308.ecosystem.view;
+package chalmers.dax021308.ecosystem.view.populationsettings;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+
+import chalmers.dax021308.ecosystem.view.IView;
 
 @SuppressWarnings("serial")
 public class GrassSettingsPanel extends JPanel implements IView {

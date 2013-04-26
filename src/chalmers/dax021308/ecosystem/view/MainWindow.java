@@ -28,6 +28,7 @@ import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.chart.ChartProvider;
 import chalmers.dax021308.ecosystem.view.chart.IChart;
+import chalmers.dax021308.ecosystem.view.populationsettings.PopulationSettingsDialog;
 
 /**
  * The view that holds the entire application.
@@ -64,6 +65,7 @@ public class MainWindow extends JFrame implements IView {
 	public final Menu mnView;
 	public final MenuItem mntmMapEditor;
 	public final MenuItem mntmSimulationSettings;
+	public final MenuItem mntmPopulationSettings;
 
 	/**
 	 * Create the frame.
@@ -84,7 +86,7 @@ public class MainWindow extends JFrame implements IView {
 		parameterViewCtrl = new LiveSettingsViewController(model);
 //		graphView1 = new PopulationAmountGraph(model, 10);
 //		graphView2 = new IterationTimeGraph(model, 10);
-		smvc = new NEWSettingsMenuViewController(model);
+		smvc = new NEWSettingsMenuViewController(model, this);
 //=======
 		heatMap = new HeatMapView(model, d, new Dimension(50,50), 3, "Deers");
 //		parameterView = new ParameterView(model);
@@ -191,6 +193,7 @@ public class MainWindow extends JFrame implements IView {
 		menuBar.add(mnSettings);
 		
 		mntmSimulationSettings = new MenuItem("Simulation settings");
+		mntmPopulationSettings = new MenuItem("Population settings");
 		
 		mntmSimulationSettings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -198,6 +201,12 @@ public class MainWindow extends JFrame implements IView {
 			}
 		});
 		mnSettings.add(mntmSimulationSettings);
+		mnSettings.add(mntmPopulationSettings);
+		mntmPopulationSettings.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new PopulationSettingsDialog(MainWindow.this);
+			}
+		});
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));

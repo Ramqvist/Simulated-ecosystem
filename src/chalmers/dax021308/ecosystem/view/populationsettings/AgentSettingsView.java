@@ -1,10 +1,12 @@
-package chalmers.dax021308.ecosystem.view;
+package chalmers.dax021308.ecosystem.view.populationsettings;
 
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
+
+import chalmers.dax021308.ecosystem.view.IView;
 
 /**
  * A tabbed view to modify specific parameters for our current agents.
@@ -29,7 +31,6 @@ public class AgentSettingsView extends JTabbedPane implements IView {
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
