@@ -64,8 +64,8 @@ public class SelectedObstacleView extends JPanel implements IView {
 	public final JLabel lblNewLabel;
 	public final JList<ObstacleColorContainer> colorList;
 	private JLabel lblAngleradians;
-	private JTextField tbxAngle;
-	private JSlider sliderAngle;
+	public final JTextField tbxAngle;
+	public final JSlider sliderAngle;
 
 	public SelectedObstacleView(IModel m) {
 		setVisible(false);
@@ -198,6 +198,7 @@ public class SelectedObstacleView extends JPanel implements IView {
 					tbxXPosition.setEnabled(false);
 					tbxYPosition.setEnabled(false);
 					rdbtnTypeTriangle.setEnabled(false);
+					tbxAngle.setEnabled(false);
 					rdbtnTypeRectangle.setEnabled(false);
 					rdbtnTypeCircle.setEnabled(false);
 				}
@@ -211,6 +212,20 @@ public class SelectedObstacleView extends JPanel implements IView {
 			loadObstacle(selectedObstacle);
 		}
 	}
+	}
+	
+	public double getUnconvertedRadians(int convertFrom) {
+		if(convertFrom == 0) {
+			return 0;
+		}
+		return ((double)convertFrom)/100000.0;
+	}
+	
+	public int getConvertedRandins(double angle) {
+		if(angle == 0) {
+			return 0;
+		}
+		return (int) (angle*100000);
 	}
 
 	private void loadObstacle(IObstacle selectedObstacle) {
@@ -233,6 +248,8 @@ public class SelectedObstacleView extends JPanel implements IView {
 		}
 		sliderWidth.setValue((int) selectedObstacle.getWidth());
 		sliderHeight.setValue((int) selectedObstacle.getHeight());
+		tbxAngle.setText(selectedObstacle.getAngle() + "");
+		sliderAngle.setValue(getConvertedRandins(selectedObstacle.getAngle()));
 		ObstacleColorContainer obsColor = ObstacleColorContainer.getObstacleColorContainerFromColor(selectedObstacle.getColor());
 		if(obsColor != null) {
 			colorList.setSelectedValue(obsColor, true);

@@ -38,6 +38,8 @@ public interface IObstacle {
 	public Color getColor();
 	
 	public double getAngle();
+	
+	public void setAngle(double angle);
 
 	public String toBinaryString();
 

@@ -93,6 +93,11 @@ public abstract class AbstractObstacle implements IObstacle {
 		return this.angle;
 	}
 	
+	@Override
+	public void setAngle(double angle) {
+		this.angle = angle;
+	}
+	
 	/**
 	 * Sets the color of the obstacle
 	 */

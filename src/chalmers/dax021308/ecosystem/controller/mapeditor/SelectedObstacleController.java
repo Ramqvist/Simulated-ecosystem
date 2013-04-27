@@ -37,10 +37,17 @@ public class SelectedObstacleController implements IController {
 		view.sliderHeight.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				Log.v("state changed");
 				int value = view.sliderHeight.getValue();
 				model.getSelectedObstacle().setHeight(value);
 				view.tbxHeight.setText(value + "");
+			}
+		});
+		view.sliderAngle.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				int value = view.sliderAngle.getValue();
+				model.getSelectedObstacle().setAngle(view.getUnconvertedRadians(value));
+				view.tbxAngle.setText(view.getUnconvertedRadians(value) + "");
 			}
 		});
 		view.colorList.addListSelectionListener(new ListSelectionListener() {
