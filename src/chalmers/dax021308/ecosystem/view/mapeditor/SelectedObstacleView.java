@@ -63,11 +63,14 @@ public class SelectedObstacleView extends JPanel implements IView {
 	public final JLabel lblWidth_1;
 	public final JLabel lblNewLabel;
 	public final JList<ObstacleColorContainer> colorList;
+	private JLabel lblAngleradians;
+	private JTextField tbxAngle;
+	private JSlider sliderAngle;
 
 	public SelectedObstacleView(IModel m) {
 		setVisible(false);
 		m.addObserver(this);
-		setLayout(new MigLayout("", "[][135.00,grow][165.00,grow][98.00]", "[][][][][][][][][][][grow][][][][][][]"));
+		setLayout(new MigLayout("", "[][135.00,grow][165.00,grow][98.00]", "[][][][][][][][][][][][][grow][][][][][][]"));
 		
 		lblSelectedObstacle = new JLabel("Selected Obstacle");
 		lblSelectedObstacle.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -102,25 +105,38 @@ public class SelectedObstacleView extends JPanel implements IView {
 		sliderHeight.setMaximum(1300);
 		add(sliderHeight, "cell 2 5");
 		
+		lblAngleradians = new JLabel("Angle (Radians)");
+		add(lblAngleradians, "cell 1 6");
+		
+		tbxAngle = new JTextField();
+		tbxAngle.setText("0");
+		tbxAngle.setColumns(10);
+		add(tbxAngle, "cell 1 7,growx");
+		
+		sliderAngle = new JSlider();
+		sliderAngle.setMinimum(-314195);
+		sliderAngle.setMaximum(314159);
+		add(sliderAngle, "cell 2 7");
+		
 		lblXPosition = new JLabel("X Position");
-		add(lblXPosition, "cell 1 7");
+		add(lblXPosition, "cell 1 9");
 		
 		lblWidth_1 = new JLabel("Y Position");
-		add(lblWidth_1, "cell 2 7");
+		add(lblWidth_1, "cell 2 9");
 		
 		tbxXPosition = new JTextField();
 		tbxXPosition.setText("100");
 		tbxXPosition.setColumns(10);
-		add(tbxXPosition, "cell 1 8,growx");
+		add(tbxXPosition, "cell 1 10,growx");
 		
 		tbxYPosition = new JTextField();
 		tbxYPosition.setText("100");
 		tbxYPosition.setColumns(10);
-		add(tbxYPosition, "cell 2 8,growx");
+		add(tbxYPosition, "cell 2 10,growx");
 		
 		lblNewLabel = new JLabel("Color");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		add(lblNewLabel, "cell 1 9");
+		add(lblNewLabel, "cell 1 11");
 		
 		rdbtnTypeRectangle = new JRadioButton("Rectangle");
 		rdbtnTypeRectangle.setEnabled(false);
@@ -147,7 +163,7 @@ public class SelectedObstacleView extends JPanel implements IView {
 			public void addListDataListener(ListDataListener l) {
 			}
 		});
-		add(colorList, "cell 1 10 1 7,grow");
+		add(colorList, "cell 1 12 1 7,grow");
 		
 		tbxHeight = new JTextField();
 		tbxHeight.setText("100");
