@@ -26,27 +26,27 @@ public class DefaultMaps {
 		List<IObstacle> obstacles = new ArrayList<IObstacle>(1);
 		obstacles.add(new EllipticalObstacle(d.getWidth() * 0.2, d
 				.getHeight() * 0.15, new Position(d.getWidth() / 2, d
-				.getHeight() / 2), new Color(0, 128, 255)));
+				.getHeight() / 2), new Color(0, 128, 255),0));
 		elliptical_map = new SimulationMap(obstacles, "Elliptical obstacle");
 		obstacles = new ArrayList<IObstacle>(1);
 		obstacles.add(new RectangularObstacle(d.getWidth() * 0.2, d
 				.getHeight() * 0.1, new Position(d.getWidth() / 2, d
-				.getHeight() / 2), new Color(0, 128, 255)));
+				.getHeight() / 2), new Color(0, 128, 255),0));
 		rectangular_map = new SimulationMap(obstacles, "Rectangular obstacle");
 		obstacles = new ArrayList<IObstacle>(1);
 		obstacles.add(new TriangleObstacle(d.getWidth() * 0.2, d
 				.getHeight() * 0.2, new Position(d.getWidth() / 2, d
-				.getHeight() / 2), new Color(0, 128, 255)));
+				.getHeight() / 2), new Color(0, 128, 255),0));
 		triangle_map = new SimulationMap(obstacles, "Triangle obstacle");
 		obstacles = new ArrayList<IObstacle>(1);
-		obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.3, d.getHeight()*0.2), new Color(0, 128, 255)));
-		obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.7, d.getHeight()*0.4), new Color(0, 128, 255)));
-		obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.3, d.getHeight()*0.6), new Color(0, 128, 255)));
-		obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.7, d.getHeight()*0.8), new Color(0, 128, 255)));
+		obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.3, d.getHeight()*0.2), new Color(0, 128, 255),0));
+		obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.7, d.getHeight()*0.4), new Color(0, 128, 255),0));
+		obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.3, d.getHeight()*0.6), new Color(0, 128, 255),0));
+		obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.7, d.getHeight()*0.8), new Color(0, 128, 255),0));
 		rivers_map = new SimulationMap(obstacles, "Rivers");
 		obstacles = new ArrayList<IObstacle>(3);
-		obstacles.add(new RectangularObstacle(d.getWidth() * 0.5, d.getHeight() * 0.225, new Position(d.getWidth() * 0.5, d.getHeight() * 0.225), new Color(25, 25, 25)));
-		obstacles.add(new RectangularObstacle(d.getWidth() * 0.5, d.getHeight() * 0.225, new Position(d.getWidth() * 0.5, d.getHeight() * 0.775), new Color(25, 25, 25)));
+		obstacles.add(new RectangularObstacle(d.getWidth() * 0.5, d.getHeight() * 0.225, new Position(d.getWidth() * 0.5, d.getHeight() * 0.225), new Color(25, 25, 25),0));
+		obstacles.add(new RectangularObstacle(d.getWidth() * 0.5, d.getHeight() * 0.225, new Position(d.getWidth() * 0.5, d.getHeight() * 0.775), new Color(25, 25, 25),0));
 		tube_map = new SimulationMap(obstacles, "Tube");
 		empty_map = new SimulationMap(new ArrayList<IObstacle>(0), "No obstacles");
 		defaultMaps = new ArrayList<SimulationMap>();

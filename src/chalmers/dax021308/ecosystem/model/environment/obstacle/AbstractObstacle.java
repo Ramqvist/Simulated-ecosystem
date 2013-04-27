@@ -27,6 +27,7 @@ public abstract class AbstractObstacle implements IObstacle {
 	protected Position position;
 	protected double width;
 	protected double height;
+	protected double angle;
 	protected Color color;
 	
 	/**
@@ -94,6 +95,18 @@ public abstract class AbstractObstacle implements IObstacle {
 		this.color = c;
 	}
 	
+	protected Position toObstacleCoordinates(Position p){
+		Position newPos =  new Position(p.getX()-this.position.getX(), p.getY()-this.position.getY());
+		return newPos.setPosition(Math.cos(angle)*newPos.getX() + Math.sin(angle)*newPos.getY(), 
+				-Math.sin(angle)*newPos.getX() + Math.cos(angle)*newPos.getY());
+	}
+	
+	protected Position fromObstacleCoordinates(Position p) {
+		Position newPos = new Position(p); 
+		newPos.setPosition(Math.cos(-angle)*newPos.getX() + Math.sin(-angle)*newPos.getY(), 
+				-Math.sin(-angle)*newPos.getX() + Math.cos(-angle)*newPos.getY());
+		return new Position(newPos.getX()+this.position.getX(), newPos.getY()+this.position.getY());	
+	}
 	
 	/**
 	 * Used to export an obstacle.
@@ -139,15 +152,15 @@ public abstract class AbstractObstacle implements IObstacle {
 		if (shape.equals(OBSTACLE_RECTANGULAR)) {
 			obs = new RectangularObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
 					new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
-					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), Integer.parseInt(inputArray[7])));
+					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), Integer.parseInt(inputArray[7])),0);
 		} else if (shape.equals(OBSTACLE_ELLIPTICAL)) {
 			obs = new EllipticalObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
 					new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
-					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), Integer.parseInt(inputArray[7])));
+					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), Integer.parseInt(inputArray[7])),0);
 		} else if (shape.equals(OBSTACLE_TRIANGLE)) {
 			obs = new TriangleObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
 					new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
-					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), Integer.parseInt(inputArray[7])));
+					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), Integer.parseInt(inputArray[7])),0);
 		}  else if (shape.equals(OBSTACLE_NONE)) {
 			return null;
 		}

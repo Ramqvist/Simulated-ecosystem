@@ -41,8 +41,8 @@ public class ShortestPathTester extends JPanel {
 	
 	private static List<IObstacle> obsList = new ArrayList<IObstacle>();
 	static {
-		obsList.add(new RectangularObstacle(200, 50, new Position(250, 400), Color.GRAY));
-		obsList.add(new RectangularObstacle(50, 200, new Position(400, 250), Color.GRAY));
+		obsList.add(new RectangularObstacle(200, 50, new Position(250, 400), Color.GRAY,0));
+		obsList.add(new RectangularObstacle(50, 200, new Position(400, 250), Color.GRAY,0));
 	}
 	
 	private AStarPosition start;

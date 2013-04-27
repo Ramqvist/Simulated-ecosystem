@@ -18,7 +18,7 @@ public class RectangularObstacleTimeTest {
 	
 	public static void main(String[] args) {
 		
-		RectangularObstacle ro = new RectangularObstacle(200, 100, new Position(500,500), Color.blue);
+		RectangularObstacle ro = new RectangularObstacle(200, 100, new Position(500,500), Color.blue, 0);
 		
 		for(int obs = 0; obs < sampleSize; obs++) {
 			

@@ -17,19 +17,22 @@ public class EllipticalObstacle extends AbstractObstacle{
 	 * @param position 
 	 * @param color
 	 */
-	public EllipticalObstacle(double width, double height, Position position, Color color){
+	public EllipticalObstacle(double width, double height, Position position, Color color, double angle){
 		this.position = position;
 		this.width = width;
 		this.height = height;
 		this.color = color;
+		this.angle = angle;
 	}
 	@Override
 	/**
 	 * Returns the closes point on the ellipse boundary to a given point p.
 	 */
 	public Position closestBoundary(Position p) {
-		Position agentPos = new Position(p.getX()-this.position.getX(), p.getY()-this.position.getY());
 		
+		
+		Position agentPos = toObstacleCoordinates(p);
+
 		if(width<height) {
 			agentPos = new Position(-agentPos.getY(), agentPos.getX());
 		} else {
@@ -61,8 +64,7 @@ public class EllipticalObstacle extends AbstractObstacle{
 //		nStep = 700;	
 //		Position bestPos = bruteBoundarySearch(agentPos);
 
-		bestPos.setPosition(bestPos.getX()+this.position.getX(), bestPos.getY()+this.position.getY());
-		return bestPos;
+		return fromObstacleCoordinates(bestPos);
 	}
 
 	/**
@@ -204,6 +206,6 @@ public class EllipticalObstacle extends AbstractObstacle{
 		Position newPos = new Position(position.getX() * scaleX, position.getY() * scaleY);
 		double newWidth = width * scaleX;
 		double newHeight = height * scaleY;
-		return new EllipticalObstacle(newWidth, newHeight, newPos, new Color(color.getRGB()));
+		return new EllipticalObstacle(newWidth, newHeight, newPos, new Color(color.getRGB()),0);
 	}
 }

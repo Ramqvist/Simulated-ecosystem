@@ -6,16 +6,17 @@ import chalmers.dax021308.ecosystem.model.util.Position;
 
 public class TriangleObstacle extends AbstractObstacle {
 	
-	public TriangleObstacle(double width, double height, Position position, Color color){
+	public TriangleObstacle(double width, double height, Position position, Color color, double angle){
 		this.position = position;
 		this.width = width;
 		this.height = height;
 		this.color = color;
+		this.angle = angle;
 	}
 
 	@Override
 	public Position closestBoundary(Position p) {
-		Position agentPos = new Position(p.getX()-this.position.getX(), p.getY()-this.position.getY());
+		Position agentPos = toObstacleCoordinates(p);
 		
 		double xSign = Math.signum(agentPos.getX());
 		agentPos.setPosition(agentPos.getX()*xSign, agentPos.getY());
@@ -51,7 +52,7 @@ public class TriangleObstacle extends AbstractObstacle {
 		}
 		
 		bestPos.setPosition(bestPos.getX()*xSign, bestPos.getY());
-		return bestPos.setPosition(bestPos.getX()+this.position.getX(), bestPos.getY()+this.position.getY());
+		return fromObstacleCoordinates(bestPos);
 	}
 
 	@Override
@@ -114,6 +115,6 @@ public class TriangleObstacle extends AbstractObstacle {
 		Position newPos = new Position(position.getX() * scaleX, position.getY() * scaleY);
 		double newWidth = width * scaleX;
 		double newHeight = height * scaleY;
-		return new TriangleObstacle(newWidth, newHeight, newPos, new Color(color.getRGB()));
+		return new TriangleObstacle(newWidth, newHeight, newPos, new Color(color.getRGB()),0);
 	}
 }

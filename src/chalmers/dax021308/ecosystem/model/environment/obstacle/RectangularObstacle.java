@@ -8,16 +8,17 @@ public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 	
 	private static double nStep = 200;
 
-	public RectangularObstacle(double width, double height, Position position, Color color){
+	public RectangularObstacle(double width, double height, Position position, Color color, double angle){
 		this.position = position;
 		this.width = width;
 		this.height = height;
 		this.color = color;
+		this.angle = angle;
 	}
 	
 	@Override
 	public Position closestBoundary(Position p) {
-		Position agentPos = new Position(p.getX()-this.position.getX(), p.getY()-this.position.getY());	
+		Position agentPos = toObstacleCoordinates(p);
 		
 		double xSign = Math.signum(agentPos.getX());
 		double ySign = Math.signum(agentPos.getY());
@@ -36,9 +37,9 @@ public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 		}
 		
 		bestPos.setPosition(bestPos.getX()*xSign, bestPos.getY()*ySign);
-		bestPos.setPosition(bestPos.getX()+this.position.getX(), bestPos.getY()+this.position.getY());
 		
-		return bestPos;
+		
+		return fromObstacleCoordinates(bestPos);
 	}
 
 	@Override
@@ -86,6 +87,6 @@ public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 		Position newPos = new Position(position.getX() * scaleX, position.getY() * scaleY);
 		double newWidth = width * scaleX;
 		double newHeight = height * scaleY;
-		return new RectangularObstacle(newWidth, newHeight, newPos, new Color(color.getRGB()));
+		return new RectangularObstacle(newWidth, newHeight, newPos, new Color(color.getRGB()),0);
 	}
 }

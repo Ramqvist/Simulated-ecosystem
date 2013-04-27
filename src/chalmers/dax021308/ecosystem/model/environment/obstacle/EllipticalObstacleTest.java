@@ -19,7 +19,7 @@ public class EllipticalObstacleTest extends JPanel {
 	
 		EllipticalObstacleTest test = new EllipticalObstacleTest();
 		positions = new ArrayList<Position>();
-		EllipticalObstacle eo = new EllipticalObstacle(200, 100, new Position(500,500), Color.blue);
+		EllipticalObstacle eo = new EllipticalObstacle(200, 100, new Position(500,500), Color.blue, -Math.PI/4);
 		
 //		for(double t=0;t<2*Math.PI;t = t + 2*Math.PI/1000) {
 //			positions.add(new Position(250+100*Math.cos(t), 250+50*Math.sin(t)));

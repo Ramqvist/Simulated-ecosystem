@@ -91,11 +91,11 @@ public class AddObstacleController implements IController {
 		}
 		Position p = new Position(posX, posY);
 		if(view.rdbtnTypeCircle.isSelected()) {
-			obs = new EllipticalObstacle(width, height,p , Color.BLUE);
+			obs = new EllipticalObstacle(width, height,p , Color.BLUE, 0);
 		} else if(view.rdbtnTypeRectangle.isSelected()) {
-			obs = new RectangularObstacle(width, height,p , Color.BLUE);
+			obs = new RectangularObstacle(width, height,p , Color.BLUE, 0);
 		} else if(view.rdbtnTypeTriangle.isSelected()) {
-			obs = new TriangleObstacle(width, height,p , Color.BLUE);
+			obs = new TriangleObstacle(width, height,p , Color.BLUE, 0);
 		}
 		return obs;
 	}
