@@ -134,6 +134,8 @@ public class NEWSettingsMenuView extends JDialog {
     private ChangeListener listenerCustomSize;
     private ChangeListener listenerLimitIterations;
 
+    private AdvancedSettings advancedSettingsView;
+    
     //Auto generated	
     /**
      * Launch the application.
@@ -273,9 +275,10 @@ public class NEWSettingsMenuView extends JDialog {
         };
 
         listenerAdvanced = new ActionListener() {
-            @Override
+
+			@Override
             public void actionPerformed(ActionEvent e) {
-				new AdvancedSettings(); 
+				advancedSettingsView = new AdvancedSettings(); 
             }
         };
 
@@ -977,4 +980,19 @@ public class NEWSettingsMenuView extends JDialog {
             advRight.add(advPanelSimWindowDim, c);
         }
     }
+
+	public void toggleVisibility() {
+		if(isVisible()) {
+			setVisible(false);
+			if(advancedSettingsView != null) {
+				advancedSettingsView.dispose();
+				advancedSettingsView = null;
+			}
+		} else {
+			setVisible(true);
+			if(advancedSettingsView == null) {
+				advancedSettingsView = new AdvancedSettings();
+			}
+		}
+	}
 }

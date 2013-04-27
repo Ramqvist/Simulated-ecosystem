@@ -49,7 +49,7 @@ public class NEWSettingsMenuViewController implements IController {
 		view.setVisible(true);
 	}
 
-	private void startSimulation() {
+	public void startSimulation() {
 		try {
 			try {
 				model.stop();
@@ -185,6 +185,10 @@ public class NEWSettingsMenuViewController implements IController {
 	
 	public SimulationSettings getSimSettings() {
 		return s;
+	}
+
+	public void toggleVisibility() {
+		view.toggleVisibility();
 	}
 	
 }

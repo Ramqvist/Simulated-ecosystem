@@ -3,8 +3,12 @@ package chalmers.dax021308.ecosystem.controller;
 
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 
 import javax.swing.JFileChooser;
@@ -60,6 +64,23 @@ public class MainWindowController implements IController {
 			public void actionPerformed(ActionEvent e) {
 				new MapEditorController();
 			}
+		});
+		KeyboardFocusManager.getCurrentKeyboardFocusManager()
+		  .addKeyEventDispatcher(new KeyEventDispatcher() {
+		      @Override
+		      public boolean dispatchKeyEvent(KeyEvent e) {
+		    	if(e.getKeyCode() == KeyEvent.VK_F1 && e.getID() == KeyEvent.KEY_RELEASED) {
+		    		window.smvc.toggleVisibility();
+		    		return true;
+		    	} else if(e.getKeyCode() == KeyEvent.VK_F2 && e.getID() == KeyEvent.KEY_RELEASED) {
+		    		window.smvc.startSimulation();
+		    		return true;
+		    	} else if(e.getKeyCode() == KeyEvent.VK_F4 && e.getID() == KeyEvent.KEY_RELEASED) {
+					new MapEditorController();
+			    	return true;
+		    	}
+		        return false;
+		      }
 		});
 	}
 	
