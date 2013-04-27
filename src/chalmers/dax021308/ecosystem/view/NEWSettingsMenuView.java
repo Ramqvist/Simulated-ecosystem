@@ -44,12 +44,12 @@ import chalmers.dax021308.ecosystem.model.environment.mapeditor.DefaultMaps;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapFileHandler;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.SimulationMap;
 import chalmers.dax021308.ecosystem.model.util.ButtonGroupWrapper;
-import chalmers.dax021308.ecosystem.model.util.Log;
 //import java.awt.Container;
 
 public class NEWSettingsMenuView extends JDialog {
-
-    static final int DEFAULT_ITERATION_DELAY = 16;
+	
+	private static final long serialVersionUID = -7514048933302292458L;
+	static final int DEFAULT_ITERATION_DELAY = 16;
     static final int DEFAULT_PRED_POP_SIZE = 10;
     static final int DEFAULT_PREY_POP_SIZE = 100;
     static final int DEFAULT_VEG_POP_SIZE = 400;

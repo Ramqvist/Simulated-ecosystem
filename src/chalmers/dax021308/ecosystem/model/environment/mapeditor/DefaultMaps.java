@@ -50,6 +50,7 @@ public class DefaultMaps {
 		tube_map = new SimulationMap(obstacles, "Tube");
 		empty_map = new SimulationMap(new ArrayList<IObstacle>(0), "No obstacles");
 		defaultMaps = new ArrayList<SimulationMap>();
+		defaultMaps.add(empty_map);
 		defaultMaps.add(elliptical_map);
 		defaultMaps.add(rectangular_map);
 		defaultMaps.add(triangle_map);
@@ -59,6 +60,7 @@ public class DefaultMaps {
 
 	public static List<SimulationMap> getDefaultMaps() {
 		List<SimulationMap> mapList = new ArrayList<SimulationMap>();
+		mapList.add(empty_map);
 		mapList.add(elliptical_map);
 		mapList.add(rectangular_map);
 		mapList.add(triangle_map);

@@ -14,7 +14,6 @@ import chalmers.dax021308.ecosystem.model.environment.mapeditor.DefaultMaps;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapFileHandler;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.SimulationMap;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
-import chalmers.dax021308.ecosystem.model.util.Log;
 
 /**
  * Container class for various simulation settings.

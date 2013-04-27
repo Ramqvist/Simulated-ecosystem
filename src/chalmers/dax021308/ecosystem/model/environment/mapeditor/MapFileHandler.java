@@ -12,7 +12,6 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.AbstractObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
-import chalmers.dax021308.ecosystem.model.util.Log;
 
 /**
  * Class for handling map files. Reading and writing on them.

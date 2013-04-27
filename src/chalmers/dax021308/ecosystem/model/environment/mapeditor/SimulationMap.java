@@ -6,7 +6,6 @@ import java.util.List;
 
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
-import chalmers.dax021308.ecosystem.model.util.Log;
 
 
 /**

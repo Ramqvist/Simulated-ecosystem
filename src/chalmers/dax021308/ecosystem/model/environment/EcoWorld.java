@@ -227,7 +227,6 @@ public class EcoWorld implements IModel {
 				&& s.getSimDimensionConstant() == null) {
 			setSimulationDimension(s.getSimDimension());
 		}
-		
 		List<IPopulation> populations = new ArrayList<IPopulation>();
 
 		SurroundingsSettings surroundings = new SurroundingsSettings(d, null, null);
@@ -236,7 +235,12 @@ public class EcoWorld implements IModel {
 		 * later.
 		 */
 		if(s.getMap().getObsList() != null) {
-			surroundings.setObstacles(s.getMap().getScaledObstacles(d));
+			List<IObstacle> obstacles = s.getMap().getScaledObstacles(d);
+			if(obstacles != null ) {
+				surroundings.setObstacles(obstacles);
+			} else {
+				surroundings.setObstacles(new ArrayList<IObstacle>(0));
+			}
 		} else {
 			surroundings.setObstacles(new ArrayList<IObstacle>());
 		}
