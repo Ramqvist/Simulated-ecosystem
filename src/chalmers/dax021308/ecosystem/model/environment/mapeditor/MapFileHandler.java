@@ -148,4 +148,18 @@ public class MapFileHandler {
 		}
 	}
 	
+	public static boolean deleteMap(SimulationMap map) {
+		if(map == null) {
+			return false;
+		}
+		if(!mapsFolder.exists()) {
+			return false;
+		}
+		File mapFile = new File(mapsFolder.getAbsolutePath() + "/" + map.getName() + ".map");
+		if(mapFile.exists()) {
+			return mapFile.delete();
+		}
+		return false;
+	}
+	
 }

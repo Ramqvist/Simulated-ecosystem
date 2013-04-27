@@ -25,8 +25,9 @@ import chalmers.dax021308.ecosystem.model.environment.mapeditor.SimulationMap;
 public class ChooseMapDialog extends JDialog {
 	
 	private static final long serialVersionUID = 6207313344198929629L;
-	public JButton btnLoadMap;
+	public final JButton btnLoadMap;
 	public final JList<SimulationMap> mapList;
+	public final JButton btnDelete;
 	
 	
 	public ChooseMapDialog(Frame owner) {
@@ -46,22 +47,22 @@ public class ChooseMapDialog extends JDialog {
 		lblMapName.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
 		mapList = new JList<SimulationMap>();
+		
+		btnDelete = new JButton("Delete");
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(mapList, GroupLayout.PREFERRED_SIZE, 285, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap())
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(lblMapName, GroupLayout.PREFERRED_SIZE, 402, GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-							.addGroup(groupLayout.createSequentialGroup()
-								.addComponent(btnLoadMap, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addGap(117)))))
+						.addComponent(lblMapName, GroupLayout.PREFERRED_SIZE, 402, GroupLayout.PREFERRED_SIZE)
+						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+							.addComponent(mapList, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+								.addComponent(btnLoadMap, GroupLayout.PREFERRED_SIZE, 147, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 147, GroupLayout.PREFERRED_SIZE))))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -71,8 +72,10 @@ public class ChooseMapDialog extends JDialog {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(mapList, GroupLayout.PREFERRED_SIZE, 295, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(btnLoadMap, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnLoadMap, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE))
+					.addGap(21))
 		);
 		getContentPane().setLayout(groupLayout);
 	}

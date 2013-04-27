@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 
@@ -35,6 +36,24 @@ public class ChooseMapDialogController implements IController {
 		this.listener = listener;
 		view = new ChooseMapDialog(superFrame);
 		view.btnLoadMap.addActionListener(finishActionListener);
+		view.btnDelete.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SimulationMap map = view.mapList.getSelectedValue();
+				if(map != null) {
+					if(MapFileHandler.deleteMap(map)) {
+						JOptionPane.showMessageDialog(view, "Map deleted from maps folder successfully.", "Map deleted", JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(view, "Error deleting map.", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+					addMapListItem();
+				}
+			}
+		});
+		addMapListItem();
+	}
+	
+	private void addMapListItem() {
 		view.mapList.setModel(new ListModel<SimulationMap>() {
 			List<SimulationMap> maps = MapFileHandler.readMapsFromMapsFolder();
 			@Override

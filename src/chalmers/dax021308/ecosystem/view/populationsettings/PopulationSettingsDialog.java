@@ -37,6 +37,7 @@ public class PopulationSettingsDialog extends JDialog implements IView {
 
 	@Override
 	public void init() {
+		//TODO: Replace with PopulationPanelController and let the constructor take in one IPopulation.
 		tabPane.addTab("Deer agent", new PopulationPanel());
 		tabPane.addTab("Grass agent", new PopulationPanel());
 		tabPane.addTab("Wolf agent", new PopulationPanel());
@@ -45,6 +46,7 @@ public class PopulationSettingsDialog extends JDialog implements IView {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setTitle("Population settings");
 		setIconImage(new ImageIcon("res/Simulated ecosystem icon.png").getImage());
+		setResizable(false);
 		centerOnScreen(this, true);
 		setVisible(true);
 	}
