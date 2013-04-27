@@ -17,7 +17,6 @@ import chalmers.dax021308.ecosystem.model.util.Log;
 /**
  * Class for handling map files. Reading and writing on them.
  * <p>
- * Class needs testing!
  * 
  * @author Erik Ramqvist
  *
@@ -160,6 +159,19 @@ public class MapFileHandler {
 			return mapFile.delete();
 		}
 		return false;
+	}
+
+
+	public static SimulationMap getMapByName(String name) {
+		List<SimulationMap> maps = readMapsFromMapsFolder();
+		if(maps != null) {
+			for(SimulationMap m : maps) {
+				if(m.getName().equals(name)) {
+					return m;
+				}
+			}
+		}
+		return null;
 	}
 	
 }

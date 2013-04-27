@@ -22,6 +22,7 @@ public class NEWSettingsMenuViewController implements IController {
 	public NEWSettingsMenuViewController(EcoWorld model, Frame superFrame) {
 		this.superFrame = superFrame;
 		this.model = model;
+		init();
 	}
 	
 	@Override
@@ -133,11 +134,11 @@ public class NEWSettingsMenuViewController implements IController {
 		view.listVegetation.setSelectedValue(s.getGrassModel(), true);
 		view.listPred.setSelectedValue(s.getPredatorModel(), true);
 		view.listPrey.setSelectedValue(s.getPreyModel(), true);
-		SimulationMap map = s.getMap();
-		if(map != null) {
-			view.listMap.setSelectedValue(map, true);
+		if(s.getMap() != null) {
+			view.listMap.setSelectedValue(s.getMap(), true);
+		} else {
+			view.listMap.setSelectedIndex(0);
 		}
-		
 		view.spinnerPredPopSize.setValue(s.getPredPopSize());
 		view.spinnerPreyPopSize.setValue(s.getPreyPopSize());
 		view.spinnerVegPopSize.setValue(s.getGrassPopSize());
@@ -168,7 +169,6 @@ public class NEWSettingsMenuViewController implements IController {
 			view.textFieldWidth.setEnabled(false);
 			view.textFieldHeight.setEnabled(false);
 		}
-		
 	}
 		
 	@Override

@@ -36,7 +36,6 @@ import chalmers.dax021308.ecosystem.model.util.shape.TriangleShape;
  * Recieves notifications from the {@link TimerHandler} and the
  * {@link IEnvironment}.
  * <p>
- * Use the proper constructor for the wanted behavior of EcoWorld.
  * 
  * !!! Please don't auto-indent this class, thanks !!!
  * 

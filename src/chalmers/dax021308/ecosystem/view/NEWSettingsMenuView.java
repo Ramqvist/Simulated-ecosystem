@@ -38,6 +38,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListDataListener;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.DefaultMaps;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapFileHandler;
@@ -48,7 +49,6 @@ import chalmers.dax021308.ecosystem.model.util.Log;
 
 public class NEWSettingsMenuView extends JDialog {
 
-    private EcoWorld model;
     static final int DEFAULT_ITERATION_DELAY = 16;
     static final int DEFAULT_PRED_POP_SIZE = 10;
     static final int DEFAULT_PREY_POP_SIZE = 100;
@@ -146,7 +146,7 @@ public class NEWSettingsMenuView extends JDialog {
                 try {
                     NEWSettingsMenuView frame = new NEWSettingsMenuView(model, null);
                     frame.setVisible(true);
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -157,9 +157,8 @@ public class NEWSettingsMenuView extends JDialog {
     /**
      * Create the frame.
      */
-    public NEWSettingsMenuView(EcoWorld model, Frame superFrame) {
+    public NEWSettingsMenuView(IModel model, Frame superFrame) {
     	super(superFrame);
-        this.model = model;
 
         //initializing the graphical objects - done here since most of them are final		
         contentPane = new JPanel();
@@ -554,21 +553,23 @@ public class NEWSettingsMenuView extends JDialog {
         });
         listSimDimension.setSelectedIndex(1);
 
-        listMap.setValueIsAdjusting(true);
         listMap.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        listMap.setSelectedIndices(new int[]{3});
         loadSimulationMaps();
         addWindowListener(new WindowAdapter() {
         	@Override
         	public void windowActivated(WindowEvent e) {
                 loadSimulationMaps();
         	}
+        	
         });
     }
     
     private void loadSimulationMaps() {
+    	SimulationMap lastSelected = listMap.getSelectedValue();
     	listMap.setModel(new SimulationMapListModel());
-    	listMap.invalidate();
+    	if(lastSelected != null) {
+    		listMap.setSelectedValue(lastSelected, true);
+    	}
     }
     
     private class SimulationMapListModel implements ListModel<SimulationMap> {

@@ -11,8 +11,10 @@ import java.nio.charset.Charset;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.DefaultMaps;
+import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapFileHandler;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.SimulationMap;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.util.Log;
 
 /**
  * Container class for various simulation settings.
@@ -341,7 +343,25 @@ public class SimulationSettings {
 			simSettings.setSimulationDimension(new Dimension(width, height));
 		} catch (NumberFormatException e) {
 			String dimConstant = input[pos];
+			i--;
 			simSettings.setSimulationDimension(dimConstant);
+		}
+		if (input.length == (i+1) ) {
+			String lastSelectedMap = input[i];
+			SimulationMap map = MapFileHandler.getMapByName(lastSelectedMap);
+			if(map == null) {
+				for(SimulationMap m :DefaultMaps.getDefaultMaps()) {
+					if(m.getName().equals(lastSelectedMap)) {
+						simSettings.setMap(m);
+						break;
+					}
+				}
+			} else {
+				simSettings.setMap(map);
+			}
+//			Log.e("Saved Map Found: " + lastSelectedMap);
+		} else {
+//			Log.e("No Saved Map Found");
 		}
 		return simSettings;
 	}
@@ -385,8 +405,13 @@ public class SimulationSettings {
 			sb.append(';');
 			sb.append(simDimension.height);
 		}
+		if(map != null) {
+			sb.append(';');
+			sb.append(map.getName());
+		}
 		return sb.toString();
 	}
+	
 	
 	
 }

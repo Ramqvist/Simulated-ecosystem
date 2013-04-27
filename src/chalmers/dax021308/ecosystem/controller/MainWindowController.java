@@ -42,7 +42,6 @@ public class MainWindowController implements IController {
 	};
 	public MainWindowController() {
 		init();
-		window.smvc.init();
 		window.setExtendedState(Frame.MAXIMIZED_BOTH);
 	}
 
