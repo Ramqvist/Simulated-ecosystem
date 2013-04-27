@@ -33,7 +33,7 @@ public class TriangleObstacle extends AbstractObstacle {
 			}
 			
 			bestPos.setPosition(bestPos.getX()*xSign, bestPos.getY());
-			return bestPos.setPosition(bestPos.getX()+this.position.getX(), bestPos.getY()+this.position.getY());
+			return fromObstacleCoordinates(bestPos);
 		}
 		
 		double yLimHigh = height + x*width/(2*height);
@@ -57,7 +57,7 @@ public class TriangleObstacle extends AbstractObstacle {
 
 	@Override
 	public boolean isInObstacle(Position p, double sd) {
-		Position agentPos = new Position(p.getX()-this.position.getX(), p.getY()-this.position.getY());
+		Position agentPos = toObstacleCoordinates(p);
 		
 		double xSign = Math.signum(agentPos.getX());
 		agentPos.setPosition(agentPos.getX()*xSign, agentPos.getY());

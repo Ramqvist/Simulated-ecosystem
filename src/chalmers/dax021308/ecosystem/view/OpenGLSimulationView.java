@@ -438,7 +438,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 					for (double angle = 0; angle < 2.0 * Math.PI; angle += increment) {
 						Position p = new Position(x + w * Math.cos(angle),y + h * Math.sin(angle));
 						p = o.toObstacleCoordinates(p);
-						p.setPosition(p.getX()+x,-p.getY()+y);
+						p.setPosition(-p.getX()+x,p.getY()+y);
 						gl.glVertex2d(p.getX()*xScale, frameHeight
 								- (p.getY()*yScale));
 					}
@@ -460,30 +460,32 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 					
 					Position p = new Position(x - w,y - h);
 					p = o.toObstacleCoordinates(p);
-					p.setPosition(p.getX()+x,-p.getY()+y);
+					p.setPosition(-p.getX()+x,p.getY()+y);
 					gl.glVertex2d(p.getX()*xScale,
 							frameHeight - p.getY()*yScale);
 					
-					p = new Position(x + w,y - h);
+					p.setPosition(x + w,y - h);
 					p = o.toObstacleCoordinates(p);
-					p.setPosition(p.getX()+x,-p.getY()+y);
+					p.setPosition(-p.getX()+x,p.getY()+y);
 					gl.glVertex2d(p.getX()*xScale,
 							frameHeight - p.getY()*yScale);
 
-					p = new Position(x + w,y + h);
+					p.setPosition(x + w,y + h);
 					p = o.toObstacleCoordinates(p);
-					p.setPosition(p.getX()+x,-p.getY()+y);
+					p.setPosition(-p.getX()+x,p.getY()+y);
 					gl.glVertex2d(p.getX()*xScale,
 							frameHeight - p.getY()*yScale);
 
-					p = new Position(x - w,y + h);
+					p.setPosition(x - w,y + h);
 					p = o.toObstacleCoordinates(p);
-					p.setPosition(p.getX()+x,-p.getY()+y);
+					p.setPosition(-p.getX()+x,p.getY()+y);
 					gl.glVertex2d(p.getX()*xScale,
 							frameHeight - p.getY()*yScale);
 					
 					gl.glEnd();
 				} else if (o != null && o instanceof TriangleObstacle) {
+					double xScale = frameWidth / size.width;
+					double yScale = frameHeight / size.height;
 					double x = o.getPosition().getX();
 					double y = o.getPosition().getY();
 					double w = o.getWidth();
@@ -494,13 +496,24 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 							(double) c.getBlue() / (double) 255);
 					gl.glLineWidth(2.5F);
 					gl.glBegin(GL.GL_TRIANGLES);
-					gl.glVertex2d(scaleX * (x + w), frameHeight - scaleY
-							* (y - h));
+					
+					Position p = new Position(x + w,y - h);
+					p = o.toObstacleCoordinates(p);
+					p.setPosition(-p.getX()+x,p.getY()+y);
+					gl.glVertex2d(p.getX()*xScale,
+							frameHeight - p.getY()*yScale);
+					
+					p.setPosition(x - w,y - h);
+					p = o.toObstacleCoordinates(p);
+					p.setPosition(-p.getX()+x,p.getY()+y);
+					gl.glVertex2d(p.getX()*xScale,
+							frameHeight - p.getY()*yScale);
 
-					gl.glVertex2d(scaleX * (x - w), frameHeight - scaleY
-							* (y - h));
-
-					gl.glVertex2d(scaleX * (x), frameHeight - scaleY * (y + h));
+					p.setPosition(x,y + h);
+					p = o.toObstacleCoordinates(p);
+					p.setPosition(-p.getX()+x,p.getY()+y);
+					gl.glVertex2d(p.getX()*xScale,
+							frameHeight - p.getY()*yScale);
 
 					gl.glEnd();
 				}

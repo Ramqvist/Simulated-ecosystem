@@ -26,7 +26,7 @@ public class DefaultMaps {
 		List<IObstacle> obstacles = new ArrayList<IObstacle>(1);
 		obstacles.add(new EllipticalObstacle(d.getWidth() * 0.2, d
 				.getHeight() * 0.15, new Position(d.getWidth() / 2, d
-				.getHeight() / 4), new Color(0, 128, 255),Math.PI/4));
+				.getHeight() / 2), new Color(0, 128, 255),Math.PI*3/8));
 		elliptical_map = new SimulationMap(obstacles, "Elliptical obstacle");
 		obstacles = new ArrayList<IObstacle>(1);
 		obstacles.add(new RectangularObstacle(d.getWidth() * 0.2, d
@@ -36,7 +36,7 @@ public class DefaultMaps {
 		obstacles = new ArrayList<IObstacle>(1);
 		obstacles.add(new TriangleObstacle(d.getWidth() * 0.2, d
 				.getHeight() * 0.2, new Position(d.getWidth() / 2, d
-				.getHeight() / 2), new Color(0, 128, 255),0));
+				.getHeight() / 2), new Color(0, 128, 255),-Math.PI/4));
 		triangle_map = new SimulationMap(obstacles, "Triangle obstacle");
 		obstacles = new ArrayList<IObstacle>(1);
 		obstacles.add(new RectangularObstacle(d.getWidth()*0.5, d.getHeight() * 0.04, new Position(d.getWidth()*0.3, d.getHeight()*0.2), new Color(0, 128, 255),0));
