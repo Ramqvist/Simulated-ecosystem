@@ -44,8 +44,9 @@ public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 
 	@Override
 	public boolean isInObstacle(Position p, double sd) {
-		if(p.getY() < position.getY()+height+sd && p.getY() > position.getY()-height-sd){
-			if(p.getX() < position.getX()+width+sd && p.getX() > position.getX()-width-sd) {
+		Position pos = toObstacleCoordinates(p);
+		if(pos.getY() <height+sd && pos.getY() > -height-sd){
+			if(pos.getX() < width+sd && pos.getX() > -width-sd) {
 				return true;
 			}
 		}
@@ -87,6 +88,6 @@ public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 		Position newPos = new Position(position.getX() * scaleX, position.getY() * scaleY);
 		double newWidth = width * scaleX;
 		double newHeight = height * scaleY;
-		return new RectangularObstacle(newWidth, newHeight, newPos, new Color(color.getRGB()),0);
+		return new RectangularObstacle(newWidth, newHeight, newPos, new Color(color.getRGB()),angle);
 	}
 }

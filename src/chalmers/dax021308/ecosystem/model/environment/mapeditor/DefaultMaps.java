@@ -26,12 +26,12 @@ public class DefaultMaps {
 		List<IObstacle> obstacles = new ArrayList<IObstacle>(1);
 		obstacles.add(new EllipticalObstacle(d.getWidth() * 0.2, d
 				.getHeight() * 0.15, new Position(d.getWidth() / 2, d
-				.getHeight() / 2), new Color(0, 128, 255),0));
+				.getHeight() / 4), new Color(0, 128, 255),Math.PI/4));
 		elliptical_map = new SimulationMap(obstacles, "Elliptical obstacle");
 		obstacles = new ArrayList<IObstacle>(1);
 		obstacles.add(new RectangularObstacle(d.getWidth() * 0.2, d
 				.getHeight() * 0.1, new Position(d.getWidth() / 2, d
-				.getHeight() / 2), new Color(0, 128, 255),0));
+				.getHeight() / 2), new Color(0, 128, 255),Math.PI/4));
 		rectangular_map = new SimulationMap(obstacles, "Rectangular obstacle");
 		obstacles = new ArrayList<IObstacle>(1);
 		obstacles.add(new TriangleObstacle(d.getWidth() * 0.2, d

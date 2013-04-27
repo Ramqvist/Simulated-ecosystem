@@ -152,8 +152,9 @@ public class EllipticalObstacle extends AbstractObstacle{
 	
 	@Override
 	public boolean isInObstacle(Position p, double sd) {
-		double px = p.getX()-position.getX();
-		double py = p.getY()-position.getY();
+		Position pos = toObstacleCoordinates(p);
+		double px = pos.getX();
+		double py = pos.getY();
 		
 		if(px<width+sd && px > -width-sd){
 			double y = (height+sd)*Math.sqrt(1-px*px/((width+sd)*(width+sd)));
@@ -206,6 +207,6 @@ public class EllipticalObstacle extends AbstractObstacle{
 		Position newPos = new Position(position.getX() * scaleX, position.getY() * scaleY);
 		double newWidth = width * scaleX;
 		double newHeight = height * scaleY;
-		return new EllipticalObstacle(newWidth, newHeight, newPos, new Color(color.getRGB()),0);
+		return new EllipticalObstacle(newWidth, newHeight, newPos, new Color(color.getRGB()),angle);
 	}
 }

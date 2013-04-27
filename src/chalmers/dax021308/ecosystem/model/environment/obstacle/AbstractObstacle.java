@@ -88,6 +88,11 @@ public abstract class AbstractObstacle implements IObstacle {
 		return this.color;
 	}
 	
+	@Override
+	public double getAngle(){
+		return this.angle;
+	}
+	
 	/**
 	 * Sets the color of the obstacle
 	 */
@@ -95,13 +100,13 @@ public abstract class AbstractObstacle implements IObstacle {
 		this.color = c;
 	}
 	
-	protected Position toObstacleCoordinates(Position p){
+	public Position toObstacleCoordinates(Position p){
 		Position newPos =  new Position(p.getX()-this.position.getX(), p.getY()-this.position.getY());
 		return newPos.setPosition(Math.cos(angle)*newPos.getX() + Math.sin(angle)*newPos.getY(), 
 				-Math.sin(angle)*newPos.getX() + Math.cos(angle)*newPos.getY());
 	}
 	
-	protected Position fromObstacleCoordinates(Position p) {
+	public Position fromObstacleCoordinates(Position p) {
 		Position newPos = new Position(p); 
 		newPos.setPosition(Math.cos(-angle)*newPos.getX() + Math.sin(-angle)*newPos.getY(), 
 				-Math.sin(-angle)*newPos.getX() + Math.cos(-angle)*newPos.getY());

@@ -36,11 +36,17 @@ public interface IObstacle {
 	public void setPosition(Position p);
 	
 	public Color getColor();
+	
+	public double getAngle();
 
 	public String toBinaryString();
 
 	public boolean isInsidePath(Position start, Position end);
 	
 	public IObstacle scale(double x, double y);
+	
+	public Position toObstacleCoordinates(Position p);
+	
+	public Position fromObstacleCoordinates(Position p);
 	
 }

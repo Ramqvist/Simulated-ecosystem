@@ -115,6 +115,6 @@ public class TriangleObstacle extends AbstractObstacle {
 		Position newPos = new Position(position.getX() * scaleX, position.getY() * scaleY);
 		double newWidth = width * scaleX;
 		double newHeight = height * scaleY;
-		return new TriangleObstacle(newWidth, newHeight, newPos, new Color(color.getRGB()),0);
+		return new TriangleObstacle(newWidth, newHeight, newPos, new Color(color.getRGB()),angle);
 	}
 }
