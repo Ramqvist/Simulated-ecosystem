@@ -256,118 +256,200 @@ public class MapEditorGLView extends GLCanvas implements IView {
           				if(o == selectedObstacle) {
               				double selectionSize = 4;
               				Color selectionColor = Color.BLACK;
-                  			if(o != null && o instanceof EllipticalObstacle){
-                  				double increment = 2.0*Math.PI/50.0;
-            	                double w = (frameWidth*o.getWidth()/size.width) + selectionSize;
-            	                double h = (frameHeight*o.getHeight()/size.height)+ selectionSize;
-            	                double x = frameWidth*o.getPosition().getX()/size.width;
-            	                double y = frameHeight*o.getPosition().getY()/size.height;
-                  				Color c = selectionColor;
-            	                gl.glColor3d((double)c.getRed()/(double)255, (double)c.getGreen()/(double)255, (double)c.getBlue()/(double)255);
-            	                gl.glLineWidth(2.5F);
-            	          		gl.glBegin(GL.GL_POLYGON); 
-            		          	for(double angle = 0; angle < 2.0*Math.PI; angle+=increment){
-            		          		gl.glVertex2d(x + w*Math.cos(angle),frameHeight - (y + h*Math.sin(angle)));
-            		          	}
-            		          	gl.glEnd();
-                  			} else if (o != null && o instanceof RectangularObstacle){
-                  				double x = o.getPosition().getX();
-                  				double y = o.getPosition().getY();
-                  				double w = o.getWidth() + selectionSize;
-                  				double h = o.getHeight() + selectionSize;
-                  				Color c = selectionColor;
-                  				gl.glColor3d((double)c.getRed()/(double)255, (double)c.getGreen()/(double)255, (double)c.getBlue()/(double)255);
-                  				gl.glLineWidth(2.5F);
-            	          		gl.glBegin(GL.GL_POLYGON); 
-            	          		gl.glVertex2d(frameWidth*(x-w)/size.width,
-            	          				frameHeight - frameHeight*(y-h)/size.height);
-            	          		
-            	          		gl.glVertex2d(frameWidth*(x+w)/size.width, 
-            	          				frameHeight - frameHeight*(y-h)/size.height);
-            	          		
-            	          		gl.glVertex2d(frameWidth*(x+w)/size.width, 
-            	          				frameHeight - frameHeight*(y+h)/size.height);
-            	          		
-            	          		gl.glVertex2d(frameWidth*(x-w)/size.width, 
-            	          				frameHeight - frameHeight*(y+h)/size.height);
-            	          		gl.glEnd();
-                  			} else if(o != null && o instanceof TriangleObstacle){
-                  				double x = o.getPosition().getX();
-                  				double y = o.getPosition().getY();
-                  				double w = o.getWidth() + selectionSize;
-                  				double h = o.getHeight() + selectionSize;
-                  				Color c = selectionColor;
-                  				gl.glColor3d((double)c.getRed()/(double)255, (double)c.getGreen()/(double)255, (double)c.getBlue()/(double)255);
-                  				gl.glLineWidth(2.5F);
-            	          		gl.glBegin(GL.GL_TRIANGLES); 
-            	          		gl.glVertex2d(frameWidth*(x+w)/size.width,
-            	          				frameHeight - frameHeight*(y-h)/size.height);
-            	          		
-            	          		gl.glVertex2d(frameWidth*(x-w)/size.width, 
-            	          				frameHeight - frameHeight*(y-h)/size.height);
-            	          		
-            	          		gl.glVertex2d(frameWidth*(x)/size.width, 
-            	          				frameHeight - frameHeight*(y+h)/size.height);
-            	          		
-            	          		gl.glEnd();
-                  			}
+              				if (o != null && o instanceof EllipticalObstacle) {
+            					double increment = 2.0 * Math.PI / 50.0;
+            					double xScale = frameWidth / size.width;
+            					double yScale = frameHeight / size.height;
+            					double w = o.getWidth()+selectionSize;
+            					double h = o.getHeight()+selectionSize;
+            					double x = o.getPosition().getX();
+            					double y = o.getPosition().getY();
+            					Color c = selectionColor;
+            					gl.glColor3d((double) c.getRed() / (double) 255,
+            							(double) c.getGreen() / (double) 255,
+            							(double) c.getBlue() / (double) 255);
+            					gl.glLineWidth(2.5F);
+            					gl.glBegin(GL.GL_POLYGON);
+            					for (double angle = 0; angle < 2.0 * Math.PI; angle += increment) {
+            						Position p = new Position(x + w * Math.cos(angle),y + h * Math.sin(angle));
+            						p = o.toObstacleCoordinates(p);
+            						p.setPosition(-p.getX()+x,p.getY()+y);
+            						gl.glVertex2d(p.getX()*xScale, frameHeight
+            								- (p.getY()*yScale));
+            					}
+            					gl.glEnd();
+            				} else if (o != null && o instanceof RectangularObstacle) {
+            					double xScale = frameWidth / size.width;
+            					double yScale = frameHeight / size.height;
+            					double x = o.getPosition().getX();
+            					double y = o.getPosition().getY();
+            					double w = o.getWidth()+selectionSize;
+            					double h = o.getHeight()+selectionSize;
+            							 
+            					Color c = selectionColor;
+            					gl.glColor3d((double) c.getRed() / (double) 255,
+            							(double) c.getGreen() / (double) 255,
+            							(double) c.getBlue() / (double) 255);
+            					gl.glLineWidth(2.5F);
+            					gl.glBegin(GL.GL_POLYGON);
+            					
+            					Position p = new Position(x - w,y - h);
+            					p = o.toObstacleCoordinates(p);
+            					p.setPosition(-p.getX()+x,p.getY()+y);
+            					gl.glVertex2d(p.getX()*xScale,
+            							frameHeight - p.getY()*yScale);
+            					
+            					p.setPosition(x + w,y - h);
+            					p = o.toObstacleCoordinates(p);
+            					p.setPosition(-p.getX()+x,p.getY()+y);
+            					gl.glVertex2d(p.getX()*xScale,
+            							frameHeight - p.getY()*yScale);
+
+            					p.setPosition(x + w,y + h);
+            					p = o.toObstacleCoordinates(p);
+            					p.setPosition(-p.getX()+x,p.getY()+y);
+            					gl.glVertex2d(p.getX()*xScale,
+            							frameHeight - p.getY()*yScale);
+
+            					p.setPosition(x - w,y + h);
+            					p = o.toObstacleCoordinates(p);
+            					p.setPosition(-p.getX()+x,p.getY()+y);
+            					gl.glVertex2d(p.getX()*xScale,
+            							frameHeight - p.getY()*yScale);
+            					
+            					gl.glEnd();
+            				} else if (o != null && o instanceof TriangleObstacle) {
+            					double xScale = frameWidth / size.width;
+            					double yScale = frameHeight / size.height;
+            					double x = o.getPosition().getX();
+            					double y = o.getPosition().getY();
+            					double w = o.getWidth()+selectionSize;
+            					double h = o.getHeight()+selectionSize;
+            					Color c = selectionColor;
+            					gl.glColor3d((double) c.getRed() / (double) 255,
+            							(double) c.getGreen() / (double) 255,
+            							(double) c.getBlue() / (double) 255);
+            					gl.glLineWidth(2.5F);
+            					gl.glBegin(GL.GL_TRIANGLES);
+            					
+            					Position p = new Position(x + w,y - h);
+            					p = o.toObstacleCoordinates(p);
+            					p.setPosition(-p.getX()+x,p.getY()+y);
+            					gl.glVertex2d(p.getX()*xScale,
+            							frameHeight - p.getY()*yScale);
+            					
+            					p.setPosition(x - w,y - h);
+            					p = o.toObstacleCoordinates(p);
+            					p.setPosition(-p.getX()+x,p.getY()+y);
+            					gl.glVertex2d(p.getX()*xScale,
+            							frameHeight - p.getY()*yScale);
+
+            					p.setPosition(x,y + h);
+            					p = o.toObstacleCoordinates(p);
+            					p.setPosition(-p.getX()+x,p.getY()+y);
+            					gl.glVertex2d(p.getX()*xScale,
+            							frameHeight - p.getY()*yScale);
+
+            					gl.glEnd();
+            				}
           				}
           			}
-          			if(o != null && o instanceof EllipticalObstacle){
-          				double increment = 2.0*Math.PI/50.0;
-    	                double w = frameWidth*o.getWidth()/size.width;
-    	                double h = frameHeight*o.getHeight()/size.height;
-    	                double x = frameWidth*o.getPosition().getX()/size.width;
-    	                double y = frameHeight*o.getPosition().getY()/size.height;
-    	                Color c = o.getColor();
-    	                gl.glColor3d((double)c.getRed()/(double)255, (double)c.getGreen()/(double)255, (double)c.getBlue()/(double)255);
-    	                gl.glLineWidth(2.5F);
-    	          		gl.glBegin(GL.GL_POLYGON); 
-    		          	for(double angle = 0; angle < 2.0*Math.PI; angle+=increment){
-    		          		gl.glVertex2d(x + w*Math.cos(angle),frameHeight - (y + h*Math.sin(angle)));
-    		          	}
-    		          	gl.glEnd();
-          			} else if (o != null && o instanceof RectangularObstacle){
-          				double x = o.getPosition().getX();
-          				double y = o.getPosition().getY();
-          				double w = o.getWidth();
-          				double h = o.getHeight();
-          				Color c = o.getColor();
-          				gl.glColor3d((double)c.getRed()/(double)255, (double)c.getGreen()/(double)255, (double)c.getBlue()/(double)255);
-          				gl.glLineWidth(2.5F);
-    	          		gl.glBegin(GL.GL_POLYGON); 
-    	          		gl.glVertex2d(frameWidth*(x-w)/size.width,
-    	          				frameHeight - frameHeight*(y-h)/size.height);
-    	          		
-    	          		gl.glVertex2d(frameWidth*(x+w)/size.width, 
-    	          				frameHeight - frameHeight*(y-h)/size.height);
-    	          		
-    	          		gl.glVertex2d(frameWidth*(x+w)/size.width, 
-    	          				frameHeight - frameHeight*(y+h)/size.height);
-    	          		
-    	          		gl.glVertex2d(frameWidth*(x-w)/size.width, 
-    	          				frameHeight - frameHeight*(y+h)/size.height);
-    	          		gl.glEnd();
-          			} else if(o != null && o instanceof TriangleObstacle){
-          				double x = o.getPosition().getX();
-          				double y = o.getPosition().getY();
-          				double w = o.getWidth();
-          				double h = o.getHeight();
-          				Color c = o.getColor();
-          				gl.glColor3d((double)c.getRed()/(double)255, (double)c.getGreen()/(double)255, (double)c.getBlue()/(double)255);
-          				gl.glLineWidth(2.5F);
-    	          		gl.glBegin(GL.GL_TRIANGLES); 
-    	          		gl.glVertex2d(frameWidth*(x+w)/size.width,
-    	          				frameHeight - frameHeight*(y-h)/size.height);
-    	          		
-    	          		gl.glVertex2d(frameWidth*(x-w)/size.width, 
-    	          				frameHeight - frameHeight*(y-h)/size.height);
-    	          		
-    	          		gl.glVertex2d(frameWidth*(x)/size.width, 
-    	          				frameHeight - frameHeight*(y+h)/size.height);
-    	          		
-    	          		gl.glEnd();
-          			}
+          			if (o != null && o instanceof EllipticalObstacle) {
+    					double increment = 2.0 * Math.PI / 50.0;
+    					double xScale = frameWidth / size.width;
+    					double yScale = frameHeight / size.height;
+    					double w = o.getWidth();
+    					double h = o.getHeight();
+    					double x = o.getPosition().getX();
+    					double y = o.getPosition().getY();
+    					Color c = o.getColor();
+    					gl.glColor3d((double) c.getRed() / (double) 255,
+    							(double) c.getGreen() / (double) 255,
+    							(double) c.getBlue() / (double) 255);
+    					gl.glLineWidth(2.5F);
+    					gl.glBegin(GL.GL_POLYGON);
+    					for (double angle = 0; angle < 2.0 * Math.PI; angle += increment) {
+    						Position p = new Position(x + w * Math.cos(angle),y + h * Math.sin(angle));
+    						p = o.toObstacleCoordinates(p);
+    						p.setPosition(-p.getX()+x,p.getY()+y);
+    						gl.glVertex2d(p.getX()*xScale, frameHeight
+    								- (p.getY()*yScale));
+    					}
+    					gl.glEnd();
+    				} else if (o != null && o instanceof RectangularObstacle) {
+    					double xScale = frameWidth / size.width;
+    					double yScale = frameHeight / size.height;
+    					double x = o.getPosition().getX();
+    					double y = o.getPosition().getY();
+    					double w = o.getWidth();
+    					double h = o.getHeight();
+    							 
+    					Color c = o.getColor();
+    					gl.glColor3d((double) c.getRed() / (double) 255,
+    							(double) c.getGreen() / (double) 255,
+    							(double) c.getBlue() / (double) 255);
+    					gl.glLineWidth(2.5F);
+    					gl.glBegin(GL.GL_POLYGON);
+    					
+    					Position p = new Position(x - w,y - h);
+    					p = o.toObstacleCoordinates(p);
+    					p.setPosition(-p.getX()+x,p.getY()+y);
+    					gl.glVertex2d(p.getX()*xScale,
+    							frameHeight - p.getY()*yScale);
+    					
+    					p.setPosition(x + w,y - h);
+    					p = o.toObstacleCoordinates(p);
+    					p.setPosition(-p.getX()+x,p.getY()+y);
+    					gl.glVertex2d(p.getX()*xScale,
+    							frameHeight - p.getY()*yScale);
+
+    					p.setPosition(x + w,y + h);
+    					p = o.toObstacleCoordinates(p);
+    					p.setPosition(-p.getX()+x,p.getY()+y);
+    					gl.glVertex2d(p.getX()*xScale,
+    							frameHeight - p.getY()*yScale);
+
+    					p.setPosition(x - w,y + h);
+    					p = o.toObstacleCoordinates(p);
+    					p.setPosition(-p.getX()+x,p.getY()+y);
+    					gl.glVertex2d(p.getX()*xScale,
+    							frameHeight - p.getY()*yScale);
+    					
+    					gl.glEnd();
+    				} else if (o != null && o instanceof TriangleObstacle) {
+    					double xScale = frameWidth / size.width;
+    					double yScale = frameHeight / size.height;
+    					double x = o.getPosition().getX();
+    					double y = o.getPosition().getY();
+    					double w = o.getWidth();
+    					double h = o.getHeight();
+    					Color c = o.getColor();
+    					gl.glColor3d((double) c.getRed() / (double) 255,
+    							(double) c.getGreen() / (double) 255,
+    							(double) c.getBlue() / (double) 255);
+    					gl.glLineWidth(2.5F);
+    					gl.glBegin(GL.GL_TRIANGLES);
+    					
+    					Position p = new Position(x + w,y - h);
+    					p = o.toObstacleCoordinates(p);
+    					p.setPosition(-p.getX()+x,p.getY()+y);
+    					gl.glVertex2d(p.getX()*xScale,
+    							frameHeight - p.getY()*yScale);
+    					
+    					p.setPosition(x - w,y - h);
+    					p = o.toObstacleCoordinates(p);
+    					p.setPosition(-p.getX()+x,p.getY()+y);
+    					gl.glVertex2d(p.getX()*xScale,
+    							frameHeight - p.getY()*yScale);
+
+    					p.setPosition(x,y + h);
+    					p = o.toObstacleCoordinates(p);
+    					p.setPosition(-p.getX()+x,p.getY()+y);
+    					gl.glVertex2d(p.getX()*xScale,
+    							frameHeight - p.getY()*yScale);
+
+    					gl.glEnd();
+    				}
           			
           		}
           		
