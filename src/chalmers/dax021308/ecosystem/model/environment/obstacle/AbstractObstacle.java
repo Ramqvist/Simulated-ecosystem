@@ -142,6 +142,8 @@ public abstract class AbstractObstacle implements IObstacle {
 		sb.append(color.getGreen());
 		sb.append(';');
 		sb.append(color.getBlue());
+		sb.append(';');
+		sb.append(angle);
 		return sb.toString();
 	}
 	
@@ -157,15 +159,18 @@ public abstract class AbstractObstacle implements IObstacle {
 		if (shape.equals(OBSTACLE_RECTANGULAR)) {
 			obs = new RectangularObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
 					new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
-					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), Integer.parseInt(inputArray[7])),0);
+					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), 
+							Integer.parseInt(inputArray[7])),Double.parseDouble(inputArray[8]));
 		} else if (shape.equals(OBSTACLE_ELLIPTICAL)) {
 			obs = new EllipticalObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
 					new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
-					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), Integer.parseInt(inputArray[7])),0);
+					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]),
+							Integer.parseInt(inputArray[7])),Double.parseDouble(inputArray[8]));
 		} else if (shape.equals(OBSTACLE_TRIANGLE)) {
 			obs = new TriangleObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
 					new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
-					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), Integer.parseInt(inputArray[7])),0);
+					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]),
+							Integer.parseInt(inputArray[7])),Double.parseDouble(inputArray[8]));
 		}  else if (shape.equals(OBSTACLE_NONE)) {
 			return null;
 		}
