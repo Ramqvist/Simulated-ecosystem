@@ -156,23 +156,44 @@ public abstract class AbstractObstacle implements IObstacle {
 		String[] inputArray = input.split(";");
 		String shape = inputArray[0];
 		AbstractObstacle obs = null;
-		if (shape.equals(OBSTACLE_RECTANGULAR)) {
-			obs = new RectangularObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
-					new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
-					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), 
-							Integer.parseInt(inputArray[7])),Double.parseDouble(inputArray[8]));
-		} else if (shape.equals(OBSTACLE_ELLIPTICAL)) {
-			obs = new EllipticalObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
-					new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
-					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]),
-							Integer.parseInt(inputArray[7])),Double.parseDouble(inputArray[8]));
-		} else if (shape.equals(OBSTACLE_TRIANGLE)) {
-			obs = new TriangleObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
-					new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
-					new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]),
-							Integer.parseInt(inputArray[7])),Double.parseDouble(inputArray[8]));
-		}  else if (shape.equals(OBSTACLE_NONE)) {
-			return null;
+		if(inputArray.length > 8) {
+			if (shape.equals(OBSTACLE_RECTANGULAR)) {
+				obs = new RectangularObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
+						new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
+						new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), 
+								Integer.parseInt(inputArray[7])),Double.parseDouble(inputArray[8]));
+			} else if (shape.equals(OBSTACLE_ELLIPTICAL)) {
+				obs = new EllipticalObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
+						new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
+						new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]),
+								Integer.parseInt(inputArray[7])),Double.parseDouble(inputArray[8]));
+			} else if (shape.equals(OBSTACLE_TRIANGLE)) {
+				obs = new TriangleObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
+						new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
+						new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]),
+								Integer.parseInt(inputArray[7])),Double.parseDouble(inputArray[8]));
+			}  else if (shape.equals(OBSTACLE_NONE)) {
+				return null;
+			}
+		} else {
+			if (shape.equals(OBSTACLE_RECTANGULAR)) {
+				obs = new RectangularObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
+						new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
+						new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), 
+								Integer.parseInt(inputArray[7])),0);
+			} else if (shape.equals(OBSTACLE_ELLIPTICAL)) {
+				obs = new EllipticalObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
+						new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
+						new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]),
+								Integer.parseInt(inputArray[7])),0);
+			} else if (shape.equals(OBSTACLE_TRIANGLE)) {
+				obs = new TriangleObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
+						new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
+						new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]),
+								Integer.parseInt(inputArray[7])),0);
+			}  else if (shape.equals(OBSTACLE_NONE)) {
+				return null;
+			}
 		}
 		return obs;
 	}
