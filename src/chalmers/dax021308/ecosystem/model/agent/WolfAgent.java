@@ -79,7 +79,7 @@ public class WolfAgent extends AbstractAgent {
 			 * correct direction of the acceleration.
 			 */
 			
-			Vector acceleration = preyForce.multiply(5)
+			Vector acceleration = preyForce.multiply(10)
 					.add(mutualInteractionForce).add(forwardThrust)
 					.add(arrayalForce);
 			double accelerationNorm = acceleration.getNorm();
