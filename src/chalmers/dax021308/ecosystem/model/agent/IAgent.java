@@ -196,4 +196,9 @@ public interface IAgent extends Cloneable {
 	 *         depending on the amount of food available in this agent
 	 */
 	public double impactForcesBy();
+	
+	/**
+	 * @return true if the agent is hungry, false otherwise.
+	 */
+	public boolean isHungry();
 }

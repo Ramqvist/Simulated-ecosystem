@@ -18,7 +18,7 @@ import chalmers.dax021308.ecosystem.model.util.shape.IShape;
  */
 public class ForceCalculator {
 	private static final double RANDOM_FORCE_MAGNITUDE = 0.05;
-	private final static double INTERACTION_RANGE = 10;
+	private final static double INTERACTION_RANGE = 11;
 	private final static double ENVIRONMENT_CONSTANT = 50;
 	private final static double OBSTACLE_CONSTANT = 50;
 	private final static double EATING_RANGE = 5;
@@ -71,7 +71,7 @@ public class ForceCalculator {
 				if (distance <= INTERACTION_RANGE) {
 					Q = -20 * (INTERACTION_RANGE - distance);
 				} else {
-					Q = 1;
+					Q = 5;
 				}
 				newForce.x = p.getX() - currentAgent.getPosition().getX();
 				newForce.y = p.getY() - currentAgent.getPosition().getY();
@@ -269,13 +269,15 @@ public class ForceCalculator {
 			double size = 0;
 			if (distance <= EATING_RANGE - size) {
 				if (focusedPreyContainer.get().tryConsumeAgent()) {
-					focusedPreyContainer.set(null);
+					focusedPreyContainer.clear();
 					currentAgent.eat();
 				}
 			} else {
 				return new Vector(focusedPreyContainer.get().getPosition(),
 						currentAgent.getPosition());
 			}
+		} else {
+			focusedPreyContainer.clear();
 		}
 		Vector preyForce = new Vector(0, 0);
 		IAgent closestFocusPrey = null;
@@ -342,7 +344,7 @@ public class ForceCalculator {
 			double distance = currentAgent.getPosition().getDistance(p);
 			//double size = (agent.getHeight() + agent.getWidth()) / 4;
 			double size = 0;
-			if (distance <= EATING_RANGE - size) {
+			if (distance <= EATING_RANGE - size && currentAgent.isHungry()) { //Eat agent
 				if (focusedPreyContainer.get().tryConsumeAgent()) {
 					focusedPreyContainer.set(null);
 					currentAgent.eat();
@@ -365,7 +367,7 @@ public class ForceCalculator {
 					
 //					System.out.println(focusedPreyPath.getTTL());
 //					System.out.println(position + " to " +nextPathPosition);
-					return new Vector(nextPathPosition, currentAgent.getPosition()).toUnitVector();
+					return new Vector(nextPathPosition, currentAgent.getPosition());
 				} else {
 					if(AbstractObstacle.isInsidePathList(surroundings.getObstacles(), currentAgent.getPosition(), focusedPreyContainer.get().getPosition())) {
 						focusedPreyPath.setPath(
@@ -382,12 +384,12 @@ public class ForceCalculator {
 //							System.out.println(focusedPreyPath);
 							focusedPreyPath.pop();
 							focusedPreyPath.pop();
-							return new Vector(focusedPreyPath.peek(), currentAgent.getPosition()).toUnitVector();
+							return new Vector(focusedPreyPath.peek(), currentAgent.getPosition());
 						}
 					} else {
 //						System.out.println("No Path");
 						focusedPreyPath.clearPath();
-						return new Vector(focusedPreyContainer.get().getPosition(), currentAgent.getPosition()).toUnitVector();
+						return new Vector(focusedPreyContainer.get().getPosition(), currentAgent.getPosition());
 					}
 				}
 			}
@@ -402,7 +404,7 @@ public class ForceCalculator {
 //			double preySize = (a.getHeight() + a.getWidth()) / 4;
 			double distance = currentAgent.getPosition().getDistance(p); // - preySize;
 			if (a.isLookingTasty(currentAgent, visionRange)) {
-				if (distance <= EATING_RANGE) {
+				if (distance <= EATING_RANGE && currentAgent.isHungry()) {
 					if (a.tryConsumeAgent()) {
 						currentAgent.eat();
 					}
@@ -450,11 +452,11 @@ public class ForceCalculator {
 //					System.out.println("New focused prey needs path");
 					focusedPreyPath.pop();
 					focusedPreyPath.pop();
-					return new Vector(focusedPreyPath.peek(), currentAgent.getPosition()).toUnitVector();
+					return new Vector(focusedPreyPath.peek(), currentAgent.getPosition());
 				}
 			} else {
 				focusedPreyPath.clearPath();
-				return new Vector(focusedPreyContainer.get().getPosition(), currentAgent.getPosition()).toUnitVector();
+				return new Vector(focusedPreyContainer.get().getPosition(), currentAgent.getPosition());
 			}
 		}
 		return preyForce;

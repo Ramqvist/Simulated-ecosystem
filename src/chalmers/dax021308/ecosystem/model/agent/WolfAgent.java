@@ -11,6 +11,7 @@ import chalmers.dax021308.ecosystem.model.genetics.WolfGenes;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
 import chalmers.dax021308.ecosystem.model.util.Position;
+import chalmers.dax021308.ecosystem.model.util.Stat;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
@@ -19,7 +20,6 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class WolfAgent extends AbstractAgent {
 
-	private boolean hungry = true;
 	private boolean willFocusPreys = true;
 	private static final int MAX_ENERGY = 1200;
 	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
@@ -56,7 +56,7 @@ public class WolfAgent extends AbstractAgent {
 		} else {
 			updateNeighbourList(neutral, preys, predators);
 			Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys, surroundings, focusedPrey, 
-					this, preyNeighbours, visionRange, visionRange,
+					this, preyNeighbours, visionRange, FOCUS_RANGE,
 					maxAcceleration, maxSpeed, 
 					OBSTACLE_SAFETY_DISTANCE, focusedPreyPath, 10);
 			Vector mutualInteractionForce = new Vector();
@@ -78,8 +78,8 @@ public class WolfAgent extends AbstractAgent {
 			 * acceleration --> scale it to maxAcceleration, but keep the
 			 * correct direction of the acceleration.
 			 */
-
-			Vector acceleration = preyForce.multiply(10)
+			
+			Vector acceleration = preyForce.multiply(5)
 					.add(mutualInteractionForce).add(forwardThrust)
 					.add(arrayalForce);
 			double accelerationNorm = acceleration.getNorm();

@@ -42,8 +42,9 @@ public abstract class AbstractAgent implements IAgent {
 	protected double maxAcceleration;
 	protected Container<IAgent> focusedPrey;
 	protected boolean isAlive = true;
-	protected static final boolean USE_PRIORITY_NEIGHBOURS = false;
-	protected static final int K_NEAREST_NEIGHBOURS = 20; 
+	protected boolean hungry = true;
+	protected static final boolean USE_PRIORITY_NEIGHBOURS = true;
+	protected static final int K_NEAREST_NEIGHBOURS = 5; 
 
 	/* Neighbour list module variables */
 	protected List<IAgent> preyNeighbours;
@@ -61,7 +62,7 @@ public abstract class AbstractAgent implements IAgent {
 
 	protected final static double INTERACTION_RANGE = 10;
 	protected final static double EATING_RANGE = 5;
-	protected final static double FOCUS_RANGE = 500;
+	protected final static double FOCUS_RANGE = 100;
 	protected final static double OBSTACLE_SAFETY_DISTANCE = 5;
 	protected static final double VELOCITY_DECAY = 1;
 
@@ -458,17 +459,17 @@ public abstract class AbstractAgent implements IAgent {
 
 	@Override
 	public boolean isLookingTasty(IAgent agent, double visionRange) {
-		// If nothing else is specified, the fact that the agent is alive and in
-		// vision range makes it desirable to eat
-		double distance = agent.getPosition().getDistance(position)
-				- (width + height)/2;
-
-		return distance <= visionRange;
+		return true;
 	}
 
 	@Override
-	public void eat() {
+	public void eat() { //TODO: This should not be here. Remove to force subclasses to implement.
 		// Do nothing special, should be overriden by advanced agents.
+	}
+	
+	@Override
+	public boolean isHungry(){
+		return hungry;
 	}
 	
 	@Override

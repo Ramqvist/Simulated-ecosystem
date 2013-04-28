@@ -19,7 +19,7 @@ public class ChartProvider {
 	}
 	
 	public static IChart makeChart(ChartType chart, IModel model){
-		int updatefrequency = 10;
+		int updatefrequency = 100;
 		switch(chart) {
 		case LIFE_LENGTH_GRAPH:
 			return new LifeLengthGraph(model, updatefrequency);

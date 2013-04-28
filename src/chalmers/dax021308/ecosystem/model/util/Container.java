@@ -22,6 +22,14 @@ public class Container<T> {
 		this.item = item;
 	}
 	
+	public void clear(){
+		this.item = null;
+	}
+	
+	public boolean isEmpty(){
+		return this.item == null;
+	}
+	
 	@Override
 	public String toString() {
 		if(item == null) {
