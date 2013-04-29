@@ -27,7 +27,7 @@ public class GrassFieldAgent extends AbstractAgent {
 		super(name, pos, color, width, height, velocity, maxSpeed, 0, 0);
 		this.capacity = capacity;
 		energy = 50;
-		seeds = new ArrayList<>();
+		seeds = new ArrayList<GrassSeed>();
 	}
 
 	@Override
