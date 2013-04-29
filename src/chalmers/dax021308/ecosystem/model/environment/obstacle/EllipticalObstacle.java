@@ -17,12 +17,13 @@ public class EllipticalObstacle extends AbstractObstacle{
 	 * @param position 
 	 * @param color
 	 */
-	public EllipticalObstacle(double width, double height, Position position, Color color, double angle){
+	public EllipticalObstacle(double width, double height, Position position, Color color, double angle, boolean transparent){
 		this.position = position;
 		this.width = width;
 		this.height = height;
 		this.color = color;
 		this.angle = angle;
+		this.transparent = transparent;
 	}
 	@Override
 	/**
@@ -207,6 +208,6 @@ public class EllipticalObstacle extends AbstractObstacle{
 		Position newPos = new Position(position.getX() * scaleX, position.getY() * scaleY);
 		double newWidth = width * scaleX;
 		double newHeight = height * scaleY;
-		return new EllipticalObstacle(newWidth, newHeight, newPos, new Color(color.getRGB()),angle);
+		return new EllipticalObstacle(newWidth, newHeight, newPos, new Color(color.getRGB()),angle, transparent);
 	}
 }

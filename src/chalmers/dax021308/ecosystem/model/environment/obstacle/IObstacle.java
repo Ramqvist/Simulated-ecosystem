@@ -19,6 +19,8 @@ public interface IObstacle {
 	
 	public boolean isCloseTo(Position p, double interactionRange);
 	
+	public boolean isTransparent();
+	
 	public double getWidth();
 	
 	public double getHeight();

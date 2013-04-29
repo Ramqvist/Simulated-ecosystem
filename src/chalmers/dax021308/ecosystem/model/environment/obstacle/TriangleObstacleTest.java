@@ -19,7 +19,7 @@ public class TriangleObstacleTest extends JPanel {
 	
 		TriangleObstacleTest test = new TriangleObstacleTest();
 		positions = new ArrayList<Position>();
-		IObstacle to = new TriangleObstacle(300, 150, new Position(500,500), Color.blue, Math.PI/4);
+		IObstacle to = new TriangleObstacle(300, 150, new Position(500,500), Color.blue, Math.PI/4, true);
 		
 //		for(double t=0;t<2*Math.PI;t = t + 2*Math.PI/1000) {
 //			positions.add(new Position(250+100*Math.cos(t), 250+50*Math.sin(t)));

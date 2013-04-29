@@ -8,12 +8,13 @@ public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 	
 	private static double nStep = 200;
 
-	public RectangularObstacle(double width, double height, Position position, Color color, double angle){
+	public RectangularObstacle(double width, double height, Position position, Color color, double angle, boolean transparent){
 		this.position = position;
 		this.width = width;
 		this.height = height;
 		this.color = color;
 		this.angle = angle;
+		this.transparent = transparent;
 	}
 	
 	@Override
@@ -88,6 +89,6 @@ public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 		Position newPos = new Position(position.getX() * scaleX, position.getY() * scaleY);
 		double newWidth = width * scaleX;
 		double newHeight = height * scaleY;
-		return new RectangularObstacle(newWidth, newHeight, newPos, new Color(color.getRGB()),angle);
+		return new RectangularObstacle(newWidth, newHeight, newPos, new Color(color.getRGB()), angle, transparent);
 	}
 }

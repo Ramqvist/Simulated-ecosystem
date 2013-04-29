@@ -370,7 +370,7 @@ public class EcoWorld implements IModel {
 
 	private List<IObstacle> readObsticlesFromFile() {
 		List<IObstacle> obsList = new ArrayList<IObstacle>();
-		obsList.add(new EllipticalObstacle(0, 0, new Position(), Color.black,0));
+		obsList.add(new EllipticalObstacle(0, 0, new Position(), Color.black, 0, true));
 		return obsList;
 	}
 
