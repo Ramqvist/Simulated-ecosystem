@@ -1,5 +1,9 @@
 package chalmers.dax021308.ecosystem.model.population;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 /**
  * Common settings for all agents to use.
  * 
@@ -13,11 +17,40 @@ public class CommonSettings {
 	public static CommonSettings preySettings = new CommonSettings();
 	public static CommonSettings grassSettings = new CommonSettings();
 	
+	public class DoubleSettingsContainer {
+		public DoubleSettingsContainer(String name, double max, double min, double defaultValue) {
+			this.value = defaultValue;
+			this.defaultValue = defaultValue;
+			this.max = max;
+			this.min = min;
+			this.name = name;
+		}
+		public String name;
+		public double value;
+		public double max;
+		public double min;
+		public double defaultValue;
+	}
+
+	public class BooleanSettingsContainer {
+		public BooleanSettingsContainer(String name, boolean defaultValue) {
+			this.defaultValue = defaultValue;
+			this.value = defaultValue;
+		}
+		public String name;
+		public boolean value;
+		public boolean defaultValue;
+	}
 	
+	private List<DoubleSettingsContainer> doubleSettings;
+	private List<BooleanSettingsContainer> booleanSettings;
+	
+	
+	//TODO: Replace ALL variables with SettingsContainers.
 	private int capacity;
 	private int max_energy;
-	private double visionRange;
-	private double maxAcceleration;
+	private DoubleSettingsContainer visionRange;
+	private DoubleSettingsContainer maxAcceleration;
 	private double maxSpeed;
 	private int width;
 	private int height;
@@ -28,6 +61,36 @@ public class CommonSettings {
 	private boolean groupBehavior;
 	
 	public CommonSettings() {
+		doubleSettings = new ArrayList<DoubleSettingsContainer>();
+		visionRange = new DoubleSettingsContainer("Vision range", 1000, 1, 500);
+		doubleSettings.add(visionRange);
+		maxAcceleration = new DoubleSettingsContainer("Max Acceleration", 1000, 1, 500);
+		doubleSettings.add(visionRange);
+		visionRange = new DoubleSettingsContainer("Chalmers range", 1000, 1, 500);
+		doubleSettings.add(visionRange);
+		visionRange = new DoubleSettingsContainer("BigTasty range", 1000, 1, 500);
+		doubleSettings.add(visionRange);
+		Random ran = new Random();
+		visionRange = new DoubleSettingsContainer("Life length", 1000, 1, ran.nextInt(1000));
+		doubleSettings.add(visionRange);
+		visionRange = new DoubleSettingsContainer("Eating range", 1000, 1, ran.nextInt(1000));
+		doubleSettings.add(visionRange);
+		visionRange = new DoubleSettingsContainer("Velocity decay", 1000, 1, ran.nextInt(1000));
+		doubleSettings.add(visionRange);
+		booleanSettings = new ArrayList<BooleanSettingsContainer>();
+	}
+	public List<DoubleSettingsContainer> getDoubleSettings() {
+		return doubleSettings;
+	}
+	public void setDoubleSettings(List<DoubleSettingsContainer> doubleSettings) {
+		this.doubleSettings = doubleSettings;
+	}
+	public List<BooleanSettingsContainer> getBooleanSettings() {
+		return booleanSettings;
+	}
+	public void setBooleanSettings(
+			List<BooleanSettingsContainer> booleanSettings) {
+		this.booleanSettings = booleanSettings;
 	}
 	public double getMaxSpeed() {
 		return maxSpeed;
@@ -48,16 +111,16 @@ public class CommonSettings {
 		this.max_energy = max_energy;
 	}
 	public double getVisionRange() {
-		return visionRange;
+		return visionRange.value;
 	}
 	public void setVisionRange(double visionRange) {
-		this.visionRange = visionRange;
+		this.visionRange.value = visionRange;
 	}
 	public double getMaxAcceleration() {
-		return maxAcceleration;
+		return maxAcceleration.value;
 	}
 	public void setMaxAcceleration(double maxAcceleration) {
-		this.maxAcceleration = maxAcceleration;
+		this.maxAcceleration.value = maxAcceleration;
 	}
 	public int getWidth() {
 		return width;
