@@ -16,8 +16,9 @@ public class CommonSettings {
 	
 	private int capacity;
 	private int max_energy;
-	private int visionRange;
-	private int maxAcceleration;
+	private double visionRange;
+	private double maxAcceleration;
+	private double maxSpeed;
 	private int width;
 	private int height;
 	private double interaction_range;
@@ -28,7 +29,12 @@ public class CommonSettings {
 	
 	public CommonSettings() {
 	}
-	
+	public double getMaxSpeed() {
+		return maxSpeed;
+	}
+	public void setMaxSpeed(double maxSpeed) {
+		this.maxSpeed = maxSpeed;
+	}
 	public int getCapacity() {
 		return capacity;
 	}
@@ -41,16 +47,16 @@ public class CommonSettings {
 	public void setMax_energy(int max_energy) {
 		this.max_energy = max_energy;
 	}
-	public int getVisionRange() {
+	public double getVisionRange() {
 		return visionRange;
 	}
-	public void setVisionRange(int visionRange) {
+	public void setVisionRange(double visionRange) {
 		this.visionRange = visionRange;
 	}
-	public int getMaxAcceleration() {
+	public double getMaxAcceleration() {
 		return maxAcceleration;
 	}
-	public void setMaxAcceleration(int maxAcceleration) {
+	public void setMaxAcceleration(double maxAcceleration) {
 		this.maxAcceleration = maxAcceleration;
 	}
 	public int getWidth() {

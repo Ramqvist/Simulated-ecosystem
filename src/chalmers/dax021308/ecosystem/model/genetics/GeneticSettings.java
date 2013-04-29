@@ -5,7 +5,7 @@ import java.util.List;
 
 public abstract class GeneticSettings {
 	
-	//TEST Setup
+	//TEST Setups
 	public static GeneticSettings preySettings = new GeneticSettings() {
 		
 		@Override
@@ -17,7 +17,6 @@ public abstract class GeneticSettings {
 			return result;
 		}
 	};
-	//TEST Setup
 	public static GeneticSettings predSettings = new GeneticSettings() {
 		
 		@Override
