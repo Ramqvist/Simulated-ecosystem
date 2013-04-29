@@ -1,14 +1,40 @@
 package chalmers.dax021308.ecosystem.view.populationsettings;
 
-import javax.swing.JPanel;
-import net.miginfocom.swing.MigLayout;
-import javax.swing.JLabel;
+import java.awt.Checkbox;
 import java.awt.Font;
-import javax.swing.JCheckBox;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import org.jfree.text.TextBox;
+
+import net.miginfocom.swing.MigLayout;
+import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
+import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings.GenomeSpecification;
+
+/**
+ * Panel for Genetic settings.
+ * 
+ * @author Erik Ramqvist
+ *
+ */
 public class GeneticPanel extends JPanel {
-	public GeneticPanel() {
-		setLayout(new MigLayout("", "[][][][][]", "[][][][][]"));
+	
+	private GeneticSettings geneticContent;
+	
+	//TODO: Replace JComponent with container class.
+	private Map<GenomeSpecification, List<JComponent>> guiMap = new HashMap<GenomeSpecification, List<JComponent>>(); 
+	
+	public GeneticPanel(GeneticSettings geneticContent) {
+		this.geneticContent = geneticContent;
+		setLayout(new MigLayout("", "[][][65.00][111.00,grow][299.00]", "[][][][][]"));
 		
 		JLabel lblGeneticSettings = new JLabel("Genetic Settings");
 		lblGeneticSettings.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -27,17 +53,65 @@ public class GeneticPanel extends JPanel {
 		add(chckbxNewCheckBox, "cell 3 2,alignx center");
 		
 		JCheckBox chckbxMutable = new JCheckBox("");
-		add(chckbxMutable, "cell 4 2,alignx center");
+		add(chckbxMutable, "cell 4 2,alignx left");
 		
-		JLabel lblGroupBehavoir = new JLabel("Group behavoir");
-		add(lblGroupBehavoir, "cell 2 3");
-		
-		JCheckBox chckbxGroupBehavior = new JCheckBox("");
-		add(chckbxGroupBehavior, "cell 3 3,alignx center");
-		
-		JCheckBox checkBox = new JCheckBox("");
-		add(checkBox, "cell 4 3,alignx center");
+		int currentRow = 2;
+		for(GenomeSpecification g : geneticContent.getGenomes()) {
+			if(g.getGenomeType() != GenomeSpecification.TYPE_BOOLEAN) {
+				continue;
+			}
+			currentRow++;
+			JLabel lblGroupBehavoir = new JLabel(g.getName());
+			add(lblGroupBehavoir, "cell 2 "+currentRow+",alignx right");
+			
+			JCheckBox chckbx1 = new JCheckBox("");
+			add(chckbx1, "cell 3 "+currentRow+",alignx center");
+			
+			JCheckBox chckbx2 = new JCheckBox("");
+			add(chckbx2, "cell 4 "+currentRow+",alignx left");
+			
+			List<JComponent> jList = new ArrayList<JComponent>();
+			jList.add(chckbx1);
+			jList.add(chckbx2);
+			guiMap.put(g, jList);
+		}
+		for(GenomeSpecification g : geneticContent.getGenomes()) {
+			if(g.getGenomeType() == GenomeSpecification.TYPE_BOOLEAN) {
+				continue;
+			}
+			currentRow++;
+			JLabel lblGroupBehavoir = new JLabel(g.getName());
+			add(lblGroupBehavoir, "cell 2 "+currentRow+",alignx right");
+			
+			JTextField tfDoubleValue = new JTextField("");
+			add(tfDoubleValue, "cell 3 "+currentRow+",growx");
+			
+			List<JComponent> jList = new ArrayList<JComponent>();
+			jList.add(tfDoubleValue);
+			guiMap.put(g, jList);
+		}
 	}
 	private static final long serialVersionUID = 1L;
+	
+	public List<GenomeSpecification> getFilledSpecification() {
+		List<GenomeSpecification> result = new ArrayList<GenomeSpecification>();
+		for(GenomeSpecification g : guiMap.keySet()) {
+			List<JComponent> jList = guiMap.get(g);
+			if(g.getGenomeType() == GenomeSpecification.TYPE_BOOLEAN) {
+				JCheckBox c1 = (JCheckBox) jList.get(0);
+				JCheckBox c2 = (JCheckBox) jList.get(1);
+				g.boolean1 = c1.isSelected();
+				g.boolean2 = c2.isSelected();
+			} else if(g.getGenomeType() == GenomeSpecification.TYPE_DOUBLE) {
+				JTextField tb = (JTextField) jList.get(0);
+				g.doubleValue = Double.parseDouble(tb.getText());
+			} else if(g.getGenomeType() == GenomeSpecification.TYPE_INTEGER) {
+				JTextField tb = (JTextField) jList.get(0);
+				g.doubleValue = Integer.parseInt(tb.getText());
+			}
+			result.add(g);
+		}
+		return result;
+	}
 
 }
