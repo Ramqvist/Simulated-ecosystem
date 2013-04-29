@@ -75,6 +75,7 @@ public class GeneticPanel extends JPanel {
 			jList.add(chckbx2);
 			guiMap.put(g, jList);
 		}
+		currentRow++;
 		for(GenomeSpecification g : geneticContent.getGenomes()) {
 			if(g.getGenomeType() == GenomeSpecification.TYPE_BOOLEAN) {
 				continue;

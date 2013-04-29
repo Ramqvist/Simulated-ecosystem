@@ -5,16 +5,17 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 
 import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
+import chalmers.dax021308.ecosystem.model.population.CommonSettings;
 
 import net.miginfocom.swing.MigLayout;
 
 public class PopulationPanel extends JPanel {
 	private static final long serialVersionUID = -6239580894018795289L;
 
-	public PopulationPanel(GeneticSettings s) {
+	public PopulationPanel(GeneticSettings s, CommonSettings c) {
 		setLayout(new MigLayout("", "[grow]", "[grow][grow][][grow]"));
 		
-		CommonSettingsPanel panel = new CommonSettingsPanel();
+		CommonSettingsPanel panel = new CommonSettingsPanel(c);
 		add(panel, "cell 0 0,grow");
 		
 		GeneticPanel panel_1 = new GeneticPanel(s);

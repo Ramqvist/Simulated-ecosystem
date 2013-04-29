@@ -12,6 +12,7 @@ import javax.swing.JDialog;
 import javax.swing.JTabbedPane;
 
 import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
+import chalmers.dax021308.ecosystem.model.population.CommonSettings;
 import chalmers.dax021308.ecosystem.view.IView;
 
 /**
@@ -39,9 +40,9 @@ public class PopulationSettingsDialog extends JDialog implements IView {
 	@Override
 	public void init() {
 		//TODO: Replace with PopulationPanelController and let the constructor take in one IPopulation.
-		tabPane.addTab("Deer agent", new PopulationPanel(GeneticSettings.predSettings));
-		tabPane.addTab("Grass agent", new PopulationPanel(GeneticSettings.preySettings));
-		tabPane.addTab("Wolf agent", new PopulationPanel(GeneticSettings.grassSettings));
+		tabPane.addTab("Deer agent", new PopulationPanel(GeneticSettings.predSettings, CommonSettings.predSettings));
+		tabPane.addTab("Grass agent", new PopulationPanel(GeneticSettings.preySettings, CommonSettings.preySettings));
+		tabPane.addTab("Wolf agent", new PopulationPanel(GeneticSettings.grassSettings, CommonSettings.grassSettings));
 		add(tabPane);
 		pack();
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

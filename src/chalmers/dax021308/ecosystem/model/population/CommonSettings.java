@@ -9,6 +9,11 @@ package chalmers.dax021308.ecosystem.model.population;
  *
  */
 public class CommonSettings {
+	public static CommonSettings predSettings = new CommonSettings();
+	public static CommonSettings preySettings = new CommonSettings();
+	public static CommonSettings grassSettings = new CommonSettings();
+	
+	
 	private int capacity;
 	private int max_energy;
 	private int visionRange;

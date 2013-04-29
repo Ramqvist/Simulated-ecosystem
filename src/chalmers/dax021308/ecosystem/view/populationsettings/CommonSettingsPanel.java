@@ -15,6 +15,8 @@ import javax.swing.JToggleButton;
 import javax.swing.JSlider;
 import javax.swing.JCheckBox;
 
+import chalmers.dax021308.ecosystem.model.population.CommonSettings;
+
 public class CommonSettingsPanel extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private JTextField textField;
@@ -25,7 +27,7 @@ public class CommonSettingsPanel extends JPanel{
 	private JTextField textField_5;
 	private JTextField textField_6;
 	
-	public CommonSettingsPanel() {
+	public CommonSettingsPanel(CommonSettings s) {
 		setLayout(new MigLayout("", "[][][grow][grow]", "[][][][][][][][][][][][][][][][][][][][]"));
 		
 		JLabel lblDeerSettings = new JLabel("Common settings");
@@ -122,12 +124,16 @@ public class CommonSettingsPanel extends JPanel{
 		
 	}
 	
-	
-	public static void main(String[] args) {
-		CommonSettingsPanel panel = new CommonSettingsPanel();
-		JFrame frame = new JFrame();
-		frame.getContentPane().add(panel);
-		frame.setSize(new Dimension(500, 600));
-		frame.setVisible(true);
+	private void injectCommonSettings() {
+		
 	}
+	
+	public CommonSettings retrieveCommonSettings() {
+		return null;
+	}
+	
+	public void UpdateCommonSettings() {
+		
+	}
+
 }
