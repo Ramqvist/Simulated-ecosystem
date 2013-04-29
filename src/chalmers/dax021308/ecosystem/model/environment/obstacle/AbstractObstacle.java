@@ -29,6 +29,7 @@ public abstract class AbstractObstacle implements IObstacle {
 	protected double height;
 	protected double angle;
 	protected Color color;
+	protected boolean transparent;
 	
 	/**
 	 * returns the width of the obstacle.
@@ -105,6 +106,11 @@ public abstract class AbstractObstacle implements IObstacle {
 		this.color = c;
 	}
 	
+	@Override
+	public boolean isTransparent(){
+		return transparent;
+	}
+	
 	public Position toObstacleCoordinates(Position p){
 		Position newPos =  new Position(p.getX()-this.position.getX(), p.getY()-this.position.getY());
 		return newPos.setPosition(Math.cos(angle)*newPos.getX() + Math.sin(angle)*newPos.getY(), 
@@ -166,17 +172,17 @@ public abstract class AbstractObstacle implements IObstacle {
 				obs = new RectangularObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
 						new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
 						new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), 
-								Integer.parseInt(inputArray[7])),Double.parseDouble(inputArray[8]));
+								Integer.parseInt(inputArray[7])),Double.parseDouble(inputArray[8]), true);
 			} else if (shape.equals(OBSTACLE_ELLIPTICAL)) {
 				obs = new EllipticalObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
 						new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
 						new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]),
-								Integer.parseInt(inputArray[7])),Double.parseDouble(inputArray[8]));
+								Integer.parseInt(inputArray[7])),Double.parseDouble(inputArray[8]), true);
 			} else if (shape.equals(OBSTACLE_TRIANGLE)) {
 				obs = new TriangleObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
 						new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
 						new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]),
-								Integer.parseInt(inputArray[7])),Double.parseDouble(inputArray[8]));
+								Integer.parseInt(inputArray[7])),Double.parseDouble(inputArray[8]), true);
 			}  else if (shape.equals(OBSTACLE_NONE)) {
 				return null;
 			}
@@ -185,17 +191,17 @@ public abstract class AbstractObstacle implements IObstacle {
 				obs = new RectangularObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
 						new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
 						new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]), 
-								Integer.parseInt(inputArray[7])),0);
+								Integer.parseInt(inputArray[7])), 0, true);
 			} else if (shape.equals(OBSTACLE_ELLIPTICAL)) {
 				obs = new EllipticalObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
 						new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
 						new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]),
-								Integer.parseInt(inputArray[7])),0);
+								Integer.parseInt(inputArray[7])),0,true);
 			} else if (shape.equals(OBSTACLE_TRIANGLE)) {
 				obs = new TriangleObstacle(Double.parseDouble(inputArray[3]), Double.parseDouble(inputArray[4]),
 						new Position( Double.parseDouble(inputArray[1]),  Double.parseDouble(inputArray[2])),
 						new Color(Integer.parseInt(inputArray[5]),Integer.parseInt(inputArray[6]),
-								Integer.parseInt(inputArray[7])),0);
+								Integer.parseInt(inputArray[7])),0, true);
 			}  else if (shape.equals(OBSTACLE_NONE)) {
 				return null;
 			}
