@@ -29,7 +29,7 @@ public class HeatmapTabHolder extends JTabbedPane implements IView {
 				List<IPopulation> popList = s.getFinalPopulations();
 				removeAll();
 				for(IPopulation p : popList) {
-					addTab(p.getName(), new HeatMapView(m, s.getSimDimension(), new Dimension(50,50), 3, p.getName()));
+					addTab(p.getName(), new HeatMapView(m, s.getSimDimension(), new Dimension(50,50), p));
 				}
 			}
 		}
