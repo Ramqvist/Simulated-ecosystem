@@ -76,6 +76,8 @@ public class GeneticPanel extends JPanel {
 			guiMap.put(g, jList);
 		}
 		currentRow++;
+		JLabel emptyLabel = new JLabel(" ");
+		add(emptyLabel, "cell 2 "+currentRow+",alignx right");
 		for(GenomeSpecification g : geneticContent.getGenomes()) {
 			if(g.getGenomeType() == GenomeSpecification.TYPE_BOOLEAN) {
 				continue;
@@ -106,10 +108,7 @@ public class GeneticPanel extends JPanel {
 			} else if(g.getGenomeType() == GenomeSpecification.TYPE_DOUBLE) {
 				JTextField tb = (JTextField) jList.get(0);
 				g.doubleValue = Double.parseDouble(tb.getText());
-			} else if(g.getGenomeType() == GenomeSpecification.TYPE_INTEGER) {
-				JTextField tb = (JTextField) jList.get(0);
-				g.doubleValue = Integer.parseInt(tb.getText());
-			}
+			} 
 			result.add(g);
 		}
 		return result;

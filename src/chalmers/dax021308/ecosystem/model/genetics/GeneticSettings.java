@@ -13,7 +13,7 @@ public abstract class GeneticSettings {
 			List<GenomeSpecification> result = new ArrayList<GenomeSpecification>();
 			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_BOOLEAN, "Grouping"));
 			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_BOOLEAN, "Focus prey"));
-			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_INTEGER, "Grouping Q parameter"));
+			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_DOUBLE, "Grouping Q parameter"));
 			return result;
 		}
 	};
@@ -23,7 +23,7 @@ public abstract class GeneticSettings {
 		@Override
 		public List<GenomeSpecification> getGenomes() {
 			List<GenomeSpecification> result = new ArrayList<GenomeSpecification>();
-			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_INTEGER, "Pred interaction range"));
+			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_DOUBLE, "Pred interaction range"));
 			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_BOOLEAN, "Focus prey"));
 			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_BOOLEAN, "Pathfinding"));
 			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_BOOLEAN, "Eat BigTasty"));
@@ -48,8 +48,7 @@ public abstract class GeneticSettings {
 	public class GenomeSpecification {
 		//TODO: Make abstract class with predefines max/min/start values.
 		public static final int TYPE_BOOLEAN = 1;
-		public static final int TYPE_INTEGER = 2;
-		public static final int TYPE_DOUBLE  = 3;
+		public static final int TYPE_DOUBLE  = 2;
 		
 		private Genome g;
 		private int genomeType;
