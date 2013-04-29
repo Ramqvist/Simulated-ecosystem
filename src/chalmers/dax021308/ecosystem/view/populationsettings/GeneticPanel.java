@@ -46,16 +46,16 @@ public class GeneticPanel extends JPanel {
 		JLabel lblMutable = new JLabel("Mutable");
 		add(lblMutable, "cell 4 1");
 		
-		JLabel lblStotting = new JLabel("Stotting");
-		add(lblStotting, "cell 2 2,alignx right");
+//		JLabel lblStotting = new JLabel("Stotting");
+//		add(lblStotting, "cell 2 2,alignx right");
+//		
+//		JCheckBox chckbxNewCheckBox = new JCheckBox("");
+//		add(chckbxNewCheckBox, "cell 3 2,alignx center");
+//		
+//		JCheckBox chckbxMutable = new JCheckBox("");
+//		add(chckbxMutable, "cell 4 2,alignx left");
 		
-		JCheckBox chckbxNewCheckBox = new JCheckBox("");
-		add(chckbxNewCheckBox, "cell 3 2,alignx center");
-		
-		JCheckBox chckbxMutable = new JCheckBox("");
-		add(chckbxMutable, "cell 4 2,alignx left");
-		
-		int currentRow = 2;
+		int currentRow = 1;
 		for(GenomeSpecification g : geneticContent.getGenomes()) {
 			if(g.getGenomeType() != GenomeSpecification.TYPE_BOOLEAN) {
 				continue;
@@ -100,8 +100,8 @@ public class GeneticPanel extends JPanel {
 			if(g.getGenomeType() == GenomeSpecification.TYPE_BOOLEAN) {
 				JCheckBox c1 = (JCheckBox) jList.get(0);
 				JCheckBox c2 = (JCheckBox) jList.get(1);
-				g.boolean1 = c1.isSelected();
-				g.boolean2 = c2.isSelected();
+				g.activeOnBirth = c1.isSelected();
+				g.mutable = c2.isSelected();
 			} else if(g.getGenomeType() == GenomeSpecification.TYPE_DOUBLE) {
 				JTextField tb = (JTextField) jList.get(0);
 				g.doubleValue = Double.parseDouble(tb.getText());
