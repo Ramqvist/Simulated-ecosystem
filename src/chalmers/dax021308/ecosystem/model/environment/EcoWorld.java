@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 
 import chalmers.dax021308.ecosystem.model.environment.obstacle.EllipticalObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
@@ -524,7 +525,11 @@ public class EcoWorld implements IModel {
 				sb.append(roundTwoDecimals(statTime.getSampleVariance()));
 			}
 			//Log.v(sb.toString());
-			executor.execute(env);
+			try {
+				executor.execute(env);
+			} catch (RejectedExecutionException e) {
+				
+			}
 			startIterationTime = System.nanoTime();
 		} else {
 			stop();
