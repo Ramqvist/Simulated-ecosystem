@@ -14,6 +14,7 @@ import java.util.concurrent.RejectedExecutionException;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.EllipticalObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
+import chalmers.dax021308.ecosystem.model.population.CommonSettings;
 import chalmers.dax021308.ecosystem.model.population.DeerPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPredatorPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPreyPopulation;
@@ -191,7 +192,6 @@ public class EcoWorld implements IModel {
 		this.d = new Dimension(1000, 1000);
 		this.timer = new TimerHandler();
 		this.observers = new PropertyChangeSupport(this);
-
 	}
 
 	private void setSimulationDimension(Dimension d) {
@@ -274,8 +274,10 @@ public class EcoWorld implements IModel {
 		}
 
 		if (s.getPreyModel() == SimulationSettings.POP_DEER) {
+//			prey = new DeerPopulation("Deers", s.getPreyPopSize(),
+//					Color.blue, 2.0, 3, 200, true, surroundings);
 			prey = new DeerPopulation("Deers", s.getPreyPopSize(),
-					Color.blue, 2.0, 3, 200, true, surroundings);
+					Color.blue, CommonSettings.predSettings.maxSpeed.value, CommonSettings.predSettings.maxAcceleration.value, CommonSettings.predSettings.visionRange.value, true, surroundings);
 		} else if (s.getPreyModel() == SimulationSettings.POP_DUMMYPREY) {
 			prey = new DummyPreyPopulation(s.getPreyPopSize(), Color.blue,
 					2.2, 2, 250, surroundings);

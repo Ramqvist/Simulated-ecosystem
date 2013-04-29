@@ -19,6 +19,7 @@ import javax.swing.event.ChangeListener;
 import net.miginfocom.swing.MigLayout;
 import chalmers.dax021308.ecosystem.model.population.CommonSettings;
 import chalmers.dax021308.ecosystem.model.population.CommonSettings.DoubleSettingsContainer;
+import chalmers.dax021308.ecosystem.model.util.Log;
 
 public class CommonSettingsPanel extends JPanel{
 	private static final long serialVersionUID = 1L;
@@ -40,14 +41,14 @@ public class CommonSettingsPanel extends JPanel{
 			final JTextField textField = new JTextField();
 			add(textField, "cell 2 "+currentRow+",growx");
 			textField.setColumns(10);
-			textField.setText(ds.defaultValue + "");
+			textField.setText(ds.value + "");
 			textField.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					try {
 						ds.value = Double.parseDouble(textField.getText());
 					} catch (NumberFormatException ne) {
-						
+						Log.e(ne.getMessage());
 					}
 				}
 			});
@@ -55,10 +56,11 @@ public class CommonSettingsPanel extends JPanel{
 			final JSlider slider = new JSlider();
 			slider.setMaximum((int) ds.max); 
 			slider.setMinimum((int) ds.min); 
-			slider.setValue((int) ds.defaultValue);
+			slider.setValue((int) ds.value);
 			slider.addChangeListener(new ChangeListener() {
 				@Override
 				public void stateChanged(ChangeEvent e) {
+					ds.value = slider.getValue();
 					textField.setText(slider.getValue() + "");
 				}
 			});
