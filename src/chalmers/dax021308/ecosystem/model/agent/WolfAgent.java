@@ -25,6 +25,7 @@ public class WolfAgent extends AbstractAgent {
 	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
 	private static final double REPRODUCTION_RATE = 0.10;
 	private static final int DIGESTION_TIME = 50;
+	private static final int PATH_TTL = 50;
 	private int digesting = 0;
 	private IGenome<IGenes> genome;
 	
@@ -58,7 +59,7 @@ public class WolfAgent extends AbstractAgent {
 			Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys, surroundings, focusedPrey, 
 					this, preyNeighbours, visionRange, FOCUS_RANGE,
 					maxAcceleration, maxSpeed, 
-					OBSTACLE_SAFETY_DISTANCE, focusedPreyPath, 10);
+					OBSTACLE_SAFETY_DISTANCE, focusedPreyPath, PATH_TTL);
 			Vector mutualInteractionForce = new Vector();
 			Vector forwardThrust = new Vector();
 			Vector arrayalForce = new Vector();
