@@ -25,6 +25,7 @@ public class JPSPathfinder {
 	private Dimension simulationDim;
 	private double coordinateScaling;
 	private double safetyDistance = 0;
+	private JPSNode goal = new JPSNode(0, 0);
 
 	public JPSPathfinder(List<IObstacle> obsList, IShape shape, Dimension simulationDim) {
 		this.obsList = obsList;
@@ -139,7 +140,7 @@ public class JPSPathfinder {
 	public List<Position> getShortestPathJumpPointsSearch(Position startPos, Position endPos, double safetyDistance) {
 		this.safetyDistance = safetyDistance;
 		JPSNode start = new JPSNode(startPos.getX(), startPos.getY());
-		JPSNode goal = new JPSNode(endPos.getX(), endPos.getY());
+		goal = new JPSNode(endPos.getX(), endPos.getY());
 		HashSet<JPSNode> closedSet = new HashSet<JPSNode>();
 		HashSet<JPSNode> openSet = new HashSet<JPSNode>();
 		openSet.add(start);
@@ -295,6 +296,11 @@ public class JPSPathfinder {
 	}
 	
 	private boolean walkable(JPSNode node) {
-		return !AbstractObstacle.isInsideObstacleList(obsList, node, safetyDistance) && shape.isInside(simulationDim, node);
+		if(node.equals(goal)){
+			return !AbstractObstacle.isInsideObstacleList(obsList, node, 0) && shape.isInside(simulationDim, node);
+		} else {
+			return !AbstractObstacle.isInsideObstacleList(obsList, node, safetyDistance) && shape.isInside(simulationDim, node);
+		}
+		
 	}
 }
