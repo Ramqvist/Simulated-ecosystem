@@ -1,5 +1,6 @@
 package chalmers.dax021308.ecosystem.view;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -15,6 +16,8 @@ import chalmers.dax021308.ecosystem.model.population.IPopulation;
 public class HeatmapTabHolder extends JTabbedPane implements IView {
 	private static final long serialVersionUID = 1L;
 	private IModel m;
+	private List<IPopulation> popList;
+	private HeatMapView heatMap;
 
 	public HeatmapTabHolder(IModel m) {
 		this.m = m;
@@ -26,13 +29,28 @@ public class HeatmapTabHolder extends JTabbedPane implements IView {
 		if(evt.getPropertyName() == EcoWorld.EVENT_SETTINGS_CHANGED) {
 			if(evt.getNewValue() instanceof SimulationSettings) {
 				SimulationSettings s = (SimulationSettings) evt.getNewValue();
-				List<IPopulation> popList = s.getFinalPopulations();
+				popList = s.getFinalPopulations();
 				removeAll();
-				for(IPopulation p : popList) {
-					addTab(p.getName(), new HeatMapView(m, s.getSimDimension(), new Dimension(50,50), p));
+				heatMap = new HeatMapView(m, s.getSimDimension(), new Dimension(50,50), popList);
+				int nPops = popList.size();
+				if(nPops>0) {
+					addTab(popList.get(0).getName(), heatMap);
+					for(int i=1; i < nPops; i++) {
+						addTab(popList.get(i).getName(), null);
+					}
 				}
+				
 			}
 		}
+	}
+	
+	@Override
+	public void setSelectedIndex(int index) {
+		super.setSelectedIndex(index);
+		if(popList.size() >= index + 1){
+			heatMap.setPopulationNameToShow(popList.get(index).getName());
+		}
+		
 	}
 
 	@Override
