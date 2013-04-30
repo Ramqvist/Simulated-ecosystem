@@ -14,7 +14,6 @@ import java.util.concurrent.RejectedExecutionException;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.EllipticalObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
-import chalmers.dax021308.ecosystem.model.population.CommonSettings;
 import chalmers.dax021308.ecosystem.model.population.DeerPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPredatorPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPreyPopulation;
@@ -23,6 +22,10 @@ import chalmers.dax021308.ecosystem.model.population.GrassPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.population.PigPopulation;
 import chalmers.dax021308.ecosystem.model.population.WolfPopulation;
+import chalmers.dax021308.ecosystem.model.population.settings.CommonSettings;
+import chalmers.dax021308.ecosystem.model.population.settings.GrassSettings;
+import chalmers.dax021308.ecosystem.model.population.settings.PredSettings;
+import chalmers.dax021308.ecosystem.model.population.settings.PreySettings;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Stat;
@@ -269,15 +272,19 @@ public class EcoWorld implements IModel {
 			pred = new DummyPredatorPopulation(s.getPredPopSize(),
 					Color.red, 3, 0.75, 275, surroundings);
 		} else if (s.getPredatorModel() == SimulationSettings.POP_WOLF) {
-			pred = new WolfPopulation("Wolves", s.getPredPopSize(),
-					Color.red, 2.3, 0.5, 250, true, surroundings);
+			pred = new WolfPopulation("Wolves", s.getPredPopSize(), Color.red,
+					PredSettings.instance.maxSpeed.value, 
+					PredSettings.instance.maxAcceleration.value, 
+					PredSettings.instance.visionRange.value, 
+					true, surroundings);
 		}
 
 		if (s.getPreyModel() == SimulationSettings.POP_DEER) {
-//			prey = new DeerPopulation("Deers", s.getPreyPopSize(),
-//					Color.blue, 2.0, 3, 200, true, surroundings);
-			prey = new DeerPopulation("Deers", s.getPreyPopSize(),
-					Color.blue, CommonSettings.predSettings.maxSpeed.value, CommonSettings.predSettings.maxAcceleration.value, CommonSettings.predSettings.visionRange.value, true, surroundings);
+			prey = new DeerPopulation("Deers", s.getPreyPopSize(), Color.blue,
+					PreySettings.instance.maxSpeed.value, 
+					PreySettings.instance.maxAcceleration.value, 
+					PreySettings.instance.visionRange.value,
+					true, surroundings);
 		} else if (s.getPreyModel() == SimulationSettings.POP_DUMMYPREY) {
 			prey = new DummyPreyPopulation(s.getPreyPopSize(), Color.blue,
 					2.2, 2, 250, surroundings);
@@ -287,11 +294,11 @@ public class EcoWorld implements IModel {
 		}
 
 		if (s.getGrassModel() == SimulationSettings.POP_GRASS) {
-			grass = new GrassPopulation("Grass", s.getGrassPopSize(),
-					new Color(69, 139, 00), 1, 1, 0, 1500, surroundings);
+			grass = new GrassPopulation("Grass", s.getGrassPopSize(), new Color(69, 139, 00), 
+					(int) GrassSettings.instance.capacity.value, surroundings);
 		} else if (s.getGrassModel() == SimulationSettings.POP_GRASS_FIELD) {
 			grass = new GrassFieldPopulation(SimulationSettings.NAME_GRASS_FIELD, s.getGrassPopSize(),
-					Color.green, 1, 1, 0, 80, surroundings);
+					Color.green, 80, surroundings);
 		}
 		
 		// TODO Shouldn't shape == null be before creating populations?

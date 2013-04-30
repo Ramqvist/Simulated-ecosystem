@@ -31,11 +31,10 @@ public class GrassPopulation extends AbstractPopulation {
 	 * @param surroundings
 	 */
 	public GrassPopulation(String name, int initPopulationSize, Color color, 
-			double maxSpeed, double maxAcceleration, double visionRange, 
 			int capacity, SurroundingsSettings surroundings) {
 		super(name, color, surroundings);
 		agents = initializePopulation(initPopulationSize, surroundings.getGridDimension(), color,
-				maxSpeed, capacity);
+				1, capacity);
 	}
 
 	private List<IAgent> initializePopulation(int populationSize,
