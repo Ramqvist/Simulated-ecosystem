@@ -16,14 +16,16 @@ import chalmers.dax021308.ecosystem.model.util.Stat;
  */
 public abstract class AbstractPopulation implements IPopulation {
 	protected SurroundingsSettings surroundings;
-	//protected Dimension gridDimension;	// TODO remove. Use SurroundingsSettings instead.
-	//protected IShape shape;				// TODO remove. Use SurroundingsSettings instead.
-	//protected List<IObstacle> obstacles;	// TODO remove. Use SurroundingsSettings instead.
+	// protected Dimension gridDimension; // TODO remove. Use
+	// SurroundingsSettings instead.
+	// protected IShape shape; // TODO remove. Use SurroundingsSettings instead.
+	// protected List<IObstacle> obstacles; // TODO remove. Use
+	// SurroundingsSettings instead.
 	protected List<IAgent> agents;
 	protected List<IPopulation> preys;
 	protected List<IPopulation> predators;
 	protected List<IPopulation> neutral;
-	protected double interestingPropertyProportion = 0;	
+	protected double interestingPropertyProportion = 0;
 	private Stat<Integer> preyNeighbourSize = new Stat<Integer>();
 	private Stat<Integer> predNeighbourSize = new Stat<Integer>();
 	private Stat<Integer> neutralNeighbourSize = new Stat<Integer>();
@@ -54,13 +56,14 @@ public abstract class AbstractPopulation implements IPopulation {
 		lifeLengths = new Stat<Integer>();
 	}
 
-	public AbstractPopulation(String name, Color color, SurroundingsSettings surroundings) {
+	public AbstractPopulation(String name, Color color,
+			SurroundingsSettings surroundings) {
 		this();
 		this.name = name;
 		this.color = color;
-		//this.gridDimension = gridDimension;
-		//this.obstacles = obstacles;
-		//this.shape = shape;
+		// this.gridDimension = gridDimension;
+		// this.obstacles = obstacles;
+		// this.shape = shape;
 		this.surroundings = surroundings;
 
 	}
@@ -90,10 +93,10 @@ public abstract class AbstractPopulation implements IPopulation {
 			}
 		}
 		this.lifeLengths = new Stat<Integer>();
-		for(Integer n: original.getLifeLengths()) {
+		for (Integer n : original.getLifeLengths()) {
 			this.lifeLengths.addObservation(n);
 		}
-		
+
 	}
 
 	/**
@@ -113,20 +116,17 @@ public abstract class AbstractPopulation implements IPopulation {
 		for (int i = fromPos; i < toPos; i++) {
 			a = agents.get(i);
 			a.calculateNextPosition(predators, preys, neutral, surroundings);
-			
 
-//			AbstractAgent aa = (AbstractAgent) a;
-//			preyNeighbourSize.addObservation(aa.getPreyNeighbourSize());
-//			predNeighbourSize.addObservation(aa.getPredatorNeighbourSize());
-//			neutralNeighbourSize.addObservation(aa.getNeutralNeighbourSize());
+			// AbstractAgent aa = (AbstractAgent) a;
+			// preyNeighbourSize.addObservation(aa.getPreyNeighbourSize());
+			// predNeighbourSize.addObservation(aa.getPredatorNeighbourSize());
+			// neutralNeighbourSize.addObservation(aa.getNeutralNeighbourSize());
 
-			
-			
 			if (!a.isAlive()) {
 				addToRemoveList(a);
 			}
 		}
-	
+
 	}
 
 	protected Position getRandomPosition() {
@@ -134,7 +134,8 @@ public abstract class AbstractPopulation implements IPopulation {
 		Position pos = new Position();
 		while (!validPos) {
 			validPos = true;
-			pos = surroundings.getWorldShape().getRandomPosition(surroundings.getGridDimension());
+			pos = surroundings.getWorldShape().getRandomPosition(
+					surroundings.getGridDimension());
 			for (IObstacle o : surroundings.getObstacles()) {
 				if (o.isInObstacle(pos, OBSTACLE_SAFETY_DISTANCE)) {
 					validPos = false;
@@ -266,17 +267,18 @@ public abstract class AbstractPopulation implements IPopulation {
 		// if (shape == null)
 		// throw new IllegalArgumentException("Illegal Shape from file.");
 
-		AbstractPopulation created = new AbstractPopulation(name, Color.black, null) {
+		AbstractPopulation created = new AbstractPopulation(name, Color.black,
+				null) {
 
-					@Override
-					public List<Integer> getLifeLengths() {
-						return (List<Integer>) lifeLengths.getSample();
-					}
+			@Override
+			public List<Integer> getLifeLengths() {
+				return (List<Integer>) lifeLengths.getSample();
+			}
 
-					@Override
-					public double getLifeLengthMean() {
-						return lifeLengths.getMean();
-					}
+			@Override
+			public double getLifeLengthMean() {
+				return lifeLengths.getMean();
+			}
 		};
 		created.agents = new ArrayList<IAgent>();
 		created.setColor(c);
@@ -310,7 +312,8 @@ public abstract class AbstractPopulation implements IPopulation {
 		int populationSize = agents.size();
 		for (IAgent a : agents) {
 			a.updatePosition();
-			List<IAgent> spawn = a.reproduce(null, populationSize, surroundings);
+			List<IAgent> spawn = a
+					.reproduce(null, populationSize, surroundings);
 			if (spawn != null) {
 				kids.addAll(spawn);
 			}
@@ -319,10 +322,13 @@ public abstract class AbstractPopulation implements IPopulation {
 			agents.addAll(kids);
 			// wg.addAll(kids);
 		}
-		
-//		System.out.println(this.name + " Prey: " + preyNeighbourSize.getMean());
-//		System.out.println(this.name + " Pred: " + predNeighbourSize.getMean());
-//		System.out.println(this.name + " Neut: " + neutralNeighbourSize.getMean());
+
+		// System.out.println(this.name + " Prey: " +
+		// preyNeighbourSize.getMean());
+		// System.out.println(this.name + " Pred: " +
+		// predNeighbourSize.getMean());
+		// System.out.println(this.name + " Neut: " +
+		// neutralNeighbourSize.getMean());
 
 		// System.out.println(name + " life length: mean = " +
 		// Stat.mean(lifeLengths) +
@@ -343,9 +349,9 @@ public abstract class AbstractPopulation implements IPopulation {
 		}
 		removeList.clear();
 	}
-	
+
 	@Override
-	public List<Integer> getLifeLengths(){
+	public List<Integer> getLifeLengths() {
 		return (List<Integer>) lifeLengths.getSample();
 	}
 
@@ -379,19 +385,16 @@ public abstract class AbstractPopulation implements IPopulation {
 		return "Population name: " + name + " NumAgents:" + agents.size();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see chalmers.dax021308.ecosystem.model.population.IPopulation#getSize()
-	 */
+	@Override
 	public int getSize() {
 		if (agents != null)
 			return agents.size();
 		else
 			return 0;
 	}
-	
-	public double getInterestingPropertyProportion(){
+
+	@Override
+	public double getInterestingPropertyProportion() {
 		return interestingPropertyProportion;
 	}
 
@@ -399,9 +402,9 @@ public abstract class AbstractPopulation implements IPopulation {
 	public double getComputationalFactor() {
 		return 1;
 	}
-	
+
 	public CommonSettings getDefaultSettings() {
 		return null;
 	}
-	
+
 }

@@ -103,4 +103,6 @@ public interface IPopulation extends Cloneable {
 	
 	public double getLifeLengthMean();
 
+	public double getInterestingPropertyProportion();
+
 }

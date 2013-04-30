@@ -105,11 +105,9 @@ public class GroupingProportionGraph extends AbstractGraph2D {
 	 */
 	private void updateGraph(List<IPopulation> populations){
 		Iterator<ITrace2D> it = this.getTraces().iterator();
-		AbstractPopulation ap = null;
 		for (IPopulation p: populations) {
-			ap = (AbstractPopulation) p;
 			if (it.hasNext()) {
-				((ITrace2D) it.next()).addPoint(nIterationsPassed, ap.getInterestingPropertyProportion());
+				((ITrace2D) it.next()).addPoint(nIterationsPassed, p.getInterestingPropertyProportion());
 			} else {
 				return;
 			}
