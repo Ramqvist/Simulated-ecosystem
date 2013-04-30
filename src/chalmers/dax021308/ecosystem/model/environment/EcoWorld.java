@@ -233,7 +233,8 @@ public class EcoWorld implements IModel {
 		}
 		List<IPopulation> populations = new ArrayList<IPopulation>();
 
-		SurroundingsSettings surroundings = new SurroundingsSettings(d, null, null);
+		SurroundingsSettings surroundings = new SurroundingsSettings(0);
+		surroundings.setGridDimension(d);
 		/*
 		 * Creating obstacles here for test. This should be done in a proper way
 		 * later.
@@ -268,15 +269,19 @@ public class EcoWorld implements IModel {
 		}
 		surroundings.setWorldShape(shape);
 		
+		SurroundingsSettings grassSourroundings = new SurroundingsSettings(GrassSettings.instance.obstacle_safety_distance.value);
+		SurroundingsSettings preySourroundings = new SurroundingsSettings(PreySettings.instance.obstacle_safety_distance.value);
+		SurroundingsSettings predSourroundings = new SurroundingsSettings(PredSettings.instance.obstacle_safety_distance.value);
+		
 		if (s.getPredatorModel() == SimulationSettings.POP_DUMMYPRED) {
 			pred = new DummyPredatorPopulation(s.getPredPopSize(),
-					Color.red, 3, 0.75, 275, surroundings);
+					Color.red, 3, 0.75, 275, predSourroundings);
 		} else if (s.getPredatorModel() == SimulationSettings.POP_WOLF) {
 			pred = new WolfPopulation("Wolves", s.getPredPopSize(), Color.red,
 					PredSettings.instance.maxSpeed.value, 
 					PredSettings.instance.maxAcceleration.value, 
 					PredSettings.instance.visionRange.value, 
-					true, surroundings);
+					true, predSourroundings);
 		}
 
 		if (s.getPreyModel() == SimulationSettings.POP_DEER) {
@@ -284,21 +289,21 @@ public class EcoWorld implements IModel {
 					PreySettings.instance.maxSpeed.value, 
 					PreySettings.instance.maxAcceleration.value, 
 					PreySettings.instance.visionRange.value,
-					true, surroundings);
+					true, preySourroundings);
 		} else if (s.getPreyModel() == SimulationSettings.POP_DUMMYPREY) {
 			prey = new DummyPreyPopulation(s.getPreyPopSize(), Color.blue,
-					2.2, 2, 250, surroundings);
+					2.2, 2, 250, preySourroundings);
 		} else if (s.getPreyModel() == SimulationSettings.POP_PIG) {
 			prey = new PigPopulation("Filthy Pigs", s.getPreyPopSize(),
-					Color.pink, 2.0, 3, 200, false, surroundings);
+					Color.pink, 2.0, 3, 200, false, preySourroundings);
 		}
 
 		if (s.getGrassModel() == SimulationSettings.POP_GRASS) {
 			grass = new GrassPopulation("Grass", s.getGrassPopSize(), new Color(69, 139, 00), 
-					(int) GrassSettings.instance.capacity.value, surroundings);
+					(int) GrassSettings.instance.capacity.value, grassSourroundings);
 		} else if (s.getGrassModel() == SimulationSettings.POP_GRASS_FIELD) {
 			grass = new GrassFieldPopulation(SimulationSettings.NAME_GRASS_FIELD, s.getGrassPopSize(),
-					Color.green, 80, surroundings);
+					Color.green, 80, grassSourroundings);
 		}
 		
 		// TODO Shouldn't shape == null be before creating populations?

@@ -96,8 +96,8 @@ public abstract class CommonSettings {
 	public DoubleSettingsContainer obstacle_safety_distance;
 	
 	/* Common boolean containers. */
-	private BooleanSettingsContainer groupBehavior;
-	private BooleanSettingsContainer pathFinding;
+	protected BooleanSettingsContainer groupBehavior;
+	protected BooleanSettingsContainer pathFinding;
 	
 	public CommonSettings() {
 		doubleSettings = new ArrayList<DoubleSettingsContainer>();

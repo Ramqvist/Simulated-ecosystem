@@ -6,6 +6,14 @@ public class GrassSettings extends CommonSettings {
 	
 	public GrassSettings() {
 		super();
+		
+		doubleSettings.remove(interaction_range);
+		doubleSettings.remove(eating_range);
+		doubleSettings.remove(focus_range);
+		doubleSettings.remove(velocity_decay);
+		booleanSettings.remove(groupBehavior);
+		booleanSettings.remove(pathFinding);
+		
 //		capacity 			= new DoubleSettingsContainer("Capacity", 1, Integer.MAX_VALUE, Integer.MAX_VALUE);
 //		maxSpeed 			= new DoubleSettingsContainer("Max speed", 1, 100, 2); // 2.3
 //		maxAcceleration 	= new DoubleSettingsContainer("Max Acceleration", 1, 100, 1); //0.5

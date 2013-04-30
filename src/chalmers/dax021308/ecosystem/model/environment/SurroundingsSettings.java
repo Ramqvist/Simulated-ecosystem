@@ -15,9 +15,10 @@ import chalmers.dax021308.ecosystem.model.util.shape.IShape;
  */
 public class SurroundingsSettings {
 
-	private Dimension gridDimension;
-	private List<IObstacle> obstacles;
-	private IShape worldShape;
+	private static Dimension gridDimension;
+	private static List<IObstacle> obstacles;
+	private static IShape worldShape;
+	private double OBSTACLE_SAFETY_DISTANCE;
 
 	/**
 	 * 
@@ -25,46 +26,52 @@ public class SurroundingsSettings {
 	 * @param s		Shape of the world.
 	 * @param o		List of obstacles.
 	 */
-	public SurroundingsSettings(Dimension d, IShape s, List<IObstacle> o){
-		this.gridDimension = d;
-		this.obstacles = o;
-		this.worldShape = s;
+	public SurroundingsSettings(double obstacleSafetyDistance){
+		OBSTACLE_SAFETY_DISTANCE = obstacleSafetyDistance;
 	}
 	
 	/**
 	 * @return the gridDimension
 	 */
 	public Dimension getGridDimension() {
-		return this.gridDimension;
+		return SurroundingsSettings.gridDimension;
 	}
 	/**
 	 * @param gridDimension the gridDimension to set
 	 */
 	public void setGridDimension(Dimension gridDimension) {
-		this.gridDimension = gridDimension;
+		SurroundingsSettings.gridDimension = gridDimension;
 	}
 	/**
 	 * @return the obstacles
 	 */
 	public List<IObstacle> getObstacles() {
-		return this.obstacles;
+		return SurroundingsSettings.obstacles;
 	}
 	/**
 	 * @param obstacles the obstacles to set
 	 */
 	public void setObstacles(List<IObstacle> obstacles) {
-		this.obstacles = obstacles;
+		SurroundingsSettings.obstacles = obstacles;
 	}
 	/**
 	 * @return the worldShape
 	 */
 	public IShape getWorldShape() {
-		return this.worldShape;
+		return SurroundingsSettings.worldShape;
 	}
 	/**
 	 * @param worldShape the worldShape to set
 	 */
 	public void setWorldShape(IShape worldShape) {
-		this.worldShape = worldShape;
+		SurroundingsSettings.worldShape = worldShape;
+	}
+
+	public void setObstacleSafetyDistance(double d) {
+		OBSTACLE_SAFETY_DISTANCE = d;
+	}
+
+	public double getObstacleSafetyDistance() {
+		return OBSTACLE_SAFETY_DISTANCE;
 	}
 }

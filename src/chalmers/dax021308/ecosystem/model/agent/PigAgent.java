@@ -111,7 +111,7 @@ public class PigAgent extends AbstractAgent {
 		Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys, surroundings, focusedPrey, 
 				this, preyNeighbours, visionRange, visionRange,
 				maxAcceleration, maxSpeed, 
-				OBSTACLE_SAFETY_DISTANCE, focusedPreyPath, 10);
+				focusedPreyPath, 10);
 		if (predatorForce.isNullVector())
 			alone = true;
 		if (digesting > 0 && alone) {
@@ -230,7 +230,7 @@ public class PigAgent extends AbstractAgent {
 						focusedPreyPath.setPath(
 								Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), 
 										surroundings.getObstacles(), surroundings.getWorldShape(), 
-										surroundings.getGridDimension(), OBSTACLE_SAFETY_DISTANCE), 
+										surroundings.getGridDimension(), surroundings.getObstacleSafetyDistance()), 
 										initial_ttl);
 						if(focusedPreyPath.isEmpty()) {
 							//Unreachable target.
@@ -346,7 +346,7 @@ public class PigAgent extends AbstractAgent {
 						focusedPreyPath.setPath(
 								Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), 
 										surroundings.getObstacles(), surroundings.getWorldShape(), 
-										surroundings.getGridDimension(), OBSTACLE_SAFETY_DISTANCE)
+										surroundings.getGridDimension(), surroundings.getObstacleSafetyDistance())
 								,initial_ttl);
 						if(focusedPreyPath.isEmpty()) {
 //							System.out.println("NULL VECTOR");
@@ -415,7 +415,7 @@ public class PigAgent extends AbstractAgent {
 				focusedPreyPath.setPath(
 						Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), 
 								surroundings.getObstacles(), surroundings.getWorldShape(), 
-								surroundings.getGridDimension(), OBSTACLE_SAFETY_DISTANCE)
+								surroundings.getGridDimension(), surroundings.getObstacleSafetyDistance())
 						,initial_ttl);
 				if(focusedPreyPath.isEmpty()) {
 					return Vector.emptyVector();
@@ -523,7 +523,7 @@ public class PigAgent extends AbstractAgent {
 				focusedPreyPath.setPath(
 						Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), 
 								surroundings.getObstacles(), surroundings.getWorldShape(), 
-								surroundings.getGridDimension(),OBSTACLE_SAFETY_DISTANCE));
+								surroundings.getGridDimension(),surroundings.getObstacleSafetyDistance()));
 				if(focusedPreyPath.isEmpty()) {
 					return Vector.emptyVector();
 				} else {

@@ -30,7 +30,7 @@ public abstract class AbstractPopulation implements IPopulation {
 	private Stat<Integer> preyNeighbourSize = new Stat<Integer>();
 	private Stat<Integer> predNeighbourSize = new Stat<Integer>();
 	private Stat<Integer> neutralNeighbourSize = new Stat<Integer>();
-	protected final static double OBSTACLE_SAFETY_DISTANCE = 8;
+	protected double OBSTACLE_SAFETY_DISTANCE = 5;
 
 	/**
 	 * Remove list for this Population.
@@ -66,6 +66,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		// this.obstacles = obstacles;
 		// this.shape = shape;
 		this.surroundings = surroundings;
+		this.OBSTACLE_SAFETY_DISTANCE = surroundings.getObstacleSafetyDistance();
 
 	}
 

@@ -336,7 +336,7 @@ public class ForceCalculator {
 	public static Vector getPreyForce(boolean willFocusPreys, SurroundingsSettings surroundings, 
 			Container<IAgent> focusedPreyContainer, IAgent currentAgent,
 			List<IAgent> preyNeighbours, double visionRange, double focusRange,
-			double maxAcceleration, double maxSpeed, double safetyDistance,
+			double maxAcceleration, double maxSpeed,
 			AgentPath focusedPreyPath, int initial_ttl) {
 		
 		if (willFocusPreys && focusedPreyContainer.get() != null && focusedPreyContainer.get().isAlive()) {
@@ -373,7 +373,7 @@ public class ForceCalculator {
 						focusedPreyPath.setPath(
 								Position.getShortestPath(currentAgent.getPosition(), focusedPreyContainer.get().getPosition(), 
 										surroundings.getObstacles(), surroundings.getWorldShape(), 
-										surroundings.getGridDimension(), safetyDistance)
+										surroundings.getGridDimension(), surroundings.getObstacleSafetyDistance())
 								,initial_ttl);
 						if(focusedPreyPath.isEmpty()) {
 //							System.out.println("NULL VECTOR");
@@ -444,7 +444,7 @@ public class ForceCalculator {
 				focusedPreyPath.setPath(
 						Position.getShortestPath(currentAgent.getPosition(), focusedPreyContainer.get().getPosition(), 
 								surroundings.getObstacles(), surroundings.getWorldShape(), 
-								surroundings.getGridDimension(), safetyDistance)
+								surroundings.getGridDimension(), surroundings.getObstacleSafetyDistance())
 						,initial_ttl);
 				if(focusedPreyPath.isEmpty()) {
 					return Vector.emptyVector();
