@@ -41,11 +41,9 @@ import chalmers.dax021308.ecosystem.view.populationsettings.PopulationSettingsDi
 public class MainWindow extends JFrame implements IView {
 	private static final long serialVersionUID = -8023060073777907757L;
 	private JPanel contentPane;
-//	private JPanel simulationPanel = new JPanel();
 	private JPanel left = new JPanel();
 	private JPanel right = new JPanel();
 	private OpenGLSimulationView openGL;
-//	private HeatMapView heatMap;
 	private HeatmapTabHolder heatMap;
 	private BottomChartTabs bottomTabbedGraphs;
 	private IChart graphView2;
@@ -81,24 +79,12 @@ public class MainWindow extends JFrame implements IView {
 	    Dimension d = model.getSize();
 		openGL = new OpenGLSimulationView(model, d, true);
 		openGL.init();
-		//openGL.setSize(new Dimension(980,700));
-//<<<<<<< HEAD
-		//heatMap = new HeatMapView(model, d, 11, "Deers");
 		controlViewCtrl = new ControlViewController(model);
 		parameterViewCtrl = new LiveSettingsViewController(model);
-//		graphView1 = new PopulationAmountGraph(model, 10);
-//		graphView2 = new IterationTimeGraph(model, 10);
 		smvc = new NEWSettingsMenuViewController(model, this);
-//=======
-//		heatMap = new HeatMapView(model, d, new Dimension(50,50), 3, "Deers");
 		heatMap = new HeatmapTabHolder(model);
-//		parameterView = new ParameterView(model);
-		//
-//		controlView = new ControlView(model);
 		bottomTabbedGraphs = new BottomChartTabs(model);
-//		graphView1 = ChartProvider.makeChart(ChartProvider.ChartType.POPULATION_AMOUNT_GRAPH, model);
 		graphView2 = ChartProvider.makeChart(ChartProvider.ChartType.GROUPING_PROPORTION_GRAPH, model);
-//>>>>>>> 0a80aae074172894a60ad8cf4ef1d867f0abfd57
 		
 		menuBar = new MenuBar();
 		setMenuBar(menuBar);
@@ -112,14 +98,9 @@ public class MainWindow extends JFrame implements IView {
 		menuBar.add(mnView);
 		mnView.add(mntmMapEditor);
 		
-//<<<<<<< HEAD
 		mntmLoad = new MenuItem("Load simulation");
 		setExtendedState(MAXIMIZED_BOTH);
 		
-//=======
-
-		
-//		MenuItem mntmLoad = new MenuItem("Load simulation");
 		//TODO: MOve this to controller.
 		mntmLoad.addActionListener(new ActionListener() {
 			@Override
@@ -141,15 +122,12 @@ public class MainWindow extends JFrame implements IView {
 				}
 			}
 		});
-//>>>>>>> 0a80aae074172894a60ad8cf4ef1d867f0abfd57
 		mnFile.add(mntmLoad);
 		
 		mntmSave = new MenuItem("Save simulation");
 		mnFile.add(mntmSave);
-//<<<<<<< HEAD
 	
 		mntmExit = new MenuItem("Exit");
-//=======
 		//TODO: MOve this to controller.
 		mntmSave.addActionListener(new ActionListener() {
 			@Override
@@ -174,10 +152,6 @@ public class MainWindow extends JFrame implements IView {
 				}
 			}
 		});
-		
-//		MenuItem mntmExit = new MenuItem("Exit");
-//>>>>>>> 0a80aae074172894a60ad8cf4ef1d867f0abfd57
-
 		
 		mnFile.add(mntmExit);
 		
@@ -216,66 +190,27 @@ public class MainWindow extends JFrame implements IView {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		left.setLayout(new BorderLayout(0,0));
 		
-		/*
-		 * Quick fix...
-		 */
 		right.setLayout(new GridLayout(3,1));
 		right.setMinimumSize(new Dimension(500, 400));
 		right.setPreferredSize(new Dimension(500, 400));
-//		GridBagConstraints gbc = new GridBagConstraints();
-//		gbc.gridx = 0;
-//		gbc.gridwidth = gbc.gridheight = 1;
-//		gbc.fill = GridBagConstraints.HORIZONTAL; 
-//		gbc.gridy = GridBagConstraints.RELATIVE; //makes sure every new add is placed beneath the previous
-//		gbc.anchor = GridBagConstraints.PAGE_START;
 		setContentPane(contentPane);
 		
-//		simulationPanel.setSize(d);
-		//simulationPanel.add(openGL);
-//		simulationPanel.setBackground(Color.RED);
 		left.add(parameterViewCtrl.view, BorderLayout.NORTH);
 		left.add(openGL, BorderLayout.CENTER);
 		left.add(controlViewCtrl.view, BorderLayout.SOUTH);  
-		//right.add(parameterView, BorderLayout.CENTER);
-		//graphView1.setMinimumSize(new Dimension(500, 400));
-		//graphView1.setPreferredSize(new Dimension(500, 400));
 		right.add(graphView2.toComponent(), BorderLayout.CENTER); // during development.
 		right.add(bottomTabbedGraphs, BorderLayout.CENTER);
 		right.add(heatMap, BorderLayout.CENTER); 
-//		right.setBackground(Color.BLUE);
-//		parameterView.setBackground(Color.GREEN);
 		
 		contentPane.add(left, BorderLayout.CENTER);
 		contentPane.add(right, BorderLayout.EAST);
-//<<<<<<< HEAD
 		addWindowListener(new WindowAdapter() {			
-//=======
-//		addWindowListener(new WindowListener() {
-//			
-//			@Override
-//			public void windowOpened(WindowEvent arg0) {}
-//			@Override
-//			public void windowIconified(WindowEvent arg0) {}
-//			@Override
-//			public void windowDeiconified(WindowEvent arg0) {}
-//			@Override
-//			public void windowDeactivated(WindowEvent arg0) {}
-//>>>>>>> 0a80aae074172894a60ad8cf4ef1d867f0abfd57
 			@Override
 			public void windowClosing(WindowEvent arg0) {
 				//Try to shutdown all worker threads.
 				model.shutdownNow();
 			}
-
-//<<<<<<< HEAD
-//=======
-//			@Override
-//			public void windowClosed(WindowEvent arg0) {}
-//			@Override
-//			public void windowActivated(WindowEvent arg0) {}
-//>>>>>>> 0a80aae074172894a60ad8cf4ef1d867f0abfd57
 		});
-		//contentPane.add(graphView2);
 	}
 
 	@Override
@@ -304,7 +239,7 @@ public class MainWindow extends JFrame implements IView {
 	}
 
 	public void setBtnStartNewSimWindowActionListener(ActionListener a) {
-		controlViewCtrl.view.buttonStartNew.addActionListener(a);		
+		controlViewCtrl.view.restartButton.addActionListener(a);		
 	}
 	
 	private class SimFileFilter extends FileFilter{

@@ -1,10 +1,7 @@
 package chalmers.dax021308.ecosystem.controller;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -12,7 +9,6 @@ import javax.swing.event.ChangeListener;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
-import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.LiveSettingsView;
 
 public class LiveSettingsViewController implements IController {
@@ -20,33 +16,13 @@ public class LiveSettingsViewController implements IController {
 	public final LiveSettingsView view;
 	private ActionListener listenerUpdateButton;
 	private SimulationSettings simSettings;
-	//TODO: den hï¿½r borde typ ta in aktuella SimulationsSettings pï¿½ nï¿½t sï¿½tt, sï¿½ att den bara kan uppdatera det som ï¿½ndrats
+	//TODO: den här borde typ ta in aktuella SimulationsSettings på nï¿½t sï¿½tt, sï¿½ att den bara kan uppdatera det som ï¿½ndrats
 	
 	public LiveSettingsViewController(final EcoWorld model) {
 		this.model = model;
 		view = new LiveSettingsView(model);
 		view.setVisible(true);
-		view.comboBoxHeatMapPop.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Object item = view.comboBoxHeatMapPop.getSelectedItem();
-				if(item instanceof String) {
-					String selectedPop = (String) item;
-					model.setHeapmatPopulation(selectedPop);
-				}
-			}
-		});
 
-		view.choiceHeatMapPop.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				Object item = e.getItem();
-				if(item instanceof String) {
-					String selectedPop = (String) item;
-					model.setHeapmatPopulation(selectedPop);
-				}
-			}
-		});
 		view.spinnerDelayLength.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {

@@ -1,20 +1,16 @@
 package chalmers.dax021308.ecosystem.view;
 
-import java.awt.Choice;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
-import chalmers.dax021308.ecosystem.model.util.Log;
 
+@SuppressWarnings("serial")
 public class LiveSettingsView extends JPanel {
 	static final int DEFAULT_ITERATION_DELAY = 16;
 	
@@ -24,14 +20,9 @@ public class LiveSettingsView extends JPanel {
 	private JPanel panelFourth;
 	
 	private JLabel labelIterationDelay;
-	private JLabel labelHeatMapPop;
 	
 	public final JSpinner spinnerDelayLength;
 	
-	public final JComboBox<String> comboBoxHeatMapPop;
-	public final Choice choiceHeatMapPop;
-	
-	public String[] populationNames = {"Deers","Wolves","Grass"};
 	/*
 	public final JRadioButton radioButtonDelayOn;
 	public final JRadioButton radioButtonDelayOff;
@@ -44,22 +35,16 @@ public class LiveSettingsView extends JPanel {
 	
 	public LiveSettingsView(EcoWorld model) {
 		setLayout(new GridBagLayout());
-		choiceHeatMapPop = new Choice();
-		for(int i = 0 ; i < populationNames.length; i++) {
-			choiceHeatMapPop.add(populationNames[i]);
-		}
 		panelFirst = new JPanel();
 		panelSecond = new JPanel();
 		panelThird = new JPanel();
 		panelFourth = new JPanel();
 		
 		labelIterationDelay = new JLabel("Iteration Delay");
-		labelHeatMapPop = new JLabel("Populations shown on heat map");
 		
 		spinnerDelayLength = new JSpinner();
 		spinnerDelayLength.setModel(new SpinnerNumberModel(DEFAULT_ITERATION_DELAY, 0, 100, 1));
 		
-		comboBoxHeatMapPop = new JComboBox<String>(populationNames);
 		
 		/*
 		radioButtonDelayOn = new JRadioButton("Delay On");
@@ -121,7 +106,6 @@ public class LiveSettingsView extends JPanel {
 		//c.weighty = 0;
 		c.gridx = 0;
 		c.gridy = 0;
-		panelSecond.add(labelHeatMapPop, c);
 		
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -129,7 +113,6 @@ public class LiveSettingsView extends JPanel {
 		//c.weighty = 0;
 		c.gridx = 1;
 		c.gridy = 0;
-		panelSecond.add(choiceHeatMapPop, c);
 		
 		/*
 		c = new GridBagConstraints();

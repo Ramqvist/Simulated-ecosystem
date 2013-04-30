@@ -278,7 +278,7 @@ public class NEWSettingsMenuView extends JDialog {
 
 			@Override
             public void actionPerformed(ActionEvent e) {
-				advancedSettingsView = new AdvancedSettings(); 
+				advancedSettingsView = new AdvancedSettings(NEWSettingsMenuView.this); 
             }
         };
 
@@ -777,7 +777,7 @@ public class NEWSettingsMenuView extends JDialog {
                 "Something went wrong.");
     }
 
-    class AdvancedSettings extends JFrame {
+    class AdvancedSettings extends JDialog {
 
         private JPanel advContentPane;
         private JPanel advLeft;
@@ -795,7 +795,8 @@ public class NEWSettingsMenuView extends JDialog {
         private ActionListener advListenerCancel;
         private ActionListener advListenerApply;
 
-        public AdvancedSettings() {
+        public AdvancedSettings(JDialog parent) {
+        	super(parent);
         	advContentPane = new JPanel();
             setContentPane(advContentPane);
             advLeft = new JPanel();
@@ -992,7 +993,7 @@ public class NEWSettingsMenuView extends JDialog {
 		} else {
 			setVisible(true);
 			if(advancedSettingsView == null) {
-				advancedSettingsView = new AdvancedSettings();
+				advancedSettingsView = new AdvancedSettings(this);
 			}
 		}
 	}
