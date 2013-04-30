@@ -18,6 +18,7 @@ import javax.swing.event.ChangeListener;
 
 import net.miginfocom.swing.MigLayout;
 import chalmers.dax021308.ecosystem.model.population.CommonSettings;
+import chalmers.dax021308.ecosystem.model.population.CommonSettings.BooleanSettingsContainer;
 import chalmers.dax021308.ecosystem.model.population.CommonSettings.DoubleSettingsContainer;
 import chalmers.dax021308.ecosystem.model.util.Log;
 
@@ -67,34 +68,28 @@ public class CommonSettingsPanel extends JPanel{
 			add(slider, "cell 3 "+currentRow+"");
 			doubleGuiMappings.put(ds, textField);
 		}
-		
+
 		currentRow++;
-		
-		//TODO: Insert boolean settings here
 		JButton btnNewButton = new JButton("Update values");
 		add(btnNewButton, "cell 2 "+currentRow+",growx");
-		
-		JCheckBox chckbxPathfinding = new JCheckBox("Pathfinding");
-		add(chckbxPathfinding, "cell 1 12");
-		
-		JCheckBox chckbxFocusPrey = new JCheckBox("Focus Prey");
-		add(chckbxFocusPrey, "cell 2 12");
-		
-		JCheckBox chckbxGroupBehavior = new JCheckBox("Group behavior");
-		add(chckbxGroupBehavior, "cell 3 12");
-		
-		
-	}
-	
-	private void injectCommonSettings() {
-		
-	}
-	
-	public CommonSettings retrieveCommonSettings() {
-		return null;
-	}
-	
-	public void UpdateCommonSettings() {
+		currentRow++;
+		int currentCol = 1;
+		for(final BooleanSettingsContainer bs : s.getBooleanSettings()) {
+			currentCol = currentCol % 3;
+			currentCol++;
+			if(currentCol == 1) {
+				currentRow++;
+			}
+			final JCheckBox checkbox = new JCheckBox(bs.name);
+			checkbox.setSelected(bs.value);
+			checkbox.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					bs.value = checkbox.isSelected();
+				}
+			});
+			add(checkbox, "cell "+currentCol+" "+currentRow);
+		}
 		
 	}
 
