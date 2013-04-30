@@ -58,8 +58,8 @@ public class ForceCalculator {
 	 */
 	public static Vector mutualInteractionForce(List<IAgent> neutralNeighbours,
 			IAgent currentAgent) {
-		Vector mutualInteractionForce = new Vector(0, 0);
-		Vector newForce = new Vector(0, 0);
+		Vector mutualInteractionForce = new Vector();
+		Vector newForce = new Vector();
 		IAgent agent;
 		int nrOfNeighbours = neutralNeighbours.size();
 		for (int i = 0; i < nrOfNeighbours; i++) {
@@ -183,7 +183,7 @@ public class ForceCalculator {
 	 */
 	public static Vector arrayalForce(List<IAgent> neutralNeighbours,
 			IAgent currentAgent) {
-		Vector arrayalForce = new Vector(0, 0);
+		Vector arrayalForce = new Vector();
 		Vector newForce = new Vector();
 		double nAgentsInVision = 0;
 		int nrOfNeighbours = neutralNeighbours.size();

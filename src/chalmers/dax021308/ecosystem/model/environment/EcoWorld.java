@@ -276,7 +276,7 @@ public class EcoWorld implements IModel {
 		if (s.getPreyModel() == SimulationSettings.POP_DEER) {
 //			prey = new DeerPopulation("Deers", s.getPreyPopSize(),
 //					Color.blue, 2.0, 3, 200, true, surroundings);
-			prey = new DeerPopulation("Deers", s.getPreyPopSize(),
+			prey = new DeerPopulation("Deer", s.getPreyPopSize(),
 					Color.blue, CommonSettings.predSettings.maxSpeed.value, CommonSettings.predSettings.maxAcceleration.value, CommonSettings.predSettings.visionRange.value, true, surroundings);
 		} else if (s.getPreyModel() == SimulationSettings.POP_DUMMYPREY) {
 			prey = new DummyPreyPopulation(s.getPreyPopSize(), Color.blue,

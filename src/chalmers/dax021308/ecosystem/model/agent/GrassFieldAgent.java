@@ -26,7 +26,7 @@ public class GrassFieldAgent extends AbstractAgent {
 			int height, Vector velocity, double maxSpeed, int capacity) {
 		super(name, pos, color, width, height, velocity, maxSpeed, 0, 0);
 		this.capacity = capacity;
-		energy = 50;
+		energy = MAX_ENERGY/2;
 		seeds = new ArrayList<GrassSeed>();
 	}
 
