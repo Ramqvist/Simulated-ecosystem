@@ -14,7 +14,6 @@ import java.util.concurrent.RejectedExecutionException;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.EllipticalObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
-import chalmers.dax021308.ecosystem.model.population.CommonSettings;
 import chalmers.dax021308.ecosystem.model.population.DeerPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPredatorPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPreyPopulation;
@@ -23,6 +22,10 @@ import chalmers.dax021308.ecosystem.model.population.GrassPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.population.PigPopulation;
 import chalmers.dax021308.ecosystem.model.population.WolfPopulation;
+import chalmers.dax021308.ecosystem.model.population.settings.CommonSettings;
+import chalmers.dax021308.ecosystem.model.population.settings.GrassSettings;
+import chalmers.dax021308.ecosystem.model.population.settings.PredSettings;
+import chalmers.dax021308.ecosystem.model.population.settings.PreySettings;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Stat;
@@ -270,17 +273,17 @@ public class EcoWorld implements IModel {
 					Color.red, 3, 0.75, 275, surroundings);
 		} else if (s.getPredatorModel() == SimulationSettings.POP_WOLF) {
 			pred = new WolfPopulation("Wolves", s.getPredPopSize(), Color.red,
-					CommonSettings.predSettings.maxSpeed.value, 
-					CommonSettings.predSettings.maxAcceleration.value, 
-					CommonSettings.predSettings.visionRange.value, 
+					PredSettings.instance.maxSpeed.value, 
+					PredSettings.instance.maxAcceleration.value, 
+					PredSettings.instance.visionRange.value, 
 					true, surroundings);
 		}
 
 		if (s.getPreyModel() == SimulationSettings.POP_DEER) {
 			prey = new DeerPopulation("Deers", s.getPreyPopSize(), Color.blue,
-					CommonSettings.preySettings.maxSpeed.value, 
-					CommonSettings.preySettings.maxAcceleration.value, 
-					CommonSettings.preySettings.visionRange.value,
+					PreySettings.instance.maxSpeed.value, 
+					PreySettings.instance.maxAcceleration.value, 
+					PreySettings.instance.visionRange.value,
 					true, surroundings);
 		} else if (s.getPreyModel() == SimulationSettings.POP_DUMMYPREY) {
 			prey = new DummyPreyPopulation(s.getPreyPopSize(), Color.blue,
@@ -292,7 +295,7 @@ public class EcoWorld implements IModel {
 
 		if (s.getGrassModel() == SimulationSettings.POP_GRASS) {
 			grass = new GrassPopulation("Grass", s.getGrassPopSize(), new Color(69, 139, 00), 
-					(int) CommonSettings.grassSettings.capacity.value, surroundings);
+					(int) GrassSettings.instance.capacity.value, surroundings);
 		} else if (s.getGrassModel() == SimulationSettings.POP_GRASS_FIELD) {
 			grass = new GrassFieldPopulation(SimulationSettings.NAME_GRASS_FIELD, s.getGrassPopSize(),
 					Color.green, 80, surroundings);

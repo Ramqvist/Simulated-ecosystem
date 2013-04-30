@@ -19,9 +19,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import net.miginfocom.swing.MigLayout;
-import chalmers.dax021308.ecosystem.model.population.CommonSettings;
-import chalmers.dax021308.ecosystem.model.population.CommonSettings.BooleanSettingsContainer;
-import chalmers.dax021308.ecosystem.model.population.CommonSettings.DoubleSettingsContainer;
+import chalmers.dax021308.ecosystem.model.population.settings.CommonSettings;
+import chalmers.dax021308.ecosystem.model.population.settings.CommonSettings.BooleanSettingsContainer;
+import chalmers.dax021308.ecosystem.model.population.settings.CommonSettings.DoubleSettingsContainer;
 import chalmers.dax021308.ecosystem.model.util.Log;
 
 public class CommonSettingsPanel extends JPanel{
@@ -53,7 +53,12 @@ public class CommonSettingsPanel extends JPanel{
 				
 				@Override
 				public void keyReleased(KeyEvent e) {
-					
+					try {
+						Log.v(e.toString());
+						ds.value = Double.parseDouble(textField.getText());
+					} catch (NumberFormatException ne) {
+						Log.e(ne.getMessage());
+					}
 				}
 				
 				@Override
@@ -88,9 +93,6 @@ public class CommonSettingsPanel extends JPanel{
 			doubleGuiMappings.put(ds, textField);
 		}
 
-		currentRow++;
-		JButton btnNewButton = new JButton("Update values");
-		add(btnNewButton, "cell 2 "+currentRow+",growx");
 		currentRow++;
 		int currentCol = 1;
 		for(final BooleanSettingsContainer bs : s.getBooleanSettings()) {

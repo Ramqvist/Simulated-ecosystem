@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 
 import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
-import chalmers.dax021308.ecosystem.model.population.CommonSettings;
+import chalmers.dax021308.ecosystem.model.population.settings.CommonSettings;
 
 import net.miginfocom.swing.MigLayout;
 

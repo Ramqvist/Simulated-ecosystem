@@ -1,4 +1,4 @@
-package chalmers.dax021308.ecosystem.model.population;
+package chalmers.dax021308.ecosystem.model.population.settings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,71 +11,43 @@ import java.util.List;
  * @author Erik Ramqvist
  *
  */
-public class CommonSettings {
-	public static CommonSettings predSettings = new CommonSettings();
-	public static CommonSettings preySettings = new CommonSettings();
-	public static CommonSettings grassSettings = new CommonSettings();
+public abstract class CommonSettings {
 	
 	static {
 		
 		//TODO: need to add values to doubleSettings-list aswell, and remove the default value.
 		
 		/*	PREY DEFAULT SETTINGS 	*/
-		preySettings.capacity 			= new DoubleSettingsContainer("Capacity", 1, Integer.MAX_VALUE, Integer.MAX_VALUE);
-		preySettings.maxSpeed 			= new DoubleSettingsContainer("Max speed", 1, 100, 2); 	
-		preySettings.maxAcceleration 	= new DoubleSettingsContainer("Max Acceleration", 1, 100, 3);
-		preySettings.visionRange 		= new DoubleSettingsContainer("Vision range", 1, 1000, 200);
-		preySettings.width 				= new DoubleSettingsContainer("Width", 1, 100, 5);
-		preySettings.height				= new DoubleSettingsContainer("Height", 1, 100, 10);
-		
-		preySettings.doubleSettings.add(preySettings.maxSpeed);
-		preySettings.doubleSettings.add(preySettings.capacity);
-		preySettings.doubleSettings.add(preySettings.visionRange);
-		preySettings.doubleSettings.add(preySettings.maxAcceleration);
-		preySettings.doubleSettings.add(preySettings.width);
-		preySettings.doubleSettings.add(preySettings.height);
-		
-		predSettings.capacity 			= new DoubleSettingsContainer("Capacity", 1, Integer.MAX_VALUE, Integer.MAX_VALUE);
-		predSettings.maxSpeed 			= new DoubleSettingsContainer("Max speed", 1, 100, 2.3); // 2.3
-		predSettings.maxAcceleration 	= new DoubleSettingsContainer("Max Acceleration", 1, 100, 0.5); //0.5
-		predSettings.visionRange 		= new DoubleSettingsContainer("Vision range", 1, 1000, 250);
-		predSettings.width 				= new DoubleSettingsContainer("Width", 1, 100, 10);
-		predSettings.height				= new DoubleSettingsContainer("Height", 1, 100, 20);
-		
-		predSettings.doubleSettings.add(predSettings.maxSpeed);
-		predSettings.doubleSettings.add(predSettings.capacity);
-		predSettings.doubleSettings.add(predSettings.visionRange);
-		predSettings.doubleSettings.add(predSettings.maxAcceleration);
-		predSettings.doubleSettings.add(predSettings.width);
-		predSettings.doubleSettings.add(predSettings.height);
+//		preySettings.capacity 			= new DoubleSettingsContainer("Capacity", 1, Integer.MAX_VALUE, Integer.MAX_VALUE);
+//		preySettings.maxSpeed 			= new DoubleSettingsContainer("Max speed", 1, 100, 2); 	
+//		preySettings.maxAcceleration 	= new DoubleSettingsContainer("Max Acceleration", 1, 100, 3);
+//		preySettings.visionRange 		= new DoubleSettingsContainer("Vision range", 1, 1000, 200);
+//		preySettings.width 				= new DoubleSettingsContainer("Width", 1, 100, 5);
+//		preySettings.height				= new DoubleSettingsContainer("Height", 1, 100, 10);
+//		
+//		preySettings.doubleSettings.add(preySettings.maxSpeed);
+//		preySettings.doubleSettings.add(preySettings.capacity);
+//		preySettings.doubleSettings.add(preySettings.visionRange);
+//		preySettings.doubleSettings.add(preySettings.maxAcceleration);
+//		preySettings.doubleSettings.add(preySettings.width);
+//		preySettings.doubleSettings.add(preySettings.height);
+//		
+//		predSettings.capacity 			= new DoubleSettingsContainer("Capacity", 1, Integer.MAX_VALUE, Integer.MAX_VALUE);
+//		predSettings.maxSpeed 			= new DoubleSettingsContainer("Max speed", 1, 100, 2.3); // 2.3
+//		predSettings.maxAcceleration 	= new DoubleSettingsContainer("Max Acceleration", 1, 100, 0.5); //0.5
+//		predSettings.visionRange 		= new DoubleSettingsContainer("Vision range", 1, 1000, 250);
+//		predSettings.width 				= new DoubleSettingsContainer("Width", 1, 100, 10);
+//		predSettings.height				= new DoubleSettingsContainer("Height", 1, 100, 20);
+//		
+//		predSettings.doubleSettings.add(predSettings.maxSpeed);
+//		predSettings.doubleSettings.add(predSettings.capacity);
+//		predSettings.doubleSettings.add(predSettings.visionRange);
+//		predSettings.doubleSettings.add(predSettings.maxAcceleration);
+//		predSettings.doubleSettings.add(predSettings.width);
+//		predSettings.doubleSettings.add(predSettings.height);
 		
 		//TODO: Fill in correct values, copied to avoid nullpointer.
-		grassSettings.capacity 			= new DoubleSettingsContainer("Capacity", 1, Integer.MAX_VALUE, Integer.MAX_VALUE);
-		grassSettings.maxSpeed 			= new DoubleSettingsContainer("Max speed", 1, 100, 2); // 2.3
-		grassSettings.maxAcceleration 	= new DoubleSettingsContainer("Max Acceleration", 1, 100, 1); //0.5
-		grassSettings.visionRange 		= new DoubleSettingsContainer("Vision range", 1, 1000, 250);
-		grassSettings.width 				= new DoubleSettingsContainer("Width", 1, 100, 10);
-		grassSettings.height				= new DoubleSettingsContainer("Height", 1, 100, 20);
 		
-		grassSettings.doubleSettings.add(grassSettings.maxSpeed);
-		grassSettings.doubleSettings.add(grassSettings.capacity);
-		grassSettings.doubleSettings.add(grassSettings.visionRange);
-		grassSettings.doubleSettings.add(grassSettings.maxAcceleration);
-		grassSettings.doubleSettings.add(grassSettings.width);
-		grassSettings.doubleSettings.add(grassSettings.height);
-		
-//		TODO: Add to deer specific variables.
-//		TODO: Make CommonSettings abstract and make extending classes.
-//		private double STOTTING_RANGE = 10;
-//		private double STOTTING_LENGTH = 8;
-//		private double STOTTING_COOLDOWN = 50;
-//		private double stottingDuration = STOTTING_LENGTH;
-//		private double stottingCoolDown = 0;
-//		digestion_time		= new DoubleSettingsContainer("Digestion time", 1, 1000, 10);
-//		reproduction_rate	= new DoubleSettingsContainer("Reproduction rate", 1, 1000, 10);
-//
-//		public DoubleSettingsContainer digestion_time;
-//		public DoubleSettingsContainer reproduction_rate;
 
 	}
 	
@@ -105,8 +77,8 @@ public class CommonSettings {
 		public boolean defaultValue;
 	}
 	
-	private List<DoubleSettingsContainer> doubleSettings;
-	private List<BooleanSettingsContainer> booleanSettings;
+	protected List<DoubleSettingsContainer> doubleSettings;
+	protected List<BooleanSettingsContainer> booleanSettings;
 	
 	
 	/*	Common Settings containers	*/
