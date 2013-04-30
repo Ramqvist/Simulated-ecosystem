@@ -48,7 +48,7 @@ public class MainWindow extends JFrame implements IView {
 	private BottomChartTabs bottomTabbedGraphs;
 	private IChart graphView2;
 	
-	public final LiveSettingsViewController parameterViewCtrl; 
+//	public final LiveSettingsViewController parameterViewCtrl; 
 	public final ControlViewController controlViewCtrl;
 	public final NEWSettingsMenuViewController smvc;
 	
@@ -80,7 +80,7 @@ public class MainWindow extends JFrame implements IView {
 		openGL = new OpenGLSimulationView(model, d, true);
 		openGL.init();
 		controlViewCtrl = new ControlViewController(model);
-		parameterViewCtrl = new LiveSettingsViewController(model);
+//		parameterViewCtrl = new LiveSettingsViewController(model);
 		smvc = new NEWSettingsMenuViewController(model, this);
 		heatMap = new HeatmapTabHolder(model);
 		bottomTabbedGraphs = new BottomChartTabs(model);
@@ -195,7 +195,7 @@ public class MainWindow extends JFrame implements IView {
 		right.setPreferredSize(new Dimension(500, 400));
 		setContentPane(contentPane);
 		
-		left.add(parameterViewCtrl.view, BorderLayout.NORTH);
+//		left.add(parameterViewCtrl.view, BorderLayout.NORTH);
 		left.add(openGL, BorderLayout.CENTER);
 		left.add(controlViewCtrl.view, BorderLayout.SOUTH);  
 		right.add(graphView2.toComponent(), BorderLayout.CENTER); // during development.

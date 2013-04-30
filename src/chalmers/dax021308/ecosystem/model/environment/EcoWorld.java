@@ -22,7 +22,6 @@ import chalmers.dax021308.ecosystem.model.population.GrassPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.population.PigPopulation;
 import chalmers.dax021308.ecosystem.model.population.WolfPopulation;
-import chalmers.dax021308.ecosystem.model.population.settings.CommonSettings;
 import chalmers.dax021308.ecosystem.model.population.settings.GrassSettings;
 import chalmers.dax021308.ecosystem.model.population.settings.PredSettings;
 import chalmers.dax021308.ecosystem.model.population.settings.PreySettings;
