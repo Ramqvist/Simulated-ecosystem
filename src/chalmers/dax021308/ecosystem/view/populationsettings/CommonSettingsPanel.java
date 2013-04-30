@@ -3,6 +3,8 @@ package chalmers.dax021308.ecosystem.view.populationsettings;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,10 +45,27 @@ public class CommonSettingsPanel extends JPanel{
 			add(textField, "cell 2 "+currentRow+",growx");
 			textField.setColumns(10);
 			textField.setText(ds.value + "");
+			textField.addKeyListener(new KeyListener() {
+				@Override
+				public void keyTyped(KeyEvent e) {
+					
+				}
+				
+				@Override
+				public void keyReleased(KeyEvent e) {
+					
+				}
+				
+				@Override
+				public void keyPressed(KeyEvent e) {
+					
+				}
+			});
 			textField.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					try {
+						Log.v("Action performed.");
 						ds.value = Double.parseDouble(textField.getText());
 					} catch (NumberFormatException ne) {
 						Log.e(ne.getMessage());

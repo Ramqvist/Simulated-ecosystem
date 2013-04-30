@@ -36,13 +36,13 @@ public class CommonSettings {
 		preySettings.doubleSettings.add(preySettings.height);
 		
 		predSettings.capacity 			= new DoubleSettingsContainer("Capacity", 1, Integer.MAX_VALUE, Integer.MAX_VALUE);
-		predSettings.maxSpeed 			= new DoubleSettingsContainer("Max speed", 1, 100, 2); // 2.3
-		predSettings.maxAcceleration 	= new DoubleSettingsContainer("Max Acceleration", 1, 100, 1); //0.5
+		predSettings.maxSpeed 			= new DoubleSettingsContainer("Max speed", 1, 100, 2.3); // 2.3
+		predSettings.maxAcceleration 	= new DoubleSettingsContainer("Max Acceleration", 1, 100, 0.5); //0.5
 		predSettings.visionRange 		= new DoubleSettingsContainer("Vision range", 1, 1000, 250);
 		predSettings.width 				= new DoubleSettingsContainer("Width", 1, 100, 10);
 		predSettings.height				= new DoubleSettingsContainer("Height", 1, 100, 20);
 		
-		predSettings.doubleSettings.add(preySettings.maxSpeed);
+		predSettings.doubleSettings.add(predSettings.maxSpeed);
 		predSettings.doubleSettings.add(predSettings.capacity);
 		predSettings.doubleSettings.add(predSettings.visionRange);
 		predSettings.doubleSettings.add(predSettings.maxAcceleration);
@@ -57,7 +57,7 @@ public class CommonSettings {
 		grassSettings.width 				= new DoubleSettingsContainer("Width", 1, 100, 10);
 		grassSettings.height				= new DoubleSettingsContainer("Height", 1, 100, 20);
 		
-		grassSettings.doubleSettings.add(preySettings.maxSpeed);
+		grassSettings.doubleSettings.add(grassSettings.maxSpeed);
 		grassSettings.doubleSettings.add(grassSettings.capacity);
 		grassSettings.doubleSettings.add(grassSettings.visionRange);
 		grassSettings.doubleSettings.add(grassSettings.maxAcceleration);
