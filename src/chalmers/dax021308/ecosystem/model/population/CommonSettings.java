@@ -98,6 +98,7 @@ public class CommonSettings {
 		public BooleanSettingsContainer(String name, boolean defaultValue) {
 			this.defaultValue = defaultValue;
 			this.value = defaultValue;
+			this.name = name;
 		}
 		public String name;
 		public boolean value;
