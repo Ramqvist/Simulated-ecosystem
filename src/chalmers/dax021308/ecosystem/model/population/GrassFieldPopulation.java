@@ -18,8 +18,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public class GrassFieldPopulation extends AbstractPopulation {
 
 	public GrassFieldPopulation(String name, int initPopulationSize,
-			Color color, double maxSpeed, double maxAcceleration,
-			double visionRange, int capacity, SurroundingsSettings surroundings) {
+			Color color, int capacity, SurroundingsSettings surroundings) {
 		super(name, color, surroundings);
 		agents = new ArrayList<IAgent>(initPopulationSize * 100);
 		initializePopulation(initPopulationSize, capacity);
