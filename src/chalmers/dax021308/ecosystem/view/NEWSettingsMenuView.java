@@ -249,9 +249,9 @@ public class NEWSettingsMenuView extends JDialog {
         setMyFonts();
         //setMySliders();
         //setMySpinners();
+        setMyListeners();
         setMyCheckBoxes();
         setMyLists();
-        setMyListeners();
         setMyButtons();
         setMyBorders();
         addToLeftPanel();
@@ -314,6 +314,7 @@ public class NEWSettingsMenuView extends JDialog {
                     //sliderNoOfIterations.setEnabled(false);
                     spinnerNoOfIterations.setEnabled(false);
                 }
+                
             }
         };
     }
