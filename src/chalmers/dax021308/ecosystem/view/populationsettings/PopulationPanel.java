@@ -21,8 +21,6 @@ public class PopulationPanel extends JPanel {
 		GeneticPanel panel_1 = new GeneticPanel(s);
 		add(panel_1, "cell 0 2,grow");
 		
-		JPanel panel_2 = new PopulationSpecificPanel();
-		add(panel_2, "cell 0 3,grow");
 		setSize(new Dimension (700, 700));
 	}
 

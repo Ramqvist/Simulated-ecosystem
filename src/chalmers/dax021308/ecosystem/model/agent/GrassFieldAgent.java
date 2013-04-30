@@ -19,7 +19,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public class GrassFieldAgent extends AbstractAgent {
 
 	private static final double REPRODUCTION_RATE = 0.1;
-	private static final double MAX_ENERGY = 200;
+	private static final double MAX_ENERGY = 300;
 	private List<GrassSeed> seeds;
 
 	public GrassFieldAgent(String name, Position pos, Color color, int width,
@@ -58,8 +58,8 @@ public class GrassFieldAgent extends AbstractAgent {
 			double newEnergy = energy * energyProportion
 					* (1 - energyProportion) * 0.1;
 			// System.out.println(newEnergy);
-			energy += newEnergy;
-			// seeds.add(new GrassSeed(newEnergy));
+//			energy += newEnergy;
+			 seeds.add(new GrassSeed(newEnergy));
 		}
 		int red = (int) (150.0 - 150.0 * (((double) energy) / MAX_ENERGY));
 		int green = (int) (55.0 + 200.0 * (((double) energy) / MAX_ENERGY));
@@ -92,9 +92,9 @@ public class GrassFieldAgent extends AbstractAgent {
 	public double impactForcesBy() {
 		// if it has a low amount of food it should negatively impact the agents
 		// who wants to eat it
-		 return 1 - energy / 100;
+		 return MAX_ENERGY/2 - energy / 100;
 		// but for now it just means less food = less impact
-		//return energy / 200;
+//		return energy / 200;
 	}
 
 	private class GrassSeed {

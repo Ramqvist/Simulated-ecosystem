@@ -32,7 +32,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected int capacity = Integer.MAX_VALUE;
 	protected int lifeLength = 0;
 	protected double energy = 1000; // set specific energy level in subclasses
-	protected int trophicLevel; //Is this used?
+	protected int trophicLevel; // Is this used?
 	protected Vector velocity;
 	protected Gender gender;
 	protected AgentPath focusedPreyPath;
@@ -44,18 +44,19 @@ public abstract class AbstractAgent implements IAgent {
 	protected boolean isAlive = true;
 	protected boolean hungry = true;
 	protected static final boolean USE_PRIORITY_NEIGHBOURS = true;
-	protected static final int K_NEAREST_NEIGHBOURS = 5; 
+	protected static final int K_NEAREST_NEIGHBOURS = 5;
 
 	/* Neighbour list module variables */
 	protected List<IAgent> preyNeighbours;
 	protected List<IAgent> predNeighbours;
 	protected List<IAgent> neutralNeighbours;
-	
+
 	protected FixedSizeAgentQueueObjectPriorityQueue preyNeighboursQueue;
 	protected FixedSizeAgentQueueObjectPriorityQueue predNeighboursQueue;
 	protected FixedSizeAgentQueueObjectPriorityQueue neutralNeighboursQueue;
 
-	//protected List<IObstacle> obstacles; // TODO remove this? Was only used by PigAgent
+	// protected List<IObstacle> obstacles; // TODO remove this? Was only used
+	// by PigAgent
 	private int neighbourCounter;
 	private static final int NEIGHBOURS_UPDATE_THRESHOLD = 10;
 	protected static Random ran = new Random();
@@ -86,10 +87,13 @@ public abstract class AbstractAgent implements IAgent {
 		preyNeighbours = new ArrayList<IAgent>(256);
 		predNeighbours = new ArrayList<IAgent>(256);
 		neutralNeighbours = new ArrayList<IAgent>(256);
-		preyNeighboursQueue = new FixedSizeAgentQueueObjectPriorityQueue(K_NEAREST_NEIGHBOURS);
-		predNeighboursQueue = new FixedSizeAgentQueueObjectPriorityQueue(K_NEAREST_NEIGHBOURS);
-		neutralNeighboursQueue = new FixedSizeAgentQueueObjectPriorityQueue(K_NEAREST_NEIGHBOURS);
-		
+		preyNeighboursQueue = new FixedSizeAgentQueueObjectPriorityQueue(
+				K_NEAREST_NEIGHBOURS);
+		predNeighboursQueue = new FixedSizeAgentQueueObjectPriorityQueue(
+				K_NEAREST_NEIGHBOURS);
+		neutralNeighboursQueue = new FixedSizeAgentQueueObjectPriorityQueue(
+				K_NEAREST_NEIGHBOURS);
+
 		focusedPrey = new Container<IAgent>(null);
 		// To update the first time.
 		neighbourCounter = ran.nextInt(NEIGHBOURS_UPDATE_THRESHOLD);
@@ -277,49 +281,50 @@ public abstract class AbstractAgent implements IAgent {
 		// predNeighbours = new ArrayList<IAgent>(2*predNeighbours.size());
 		// preyNeighbours = new ArrayList<IAgent>(2*preyNeighbours.size());
 
-		
-		
-		if(USE_PRIORITY_NEIGHBOURS) {
+		if (USE_PRIORITY_NEIGHBOURS) {
 			preyNeighboursQueue.clear();
 			predNeighboursQueue.clear();
-			if(groupBehaviour)
+			if (groupBehaviour)
 				neutralNeighboursQueue.clear();
 		} else {
 			predNeighbours.clear();
 			preyNeighbours.clear();
-			if(groupBehaviour)
+			if (groupBehaviour)
 				neutralNeighbours.clear();
 		}
 
-		if(groupBehaviour){
+		if (groupBehaviour) {
 			for (IPopulation p : neutral) {
 				for (IAgent a : p.getAgents()) {
-					if(a != this) {
+					if (a != this) {
 						double distance = a.getPosition().getDistance(position);
 						if (distance <= visionRange) {
-							if(USE_PRIORITY_NEIGHBOURS) {
-								neutralNeighboursQueue.insertWithOverflow(new AgentQueueObject(a, distance));
+							if (USE_PRIORITY_NEIGHBOURS) {
+								neutralNeighboursQueue
+										.insertWithOverflow(new AgentQueueObject(
+												a, distance));
 							} else {
 								neutralNeighbours.add(a);
 							}
-							
+
 						}
 					}
 				}
 			}
 		}
-		
+
 		for (IPopulation p : prey) {
 			for (IAgent a : p.getAgents()) {
 				double distance = a.getPosition().getDistance(position);
 				if (distance <= visionRange) {
-					if(USE_PRIORITY_NEIGHBOURS) {
-						preyNeighboursQueue.insertWithOverflow(new AgentQueueObject(a, distance));
+					if (USE_PRIORITY_NEIGHBOURS) {
+						preyNeighboursQueue
+								.insertWithOverflow(new AgentQueueObject(a,
+										distance));
 					} else {
 						preyNeighbours.add(a);
 					}
-					
-					
+
 				}
 			}
 		}
@@ -328,36 +333,40 @@ public abstract class AbstractAgent implements IAgent {
 			for (IAgent a : p.getAgents()) {
 				double distance = a.getPosition().getDistance(position);
 				if (distance <= visionRange) {
-					if(USE_PRIORITY_NEIGHBOURS) {
-						predNeighboursQueue.insertWithOverflow(new AgentQueueObject(a, distance));
+					if (USE_PRIORITY_NEIGHBOURS) {
+						predNeighboursQueue
+								.insertWithOverflow(new AgentQueueObject(a,
+										distance));
 					} else {
 						predNeighbours.add(a);
 					}
-					
-					
+
 				}
 			}
 		}
-		
-		if(USE_PRIORITY_NEIGHBOURS) {
+
+		if (USE_PRIORITY_NEIGHBOURS) {
 			preyNeighbours = preyNeighboursQueue.getAgentsInHeapAsList();
 			predNeighbours = predNeighboursQueue.getAgentsInHeapAsList();
-			if(groupBehaviour)
-				neutralNeighbours = neutralNeighboursQueue.getAgentsInHeapAsList();
-			
-//			System.out.println("--------- " + this.name + " NEUTRAL ---------");
-//			System.out.println(neutralNeighboursQueue.getHeapAsList().toString());
-//			System.out.println("---------------------------------------------------------------");
-//			
-//			System.out.println("--------- " + this.name + " PREY ---------");
-//			System.out.println(preyNeighboursQueue.getHeapAsList().toString());
-//			System.out.println("---------------------------------------------------------------");
-//			
-//			System.out.println("--------- " + this.name + " PREDATOR ---------");
-//			System.out.println(predNeighboursQueue.getHeapAsList().toString());
-//			System.out.println("---------------------------------------------------------------");
+			if (groupBehaviour)
+				neutralNeighbours = neutralNeighboursQueue
+						.getAgentsInHeapAsList();
+
+			// System.out.println("--------- " + this.name +
+			// " NEUTRAL ---------");
+			// System.out.println(neutralNeighboursQueue.getHeapAsList().toString());
+			// System.out.println("---------------------------------------------------------------");
+			//
+			// System.out.println("--------- " + this.name + " PREY ---------");
+			// System.out.println(preyNeighboursQueue.getHeapAsList().toString());
+			// System.out.println("---------------------------------------------------------------");
+			//
+			// System.out.println("--------- " + this.name +
+			// " PREDATOR ---------");
+			// System.out.println(predNeighboursQueue.getHeapAsList().toString());
+			// System.out.println("---------------------------------------------------------------");
 		}
-		
+
 	}
 
 	@Override
@@ -463,35 +472,35 @@ public abstract class AbstractAgent implements IAgent {
 	}
 
 	@Override
-	public void eat() { //TODO: This should not be here. Remove to force subclasses to implement.
+	public void eat() { // TODO: This should not be here. Remove to force
+						// subclasses to implement.
 		// Do nothing special, should be overriden by advanced agents.
 	}
-	
+
 	@Override
-	public boolean isHungry(){
+	public boolean isHungry() {
 		return hungry;
 	}
-	
+
 	@Override
-	public double impactForcesBy(){
+	public double impactForcesBy() {
 		return 1;
 	}
-	
-	public int getPreyNeighbourSize(){
+
+	public int getPreyNeighbourSize() {
 		return preyNeighbours.size();
 	}
-	
-	public int getPredatorNeighbourSize(){
+
+	public int getPredatorNeighbourSize() {
 		return predNeighbours.size();
 	}
-	
-	public int getNeutralNeighbourSize(){
+
+	public int getNeutralNeighbourSize() {
 		return neutralNeighbours.size();
 	}
-	
+
 	@Override
-	public List<Position> getFocusedPath(){
+	public List<Position> getFocusedPath() {
 		return focusedPreyPath.getPath();
 	}
-
 }

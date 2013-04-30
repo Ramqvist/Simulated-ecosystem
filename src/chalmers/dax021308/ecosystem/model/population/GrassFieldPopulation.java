@@ -17,8 +17,8 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class GrassFieldPopulation extends AbstractPopulation {
 
-	public GrassFieldPopulation(String name, int initPopulationSize, 
-			Color color, double maxSpeed, double maxAcceleration, 
+	public GrassFieldPopulation(String name, int initPopulationSize,
+			Color color, double maxSpeed, double maxAcceleration,
 			double visionRange, int capacity, SurroundingsSettings surroundings) {
 		super(name, color, surroundings);
 		agents = new ArrayList<IAgent>(initPopulationSize * 100);
@@ -26,11 +26,12 @@ public class GrassFieldPopulation extends AbstractPopulation {
 	}
 
 	private void initializePopulation(int populationSize, int capacity) {
-		
+
 		for (int i = 0; i < populationSize; i++) {
 			Position pos = getRandomPosition();
-			Vector velocity = new Vector(1,1);
-			IAgent a = new GrassFieldAgent(getName(), pos, color, 50, 50, velocity, 1, capacity);
+			Vector velocity = new Vector(1, 1);
+			IAgent a = new GrassFieldAgent(getName(), pos, color, 50, 50,
+					velocity, 1, capacity);
 			agents.add(a);
 		}
 	}
@@ -56,5 +57,4 @@ public class GrassFieldPopulation extends AbstractPopulation {
 	public synchronized void addToRemoveList(IAgent a) {
 		// Try do nothing, just let the food be there
 	}
-
 }

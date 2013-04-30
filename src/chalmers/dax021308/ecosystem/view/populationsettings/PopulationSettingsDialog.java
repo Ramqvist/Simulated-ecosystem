@@ -11,7 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JTabbedPane;
 
-import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
+	import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
 import chalmers.dax021308.ecosystem.model.population.CommonSettings;
 import chalmers.dax021308.ecosystem.view.IView;
 

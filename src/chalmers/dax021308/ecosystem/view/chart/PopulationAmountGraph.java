@@ -106,6 +106,7 @@ public class PopulationAmountGraph extends AbstractGraph2D {
 		for (IPopulation p: populations) {
 			if (it.hasNext()) {
 				((ITrace2D) it.next()).addPoint(nIterationsPassed, p.getSize());
+				System.out.println(p.getClass());
 			}
 			else
 				return;
