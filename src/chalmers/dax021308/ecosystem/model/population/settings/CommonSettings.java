@@ -13,45 +13,7 @@ import java.util.List;
  */
 public abstract class CommonSettings {
 	
-	static {
-		
-		//TODO: need to add values to doubleSettings-list aswell, and remove the default value.
-		
-		/*	PREY DEFAULT SETTINGS 	*/
-//		preySettings.capacity 			= new DoubleSettingsContainer("Capacity", 1, Integer.MAX_VALUE, Integer.MAX_VALUE);
-//		preySettings.maxSpeed 			= new DoubleSettingsContainer("Max speed", 1, 100, 2); 	
-//		preySettings.maxAcceleration 	= new DoubleSettingsContainer("Max Acceleration", 1, 100, 3);
-//		preySettings.visionRange 		= new DoubleSettingsContainer("Vision range", 1, 1000, 200);
-//		preySettings.width 				= new DoubleSettingsContainer("Width", 1, 100, 5);
-//		preySettings.height				= new DoubleSettingsContainer("Height", 1, 100, 10);
-//		
-//		preySettings.doubleSettings.add(preySettings.maxSpeed);
-//		preySettings.doubleSettings.add(preySettings.capacity);
-//		preySettings.doubleSettings.add(preySettings.visionRange);
-//		preySettings.doubleSettings.add(preySettings.maxAcceleration);
-//		preySettings.doubleSettings.add(preySettings.width);
-//		preySettings.doubleSettings.add(preySettings.height);
-//		
-//		predSettings.capacity 			= new DoubleSettingsContainer("Capacity", 1, Integer.MAX_VALUE, Integer.MAX_VALUE);
-//		predSettings.maxSpeed 			= new DoubleSettingsContainer("Max speed", 1, 100, 2.3); // 2.3
-//		predSettings.maxAcceleration 	= new DoubleSettingsContainer("Max Acceleration", 1, 100, 0.5); //0.5
-//		predSettings.visionRange 		= new DoubleSettingsContainer("Vision range", 1, 1000, 250);
-//		predSettings.width 				= new DoubleSettingsContainer("Width", 1, 100, 10);
-//		predSettings.height				= new DoubleSettingsContainer("Height", 1, 100, 20);
-//		
-//		predSettings.doubleSettings.add(predSettings.maxSpeed);
-//		predSettings.doubleSettings.add(predSettings.capacity);
-//		predSettings.doubleSettings.add(predSettings.visionRange);
-//		predSettings.doubleSettings.add(predSettings.maxAcceleration);
-//		predSettings.doubleSettings.add(predSettings.width);
-//		predSettings.doubleSettings.add(predSettings.height);
-		
-		//TODO: Fill in correct values, copied to avoid nullpointer.
-		
-
-	}
-	
-	public static class DoubleSettingsContainer {
+	public class DoubleSettingsContainer {
 		public DoubleSettingsContainer(String name, double min, double max, double defaultValue) {
 			this.value = defaultValue;
 			this.defaultValue = defaultValue;

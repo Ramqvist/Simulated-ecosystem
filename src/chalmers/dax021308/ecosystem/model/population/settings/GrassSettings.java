@@ -1,5 +1,7 @@
 package chalmers.dax021308.ecosystem.model.population.settings;
 
+import chalmers.dax021308.ecosystem.model.population.settings.CommonSettings.DoubleSettingsContainer;
+
 
 public class GrassSettings extends CommonSettings {
 	public static GrassSettings instance = new GrassSettings();
@@ -13,6 +15,10 @@ public class GrassSettings extends CommonSettings {
 		doubleSettings.remove(velocity_decay);
 		booleanSettings.remove(groupBehavior);
 		booleanSettings.remove(pathFinding);
+		
+		doubleSettings.remove(capacity);
+		capacity = new DoubleSettingsContainer("Capacity", 1, Integer.MAX_VALUE, 2000);
+		doubleSettings.add(capacity);
 		
 //		capacity 			= new DoubleSettingsContainer("Capacity", 1, Integer.MAX_VALUE, Integer.MAX_VALUE);
 //		maxSpeed 			= new DoubleSettingsContainer("Max speed", 1, 100, 2); // 2.3

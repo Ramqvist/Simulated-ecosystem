@@ -2,6 +2,8 @@ package chalmers.dax021308.ecosystem.view.populationsettings;
 
 import java.awt.Checkbox;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +22,9 @@ import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
 import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings.GenomeSpecification;
 
 /**
- * Panel for Genetic settings.
+ * Panel for Genetic settings. 
+ * <p>
+ * Dynamically adds gui elements depending on the values  in the given GeneticSettings.
  * 
  * @author Erik Ramqvist
  *
@@ -29,7 +33,7 @@ public class GeneticPanel extends JPanel {
 	
 	private GeneticSettings geneticContent;
 	
-	//TODO: Replace JComponent with container class.
+	@Deprecated
 	private Map<GenomeSpecification, List<JComponent>> guiMap = new HashMap<GenomeSpecification, List<JComponent>>(); 
 	
 	public GeneticPanel(GeneticSettings geneticContent) {
@@ -46,17 +50,8 @@ public class GeneticPanel extends JPanel {
 		JLabel lblMutable = new JLabel("Mutable");
 		add(lblMutable, "cell 4 1");
 		
-//		JLabel lblStotting = new JLabel("Stotting");
-//		add(lblStotting, "cell 2 2,alignx right");
-//		
-//		JCheckBox chckbxNewCheckBox = new JCheckBox("");
-//		add(chckbxNewCheckBox, "cell 3 2,alignx center");
-//		
-//		JCheckBox chckbxMutable = new JCheckBox("");
-//		add(chckbxMutable, "cell 4 2,alignx left");
-		
 		int currentRow = 1;
-		for(GenomeSpecification g : geneticContent.getGenomes()) {
+		for(final GenomeSpecification g : geneticContent.getGenomes()) {
 			if(g.getGenomeType() != GenomeSpecification.TYPE_BOOLEAN) {
 				continue;
 			}
@@ -64,15 +59,27 @@ public class GeneticPanel extends JPanel {
 			JLabel lblGroupBehavoir = new JLabel(g.getName());
 			add(lblGroupBehavoir, "cell 2 "+currentRow+",alignx right");
 			
-			JCheckBox chckbx1 = new JCheckBox("");
-			add(chckbx1, "cell 3 "+currentRow+",alignx center");
+			final JCheckBox chkbxActiveBirth = new JCheckBox("");
+			chkbxActiveBirth.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					g.activeOnBirth = chkbxActiveBirth.isSelected();
+				}
+			});
+			add(chkbxActiveBirth, "cell 3 "+currentRow+",alignx center");
 			
-			JCheckBox chckbx2 = new JCheckBox("");
-			add(chckbx2, "cell 4 "+currentRow+",alignx left");
+			final JCheckBox chckbxMutable = new JCheckBox("");
+			chckbxMutable.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					g.mutable = chckbxMutable.isSelected();
+				}
+			});
+			add(chckbxMutable, "cell 4 "+currentRow+",alignx left");
 			
 			List<JComponent> jList = new ArrayList<JComponent>();
-			jList.add(chckbx1);
-			jList.add(chckbx2);
+			jList.add(chkbxActiveBirth);
+			jList.add(chckbxMutable);
 			guiMap.put(g, jList);
 		}
 		currentRow++;
@@ -96,6 +103,7 @@ public class GeneticPanel extends JPanel {
 	}
 	private static final long serialVersionUID = 1L;
 	
+	@Deprecated
 	public List<GenomeSpecification> getFilledSpecification() {
 		List<GenomeSpecification> result = new ArrayList<GenomeSpecification>();
 		for(GenomeSpecification g : guiMap.keySet()) {
