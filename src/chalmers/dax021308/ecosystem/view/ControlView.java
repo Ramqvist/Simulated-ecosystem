@@ -54,6 +54,10 @@ public class ControlView extends JPanel implements IView {
 			swithToPauseButton();
 		} else if (evt.getPropertyName() == EcoWorld.EVENT_PAUSE) {
 			switchToPlayButton();
+		} else if (evt.getPropertyName() == EcoWorld.EVENT_STOP) {
+			switchToPlayButton();
+			playPauseButton.setEnabled(false);
+			restartButton.setEnabled(false);
 		}
 	}
 
