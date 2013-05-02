@@ -258,7 +258,7 @@ public class NEWSettingsMenuView extends JDialog {
         addToRightPanel();
 
         setResizable(false);
-        setTitle("Simulation Settings");
+        setTitle("New Simulation");
         setIconImage(new ImageIcon("res/Simulated ecosystem icon.png").getImage());
         setLocation(300, 150);
         pack();
