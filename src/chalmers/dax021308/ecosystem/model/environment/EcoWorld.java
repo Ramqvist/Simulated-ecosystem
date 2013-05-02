@@ -552,6 +552,13 @@ public class EcoWorld implements IModel {
 				loadRecordedSimulation(new File("Testrecording1.sim"));
 				playRecordedSimulation();
 			}
+			StringBuilder sb = new StringBuilder();
+			sb.append("- Simulation finished - ");
+			sb.append(" mean value: ");
+			sb.append(roundTwoDecimals(statTime.getMean()));
+			sb.append(" sample variance: ");
+			sb.append(roundTwoDecimals(statTime.getSampleVariance()));
+			Log.v(sb.toString());
 			/*
 			 * if (recordSimulation) {
 			 * playRecordedSimulation(recordedSimulation); }
