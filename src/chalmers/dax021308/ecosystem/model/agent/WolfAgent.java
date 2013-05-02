@@ -8,7 +8,7 @@ import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
 import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
 import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
-import chalmers.dax021308.ecosystem.model.genetics.newV.NewIGenome;
+import chalmers.dax021308.ecosystem.model.genetics.newV.IGenome;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.population.settings.GrassSettings;
 import chalmers.dax021308.ecosystem.model.population.settings.PredSettings;
@@ -30,13 +30,13 @@ public class WolfAgent extends AbstractAgent {
 	private static final int DIGESTION_TIME = 50;
 	private static final int PATH_TTL = 50;
 	private int digesting = 0;
-	private NewIGenome<GeneralGeneTypes, IGene> genome = GenomeFactory.wolfGenomeFactory();
+	private IGenome<GeneralGeneTypes, IGene> genome = GenomeFactory.wolfGenomeFactory();
 
 	
 	public WolfAgent(String name, Position position, Color color, int width,
 			int height, Vector velocity, double maxSpeed,
 			double maxAcceleration, double visionRange,
-			NewIGenome<GeneralGeneTypes, IGene> genome) {
+			IGenome<GeneralGeneTypes, IGene> genome) {
 		
 		super(name, position, color, width, height, velocity, maxSpeed,
 				visionRange, maxAcceleration);

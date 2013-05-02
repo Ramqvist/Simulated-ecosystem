@@ -10,7 +10,7 @@ import java.util.List;
  * @author Loanne Berggren
  *
  */
-public interface NewIChromosome <E, T> {
+public interface IChromosome <E, T> {
 	/**
 	 * 
 	 * @return

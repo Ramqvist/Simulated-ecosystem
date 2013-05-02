@@ -9,18 +9,18 @@ import java.util.List;
  *
  * @param <T> Type of genes
  */
-public class NewGenericGenome<E extends Enum<E>, T extends IGene> implements NewIGenome<E,T>{
-	protected NewIChromosome<E,T> chromosome;
+public class GenericGenome<E extends Enum<E>, T extends IGene> implements IGenome<E,T>{
+	protected IChromosome<E,T> chromosome;
 
-	protected NewGenericGenome() {}
+	protected GenericGenome() {}
 	
 	/**
 	 * Creates a new Genome.
 	 * Use {@link #setGene(IGenes, boolean)} to change gene value.
 	 * @param chromosome
 	 */
-	public NewGenericGenome(NewIChromosome<E,T> chromosome) {
-		this.chromosome = (NewIChromosome<E, T>) chromosome.clone();
+	public GenericGenome(IChromosome<E,T> chromosome) {
+		this.chromosome = (IChromosome<E, T>) chromosome.clone();
 	}
 	
 	/**
@@ -98,10 +98,10 @@ public class NewGenericGenome<E extends Enum<E>, T extends IGene> implements New
 	 * 			The original genome is unchanged hopefully.
 	 */
 	@Override
-	public NewIGenome<E,T> onlyMutate(){
-		NewIChromosome<E,T> nChrom = (NewIChromosome<E,T>) this.chromosome.clone();
+	public IGenome<E,T> onlyMutate(){
+		IChromosome<E,T> nChrom = (IChromosome<E,T>) this.chromosome.clone();
 		nChrom.mutateChromosome();
-		return new NewGenericGenome<E,T>(nChrom);
+		return new GenericGenome<E,T>(nChrom);
 	}
 
 

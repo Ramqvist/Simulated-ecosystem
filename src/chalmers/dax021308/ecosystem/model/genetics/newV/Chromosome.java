@@ -7,17 +7,17 @@ import java.util.Map;
 
 import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
 
-public class NewChromosome implements NewIChromosome<GeneralGeneTypes, IGene> {
+public class Chromosome implements IChromosome<GeneralGeneTypes, IGene> {
 
 	protected Map<GeneralGeneTypes, IGene> chromosomeMap;
 	protected double mutationProbability;
 	
-	public NewChromosome() {
+	public Chromosome() {
 		this.chromosomeMap = makeNewMap();
 		this.mutationProbability = 0.1;
 	}
 	
-	private NewChromosome(Map<GeneralGeneTypes,IGene> chromosome, double mutProb) {
+	private Chromosome(Map<GeneralGeneTypes,IGene> chromosome, double mutProb) {
 		this.chromosomeMap = chromosome;
 		this.mutationProbability = mutProb;
 	}
@@ -25,59 +25,39 @@ public class NewChromosome implements NewIChromosome<GeneralGeneTypes, IGene> {
 	private Map<GeneralGeneTypes, IGene> makeNewMap(){
 		return new EnumMap<GeneralGeneTypes, IGene>(GeneralGeneTypes.class);
 	}
-	
-	/*@Override
-	public IChromosomeGeneric<GeneralGeneTypes,IGene> crossChromosomes(IChromosomeGeneric<GeneralGeneTypes,Double,GeneDouble> other) {
-		throw new UnsupportedOperationException("crossChromosomes");
-	}*/
 
 	@Override
 	public Object clone(){
-		// TODO, don't know if it actually makes deep clone.
-		return new NewChromosome(new EnumMap<GeneralGeneTypes,IGene>(chromosomeMap), this.mutationProbability);
+		return new Chromosome(new EnumMap<GeneralGeneTypes,IGene>(chromosomeMap), this.mutationProbability);
 	}
 
-	/* (non-Javadoc)
-	 * @see chalmers.dax021308.ecosystem.model.genetics.newV.NewIChromosome#getMutationProbabilty()
-	 */
 	@Override
 	public double getMutationProbabilty() {
 		return this.mutationProbability;
 	}
 
-	/* (non-Javadoc)
-	 * @see chalmers.dax021308.ecosystem.model.genetics.newV.NewIChromosome#setMutationProbabilty(double)
-	 */
 	@Override
 	public void setMutationProbabilty(double mutationProbability) {
 		this.mutationProbability = mutationProbability;
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see chalmers.dax021308.ecosystem.model.genetics.newV.NewIChromosome#getNumberOfGenes()
-	 */
+
 	@Override
 	public int getNumberOfGenes() {
 		return this.chromosomeMap.size();
 	}
 
-	/* (non-Javadoc)
-	 * @see chalmers.dax021308.ecosystem.model.genetics.newV.NewIChromosome#addGene(java.lang.Object, java.lang.Object)
-	 */
+
 	@Override
 	public void addGene(GeneralGeneTypes geneType, IGene gene) {
 		this.chromosomeMap.put(geneType, gene);
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see chalmers.dax021308.ecosystem.model.genetics.newV.NewIChromosome#getGenes()
-	 */
 	@Override
 	public Object getGenes() {
-		// TODO Auto-generated method stub
-		return null;
+		return new EnumMap<GeneralGeneTypes, IGene>(this.chromosomeMap);
 	}
 
 	/* (non-Javadoc)

@@ -8,7 +8,7 @@ import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
 import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
 import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
-import chalmers.dax021308.ecosystem.model.genetics.newV.NewIGenome;
+import chalmers.dax021308.ecosystem.model.genetics.newV.IGenome;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.population.settings.GrassSettings;
 import chalmers.dax021308.ecosystem.model.population.settings.PreySettings;
@@ -40,7 +40,7 @@ public class DeerAgent extends AbstractAgent {
 	private boolean isAStottingDeer = false;
 	private boolean isStotting = false;
 	private Vector stottingVector = new Vector();
-	private NewIGenome<GeneralGeneTypes, IGene> genome = GenomeFactory.deerGenomeFactory();
+	private IGenome<GeneralGeneTypes, IGene> genome = GenomeFactory.deerGenomeFactory();
 	
 	/*public DeerAgent(String name, Position p, Color c, int width, int height,
 			Vector velocity, double maxSpeed, double maxAcceleration,
@@ -48,7 +48,7 @@ public class DeerAgent extends AbstractAgent {
 			IGenomeGeneric<GeneralGeneTypes, Double> genome)*/
 	public DeerAgent(String name, Position p, Color c, int width, int height,
 			Vector velocity, double maxSpeed, double maxAcceleration,
-			double visionRange, NewIGenome<GeneralGeneTypes, IGene> genome) {
+			double visionRange, IGenome<GeneralGeneTypes, IGene> genome) {
 
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);

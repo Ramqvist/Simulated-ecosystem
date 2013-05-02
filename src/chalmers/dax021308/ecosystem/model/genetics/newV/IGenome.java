@@ -7,7 +7,7 @@ package chalmers.dax021308.ecosystem.model.genetics.newV;
  *
  * @param <G> Type of genes
  */
-public interface NewIGenome<E extends Enum<E>, G> {
+public interface IGenome<E extends Enum<E>, G> {
 	
 	/**
 	 * Mutation probability specifies the probability that a gene mutates.
@@ -80,7 +80,7 @@ public interface NewIGenome<E extends Enum<E>, G> {
 	 * @return 	A mutated version of this genome. 
 	 * 			The original genome is unchanged.
 	 */
-	public abstract NewIGenome<E,G> onlyMutate();
+	public abstract IGenome<E,G> onlyMutate();
 
 	@Override
 	public boolean equals(Object other);

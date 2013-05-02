@@ -3,7 +3,7 @@ package chalmers.dax021308.ecosystem.model.genetics;
 import java.util.ArrayList;
 import java.util.List;
 
-import chalmers.dax021308.ecosystem.model.genetics.newV.NewGenome;
+import chalmers.dax021308.ecosystem.model.genetics.newV.Genome;
 
 public abstract class GeneticSettings {
 	
@@ -13,9 +13,9 @@ public abstract class GeneticSettings {
 		@Override
 		public List<GenomeSpecification> getGenomes() {
 			List<GenomeSpecification> result = new ArrayList<GenomeSpecification>();
-			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_BOOLEAN, "Grouping"));
-			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_BOOLEAN, "Focus prey"));
-			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_DOUBLE, "Grouping Q parameter"));
+			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_BOOLEAN, "Grouping"));
+			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_BOOLEAN, "Focus prey"));
+			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_DOUBLE, "Grouping Q parameter"));
 			return result;
 		}
 	};
@@ -24,11 +24,11 @@ public abstract class GeneticSettings {
 		@Override
 		public List<GenomeSpecification> getGenomes() {
 			List<GenomeSpecification> result = new ArrayList<GenomeSpecification>();
-			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_DOUBLE, "Pred interaction range"));
-			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_BOOLEAN, "Focus prey"));
-			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_BOOLEAN, "Pathfinding"));
-			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_BOOLEAN, "Eat BigTasty"));
-			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_DOUBLE, "Grouping probability"));
+			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_DOUBLE, "Pred interaction range"));
+			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_BOOLEAN, "Focus prey"));
+			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_BOOLEAN, "Pathfinding"));
+			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_BOOLEAN, "Eat BigTasty"));
+			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_DOUBLE, "Grouping probability"));
 			return result;
 		}
 	};
@@ -37,9 +37,9 @@ public abstract class GeneticSettings {
 		@Override
 		public List<GenomeSpecification> getGenomes() {
 			List<GenomeSpecification> result = new ArrayList<GenomeSpecification>();
-			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_BOOLEAN, "Will die when eaten"));
-			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_DOUBLE, "Chance to transform to weed"));
-			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_DOUBLE, "High factor"));
+			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_BOOLEAN, "Will die when eaten"));
+			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_DOUBLE, "Chance to transform to weed"));
+			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_DOUBLE, "High factor"));
 			return result;
 		}
 	};
@@ -47,9 +47,9 @@ public abstract class GeneticSettings {
 		@Override
 		public List<GenomeSpecification> getGenomes(){
 			List<GenomeSpecification> result = new ArrayList<GenomeSpecification>();
-			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_BOOLEAN, "Will die when eaten"));
-			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_DOUBLE, "Chance to transform to weed"));
-			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_DOUBLE, "High factor"));
+			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_BOOLEAN, "Will die when eaten"));
+			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_DOUBLE, "Chance to transform to weed"));
+			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_DOUBLE, "High factor"));
 			return result;
 		}
 	};
@@ -61,7 +61,7 @@ public abstract class GeneticSettings {
 		public static final int TYPE_BOOLEAN = 1;
 		public static final int TYPE_DOUBLE  = 2;
 		
-		private NewGenome g;
+		private Genome g;
 		private int genomeType;
 		private String name;
 		
@@ -70,17 +70,17 @@ public abstract class GeneticSettings {
 		public boolean activeOnBirth;
 		public boolean mutable;
 		
-		public GenomeSpecification(NewGenome g, int type, String name) {
+		public GenomeSpecification(Genome g, int type, String name) {
 			this.g = g;
 			this.genomeType = type;
 			this.name = name;
 		}
 		
-		public NewGenome getGenome() {
+		public Genome getGenome() {
 			return g;
 		}
 		
-		public void setGenome(NewGenome g) {
+		public void setGenome(Genome g) {
 			this.g = g;
 		}
 		
