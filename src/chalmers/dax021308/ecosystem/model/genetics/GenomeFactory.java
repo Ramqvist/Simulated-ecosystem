@@ -34,9 +34,21 @@ public class GenomeFactory {
 		double mutProb = 0.1;
 		
 		IChromosome<GeneralGeneTypes,IGene> chrom = new Chromosome(); 
+		
+		//Grouping behaviour
 		chrom.addGene(GeneralGeneTypes.ISGROUPING, new BooleanGene(false, mutProb, true));
+		chrom.addGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR, new DoubleGene(-100, 0, true, 50, mutProb, 8));
+		chrom.addGene(GeneralGeneTypes.GROUPING_COHESION, new DoubleGene(-100, 0, true, 50, mutProb, 8));
+		chrom.addGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST, new DoubleGene(-100, 0, true, 50, mutProb, 8));
+		chrom.addGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE, new DoubleGene(-100, 0, true, 50, mutProb, 8));
+		
+		//Stotting behaviour
 		chrom.addGene(GeneralGeneTypes.ISSTOTTING, new BooleanGene(false, mutProb, true));
-			return chrom;
+		chrom.addGene(GeneralGeneTypes.STOTTINGLENGTH, new DoubleGene(-100, 0, true, 50, mutProb, 8));
+		chrom.addGene(GeneralGeneTypes.STOTTINGRANGE, new DoubleGene(-100, 0, true, 50, mutProb, 8));
+		chrom.addGene(GeneralGeneTypes.STOTTINGANGLE, new DoubleGene(-100, 0, true, 50, mutProb, 8));
+		
+		return chrom;
 	}
 	
 	
@@ -44,9 +56,18 @@ public class GenomeFactory {
 		double mutProb = 0.1;
 		
 		IChromosome<GeneralGeneTypes,IGene> chrom = new Chromosome(); 
+		
+		//Grouping behaviour
 		chrom.addGene(GeneralGeneTypes.ISGROUPING, new BooleanGene(false, mutProb, true));
-		chrom.addGene(GeneralGeneTypes.FOCUSPREY, new DoubleGene(0.0, 10.0, true, 0.0, 0.1, 7));
-			return chrom;
+		chrom.addGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR, new DoubleGene(-100, 0, true, 50, mutProb, 8));
+		chrom.addGene(GeneralGeneTypes.GROUPING_COHESION, new DoubleGene(-100, 0, true, 50, mutProb, 8));
+		chrom.addGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST, new DoubleGene(-100, 0, true, 50, mutProb, 8));
+		chrom.addGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE, new DoubleGene(-100, 0, true, 50, mutProb, 8));
+
+		//Focus preys
+		chrom.addGene(GeneralGeneTypes.FOCUSPREY, new BooleanGene(false, mutProb, true));
+		
+		return chrom;
 	}
 }	
 
