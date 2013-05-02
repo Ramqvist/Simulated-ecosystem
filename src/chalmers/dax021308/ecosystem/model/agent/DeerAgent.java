@@ -9,6 +9,8 @@ import chalmers.dax021308.ecosystem.model.genetics.DeerGenes;
 import chalmers.dax021308.ecosystem.model.genetics.IGenes;
 import chalmers.dax021308.ecosystem.model.genetics.IGenome;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.population.settings.GrassSettings;
+import chalmers.dax021308.ecosystem.model.population.settings.PreySettings;
 import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
@@ -23,7 +25,7 @@ public class DeerAgent extends AbstractAgent {
 	private static final int MAX_ENERGY = 1000;
 	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
 	private static final int DIGESTION_TIME = 10;
-	private static final double REPRODUCTION_RATE = 0.1;
+	private static double REPRODUCTION_RATE = PreySettings.instance.reproductionRate.value;
 	
 	private int digesting = 0;
 	private boolean alone;
@@ -46,6 +48,7 @@ public class DeerAgent extends AbstractAgent {
 
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
+		REPRODUCTION_RATE = PreySettings.instance.reproductionRate.value;
 		this.genome = genome;
 		this.groupBehaviour = this.genome.isGeneSet(DeerGenes.GROUPING);
 //		this.groupBehaviour = groupBehaviour;

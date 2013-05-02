@@ -173,4 +173,17 @@ public abstract class CommonSettings {
 	public void setGroupBehavior(boolean groupBehavior) {
 		this.groupBehavior.value = groupBehavior;
 	}
+	
+	public double getReproductionRate() {
+		return reproductionRate.value;
+	}
+	public void setHeight(double rate) {
+		if(rate > 1) {
+			this.reproductionRate.value = 1;
+		} else if(rate < 0) {
+			this.reproductionRate.value = 0;
+		} else {
+			this.reproductionRate.value = rate;
+		}
+	}
 }
