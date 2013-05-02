@@ -8,7 +8,6 @@ import java.util.Random;
  * 
  */
 public class BooleanGene extends AbstractGene {
-	//protected double mutationProbability = 0.1;
 	protected boolean haveGene = true;
 
 	public BooleanGene() {}
@@ -71,7 +70,11 @@ public class BooleanGene extends AbstractGene {
 		}
 	}
 	
-	public Object clone(){
+	/* (non-Javadoc)
+	 * @see chalmers.dax021308.ecosystem.model.genetics.newV.IGene#getCopy()
+	 */
+	@Override
+	public IGene getCopy() {
 		return new BooleanGene(this);
 	}
 

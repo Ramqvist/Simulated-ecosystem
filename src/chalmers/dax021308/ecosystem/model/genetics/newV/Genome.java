@@ -23,6 +23,12 @@ public class Genome extends GenericGenome<GeneralGeneTypes, IGene> {
 		super(new Chromosome());
 	}
 	
+	public IGenome<GeneralGeneTypes,IGene> onlyMutate(){
+		IChromosome<GeneralGeneTypes,IGene> nChrom = this.chromosome.getCopy();
+		nChrom.mutateChromosome();
+		return new Genome(nChrom);
+	}
+	
 	
 }
 

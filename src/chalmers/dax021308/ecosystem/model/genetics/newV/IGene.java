@@ -27,7 +27,7 @@ public interface IGene {
 	/**
 	 * @param hasGene
 	 */
-	void setHasGene(boolean hasGene);
+	void setHaveGene(boolean haveGene);
 
 	/**
 	 * @return
@@ -74,7 +74,6 @@ public interface IGene {
 	 */
 	void mutate();
 	
-	public Object clone();
-	
+	public IGene getCopy();
 	
 }

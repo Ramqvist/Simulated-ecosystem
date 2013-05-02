@@ -21,13 +21,6 @@ public interface IGenome<E extends Enum<E>, G> {
 	 * @param mutationProbability
 	 */
 	public abstract void setMutationProbability(double mutationProbability);
-
-	/**
-	 * 
-	 * @param gene
-	 * @return		True if this is set. False if it is not.
-	 */
-	//public abstract boolean hasGeneAllele(E geneType);	
 	
 	/**
 	 * 
@@ -63,17 +56,6 @@ public interface IGenome<E extends Enum<E>, G> {
 	 * @return Number of genes.
 	 */
 	public abstract int numberOfGenes();
-
-	/**
-	 * Crosses this genome with other genome. The new genome might also be mutated.
-	 * The original genomes are unchanged.
-	 * <p>
-	 * @param other
-	 * @return The baby genome.
-	 * @see #setMutationProbability(double)
-	 */
-	//public abstract NewIGenome<E,N> mateWithMutation(final NewIGenome<E,N> other);
-
 
 	/**
 	 * <p>

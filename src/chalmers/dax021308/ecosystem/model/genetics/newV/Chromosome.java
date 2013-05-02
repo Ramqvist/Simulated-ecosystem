@@ -18,17 +18,21 @@ public class Chromosome implements IChromosome<GeneralGeneTypes, IGene> {
 	}
 	
 	private Chromosome(Map<GeneralGeneTypes,IGene> chromosome, double mutProb) {
-		this.chromosomeMap = chromosome;
+		this.chromosomeMap = makeNewMap(chromosome);
 		this.mutationProbability = mutProb;
 	}
 	
 	private Map<GeneralGeneTypes, IGene> makeNewMap(){
 		return new EnumMap<GeneralGeneTypes, IGene>(GeneralGeneTypes.class);
 	}
-
+	
+	private Map<GeneralGeneTypes, IGene> makeNewMap(Map<GeneralGeneTypes,IGene> chromosome){
+		return new EnumMap<GeneralGeneTypes, IGene>(chromosome);
+	}
+	
 	@Override
-	public Object clone(){
-		return new Chromosome(new EnumMap<GeneralGeneTypes,IGene>(chromosomeMap), this.mutationProbability);
+	public IChromosome<GeneralGeneTypes, IGene> getCopy(){
+		return new Chromosome(this.chromosomeMap, this.mutationProbability);
 	}
 
 	@Override
@@ -57,7 +61,7 @@ public class Chromosome implements IChromosome<GeneralGeneTypes, IGene> {
 
 	@Override
 	public Object getGenes() {
-		return new EnumMap<GeneralGeneTypes, IGene>(this.chromosomeMap);
+		return makeNewMap(this.chromosomeMap);
 	}
 
 	/* (non-Javadoc)
@@ -101,7 +105,7 @@ public class Chromosome implements IChromosome<GeneralGeneTypes, IGene> {
 	 */
 	@Override
 	public IGene getGene(GeneralGeneTypes geneType) {
-		return (IGene) this.chromosomeMap.get(geneType).clone();
+		return (IGene) this.chromosomeMap.get(geneType).getCopy();
 	}
 
 }

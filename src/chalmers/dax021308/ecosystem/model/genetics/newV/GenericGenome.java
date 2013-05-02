@@ -1,15 +1,12 @@
 package chalmers.dax021308.ecosystem.model.genetics.newV;
 
-import java.util.List;
-
-
 /**
  * 
  * @author Loanne Berggren
  *
  * @param <T> Type of genes
  */
-public class GenericGenome<E extends Enum<E>, T extends IGene> implements IGenome<E,T>{
+public abstract class GenericGenome<E extends Enum<E>, T extends IGene> implements IGenome<E,T>{
 	protected IChromosome<E,T> chromosome;
 
 	protected GenericGenome() {}
@@ -20,7 +17,7 @@ public class GenericGenome<E extends Enum<E>, T extends IGene> implements IGenom
 	 * @param chromosome
 	 */
 	public GenericGenome(IChromosome<E,T> chromosome) {
-		this.chromosome = (IChromosome<E, T>) chromosome.clone();
+		this.chromosome = chromosome;
 	}
 	
 	/**
@@ -36,16 +33,6 @@ public class GenericGenome<E extends Enum<E>, T extends IGene> implements IGenom
 	public void setMutationProbability(double mutationProbability) {
 		this.chromosome.setMutationProbabilty(mutationProbability);
 	}
-	
-	/**
-	 * 
-	 * @param gene
-	 * @return		True if this is set. False if it is not.
-	 */
-	/*@Override
-	public boolean hasGeneAllele(E geneType) {
-		return this.chromosome.getGene(geneType).isHasGene();
-	}*/
 	
 	/* (non-Javadoc)
 	 * @see chalmers.dax021308.ecosystem.model.genetics.IGenome#getGeneValue(chalmers.dax021308.ecosystem.model.genetics.IGenes)
@@ -80,29 +67,19 @@ public class GenericGenome<E extends Enum<E>, T extends IGene> implements IGenom
 	}
 	
 	/**
-	 * @throws IllegalArgumentException if other is null
-	 */
-/*	@Override
-	public IGenomeGeneric<E,N> mateWithMutation(final IGenomeGeneric<E,N> other){
-		if (null == other) throw new IllegalArgumentException("other is null.");
-		
-		IChromosomeGeneric<E,N,T> nChrom = chromosome.crossChromosomes((IChromosomeGeneric<E, N, T>) other.getAllGenes());
-		nChrom.mutateChromosome();
-		return new NewGenericGenome<E,N,T>(nChrom);
-	}*/
-
-
-	/**
 	 * <p>
 	 * @return 	A mutated version of this genome. 
 	 * 			The original genome is unchanged hopefully.
 	 */
 	@Override
+	public abstract IGenome<E,T> onlyMutate();
+	
+	/*@Override
 	public IGenome<E,T> onlyMutate(){
 		IChromosome<E,T> nChrom = (IChromosome<E,T>) this.chromosome.clone();
 		nChrom.mutateChromosome();
 		return new GenericGenome<E,T>(nChrom);
-	}
+	}*/
 
 
 	

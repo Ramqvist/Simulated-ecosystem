@@ -26,15 +26,12 @@ public abstract class AbstractGene implements IGene {
 	 */
 	public abstract Object getCurrentValue();
 	
-	public abstract Object clone();
-
 	/* (non-Javadoc)
 	 * @see chalmers.dax021308.ecosystem.model.genetics.newV.IGene#getMutationProbaility()
 	 */
 	@Override
 	public double getMutationProbaility() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.mutationProbability;
 	}
 
 	/* (non-Javadoc)
@@ -50,17 +47,15 @@ public abstract class AbstractGene implements IGene {
 	 */
 	@Override
 	public boolean haveGene() {
-		// TODO Auto-generated method stub
-		return false;
+		throw new UnsupportedOperationException("haveGene");
 	}
 
 	/* (non-Javadoc)
 	 * @see chalmers.dax021308.ecosystem.model.genetics.newV.IGene#setHasGene(boolean)
 	 */
 	@Override
-	public void setHasGene(boolean hasGene) {
-		// TODO Auto-generated method stub
-		
+	public void setHaveGene(boolean haveGene) {
+		throw new UnsupportedOperationException("setHaveGene");
 	}
 
 	/* (non-Javadoc)
@@ -84,8 +79,7 @@ public abstract class AbstractGene implements IGene {
 	 */
 	@Override
 	public double getMinValue() {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new UnsupportedOperationException("getMinValue");
 	}
 
 	/* (non-Javadoc)
@@ -93,8 +87,7 @@ public abstract class AbstractGene implements IGene {
 	 */
 	@Override
 	public void setMinValue(double minValue) {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException("setMinValue");
 	}
 
 	/* (non-Javadoc)
@@ -102,8 +95,7 @@ public abstract class AbstractGene implements IGene {
 	 */
 	@Override
 	public double getMaxValue() {
-		// TODO Auto-generated method stub
-		return 0;
+		throw new UnsupportedOperationException("getMaxValue");
 	}
 
 	/* (non-Javadoc)
@@ -111,8 +103,7 @@ public abstract class AbstractGene implements IGene {
 	 */
 	@Override
 	public void setMaxValue(double maxValue) {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException("setMaxValue");
 	}
 
 }

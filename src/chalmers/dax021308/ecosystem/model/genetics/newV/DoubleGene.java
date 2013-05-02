@@ -68,12 +68,6 @@ public class DoubleGene extends AbstractGene {
 		Random randomGen = new Random();
 		double rand;
 
-		/*for (int i = 0; i < nBits; ++i){
-			rand = randomGen.nextDouble();
-			if (rand < mutationProbability) {
-				currentValue = currentValue^i;
-			}
-		}*/
 		for (int i = 1; i <= this.maxInt; i=2*i) {
 			rand = randomGen.nextDouble();
 			if (rand < mutationProbability) {
@@ -92,7 +86,11 @@ public class DoubleGene extends AbstractGene {
 		return result;
 	}
 	
-	public Object clone(){
+	/* (non-Javadoc)
+	 * @see chalmers.dax021308.ecosystem.model.genetics.newV.IGene#getCopy()
+	 */
+	@Override
+	public IGene getCopy() {
 		return new DoubleGene(this);
 	}
 

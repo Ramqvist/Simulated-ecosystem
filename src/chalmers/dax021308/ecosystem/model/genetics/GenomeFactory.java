@@ -35,7 +35,7 @@ public class GenomeFactory {
 		
 		IChromosome<GeneralGeneTypes,IGene> chrom = new Chromosome(); 
 		chrom.addGene(GeneralGeneTypes.ISGROUPING, new BooleanGene(false, mutProb, true));
-		chrom.addGene(GeneralGeneTypes.ISSTOTTING, new DoubleGene(0.0, 10.0, true, 0.0, 0.1, 7));
+		chrom.addGene(GeneralGeneTypes.ISSTOTTING, new BooleanGene(false, mutProb, true));
 			return chrom;
 	}
 	

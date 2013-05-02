@@ -5,6 +5,8 @@ package chalmers.dax021308.ecosystem.model.genetics.newV;
 
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
+
 /**
  * 
  * @author Loanne Berggren
@@ -49,25 +51,9 @@ public interface IChromosome <E, T> {
 	public void setCurrentValue(E geneType, Object currentValue);
 	
 	/**
-	 * @param other
-	 * @return
-	 */
-	//NewIChromosome<E,N,T> crossChromosomes(NewIChromosome<E,N,T> other);
-
-	/**
 	 * 
 	 */
 	public void mutateChromosome();
-
-	/**
-	 * Checks if other and this are the same implementing class, have the same length and
-	 * mutation probability. This method will not care about actual "gene" values.
-	 * @param other
-	 * @return true if they are of same "chromosome type", otherwise false;
-	 */
-	//public boolean isEqualType(NewIChromosome<E,N,T> other);
-
-	public Object clone();
 
 	/**
 	 * @param geneType
@@ -75,19 +61,12 @@ public interface IChromosome <E, T> {
 	 */
 	public T getGene(E geneType);
 
-	/**
-	 * @param gene
-	 * @param minValue
-	 * @param maxValue
-	 * @param hasGene
-	 * @param isMutable
-	 * @param currentValue
-	 * @param mutProb
-	 */
-	/*void changeGene(E gene, N minValue, N maxValue,
-			boolean hasGene, boolean isMutable, N currentValue, double mutProb);
-*/
 	@Override
 	public boolean equals(Object other);
+
+	/**
+	 * @return
+	 */
+	public IChromosome<E, T> getCopy();
 	
 }
