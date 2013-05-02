@@ -127,7 +127,6 @@ public class NEWSettingsMenuViewController implements IController {
 	public void setGUISettings(SimulationSettings s) {
 		view.buttonGroupThread.selectButtonByText(s.getNumThreads() + "");
 		view.buttonGroupShape.selectButtonByText(s.getShapeModel());
-		System.out.println(s.getShapeModel());
 		
 		view.spinnerDelayLength.setValue(s.getDelayLength()); 
 		

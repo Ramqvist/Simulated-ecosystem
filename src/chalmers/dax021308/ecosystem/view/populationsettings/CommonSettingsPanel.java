@@ -54,7 +54,6 @@ public class CommonSettingsPanel extends JPanel{
 				@Override
 				public void keyReleased(KeyEvent e) {
 					try {
-						Log.v(e.toString());
 						ds.value = Double.parseDouble(textField.getText());
 					} catch (NumberFormatException ne) {
 						Log.e(ne.getMessage());

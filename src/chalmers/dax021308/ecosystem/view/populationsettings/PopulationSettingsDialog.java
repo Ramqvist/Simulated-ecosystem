@@ -20,7 +20,9 @@ import chalmers.dax021308.ecosystem.view.IView;
 
 /**
  * 
- * Dialog for changing population settings.
+ * Dialog for changing population settings. 
+ * <p>
+ * Contains one tab per population.	
  * 
  * @author Erik Ramqvist
  *
@@ -36,16 +38,13 @@ public class PopulationSettingsDialog extends JDialog implements IView {
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void init() {
-		//TODO: Replace with PopulationPanelController and let the constructor take in one IPopulation.
+		tabPane.addTab("Wolf agent", new PopulationPanel(GeneticSettings.predSettings, PredSettings.instance));
 		tabPane.addTab("Deer agent", new PopulationPanel(GeneticSettings.preySettings, PreySettings.instance));
 		tabPane.addTab("Grass agent", new PopulationPanel(GeneticSettings.grassSettings, GrassSettings.instance));
-		tabPane.addTab("Wolf agent", new PopulationPanel(GeneticSettings.predSettings, PredSettings.instance));
 		add(tabPane);
 		pack();
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -58,21 +57,16 @@ public class PopulationSettingsDialog extends JDialog implements IView {
 
 	@Override
 	public void addController(ActionListener controller) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onTick() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void release() {
-		// TODO Auto-generated method stub
-		
 	}
+	
 	public void centerOnScreen(final Component c, final boolean absolute) {
 	    final int width = c.getWidth();
 	    final int height = c.getHeight();
