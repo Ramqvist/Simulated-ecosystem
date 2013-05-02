@@ -85,7 +85,7 @@ public class GeneticPanel extends JPanel {
 		currentRow++;
 		JLabel emptyLabel = new JLabel(" ");
 		add(emptyLabel, "cell 2 "+currentRow+",alignx right");
-		for(GenomeSpecification g : geneticContent.getGenomes()) {
+		for(final GenomeSpecification g : geneticContent.getGenomes()) {
 			if(g.getGenomeType() == GenomeSpecification.TYPE_BOOLEAN) {
 				continue;
 			}
@@ -95,6 +95,21 @@ public class GeneticPanel extends JPanel {
 			
 			JTextField tfDoubleValue = new JTextField("");
 			add(tfDoubleValue, "cell 3 "+currentRow+",growx");
+			
+			tfDoubleValue = new JTextField("");
+			add(tfDoubleValue, "cell 4 "+currentRow+",growx");
+			
+			tfDoubleValue = new JTextField("");
+			add(tfDoubleValue, "cell 5 "+currentRow+",growx");
+			
+			final JCheckBox chkbxActiveBirth = new JCheckBox("");
+			chkbxActiveBirth.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					g.activeOnBirth = chkbxActiveBirth.isSelected();
+				}
+			});
+			add(chkbxActiveBirth, "cell 6 "+currentRow+",alignx center");
 			
 			List<JComponent> jList = new ArrayList<JComponent>();
 			jList.add(tfDoubleValue);
