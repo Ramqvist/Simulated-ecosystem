@@ -82,6 +82,7 @@ public class EcoWorld implements IModel {
 	private long startIterationTime;
 	private double elapsedTime;
 	private Stat<Double> statTime;
+	private List<Stat<Double>> allSimulationStats;
 
 	/**
 	 * Simple object, used for synchronizing the {@link TimerHandler} and the
@@ -194,6 +195,7 @@ public class EcoWorld implements IModel {
 		this.d = new Dimension(1000, 1000);
 		this.timer = new TimerHandler();
 		this.observers = new PropertyChangeSupport(this);
+		this.allSimulationStats = new ArrayList<Stat<Double>>();
 	}
 
 	private void setSimulationDimension(Dimension d) {
@@ -559,6 +561,8 @@ public class EcoWorld implements IModel {
 			sb.append(" sample variance: ");
 			sb.append(roundTwoDecimals(statTime.getSampleVariance()));
 			Log.v(sb.toString());
+			allSimulationStats.add(statTime);
+			Log.v("All simulations run mean value: " + statTime.getMean(allSimulationStats));
 			/*
 			 * if (recordSimulation) {
 			 * playRecordedSimulation(recordedSimulation); }
