@@ -53,7 +53,7 @@ public class BooleanGene extends AbstractGene {
 	 */
 	@Override
 	public void setCurrentValue(Object currentValue) {
-		this.haveGene = (boolean)currentValue;
+		this.haveGene = ((Boolean)currentValue).booleanValue();
 	}
 
 	/**
@@ -61,7 +61,8 @@ public class BooleanGene extends AbstractGene {
 	 */
 	@Override
 	public void mutate() {
-		
+		if (!isMutable)
+			return;
 		Random randomGen = new Random();
 		double rand;
 		rand = randomGen.nextDouble();

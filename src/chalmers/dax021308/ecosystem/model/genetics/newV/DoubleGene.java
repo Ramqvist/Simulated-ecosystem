@@ -53,7 +53,7 @@ public class DoubleGene extends AbstractGene {
 	 */
 	@Override
 	public void setCurrentValue(Object currentValue) {
-		this.parseToInt((double)currentValue);
+		this.parseToInt(((Double)currentValue).doubleValue());
 	}
 
 
@@ -62,8 +62,18 @@ public class DoubleGene extends AbstractGene {
 	 */
 	@Override
 	public void mutate() {
+		if (!isMutable)
+			return;
+		
 		Random randomGen = new Random();
 		double rand;
+
+		/*for (int i = 0; i < nBits; ++i){
+			rand = randomGen.nextDouble();
+			if (rand < mutationProbability) {
+				currentValue = currentValue^i;
+			}
+		}*/
 		for (int i = 1; i <= this.maxInt; i=2*i) {
 			rand = randomGen.nextDouble();
 			if (rand < mutationProbability) {

@@ -36,7 +36,7 @@ public class GenomeFactory {
 		NewIChromosome<GeneralGeneTypes,IGene> chrom = new NewChromosome(); 
 		chrom.addGene(GeneralGeneTypes.ISGROUPING, new BooleanGene(false, mutProb, true));
 		chrom.addGene(GeneralGeneTypes.ISSTOTTING, new DoubleGene(0.0, 10.0, true, 0.0, 0.1, 7));
-				return chrom;
+			return chrom;
 	}
 	
 	
@@ -46,7 +46,7 @@ public class GenomeFactory {
 		NewIChromosome<GeneralGeneTypes,IGene> chrom = new NewChromosome(); 
 		chrom.addGene(GeneralGeneTypes.ISGROUPING, new BooleanGene(false, mutProb, true));
 		chrom.addGene(GeneralGeneTypes.FOCUSPREY, new DoubleGene(0.0, 10.0, true, 0.0, 0.1, 7));
-				return chrom;
+			return chrom;
 	}
 }	
 

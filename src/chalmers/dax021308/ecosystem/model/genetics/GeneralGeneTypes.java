@@ -21,8 +21,6 @@ public enum GeneralGeneTypes
 	FOCUSPREY("boolean"), // bool
 	FEMALE("boolean"),
 	MALE("boolean")
-	// To add gene: genename(startindex, #bits)
-	// ex JUNK(2, 4)
 	;
 	
 	private GeneralGeneTypes(String type){
@@ -30,22 +28,5 @@ public enum GeneralGeneTypes
 	}
 	
 	private String type;
-	// Gen double, boolean
-	
-	
-	/*
-	 Stotting: 
-	 Grouping: isgrouping, max, min, ismutable, current value group probability
-	 FocusPredator:
-	 
-	 FocusPrey
-	 
-	 private UpdatedDeerGenes(int minValue, int maxValue, boolean hasGene, boolean isMutable, int currentValue)
-	 private UpdatedDeerGenes(Object minValue, Object maxValue, boolean hasGene, boolean isMutable, Object currentValue)
-	 STOTTING(0, 1),
-	 GROUPING(1, 1),
-	
-	
-	 */
 
 }
