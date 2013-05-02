@@ -1,5 +1,7 @@
 package chalmers.dax021308.ecosystem.model.population.settings;
 
+import chalmers.dax021308.ecosystem.model.population.settings.CommonSettings.DoubleSettingsContainer;
+
 
 public class PredSettings extends CommonSettings {
 	public static PredSettings instance = new PredSettings();
@@ -12,6 +14,7 @@ public class PredSettings extends CommonSettings {
 		visionRange 		= new DoubleSettingsContainer("Vision range", 1, 1000, 250);
 		width 				= new DoubleSettingsContainer("Width", 1, 100, 10);
 		height				= new DoubleSettingsContainer("Height", 1, 100, 20);
+		reproduction_rate	= new DoubleSettingsContainer("Reproduction rate", 0, 1, 0.06);
 		
 		doubleSettings.add(maxSpeed);
 		doubleSettings.add(capacity);
@@ -19,5 +22,6 @@ public class PredSettings extends CommonSettings {
 		doubleSettings.add(maxAcceleration);
 		doubleSettings.add(width);
 		doubleSettings.add(height);
+		doubleSettings.add(reproduction_rate);
 	}
 }

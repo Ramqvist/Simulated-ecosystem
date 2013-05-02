@@ -56,6 +56,7 @@ public abstract class CommonSettings {
 	public DoubleSettingsContainer focus_range;
 	public DoubleSettingsContainer velocity_decay;
 	public DoubleSettingsContainer obstacle_safety_distance;
+	public DoubleSettingsContainer reproduction_rate;
 	
 	/* Common boolean containers. */
 	protected BooleanSettingsContainer groupBehavior;
@@ -171,5 +172,18 @@ public abstract class CommonSettings {
 	}
 	public void setGroupBehavior(boolean groupBehavior) {
 		this.groupBehavior.value = groupBehavior;
+	}
+	
+	public double getReproductionRate() {
+		return reproduction_rate.value;
+	}
+	public void setHeight(double rate) {
+		if(rate > 1) {
+			this.reproduction_rate.value = 1;
+		} else if(rate < 0) {
+			this.reproduction_rate.value = 0;
+		} else {
+			this.reproduction_rate.value = rate;
+		}
 	}
 }
