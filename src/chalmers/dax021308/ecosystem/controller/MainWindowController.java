@@ -68,16 +68,19 @@ public class MainWindowController implements IController {
 		  .addKeyEventDispatcher(new KeyEventDispatcher() {
 		      @Override
 		      public boolean dispatchKeyEvent(KeyEvent e) {
-		    	if(e.getKeyCode() == KeyEvent.VK_F1 && e.getID() == KeyEvent.KEY_RELEASED) {
-		    		window.smvc.toggleVisibility();
-		    		return true;
-		    	} else if(e.getKeyCode() == KeyEvent.VK_F2 && e.getID() == KeyEvent.KEY_RELEASED) {
-		    		window.smvc.startSimulation();
-		    		return true;
-		    	} else if(e.getKeyCode() == KeyEvent.VK_F4 && e.getID() == KeyEvent.KEY_RELEASED) {
-					new MapEditorController();
-			    	return true;
-		    	}
+		    	  if(e.getID() == KeyEvent.KEY_RELEASED){
+			    	if(e.getKeyCode() == KeyEvent.VK_F1 || 
+			    			(e.getKeyCode() == KeyEvent.VK_N && e.isControlDown())) {
+			    		window.smvc.toggleVisibility();
+			    		return true;
+			    	} else if(e.getKeyCode() == KeyEvent.VK_F2) {
+			    		window.smvc.startSimulation();
+			    		return true;
+			    	} else if(e.getKeyCode() == KeyEvent.VK_F3) {
+						new MapEditorController();
+				    	return true;
+			    	}
+		    	  }
 		        return false;
 		      }
 		});
