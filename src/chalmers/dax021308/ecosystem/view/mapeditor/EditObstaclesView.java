@@ -1,27 +1,28 @@
 package chalmers.dax021308.ecosystem.view.mapeditor;
 
+import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.event.ListDataListener;
 
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapEditorModel;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.view.IView;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JLabel;
-import java.awt.Font;
-import javax.swing.JRadioButton;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.JList;
-import javax.swing.ListModel;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListDataListener;
+import net.miginfocom.swing.MigLayout;
 
 /**
  * Edit obstacles panel in MapEditor
@@ -37,43 +38,28 @@ public class EditObstaclesView extends JPanel implements IView {
 	public EditObstaclesView(IModel m) {
 		m.addObserver(this);
 		setEnabled(false);
-		JLabel lblAddNewObstacle = new JLabel("Edit obstacles");
-		lblAddNewObstacle.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		
+
 		obstaclesJList = new JList<IObstacle>();
+		obstaclesJList.setVisibleRowCount(7);
 		obstaclesJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		btnDelete = new JButton("Delete");
 		btnDelete.setFont(new Font("Tahoma", Font.PLAIN, 14));
-
+		JScrollPane listScrollPane = new JScrollPane(obstaclesJList,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+			     ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		obstaclesJList.setEnabled(false);
 		btnDelete.setEnabled(false);
+		setLayout(new MigLayout("", "[grow][]", "[][grow][]"));
 		
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-							.addComponent(lblAddNewObstacle)
-							.addContainerGap(344, Short.MAX_VALUE))
-						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-							.addComponent(btnDelete, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(obstaclesJList, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE))))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(lblAddNewObstacle)
-					.addGap(18)
-					.addComponent(obstaclesJList, GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
-		);
-		setLayout(groupLayout);
+		JLabel lblEditObstacles = new JLabel("Edit obstacles");
+		lblEditObstacles.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		add(lblEditObstacles, "cell 0 0");
+		
+		add(listScrollPane, "cell 0 1,grow");
+		
+		add(btnDelete, "cell 0 2,growx");
+		
+		
 	}
 	
 	@Override
