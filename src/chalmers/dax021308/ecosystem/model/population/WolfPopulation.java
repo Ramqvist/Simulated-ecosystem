@@ -53,7 +53,7 @@ public class WolfPopulation extends AbstractPopulation {
 			}
 			IAgent a = new WolfAgent("Wolf", randPos, color, 10, 20,
 					velocity, maxSpeed, maxAcceleration, visionRange,
-					groupBehaviour, GenomeFactory.wolfGenomeFactory());
+					GenomeFactory.wolfGenomeFactory());
 			newAgents.add(a);
 		}
 		return newAgents;

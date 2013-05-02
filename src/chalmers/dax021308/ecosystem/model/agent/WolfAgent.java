@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
-import chalmers.dax021308.ecosystem.model.genetics.IGenes;
-import chalmers.dax021308.ecosystem.model.genetics.IGenome;
-import chalmers.dax021308.ecosystem.model.genetics.WolfGenes;
+import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
+import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
+import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
+import chalmers.dax021308.ecosystem.model.genetics.newV.NewIGenome;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -27,20 +28,19 @@ public class WolfAgent extends AbstractAgent {
 	private static final int DIGESTION_TIME = 50;
 	private static final int PATH_TTL = 50;
 	private int digesting = 0;
-	private IGenome<IGenes> genome;
+	private NewIGenome<GeneralGeneTypes, IGene> genome = GenomeFactory.wolfGenomeFactory();
+
 	
 	public WolfAgent(String name, Position position, Color color, int width,
 			int height, Vector velocity, double maxSpeed,
-			double maxAcceleration, double visionRange, boolean groupBehaviour,
-			IGenome<IGenes> genome) {
+			double maxAcceleration, double visionRange,
+			NewIGenome<GeneralGeneTypes, IGene> genome) {
 		
 		super(name, position, color, width, height, velocity, maxSpeed,
 				visionRange, maxAcceleration);
 		this.energy = MAX_ENERGY;
 		this.genome = genome;
-		this.groupBehaviour = this.genome.isGeneSet(WolfGenes.GROUPING);
-//		this.groupBehaviour = groupBehaviour;
-//		this.groupBehaviour = false;
+		this.groupBehaviour = this.genome.getGene(GeneralGeneTypes.ISGROUPING).haveGene();
 		if(this.groupBehaviour){
 			this.color = Color.RED;
 		} else {
@@ -136,7 +136,7 @@ public class WolfAgent extends AbstractAgent {
 				} while (!surroundings.getWorldShape().isInside(surroundings.getGridDimension(), pos));
 				IAgent child = new WolfAgent(name, pos, color, width, height,
 						new Vector(velocity), maxSpeed, maxAcceleration,
-						visionRange, groupBehaviour, genome.onlyMutate());
+						visionRange, genome.onlyMutate());
 				spawn.add(child);
 			}
 			return spawn;

@@ -27,7 +27,7 @@ public class DeerPopulation extends AbstractPopulation {
 			double maxAcceleration, double visionRange, boolean groupBehaviour, SurroundingsSettings surroundings) {
 		
 		super(name, color, surroundings);
-		this.groupBehaviour = groupBehaviour;
+		//this.groupBehaviour = groupBehaviour;
 		agents = initializePopulation(initPopulationSize, surroundings.getGridDimension(), color,
 				maxSpeed, maxAcceleration, visionRange);
 	}
@@ -49,7 +49,12 @@ public class DeerPopulation extends AbstractPopulation {
 			}
 			IAgent a = new DeerAgent("Deer", randPos,
 					color, 5, 10, velocity, maxSpeed, maxAcceleration,
-					visionRange, groupBehaviour, GenomeFactory.deerGenomeFactory());
+					visionRange, GenomeFactory.deerGenomeFactory());
+			/*
+			 * IAgent a = new DeerAgent("Deer", randPos,
+					color, 5, 10, velocity, maxSpeed, maxAcceleration,
+					visionRange, GenomeFactory.deerGenomeFactory());
+			 */
 
 			newAgents.add(a);
 		}

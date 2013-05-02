@@ -3,6 +3,8 @@ package chalmers.dax021308.ecosystem.model.genetics;
 import java.util.ArrayList;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.model.genetics.newV.NewGenome;
+
 public abstract class GeneticSettings {
 	
 	//TEST Setups
@@ -11,9 +13,9 @@ public abstract class GeneticSettings {
 		@Override
 		public List<GenomeSpecification> getGenomes() {
 			List<GenomeSpecification> result = new ArrayList<GenomeSpecification>();
-			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_BOOLEAN, "Grouping"));
-			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_BOOLEAN, "Focus prey"));
-			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_DOUBLE, "Grouping Q parameter"));
+			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_BOOLEAN, "Grouping"));
+			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_BOOLEAN, "Focus prey"));
+			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_DOUBLE, "Grouping Q parameter"));
 			return result;
 		}
 	};
@@ -22,11 +24,11 @@ public abstract class GeneticSettings {
 		@Override
 		public List<GenomeSpecification> getGenomes() {
 			List<GenomeSpecification> result = new ArrayList<GenomeSpecification>();
-			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_DOUBLE, "Pred interaction range"));
-			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_BOOLEAN, "Focus prey"));
-			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_BOOLEAN, "Pathfinding"));
-			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_BOOLEAN, "Eat BigTasty"));
-			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_DOUBLE, "Grouping probability"));
+			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_DOUBLE, "Pred interaction range"));
+			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_BOOLEAN, "Focus prey"));
+			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_BOOLEAN, "Pathfinding"));
+			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_BOOLEAN, "Eat BigTasty"));
+			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_DOUBLE, "Grouping probability"));
 			return result;
 		}
 	};
@@ -35,9 +37,9 @@ public abstract class GeneticSettings {
 		@Override
 		public List<GenomeSpecification> getGenomes() {
 			List<GenomeSpecification> result = new ArrayList<GenomeSpecification>();
-			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_BOOLEAN, "Will die when eaten"));
-			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_DOUBLE, "Chance to transform to weed"));
-			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_DOUBLE, "High factor"));
+			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_BOOLEAN, "Will die when eaten"));
+			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_DOUBLE, "Chance to transform to weed"));
+			result.add(new GenomeSpecification(new NewGenome(null), GenomeSpecification.TYPE_DOUBLE, "High factor"));
 			return result;
 		}
 	};
@@ -49,7 +51,7 @@ public abstract class GeneticSettings {
 		public static final int TYPE_BOOLEAN = 1;
 		public static final int TYPE_DOUBLE  = 2;
 		
-		private Genome g;
+		private NewGenome g;
 		private int genomeType;
 		private String name;
 		
@@ -58,17 +60,17 @@ public abstract class GeneticSettings {
 		public boolean activeOnBirth;
 		public boolean mutable;
 		
-		public GenomeSpecification(Genome g, int type, String name) {
+		public GenomeSpecification(NewGenome g, int type, String name) {
 			this.g = g;
 			this.genomeType = type;
 			this.name = name;
 		}
 		
-		public Genome getGenome() {
+		public NewGenome getGenome() {
 			return g;
 		}
 		
-		public void setGenome(Genome g) {
+		public void setGenome(NewGenome g) {
 			this.g = g;
 		}
 		

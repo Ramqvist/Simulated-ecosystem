@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
-import chalmers.dax021308.ecosystem.model.genetics.DeerGenes;
-import chalmers.dax021308.ecosystem.model.genetics.IGenes;
-import chalmers.dax021308.ecosystem.model.genetics.IGenome;
+import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
+import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
+import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
+import chalmers.dax021308.ecosystem.model.genetics.newV.NewIGenome;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -37,17 +38,21 @@ public class DeerAgent extends AbstractAgent {
 	private boolean isAStottingDeer = false;
 	private boolean isStotting = false;
 	private Vector stottingVector = new Vector();
-	private IGenome<IGenes> genome;
+	private NewIGenome<GeneralGeneTypes, IGene> genome = GenomeFactory.deerGenomeFactory();
 	
-	public DeerAgent(String name, Position p, Color c, int width, int height,
+	/*public DeerAgent(String name, Position p, Color c, int width, int height,
 			Vector velocity, double maxSpeed, double maxAcceleration,
 			double visionRange, boolean groupBehaviour,
-			IGenome<IGenes> genome) {
+			IGenomeGeneric<GeneralGeneTypes, Double> genome)*/
+	public DeerAgent(String name, Position p, Color c, int width, int height,
+			Vector velocity, double maxSpeed, double maxAcceleration,
+			double visionRange, NewIGenome<GeneralGeneTypes, IGene> genome) {
 
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
 		this.genome = genome;
-		this.groupBehaviour = this.genome.isGeneSet(DeerGenes.GROUPING);
+		this.groupBehaviour = this.genome.getGene(GeneralGeneTypes.ISGROUPING).haveGene();
+		this.isAStottingDeer = this.genome.getGene(GeneralGeneTypes.ISSTOTTING).haveGene();
 //		this.groupBehaviour = groupBehaviour;
 //		this.groupBehaviour = false;
 		if (this.groupBehaviour) {
@@ -80,7 +85,7 @@ public class DeerAgent extends AbstractAgent {
 				} while (!surroundings.getWorldShape().isInside(surroundings.getGridDimension(), pos));
 				IAgent child = new DeerAgent(name, pos, color, width, height,
 						new Vector(velocity), maxSpeed, maxAcceleration,
-						visionRange, groupBehaviour, genome.onlyMutate());
+						visionRange, genome.onlyMutate());
 
 				spawn.add(child);
 
