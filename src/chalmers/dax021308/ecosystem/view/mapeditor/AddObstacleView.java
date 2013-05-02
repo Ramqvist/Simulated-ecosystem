@@ -18,6 +18,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapEditorModel;
 import chalmers.dax021308.ecosystem.view.IView;
+import net.miginfocom.swing.MigLayout;
 
 public class AddObstacleView extends JPanel implements IView {
 	private static final long serialVersionUID = 4214212142L;
@@ -29,50 +30,75 @@ public class AddObstacleView extends JPanel implements IView {
 	public final JRadioButton rdbtnTypeRectangle;
 	public final JRadioButton rdbtnTypeCircle;
 	public final JButton btnAddObstacle;
+	private JTextField textField;
+	private JTextField textField_1;
 
 	public AddObstacleView(IModel m) {
 		m.addObserver(this);
+		setLayout(new MigLayout("", "[117.00,grow][112.00,grow][27.00,grow]", "[][][][][][][][]"));
+		
+		JLabel lblAddNewObstacle_1 = new JLabel("Add new obstacle");
+		lblAddNewObstacle_1.setFont(new Font("Tahoma", Font.PLAIN, 17));
+		add(lblAddNewObstacle_1, "cell 0 0 3 1");
+		
+		rdbtnTypeRectangle = new JRadioButton("Rectangle");
+		rdbtnTypeRectangle.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		add(rdbtnTypeRectangle, "flowx,cell 0 1 2 1");
+		
+		JLabel lblNewLabel = new JLabel("Width");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		add(lblNewLabel, "cell 0 2");
+		
+		JLabel lblNewLabel_1 = new JLabel("Height");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		add(lblNewLabel_1, "cell 1 2");
+		
+
+		tbxWidth = new JFormattedTextField(NumberFormat.getInstance());
+		tbxWidth.setText("120");
+		tbxWidth.setColumns(10);
+		add(tbxWidth, "cell 0 3,growx");
+		tbxWidth.setColumns(10);
+
+		tbxHeight = new JFormattedTextField(NumberFormat.getInstance());
+		tbxHeight.setText("120");
+		tbxHeight.setColumns(10);
+		add(tbxHeight, "cell 1 3,growx");
+		tbxHeight.setColumns(10);
+		
+		rdbtnTypeTriangle = new JRadioButton("Triangle");
+		rdbtnTypeTriangle.setSelected(true);
+		rdbtnTypeTriangle.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		add(rdbtnTypeTriangle, "cell 0 1 2 1");
+		
+
+		rdbtnTypeCircle = new JRadioButton("Ellipse");
+		rdbtnTypeCircle.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		add(rdbtnTypeCircle, "cell 0 1 2 1");
+		
+		btnAddObstacle = new JButton("Add obstacle");
+		btnAddObstacle.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		add(btnAddObstacle, "cell 0 5 2 1,growx");
 		
 		JLabel lblAddNewObstacle = new JLabel("Add new obstacle");
 		lblAddNewObstacle.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
-		rdbtnTypeTriangle = new JRadioButton("Triangle");
-		rdbtnTypeTriangle.setSelected(true);
 		
-		rdbtnTypeRectangle = new JRadioButton("Rectangle");
 		
-		rdbtnTypeCircle = new JRadioButton("Ellipse");
 		
-		JLabel lblSize = new JLabel("Width");
-		lblSize.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
-		tbxWidth = new JFormattedTextField(NumberFormat.getInstance());
-		tbxWidth.setText("120");
-		tbxWidth.setColumns(10);
 		
-		JLabel lblHeight = new JLabel("Height");
-		lblHeight.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
-		tbxHeight = new JFormattedTextField(NumberFormat.getInstance());
-		tbxHeight.setText("120");
-		tbxHeight.setColumns(10);
-		
-		JLabel lblXPosition = new JLabel("X position");
-		lblXPosition.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
 		tbxXPosition = new JFormattedTextField(NumberFormat.getInstance());
 		tbxXPosition.setText("500");
 		tbxXPosition.setColumns(10);
-		
-		JLabel lblYPosition = new JLabel("Y position");
-		lblYPosition.setFont(new Font("Tahoma", Font.PLAIN, 14));
+	
 		
 		tbxYPosition = new JFormattedTextField(NumberFormat.getInstance());
 		tbxYPosition.setText("500");
 		tbxYPosition.setColumns(10);
 		
-		btnAddObstacle = new JButton("Add obstacle");
-		btnAddObstacle.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
 		tbxWidth.setEnabled(false);
 		tbxHeight.setEnabled(false);
@@ -83,79 +109,6 @@ public class AddObstacleView extends JPanel implements IView {
 		rdbtnTypeCircle.setEnabled(false);
 		btnAddObstacle.setEnabled(false);
 		
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(144)
-							.addComponent(rdbtnTypeCircle)
-							.addGap(241))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(rdbtnTypeTriangle)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(rdbtnTypeRectangle, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap())
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblAddNewObstacle, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addGap(315))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblSize, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
-							.addGap(56)
-							.addComponent(lblHeight, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap(264, Short.MAX_VALUE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(tbxWidth, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(tbxHeight, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap(232, Short.MAX_VALUE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(btnAddObstacle, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addComponent(tbxXPosition, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblXPosition, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE))
-									.addGap(18)
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addComponent(tbxYPosition, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblYPosition, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE))))
-							.addContainerGap())))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addComponent(lblAddNewObstacle)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(rdbtnTypeTriangle)
-						.addComponent(rdbtnTypeRectangle)
-						.addComponent(rdbtnTypeCircle))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblSize, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblHeight, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(tbxWidth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(tbxHeight, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblXPosition, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(tbxXPosition, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblYPosition, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(tbxYPosition, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(btnAddObstacle, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(48, Short.MAX_VALUE))
-		);
-		setLayout(groupLayout);
 	}
 	
 	@Override
