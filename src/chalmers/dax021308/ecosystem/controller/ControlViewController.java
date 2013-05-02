@@ -3,8 +3,6 @@ package chalmers.dax021308.ecosystem.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
-
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.util.Log;
@@ -36,18 +34,12 @@ public class ControlViewController implements IController {
 					} catch (IllegalStateException ex) {
 						Log.v("EcoWorld already started");
 					}
-					view.play = true;
-					view.playPauseButton.setIcon(new ImageIcon("res/pause.png"));
-					view.playPauseButton.setToolTipText("Pause");
 				} else {
 					try {
 						model.pause();
 					} catch (IllegalStateException ex) {
 						Log.v("EcoWorld already paused");
 					}
-					view.play = false;
-					view.playPauseButton.setIcon(new ImageIcon("res/play.png"));
-					view.playPauseButton.setToolTipText("Play");
 				}
 			}
 		});

@@ -34,28 +34,39 @@ public class ControlView extends JPanel implements IView {
 	public boolean play;
 	
 	public ControlView(EcoWorld model) {  
-		playPauseButton = new JButton(new ImageIcon("res/pause.png"));//("res/pause.png"));
+		playPauseButton = new JButton(new ImageIcon("res/play.png"));//("res/pause.png"));
 		restartButton = new JButton(new ImageIcon("res/restart.png"));
 		iterationDelaySpinner = new JSpinner();
 		iterationDelayPanel = new JPanel();
 		iterationDelayLabel = new JLabel("Iteration Delay");
+		
+		model.addObserver(this);
 		init();
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		// TODO Auto-generated method stub
-		
+		if (evt.getPropertyName() == EcoWorld.EVENT_START) {
+			if (!playPauseButton.isEnabled()) {
+				playPauseButton.setEnabled(true);
+				restartButton.setEnabled(true);
+			}
+			swithToPauseButton();
+		} else if (evt.getPropertyName() == EcoWorld.EVENT_PAUSE) {
+			switchToPlayButton();
+		}
 	}
 
 	@Override
 	public void init() {
 		playPauseButton.setMaximumSize(new Dimension(40, 40));
 		playPauseButton.setMinimumSize(new Dimension(40, 40));
-		playPauseButton.setToolTipText("Pause");
+		playPauseButton.setToolTipText("Play");
+		playPauseButton.setEnabled(false);
 		restartButton.setMaximumSize(new Dimension(40, 40));
 		restartButton.setMinimumSize(new Dimension(40, 40));
 		restartButton.setToolTipText("Restart");
+		restartButton.setEnabled(false);
 		
 		iterationDelaySpinner.setModel(new SpinnerNumberModel(DEFAULT_ITERATION_DELAY, 0, 100, 1));
 		iterationDelaySpinner.setAlignmentX(LEFT_ALIGNMENT);
@@ -74,7 +85,7 @@ public class ControlView extends JPanel implements IView {
 		add(Box.createRigidArea(new Dimension(5, 0)));
 		add(iterationDelayPanel);
 		
-		play = true;
+		play = false;
 	}
 
 	@Override
@@ -93,5 +104,17 @@ public class ControlView extends JPanel implements IView {
 	public void release() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void switchToPlayButton() {
+		play = false;
+		playPauseButton.setIcon(new ImageIcon("res/play.png"));
+		playPauseButton.setToolTipText("Play");
+	}
+	
+	public void swithToPauseButton() {
+		play = true;
+		playPauseButton.setIcon(new ImageIcon("res/pause.png"));
+		playPauseButton.setToolTipText("Pause");
 	}
 }
