@@ -9,6 +9,8 @@ import chalmers.dax021308.ecosystem.model.genetics.IGenes;
 import chalmers.dax021308.ecosystem.model.genetics.IGenome;
 import chalmers.dax021308.ecosystem.model.genetics.WolfGenes;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.population.settings.GrassSettings;
+import chalmers.dax021308.ecosystem.model.population.settings.PredSettings;
 import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Stat;
@@ -21,9 +23,9 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public class WolfAgent extends AbstractAgent {
 
 	private boolean willFocusPreys = true;
-	private static final int MAX_ENERGY = 1200;
+	private static final int MAX_ENERGY = 1100;
 	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
-	private static final double REPRODUCTION_RATE = 0.10;
+	private static double REPRODUCTION_RATE = PredSettings.instance.reproduction_rate.value;
 	private static final int DIGESTION_TIME = 50;
 	private static final int PATH_TTL = 50;
 	private int digesting = 0;
@@ -36,6 +38,7 @@ public class WolfAgent extends AbstractAgent {
 		
 		super(name, position, color, width, height, velocity, maxSpeed,
 				visionRange, maxAcceleration);
+		REPRODUCTION_RATE = PredSettings.instance.reproduction_rate.value;
 		this.energy = MAX_ENERGY;
 		this.genome = genome;
 		this.groupBehaviour = this.genome.isGeneSet(WolfGenes.GROUPING);

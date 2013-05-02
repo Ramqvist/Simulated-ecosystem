@@ -15,10 +15,13 @@ public class GrassSettings extends CommonSettings {
 		doubleSettings.remove(velocity_decay);
 		booleanSettings.remove(groupBehavior);
 		booleanSettings.remove(pathFinding);
-		
 		doubleSettings.remove(capacity);
+		
 		capacity = new DoubleSettingsContainer("Capacity", 1, 1000000, 2000);
+		reproduction_rate	= new DoubleSettingsContainer("Reproduction rate", 0, 1, 0.007);
+		
 		doubleSettings.add(capacity);
+		doubleSettings.add(reproduction_rate);
 		
 //		capacity 			= new DoubleSettingsContainer("Capacity", 1, Integer.MAX_VALUE, Integer.MAX_VALUE);
 //		maxSpeed 			= new DoubleSettingsContainer("Max speed", 1, 100, 2); // 2.3
