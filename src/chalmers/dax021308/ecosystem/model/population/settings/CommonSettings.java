@@ -56,6 +56,7 @@ public abstract class CommonSettings {
 	public DoubleSettingsContainer focus_range;
 	public DoubleSettingsContainer velocity_decay;
 	public DoubleSettingsContainer obstacle_safety_distance;
+	public DoubleSettingsContainer reproductionRate;
 	
 	/* Common boolean containers. */
 	protected BooleanSettingsContainer groupBehavior;

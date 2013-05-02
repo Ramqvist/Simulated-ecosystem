@@ -41,6 +41,16 @@ public abstract class GeneticSettings {
 			return result;
 		}
 	};
+	public static GeneticSettings grassFieldSettings = new GeneticSettings() {
+		@Override
+		public List<GenomeSpecification> getGenomes(){
+			List<GenomeSpecification> result = new ArrayList<GenomeSpecification>();
+			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_BOOLEAN, "Will die when eaten"));
+			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_DOUBLE, "Chance to transform to weed"));
+			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_DOUBLE, "High factor"));
+			return result;
+		}
+	};
 	
 	public abstract List<GenomeSpecification> getGenomes();
 	

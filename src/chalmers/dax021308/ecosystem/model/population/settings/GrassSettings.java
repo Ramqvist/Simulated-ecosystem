@@ -1,6 +1,5 @@
 package chalmers.dax021308.ecosystem.model.population.settings;
 
-import chalmers.dax021308.ecosystem.model.population.settings.CommonSettings.DoubleSettingsContainer;
 
 
 public class GrassSettings extends CommonSettings {
