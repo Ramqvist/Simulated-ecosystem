@@ -2,7 +2,7 @@ package chalmers.dax021308.ecosystem.model.population.settings;
 
 public class GrassFieldSettings extends CommonSettings {
 	public static GrassFieldSettings instance = new GrassFieldSettings();
-
+	public static DoubleSettingsContainer timeToBloom;
 	public GrassFieldSettings() {
 		super();
 		doubleSettings.remove(interaction_range);
@@ -13,14 +13,14 @@ public class GrassFieldSettings extends CommonSettings {
 		booleanSettings.remove(pathFinding);
 		doubleSettings.remove(obstacle_safety_distance);
 
-		DoubleSettingsContainer maxEnergy = new DoubleSettingsContainer(
+		max_energy = new DoubleSettingsContainer(
 				"Max Energy", 1, 5000, 200);
-		DoubleSettingsContainer timeToBloom = new DoubleSettingsContainer(
+		timeToBloom = new DoubleSettingsContainer(
 				"Time to Bloom", 0, 5000, 100);
 		reproduction_rate = new DoubleSettingsContainer("Reproduction rate", 0,
 				1, 0.2);
 
-		doubleSettings.add(maxEnergy);
+		doubleSettings.add(max_energy);
 		doubleSettings.add(timeToBloom);
 		doubleSettings.add(reproduction_rate);
 	}

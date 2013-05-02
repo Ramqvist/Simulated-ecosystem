@@ -78,9 +78,10 @@ public class MapEditorController implements IController {
 		addObstacle = new AddObstacleController(model, obstacleListener);
 		editObstacle = new EditObstaclesController(model);
 		selectedObstacle = new SelectedObstacleController(model);
-		view.right.add(addObstacle.view);
-		view.right.add(editObstacle.view);
-		view.right.add(selectedObstacle.view);
+		view.right.add(addObstacle.view, "cell 0 0,grow");
+		view.right.add(editObstacle.view, "cell 0 1,grow");
+		view.right.add(selectedObstacle.view, "cell 0 2,grow");
+		
 		init();
 		view.setVisible(true);
 		view.setExtendedState(Frame.MAXIMIZED_BOTH);

@@ -22,6 +22,7 @@ import javax.swing.border.EmptyBorder;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapEditorModel;
 import chalmers.dax021308.ecosystem.view.IView;
+import net.miginfocom.swing.MigLayout;
 
 /**
  * Map editor view
@@ -36,7 +37,6 @@ public class MapEditorView extends JFrame implements IView {
 	public final JPanel left = new JPanel();
 	public final JPanel right = new JPanel();
 	public JLayeredPane mainPanel = new JLayeredPane();
-	private MapEditorGLView openGL;
 	
 	public final MenuBar menuBar;
 	public final Menu mnFile;
@@ -84,13 +84,11 @@ public class MapEditorView extends JFrame implements IView {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		left.setLayout(new BorderLayout(0,0));
-	
-		right.setLayout(new GridLayout(3,1));
-		right.setMinimumSize(new Dimension(500, 400));
-		right.setPreferredSize(new Dimension(500, 400));
 		setContentPane(contentPane);
 		contentPane.add(left, BorderLayout.CENTER);
 		contentPane.add(right, BorderLayout.EAST);
+		right.setLayout(new MigLayout("", "[grow]", "[grow][grow][grow]"));
+		
 	}
 
 	@Override

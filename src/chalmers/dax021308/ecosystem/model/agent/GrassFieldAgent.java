@@ -6,6 +6,7 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.population.settings.GrassFieldSettings;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
@@ -18,8 +19,8 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class GrassFieldAgent extends AbstractAgent {
 
-	private static final double REPRODUCTION_RATE = 0.2;
-	private static final double MAX_ENERGY = 200;
+	private double REPRODUCTION_RATE = GrassFieldSettings.instance.reproduction_rate.value;
+	private double MAX_ENERGY = GrassFieldSettings.instance.reproduction_rate.value;
 	private List<GrassSeed> seeds;
 
 	public GrassFieldAgent(String name, Position pos, Color color, int width,
@@ -96,7 +97,7 @@ public class GrassFieldAgent extends AbstractAgent {
 	private class GrassSeed {
 		private int lifeLength = 0;
 		private double energy;
-		private static final int TIME_TO_BLOOM = 100;
+		private int TIME_TO_BLOOM = (int) GrassFieldSettings.instance.timeToBloom.value;
 
 		private GrassSeed(double energy) {
 			this.energy = energy;
