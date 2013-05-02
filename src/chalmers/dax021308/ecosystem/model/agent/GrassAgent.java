@@ -19,7 +19,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class GrassAgent extends AbstractAgent {
 
-	private static double REPRODUCTION_RATE = GrassSettings.instance.reproductionRate.value;
+	private static double REPRODUCTION_RATE = GrassSettings.instance.reproduction_rate.value;
 	private static final int MAX_LIFE_LENGTH = 5000;
 	private static final double SPAWNING_STD = 200;
 
@@ -27,7 +27,7 @@ public class GrassAgent extends AbstractAgent {
 			int height, Vector velocity, double maxSpeed, int capacity) {
 		super(name, pos, color, width, height, velocity, maxSpeed, 0, 0);
 		this.capacity = capacity;
-		REPRODUCTION_RATE = GrassSettings.instance.reproductionRate.value;
+		REPRODUCTION_RATE = GrassSettings.instance.reproduction_rate.value;
 	}
 
 	@Override

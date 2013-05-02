@@ -12,7 +12,7 @@ public class PreySettings extends CommonSettings {
 		visionRange 		= new DoubleSettingsContainer("Vision range", 1, 1000, 200);
 		width 				= new DoubleSettingsContainer("Width", 1, 100, 5);
 		height				= new DoubleSettingsContainer("Height", 1, 100, 10);
-		reproductionRate	= new DoubleSettingsContainer("Reproduction rate", 0, 1, 0.08);
+		reproduction_rate	= new DoubleSettingsContainer("Reproduction rate", 0, 1, 0.08);
 		
 		doubleSettings.add(maxSpeed);
 		doubleSettings.add(capacity);
@@ -20,7 +20,7 @@ public class PreySettings extends CommonSettings {
 		doubleSettings.add(maxAcceleration);
 		doubleSettings.add(width);
 		doubleSettings.add(height);
-		doubleSettings.add(reproductionRate);
+		doubleSettings.add(reproduction_rate);
 
 //		TODO: Add to deer specific variables.
 //		TODO: Make CommonSettings abstract and make extending classes.

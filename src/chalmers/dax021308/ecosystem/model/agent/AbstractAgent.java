@@ -44,7 +44,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected boolean isAlive = true;
 	protected boolean hungry = true;
 	protected static final boolean USE_PRIORITY_NEIGHBOURS = true;
-	protected static final int K_NEAREST_NEIGHBOURS = 5;
+	protected static final int K_NEAREST_NEIGHBOURS = 10;
 
 	/* Neighbour list module variables */
 	protected List<IAgent> preyNeighbours;
@@ -63,7 +63,7 @@ public abstract class AbstractAgent implements IAgent {
 
 	protected final static double INTERACTION_RANGE = 10;
 	protected final static double EATING_RANGE = 5;
-	protected final static double FOCUS_RANGE = 150;
+	protected final static double FOCUS_RANGE = 100;
 	protected static final double VELOCITY_DECAY = 1;
 
 	public AbstractAgent(String name, Position position, Color color,

@@ -23,9 +23,9 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public class WolfAgent extends AbstractAgent {
 
 	private boolean willFocusPreys = true;
-	private static final int MAX_ENERGY = 1100;
+	private static final int MAX_ENERGY = 1200;
 	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
-	private static double REPRODUCTION_RATE = PredSettings.instance.reproductionRate.value;
+	private static double REPRODUCTION_RATE = PredSettings.instance.reproduction_rate.value;
 	private static final int DIGESTION_TIME = 50;
 	private static final int PATH_TTL = 50;
 	private int digesting = 0;
@@ -38,11 +38,11 @@ public class WolfAgent extends AbstractAgent {
 		
 		super(name, position, color, width, height, velocity, maxSpeed,
 				visionRange, maxAcceleration);
-		REPRODUCTION_RATE = PredSettings.instance.reproductionRate.value;
+		REPRODUCTION_RATE = PredSettings.instance.reproduction_rate.value;
 		this.energy = MAX_ENERGY;
 		this.genome = genome;
 		this.groupBehaviour = this.genome.isGeneSet(WolfGenes.GROUPING);
-//		this.groupBehaviour = groupBehaviour;
+		this.groupBehaviour = groupBehaviour;
 //		this.groupBehaviour = false;
 		if(this.groupBehaviour){
 			this.color = Color.RED;
@@ -90,7 +90,7 @@ public class WolfAgent extends AbstractAgent {
 				acceleration.multiply(maxAcceleration / accelerationNorm);
 			}
 
-			acceleration.add(environmentForce).add(obstacleForce);
+			acceleration.add(environmentForce.multiply(2.0/3.0)).add(obstacleForce.multiply(2.0/3.0));
 
 			/*
 			 * The new velocity is then just: v(t+dt) = (v(t)+a(t+1)*dt)*decay,

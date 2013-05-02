@@ -17,12 +17,12 @@ public class GrassFieldSettings extends CommonSettings {
 				"Max Energy", 1, 5000, 200);
 		DoubleSettingsContainer timeToBloom = new DoubleSettingsContainer(
 				"Time to Bloom", 0, 5000, 100);
-		reproductionRate = new DoubleSettingsContainer("Reproduction rate", 0,
+		reproduction_rate = new DoubleSettingsContainer("Reproduction rate", 0,
 				1, 0.2);
 
 		doubleSettings.add(maxEnergy);
 		doubleSettings.add(timeToBloom);
-		doubleSettings.add(reproductionRate);
+		doubleSettings.add(reproduction_rate);
 	}
 
 }

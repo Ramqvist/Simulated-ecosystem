@@ -25,7 +25,7 @@ public class DeerAgent extends AbstractAgent {
 	private static final int MAX_ENERGY = 1000;
 	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
 	private static final int DIGESTION_TIME = 10;
-	private static double REPRODUCTION_RATE = PreySettings.instance.reproductionRate.value;
+	private static double REPRODUCTION_RATE = PreySettings.instance.reproduction_rate.value;
 	
 	private int digesting = 0;
 	private boolean alone;
@@ -48,10 +48,10 @@ public class DeerAgent extends AbstractAgent {
 
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
-		REPRODUCTION_RATE = PreySettings.instance.reproductionRate.value;
+		REPRODUCTION_RATE = PreySettings.instance.reproduction_rate.value;
 		this.genome = genome;
 		this.groupBehaviour = this.genome.isGeneSet(DeerGenes.GROUPING);
-//		this.groupBehaviour = groupBehaviour;
+		this.groupBehaviour = groupBehaviour;
 //		this.groupBehaviour = false;
 		if (this.groupBehaviour) {
 			this.color = Color.BLUE;
