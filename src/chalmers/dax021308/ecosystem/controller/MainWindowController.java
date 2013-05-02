@@ -79,6 +79,21 @@ public class MainWindowController implements IController {
 			    	} else if(e.getKeyCode() == KeyEvent.VK_F3) {
 						new MapEditorController();
 				    	return true;
+			    	}else if (e.getKeyCode() == KeyEvent.VK_SPACE){
+			    		if (!window.controlViewCtrl.view.play) {
+							try {
+								model.start();
+							} catch (IllegalStateException ex) {
+								Log.v("EcoWorld already started");
+							}
+						} else {
+							try {
+								model.pause();
+							} catch (IllegalStateException ex) {
+								Log.v("EcoWorld already paused");
+							}
+						}
+			    		return true;
 			    	}
 		    	  }
 		        return false;

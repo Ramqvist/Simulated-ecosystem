@@ -22,13 +22,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
 
 import chalmers.dax021308.ecosystem.controller.ControlViewController;
-import chalmers.dax021308.ecosystem.controller.LiveSettingsViewController;
 import chalmers.dax021308.ecosystem.controller.NEWSettingsMenuViewController;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.util.Log;
+import chalmers.dax021308.ecosystem.view.chart.BottomChartTabs;
 import chalmers.dax021308.ecosystem.view.chart.ChartProvider;
 import chalmers.dax021308.ecosystem.view.chart.IChart;
-import chalmers.dax021308.ecosystem.view.chart.BottomChartTabs;
 import chalmers.dax021308.ecosystem.view.populationsettings.PopulationSettingsDialog;
 
 /**
@@ -98,7 +97,16 @@ public class MainWindow extends JFrame implements IView {
 		menuBar.add(mnView);
 		mnView.add(mntmMapEditor);
 		
-		mntmLoad = new MenuItem("Load simulation");
+		mntmSimulationSettings = new MenuItem("New Simulation");
+		mntmSimulationSettings.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				smvc.init();
+			}
+		});
+		
+		mnFile.add(mntmSimulationSettings);
+		
+		mntmLoad = new MenuItem("Load Simulation");
 		setExtendedState(MAXIMIZED_BOTH);
 		
 		//TODO: MOve this to controller.
@@ -124,7 +132,7 @@ public class MainWindow extends JFrame implements IView {
 		});
 		mnFile.add(mntmLoad);
 		
-		mntmSave = new MenuItem("Save simulation");
+		mntmSave = new MenuItem("Save Simulation");
 		mnFile.add(mntmSave);
 	
 		mntmExit = new MenuItem("Exit");
@@ -170,15 +178,9 @@ public class MainWindow extends JFrame implements IView {
 		mnSettings = new Menu("Settings");
 		menuBar.add(mnSettings);
 		
-		mntmSimulationSettings = new MenuItem("Simulation settings");
-		mntmPopulationSettings = new MenuItem("Population settings");
+		mntmPopulationSettings = new MenuItem("Population Settings");
 		
-		mntmSimulationSettings.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				smvc.init();
-			}
-		});
-		mnSettings.add(mntmSimulationSettings);
+//		mnSettings.add(mntmSimulationSettings);
 		mnSettings.add(mntmPopulationSettings);
 		mntmPopulationSettings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

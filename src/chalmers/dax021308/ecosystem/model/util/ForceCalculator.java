@@ -71,7 +71,7 @@ public class ForceCalculator {
 				if (distance <= INTERACTION_RANGE) {
 					Q = -20 * (INTERACTION_RANGE - distance);
 				} else {
-					Q = 5;
+					Q = 1;
 				}
 				newForce.x = p.getX() - currentAgent.getPosition().getX();
 				newForce.y = p.getY() - currentAgent.getPosition().getY();

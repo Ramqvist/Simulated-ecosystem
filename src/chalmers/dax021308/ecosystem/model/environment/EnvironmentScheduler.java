@@ -63,7 +63,7 @@ public class EnvironmentScheduler implements Runnable {
 		this.mListener = listener;
 		
 		//Create one Worker for each population.
-		this.workPool = Executors.newFixedThreadPool(numThreads);
+		this.workPool = Executors.newFixedThreadPool(1);
 		//Create the list of executing tasks, for barrier synchronization.
 		this.futures = new ArrayList<Future<Runnable>>();
 		

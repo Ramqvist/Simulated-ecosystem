@@ -10,6 +10,8 @@ import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
 import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
 import chalmers.dax021308.ecosystem.model.genetics.newV.NewIGenome;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.population.settings.GrassSettings;
+import chalmers.dax021308.ecosystem.model.population.settings.PredSettings;
 import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Stat;
@@ -24,7 +26,7 @@ public class WolfAgent extends AbstractAgent {
 	private boolean willFocusPreys = true;
 	private static final int MAX_ENERGY = 1200;
 	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
-	private static final double REPRODUCTION_RATE = 0.10;
+	private static double REPRODUCTION_RATE = PredSettings.instance.reproduction_rate.value;
 	private static final int DIGESTION_TIME = 50;
 	private static final int PATH_TTL = 50;
 	private int digesting = 0;
@@ -38,9 +40,11 @@ public class WolfAgent extends AbstractAgent {
 		
 		super(name, position, color, width, height, velocity, maxSpeed,
 				visionRange, maxAcceleration);
+		REPRODUCTION_RATE = PredSettings.instance.reproduction_rate.value;
 		this.energy = MAX_ENERGY;
 		this.genome = genome;
 		this.groupBehaviour = this.genome.getGene(GeneralGeneTypes.ISGROUPING).haveGene();
+
 		if(this.groupBehaviour){
 			this.color = Color.RED;
 		} else {
@@ -87,7 +91,7 @@ public class WolfAgent extends AbstractAgent {
 				acceleration.multiply(maxAcceleration / accelerationNorm);
 			}
 
-			acceleration.add(environmentForce).add(obstacleForce);
+			acceleration.add(environmentForce.multiply(2.0/3.0)).add(obstacleForce.multiply(2.0/3.0));
 
 			/*
 			 * The new velocity is then just: v(t+dt) = (v(t)+a(t+1)*dt)*decay,

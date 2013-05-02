@@ -10,6 +10,8 @@ import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
 import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
 import chalmers.dax021308.ecosystem.model.genetics.newV.NewIGenome;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
+import chalmers.dax021308.ecosystem.model.population.settings.GrassSettings;
+import chalmers.dax021308.ecosystem.model.population.settings.PreySettings;
 import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
@@ -24,7 +26,7 @@ public class DeerAgent extends AbstractAgent {
 	private static final int MAX_ENERGY = 1000;
 	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
 	private static final int DIGESTION_TIME = 10;
-	private static final double REPRODUCTION_RATE = 0.1;
+	private static double REPRODUCTION_RATE = PreySettings.instance.reproduction_rate.value;
 	
 	private int digesting = 0;
 	private boolean alone;
@@ -50,11 +52,10 @@ public class DeerAgent extends AbstractAgent {
 
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
+		REPRODUCTION_RATE = PreySettings.instance.reproduction_rate.value;
 		this.genome = genome;
 		this.groupBehaviour = this.genome.getGene(GeneralGeneTypes.ISGROUPING).haveGene();
 		this.isAStottingDeer = this.genome.getGene(GeneralGeneTypes.ISSTOTTING).haveGene();
-//		this.groupBehaviour = groupBehaviour;
-//		this.groupBehaviour = false;
 		if (this.groupBehaviour) {
 			this.color = Color.BLUE;
 		} else {

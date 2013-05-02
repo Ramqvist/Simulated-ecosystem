@@ -13,6 +13,7 @@ import javax.swing.JTabbedPane;
 
 	import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
 import chalmers.dax021308.ecosystem.model.population.settings.CommonSettings;
+import chalmers.dax021308.ecosystem.model.population.settings.GrassFieldSettings;
 import chalmers.dax021308.ecosystem.model.population.settings.GrassSettings;
 import chalmers.dax021308.ecosystem.model.population.settings.PredSettings;
 import chalmers.dax021308.ecosystem.model.population.settings.PreySettings;
@@ -45,6 +46,7 @@ public class PopulationSettingsDialog extends JDialog implements IView {
 		tabPane.addTab("Wolf agent", new PopulationPanel(GeneticSettings.predSettings, PredSettings.instance));
 		tabPane.addTab("Deer agent", new PopulationPanel(GeneticSettings.preySettings, PreySettings.instance));
 		tabPane.addTab("Grass agent", new PopulationPanel(GeneticSettings.grassSettings, GrassSettings.instance));
+		tabPane.addTab("Grass Field Agent", new PopulationPanel(GeneticSettings.grassFieldSettings,  GrassFieldSettings.instance));
 		add(tabPane);
 		pack();
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

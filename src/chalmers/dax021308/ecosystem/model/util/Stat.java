@@ -38,6 +38,7 @@ public class Stat<T extends Number> {
 		return mean;
 	}
 	
+	
 	public double getSampleVariance(){
 		double n = sample.size();
 		if(n<=1){
@@ -108,6 +109,14 @@ public class Stat<T extends Number> {
 		double x = Math.sqrt(-2*Math.log(U))*Math.cos(2*Math.PI*V);
 		double y = Math.sqrt(-2*Math.log(U))*Math.sin(2*Math.PI*V);
 		return new Vector(std*x,std*y);
+	}
+	
+	public double getMean(List<Stat<T>> statList) {
+		double result = 0;
+		for(Stat<T> t : statList) {
+			result = result + t.getMean();
+		}
+		return result / ((double) statList.size());
 	}
 	
 }

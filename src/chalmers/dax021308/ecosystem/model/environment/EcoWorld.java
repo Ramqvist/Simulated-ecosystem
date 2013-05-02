@@ -65,7 +65,7 @@ public class EcoWorld implements IModel {
 	/* State variables */
 	private boolean environmentFinished = false;
 	private boolean timerFinished 		= false;
-	private boolean shouldRun 			= false;
+	private boolean running 			= false;
 	private boolean runWithoutTimer;
 	private boolean recordSimulation;
 	private boolean playRecording;
@@ -82,6 +82,7 @@ public class EcoWorld implements IModel {
 	private long startIterationTime;
 	private double elapsedTime;
 	private Stat<Double> statTime;
+	private List<Stat<Double>> allSimulationStats;
 
 	/**
 	 * Simple object, used for synchronizing the {@link TimerHandler} and the
@@ -101,7 +102,7 @@ public class EcoWorld implements IModel {
 
 		@Override
 		public void onFinish(List<IPopulation> popList, List<IObstacle> obsList) {
-			if (!shouldRun) {
+			if (!running) {
 				return;
 			}
 			long start = System.nanoTime();
@@ -168,7 +169,7 @@ public class EcoWorld implements IModel {
 	private OnTickUpdate onTickListener = new OnTickUpdate() {
 		@Override
 		public void onTick() {
-			if (!shouldRun) {
+			if (!running) {
 				return;
 			}
 			synchronized (syncObject) {
@@ -194,6 +195,7 @@ public class EcoWorld implements IModel {
 		this.d = new Dimension(1000, 1000);
 		this.timer = new TimerHandler();
 		this.observers = new PropertyChangeSupport(this);
+		this.allSimulationStats = new ArrayList<Stat<Double>>();
 	}
 
 	private void setSimulationDimension(Dimension d) {
@@ -395,10 +397,10 @@ public class EcoWorld implements IModel {
 	 */
 	public void start() throws IllegalStateException {
 		synchronized (syncObject) {
-			if (!shouldRun) {
+			if (!running) {
 				executor = Executors.newSingleThreadExecutor();
 				this.timer = new TimerHandler();
-				shouldRun = true;
+				running = true;
 				scheduleEnvironmentUpdate();
 				Log.i("EcoWorld started.");
 				if (recordSimulation) {
@@ -423,8 +425,8 @@ public class EcoWorld implements IModel {
 	 */
 	public void pause() throws IllegalStateException {
 		synchronized (syncObject) {
-			if (shouldRun) {
-				shouldRun = false;
+			if (running) {
+				running = false;
 				executor.shutdownNow();
 				timer.stop();
 				numUpdates = 0;
@@ -450,8 +452,8 @@ public class EcoWorld implements IModel {
 	 */
 	public void stop() throws IllegalStateException {
 		synchronized (syncObject) {
-			if (shouldRun) {
-				shouldRun = false;
+			if (running) {
+				running = false;
 				executor.shutdownNow();
 				timer.stop();
 				numUpdates = 0;
@@ -552,6 +554,15 @@ public class EcoWorld implements IModel {
 				loadRecordedSimulation(new File("Testrecording1.sim"));
 				playRecordedSimulation();
 			}
+			StringBuilder sb = new StringBuilder();
+			sb.append("- Simulation finished - ");
+			sb.append(" mean value: ");
+			sb.append(roundTwoDecimals(statTime.getMean()));
+			sb.append(" sample variance: ");
+			sb.append(roundTwoDecimals(statTime.getSampleVariance()));
+			Log.v(sb.toString());
+			allSimulationStats.add(statTime);
+			Log.v("All simulations run mean value: " + statTime.getMean(allSimulationStats));
 			/*
 			 * if (recordSimulation) {
 			 * playRecordedSimulation(recordedSimulation); }
