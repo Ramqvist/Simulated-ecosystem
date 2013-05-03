@@ -45,19 +45,16 @@ public class EditObstaclesController implements IController {
 	
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void release() {
-		// TODO Auto-generated method stub
-		
+		view.release();
 	}
 
 	@Override
 	public void setModel(IModel m) {
-		// TODO Auto-generated method stub
 		
 	}
 
