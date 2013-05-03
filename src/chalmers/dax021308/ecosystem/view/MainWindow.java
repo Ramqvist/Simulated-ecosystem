@@ -75,8 +75,7 @@ public class MainWindow extends JFrame implements IView {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 613, 516);
 		//OpenGL   
-	    Dimension d = model.getSize();
-		openGL = new OpenGLSimulationView(model, d, true);
+		openGL = new OpenGLSimulationView(model);
 		openGL.init();
 		controlViewCtrl = new ControlViewController(model);
 //		parameterViewCtrl = new LiveSettingsViewController(model);

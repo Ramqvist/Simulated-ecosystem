@@ -80,8 +80,8 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 	/**
 	 * Create the panel.
 	 */
-	public OpenGLSimulationView(IModel model, Dimension size, boolean showFPS) {
-		this.size = size;
+	public OpenGLSimulationView(IModel model) {
+		this.size = new Dimension();
 		model.addObserver(this);
 		// setVisible(true);
 		// setSize(size);

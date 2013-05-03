@@ -563,10 +563,6 @@ public class EcoWorld implements IModel {
 			Log.v(sb.toString());
 			allSimulationStats.add(statTime);
 			Log.v("All simulations run mean value: " + statTime.getMean(allSimulationStats));
-			/*
-			 * if (recordSimulation) {
-			 * playRecordedSimulation(recordedSimulation); }
-			 */
 		}
 	}
 
