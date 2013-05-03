@@ -44,7 +44,7 @@ public class GeneticPanel extends JPanel {
 	
 	public GeneticPanel(GeneticSettings geneticContent) {
 		this.geneticContent = geneticContent;
-		setLayout(new MigLayout("", "[][][65.00][111.00,grow][299.00]", "[][][][][]"));
+		setLayout(new MigLayout("", "[][][65.00][65.00][65]", "[][][][][]"));
 		
 		JLabel lblGeneticSettings = new JLabel("Genetic Settings");
 		lblGeneticSettings.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -94,6 +94,18 @@ public class GeneticPanel extends JPanel {
 		currentRow++;
 		JLabel emptyLabel = new JLabel(" ");
 		add(emptyLabel, "cell 2 "+currentRow+",alignx right");
+		currentRow++;
+		JLabel startLabel = new JLabel("Start");
+		add(startLabel, "cell 3 "+currentRow+",alignx center");
+		JLabel minLabel = new JLabel("Min");
+		add(minLabel, "cell 4 "+currentRow+",alignx center");
+		JLabel maxLabel = new JLabel("Max");
+		add(maxLabel, "cell 5 "+currentRow+",alignx center");
+		JLabel mutableLabel = new JLabel("Mutable");
+		add(mutableLabel, "cell 6 "+currentRow+",alignx center");
+		JLabel randomStartLabel = new JLabel("Random Start");
+		add(randomStartLabel, "cell 7 "+currentRow+",alignx center");
+		currentRow++;
 		for(final GenomeSpecification g : geneticContent.getGenomes()) {
 			if(g.getGenomeType() == GenomeSpecification.TYPE_BOOLEAN) {
 				continue;
@@ -183,7 +195,7 @@ public class GeneticPanel extends JPanel {
 					//Nothing yet.
 				}
 			});
-			add(chkbxRandomStart, "cell 6 "+currentRow+",alignx center");
+			add(chkbxRandomStart, "cell 7 "+currentRow+",alignx center");
 //			
 //			List<JComponent> jList = new ArrayList<JComponent>();
 //			jList.add(tfDoubleValue);
