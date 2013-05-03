@@ -2,8 +2,10 @@ package chalmers.dax021308.ecosystem.model.genetics.newV;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
 
@@ -27,7 +29,17 @@ public class Chromosome implements IChromosome<GeneralGeneTypes, IGene> {
 	}
 	
 	private Map<GeneralGeneTypes, IGene> makeNewMap(Map<GeneralGeneTypes,IGene> chromosome){
-		return new EnumMap<GeneralGeneTypes, IGene>(chromosome);
+		
+		Map<GeneralGeneTypes,IGene> newChromosome = new EnumMap<GeneralGeneTypes, IGene>(GeneralGeneTypes.class);
+		
+		Iterator<Entry<GeneralGeneTypes,IGene>> it = chromosome.entrySet().iterator();
+		while(it.hasNext()) {
+			Entry<GeneralGeneTypes,IGene> entry = it.next();
+			newChromosome.put(entry.getKey(), entry.getValue().getCopy());
+//			System.out.println(entry.getKey());
+		}
+		
+		return newChromosome;
 	}
 	
 	@Override

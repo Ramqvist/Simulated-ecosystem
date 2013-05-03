@@ -8,6 +8,7 @@ import java.util.List;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.agent.DeerAgent;
 import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
+import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
 import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
@@ -47,9 +48,10 @@ public class DeerPopulation extends AbstractPopulation {
 				velocity.setVector(-maxSpeed + Math.random() * 2 * maxSpeed,
 						-maxSpeed + Math.random() * 2 * maxSpeed);
 			}
+			
 			IAgent a = new DeerAgent("Deer", randPos,
 					color, 5, 10, velocity, maxSpeed, maxAcceleration,
-					visionRange, GenomeFactory.deerGenomeFactory());
+					visionRange, GeneticSettings.preySettings.getGenome().getCopy());
 			/*
 			 * IAgent a = new DeerAgent("Deer", randPos,
 					color, 5, 10, velocity, maxSpeed, maxAcceleration,

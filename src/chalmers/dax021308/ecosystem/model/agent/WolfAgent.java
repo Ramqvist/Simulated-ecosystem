@@ -43,7 +43,7 @@ public class WolfAgent extends AbstractAgent {
 				visionRange, maxAcceleration);
 		REPRODUCTION_RATE = PredSettings.instance.reproduction_rate.value;
 		this.energy = MAX_ENERGY;
-		this.genome = GeneticSettings.predSettings.getGenome();
+		this.genome = genome;
 		this.groupBehaviour = this.genome.getGene(GeneralGeneTypes.ISGROUPING).haveGene();
 
 		if(this.groupBehaviour){
@@ -141,7 +141,7 @@ public class WolfAgent extends AbstractAgent {
 				} while (!surroundings.getWorldShape().isInside(surroundings.getGridDimension(), pos));
 				IAgent child = new WolfAgent(name, pos, color, width, height,
 						new Vector(velocity), maxSpeed, maxAcceleration,
-						visionRange, genome.onlyMutate());
+						visionRange, genome.getCopy().onlyMutate());
 				spawn.add(child);
 			}
 			return spawn;

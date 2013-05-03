@@ -8,6 +8,7 @@ import java.util.List;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.agent.WolfAgent;
 import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
+import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
 import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
@@ -53,7 +54,7 @@ public class WolfPopulation extends AbstractPopulation {
 			}
 			IAgent a = new WolfAgent("Wolf", randPos, color, 10, 20,
 					velocity, maxSpeed, maxAcceleration, visionRange,
-					GenomeFactory.wolfGenomeFactory());
+					GeneticSettings.predSettings.getGenome().getCopy());
 			newAgents.add(a);
 		}
 		return newAgents;

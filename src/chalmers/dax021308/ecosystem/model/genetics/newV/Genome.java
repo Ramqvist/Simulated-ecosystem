@@ -29,6 +29,10 @@ public class Genome extends GenericGenome<GeneralGeneTypes, IGene> {
 		return new Genome(nChrom);
 	}
 	
+	public IGenome<GeneralGeneTypes, IGene> getCopy(){
+		return new Genome(this.chromosome.getCopy());
+	}
+	
 	
 }
 

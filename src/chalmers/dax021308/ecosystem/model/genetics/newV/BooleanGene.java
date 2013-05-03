@@ -19,8 +19,7 @@ public class BooleanGene extends AbstractGene {
 	}
 	
 	private BooleanGene(BooleanGene toCopy) {
-		this.mutationProbability = toCopy.mutationProbability;
-		this.haveGene = toCopy.haveGene;
+		this(toCopy.haveGene,toCopy.mutationProbability,toCopy.isMutable);
 	}
 
 	/**
@@ -53,7 +52,6 @@ public class BooleanGene extends AbstractGene {
 	@Override
 	public void setCurrentValue(Object currentValue) {
 		this.haveGene = ((Boolean)currentValue).booleanValue();
-		System.out.println(haveGene);
 	}
 
 	/**

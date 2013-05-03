@@ -81,18 +81,6 @@ public abstract class GenericGenome<E extends Enum<E>, T extends IGene> implemen
 		return new GenericGenome<E,T>(nChrom);
 	}*/
 
-
-	
-	/**
-	 * @throws CloneNotSupportedException
-	 */
-	@Override 
-	public Object clone() throws CloneNotSupportedException {
-		throw new CloneNotSupportedException();
-	}
-
-
-
 	/* (non-Javadoc)
 	 * @see chalmers.dax021308.ecosystem.model.genetics.IntAndAbs.IGenomeGeneric#getGene(java.lang.Enum)
 	 */

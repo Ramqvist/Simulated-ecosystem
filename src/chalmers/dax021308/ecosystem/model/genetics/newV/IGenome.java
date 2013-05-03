@@ -66,5 +66,7 @@ public interface IGenome<E extends Enum<E>, G> {
 
 	@Override
 	public boolean equals(Object other);
+	
+	public IGenome<E, G> getCopy();
 }
 

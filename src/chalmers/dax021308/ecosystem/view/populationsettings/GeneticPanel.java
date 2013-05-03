@@ -73,7 +73,6 @@ public class GeneticPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					gene.setCurrentValue(chkbxActiveBirth.isSelected());
-					System.out.println(chkbxActiveBirth.isSelected());
 				}
 			});
 			add(chkbxActiveBirth, "cell 3 "+currentRow+",alignx center");

@@ -54,7 +54,7 @@ public class DeerAgent extends AbstractAgent {
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
 		REPRODUCTION_RATE = PreySettings.instance.reproduction_rate.value;
-		this.genome = GeneticSettings.preySettings.getGenome();
+		this.genome = genome;
 		this.groupBehaviour = this.genome.getGene(GeneralGeneTypes.ISGROUPING).haveGene();
 		this.isAStottingDeer = this.genome.getGene(GeneralGeneTypes.ISSTOTTING).haveGene();
 		if (this.groupBehaviour) {
@@ -85,9 +85,10 @@ public class DeerAgent extends AbstractAgent {
 							* (0.001 + 0.001 * Math.random());
 					pos = new Position(newX, newY);
 				} while (!surroundings.getWorldShape().isInside(surroundings.getGridDimension(), pos));
+				IGenome<GeneralGeneTypes, IGene> newGenome = genome.getCopy();
 				IAgent child = new DeerAgent(name, pos, color, width, height,
 						new Vector(velocity), maxSpeed, maxAcceleration,
-						visionRange, genome.onlyMutate());
+						visionRange, newGenome.onlyMutate());
 
 				spawn.add(child);
 
