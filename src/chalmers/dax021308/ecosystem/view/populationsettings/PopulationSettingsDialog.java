@@ -45,8 +45,8 @@ public class PopulationSettingsDialog extends JDialog implements IView {
 	public void init() {
 		tabPane.addTab("Wolf agent", new PopulationPanel(GeneticSettings.predSettings, PredSettings.instance));
 		tabPane.addTab("Deer agent", new PopulationPanel(GeneticSettings.preySettings, PreySettings.instance));
-		tabPane.addTab("Grass agent", new PopulationPanel(GeneticSettings.grassSettings, GrassSettings.instance));
-		tabPane.addTab("Grass Field Agent", new PopulationPanel(GeneticSettings.grassFieldSettings,  GrassFieldSettings.instance));
+		tabPane.addTab("Grass agent", new PopulationPanel(null, GrassSettings.instance));
+		tabPane.addTab("Grass Field Agent", new PopulationPanel(null, GrassFieldSettings.instance));
 		add(tabPane);
 		pack();
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

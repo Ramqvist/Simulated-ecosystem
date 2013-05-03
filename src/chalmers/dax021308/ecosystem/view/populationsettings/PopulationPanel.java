@@ -17,10 +17,10 @@ public class PopulationPanel extends JPanel {
 		
 		CommonSettingsPanel panel = new CommonSettingsPanel(c);
 		add(panel, "cell 0 0,grow");
-		
-		GeneticPanel panel_1 = new GeneticPanel(s);
-		add(panel_1, "cell 0 2,grow");
-		
+		if(s != null) {
+			GeneticPanel panel_1 = new GeneticPanel(s);
+			add(panel_1, "cell 0 2,grow");
+		}
 		setSize(new Dimension (700, 700));
 	}
 

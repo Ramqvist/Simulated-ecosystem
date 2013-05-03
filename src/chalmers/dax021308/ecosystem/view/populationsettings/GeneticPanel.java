@@ -4,6 +4,8 @@ import java.awt.Checkbox;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.jfree.text.TextBox;
+
 
 import net.miginfocom.swing.MigLayout;
 import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
@@ -93,14 +96,30 @@ public class GeneticPanel extends JPanel {
 			JLabel lblGroupBehavoir = new JLabel(g.getName());
 			add(lblGroupBehavoir, "cell 2 "+currentRow+",alignx right");
 			
-			JTextField tfDoubleValue = new JTextField("");
-			add(tfDoubleValue, "cell 3 "+currentRow+",growx");
+			final JTextField tfStartValue = new JTextField("");
+			add(tfStartValue, "cell 3 "+currentRow+",growx");
 			
-			tfDoubleValue = new JTextField("");
-			add(tfDoubleValue, "cell 4 "+currentRow+",growx");
+			final JTextField tfMinValue = new JTextField("");
+			add(tfMinValue, "cell 4 "+currentRow+",growx");
 			
-			tfDoubleValue = new JTextField("");
-			add(tfDoubleValue, "cell 5 "+currentRow+",growx");
+			final JTextField tfMaxValue = new JTextField("");
+			tfMaxValue.addKeyListener(new KeyListener() {
+				@Override
+				public void keyTyped(KeyEvent e) { }
+				@Override
+				public void keyReleased(KeyEvent e) { 
+					try {
+						double value = Double.parseDouble(tfMaxValue.getText());
+//						g.getGenome().g
+					} catch (Exception ex) {
+						
+					}
+				}
+				@Override
+				public void keyPressed(KeyEvent e) {
+				}
+			});
+			add(tfMaxValue, "cell 5 "+currentRow+",growx");
 			
 			final JCheckBox chkbxActiveBirth = new JCheckBox("");
 			chkbxActiveBirth.addActionListener(new ActionListener() {
@@ -110,10 +129,10 @@ public class GeneticPanel extends JPanel {
 				}
 			});
 			add(chkbxActiveBirth, "cell 6 "+currentRow+",alignx center");
-			
-			List<JComponent> jList = new ArrayList<JComponent>();
-			jList.add(tfDoubleValue);
-			guiMap.put(g, jList);
+//			
+//			List<JComponent> jList = new ArrayList<JComponent>();
+//			jList.add(tfDoubleValue);
+//			guiMap.put(g, jList);
 		}
 	}
 	private static final long serialVersionUID = 1L;
