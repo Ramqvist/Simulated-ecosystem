@@ -111,6 +111,13 @@ public class EditObstaclesView extends JPanel implements IView {
 					btnDelete.setEnabled(true);
 				}
 			}
+		} else if(evt.getPropertyName() == MapEditorModel.EVENT_SELECTED_CHANGED) {
+			IObstacle selectedObstacle = (IObstacle) evt.getNewValue();
+			if(selectedObstacle != null) {
+				obstaclesJList.setSelectedValue(selectedObstacle, true);
+			} else {
+				obstaclesJList.clearSelection();
+			}
 		}
 	}
 	
