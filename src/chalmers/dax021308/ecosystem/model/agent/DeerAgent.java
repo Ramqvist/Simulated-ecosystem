@@ -6,6 +6,7 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
+import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
 import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
 import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
 import chalmers.dax021308.ecosystem.model.genetics.newV.IGenome;
@@ -40,7 +41,7 @@ public class DeerAgent extends AbstractAgent {
 	private boolean isAStottingDeer = false;
 	private boolean isStotting = false;
 	private Vector stottingVector = new Vector();
-	private IGenome<GeneralGeneTypes, IGene> genome = GenomeFactory.deerGenomeFactory();
+	private IGenome<GeneralGeneTypes, IGene> genome = GeneticSettings.preySettings.getGenome();
 	
 	/*public DeerAgent(String name, Position p, Color c, int width, int height,
 			Vector velocity, double maxSpeed, double maxAcceleration,
@@ -62,7 +63,7 @@ public class DeerAgent extends AbstractAgent {
 			this.color = Color.MAGENTA;
 		}
 		this.energy = MAX_ENERGY;
-
+		
 	}
 
 	@Override
