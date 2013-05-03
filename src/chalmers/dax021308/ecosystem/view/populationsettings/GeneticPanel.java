@@ -190,11 +190,11 @@ public class GeneticPanel extends JPanel {
 			add(chkbxMutable, "cell 6 "+currentRow+",alignx center");
 			
 			//Random Start
-			final JCheckBox chkbxRandomStart = new JCheckBox("");
+			final JCheckBox chkbxRandomStart = new JCheckBox("", gene.hasRandomStartValue());
 			chkbxRandomStart.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					//Nothing yet.
+					gene.setHasRandomStartValue(chkbxRandomStart.isSelected());
 				}
 			});
 			add(chkbxRandomStart, "cell 7 "+currentRow+",alignx center");

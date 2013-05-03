@@ -20,25 +20,27 @@ public class DoubleGene extends AbstractGene {
 	public DoubleGene() {}
 
 	public DoubleGene(double minValue, double maxValue,
-			boolean isMutable, double currentValue, double mutProb, int nBits) {
+			boolean isMutable, double currentValue, double mutProb, int nBits, boolean randomStartValue) {
+		this.randomStartValue = randomStartValue;
+		this.nBits = nBits;
 		this.maxInt = Math.pow(2, nBits) - 1;
 		this.minValue = minValue;
 		this.maxValue = maxValue;
 		this.isMutable = isMutable;
-		this.currentValue = parseToInt(currentValue);
+		if(this.randomStartValue) {
+			this.currentValue = new Random().nextInt((int)maxInt + 1);
+		} else {
+			this.currentValue = parseToInt(currentValue);
+		}
 		this.mutationProbability = mutProb;
-		this.nBits = nBits;
-		
 	}
 	
 	private DoubleGene(DoubleGene toCopy) {
-		this.minValue = toCopy.minValue;
-		this.maxValue = toCopy.maxValue;
-		this.isMutable = toCopy.isMutable;
-		this.currentValue = toCopy.currentValue;
-		this.mutationProbability = toCopy.mutationProbability;
-		this.nBits = toCopy.nBits;
-		this.maxInt = toCopy.maxInt;
+		this(toCopy.minValue, toCopy.maxValue, toCopy.isMutable, toCopy.currentValue, 
+				toCopy.mutationProbability, toCopy.nBits, toCopy.randomStartValue);
+		if(!toCopy.randomStartValue) {
+			this.currentValue = toCopy.currentValue;
+		}
 	}
 
 	/**

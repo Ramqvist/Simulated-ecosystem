@@ -12,14 +12,24 @@ public class BooleanGene extends AbstractGene {
 
 	public BooleanGene() {}
 
-	public BooleanGene(boolean haveGene, double mutationProbability, boolean isMutable) {
-		this.haveGene = haveGene;
+	public BooleanGene(boolean haveGene, double mutationProbability, boolean isMutable, boolean randomStartValue) {
+		this.randomStartValue = randomStartValue;
+		if(this.randomStartValue) {
+			if(Math.random()<0.5){
+				this.haveGene = false;
+			} else {
+				this.haveGene = true;
+			}
+		} else {
+			this.haveGene = haveGene;
+		}
+		
 		this.mutationProbability = mutationProbability;
 		this.isMutable = isMutable;
 	}
 	
 	private BooleanGene(BooleanGene toCopy) {
-		this(toCopy.haveGene,toCopy.mutationProbability,toCopy.isMutable);
+		this(toCopy.haveGene,toCopy.mutationProbability,toCopy.isMutable, toCopy.randomStartValue);
 	}
 
 	/**

@@ -74,6 +74,22 @@ public interface IGene {
 	 */
 	void mutate();
 	
+	/**
+	 * 
+	 * @return a copy of the gene.
+	 */
 	public IGene getCopy();
+	
+	/**
+	 * 
+	 * @return true if the starting value of the gene should be random. 
+	 */
+	public boolean hasRandomStartValue();
+	
+	/**
+	 * 
+	 * @param random true if the start value should be random.
+	 */
+	public void setHasRandomStartValue(boolean random);
 	
 }

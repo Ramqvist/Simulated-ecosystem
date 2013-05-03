@@ -9,7 +9,8 @@ package chalmers.dax021308.ecosystem.model.genetics.newV;
  */
 public abstract class AbstractGene implements IGene {
 	protected double mutationProbability = 0.1;
-	protected boolean isMutable = true;
+	protected boolean isMutable = false;
+	protected boolean randomStartValue = false;
 	
 	/**
 	 * 
@@ -90,4 +91,14 @@ public abstract class AbstractGene implements IGene {
 		throw new UnsupportedOperationException("setMaxValue");
 	}
 
+	@Override
+	public boolean hasRandomStartValue() {
+		return this.randomStartValue;
+	}
+	
+	@Override
+	public void setHasRandomStartValue(boolean random) {
+		this.randomStartValue = random;
+	}
+	
 }
