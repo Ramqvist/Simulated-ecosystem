@@ -53,6 +53,7 @@ public class BooleanGene extends AbstractGene {
 	@Override
 	public void setCurrentValue(Object currentValue) {
 		this.haveGene = ((Boolean)currentValue).booleanValue();
+		System.out.println(haveGene);
 	}
 
 	/**
@@ -76,6 +77,16 @@ public class BooleanGene extends AbstractGene {
 	@Override
 	public IGene getCopy() {
 		return new BooleanGene(this);
+	}
+
+	@Override
+	public double getMinValue() {
+		return 0;
+	}
+
+	@Override
+	public double getMaxValue() {
+		return 0;
 	}
 
 }

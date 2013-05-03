@@ -75,27 +75,11 @@ public abstract class AbstractGene implements IGene {
 	}
 
 	/* (non-Javadoc)
-	 * @see chalmers.dax021308.ecosystem.model.genetics.newV.IGene#getMinValue()
-	 */
-	@Override
-	public double getMinValue() {
-		throw new UnsupportedOperationException("getMinValue");
-	}
-
-	/* (non-Javadoc)
 	 * @see chalmers.dax021308.ecosystem.model.genetics.newV.IGene#setMinValue(double)
 	 */
 	@Override
 	public void setMinValue(double minValue) {
 		throw new UnsupportedOperationException("setMinValue");
-	}
-
-	/* (non-Javadoc)
-	 * @see chalmers.dax021308.ecosystem.model.genetics.newV.IGene#getMaxValue()
-	 */
-	@Override
-	public double getMaxValue() {
-		throw new UnsupportedOperationException("getMaxValue");
 	}
 
 	/* (non-Javadoc)

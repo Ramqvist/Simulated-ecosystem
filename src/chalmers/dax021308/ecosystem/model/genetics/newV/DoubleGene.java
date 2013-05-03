@@ -2,6 +2,8 @@ package chalmers.dax021308.ecosystem.model.genetics.newV;
 
 import java.util.Random;
 
+import org.junit.experimental.max.MaxCore;
+
 
 /**
  * 
@@ -92,6 +94,16 @@ public class DoubleGene extends AbstractGene {
 	@Override
 	public IGene getCopy() {
 		return new DoubleGene(this);
+	}
+
+	@Override
+	public double getMinValue() {
+		return minValue;
+	}
+
+	@Override
+	public double getMaxValue() {
+		return maxValue;
 	}
 
 }

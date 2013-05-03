@@ -68,16 +68,17 @@ public class GeneticPanel extends JPanel {
 			JLabel lblGroupBehavoir = new JLabel(g.getName());
 			add(lblGroupBehavoir, "cell 2 "+currentRow+",alignx right");
 			
-			final JCheckBox chkbxActiveBirth = new JCheckBox("");
+			final JCheckBox chkbxActiveBirth = new JCheckBox("",gene.haveGene());
 			chkbxActiveBirth.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					gene.setCurrentValue(chkbxActiveBirth.isSelected());
+					System.out.println(chkbxActiveBirth.isSelected());
 				}
 			});
 			add(chkbxActiveBirth, "cell 3 "+currentRow+",alignx center");
 			
-			final JCheckBox chckbxMutable = new JCheckBox("");
+			final JCheckBox chckbxMutable = new JCheckBox("", gene.isMutable());
 			chckbxMutable.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -118,7 +119,7 @@ public class GeneticPanel extends JPanel {
 			add(lblGroupBehavoir, "cell 2 "+currentRow+",alignx right");
 			
 			//Start value
-			final JTextField tfStartValue = new JTextField("");
+			final JTextField tfStartValue = new JTextField("" + gene.getCurrentValue());
 			tfStartValue.addKeyListener(new KeyListener() {
 				@Override
 				public void keyTyped(KeyEvent e) { }
@@ -138,7 +139,7 @@ public class GeneticPanel extends JPanel {
 			add(tfStartValue, "cell 3 "+currentRow+",growx");
 			
 			//Min value
-			final JTextField tfMinValue = new JTextField("");
+			final JTextField tfMinValue = new JTextField("" + gene.getMinValue());
 			tfMinValue.addKeyListener(new KeyListener() {
 				@Override
 				public void keyTyped(KeyEvent e) { }
@@ -158,7 +159,7 @@ public class GeneticPanel extends JPanel {
 			add(tfMinValue, "cell 4 "+currentRow+",growx");
 			
 			//Max value
-			final JTextField tfMaxValue = new JTextField("");
+			final JTextField tfMaxValue = new JTextField("" + gene.getMaxValue());
 			tfMaxValue.addKeyListener(new KeyListener() {
 				@Override
 				public void keyTyped(KeyEvent e) { }
@@ -178,7 +179,7 @@ public class GeneticPanel extends JPanel {
 			add(tfMaxValue, "cell 5 "+currentRow+",growx");
 			
 			//Mutable
-			final JCheckBox chkbxMutable = new JCheckBox("");
+			final JCheckBox chkbxMutable = new JCheckBox("", gene.isMutable());
 			chkbxMutable.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
