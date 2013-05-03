@@ -21,13 +21,13 @@ public class DoubleGene extends AbstractGene {
 
 	public DoubleGene(double minValue, double maxValue,
 			boolean isMutable, double currentValue, double mutProb, int nBits) {
+		this.maxInt = Math.pow(2, nBits) - 1;
 		this.minValue = minValue;
 		this.maxValue = maxValue;
 		this.isMutable = isMutable;
 		this.currentValue = parseToInt(currentValue);
 		this.mutationProbability = mutProb;
 		this.nBits = nBits;
-		this.maxInt = 2^nBits;
 		
 	}
 	
@@ -55,7 +55,8 @@ public class DoubleGene extends AbstractGene {
 	 */
 	@Override
 	public void setCurrentValue(Object currentValue) {
-		this.parseToInt(((Double)currentValue).doubleValue());
+		this.currentValue = parseToInt(((Double)currentValue).doubleValue());
+		System.out.println(this.currentValue);
 	}
 
 
@@ -84,6 +85,11 @@ public class DoubleGene extends AbstractGene {
 	}
 	
 	private int parseToInt(double c){
+		if(c>maxValue) {
+			c = maxValue;
+		} else if(c < minValue) {
+			c = minValue;
+		}
 		int result = (int) ((maxInt * ((c -minValue) / (maxValue-minValue)))+ 0.5);
 		return result;
 	}
@@ -100,10 +106,20 @@ public class DoubleGene extends AbstractGene {
 	public double getMinValue() {
 		return minValue;
 	}
+	
+	@Override
+	public void setMinValue(double minValue) {
+		this.minValue = minValue;
+	}
 
 	@Override
 	public double getMaxValue() {
 		return maxValue;
+	}
+	
+	@Override
+	public void setMaxValue(double maxValue) {
+		this.maxValue = maxValue;
 	}
 
 }

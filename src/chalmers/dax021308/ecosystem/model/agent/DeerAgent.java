@@ -33,9 +33,10 @@ public class DeerAgent extends AbstractAgent {
 	private boolean alone;
 	private boolean hungry = true;
 	private boolean willFocusPreys = false;
-	private double STOTTING_RANGE = 10;
-	private double STOTTING_LENGTH = 8;
-	private double STOTTING_COOLDOWN = 50;
+	private double STOTTING_RANGE;
+	private double STOTTING_LENGTH;
+	private double STOTTING_COOLDOWN;
+	private double STOTTING_ANGLE;
 	private double stottingDuration = STOTTING_LENGTH;
 	private double stottingCoolDown = 0;
 	private boolean isAStottingDeer = false;
@@ -55,13 +56,26 @@ public class DeerAgent extends AbstractAgent {
 				maxAcceleration);
 		REPRODUCTION_RATE = PreySettings.instance.reproduction_rate.value;
 		this.genome = genome;
+		
+		//Grouping parameters
 		this.groupBehaviour = this.genome.getGene(GeneralGeneTypes.ISGROUPING).haveGene();
-		this.isAStottingDeer = this.genome.getGene(GeneralGeneTypes.ISSTOTTING).haveGene();
+		cohesionConstant = ((Double)this.genome.getGene(GeneralGeneTypes.GROUPING_COHESION).getCurrentValue()).doubleValue();
+		separationConstant = ((Double)this.genome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).getCurrentValue()).doubleValue();
+		arrayalConstant = ((Double)this.genome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).getCurrentValue()).doubleValue();
+		forwardThrustConstant = ((Double)this.genome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).getCurrentValue()).doubleValue();
 		if (this.groupBehaviour) {
 			this.color = Color.BLUE;
 		} else {
 			this.color = Color.MAGENTA;
 		}
+		
+		//Stotting parameters
+		this.isAStottingDeer = this.genome.getGene(GeneralGeneTypes.ISSTOTTING).haveGene();
+		STOTTING_RANGE = ((Double)this.genome.getGene(GeneralGeneTypes.STOTTINGRANGE).getCurrentValue()).doubleValue();
+		STOTTING_LENGTH = ((Double)this.genome.getGene(GeneralGeneTypes.STOTTINGLENGTH).getCurrentValue()).doubleValue();
+		STOTTING_ANGLE = ((Double)this.genome.getGene(GeneralGeneTypes.STOTTINGANGLE).getCurrentValue()).doubleValue();
+		stottingDuration = STOTTING_LENGTH;
+		
 		this.energy = MAX_ENERGY;
 		
 	}
@@ -124,10 +138,10 @@ public class DeerAgent extends AbstractAgent {
 			Vector arrayalForce = new Vector();
 			if (groupBehaviour) {
 				mutualInteractionForce = ForceCalculator
-						.mutualInteractionForce(neutralNeighbours, this);
-				forwardThrust = ForceCalculator.forwardThrust(velocity);
+						.mutualInteractionForce(neutralNeighbours, this, separationConstant, cohesionConstant);
+				forwardThrust = ForceCalculator.forwardThrust(velocity, forwardThrustConstant);
 				arrayalForce = ForceCalculator.arrayalForce(neutralNeighbours,
-						this);
+						this, arrayalConstant);
 			}
 
 			Vector environmentForce = ForceCalculator.getEnvironmentForce(

@@ -76,7 +76,7 @@ public class SimplePredatorAgent extends AbstractAgent {
 		updateNeighbourList(neutral, preys, predators);
 		
 		Vector preyForce = getPreyForce();
-		Vector separationForce = ForceCalculator.mutualInteractionForce(neutralNeighbours, this);
+		Vector separationForce = ForceCalculator.mutualInteractionForce(neutralNeighbours, this, separationConstant, cohesionConstant);
 		//Vector separationForce = new Vector();
 		Vector environmentForce = ForceCalculator.getEnvironmentForce(surroundings.getGridDimension(), surroundings.getWorldShape(), position);
 		

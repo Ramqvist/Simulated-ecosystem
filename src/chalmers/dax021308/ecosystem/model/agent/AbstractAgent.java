@@ -26,7 +26,15 @@ public abstract class AbstractAgent implements IAgent {
 	protected Position reUsedPosition;
 	protected String name;
 	protected Color color;
+	
+	//Group behaviour parameters
 	protected boolean groupBehaviour;
+	protected double cohesionConstant = 1;
+	protected double separationConstant = 20;
+	protected double arrayalConstant = 4;
+	protected double forwardThrustConstant = 0.1;
+	
+	
 	protected int width;
 	protected int height;
 	protected int capacity = Integer.MAX_VALUE;
@@ -43,7 +51,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected Container<IAgent> focusedPrey;
 	protected boolean isAlive = true;
 	protected boolean hungry = true;
-	protected static final boolean USE_PRIORITY_NEIGHBOURS = true;
+	protected static final boolean USE_PRIORITY_NEIGHBOURS = false;
 	protected static final int K_NEAREST_NEIGHBOURS = 10;
 
 	/* Neighbour list module variables */

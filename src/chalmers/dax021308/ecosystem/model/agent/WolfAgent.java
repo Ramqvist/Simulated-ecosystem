@@ -24,7 +24,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class WolfAgent extends AbstractAgent {
 
-	private boolean willFocusPreys = true;
+	private boolean willFocusPreys;
 	private static final int MAX_ENERGY = 1200;
 	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
 	private static double REPRODUCTION_RATE = PredSettings.instance.reproduction_rate.value;
@@ -44,13 +44,21 @@ public class WolfAgent extends AbstractAgent {
 		REPRODUCTION_RATE = PredSettings.instance.reproduction_rate.value;
 		this.energy = MAX_ENERGY;
 		this.genome = genome;
+		
+		//Grouping parameters
 		this.groupBehaviour = this.genome.getGene(GeneralGeneTypes.ISGROUPING).haveGene();
-
+		cohesionConstant = ((Double)this.genome.getGene(GeneralGeneTypes.GROUPING_COHESION).getCurrentValue()).doubleValue();
+		separationConstant = ((Double)this.genome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).getCurrentValue()).doubleValue();
+		arrayalConstant = ((Double)this.genome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).getCurrentValue()).doubleValue();
+		forwardThrustConstant = ((Double)this.genome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).getCurrentValue()).doubleValue();
 		if(this.groupBehaviour){
 			this.color = Color.RED;
 		} else {
 			this.color = Color.ORANGE;
 		}
+		
+		//Focusing preys
+		willFocusPreys = this.genome.getGene(GeneralGeneTypes.FOCUSPREY).haveGene();
 	}
 
 	@Override
@@ -69,9 +77,9 @@ public class WolfAgent extends AbstractAgent {
 			Vector arrayalForce = new Vector();
 			if (groupBehaviour) {
 				mutualInteractionForce = ForceCalculator.mutualInteractionForce(
-						neutralNeighbours, this);
-				forwardThrust = ForceCalculator.forwardThrust(velocity);
-				arrayalForce = ForceCalculator.arrayalForce(neutralNeighbours, this);
+						neutralNeighbours, this, separationConstant, cohesionConstant);
+				forwardThrust = ForceCalculator.forwardThrust(velocity, forwardThrustConstant);
+				arrayalForce = ForceCalculator.arrayalForce(neutralNeighbours, this, arrayalConstant);
 			}
 			Vector environmentForce = ForceCalculator.getEnvironmentForce(surroundings.getGridDimension(), surroundings.getWorldShape(),
 					position);

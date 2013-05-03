@@ -57,7 +57,7 @@ public class ForceCalculator {
 	 * @author Sebbe
 	 */
 	public static Vector mutualInteractionForce(List<IAgent> neutralNeighbours,
-			IAgent currentAgent) {
+			IAgent currentAgent, double separation, double cohesion) {
 		Vector mutualInteractionForce = new Vector();
 		Vector newForce = new Vector();
 		IAgent agent;
@@ -69,9 +69,9 @@ public class ForceCalculator {
 				double distance = currentAgent.getPosition().getDistance(p);
 				double Q = 0; // Q is a function of the distance.
 				if (distance <= INTERACTION_RANGE) {
-					Q = -20 * (INTERACTION_RANGE - distance);
+					Q = -separation * (INTERACTION_RANGE - distance);
 				} else {
-					Q = 1;
+					Q = cohesion;
 				}
 				newForce.x = p.getX() - currentAgent.getPosition().getX();
 				newForce.y = p.getY() - currentAgent.getPosition().getY();
@@ -157,8 +157,8 @@ public class ForceCalculator {
 	 * @return The forward thrust force.
 	 * @author Sebbe
 	 */
-	public static Vector forwardThrust(Vector velocity) {
-		double a = 0.1; // Scaling constant
+	public static Vector forwardThrust(Vector velocity, double scale) {
+		double a = scale; // Scaling constant
 		double x = velocity.x;
 		double y = velocity.y;
 		double norm = velocity.getNorm();
@@ -182,7 +182,7 @@ public class ForceCalculator {
 	 * @author Sebbe
 	 */
 	public static Vector arrayalForce(List<IAgent> neutralNeighbours,
-			IAgent currentAgent) {
+			IAgent currentAgent, double arryalForce) {
 		Vector arrayalForce = new Vector();
 		Vector newForce = new Vector();
 		double nAgentsInVision = 0;
@@ -197,7 +197,7 @@ public class ForceCalculator {
 					newForce.setVector(0, 0);
 					newForce.add(agent.getVelocity());
 					newForce.add(currentAgent.getVelocity());
-					double h = 4; // Scaling constant
+					double h = arryalForce; // Scaling constant
 					newForce.x *= h;
 					newForce.y *= h;
 					arrayalForce.x = (arrayalForce.x + newForce.x);

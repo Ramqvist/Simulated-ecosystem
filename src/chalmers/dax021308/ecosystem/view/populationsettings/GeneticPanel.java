@@ -26,6 +26,7 @@ import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
 import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings.GenomeSpecification;
 import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
 import chalmers.dax021308.ecosystem.model.genetics.newV.IGenome;
+import chalmers.dax021308.ecosystem.model.util.Stat;
 
 /**
  * Panel for Genetic settings. 
@@ -118,7 +119,8 @@ public class GeneticPanel extends JPanel {
 			add(lblGroupBehavoir, "cell 2 "+currentRow+",alignx right");
 			
 			//Start value
-			final JTextField tfStartValue = new JTextField("" + gene.getCurrentValue());
+			
+			final JTextField tfStartValue = new JTextField("" + Stat.roundNDecimals(((Double)gene.getCurrentValue()).doubleValue(),2));
 			tfStartValue.addKeyListener(new KeyListener() {
 				@Override
 				public void keyTyped(KeyEvent e) { }
@@ -138,7 +140,7 @@ public class GeneticPanel extends JPanel {
 			add(tfStartValue, "cell 3 "+currentRow+",growx");
 			
 			//Min value
-			final JTextField tfMinValue = new JTextField("" + gene.getMinValue());
+			final JTextField tfMinValue = new JTextField("" +  Stat.roundNDecimals(gene.getMinValue(),2));
 			tfMinValue.addKeyListener(new KeyListener() {
 				@Override
 				public void keyTyped(KeyEvent e) { }
@@ -158,7 +160,7 @@ public class GeneticPanel extends JPanel {
 			add(tfMinValue, "cell 4 "+currentRow+",growx");
 			
 			//Max value
-			final JTextField tfMaxValue = new JTextField("" + gene.getMaxValue());
+			final JTextField tfMaxValue = new JTextField("" +  Stat.roundNDecimals(gene.getMaxValue(),2));
 			tfMaxValue.addKeyListener(new KeyListener() {
 				@Override
 				public void keyTyped(KeyEvent e) { }
