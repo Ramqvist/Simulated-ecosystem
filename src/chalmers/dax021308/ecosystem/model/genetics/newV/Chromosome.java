@@ -105,7 +105,7 @@ public class Chromosome implements IChromosome<GeneralGeneTypes, IGene> {
 	 */
 	@Override
 	public IGene getGene(GeneralGeneTypes geneType) {
-		return (IGene) this.chromosomeMap.get(geneType).getCopy();
+		return (IGene) this.chromosomeMap.get(geneType);
 	}
 
 }

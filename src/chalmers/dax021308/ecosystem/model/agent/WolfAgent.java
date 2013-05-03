@@ -6,6 +6,7 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
+import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
 import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
 import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
 import chalmers.dax021308.ecosystem.model.genetics.newV.IGenome;
@@ -30,7 +31,7 @@ public class WolfAgent extends AbstractAgent {
 	private static final int DIGESTION_TIME = 50;
 	private static final int PATH_TTL = 50;
 	private int digesting = 0;
-	private IGenome<GeneralGeneTypes, IGene> genome = GenomeFactory.wolfGenomeFactory();
+	private IGenome<GeneralGeneTypes, IGene> genome;
 
 	
 	public WolfAgent(String name, Position position, Color color, int width,
@@ -42,7 +43,7 @@ public class WolfAgent extends AbstractAgent {
 				visionRange, maxAcceleration);
 		REPRODUCTION_RATE = PredSettings.instance.reproduction_rate.value;
 		this.energy = MAX_ENERGY;
-		this.genome = genome;
+		this.genome = GeneticSettings.predSettings.getGenome();
 		this.groupBehaviour = this.genome.getGene(GeneralGeneTypes.ISGROUPING).haveGene();
 
 		if(this.groupBehaviour){

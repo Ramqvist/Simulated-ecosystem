@@ -41,7 +41,7 @@ public class DeerAgent extends AbstractAgent {
 	private boolean isAStottingDeer = false;
 	private boolean isStotting = false;
 	private Vector stottingVector = new Vector();
-	private IGenome<GeneralGeneTypes, IGene> genome = GeneticSettings.preySettings.getGenome();
+	private IGenome<GeneralGeneTypes, IGene> genome;
 	
 	/*public DeerAgent(String name, Position p, Color c, int width, int height,
 			Vector velocity, double maxSpeed, double maxAcceleration,
@@ -54,7 +54,7 @@ public class DeerAgent extends AbstractAgent {
 		super(name, p, c, width, height, velocity, maxSpeed, visionRange,
 				maxAcceleration);
 		REPRODUCTION_RATE = PreySettings.instance.reproduction_rate.value;
-		this.genome = genome;
+		this.genome = GeneticSettings.preySettings.getGenome();
 		this.groupBehaviour = this.genome.getGene(GeneralGeneTypes.ISGROUPING).haveGene();
 		this.isAStottingDeer = this.genome.getGene(GeneralGeneTypes.ISSTOTTING).haveGene();
 		if (this.groupBehaviour) {

@@ -17,16 +17,16 @@ public abstract class GeneticSettings {
 		public List<GenomeSpecification> getGenomes() {
 			List<GenomeSpecification> result = new ArrayList<GenomeSpecification>();
 			
-			result.add(new GenomeSpecification(deerGenome, GenomeSpecification.TYPE_BOOLEAN, "Grouping"));
-			result.add(new GenomeSpecification(deerGenome, GenomeSpecification.TYPE_DOUBLE, "Separation force"));
-			result.add(new GenomeSpecification(deerGenome, GenomeSpecification.TYPE_DOUBLE, "Cohesion"));
-			result.add(new GenomeSpecification(deerGenome, GenomeSpecification.TYPE_DOUBLE, "Arrayal force"));
-			result.add(new GenomeSpecification(deerGenome, GenomeSpecification.TYPE_DOUBLE, "Forward thrust"));
+			result.add(new GenomeSpecification(deerGenome.getGene(GeneralGeneTypes.ISGROUPING), GenomeSpecification.TYPE_BOOLEAN, "Grouping"));
+			result.add(new GenomeSpecification(deerGenome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR), GenomeSpecification.TYPE_DOUBLE, "Separation force"));
+			result.add(new GenomeSpecification(deerGenome.getGene(GeneralGeneTypes.GROUPING_COHESION), GenomeSpecification.TYPE_DOUBLE, "Cohesion"));
+			result.add(new GenomeSpecification(deerGenome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE), GenomeSpecification.TYPE_DOUBLE, "Arrayal force"));
+			result.add(new GenomeSpecification(deerGenome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST), GenomeSpecification.TYPE_DOUBLE, "Forward thrust"));
 			
-			result.add(new GenomeSpecification(deerGenome, GenomeSpecification.TYPE_BOOLEAN, "Stotting"));
-			result.add(new GenomeSpecification(deerGenome, GenomeSpecification.TYPE_DOUBLE, "Stotting length"));
-			result.add(new GenomeSpecification(deerGenome, GenomeSpecification.TYPE_DOUBLE, "Stotting range"));
-			result.add(new GenomeSpecification(deerGenome, GenomeSpecification.TYPE_DOUBLE, "Stotting angle"));
+			result.add(new GenomeSpecification(deerGenome.getGene(GeneralGeneTypes.ISSTOTTING), GenomeSpecification.TYPE_BOOLEAN, "Stotting"));
+			result.add(new GenomeSpecification(deerGenome.getGene(GeneralGeneTypes.STOTTINGLENGTH), GenomeSpecification.TYPE_DOUBLE, "Stotting length"));
+			result.add(new GenomeSpecification(deerGenome.getGene(GeneralGeneTypes.STOTTINGRANGE), GenomeSpecification.TYPE_DOUBLE, "Stotting range"));
+			result.add(new GenomeSpecification(deerGenome.getGene(GeneralGeneTypes.STOTTINGANGLE), GenomeSpecification.TYPE_DOUBLE, "Stotting angle"));
 			
 			return result;
 		}
@@ -44,13 +44,13 @@ public abstract class GeneticSettings {
 		public List<GenomeSpecification> getGenomes() {
 			List<GenomeSpecification> result = new ArrayList<GenomeSpecification>();
 			
-			result.add(new GenomeSpecification(wolfGenome, GenomeSpecification.TYPE_BOOLEAN, "Grouping"));
-			result.add(new GenomeSpecification(wolfGenome, GenomeSpecification.TYPE_DOUBLE, "Separation force"));
-			result.add(new GenomeSpecification(wolfGenome, GenomeSpecification.TYPE_DOUBLE, "Cohesion"));
-			result.add(new GenomeSpecification(wolfGenome, GenomeSpecification.TYPE_DOUBLE, "Arrayal force"));
-			result.add(new GenomeSpecification(wolfGenome, GenomeSpecification.TYPE_DOUBLE, "Forward thrust"));
+			result.add(new GenomeSpecification(wolfGenome.getGene(GeneralGeneTypes.ISGROUPING), GenomeSpecification.TYPE_BOOLEAN, "Grouping"));
+			result.add(new GenomeSpecification(wolfGenome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR), GenomeSpecification.TYPE_DOUBLE, "Separation force"));
+			result.add(new GenomeSpecification(wolfGenome.getGene(GeneralGeneTypes.GROUPING_COHESION), GenomeSpecification.TYPE_DOUBLE, "Cohesion"));
+			result.add(new GenomeSpecification(wolfGenome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE), GenomeSpecification.TYPE_DOUBLE, "Arrayal force"));
+			result.add(new GenomeSpecification(wolfGenome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST), GenomeSpecification.TYPE_DOUBLE, "Forward thrust"));
 			
-			result.add(new GenomeSpecification(wolfGenome, GenomeSpecification.TYPE_BOOLEAN, "Focus preys"));
+			result.add(new GenomeSpecification(wolfGenome.getGene(GeneralGeneTypes.FOCUSPREY), GenomeSpecification.TYPE_BOOLEAN, "Focus preys"));
 			return result;
 		}
 
@@ -64,9 +64,9 @@ public abstract class GeneticSettings {
 		@Override
 		public List<GenomeSpecification> getGenomes() {
 			List<GenomeSpecification> result = new ArrayList<GenomeSpecification>();
-			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_BOOLEAN, "Will die when eaten"));
-			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_DOUBLE, "Chance to transform to weed"));
-			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_DOUBLE, "High factor"));
+			result.add(new GenomeSpecification(null, GenomeSpecification.TYPE_BOOLEAN, "Will die when eaten"));
+			result.add(new GenomeSpecification(null, GenomeSpecification.TYPE_DOUBLE, "Chance to transform to weed"));
+			result.add(new GenomeSpecification(null, GenomeSpecification.TYPE_DOUBLE, "High factor"));
 			return result;
 		}
 
@@ -80,9 +80,9 @@ public abstract class GeneticSettings {
 		@Override
 		public List<GenomeSpecification> getGenomes(){
 			List<GenomeSpecification> result = new ArrayList<GenomeSpecification>();
-			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_BOOLEAN, "Will die when eaten"));
-			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_DOUBLE, "Chance to transform to weed"));
-			result.add(new GenomeSpecification(new Genome(null), GenomeSpecification.TYPE_DOUBLE, "High factor"));
+			result.add(new GenomeSpecification(null, GenomeSpecification.TYPE_BOOLEAN, "Will die when eaten"));
+			result.add(new GenomeSpecification(null, GenomeSpecification.TYPE_DOUBLE, "Chance to transform to weed"));
+			result.add(new GenomeSpecification(null, GenomeSpecification.TYPE_DOUBLE, "High factor"));
 			return result;
 		}
 
@@ -102,7 +102,7 @@ public abstract class GeneticSettings {
 		public static final int TYPE_BOOLEAN = 1;
 		public static final int TYPE_DOUBLE  = 2;
 		
-		private IGenome<GeneralGeneTypes, IGene> g;
+		private IGene g;
 		private int genomeType;
 		private String name;
 		
@@ -111,17 +111,17 @@ public abstract class GeneticSettings {
 		public boolean activeOnBirth;
 		public boolean mutable;
 		
-		public GenomeSpecification(IGenome<GeneralGeneTypes, IGene> g, int type, String name) {
+		public GenomeSpecification(IGene g, int type, String name) {
 			this.g = g;
 			this.genomeType = type;
 			this.name = name;
 		}
 		
-		public IGenome<GeneralGeneTypes, IGene> getGenome() {
+		public IGene getGene() {
 			return g;
 		}
 		
-		public void setGenome(IGenome<GeneralGeneTypes, IGene> g) {
+		public void setGene(IGene g) {
 			this.g = g;
 		}
 		
