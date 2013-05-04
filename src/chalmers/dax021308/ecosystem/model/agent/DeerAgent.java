@@ -70,7 +70,7 @@ public class DeerAgent extends AbstractAgent {
 		}
 		
 		//Stotting parameters
-		this.isAStottingDeer = this.genome.getGene(GeneralGeneTypes.ISSTOTTING).haveGene();
+		isAStottingDeer = this.genome.getGene(GeneralGeneTypes.ISSTOTTING).haveGene();
 		STOTTING_RANGE = ((Double)this.genome.getGene(GeneralGeneTypes.STOTTINGRANGE).getCurrentValue()).doubleValue();
 		STOTTING_LENGTH = ((Double)this.genome.getGene(GeneralGeneTypes.STOTTINGLENGTH).getCurrentValue()).doubleValue();
 		STOTTING_ANGLE = ((Double)this.genome.getGene(GeneralGeneTypes.STOTTINGANGLE).getCurrentValue()).doubleValue();
@@ -125,9 +125,9 @@ public class DeerAgent extends AbstractAgent {
 
 		updateNeighbourList(neutral, preys, predators);
 		
-		Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys,
-				focusedPrey, this, preyNeighbours, visionRange,
-				maxAcceleration);
+		Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys, surroundings, 
+				focusedPrey, this, preyNeighbours, visionRange, 
+				FOCUS_RANGE, maxAcceleration, maxSpeed, focusedPreyPath, 1);
 		Vector predatorForce = getPredatorForce();
 		alone = predatorForce.isNullVector();
 		if (digesting > 0 && alone) {

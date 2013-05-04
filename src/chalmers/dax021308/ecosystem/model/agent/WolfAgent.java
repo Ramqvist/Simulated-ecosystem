@@ -28,7 +28,7 @@ public class WolfAgent extends AbstractAgent {
 	private static final int MAX_ENERGY = 1200;
 	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
 	private static double REPRODUCTION_RATE = PredSettings.instance.reproduction_rate.value;
-	private static final int DIGESTION_TIME = 50;
+	private static final int DIGESTION_TIME = 0;
 	private static final int PATH_TTL = 50;
 	private int digesting = 0;
 	private IGenome<GeneralGeneTypes, IGene> genome;
@@ -147,9 +147,10 @@ public class WolfAgent extends AbstractAgent {
 							* (0.001 + 0.001 * Math.random());
 					pos = new Position(newX, newY);
 				} while (!surroundings.getWorldShape().isInside(surroundings.getGridDimension(), pos));
+				IGenome<GeneralGeneTypes, IGene> newGenome = genome.getCopy();
 				IAgent child = new WolfAgent(name, pos, color, width, height,
 						new Vector(velocity), maxSpeed, maxAcceleration,
-						visionRange, genome.getCopy().onlyMutate());
+						visionRange, newGenome.onlyMutate());
 				spawn.add(child);
 			}
 			return spawn;

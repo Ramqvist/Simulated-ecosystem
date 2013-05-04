@@ -475,7 +475,7 @@ public abstract class AbstractAgent implements IAgent {
 
 	@Override
 	public boolean isLookingTasty(IAgent agent, double visionRange) {
-		return true;
+		return position.getDistance(agent.getPosition()) <= visionRange;
 	}
 
 	@Override

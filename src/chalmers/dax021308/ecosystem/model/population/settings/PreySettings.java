@@ -12,7 +12,7 @@ public class PreySettings extends CommonSettings {
 		visionRange 		= new DoubleSettingsContainer("Vision range", 1, 1000, 200);
 		width 				= new DoubleSettingsContainer("Width", 1, 100, 5);
 		height				= new DoubleSettingsContainer("Height", 1, 100, 10);
-		reproduction_rate	= new DoubleSettingsContainer("Reproduction rate", 0, 1, 0.08);
+		reproduction_rate	= new DoubleSettingsContainer("Reproduction rate", 0, 1, 0.1);
 		
 		doubleSettings.add(maxSpeed);
 		doubleSettings.add(capacity);
