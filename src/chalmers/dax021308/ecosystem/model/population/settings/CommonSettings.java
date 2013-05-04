@@ -70,7 +70,7 @@ public abstract class CommonSettings {
 		capacity 					= new DoubleSettingsContainer("Capacity", 1, Integer.MAX_VALUE, Integer.MAX_VALUE);
 		interaction_range			= new DoubleSettingsContainer("Interaction range", 1, 100, 10);
 		eating_range				= new DoubleSettingsContainer("Eating range", 1, 100, 5);
-		focus_range					= new DoubleSettingsContainer("Focus range", 1, 1000, 150);
+		focus_range					= new DoubleSettingsContainer("Focus range", 1, 1000, 100);
 		obstacle_safety_distance	= new DoubleSettingsContainer("Obstacle safety distance", 1, 100, 10);
 		velocity_decay				= new DoubleSettingsContainer("Velocity decay", 1, 10, 1); //TODO: Add support for decimals. Only integers now.
 
