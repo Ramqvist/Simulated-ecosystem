@@ -22,7 +22,6 @@ public class ForceCalculator {
 	private final static double ENVIRONMENT_CONSTANT = 50;
 	private final static double OBSTACLE_CONSTANT = 50;
 	private final static double EATING_RANGE = 5;
-	private final static double FOCUS_RANGE = 100;
 
 	/**
 	 * A random force that the agent gets influenced by. Can be interpreted as
@@ -347,11 +346,11 @@ public class ForceCalculator {
 			Position p = focusedPreyContainer.get().getPosition();
 			double distance = currentAgent.getPosition().getDistance(p);
 			//double size = (agent.getHeight() + agent.getWidth()) / 4;
-			double size = 0;
 			if (distance <= EATING_RANGE) { //Eat agent
 				if (focusedPreyContainer.get().tryConsumeAgent()) {
 					focusedPreyContainer.set(null);
 					currentAgent.eat();
+					return new Vector();
 				}
 			} else {
 				if(!focusedPreyPath.isEmpty() && focusedPreyPath.isValid()) {
@@ -439,9 +438,10 @@ public class ForceCalculator {
 			}
 		}
 		
-		if (willFocusPreys && closestFocusPrey != null) {
+		if (willFocusPreys && closestFocusPrey != null && closestFocusPrey.isAlive()) {
 			focusedPreyContainer.set(closestFocusPrey);
-			if(AbstractObstacle.isInsidePathList(surroundings.getObstacles(), currentAgent.getPosition(), focusedPreyContainer.get().getPosition())) {
+			if(AbstractObstacle.isInsidePathList(surroundings.getObstacles(), 
+					currentAgent.getPosition(), focusedPreyContainer.get().getPosition())) {
 				focusedPreyPath.setPath(
 						Position.getShortestPath(currentAgent.getPosition(), focusedPreyContainer.get().getPosition(), 
 								surroundings.getObstacles(), surroundings.getWorldShape(), 

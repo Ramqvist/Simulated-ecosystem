@@ -28,7 +28,7 @@ public class WolfAgent extends AbstractAgent {
 	private static final int MAX_ENERGY = 1200;
 	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
 	private static double REPRODUCTION_RATE = PredSettings.instance.reproduction_rate.value;
-	private static final int DIGESTION_TIME = 0;
+	private static final int DIGESTION_TIME = 50;
 	private static final int PATH_TTL = 50;
 	private int digesting = 0;
 	private IGenome<GeneralGeneTypes, IGene> genome;
