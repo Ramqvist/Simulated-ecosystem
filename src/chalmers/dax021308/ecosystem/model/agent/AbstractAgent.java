@@ -51,8 +51,8 @@ public abstract class AbstractAgent implements IAgent {
 	protected Container<IAgent> focusedPrey;
 	protected boolean isAlive = true;
 	protected boolean hungry = true;
-	protected static final boolean USE_PRIORITY_NEIGHBOURS = false;
-	protected static final int K_NEAREST_NEIGHBOURS = 10;
+	protected static final boolean USE_PRIORITY_NEIGHBOURS = true;
+	protected static final int K_NEAREST_NEIGHBOURS = 20;
 
 	/* Neighbour list module variables */
 	protected List<IAgent> preyNeighbours;

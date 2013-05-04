@@ -58,7 +58,6 @@ public class DoubleGene extends AbstractGene {
 	@Override
 	public void setCurrentValue(Object currentValue) {
 		this.currentValue = parseToInt(((Double)currentValue).doubleValue());
-		System.out.println(this.currentValue);
 	}
 
 
