@@ -161,12 +161,10 @@ public interface IAgent extends Cloneable {
 	 * 
 	 * @param agent
 	 *            The agent looking for food
-	 * @param visionRange
-	 *            The visionrange of the agent looking for food
 	 * @return True if the agent is desirable to hunt and should affect the
 	 *         preyforce, otherwise false
 	 */
-	public boolean isLookingTasty(IAgent agent, double visionRange);
+	public boolean isLookingTasty(IAgent agent);
 
 	/**
 	 * @return Max acceleration.
