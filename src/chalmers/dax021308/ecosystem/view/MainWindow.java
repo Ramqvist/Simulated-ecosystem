@@ -40,15 +40,14 @@ import chalmers.dax021308.ecosystem.view.populationsettings.PopulationSettingsDi
 public class MainWindow extends JFrame implements IView {
 	private static final long serialVersionUID = -8023060073777907757L;
 	private JPanel contentPane;
-	private JPanel left = new JPanel();
-	private JPanel right = new JPanel();
+	public final JPanel left = new JPanel();
+	private final JPanel right = new JPanel();
 	private OpenGLSimulationView openGL;
 	private HeatmapTabHolder heatMap;
 	private BottomChartTabs bottomTabbedGraphs;
 	private IChart graphView2;
 	
 //	public final LiveSettingsViewController parameterViewCtrl; 
-	public final ControlViewController controlViewCtrl;
 	public final NEWSettingsMenuViewController smvc;
 	
 	public final MenuBar menuBar;
@@ -77,7 +76,6 @@ public class MainWindow extends JFrame implements IView {
 		//OpenGL   
 		openGL = new OpenGLSimulationView(model);
 		openGL.init();
-		controlViewCtrl = new ControlViewController(model);
 //		parameterViewCtrl = new LiveSettingsViewController(model);
 		smvc = new NEWSettingsMenuViewController(model, this);
 		heatMap = new HeatmapTabHolder(model);
@@ -198,7 +196,6 @@ public class MainWindow extends JFrame implements IView {
 		
 //		left.add(parameterViewCtrl.view, BorderLayout.NORTH);
 		left.add(openGL, BorderLayout.CENTER);
-		left.add(controlViewCtrl.view, BorderLayout.SOUTH);  
 		right.add(graphView2.toComponent(), BorderLayout.CENTER); // during development.
 		right.add(bottomTabbedGraphs, BorderLayout.CENTER);
 		right.add(heatMap, BorderLayout.CENTER); 
@@ -240,7 +237,6 @@ public class MainWindow extends JFrame implements IView {
 	}
 
 	public void setBtnStartNewSimWindowActionListener(ActionListener a) {
-		controlViewCtrl.view.restartButton.addActionListener(a);		
 	}
 	
 	private class SimFileFilter extends FileFilter{

@@ -1,6 +1,7 @@
 package chalmers.dax021308.ecosystem.controller;
 
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.KeyEventDispatcher;
@@ -30,6 +31,7 @@ public class MainWindowController implements IController {
 	public final EcoWorld model;
 	public final MainWindow window;
 	//private NewSimulationController newSim;
+	public final ControlViewController controlViewCtrl;
 	
 	private ActionListener listenerStartNewSimButton = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
@@ -46,6 +48,8 @@ public class MainWindowController implements IController {
 	public MainWindowController() {
 		this.model = new EcoWorld();
 		this.window = new MainWindow(model);
+		controlViewCtrl = new ControlViewController(model);
+		controlViewCtrl.view.restartButton.addActionListener(listenerStartNewSimButton);		
 		init();
 		window.setExtendedState(Frame.MAXIMIZED_BOTH);
 	}
@@ -58,6 +62,7 @@ public class MainWindowController implements IController {
 		window.setBtnStartNewSimWindowActionListener(listenerStartNewSimButton);
 		addActionListeners();
 		//showNewSimulationWindow();	
+		window.left.add(controlViewCtrl.view, BorderLayout.SOUTH);  
 		window.mntmMapEditor.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -80,7 +85,7 @@ public class MainWindowController implements IController {
 						new MapEditorController();
 				    	return true;
 			    	}else if (e.getKeyCode() == KeyEvent.VK_SPACE){
-			    		if (!window.controlViewCtrl.view.play) {
+			    		if (!controlViewCtrl.view.play) {
 							try {
 								model.start();
 							} catch (IllegalStateException ex) {
