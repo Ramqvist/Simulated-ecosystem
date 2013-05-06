@@ -79,6 +79,9 @@ public class EnvironmentScheduler implements Runnable {
 		}
 	}
 	
+	public List<IPopulation> getPopulations() {
+		return populations;
+	}
 
 	/**
 	 * Run method, called for each tick of the timer

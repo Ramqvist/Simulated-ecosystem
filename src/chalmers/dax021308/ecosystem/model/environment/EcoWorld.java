@@ -548,6 +548,7 @@ public class EcoWorld implements IModel {
 			startIterationTime = System.nanoTime();
 		} else {
 			stop();
+			//Lägg till är Sebastian.
 			if (recording != null)
 				recording.close();
 			if (recordSimulation) {
