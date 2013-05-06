@@ -27,8 +27,8 @@ import chalmers.dax021308.ecosystem.view.MainWindow;
  */
 public class MainWindowController implements IController {
 
-	private EcoWorld model;
-	private MainWindow window;
+	public final EcoWorld model;
+	public final MainWindow window;
 	//private NewSimulationController newSim;
 	
 	private ActionListener listenerStartNewSimButton = new ActionListener() {
@@ -44,6 +44,8 @@ public class MainWindowController implements IController {
 		}
 	};
 	public MainWindowController() {
+		this.model = new EcoWorld();
+		this.window = new MainWindow(model);
 		init();
 		window.setExtendedState(Frame.MAXIMIZED_BOTH);
 	}
@@ -52,8 +54,6 @@ public class MainWindowController implements IController {
 	public void init() {
 		Dimension d = new Dimension(1300, 1300);
 		d.height = d.height - 40;
-		this.model = new EcoWorld();
-		this.window = new MainWindow(model);
 		window.setVisible(true);
 		window.setBtnStartNewSimWindowActionListener(listenerStartNewSimButton);
 		addActionListeners();

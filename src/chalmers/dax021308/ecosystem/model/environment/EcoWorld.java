@@ -53,6 +53,7 @@ public class EcoWorld implements IModel {
 	public static final String EVENT_STOP 					= "chalmers.dax021308.ecosystem.model.Ecoworld.event_stop";
 	public static final String EVENT_START 					= "chalmers.dax021308.ecosystem.model.Ecoworld.event_start";
 	public static final String EVENT_PAUSE 					= "chalmers.dax021308.ecosystem.model.Ecoworld.event_pause";
+	public static final String EVENT_FINISHED				= "chalmers.dax021308.ecosystem.model.Ecoworld.event_finished";
 	public static final String EVENT_RECORDING_FINISHED		= "chalmers.dax021308.ecosystem.model.Ecoworld.event_recording_started";
 	public static final String EVENT_RECORDING_STARTED 		= "chalmers.dax021308.ecosystem.model.Ecoworld.event_recording_finished";
 	public static final String EVENT_DIMENSIONCHANGED		= "chalmers.dax021308.ecosystem.model.Ecoworld.event_dimension_changed";
@@ -563,6 +564,7 @@ public class EcoWorld implements IModel {
 			sb.append(roundTwoDecimals(statTime.getSampleVariance()));
 			Log.v(sb.toString());
 			allSimulationStats.add(statTime);
+			observers.firePropertyChange(EVENT_FINISHED, null, null);
 			Log.v("All simulations run mean value: " + statTime.getMean(allSimulationStats));
 		}
 	}

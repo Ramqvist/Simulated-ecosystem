@@ -25,6 +25,7 @@ import chalmers.dax021308.ecosystem.model.util.Log;
 public class CommonSettingsPanel extends JPanel{
 	private static final long serialVersionUID = 1L;
 	
+	@Deprecated
 	private Map<DoubleSettingsContainer, JTextField> doubleGuiMappings = new HashMap<DoubleSettingsContainer, JTextField>();
 	
 	public CommonSettingsPanel(CommonSettings s) {
