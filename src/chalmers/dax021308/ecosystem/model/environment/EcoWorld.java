@@ -169,9 +169,12 @@ public class EcoWorld implements IModel {
 			// recycledPopulationList =
 			// AbstractPopulation.clonePopulationListWithRecycledList(recycledPopulationList,
 			// popList);
+//			long start = System.nanoTime();
 			observers.firePropertyChange(EVENT_TICK, obsList, popList);
 			observers.firePropertyChange(EVENT_ITERATION_FINISHED, null,
 					elapsedTime);
+//			double elapsedTime = (0.000001 * (System.nanoTime() - start));
+//			Log.e("GUI firePropertyChange elapsed time: " + elapsedTime + " ms.");
 		}
 	};
 
@@ -551,7 +554,7 @@ public class EcoWorld implements IModel {
 				sb.append(" sample variance: ");
 				sb.append(roundTwoDecimals(statTime.getSampleVariance()));
 			}
-			Log.v(sb.toString());
+//			Log.v(sb.toString());
 			try {
 				executor.execute(env);
 			} catch (RejectedExecutionException e) {

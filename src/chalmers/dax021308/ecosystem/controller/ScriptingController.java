@@ -17,22 +17,24 @@ import chalmers.dax021308.ecosystem.model.util.Log;
  */
 public class ScriptingController implements PropertyChangeListener {
 
-	private MainWindowController controller;
+//	private MainWindowController controller;
 	private SimulationSettings s;
 	
 	private static final int NUM_ITERATIONS = 200;
 	private int rounds = 10;
 	private List<IPopulation> lastPop;
+	private EcoWorld model;
 	
 
 	public ScriptingController() {
 		s = SimulationSettings.EXTREME;
-		controller = new MainWindowController();
-		controller.model.addObserver(this);
-		controller.window.smvc.toggleVisibility();
+//		controller = new MainWindowController();
+		model = new EcoWorld();
+		model.addObserver(this);
+//		controller.window.smvc.toggleVisibility();
 		s.setNumIterations(NUM_ITERATIONS);
 		s.setDelayLength(0);
-		s.setNumThreads(8);
+		s.setNumThreads(16);
 		s.setRunWithoutTimer(true);
 		startNewRound();
 	}
@@ -60,8 +62,8 @@ public class ScriptingController implements PropertyChangeListener {
 	private void startNewRound() {
 		if(rounds-- > 0) {
 			Log.v("Rounds Left: " + rounds);
-			controller.model.loadSimulationSettings(s);
-			controller.model.start();
+			model.loadSimulationSettings(s);
+			model.start();
 		} else {
 			onFinish();
 			Log.e("--- Scripted run finished ---");
