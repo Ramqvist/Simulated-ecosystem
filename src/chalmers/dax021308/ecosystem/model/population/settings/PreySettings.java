@@ -22,6 +22,8 @@ public class PreySettings extends CommonSettings {
 		doubleSettings.add(height);
 		doubleSettings.add(reproduction_rate);
 
+		doubleSettings.remove(capacity);
+		
 //		TODO: Add to deer specific variables.
 //		TODO: Make CommonSettings abstract and make extending classes.
 //		private double STOTTING_RANGE = 10;

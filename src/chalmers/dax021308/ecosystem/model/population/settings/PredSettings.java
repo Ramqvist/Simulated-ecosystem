@@ -24,5 +24,7 @@ public class PredSettings extends CommonSettings {
 		doubleSettings.add(width);
 		doubleSettings.add(height);
 		doubleSettings.add(reproduction_rate);
+		
+		doubleSettings.remove(capacity);
 	}
 }
