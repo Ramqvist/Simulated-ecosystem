@@ -2,7 +2,7 @@ package chalmers.dax021308.ecosystem.model.genetics.newV;
 
 import java.util.Random;
 
-import org.junit.experimental.max.MaxCore;
+//import org.junit.experimental.max.MaxCore;
 
 
 /**

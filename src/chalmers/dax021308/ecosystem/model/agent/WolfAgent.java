@@ -70,8 +70,8 @@ public class WolfAgent extends AbstractAgent {
 		} else {
 			updateNeighbourList(neutral, preys, predators);
 			Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys, surroundings, focusedPrey, 
-					this, preyNeighbours, visionRange, FOCUS_RANGE,
-					maxAcceleration, maxSpeed, focusedPreyPath, PATH_TTL);
+					this, preyNeighbours, FOCUS_RANGE,
+					focusedPreyPath, PATH_TTL);
 			Vector mutualInteractionForce = new Vector();
 			Vector forwardThrust = new Vector();
 			Vector arrayalForce = new Vector();

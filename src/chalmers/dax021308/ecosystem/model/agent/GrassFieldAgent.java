@@ -20,14 +20,14 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 public class GrassFieldAgent extends AbstractAgent {
 
 	private double REPRODUCTION_RATE = GrassFieldSettings.instance.reproduction_rate.value;
-	private double MAX_ENERGY = GrassFieldSettings.instance.reproduction_rate.value;
+	private double MAX_ENERGY = GrassFieldSettings.instance.max_energy.value;
 	private List<GrassSeed> seeds;
 
 	public GrassFieldAgent(String name, Position pos, Color color, int width,
 			int height, Vector velocity, double maxSpeed, int capacity) {
 		super(name, pos, color, width, height, velocity, maxSpeed, 0, 0);
 		this.capacity = capacity;
-		energy = MAX_ENERGY/2;
+		energy = MAX_ENERGY / 2;
 		seeds = new ArrayList<GrassSeed>();
 	}
 
@@ -58,7 +58,7 @@ public class GrassFieldAgent extends AbstractAgent {
 			double energyProportion = (double) energy / (double) MAX_ENERGY;
 			double newEnergy = energy * energyProportion
 					* (1 - energyProportion) * 0.1;
-			 seeds.add(new GrassSeed(newEnergy));
+			seeds.add(new GrassSeed(newEnergy));
 		}
 		int red = (int) (150.0 - 150.0 * (((double) energy) / MAX_ENERGY));
 		int green = (int) (55.0 + 200.0 * (((double) energy) / MAX_ENERGY));
@@ -78,12 +78,13 @@ public class GrassFieldAgent extends AbstractAgent {
 	}
 
 	@Override
-	public boolean isLookingTasty(IAgent agent, double visionRange) {
+	public boolean isLookingTasty(IAgent agent) {
 		double distance = agent.getPosition().getDistance(position)
 				- (width + height) / 2;
 		// If the agent has enough food for three agents, then it looks tasty!
-		if (energy >= 24)
-			return distance <= visionRange;
+		if (energy >= 24) {
+			return distance <= agent.getVisionRange();
+		}
 		return false;
 	}
 
@@ -91,13 +92,13 @@ public class GrassFieldAgent extends AbstractAgent {
 	public double impactForcesBy() {
 		// if it has a low amount of food it should negatively impact the agents
 		// who wants to eat it
-		 return MAX_ENERGY/2 - energy / 100;
+		return MAX_ENERGY / 2 - energy / 100;
 	}
 
 	private class GrassSeed {
 		private int lifeLength = 0;
 		private double energy;
-		private int TIME_TO_BLOOM = (int) GrassFieldSettings.instance.timeToBloom.value;
+		private int TIME_TO_BLOOM = 100;// (int) GrassFieldSettings.instance.timeToBloom.value;
 
 		private GrassSeed(double energy) {
 			this.energy = energy;

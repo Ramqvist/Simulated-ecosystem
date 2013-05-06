@@ -109,8 +109,7 @@ public class PigAgent extends AbstractAgent {
 		updateNeighbourList(neutral, preys, predators);
 		Vector predatorForce = getPredatorForce();
 		Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys, surroundings, focusedPrey, 
-				this, preyNeighbours, visionRange, visionRange,
-				maxAcceleration, maxSpeed, 
+				this, preyNeighbours, visionRange,
 				focusedPreyPath, 10);
 		if (predatorForce.isNullVector())
 			alone = true;
@@ -374,7 +373,7 @@ public class PigAgent extends AbstractAgent {
 			Position p = a.getPosition();
 //			double preySize = (a.getHeight() + a.getWidth()) / 4;
 			double distance = this.getPosition().getDistance(p); // - preySize;
-			if (a.isLookingTasty(this, visionRange)) {
+			if (a.isLookingTasty(this)) {
 				if (distance <= EATING_RANGE) {
 					if (a.tryConsumeAgent()) {
 						this.eat();

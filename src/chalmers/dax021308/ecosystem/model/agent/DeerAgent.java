@@ -126,8 +126,8 @@ public class DeerAgent extends AbstractAgent {
 		updateNeighbourList(neutral, preys, predators);
 		
 		Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys, surroundings, 
-				focusedPrey, this, preyNeighbours, visionRange, 
-				FOCUS_RANGE, maxAcceleration, maxSpeed, focusedPreyPath, 1);
+				focusedPrey, this, preyNeighbours, 
+				FOCUS_RANGE, focusedPreyPath, 1);
 		Vector predatorForce = getPredatorForce();
 		alone = predatorForce.isNullVector();
 		if (digesting > 0 && alone) {
