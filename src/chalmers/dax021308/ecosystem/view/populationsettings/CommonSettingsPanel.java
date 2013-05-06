@@ -28,7 +28,7 @@ public class CommonSettingsPanel extends JPanel{
 	private Map<DoubleSettingsContainer, JTextField> doubleGuiMappings = new HashMap<DoubleSettingsContainer, JTextField>();
 	
 	public CommonSettingsPanel(CommonSettings s) {
-		setLayout(new MigLayout("", "[][][grow][grow]", "[][][][][][][][][][][][][][][][][][][][]"));
+		setLayout(new MigLayout("", "[][][grow][grow]", "[][][][][][][][][][][][][]"));
 		
 		JLabel lblDeerSettings = new JLabel("Common settings");
 		lblDeerSettings.setFont(new Font("Tahoma", Font.PLAIN, 16));

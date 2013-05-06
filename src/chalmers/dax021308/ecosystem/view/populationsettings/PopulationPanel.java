@@ -13,15 +13,14 @@ public class PopulationPanel extends JPanel {
 	private static final long serialVersionUID = -6239580894018795289L;
 
 	public PopulationPanel(GeneticSettings s, CommonSettings c) {
-		setLayout(new MigLayout("", "[grow]", "[grow][grow][][grow]"));
+		setLayout(new MigLayout("", "[grow]", "[grow][grow][3.00][grow]"));
 		
 		CommonSettingsPanel panel = new CommonSettingsPanel(c);
 		add(panel, "cell 0 0,grow");
 		if(s != null) {
 			GeneticPanel panel_1 = new GeneticPanel(s);
-			add(panel_1, "cell 0 2,grow");
+			add(panel_1, "cell 0 1,grow");
 		}
-		setSize(new Dimension (700, 700));
 	}
 
 }
