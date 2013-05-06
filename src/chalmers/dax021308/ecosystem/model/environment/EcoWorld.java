@@ -124,7 +124,15 @@ public class EcoWorld implements IModel {
 
 			notifier.popList = AbstractPopulation.clonePopulationList(popList);
 			notifier.obsList = obsList;
-			notifierExecutor.execute(notifier);
+			try {
+				notifierExecutor.execute(notifier);
+			} catch (RejectedExecutionException e) {
+				try {
+					pause();
+				} catch (IllegalStateException se) {
+					
+				}
+			}
 			// double observerTime = (0.000001 * (System.nanoTime() - start));
 			// Log.v("Observer propertychange time: " + observerTime);
 			if (runWithoutTimer) {
@@ -322,6 +330,9 @@ public class EcoWorld implements IModel {
 		populations.add(pred);
 		recordSimulation = s.isRecordSimulation();
 		runWithoutTimer = s.isRunWithoutTimer();
+		if(s.getDelayLength() == 0) {
+			runWithoutTimer = true;
+		}
 		tickTime = s.getDelayLength();
 		numIterations = s.getNumIterations();
 		if (recordSimulation) {
@@ -540,7 +551,7 @@ public class EcoWorld implements IModel {
 				sb.append(" sample variance: ");
 				sb.append(roundTwoDecimals(statTime.getSampleVariance()));
 			}
-			//Log.v(sb.toString());
+			Log.v(sb.toString());
 			try {
 				executor.execute(env);
 			} catch (RejectedExecutionException e) {

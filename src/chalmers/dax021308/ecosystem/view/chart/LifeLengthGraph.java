@@ -21,6 +21,9 @@ import info.monitorenter.util.Range;
  * 
  */
 public class LifeLengthGraph extends AbstractGraph2D {
+	private static final long serialVersionUID = 6632491790861435074L;
+
+
 
 	public LifeLengthGraph(IModel model, int updateFrequency) {
 		super(model, updateFrequency, "Iterations", "Population life length mean");
