@@ -10,6 +10,7 @@ import chalmers.dax021308.ecosystem.controller.IController;
 import chalmers.dax021308.ecosystem.controller.MainWindowController;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
+import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.ScriptSelector;
 import chalmers.dax021308.ecosystem.view.ScriptSelector.OnScriptSelectedListener;
 
@@ -102,11 +103,12 @@ public class ScriptHandler implements IController{
 	public static void shutdown() throws RuntimeException, IOException {
 	    String shutdownCommand;
 	    String operatingSystem = System.getProperty("os.name");
+	    Log.v(operatingSystem);
 
 	    if ("Linux".equals(operatingSystem) || "Mac OS X".equals(operatingSystem)) {
 	        shutdownCommand = "shutdown -h now";
 	    }
-	    else if ("Windows".equals(operatingSystem)) {
+	    else if (operatingSystem.startsWith("Windows")) {
 	        shutdownCommand = "shutdown.exe -s -t 0";
 	    }
 	    else {

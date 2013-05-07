@@ -23,6 +23,7 @@ import chalmers.dax021308.ecosystem.controller.scripting.IScript;
 
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JCheckBox;
+import java.awt.Window.Type;
 
 
 /**
@@ -35,6 +36,7 @@ public class ScriptSelector extends JFrame {
 	private static final long serialVersionUID = -5289591637437045802L;
 
 	public ScriptSelector(final List<IScript> scriptList, final OnScriptSelectedListener listener) {
+		setType(Type.UTILITY);
 		getContentPane().setForeground(Color.WHITE);
 		setSize(new Dimension(399, 500));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

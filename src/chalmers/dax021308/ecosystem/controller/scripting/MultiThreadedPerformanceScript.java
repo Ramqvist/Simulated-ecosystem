@@ -15,6 +15,7 @@ public class MultiThreadedPerformanceScript implements IScript {
 	private List<IPopulation> lastPop;
 	private int NUM_ITERATION_PER_SIM = 1000;
 	private int rounds = 10;
+	private int counter = 0;
 	private OnFinishedScriptListener listener;
 
 	@Override
@@ -22,13 +23,18 @@ public class MultiThreadedPerformanceScript implements IScript {
 		this.listener = listener;
 		this.model = e;
 		e.addObserver(this);
-		e.loadSimulationSettings(SimulationSettings.DEFAULT);
+		SimulationSettings s = SimulationSettings.DEFAULT;
+		s.setDelayLength(0);
+		s.setRunWithoutTimer(true);
+		s.setNumIterations(12);
+		e.loadSimulationSettings(s);
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if(evt.getPropertyName() == EcoWorld.EVENT_TICK) {
 			this.lastPop = (List<IPopulation>) evt.getNewValue();
+			Log.v("EVENT_TICK " + counter++);
 		}
 		if(evt.getPropertyName() == EcoWorld.EVENT_FINISHED) {
 			onFinishOneRun();
@@ -37,11 +43,14 @@ public class MultiThreadedPerformanceScript implements IScript {
 
 	@Override
 	public void onFinishScript() {
+		Log.v("onFinishScript");
 		listener.onFinishScript();
 	}
 
 	@Override
 	public void onFinishOneRun() {
+		Log.v("onFinishOneRun");
+		onFinishScript();
 		SimulationSettings s = SimulationSettings.DEFAULT;
 		s.setDelayLength(0);
 		s.setRunWithoutTimer(true);

@@ -600,10 +600,12 @@ public class EcoWorld implements IModel {
 		} else {
 			stop();
 			//Lägg till är Sebastian.
-			for(IPopulation pop: env.getPopulations()){
-				String dest = "C:\\GroupingData\\" + pop.getName() + "End.txt";
-				File file = new File(dest);
-				savePopulationToFile(file,pop.clonePopulation());
+			if(printToFile) {
+				for(IPopulation pop: env.getPopulations()){
+					String dest = "C:\\GroupingData\\" + pop.getName() + "End.txt";
+					File file = new File(dest);
+					savePopulationToFile(file,pop.clonePopulation());
+				}
 			}
 			if (recording != null)
 				recording.close();
