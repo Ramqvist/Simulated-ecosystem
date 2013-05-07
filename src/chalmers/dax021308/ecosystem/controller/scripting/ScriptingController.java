@@ -17,6 +17,7 @@ import chalmers.dax021308.ecosystem.model.util.Log;
  * @author Erik Ramqvist
  *
  */
+@Deprecated
 public class ScriptingController implements PropertyChangeListener {
 
 	private MainWindowController controller;

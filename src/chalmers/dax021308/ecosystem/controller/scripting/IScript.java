@@ -25,8 +25,20 @@ public interface IScript extends PropertyChangeListener {
 	 * @param e
 	 */
 	public void init(EcoWorld e);
-	
+
+	/**
+	 * This is managed by the extending class.
+	 */
 	public void onFinishOneRun();
+	
+	/**
+	 * This is managed by the extending class.
+	 */
 	public void postRun();
+	
+	/**
+	 * This is only used for the GUI to distinguish the scripts apart.
+	 * @return
+	 */
 	public String getName();
 }
