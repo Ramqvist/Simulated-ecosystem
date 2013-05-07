@@ -5,12 +5,16 @@ import java.awt.Dimension;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 
+import chalmers.dax021308.ecosystem.model.agent.IAgent;
+import chalmers.dax021308.ecosystem.model.environment.mapeditor.SimulationMap;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.EllipticalObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
@@ -81,10 +85,16 @@ public class EcoWorld implements IModel {
 
 	/* Time measurements variables (in ns). */
 	private long startIterationTime;
+	private long endIterationTime;
 	private double elapsedTime;
 	private Stat<Double> statTime;
 	private List<Stat<Double>> allSimulationStats;
-
+	
+	/* Sebastians print to file settings */
+	private boolean printToFile = false;
+	private boolean started = false;
+	private int toFileInterval = 20000;
+	
 	/**
 	 * Simple object, used for synchronizing the {@link TimerHandler} and the
 	 * {@link IEnvironment} {@link OnFinishListener}. This object makes the
@@ -238,6 +248,7 @@ public class EcoWorld implements IModel {
 	 */
 	public void loadSimulationSettings(SimulationSettings s)
 			throws IllegalArgumentException {
+		started = false;
 		if (s.getSimDimension() == null && s.getSimDimensionConstant() != null) {
 			setSimulationDimension(s.getSimDimensionConstant());
 		} else if (s.getSimDimension() != null
@@ -544,26 +555,56 @@ public class EcoWorld implements IModel {
 			}
 			StringBuffer sb = new StringBuffer("-- Simulation model Update: ");
 			sb.append(++numUpdates);
-			if (startIterationTime != 0) {
-				sb.append(" - Iteration time:");
-				sb.append(roundTwoDecimals(elapsedTime));
-				sb.append(" ms.");
-				statTime.addObservation(elapsedTime);
-				sb.append(" mean value: ");
-				sb.append(roundTwoDecimals(statTime.getMean()));
-				sb.append(" sample variance: ");
-				sb.append(roundTwoDecimals(statTime.getSampleVariance()));
-			}
+//			if (startIterationTime != 0) {
+//				sb.append(" - Iteration time:");
+//				sb.append(roundTwoDecimals(elapsedTime));
+//				sb.append(" ms.");
+//				statTime.addObservation(elapsedTime);
+//				sb.append(" mean value: ");
+//				sb.append(roundTwoDecimals(statTime.getMean()));
+//				sb.append(" sample variance: ");
+//				sb.append(roundTwoDecimals(statTime.getSampleVariance()));
+//			}
 //			Log.v(sb.toString());
 			try {
 				executor.execute(env);
 			} catch (RejectedExecutionException e) {
 				
 			}
-			startIterationTime = System.nanoTime();
+		
+			if(printToFile) {
+				if(!started && numIterations < Integer.MAX_VALUE-1) {
+					started = true;
+					for(IPopulation pop: env.getPopulations()){
+						IPopulation p = pop.clonePopulation();
+						String dest = "C:\\GroupingData\\" + p.getName() + "Start.txt";
+						File file = new File(dest);
+						savePopulationToFile(file,p);
+					}
+					startIterationTime = System.nanoTime();
+					System.out.println("Printed start values at iteration: " + (Integer.MAX_VALUE-numIterations));
+				}
+				if((numIterations-3647)%toFileInterval==0){
+					for(IPopulation pop: env.getPopulations()){
+						String dest = "C:\\GroupingData\\" + pop.getName() + "End.txt";
+						File file = new File(dest);
+						savePopulationToFile(file,pop.clonePopulation());
+					}
+					endIterationTime = System.nanoTime();
+					System.out.println("Printed last end values at iteration: " + (Integer.MAX_VALUE-numIterations) + ". It took " + 
+							Stat.roundNDecimals(0.000000001*(endIterationTime-startIterationTime), 2) + 
+							" Seconds since last print.");
+					startIterationTime = System.nanoTime();
+				}
+			}
 		} else {
 			stop();
 			//Lägg till är Sebastian.
+			for(IPopulation pop: env.getPopulations()){
+				String dest = "C:\\GroupingData\\" + pop.getName() + "End.txt";
+				File file = new File(dest);
+				savePopulationToFile(file,pop.clonePopulation());
+			}
 			if (recording != null)
 				recording.close();
 			if (recordSimulation) {
@@ -645,6 +686,27 @@ public class EcoWorld implements IModel {
 
 	public void setHeapmatPopulation(String selectedPop) {
 		observers.firePropertyChange(EVENT_HEATMAP_POPCHANGE, null, selectedPop);
+	}
+	
+	private static synchronized boolean savePopulationToFile(File dest, IPopulation pop) {
+		PrintWriter pw = null;
+		try {
+			if(dest.exists()) {
+				dest.delete();
+			}
+			dest.createNewFile();
+			pw = new PrintWriter(dest);
+			pw.println("Separation, Cohesion, Arrayal, Forward");
+			for(IAgent a : pop.getAgents()) {
+				pw.println(a.getGroupingParametersString());
+			}
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			pw.close();
+		}
 	}
 
 }

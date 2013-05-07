@@ -18,7 +18,7 @@ public class GrassFieldSettings extends CommonSettings {
 		timeToBloom = new DoubleSettingsContainer(
 				"Time to Bloom", 0, 5000, 100);
 		reproduction_rate = new DoubleSettingsContainer("Reproduction rate", 0,
-				1, 0.2);
+				1, 0.4);
 
 		doubleSettings.add(max_energy);
 		doubleSettings.add(timeToBloom);

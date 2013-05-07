@@ -35,6 +35,8 @@ public abstract class AbstractAgent implements IAgent {
 	protected double forwardThrustConstant = 0.1;
 	
 	
+	
+
 	protected int width;
 	protected int height;
 	protected int capacity = Integer.MAX_VALUE;
@@ -52,7 +54,7 @@ public abstract class AbstractAgent implements IAgent {
 	protected boolean isAlive = true;
 	protected boolean hungry = true;
 	protected static final boolean USE_PRIORITY_NEIGHBOURS = true;
-	protected static final int K_NEAREST_NEIGHBOURS = 20;
+	protected static final int K_NEAREST_NEIGHBOURS = 25;
 
 	/* Neighbour list module variables */
 	protected List<IAgent> preyNeighbours;
@@ -125,6 +127,11 @@ public abstract class AbstractAgent implements IAgent {
 				new Vector(a.velocity), a.maxSpeed, a.visionRange,
 				a.maxAcceleration);
 		this.focusedPreyPath = a.focusedPreyPath;
+		this.separationConstant = a.separationConstant;
+		this.cohesionConstant = a.cohesionConstant;
+		this.arrayalConstant = a.arrayalConstant;
+		this.forwardThrustConstant = a.forwardThrustConstant;
+		
 	}
 
 	public AbstractAgent(String name, Position pos, Color color, int width,
@@ -249,8 +256,13 @@ public abstract class AbstractAgent implements IAgent {
 				// TODO Auto-generated method stub
 				return null;
 			}
+
 		};
 		a.focusedPreyPath = focusedPreyPath;
+		a.separationConstant = separationConstant;
+		a.cohesionConstant = cohesionConstant;
+		a.arrayalConstant = arrayalConstant;
+		a.forwardThrustConstant = forwardThrustConstant;
 		return a;
 	}
 
@@ -509,5 +521,24 @@ public abstract class AbstractAgent implements IAgent {
 	@Override
 	public List<Position> getFocusedPath() {
 		return focusedPreyPath.getPath();
+	}
+	
+	@Override
+	public String getGroupingParametersString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(separationConstant);
+		sb.append(",");
+		sb.append(cohesionConstant);
+		sb.append(",");
+		sb.append(arrayalConstant);
+		sb.append(",");
+		sb.append(forwardThrustConstant);
+		return sb.toString();
+	}
+
+	@Override
+	public double eatenFromDistance(){
+		// For most agents the other predator has to be on this agent to eat it.
+		return 0;
 	}
 }

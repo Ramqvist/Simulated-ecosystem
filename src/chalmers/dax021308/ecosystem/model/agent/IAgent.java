@@ -20,7 +20,7 @@ public interface IAgent extends Cloneable {
 	 * @return The position of the IAgent.
 	 */
 	public Position getPosition();
-	
+
 	public List<Position> getFocusedPath();
 
 	/**
@@ -194,9 +194,19 @@ public interface IAgent extends Cloneable {
 	 *         depending on the amount of food available in this agent
 	 */
 	public double impactForcesBy();
-	
+
 	/**
 	 * @return true if the agent is hungry, false otherwise.
 	 */
 	public boolean isHungry();
+
+	public String getGroupingParametersString();
+
+	/**
+	 * Returns a distance representing how close another agent can be to eat
+	 * this agent
+	 * 
+	 * @return The distance from which this agent can be eaten
+	 */
+	public double eatenFromDistance();
 }
