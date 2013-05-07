@@ -7,6 +7,8 @@ import chalmers.dax021308.ecosystem.controller.scripting.ScriptHandler;
 
 /**
  * Special Main method for using the script controller.
+ * <p> 
+ * Don't forget to copy the run configuration (VM Arguments) from the normal one to ScriptInitializers.
  * 
  * @author Erik Ramqvist
  *

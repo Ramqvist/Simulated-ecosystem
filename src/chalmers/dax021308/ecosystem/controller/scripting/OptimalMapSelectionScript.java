@@ -1,6 +1,7 @@
 package chalmers.dax021308.ecosystem.controller.scripting;
 
 import java.beans.PropertyChangeEvent;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +56,7 @@ public class OptimalMapSelectionScript implements IScript {
 		worstMaps = new HashMap<SimulationMap, Long>();
 		
 		SimulationSettings s = SimulationSettings.DEFAULT;
+		s.setMap(null);  //TODO: fix
 		s.setDelayLength(0);
 		s.setRunWithoutTimer(true);
 		s.setNumIterations(NUM_ITERATION_PER_SIM);
@@ -102,6 +104,13 @@ public class OptimalMapSelectionScript implements IScript {
 
 	@Override
 	public void onFinishScript() {
+		Log.v("--- Best Maps ---");
+		printObstacles(bestMaps.keySet());
+		dumpMapsToFile("BestMaps", bestMaps.keySet());
+		Log.v(" ");
+		Log.v("--- Worst Maps ---");
+		printObstacles(worstMaps.keySet());
+		dumpMapsToFile("WorstMaps", worstMaps.keySet());
 		listener.onFinishScript();
 	}
 
@@ -130,7 +139,7 @@ public class OptimalMapSelectionScript implements IScript {
 		return getName();
 	}
 	
-	private void dumpMapsToFile(String fileHeader, List<SimulationMap> maps) {
+	private void dumpMapsToFile(String fileHeader, Collection<SimulationMap> maps) {
 		int counter = 1;
 		for(SimulationMap m : maps) {
 			m.setName(fileHeader + "_" + counter++);
@@ -138,7 +147,7 @@ public class OptimalMapSelectionScript implements IScript {
 		}
 	}
 	
-	private void printObstacles(List<SimulationMap> maps) {
+	private void printObstacles(Collection<SimulationMap> maps) {
 		if(maps == null) {
 			return;
 		}
