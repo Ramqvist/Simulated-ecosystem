@@ -42,7 +42,7 @@ public class ScriptSelector extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getContentPane().setBackground(Color.LIGHT_GRAY);
 		setBackground(Color.BLACK);
-		setTitle("Big Tasty's Super Script Injector 2000");
+		setTitle("Erkans Super Script K\u00F6rare");
 		getContentPane().setLayout(new MigLayout("", "[grow]", "[][grow][][][]"));
 		
 		JLabel lblSelectScriptTo = new JLabel("Select script to run");

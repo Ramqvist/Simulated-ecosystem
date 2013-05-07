@@ -32,9 +32,10 @@ public class ScriptHandler implements IController{
 	public ScriptHandler() {
 		List<IScript> scriptList = new ArrayList<IScript>();
 
-		/* Add your created script to this list here! */
+		/* Add your created script to this list here! */	
 		scriptList.add(new MultiThreadedPerformanceScript());
 		scriptList.add(new OptimalMapSelectionScript());
+		scriptList.add(new MySillyScript());
 		//scriptList.add(new MyFancyScript());
 		
 		this.ss = new ScriptSelector(scriptList, new OnScriptSelectedListener() {
