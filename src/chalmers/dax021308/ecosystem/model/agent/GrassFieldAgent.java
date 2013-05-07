@@ -112,4 +112,9 @@ public class GrassFieldAgent extends AbstractAgent {
 			return lifeLength++ > TIME_TO_BLOOM;
 		}
 	}
+	
+	@Override
+	public double eatenFromDistance(){
+		return (width+height)/4;
+	}
 }

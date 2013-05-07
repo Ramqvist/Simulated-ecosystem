@@ -536,4 +536,9 @@ public abstract class AbstractAgent implements IAgent {
 		return sb.toString();
 	}
 
+	@Override
+	public double eatenFromDistance(){
+		// For most agents the other predator has to be on this agent to eat it.
+		return 0;
+	}
 }
