@@ -1,9 +1,11 @@
-package chalmers.dax021308.ecosystem.controller;
+package chalmers.dax021308.ecosystem.controller.scripting;
+
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.controller.MainWindowController;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
@@ -17,10 +19,10 @@ import chalmers.dax021308.ecosystem.model.util.Log;
  */
 public class ScriptingController implements PropertyChangeListener {
 
-//	private MainWindowController controller;
+	private MainWindowController controller;
 	private SimulationSettings s;
 	
-	private static final int NUM_ITERATIONS = 200;
+	private static final int NUM_ITERATIONS = 1000;
 	private int rounds = 10;
 	private List<IPopulation> lastPop;
 	private EcoWorld model;
@@ -28,13 +30,14 @@ public class ScriptingController implements PropertyChangeListener {
 
 	public ScriptingController() {
 		s = SimulationSettings.EXTREME;
-//		controller = new MainWindowController();
 		model = new EcoWorld();
-		model.addObserver(this);
+//		controller = new MainWindowController();
+//		model = controller.model;
 //		controller.window.smvc.toggleVisibility();
+		model.addObserver(this);
 		s.setNumIterations(NUM_ITERATIONS);
 		s.setDelayLength(0);
-		s.setNumThreads(16);
+		s.setNumThreads(8);
 		s.setRunWithoutTimer(true);
 		startNewRound();
 	}

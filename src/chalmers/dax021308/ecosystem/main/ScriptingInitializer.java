@@ -2,7 +2,8 @@ package chalmers.dax021308.ecosystem.main;
 
 import javax.swing.UIManager;
 
-import chalmers.dax021308.ecosystem.controller.ScriptingController;
+import chalmers.dax021308.ecosystem.controller.scripting.ScriptHandler;
+
 
 /**
  * Special Main method for using the script controller.
@@ -14,10 +15,10 @@ public class ScriptingInitializer {
 	
 	public static void main(String[] args) {
 		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+	    	UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		new ScriptingController();
+		new ScriptHandler();
 	}
 }
