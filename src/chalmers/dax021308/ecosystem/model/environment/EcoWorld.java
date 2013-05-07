@@ -5,12 +5,16 @@ import java.awt.Dimension;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 
+import chalmers.dax021308.ecosystem.model.agent.IAgent;
+import chalmers.dax021308.ecosystem.model.environment.mapeditor.SimulationMap;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.EllipticalObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
@@ -73,6 +77,9 @@ public class EcoWorld implements IModel {
 
 	/* Simulation settings */
 	private int numIterations;
+	private boolean started = false;
+	private int thisIterationNumber = 1;
+	private int toFileInterval = 10000;
 	private TimerHandler timer;
 	private EnvironmentScheduler env;
 	private int tickTime;
@@ -542,6 +549,9 @@ public class EcoWorld implements IModel {
 			if (!runWithoutTimer) {
 				timer.start(tickTime, onTickListener);
 			}
+			if(numIterations%10000==0){
+				System.out.println(numIterations);
+			}
 			StringBuffer sb = new StringBuffer("-- Simulation model Update: ");
 			sb.append(++numUpdates);
 			if (startIterationTime != 0) {
@@ -560,10 +570,25 @@ public class EcoWorld implements IModel {
 			} catch (RejectedExecutionException e) {
 				
 			}
+//			if(!started) {
+//				started = true;
+//				for(IPopulation pop: env.getPopulations()){
+//					String dest = "C:\\GroupingData\\" + pop.getName() + "Start.txt";
+//					File file = new File(dest);
+//					savePopulationToFile(file,pop.clonePopulation());
+//				}
+//			}
+			
+			
 			startIterationTime = System.nanoTime();
 		} else {
 			stop();
 			//Lägg till är Sebastian.
+//			for(IPopulation pop: env.getPopulations()){
+//				String dest = "C:\\GroupingData\\" + pop.getName() + "End.txt";
+//				File file = new File(dest);
+//				savePopulationToFile(file,pop.clonePopulation());
+//			}
 			if (recording != null)
 				recording.close();
 			if (recordSimulation) {
@@ -645,6 +670,27 @@ public class EcoWorld implements IModel {
 
 	public void setHeapmatPopulation(String selectedPop) {
 		observers.firePropertyChange(EVENT_HEATMAP_POPCHANGE, null, selectedPop);
+	}
+	
+	private static synchronized boolean savePopulationToFile(File dest, IPopulation pop) {
+		PrintWriter pw = null;
+		try {
+			if(dest.exists()) {
+				dest.delete();
+			}
+			dest.createNewFile();
+			pw = new PrintWriter(dest);
+			pw.println("Separation, Cohesion, Arrayal, Forward");
+			for(IAgent a : pop.getAgents()) {
+				pw.println(a.getGroupingParametersString());
+			}
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			pw.close();
+		}
 	}
 
 }

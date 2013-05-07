@@ -37,10 +37,10 @@ public class GenomeFactory {
 		
 		//Grouping behaviour
 		chrom.addGene(GeneralGeneTypes.ISGROUPING, new BooleanGene(true, mutProb, false, false));
-		chrom.addGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR, new DoubleGene(0, 100, false, 20.0, mutProb, 8, false));
-		chrom.addGene(GeneralGeneTypes.GROUPING_COHESION, new DoubleGene(0, 20, false, 1, mutProb, 8, false));
-		chrom.addGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST, new DoubleGene(0, 3, false, 0.1, mutProb, 8, false));
-		chrom.addGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE, new DoubleGene(0, 15, false, 4, mutProb, 8, false));
+		chrom.addGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR, new DoubleGene(20, 70, false, 20.0, mutProb, 8, false));
+		chrom.addGene(GeneralGeneTypes.GROUPING_COHESION, new DoubleGene(0, 10, false, 1, mutProb, 8, false));
+		chrom.addGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST, new DoubleGene(0, 1.5, false, 0.1, mutProb, 8, false));
+		chrom.addGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE, new DoubleGene(0, 10, false, 4, mutProb, 8, false));
 		
 		//Stotting behaviour
 		chrom.addGene(GeneralGeneTypes.ISSTOTTING, new BooleanGene(false, mutProb, false, false));
@@ -59,10 +59,10 @@ public class GenomeFactory {
 		
 		//Grouping behaviour
 		chrom.addGene(GeneralGeneTypes.ISGROUPING, new BooleanGene(true, mutProb, false, false));
-		chrom.addGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR, new DoubleGene(0, 100, false, 20, mutProb, 8, false));
-		chrom.addGene(GeneralGeneTypes.GROUPING_COHESION, new DoubleGene(0, 20, false, 1, mutProb, 8, false));
-		chrom.addGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST, new DoubleGene(0, 3, false, 0.1, mutProb, 8, false));
-		chrom.addGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE, new DoubleGene(0, 15, false, 4, mutProb, 8, false));
+		chrom.addGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR, new DoubleGene(30, 80, false, 20, mutProb, 8, false));
+		chrom.addGene(GeneralGeneTypes.GROUPING_COHESION, new DoubleGene(7, 17, false, 1, mutProb, 8, false));
+		chrom.addGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST, new DoubleGene(1, 2.5, false, 0.1, mutProb, 8, false));
+		chrom.addGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE, new DoubleGene(0, 10, false, 4, mutProb, 8, false));
 
 		//Focus preys
 		chrom.addGene(GeneralGeneTypes.FOCUSPREY, new BooleanGene(true, mutProb, false, false));

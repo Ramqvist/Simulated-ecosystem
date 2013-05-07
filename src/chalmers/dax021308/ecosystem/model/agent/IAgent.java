@@ -199,4 +199,6 @@ public interface IAgent extends Cloneable {
 	 * @return true if the agent is hungry, false otherwise.
 	 */
 	public boolean isHungry();
+	
+	public String getGroupingParametersString();
 }
