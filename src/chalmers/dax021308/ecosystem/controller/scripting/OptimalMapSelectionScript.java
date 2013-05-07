@@ -1,6 +1,7 @@
 package chalmers.dax021308.ecosystem.controller.scripting;
 
 import java.beans.PropertyChangeEvent;
+import java.util.List;
 import java.util.Map;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
@@ -55,6 +56,10 @@ public class OptimalMapSelectionScript implements IScript {
 	@Override
 	public String toString() {
 		return getName();
+	}
+	
+	private void dumpMapsToFile(String fileStart, List<SimulationMap> maps) {
+		
 	}
 
 }
