@@ -27,6 +27,7 @@ public class SimulationSettings {
 	public static final SimulationSettings DEFAULT;
 	public static final SimulationSettings LARGESIM;
 	public static final SimulationSettings EXTREME;
+	public static final SimulationSettings FASTRUN;
 	public static final SimulationSettings[] PROFILE_VALUES;
 	
 	public static final String DEFAULT_SETTINGSFILE = "saved_settings.property";
@@ -69,12 +70,14 @@ public class SimulationSettings {
 	
 	/* Simulation profiles settings */
 	static {
-		DEFAULT = new SimulationSettings("Default", POP_WOLF, 10, POP_DEER, 100, POP_GRASS, 400, SHAPE_SQUARE, 4, false, false, 16, Integer.MAX_VALUE, DefaultMaps.empty_map);
+		DEFAULT = new SimulationSettings("Default", POP_WOLF, 50, POP_DEER, 250, POP_GRASS, 600, SHAPE_SQUARE, 4, false, false, 16, Integer.MAX_VALUE, DefaultMaps.empty_map);
 		DEFAULT.setSimulationDimension(DIM_XLARGE);
 		LARGESIM = new SimulationSettings("Large simulation", POP_WOLF, 100, POP_DEER, 1000, POP_GRASS, 4000, SHAPE_SQUARE, 4, false, false, 16, Integer.MAX_VALUE, DefaultMaps.elliptical_map);
 		LARGESIM.setSimulationDimension(DIM_XLARGE);
 		EXTREME = new SimulationSettings("Large simulation", POP_WOLF, 400, POP_DEER, 1500, POP_GRASS, 10000, SHAPE_SQUARE, 8, true, false, 0, Integer.MAX_VALUE, DefaultMaps.empty_map);
 		EXTREME.setSimulationDimension(new Dimension(2600, 2600));
+		FASTRUN = new SimulationSettings("Default", POP_WOLF, 50, POP_DEER, 250, POP_GRASS, 600, SHAPE_SQUARE, 4, true, false, 0, Integer.MAX_VALUE, DefaultMaps.empty_map);
+		FASTRUN.setSimulationDimension(DIM_XLARGE);
 		
 		PROFILE_VALUES = new SimulationSettings[2];
 		PROFILE_VALUES[0] = DEFAULT;

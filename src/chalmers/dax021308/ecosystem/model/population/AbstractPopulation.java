@@ -46,6 +46,7 @@ public abstract class AbstractPopulation implements IPopulation {
 	protected Color color; // Standard color for population.
 
 	protected Stat<Integer> lifeLengths;
+	private double lifeLengthsMean = 0; 
 	protected boolean groupBehaviour = true;
 	private String name;
 
@@ -94,10 +95,7 @@ public abstract class AbstractPopulation implements IPopulation {
 				e.printStackTrace();
 			}
 		}
-		this.lifeLengths = new Stat<Integer>();
-		for (Integer n : original.getLifeLengths()) {
-			this.lifeLengths.addObservation(n);
-		}
+		this.lifeLengthsMean = original.lifeLengths.getMean();
 
 	}
 
@@ -203,18 +201,7 @@ public abstract class AbstractPopulation implements IPopulation {
 
 	@Override
 	public IPopulation clonePopulation() {
-		return new AbstractPopulation(this) {
-
-			@Override
-			public List<Integer> getLifeLengths() {
-				return (List<Integer>) lifeLengths.getSample();
-			}
-
-			@Override
-			public double getLifeLengthMean() {
-				return lifeLengths.getMean();
-			}
-		};
+		return new AbstractPopulation(this) {};
 	}
 
 	/**
@@ -270,18 +257,7 @@ public abstract class AbstractPopulation implements IPopulation {
 		// throw new IllegalArgumentException("Illegal Shape from file.");
 
 		AbstractPopulation created = new AbstractPopulation(name, Color.black,
-				null) {
-
-			@Override
-			public List<Integer> getLifeLengths() {
-				return (List<Integer>) lifeLengths.getSample();
-			}
-
-			@Override
-			public double getLifeLengthMean() {
-				return lifeLengths.getMean();
-			}
-		};
+				null) {};
 		created.agents = new ArrayList<IAgent>();
 		created.setColor(c);
 		return created;
@@ -359,7 +335,7 @@ public abstract class AbstractPopulation implements IPopulation {
 
 	@Override
 	public double getLifeLengthMean() {
-		return lifeLengths.getMean();
+		return lifeLengthsMean;
 	}
 
 	@Override
