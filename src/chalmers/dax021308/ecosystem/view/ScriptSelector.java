@@ -41,7 +41,7 @@ public class ScriptSelector extends JFrame {
 		getContentPane().setBackground(Color.LIGHT_GRAY);
 		setBackground(Color.BLACK);
 		setTitle("Big Tasty's Super Script Injector 2000");
-		getContentPane().setLayout(new MigLayout("", "[grow]", "[][grow][][]"));
+		getContentPane().setLayout(new MigLayout("", "[grow]", "[][grow][][][]"));
 		
 		JLabel lblSelectScriptTo = new JLabel("Select script to run");
 		lblSelectScriptTo.setForeground(Color.WHITE);
@@ -73,22 +73,27 @@ public class ScriptSelector extends JFrame {
 		getContentPane().add(list, "cell 0 1,grow");
 
 		final JCheckBox chckbxEnableGui = new JCheckBox("Enable GUI");
+		chckbxEnableGui.setForeground(Color.WHITE);
 		getContentPane().add(chckbxEnableGui, "cell 0 2,growx");
-		
-		JButton btnRun = new JButton("Start script");
+
+		final JCheckBox checkBoxShutdown = new JCheckBox("Shutdown computer when finished");
+		checkBoxShutdown.setForeground(Color.WHITE);
+		JButton btnRun = new JButton("Run Script");
 		btnRun.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				IScript selected = list.getSelectedValue();
 				if(selected != null && listener != null) {
-					listener.onScriptSelected(selected,chckbxEnableGui.isSelected() );
+					listener.onScriptSelected(selected,chckbxEnableGui.isSelected(), checkBoxShutdown.isSelected() );
 				}
 			}
 		});
 		
+		getContentPane().add(checkBoxShutdown, "cell 0 3,growx");
+		
 		btnRun.setBackground(Color.WHITE);
 		btnRun.setForeground(Color.BLACK);
-		getContentPane().add(btnRun, "cell 0 3,growx");
+		getContentPane().add(btnRun, "cell 0 4,growx");
 		revalidate();
 		centerOnScreen(this, true);
 		getContentPane().setVisible(true);
@@ -96,7 +101,7 @@ public class ScriptSelector extends JFrame {
 	}
 	
 	public interface OnScriptSelectedListener {
-		 public void onScriptSelected(IScript s, boolean runWithGUI);
+		 public void onScriptSelected(IScript s, boolean runWithGUI, boolean shutdown);
 	}
 	
 

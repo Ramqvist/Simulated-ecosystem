@@ -3,6 +3,7 @@ package chalmers.dax021308.ecosystem.controller.scripting;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
+import chalmers.dax021308.ecosystem.controller.scripting.ScriptHandler.OnFinishedScriptListener;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
@@ -14,9 +15,11 @@ public class MultiThreadedPerformanceScript implements IScript {
 	private List<IPopulation> lastPop;
 	private int NUM_ITERATION_PER_SIM = 1000;
 	private int rounds = 10;
+	private OnFinishedScriptListener listener;
 
 	@Override
-	public void init(EcoWorld e) {
+	public void init(EcoWorld e, OnFinishedScriptListener listener) {
+		this.listener = listener;
 		this.model = e;
 		e.addObserver(this);
 		e.loadSimulationSettings(SimulationSettings.DEFAULT);
@@ -32,6 +35,10 @@ public class MultiThreadedPerformanceScript implements IScript {
 		}
 	}
 
+	@Override
+	public void onFinishScript() {
+		listener.onFinishScript();
+	}
 
 	@Override
 	public void onFinishOneRun() {
@@ -44,11 +51,6 @@ public class MultiThreadedPerformanceScript implements IScript {
 	}
 
 	@Override
-	public void postRun() {
-		Log.v("Finished performance run");
-	}
-
-	@Override
 	public String getName() {
 		return "Multithreaded Performance test";
 	}
@@ -57,4 +59,5 @@ public class MultiThreadedPerformanceScript implements IScript {
 	public String toString() {
 		return getName();
 	}
+
 }

@@ -2,6 +2,7 @@ package chalmers.dax021308.ecosystem.controller.scripting;
 
 import java.beans.PropertyChangeListener;
 
+import chalmers.dax021308.ecosystem.controller.scripting.ScriptHandler.OnFinishedScriptListener;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 
@@ -24,7 +25,7 @@ public interface IScript extends PropertyChangeListener {
 	 * 
 	 * @param e
 	 */
-	public void init(EcoWorld e);
+	public void init(EcoWorld e, OnFinishedScriptListener listener);
 
 	/**
 	 * This is managed by the extending class.
@@ -34,7 +35,7 @@ public interface IScript extends PropertyChangeListener {
 	/**
 	 * This is managed by the extending class.
 	 */
-	public void postRun();
+	public void onFinishScript();
 	
 	/**
 	 * This is only used for the GUI to distinguish the scripts apart.

@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Map;
 
+import chalmers.dax021308.ecosystem.controller.scripting.ScriptHandler.OnFinishedScriptListener;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.SimulationMap;
@@ -19,10 +20,12 @@ public class OptimalMapSelectionScript implements IScript {
 	private Map<Long, SimulationMap> bestMaps;
 	private Map<Long, SimulationMap> worstMaps;
 	private EcoWorld e;
+	private OnFinishedScriptListener listener;
 	
 
 	@Override
-	public void init(EcoWorld e) {
+	public void init(EcoWorld e, OnFinishedScriptListener listener) {
+		this.listener = listener;
 		this.e = e;
 		e.addObserver(this);
 		SimulationSettings s = SimulationSettings.DEFAULT;
@@ -39,8 +42,8 @@ public class OptimalMapSelectionScript implements IScript {
 	}
 
 	@Override
-	public void postRun() {
-		
+	public void onFinishScript() {
+		listener.onFinishScript();
 	}
 
 	@Override

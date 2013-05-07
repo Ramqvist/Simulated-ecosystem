@@ -26,6 +26,7 @@ import chalmers.dax021308.ecosystem.view.ScriptSelector.OnScriptSelectedListener
 public class ScriptHandler implements IController{
 	
 	private ScriptSelector ss;
+	private boolean shutdownOnFinish;
 
 	public ScriptHandler() {
 		List<IScript> scriptList = new ArrayList<IScript>();
@@ -37,10 +38,10 @@ public class ScriptHandler implements IController{
 		
 		this.ss = new ScriptSelector(scriptList, new OnScriptSelectedListener() {
 			@Override
-			public void onScriptSelected(IScript s, boolean enableGUI) {
+			public void onScriptSelected(IScript s, boolean enableGUI, boolean shutdown) {
 				runScript(s, enableGUI);
 				ss.dispose();
-				//TODO: Add shutdown computer option. 
+				ScriptHandler.this.shutdownOnFinish = shutdown;
 				//TODO: Add minimalistic gui option.
 			}
 
@@ -60,7 +61,21 @@ public class ScriptHandler implements IController{
 		} else {
 			e = new EcoWorld();
 		}
-		s.init(e);
+		s.init(e, new OnFinishedScriptListener() {
+			
+			@Override
+			public void onFinishScript() {
+				if(shutdownOnFinish) {
+					try {
+						shutdown();
+					} catch (RuntimeException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
 		e.start();
 	}
 	@Override
@@ -100,5 +115,9 @@ public class ScriptHandler implements IController{
 
 	    Runtime.getRuntime().exec(shutdownCommand);
 	    System.exit(0);
+	}
+	
+	public interface OnFinishedScriptListener {
+		public void onFinishScript();
 	}
 }
