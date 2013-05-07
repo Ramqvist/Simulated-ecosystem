@@ -26,7 +26,7 @@ public class MultiThreadedPerformanceScript implements IScript {
 		SimulationSettings s = SimulationSettings.DEFAULT;
 		s.setDelayLength(0);
 		s.setRunWithoutTimer(true);
-		s.setNumIterations(12);
+		s.setNumIterations(NUM_ITERATION_PER_SIM);
 		e.loadSimulationSettings(s);
 	}
 

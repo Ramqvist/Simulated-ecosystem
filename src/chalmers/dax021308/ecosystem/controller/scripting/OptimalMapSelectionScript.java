@@ -28,8 +28,21 @@ public class OptimalMapSelectionScript implements IScript {
 	private OnFinishedScriptListener listener;
 	private SimulationMap lastMap;
 	private List<IPopulation> lastPop;
-	private int NUM_ITERATION_PER_SIM = 1000;
+	
+	private long currentPopulationPoints = 0;
+	
 	private int rounds = 10;
+	
+	private static final String populationToTrack = "Deers";
+	private static final int NUM_ITERATION_PER_SIM = 1000;
+	private static final int NUM_BESTMAPS  = 5;
+	private static final int NUM_WORSTMAPS = 5;
+	
+	private static final int PHASE_BROAD_RANDOMINESS 	= 1;
+	private static final int PHASE_ANALYSE_RESULT 		= 2;
+	private static final int PHASE_FINALIZE_MAPS 		= 3;
+	
+	private int current_phase = PHASE_BROAD_RANDOMINESS;
 	
 
 	@Override
@@ -42,20 +55,49 @@ public class OptimalMapSelectionScript implements IScript {
 		worstMaps = new HashMap<SimulationMap, Long>();
 		
 		SimulationSettings s = SimulationSettings.DEFAULT;
+		s.setDelayLength(0);
+		s.setRunWithoutTimer(true);
+		s.setNumIterations(NUM_ITERATION_PER_SIM);
 		e.loadSimulationSettings(s);
 	}
 
 	@Override
 	public void onFinishOneRun() {
 		//Handle data
-		//TODO: Decrease counter;
-		onFinishScript();
-		SimulationSettings s = SimulationSettings.DEFAULT;
-		s.setNumIterations(NUM_ITERATION_PER_SIM);
-		lastMap = new SimulationMap(null, null);
-		s.setMap(lastMap);
-		e.loadSimulationSettings(s);
-		e.start();
+		if(bestMaps.size() > NUM_BESTMAPS) {
+			bestMaps.put(lastMap, currentPopulationPoints);
+		} else {
+			for(SimulationMap m : bestMaps.keySet()) {
+				if(currentPopulationPoints > bestMaps.get(m)) {
+					bestMaps.remove(m);
+					bestMaps.put(lastMap, currentPopulationPoints);
+					break;
+				}
+			}
+		}
+		if(worstMaps.size() > NUM_WORSTMAPS) {
+			worstMaps.put(lastMap, currentPopulationPoints);
+		} else {
+			for(SimulationMap m : worstMaps.keySet()) {
+				if(currentPopulationPoints < worstMaps.get(m)) {
+					worstMaps.remove(m);
+					worstMaps.put(lastMap, currentPopulationPoints);
+					break;
+				}
+			}
+		}
+		currentPopulationPoints = 0;
+		if(--rounds >= 0) {
+			onFinishScript();
+			SimulationSettings s = SimulationSettings.DEFAULT;
+			s.setNumIterations(NUM_ITERATION_PER_SIM);
+			lastMap = new SimulationMap(null, null); //TODO: fix
+			s.setMap(lastMap);
+			e.loadSimulationSettings(s);
+			e.start();
+		} else {
+			onFinishScript();
+		}
 	}
 
 	@Override
@@ -67,6 +109,11 @@ public class OptimalMapSelectionScript implements IScript {
 	public void propertyChange(PropertyChangeEvent evt) {
 		if(evt.getPropertyName() == EcoWorld.EVENT_TICK) {
 			this.lastPop = (List<IPopulation>) evt.getNewValue();
+			for(IPopulation p : lastPop) {
+				if(p.getName().equals(populationToTrack)) {
+					currentPopulationPoints = currentPopulationPoints + p.getAgents().size();
+				}
+			}
 		}
 		if(evt.getPropertyName() == EcoWorld.EVENT_FINISHED) {
 			onFinishOneRun();
