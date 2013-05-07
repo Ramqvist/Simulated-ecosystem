@@ -22,14 +22,15 @@ public class ScriptingController implements PropertyChangeListener {
 	private MainWindowController controller;
 	private SimulationSettings s;
 	
-	private static final int NUM_ITERATIONS = 1000;
-	private int rounds = 10;
+	private static final int NUM_ITERATIONS = Integer.MAX_VALUE;
+	private int rounds = 1;
 	private List<IPopulation> lastPop;
 	private EcoWorld model;
 	
 
 	public ScriptingController() {
-		s = SimulationSettings.EXTREME;
+		s = SimulationSettings.FASTRUN;
+//		controller = new MainWindowController();
 		model = new EcoWorld();
 //		controller = new MainWindowController();
 //		model = controller.model;
@@ -45,21 +46,21 @@ public class ScriptingController implements PropertyChangeListener {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if(evt.getPropertyName() == EcoWorld.EVENT_TICK) {
-			this.lastPop = (List<IPopulation>) evt.getNewValue();
-		}
+//		if(evt.getPropertyName() == EcoWorld.EVENT_TICK) {
+//			this.lastPop = (List<IPopulation>) evt.getNewValue();
+//		}
 		if(evt.getPropertyName() == EcoWorld.EVENT_FINISHED) {
 			startNewRound();
 		}
 	}
 	
 	private void onFinish() {
-		for(IPopulation p : lastPop) {
-			if(p.getName().equals("Deers")) {
-				p.getLifeLengthMean();
-				break;
-			}
-		}
+//		for(IPopulation p : lastPop) {
+//			if(p.getName().equals("Deers")) {
+//				p.getLifeLengthMean();
+//				break;
+//			}
+//		}
 	}
 
 	private void startNewRound() {
