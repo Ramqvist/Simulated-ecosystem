@@ -9,6 +9,10 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
+import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
+import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
+import chalmers.dax021308.ecosystem.model.genetics.newV.IGenome;
 import chalmers.dax021308.ecosystem.model.util.Position;
 
 public class TriangleObstacleTest extends JPanel {
@@ -50,9 +54,46 @@ public class TriangleObstacleTest extends JPanel {
 			positions.add(to.closestBoundary(pos));
 		}
 		
+//		IGenome<GeneralGeneTypes, IGene> genome = GenomeFactory.deerGenomeFactory();
+//		genome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).setMutable(true);
+//		genome.getGene(GeneralGeneTypes.GROUPING_COHESION).setMutable(true);
+//		genome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).setMutable(true);
+//		genome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).setMutable(true);
+//		
+//		genome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).setHasRandomStartValue(true);
+//		genome.getGene(GeneralGeneTypes.GROUPING_COHESION).setHasRandomStartValue(true);
+//		genome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).setHasRandomStartValue(true);
+//		genome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).setHasRandomStartValue(true);
+//		
+//		IGenome<GeneralGeneTypes, IGene> deerGenome = genome.getCopy();
+//		
+//		deerGenome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).setHasRandomStartValue(false);
+//		deerGenome.getGene(GeneralGeneTypes.GROUPING_COHESION).setHasRandomStartValue(false);
+//		deerGenome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).setHasRandomStartValue(false);
+//		deerGenome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).setHasRandomStartValue(false);
+//		
+//		System.out.println(genome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).getMutationProbaility());
+		
+//		for(int i=0; i<100; i++) {
+//			
+//			positions.add(new Position(i*8,
+//					10*(double)deerGenome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).getCurrentValue()));
+//			
+//			positions.add(new Position(i*8,
+//					100*(double)deerGenome.getGene(GeneralGeneTypes.GROUPING_COHESION).getCurrentValue()));
+//			
+//			positions.add(new Position(i*8,
+//					50*(double)deerGenome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).getCurrentValue()));
+//			
+//			positions.add(new Position(i*8,
+//					200*(double)deerGenome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).getCurrentValue()));
+//			
+//			deerGenome = deerGenome.onlyMutate();
+//		}
+		
 		Frame frame = new Frame();
 		frame.add(test);
-		frame.setSize(new Dimension(1000,1000));
+		frame.setSize(new Dimension(800,800));
 		test.repaint();
 		frame.setVisible(true);
 		
@@ -72,9 +113,10 @@ public class TriangleObstacleTest extends JPanel {
 			} else {
 				g.setColor(Color.blue);
 			}
+		
 			Position p = positions.get(i);
-			g.drawOval((int)p.getX(), 1000-(int)p.getY(), 1, 1);
-			g.drawOval(500, 500, 3, 3);
+			g.drawOval((int)p.getX(), 800-(int)p.getY(), 3, 3);
+//			g.drawOval(500, 500, 3, 3);
 //			System.out.println(p);
 		}
 	}

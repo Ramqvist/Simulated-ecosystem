@@ -31,16 +31,16 @@ public class GenomeFactory {
 	}
 	
 	private static IChromosome<GeneralGeneTypes,IGene> initDeerGenome(){
-		double mutProb = 0.1;
+		double mutProb = 0.01;
 		
 		IChromosome<GeneralGeneTypes,IGene> chrom = new Chromosome(); 
 		
 		//Grouping behaviour
 		chrom.addGene(GeneralGeneTypes.ISGROUPING, new BooleanGene(true, mutProb, false, false));
-		chrom.addGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR, new DoubleGene(30, 70, false, 20.0, mutProb, 8, false));
-		chrom.addGene(GeneralGeneTypes.GROUPING_COHESION, new DoubleGene(1, 7, false, 1, mutProb, 8, false));
-		chrom.addGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST, new DoubleGene(0.25, 1.25, false, 0.1, mutProb, 8, false));
-		chrom.addGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE, new DoubleGene(8, 2, false, 4, mutProb, 8, false));
+		chrom.addGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR, new DoubleGene(0, 120, false, 80, mutProb, 10, false));
+		chrom.addGene(GeneralGeneTypes.GROUPING_COHESION, new DoubleGene(0, 10, false, 2, mutProb, 10, false));
+		chrom.addGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST, new DoubleGene(0, 2, false, 1.5, mutProb, 10, false));
+		chrom.addGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE, new DoubleGene(0, 10, false, 2, mutProb, 10, false));
 		
 		//Stotting behaviour
 		chrom.addGene(GeneralGeneTypes.ISSTOTTING, new BooleanGene(false, mutProb, false, false));
@@ -53,16 +53,16 @@ public class GenomeFactory {
 	
 	
 	private static IChromosome<GeneralGeneTypes,IGene> initWolfGenome(){
-		double mutProb = 0.1;
+		double mutProb = 0.01;
 		
 		IChromosome<GeneralGeneTypes,IGene> chrom = new Chromosome(); 
 		
 		//Grouping behaviour
 		chrom.addGene(GeneralGeneTypes.ISGROUPING, new BooleanGene(true, mutProb, false, false));
-		chrom.addGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR, new DoubleGene(50, 90, false, 20, mutProb, 8, false));
-		chrom.addGene(GeneralGeneTypes.GROUPING_COHESION, new DoubleGene(10, 16, false, 1, mutProb, 8, false));
-		chrom.addGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST, new DoubleGene(1.5, 2.5, false, 0.1, mutProb, 8, false));
-		chrom.addGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE, new DoubleGene(1, 7, false, 4, mutProb, 8, false));
+		chrom.addGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR, new DoubleGene(0, 150, false, 100, mutProb, 10, false));
+		chrom.addGene(GeneralGeneTypes.GROUPING_COHESION, new DoubleGene(0, 20, false, 2, mutProb, 10, false));
+		chrom.addGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST, new DoubleGene(0, 2.5, false, 1, mutProb, 10, false));
+		chrom.addGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE, new DoubleGene(0, 10, false, 1, mutProb, 10, false));
 
 		//Focus preys
 		chrom.addGene(GeneralGeneTypes.FOCUSPREY, new BooleanGene(true, mutProb, false, false));
