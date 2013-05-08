@@ -147,8 +147,6 @@ public class SimulationMap {
 		return true;
 	}
 
-<<<<<<< HEAD
-=======
 	public static SimulationMap randomMap() {
 		List<IObstacle> obsList = new ArrayList<IObstacle>();
 		String name = "RandomMap";
@@ -167,5 +165,4 @@ public class SimulationMap {
 		return new SimulationMap(obsList, name);
 	}
 	
->>>>>>> Added random maps function.
 }

@@ -120,6 +120,10 @@ public class MapEditorGLController implements IController {
 			
 			@Override
 			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_1) {
+					view.selectedObstacle = null;
+					view.newObs = SimulationMap.randomMap().getObsList();
+				} 
 				if(e.getKeyCode() == KeyEvent.VK_TAB) {
 					model.switchSelectedObstacle();
 					e.consume();
