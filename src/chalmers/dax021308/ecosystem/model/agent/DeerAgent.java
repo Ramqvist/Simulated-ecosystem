@@ -6,12 +6,9 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
-import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
-import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
 import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
 import chalmers.dax021308.ecosystem.model.genetics.newV.IGenome;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
-import chalmers.dax021308.ecosystem.model.population.settings.GrassSettings;
 import chalmers.dax021308.ecosystem.model.population.settings.PreySettings;
 import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
 import chalmers.dax021308.ecosystem.model.util.Position;
@@ -19,7 +16,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
  * A basic implementation of the IAgent interface.
- * 
+ *
  * @author Albin
  */
 public class DeerAgent extends AbstractAgent {
@@ -28,7 +25,7 @@ public class DeerAgent extends AbstractAgent {
 	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
 	private static final int DIGESTION_TIME = 10;
 	private static double REPRODUCTION_RATE = PreySettings.instance.reproduction_rate.value;
-	
+
 	private int digesting = 0;
 	private boolean alone;
 	private boolean hungry = true;
@@ -37,13 +34,13 @@ public class DeerAgent extends AbstractAgent {
 	private double STOTTING_LENGTH;
 	private double STOTTING_COOLDOWN;
 	private double STOTTING_ANGLE;
-	private double stottingDuration = STOTTING_LENGTH;
+	private double stottingDuration;
 	private double stottingCoolDown = 0;
 	private boolean isAStottingDeer = false;
 	private boolean isStotting = false;
 	private Vector stottingVector = new Vector();
 	private IGenome<GeneralGeneTypes, IGene> genome;
-	
+
 	/*public DeerAgent(String name, Position p, Color c, int width, int height,
 			Vector velocity, double maxSpeed, double maxAcceleration,
 			double visionRange, boolean groupBehaviour,
@@ -56,28 +53,28 @@ public class DeerAgent extends AbstractAgent {
 				maxAcceleration);
 		REPRODUCTION_RATE = PreySettings.instance.reproduction_rate.value;
 		this.genome = genome;
-		
+
 		//Grouping parameters
-		this.groupBehaviour = this.genome.getGene(GeneralGeneTypes.ISGROUPING).haveGene();
-		cohesionConstant = ((Double)this.genome.getGene(GeneralGeneTypes.GROUPING_COHESION).getCurrentValue()).doubleValue();
-		separationConstant = ((Double)this.genome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).getCurrentValue()).doubleValue();
-		arrayalConstant = ((Double)this.genome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).getCurrentValue()).doubleValue();
-		forwardThrustConstant = ((Double)this.genome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).getCurrentValue()).doubleValue();
+		this.groupBehaviour = this.genome.getGene(GeneralGeneTypes.ISGROUPING).isGeneActive();
+		cohesionConstant = this.genome.getGene(GeneralGeneTypes.GROUPING_COHESION).getCurrentDoubleValue();
+		separationConstant = this.genome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).getCurrentDoubleValue();
+		arrayalConstant = this.genome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).getCurrentDoubleValue();
+		forwardThrustConstant = this.genome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).getCurrentDoubleValue();
 		if (this.groupBehaviour) {
 			this.color = Color.BLUE;
 		} else {
 			this.color = Color.MAGENTA;
 		}
-		
+
 		//Stotting parameters
-		isAStottingDeer = this.genome.getGene(GeneralGeneTypes.ISSTOTTING).haveGene();
-		STOTTING_RANGE = ((Double)this.genome.getGene(GeneralGeneTypes.STOTTINGRANGE).getCurrentValue()).doubleValue();
-		STOTTING_LENGTH = ((Double)this.genome.getGene(GeneralGeneTypes.STOTTINGLENGTH).getCurrentValue()).doubleValue();
-		STOTTING_ANGLE = ((Double)this.genome.getGene(GeneralGeneTypes.STOTTINGANGLE).getCurrentValue()).doubleValue();
+		isAStottingDeer = this.genome.getGene(GeneralGeneTypes.ISSTOTTING).isGeneActive();
+		STOTTING_RANGE = this.genome.getGene(GeneralGeneTypes.STOTTINGRANGE).getCurrentDoubleValue();
+		STOTTING_LENGTH = this.genome.getGene(GeneralGeneTypes.STOTTINGLENGTH).getCurrentDoubleValue();
+		STOTTING_ANGLE = this.genome.getGene(GeneralGeneTypes.STOTTINGANGLE).getCurrentDoubleValue();
 		stottingDuration = STOTTING_LENGTH;
-		
+
 		this.energy = MAX_ENERGY;
-		
+
 	}
 
 	@Override
@@ -115,7 +112,7 @@ public class DeerAgent extends AbstractAgent {
 	 * Calculates the next position of the agent depending on the forces that
 	 * affects it. Note: The next position is not set until updatePosition() is
 	 * called.
-	 * 
+	 *
 	 * @author Sebbe
 	 */
 	@Override
@@ -124,9 +121,9 @@ public class DeerAgent extends AbstractAgent {
 			SurroundingsSettings surroundings) {
 
 		updateNeighbourList(neutral, preys, predators);
-		
-		Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys, surroundings, 
-				focusedPrey, this, preyNeighbours, 
+
+		Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys, surroundings,
+				focusedPrey, this, preyNeighbours,
 				FOCUS_RANGE, focusedPreyPath, 1);
 		Vector predatorForce = getPredatorForce();
 		alone = predatorForce.isNullVector();
@@ -204,7 +201,7 @@ public class DeerAgent extends AbstractAgent {
 	 * the predators, then normalized to have unit norm. Can be interpreted as
 	 * the average sum of forces that the agent feels, weighted by how close the
 	 * source of the force is.
-	 * 
+	 *
 	 * @author Sebbe
 	 */
 	private Vector getPredatorForce() {

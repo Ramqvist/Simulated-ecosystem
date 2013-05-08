@@ -49,17 +49,17 @@ import com.sun.opengl.util.FPSAnimator;
  *
  */
 public class MapEditorGLView extends GLCanvas implements IView {
-	
+
 	private static final long serialVersionUID = 158552837620985591L;
 	private List<IObstacle> newObs = new ArrayList<IObstacle>();
 	public final Dimension size;
 	public final JOGLListener glListener;
 	public IObstacle selectedObstacle;
 	private IShape shape;
-	
-	private MouseEvent lastZoomEvent;
-	
-	
+
+	private MouseEvent lastZoomEvent = null;
+
+
 	/**
 	 * Create the panel.
 	 */
@@ -71,8 +71,8 @@ public class MapEditorGLView extends GLCanvas implements IView {
 		FPSAnimator animator = new FPSAnimator(this, 60);
 		animator.start();
 	}
-	
-	
+
+
 	public IObstacle getObstacleFromCoordinates(double x, double y) {
 		if(newObs == null ) {
 			return null;
@@ -106,25 +106,25 @@ public class MapEditorGLView extends GLCanvas implements IView {
 			selectedObstacle = (IObstacle) event.getNewValue();
 		}
 	}
-	
-	
+
+
 	/**
 	 * JOGL Listener, listenes to commands from the GLCanvas.
-	 * 
+	 *
 	 * @author Erik
 	 *
 	 */
     public class JOGLListener implements GLEventListener {
-    	
+
         	private final float  COLOR_FACTOR        = (1.0f/255);
         	private int zoomValue = 0;
         	private int currentScrollZoom = 0;
         	private int ZOOM_ACCELERATION = 10;
-        	
-    		
+
+
         	/**
         	 * Called each frame to redraw all the 3D elements.
-        	 * 
+        	 *
         	 */
             @Override
             public void display(GLAutoDrawable drawable) {
@@ -146,11 +146,11 @@ public class MapEditorGLView extends GLCanvas implements IView {
         			} else if(currentZoomY > lastZoomEvent.getY()) {
         				pointOfInterestY--;
         			}*/
-        			
+
         			int pointOfInterestX = lastZoomEvent.getX();
         			int pointOfInterestY = lastZoomEvent.getY();
         			int zoomLevel = 3;
-            		
+
             		gl.glViewport(0, 0, getWidth(), getWidth());
             		gl.glMatrixMode(GL.GL_PROJECTION);
             		gl.glLoadIdentity();
@@ -173,12 +173,12 @@ public class MapEditorGLView extends GLCanvas implements IView {
         			gl.glOrtho(0, getWidth(), getHeight(), 0, 0, 1);
         		}
 
-       
+
 //            	long start = System.currentTimeMillis();
-            	
+
                 double frameHeight = (double)getHeight();
                 double frameWidth  = (double)getWidth();
-                
+
                 double scaleX = frameWidth / size.width;
                 double scaleY = frameHeight / size.height;
 
@@ -189,7 +189,7 @@ public class MapEditorGLView extends GLCanvas implements IView {
           		gl.glVertex2d(frameWidth, frameHeight);
           		gl.glVertex2d(frameWidth, 0);
           		gl.glEnd();
-          		
+
           		if(shape != null && shape instanceof CircleShape) {
       				double increment = 2.0*Math.PI/50.0;
 	                double cx = frameWidth / 2.0;
@@ -197,7 +197,7 @@ public class MapEditorGLView extends GLCanvas implements IView {
 	                gl.glColor3d(0.545098, 0.270588, 0.0745098);
 		          	for(double angle = 0; angle < 2.0*Math.PI; angle+=increment){
 		          		gl.glLineWidth(2.5F);
-		          		gl.glBegin(GL.GL_LINES); 
+		          		gl.glBegin(GL.GL_LINES);
 		          		gl.glVertex2d(cx*(1+Math.cos(angle)), cy*(1+Math.sin(angle)));
 		          		gl.glVertex2d(cx*(1+Math.cos(angle+increment)), cy*(1+Math.sin(angle+increment)));
 		          		gl.glEnd();
@@ -205,49 +205,49 @@ public class MapEditorGLView extends GLCanvas implements IView {
           		} else if (shape != null && shape instanceof TriangleShape){
           			gl.glColor3d(0.545098, 0.270588, 0.0745098);
           			gl.glLineWidth(2.5F);
-	          		gl.glBegin(GL.GL_LINES); 
+	          		gl.glBegin(GL.GL_LINES);
 	          		gl.glVertex2d(0, frameHeight);
 	          		gl.glVertex2d(frameWidth/2.0, 0);
 	          		gl.glEnd();
-	          		
+
 	          		gl.glLineWidth(2.5F);
-	          		gl.glBegin(GL.GL_LINES); 
+	          		gl.glBegin(GL.GL_LINES);
 	          		gl.glVertex2d(frameWidth/2.0, 0);
 	          		gl.glVertex2d(frameWidth, frameHeight);
 	          		gl.glEnd();
-	          		
+
 	          		gl.glLineWidth(2.5F);
-	          		gl.glBegin(GL.GL_LINES); 
+	          		gl.glBegin(GL.GL_LINES);
 	          		gl.glVertex2d(frameWidth, frameHeight);
 	          		gl.glVertex2d(0, frameHeight);
 	          		gl.glEnd();
           		} else if (shape != null && shape instanceof SquareShape){
           			gl.glColor3d(0.545098, 0.270588, 0.0745098);
           			gl.glLineWidth(2.5F);
-	          		gl.glBegin(GL.GL_LINES); 
+	          		gl.glBegin(GL.GL_LINES);
 	          		gl.glVertex2d(0, 0);
 	          		gl.glVertex2d(frameWidth, 0);
 	          		gl.glEnd();
-	          		
+
 	          		gl.glLineWidth(2.5F);
-	          		gl.glBegin(GL.GL_LINES); 
+	          		gl.glBegin(GL.GL_LINES);
 	          		gl.glVertex2d(0, 0);
 	          		gl.glVertex2d(0, frameHeight);
 	          		gl.glEnd();
-	          		
+
 	          		gl.glLineWidth(2.5F);
-	          		gl.glBegin(GL.GL_LINES); 
+	          		gl.glBegin(GL.GL_LINES);
 	          		gl.glVertex2d(frameWidth, 0);
 	          		gl.glVertex2d(frameWidth, frameHeight);
 	          		gl.glEnd();
-	          		
+
 	          		gl.glLineWidth(2.5F);
-	          		gl.glBegin(GL.GL_LINES); 
+	          		gl.glBegin(GL.GL_LINES);
 	          		gl.glVertex2d(frameWidth, frameHeight);
 	          		gl.glVertex2d(0, frameHeight);
 	          		gl.glEnd();
           		}
-	          	
+
           		/*
           		 * Draw Obstacles
           		 */
@@ -285,20 +285,20 @@ public class MapEditorGLView extends GLCanvas implements IView {
             					double y = o.getPosition().getY();
             					double w = o.getWidth()+selectionSize;
             					double h = o.getHeight()+selectionSize;
-            							 
+
             					Color c = selectionColor;
             					gl.glColor3d((double) c.getRed() / (double) 255,
             							(double) c.getGreen() / (double) 255,
             							(double) c.getBlue() / (double) 255);
             					gl.glLineWidth(2.5F);
             					gl.glBegin(GL.GL_POLYGON);
-            					
+
             					Position p = new Position(x - w,y - h);
             					p = o.toObstacleCoordinates(p);
             					p.setPosition(-p.getX()+x,p.getY()+y);
             					gl.glVertex2d(p.getX()*xScale,
             							frameHeight - p.getY()*yScale);
-            					
+
             					p.setPosition(x + w,y - h);
             					p = o.toObstacleCoordinates(p);
             					p.setPosition(-p.getX()+x,p.getY()+y);
@@ -316,7 +316,7 @@ public class MapEditorGLView extends GLCanvas implements IView {
             					p.setPosition(-p.getX()+x,p.getY()+y);
             					gl.glVertex2d(p.getX()*xScale,
             							frameHeight - p.getY()*yScale);
-            					
+
             					gl.glEnd();
             				} else if (o != null && o instanceof TriangleObstacle) {
             					double xScale = frameWidth / size.width;
@@ -331,13 +331,13 @@ public class MapEditorGLView extends GLCanvas implements IView {
             							(double) c.getBlue() / (double) 255);
             					gl.glLineWidth(2.5F);
             					gl.glBegin(GL.GL_TRIANGLES);
-            					
+
             					Position p = new Position(x + w,y - h);
             					p = o.toObstacleCoordinates(p);
             					p.setPosition(-p.getX()+x,p.getY()+y);
             					gl.glVertex2d(p.getX()*xScale,
             							frameHeight - p.getY()*yScale);
-            					
+
             					p.setPosition(x - w,y - h);
             					p = o.toObstacleCoordinates(p);
             					p.setPosition(-p.getX()+x,p.getY()+y);
@@ -383,20 +383,20 @@ public class MapEditorGLView extends GLCanvas implements IView {
     					double y = o.getPosition().getY();
     					double w = o.getWidth();
     					double h = o.getHeight();
-    							 
+
     					Color c = o.getColor();
     					gl.glColor3d((double) c.getRed() / (double) 255,
     							(double) c.getGreen() / (double) 255,
     							(double) c.getBlue() / (double) 255);
     					gl.glLineWidth(2.5F);
     					gl.glBegin(GL.GL_POLYGON);
-    					
+
     					Position p = new Position(x - w,y - h);
     					p = o.toObstacleCoordinates(p);
     					p.setPosition(-p.getX()+x,p.getY()+y);
     					gl.glVertex2d(p.getX()*xScale,
     							frameHeight - p.getY()*yScale);
-    					
+
     					p.setPosition(x + w,y - h);
     					p = o.toObstacleCoordinates(p);
     					p.setPosition(-p.getX()+x,p.getY()+y);
@@ -414,7 +414,7 @@ public class MapEditorGLView extends GLCanvas implements IView {
     					p.setPosition(-p.getX()+x,p.getY()+y);
     					gl.glVertex2d(p.getX()*xScale,
     							frameHeight - p.getY()*yScale);
-    					
+
     					gl.glEnd();
     				} else if (o != null && o instanceof TriangleObstacle) {
     					double xScale = frameWidth / size.width;
@@ -429,13 +429,13 @@ public class MapEditorGLView extends GLCanvas implements IView {
     							(double) c.getBlue() / (double) 255);
     					gl.glLineWidth(2.5F);
     					gl.glBegin(GL.GL_TRIANGLES);
-    					
+
     					Position p = new Position(x + w,y - h);
     					p = o.toObstacleCoordinates(p);
     					p.setPosition(-p.getX()+x,p.getY()+y);
     					gl.glVertex2d(p.getX()*xScale,
     							frameHeight - p.getY()*yScale);
-    					
+
     					p.setPosition(x - w,y - h);
     					p = o.toObstacleCoordinates(p);
     					p.setPosition(-p.getX()+x,p.getY()+y);
@@ -450,20 +450,20 @@ public class MapEditorGLView extends GLCanvas implements IView {
 
     					gl.glEnd();
     				}
-          			
+
           		}
-          		
-//        		
+
+//
 //        		/* Information print, comment out to increase performance. */
 //        		Long totalTime = System.currentTimeMillis() - start;
 //        		StringBuffer sb = new StringBuffer("OpenGL Redraw! Fps: ");
 //        		sb.append(getNewFps());
 //        		//sb.append(" Rendertime in ms: ");
 //        		//sb.append(totalTime);
-//            	System.out.println(sb.toString());	
+//            	System.out.println(sb.toString());
         		/* End Information print. */
             }
-            
+
         	public void clearZoom() {
     			zoomValue = 0;
 			}
@@ -474,7 +474,7 @@ public class MapEditorGLView extends GLCanvas implements IView {
         			zoomValue = 0;
         		}
 			}
-        	
+
 			public void zoomIn() {
         		zoomValue = zoomValue + 20;
 			}
@@ -483,12 +483,12 @@ public class MapEditorGLView extends GLCanvas implements IView {
         		return Math.sqrt((x*x)+(y*y));
         	}
 
- 
+
             @Override
             public void init(GLAutoDrawable drawable) {
 
             }
-            
+
            /**
             * Called by the drawable during the first repaint after the component has been resized. The
             * client can update the viewport and view volume of the window appropriately, for example by a
@@ -523,7 +523,7 @@ public class MapEditorGLView extends GLCanvas implements IView {
                     gl.glDisable(GL.GL_DEPTH_TEST);
                   //Setting the clear color (in this case black)
                   //and clearing the buffer with this set clear color
-                    gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);  
+                    gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
                     gl.glClear(GL.GL_COLOR_BUFFER_BIT);
                   //This defines how to blend when a transparent graphics
                   //is placed over another (here we have blended colors of
@@ -531,16 +531,16 @@ public class MapEditorGLView extends GLCanvas implements IView {
                     gl.glBlendFunc (GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
                     gl.glEnable (GL.GL_BLEND);
                     gl.glLoadIdentity();
-                  //After this we start the drawing of object  
+                  //After this we start the drawing of object
                   //We want to draw a triangle which is a type of polygon
- 
+
             }
 
 			@Override
 			public void displayChanged(GLAutoDrawable arg0, boolean arg1,
 					boolean arg2) {
-				
-			}     
+
+			}
     }
 
 	@Override
@@ -549,17 +549,17 @@ public class MapEditorGLView extends GLCanvas implements IView {
 
 	@Override
 	public void addController(ActionListener controller) {
-		
+
 	}
 
 	@Override
 	public void onTick() {
-		
+
 	}
 
 	@Override
 	public void release() {
-		
+
 	}
 
 }

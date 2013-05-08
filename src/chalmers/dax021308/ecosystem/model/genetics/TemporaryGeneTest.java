@@ -19,22 +19,22 @@ public class TemporaryGeneTest {
 		genome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).setMutable(true);
 		genome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).setMutable(true);
 		
-		genome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).setHasRandomStartValue(true);
-		genome.getGene(GeneralGeneTypes.GROUPING_COHESION).setHasRandomStartValue(true);
-		genome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).setHasRandomStartValue(true);
-		genome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).setHasRandomStartValue(true);
+		genome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).setRandomStartValue(true);
+		genome.getGene(GeneralGeneTypes.GROUPING_COHESION).setRandomStartValue(true);
+		genome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).setRandomStartValue(true);
+		genome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).setRandomStartValue(true);
 		
 		IGenome<GeneralGeneTypes, IGene> deerGenome = genome.getCopy();
 		
 		for(int i=0; i<nIterations; i++) {
 			StringBuilder sb = new StringBuilder();
-			sb.append(deerGenome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).getCurrentValue());
+			sb.append(deerGenome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).getCurrentDoubleValue());
 			sb.append(" | ");
-			sb.append(deerGenome.getGene(GeneralGeneTypes.GROUPING_COHESION).getCurrentValue());
+			sb.append(deerGenome.getGene(GeneralGeneTypes.GROUPING_COHESION).getCurrentDoubleValue());
 			sb.append(" | ");
-			sb.append(deerGenome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).getCurrentValue());
+			sb.append(deerGenome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).getCurrentDoubleValue());
 			sb.append(" | ");
-			sb.append(deerGenome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).getCurrentValue());
+			sb.append(deerGenome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).getCurrentDoubleValue());
 			System.out.println(sb.toString());
 			deerGenome = deerGenome.onlyMutate();
 		}

@@ -35,7 +35,7 @@ public class DeerAgentTest {
 	//private IShape shape;
 	//private Dimension dimension;
 	private SurroundingsSettings surroundings;
-	
+
 	@Before
 	public void init() {
 		name = "Deer test";
@@ -52,28 +52,28 @@ public class DeerAgentTest {
 		//shape = new SquareShape();
 		//dimension = new Dimension(50, 50);
 		surroundings = new SurroundingsSettings(new Dimension(50, 50), new SquareShape(), null);
-		
+
 	}
-		
+
 	@Test
 	public void reproduceTest() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		Field hungryField = DeerAgent.class.getDeclaredField("hungry");
 		hungryField.setAccessible(true);
 		assertTrue(hungryField.get(deerTest).equals(true));
 		//assertEquals(null, deerTest.reproduce(null, 0, null, null, null));
-		SurroundingsSettings temp = new SurroundingsSettings(null, null, null);
+		SurroundingsSettings temp = new SurroundingsSettings(null);
 		assertEquals(null, deerTest.reproduce(null, 0, temp));
 		hungryField.set(deerTest, false);
 		assertTrue(hungryField.get(deerTest).equals(false));
-		
+
 		List<IAgent> children;
 		do {
 			children = deerTest.reproduce(null, 0, surroundings);
 			hungryField.set(deerTest, false);
-		} while (children.size() == 0); 
-		
+		} while (children.size() == 0);
+
 		IAgent child = children.get(0);
-		
+
 		assertEquals(deerTest.getName(), child.getName());
 		assertTrue(!deerTest.getPosition().equals(child.getPosition()));
 		assertEquals(deerTest.getColor(), child.getColor());

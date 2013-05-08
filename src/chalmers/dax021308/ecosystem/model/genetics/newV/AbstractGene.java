@@ -3,35 +3,45 @@
  */
 package chalmers.dax021308.ecosystem.model.genetics.newV;
 
+import java.util.Random;
+
 /**
  * @author Loanne Berggren
  *
  */
 public abstract class AbstractGene implements IGene {
+	protected final double mutationProbabilityMin = 0.0;
+	protected final double mutationProbabilityMax = 1.0;
 	protected double mutationProbability = 0.1;
 	protected boolean isMutable = false;
 	protected boolean randomStartValue = false;
-	
+	protected boolean geneActiveStatus = true;
+	protected Random randomGenerator = new Random();
+
 	/**
-	 * 
+	 *
 	 */
 	public abstract void mutate();
 
 	/**
 	 * @param currentValue
 	 */
-	public abstract void setCurrentValue(Object currentValue);
+	public void setCurrentDoubleValue(double currentValue){
+		// nothing
+	}
 
 	/**
 	 * @return
 	 */
-	public abstract Object getCurrentValue();
-	
+	public double getCurrentDoubleValue(){
+		return 0.0;
+	}
+
 	/* (non-Javadoc)
 	 * @see chalmers.dax021308.ecosystem.model.genetics.newV.IGene#getMutationProbaility()
 	 */
 	@Override
-	public double getMutationProbaility() {
+	public double getMutationProbability() {
 		return this.mutationProbability;
 	}
 
@@ -39,24 +49,30 @@ public abstract class AbstractGene implements IGene {
 	 * @see chalmers.dax021308.ecosystem.model.genetics.newV.IGene#setMutationProbaility(double)
 	 */
 	@Override
-	public void setMutationProbaility(double mutationProbability) {
+	public void setMutationProbability(double mutationProbability) {
+		// Validate minMutProb <= mutationProbability <= maxMutProb
+		if ( (mutationProbability < mutationProbabilityMin) || (mutationProbability > mutationProbabilityMax) ) {
+			throw new IllegalArgumentException("Mutation probability should be in range " +
+					mutationProbabilityMin + "-" + mutationProbabilityMax);
+		}
 		this.mutationProbability = mutationProbability;
 	}
 
-	/* (non-Javadoc)
-	 * @see chalmers.dax021308.ecosystem.model.genetics.newV.IGene#hasGene()
+	/**
+	 * @return the haveGene
 	 */
 	@Override
-	public boolean haveGene() {
-		throw new UnsupportedOperationException("haveGene");
+	public boolean isGeneActive() {
+		return this.geneActiveStatus;
 	}
 
-	/* (non-Javadoc)
-	 * @see chalmers.dax021308.ecosystem.model.genetics.newV.IGene#setHasGene(boolean)
+	/**
+	 * @param hasGene
+	 *            the hasGene to set
 	 */
 	@Override
 	public void setHaveGene(boolean haveGene) {
-		throw new UnsupportedOperationException("setHaveGene");
+		this.geneActiveStatus = haveGene;
 	}
 
 	/* (non-Javadoc)
@@ -75,30 +91,46 @@ public abstract class AbstractGene implements IGene {
 		this.isMutable = isMutable;
 	}
 
-	/* (non-Javadoc)
-	 * @see chalmers.dax021308.ecosystem.model.genetics.newV.IGene#setMinValue(double)
-	 */
-	@Override
-	public void setMinValue(double minValue) {
-		throw new UnsupportedOperationException("setMinValue");
-	}
-
-	/* (non-Javadoc)
-	 * @see chalmers.dax021308.ecosystem.model.genetics.newV.IGene#setMaxValue(double)
-	 */
-	@Override
-	public void setMaxValue(double maxValue) {
-		throw new UnsupportedOperationException("setMaxValue");
-	}
-
 	@Override
 	public boolean hasRandomStartValue() {
 		return this.randomStartValue;
 	}
-	
+
 	@Override
-	public void setHasRandomStartValue(boolean random) {
+	public void setRandomStartValue(boolean random) {
 		this.randomStartValue = random;
 	}
-	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(this.mutationProbabilityMax);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(this.mutationProbabilityMin);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AbstractGene other = (AbstractGene) obj;
+		if (Double.doubleToLongBits(this.mutationProbabilityMax) != Double
+				.doubleToLongBits(other.mutationProbabilityMax))
+			return false;
+		if (Double.doubleToLongBits(this.mutationProbabilityMin) != Double
+				.doubleToLongBits(other.mutationProbabilityMin))
+			return false;
+		return true;
+	}
+
+
+
 }

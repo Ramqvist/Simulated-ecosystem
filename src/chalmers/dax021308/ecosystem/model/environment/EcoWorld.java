@@ -44,15 +44,15 @@ import chalmers.dax021308.ecosystem.model.util.shape.TriangleShape;
  * Recieves notifications from the {@link TimerHandler} and the
  * {@link IEnvironment}.
  * <p>
- * 
+ *
  * !!! Please don't auto-indent this class, thanks !!!
- * 
+ *
  * @author Erik Ramqvist
- * 
+ *
  */
 public class EcoWorld implements IModel {
 
-	/* Property change events constants */	
+	/* Property change events constants */
 	public static final String EVENT_TICK 					= "chalmers.dax021308.ecosystem.model.Ecoworld.event_tick";
 	public static final String EVENT_STOP 					= "chalmers.dax021308.ecosystem.model.Ecoworld.event_stop";
 	public static final String EVENT_START 					= "chalmers.dax021308.ecosystem.model.Ecoworld.event_start";
@@ -89,12 +89,12 @@ public class EcoWorld implements IModel {
 	private double elapsedTime;
 	private Stat<Double> statTime;
 	private List<Stat<Double>> allSimulationStats;
-	
+
 	/* Sebastians print to file settings */
 	private boolean printToFile = false;
 	private boolean started = false;
 	private int toFileInterval = 20000;
-	
+
 	/**
 	 * Simple object, used for synchronizing the {@link TimerHandler} and the
 	 * {@link IEnvironment} {@link OnFinishListener}. This object makes the
@@ -140,7 +140,7 @@ public class EcoWorld implements IModel {
 				try {
 					pause();
 				} catch (IllegalStateException se) {
-					
+
 				}
 			}
 			// double observerTime = (0.000001 * (System.nanoTime() - start));
@@ -242,7 +242,7 @@ public class EcoWorld implements IModel {
 	 * Load a {@link SimulationSettings} into EcoWorld.
 	 * <p>
 	 * The simulation should be stopped before loading.
-	 * 
+	 *
 	 * @param s
 	 * @throws IllegalArgumentException
 	 */
@@ -273,7 +273,7 @@ public class EcoWorld implements IModel {
 		} else {
 			surroundings.setObstacles(new ArrayList<IObstacle>());
 		}
-		
+
 		statTime = new Stat<Double>();
 
 		IPopulation prey = null;
@@ -292,26 +292,26 @@ public class EcoWorld implements IModel {
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
 		}
 		surroundings.setWorldShape(shape);
-		
+
 		SurroundingsSettings grassSourroundings = new SurroundingsSettings(GrassSettings.instance.obstacle_safety_distance.value);
 		SurroundingsSettings preySourroundings = new SurroundingsSettings(PreySettings.instance.obstacle_safety_distance.value);
 		SurroundingsSettings predSourroundings = new SurroundingsSettings(PredSettings.instance.obstacle_safety_distance.value);
-		
+
 		if (s.getPredatorModel() == SimulationSettings.POP_DUMMYPRED) {
 			pred = new DummyPredatorPopulation(s.getPredPopSize(),
 					Color.red, 3, 0.75, 275, predSourroundings);
 		} else if (s.getPredatorModel() == SimulationSettings.POP_WOLF) {
 			pred = new WolfPopulation("Wolves", s.getPredPopSize(), Color.red,
-					PredSettings.instance.maxSpeed.value, 
-					PredSettings.instance.maxAcceleration.value, 
-					PredSettings.instance.visionRange.value, 
+					PredSettings.instance.maxSpeed.value,
+					PredSettings.instance.maxAcceleration.value,
+					PredSettings.instance.visionRange.value,
 					true, predSourroundings);
 		}
 
 		if (s.getPreyModel() == SimulationSettings.POP_DEER) {
 			prey = new DeerPopulation("Deers", s.getPreyPopSize(), Color.blue,
-					PreySettings.instance.maxSpeed.value, 
-					PreySettings.instance.maxAcceleration.value, 
+					PreySettings.instance.maxSpeed.value,
+					PreySettings.instance.maxAcceleration.value,
 					PreySettings.instance.visionRange.value,
 					true, preySourroundings);
 		} else if (s.getPreyModel() == SimulationSettings.POP_DUMMYPREY) {
@@ -323,13 +323,13 @@ public class EcoWorld implements IModel {
 		}
 
 		if (s.getGrassModel() == SimulationSettings.POP_GRASS) {
-			grass = new GrassPopulation("Grass", s.getGrassPopSize(), new Color(69, 139, 00), 
+			grass = new GrassPopulation("Grass", s.getGrassPopSize(), new Color(69, 139, 00),
 					(int) GrassSettings.instance.capacity.value, grassSourroundings);
 		} else if (s.getGrassModel() == SimulationSettings.POP_GRASS_FIELD) {
 			grass = new GrassFieldPopulation(SimulationSettings.NAME_GRASS_FIELD, s.getGrassPopSize(),
 					Color.green, 80, grassSourroundings);
 		}
-		
+
 		// TODO Shouldn't shape == null be before creating populations?
 		if (prey == null || pred == null || grass == null || surroundings.getWorldShape() == null) {
 			throw new IllegalArgumentException("Wrong populations set.");
@@ -363,7 +363,7 @@ public class EcoWorld implements IModel {
 
 	/**
 	 * Loads a simulation from the given filePath.
-	 * 
+	 *
 	 * @param selectedFile
 	 */
 	public boolean loadRecordedSimulation(File selectedFile) {
@@ -399,7 +399,7 @@ public class EcoWorld implements IModel {
 
 	/**
 	 * Saves the recording to a file.
-	 * 
+	 *
 	 * @param f
 	 */
 	public boolean saveRecordingToFile(File f) {
@@ -419,7 +419,7 @@ public class EcoWorld implements IModel {
 	 * Start the EcoWorld simulation program.
 	 * <p>
 	 * If already started {@link IllegalStateException} will be thrown.
-	 * 
+	 *
 	 */
 	public void start() throws IllegalStateException {
 		synchronized (syncObject) {
@@ -447,7 +447,7 @@ public class EcoWorld implements IModel {
 	 * Warning! WILL affect ongoing execution!
 	 * <p>
 	 * If already stopped {@link IllegalStateException} will be thrown.
-	 * 
+	 *
 	 */
 	public void pause() throws IllegalStateException {
 		synchronized (syncObject) {
@@ -474,7 +474,7 @@ public class EcoWorld implements IModel {
 	 * Warning! WILL affect ongoing execution!
 	 * <p>
 	 * If already stopped {@link IllegalStateException} will be thrown.
-	 * 
+	 *
 	 */
 	public void stop() throws IllegalStateException {
 		synchronized (syncObject) {
@@ -569,9 +569,9 @@ public class EcoWorld implements IModel {
 			try {
 				executor.execute(env);
 			} catch (RejectedExecutionException e) {
-				
+
 			}
-		
+
 			if(printToFile) {
 				if(!started && numIterations < Integer.MAX_VALUE-1) {
 					started = true;
@@ -600,8 +600,8 @@ public class EcoWorld implements IModel {
 					}
 					endIterationTime = System.nanoTime();
 					if(success){
-					System.out.println("Printed last end values at iteration: " + (Integer.MAX_VALUE-numIterations) + ". It took " + 
-							Stat.roundNDecimals(0.000000001*(endIterationTime-startIterationTime), 2) + 
+					System.out.println("Printed last end values at iteration: " + (Integer.MAX_VALUE-numIterations) + ". It took " +
+							Stat.roundNDecimals(0.000000001*(endIterationTime-startIterationTime), 2) +
 							" Seconds since last print.");
 					} else {
 						System.out.println(failPop.getName() + " died.");
@@ -641,7 +641,7 @@ public class EcoWorld implements IModel {
 	/**
 	 * Adjust the tick rate of the next iteration. The currently executing
 	 * iteration will not be affected.
-	 * 
+	 *
 	 * @param newTickRate
 	 */
 	public void setDelayLength(int newDelay) {
@@ -653,9 +653,9 @@ public class EcoWorld implements IModel {
 
 	/**
 	 * Tick listener for the TimerHandler. Called when timer has expired.
-	 * 
+	 *
 	 * @author Erik
-	 * 
+	 *
 	 */
 	public interface OnTickUpdate {
 		public void onTick();
@@ -672,9 +672,9 @@ public class EcoWorld implements IModel {
 	/**
 	 * Environment onFinish listener. Called when one iteration of the
 	 * Environment is done.
-	 * 
+	 *
 	 * @author Erik
-	 * 
+	 *
 	 */
 	public interface OnFinishListener {
 		public void onFinish(List<IPopulation> popList,
@@ -694,7 +694,7 @@ public class EcoWorld implements IModel {
 	public void setHeapmatPopulation(String selectedPop) {
 		observers.firePropertyChange(EVENT_HEATMAP_POPCHANGE, null, selectedPop);
 	}
-	
+
 	private static synchronized boolean savePopulationToFile(File dest, IPopulation pop) {
 		if(pop.getSize()<=0) {
 			return false;
@@ -715,7 +715,8 @@ public class EcoWorld implements IModel {
 			e.printStackTrace();
 			return false;
 		} finally {
-			pw.close();
+			if (pw != null)
+				pw.close();
 		}
 	}
 

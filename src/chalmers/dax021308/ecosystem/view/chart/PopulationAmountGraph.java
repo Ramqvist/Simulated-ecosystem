@@ -11,23 +11,23 @@ import info.monitorenter.gui.chart.traces.Trace2DSorted;
 import info.monitorenter.util.Range;
 
 /**
- * 
- * 
- * 
+ *
+ *
+ *
  * Shows population amount over iterations.
- * 
+ *
  * @author Loanne Berggren
- * 
+ *
  */
 public class PopulationAmountGraph extends AbstractGraph2D {
 
-	public PopulationAmountGraph(IModel model, int updateFrequency) {
-		super(model, updateFrequency, "Iterations", "Population amount");
+	public PopulationAmountGraph(IModel model, int updateFrequency, String title, String xTitle, String yTitle) {
+		super(model, updateFrequency, title, xTitle, yTitle);
 		init();
 	}
 
 	@Override
-	public void init() {    
+	public void init() {
 		this.rangeX = new Range(0, 1000);
 		this.rangeY = new Range(0, 500);
 		super.init();
@@ -36,12 +36,12 @@ public class PopulationAmountGraph extends AbstractGraph2D {
 	}
 
 	/*
-	 * 
+	 *
 	 */
 	private void initializeTraces(List<IPopulation> populations){
 		ITrace2D newTrace;
-		for (IPopulation p: populations) {		
-			String name = p.getName();	
+		for (IPopulation p: populations) {
+			String name = p.getName();
 			if (name != null) {
 				newTrace = new Trace2DSorted();
 				newTrace.setName(name);
@@ -58,7 +58,7 @@ public class PopulationAmountGraph extends AbstractGraph2D {
 
 	@Override
 	public void onTick() {
-		// TODO Auto-generated method stub	
+		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -66,37 +66,40 @@ public class PopulationAmountGraph extends AbstractGraph2D {
 		this.removeAllTraces().clear();
 		this.removeAll();
 	}
-	
+
 	@Override
 	protected void onStart(Object object) {
 		// Nothing
-		
+
 	}
-	
-	@Override
-	protected void onStop(Object object){
+
+	protected void resetChart(){
+		super.resetChart();
 		this.removeAllTraces().clear();
-		this.nIterationsPassed = 0;
 	}
+
+	@Override
+	protected void onStop(Object object){}
+
 	@Override
 	public void onTick(Object object) {
-		if (nIterationsPassed % updateFrequency != 0)
+		if (getIterationsPassed() % updateFrequency != 0)
 			return;
 		List<IPopulation> populations = null;
-		
+
 		if(!(object instanceof List<?>)) {
 			return;
-		} 
-		
+		}
+
 		populations = (List<IPopulation>) object;
-		if(populations != null) {		
+		if(populations != null) {
 			if (this.getTraces().size() == 0) {
 				// initialize traces
 				initializeTraces(populations);
 			}
 			updateGraph(populations);
 		}
-		
+
 	}
 	/*
 	 * update points for each population.
@@ -105,7 +108,7 @@ public class PopulationAmountGraph extends AbstractGraph2D {
 		Iterator<ITrace2D> it = this.getTraces().iterator();
 		for (IPopulation p: populations) {
 			if (it.hasNext()) {
-				((ITrace2D) it.next()).addPoint(nIterationsPassed, p.getSize());
+				((ITrace2D) it.next()).addPoint(getIterationsPassed(), p.getSize());
 			}
 			else
 				return;
@@ -117,6 +120,15 @@ public class PopulationAmountGraph extends AbstractGraph2D {
 	@Override
 	protected void onPause(Object object) {
 		// Nothing
+	}
+
+	/* (non-Javadoc)
+	 * @see chalmers.dax021308.ecosystem.view.chart.AbstractGraph2D#onIterationFinished(java.lang.Object)
+	 */
+	@Override
+	protected void onIterationFinished(Object object) {
+
+
 	}
 }
 

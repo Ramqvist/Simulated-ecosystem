@@ -12,52 +12,38 @@ import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
 public class Chromosome implements IChromosome<GeneralGeneTypes, IGene> {
 
 	protected Map<GeneralGeneTypes, IGene> chromosomeMap;
-	protected double mutationProbability;
-	
+
 	public Chromosome() {
-		this.chromosomeMap = makeNewMap();
-		this.mutationProbability = 0.1;
+		this.chromosomeMap = makeNewMap(null);
 	}
-	
-	private Chromosome(Map<GeneralGeneTypes,IGene> chromosome, double mutProb) {
+
+	private Chromosome(Map<GeneralGeneTypes,IGene> chromosome) {
 		this.chromosomeMap = makeNewMap(chromosome);
-		this.mutationProbability = mutProb;
 	}
-	
-	private Map<GeneralGeneTypes, IGene> makeNewMap(){
+
+	/*private Map<GeneralGeneTypes, IGene> makeNewMap(){
 		return new EnumMap<GeneralGeneTypes, IGene>(GeneralGeneTypes.class);
-	}
-	
+	}*/
+
 	private Map<GeneralGeneTypes, IGene> makeNewMap(Map<GeneralGeneTypes,IGene> chromosome){
-		
+
 		Map<GeneralGeneTypes,IGene> newChromosome = new EnumMap<GeneralGeneTypes, IGene>(GeneralGeneTypes.class);
-		
-		Iterator<Entry<GeneralGeneTypes,IGene>> it = chromosome.entrySet().iterator();
-		while(it.hasNext()) {
-			Entry<GeneralGeneTypes,IGene> entry = it.next();
-			newChromosome.put(entry.getKey(), entry.getValue().getCopy());
-//			System.out.println(entry.getKey());
+		if (chromosome != null) {
+			Iterator<Entry<GeneralGeneTypes,IGene>> it = chromosome.entrySet().iterator();
+			while(it.hasNext()) {
+				Entry<GeneralGeneTypes,IGene> entry = it.next();
+				newChromosome.put(entry.getKey(), entry.getValue().getCopy());
+	//			System.out.println(entry.getKey());
+			}
 		}
-		
+
 		return newChromosome;
 	}
-	
+
 	@Override
 	public IChromosome<GeneralGeneTypes, IGene> getCopy(){
-		return new Chromosome(this.chromosomeMap, this.mutationProbability);
+		return new Chromosome(this.chromosomeMap);
 	}
-
-	@Override
-	public double getMutationProbabilty() {
-		return this.mutationProbability;
-	}
-
-	@Override
-	public void setMutationProbabilty(double mutationProbability) {
-		this.mutationProbability = mutationProbability;
-		
-	}
-
 
 	@Override
 	public int getNumberOfGenes() {
@@ -68,7 +54,7 @@ public class Chromosome implements IChromosome<GeneralGeneTypes, IGene> {
 	@Override
 	public void addGene(GeneralGeneTypes geneType, IGene gene) {
 		this.chromosomeMap.put(geneType, gene);
-		
+
 	}
 
 	@Override
@@ -88,17 +74,21 @@ public class Chromosome implements IChromosome<GeneralGeneTypes, IGene> {
 	 * @see chalmers.dax021308.ecosystem.model.genetics.newV.NewIChromosome#getGeneCurrentValue(java.lang.Object)
 	 */
 	@Override
-	public Object getGeneCurrentValue(GeneralGeneTypes geneType) {
-		return this.chromosomeMap.get(geneType).getCurrentValue();
+	public double getGeneCurrentDoubleValue(GeneralGeneTypes geneType) {
+		if (chromosomeMap.containsKey(geneType))
+			return chromosomeMap.get(geneType).getCurrentDoubleValue();
+		else
+			throw new IllegalArgumentException(geneType.name() + " is not part of this" +
+					" chromosome.");
 	}
 
 	/* (non-Javadoc)
 	 * @see chalmers.dax021308.ecosystem.model.genetics.newV.NewIChromosome#setCurrentValue(java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public void setCurrentValue(GeneralGeneTypes geneType, Object currentValue) {
-		this.chromosomeMap.get(geneType).setCurrentValue(currentValue);
-		
+	public void setCurrentDoubleValue(GeneralGeneTypes geneType, double currentValue) {
+		if (chromosomeMap.containsKey(geneType))
+			chromosomeMap.get(geneType).setCurrentDoubleValue(currentValue);
 	}
 
 	/* (non-Javadoc)
@@ -109,7 +99,7 @@ public class Chromosome implements IChromosome<GeneralGeneTypes, IGene> {
 		for(IGene g : this.chromosomeMap.values()){
 			g.mutate();
 		}
-		
+
 	}
 
 	/* (non-Javadoc)
@@ -117,7 +107,20 @@ public class Chromosome implements IChromosome<GeneralGeneTypes, IGene> {
 	 */
 	@Override
 	public IGene getGene(GeneralGeneTypes geneType) {
-		return (IGene) this.chromosomeMap.get(geneType);
+		if (chromosomeMap.containsKey(geneType))
+			return (IGene) this.chromosomeMap.get(geneType);
+		else
+			throw new IllegalArgumentException(geneType.name() + " is not part of this" +
+					" chromosome.");
+
+	}
+
+	/* (non-Javadoc)
+	 * @see chalmers.dax021308.ecosystem.model.genetics.newV.IChromosome#isGeneActive(java.lang.Object)
+	 */
+	@Override
+	public boolean isGeneActive(GeneralGeneTypes geneType) {
+		return this.chromosomeMap.get(geneType).isGeneActive();
 	}
 
 }

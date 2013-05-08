@@ -80,7 +80,7 @@ public class MainWindow extends JFrame implements IView {
 		smvc = new NEWSettingsMenuViewController(model, this);
 		heatMap = new HeatmapTabHolder(model);
 		bottomTabbedGraphs = new BottomChartTabs(model);
-		graphView2 = ChartProvider.makeChart(ChartProvider.ChartType.GROUPING_PROPORTION_GRAPH, model);
+		graphView2 = ChartProvider.getChart(ChartProvider.ChartType.GROUPING_PROPORTION_GRAPH, model);
 		
 		menuBar = new MenuBar();
 		setMenuBar(menuBar);

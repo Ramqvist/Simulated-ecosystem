@@ -53,15 +53,15 @@ public class DeerPopulation extends AbstractPopulation {
 			}
 			
 			IGenome<GeneralGeneTypes, IGene> genome = GeneticSettings.preySettings.getGenome().getCopy();
-			genome.getGene(GeneralGeneTypes.ISGROUPING).haveGene();
-			genome.getGene(GeneralGeneTypes.GROUPING_COHESION).setHasRandomStartValue(false);
-			genome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).setHasRandomStartValue(false);
-			genome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).setHasRandomStartValue(false);
-			genome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).setHasRandomStartValue(false);
-			genome.getGene(GeneralGeneTypes.ISSTOTTING).setHasRandomStartValue(false);
-			genome.getGene(GeneralGeneTypes.STOTTINGRANGE).setHasRandomStartValue(false);
-			genome.getGene(GeneralGeneTypes.STOTTINGLENGTH).setHasRandomStartValue(false);
-			genome.getGene(GeneralGeneTypes.STOTTINGANGLE).setHasRandomStartValue(false);
+			genome.getGene(GeneralGeneTypes.ISGROUPING).isGeneActive();
+			genome.getGene(GeneralGeneTypes.GROUPING_COHESION).setRandomStartValue(false);
+			genome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).setRandomStartValue(false);
+			genome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).setRandomStartValue(false);
+			genome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).setRandomStartValue(false);
+			genome.getGene(GeneralGeneTypes.ISSTOTTING).setRandomStartValue(false);
+			genome.getGene(GeneralGeneTypes.STOTTINGRANGE).setRandomStartValue(false);
+			genome.getGene(GeneralGeneTypes.STOTTINGLENGTH).setRandomStartValue(false);
+			genome.getGene(GeneralGeneTypes.STOTTINGANGLE).setRandomStartValue(false);
 			
 			
 			IAgent a = new DeerAgent("Deer", randPos,

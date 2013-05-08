@@ -24,33 +24,33 @@ import chalmers.dax021308.ecosystem.model.util.shape.SquareShape;
 
 /**
  * Class for testing A* algorithm.
- * 
+ *
  * @author Erik Ramqvist
  *
  */
-public class ShortestPathTester extends JPanel {
+public class ShortestPathTester extends JPanel implements Cloneable{
 	private static final long serialVersionUID = 3766084045600317521L;
 	private static final double HEURISTIC_UPSAMPLE = 1;
 	private static final long ITERATION_TIME = 20;
 	private static final double coordinateScaling = 10;
 	private static final Dimension simulationDimension = new Dimension(750, 750);
-	
+
 	private static HashSet<AStarPosition> closedSet;
 	private static HashSet<AStarPosition> openSet;
 	private static AStarPosition current;
-	
+
 	private static List<IObstacle> obsList = new ArrayList<IObstacle>();
 	static {
 		obsList.add(new RectangularObstacle(200, 50, new Position(250, 400), Color.GRAY,0, true));
 		obsList.add(new RectangularObstacle(50, 200, new Position(400, 250), Color.GRAY,0, true));
 	}
-	
+
 	private AStarPosition start;
 	private AStarPosition goal;
 	private List<Position> result;
 	private AStarPosition jumpNode;
-	
-	
+
+
 	public ShortestPathTester() {
 
 		JFrame frame = new JFrame();
@@ -59,9 +59,9 @@ public class ShortestPathTester extends JPanel {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(this);
 		setBackground(Color.WHITE);
-		
-		Position start = new Position(140.4120, 149.0); 
-		Position end = new Position(500, 500); 
+
+		Position start = new Position(140.4120, 149.0);
+		Position end = new Position(500, 500);
 		Dimension dim = new Dimension(700, 700);
 		goal = new AStarPosition(end.x, end.y);
 		if(AbstractObstacle.isInsideObstacleList(obsList, start) || AbstractObstacle.isInsideObstacleList(obsList, end)) {
@@ -122,7 +122,7 @@ public class ShortestPathTester extends JPanel {
 
 		repaint();
 	}
-	
+
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
@@ -144,7 +144,7 @@ public class ShortestPathTester extends JPanel {
 		if(openSet != null) {
 			for(AStarPosition a : openSet) {
 				drawAStarPosition(a, g, Color.BLUE);
-				
+
 			}
 		}
 		if(current != null) {
@@ -154,7 +154,7 @@ public class ShortestPathTester extends JPanel {
 		if(jumpNode != null) {
 				drawAStarPosition(jumpNode, g, Color.BLACK);
 		}
-		
+
 		if(result != null) {
 			for(Position a : result) {
 				drawAStarPosition(a, g, Color.RED);
@@ -166,8 +166,8 @@ public class ShortestPathTester extends JPanel {
 		}
 	}
 
-	
-	
+
+
 	private void drawAStarPosition(Position p, Graphics g, Color c) {
 		//draw position
 		g.setColor(c);
@@ -176,7 +176,7 @@ public class ShortestPathTester extends JPanel {
 				(int) coordinateScaling,
 				(int) coordinateScaling);
 	}
-	
+
 	public List<Position> getShortestPath(Position startPos, Position endPos, List<IObstacle> obsList) {
 		double distance = startPos.getDistance(endPos);
 		if(distance > 55) {
@@ -189,10 +189,10 @@ public class ShortestPathTester extends JPanel {
 			goal = new AStarPosition(newEnd.x, newEnd.y);
 //			Log.e(newEnd + " " + newStartPos);
 			return getShortestPathJumpPointsSearch(newStartPos, newEnd, obsList, coordinateScaling);
-		} 
+		}
 		return getShortestPathJumpPointsSearch(startPos, endPos, obsList, 1);
 	}
-	
+
 	/**
 	 * Calculates the shortest path to the target using A* search algorithm.
 	 * <p>
@@ -200,9 +200,9 @@ public class ShortestPathTester extends JPanel {
 	 * <p>
 	 * TODO: Supply a obstacle-list and Shape?
 	 * TODO: Make private when finished.
-	 * 
+	 *
 	 * For use with target agents behind obstacles.
-	 * 
+	 *
 	 * @see <a href="http://en.wikipedia.org/wiki/A*_search_algorithm">http://en.wikipedia.org/wiki/A*_search_algorithm</a>
 	 * @param target
 	 * @return
@@ -225,14 +225,14 @@ public class ShortestPathTester extends JPanel {
 			Log.v("current" + current);
 			Log.v("--------");
 			current = openSet.poll();
-			
+
 			//Slow down to see movement.
-			
+
 			repaint();
 			try {
 				Thread.sleep(ITERATION_TIME);
 			} catch (InterruptedException e) {
-				
+
 			}
 			closedSet.add(current);
 			if(current.equals(goal)) {
@@ -254,12 +254,12 @@ public class ShortestPathTester extends JPanel {
 					}
 				}
 			}
-		}	
+		}
 		//Failure to find path.
 		Log.e("Failed to find path to target!");
 		return Collections.emptyList();
 	}
-	
+
 
 	/**
 	 * Calculates the shortest path to the target using A* search algorithm.
@@ -268,9 +268,9 @@ public class ShortestPathTester extends JPanel {
 	 * <p>
 	 * TODO: Supply a obstacle-list and Shape?
 	 * TODO: Make private when finished.
-	 * 
+	 *
 	 * For use with target agents behind obstacles.
-	 * 
+	 *
 	 * @see <a
 	 *      href="http://en.wikipedia.org/wiki/A*_search_algorithm">http://en.wikipedia.org/wiki/A*_search_algorithm</a>
 	 * @param target
@@ -308,7 +308,7 @@ public class ShortestPathTester extends JPanel {
 			try {
 				Thread.sleep(ITERATION_TIME);
 			} catch (InterruptedException e) {
-				
+
 			}
 			 Log.v("openset" + openSet);
 //			 Log.v("closedSet" + closedSet);
@@ -343,7 +343,7 @@ public class ShortestPathTester extends JPanel {
 		Log.e("Failed to find path to target!");
 		return Collections.emptyList();
 	}
-	
+
 
 	private static List<Position> reconstructPath(AStarPosition current_node) {
 		List<Position> result = new ArrayList<Position>();
@@ -355,7 +355,7 @@ public class ShortestPathTester extends JPanel {
 	    Collections.reverse(result);
 		return result;
 	}
-	
+
 	private static class AStarPositionComparator implements Comparator<AStarPosition> {
 
 		@Override
@@ -368,13 +368,13 @@ public class ShortestPathTester extends JPanel {
 			return 0;
 		}
 	}
-	
+
 
 	/**
 	 * Gets the neighbours of one AStarPosition.
 	 * <p>
 	 * Is shape really needed here? Since we guarantee Agents are inside the shape.
-	 * 
+	 *
 	 * @param p1
 	 * @param obsList
 	 * @param shape
@@ -426,19 +426,19 @@ public class ShortestPathTester extends JPanel {
 			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
 				neighbours.add(p2);
 			}
-			
+
 		}
 		return neighbours;
 	}
-	
-	
+
+
 
 
 	/**
 	 * Gets the neighbours of one AStarPosition.
 	 * <p>
 	 * Is shape really needed here? Since we guarantee Agents are inside the shape.
-	 * 
+	 *
 	 * @param p1
 	 * @param obsList
 	 * @param shape
@@ -490,15 +490,15 @@ public class ShortestPathTester extends JPanel {
 			if(!AbstractObstacle.isInsideObstacleList(obsList, p2)) {
 				neighbours.add(p2);
 			}
-			
+
 		}
 		return neighbours;
 	}
-	
-	
+
+
 	/**
 	 * Internal Position class for use with A* shortest path algorithm.
-	 * 
+	 *
 	 * @author Erik
 	 *
 	 */
@@ -517,18 +517,18 @@ public class ShortestPathTester extends JPanel {
 		public double getGF() {
 			return g_score+f_score;
 		}
-		
+
 		@Override
 		public String toString() {
 			return "AStarPosition G: " + g_score + " F: " + f_score + " " + super.toString();
 		}
-		
+
 		public AStarPosition shift(double x, double y) {
 			this.x += x;
 			this.y += y;
 			return this;
 		}
-		
+
 		protected double getG() {
 			if (g_score == 0) {
 				final AStarPosition parent = came_from;
@@ -544,7 +544,7 @@ public class ShortestPathTester extends JPanel {
 			double steps = getSteps(x, y, px, py);
 			return x == px || y == px ? steps : (double) steps * 1;
 		}
-		
+
 		private double getSteps(double x, double y, double px, double py) {
 			double temp;
 			if ((temp = x - px) != 0) { // straight, horizontal AND will handle
@@ -554,7 +554,7 @@ public class ShortestPathTester extends JPanel {
 				return 0;
 			return Math.abs(temp);
 		}
-		
+
 		public AStarPosition derive(double x, double y) {
 			return clone().shift(x, y);
 		}
@@ -566,36 +566,38 @@ public class ShortestPathTester extends JPanel {
 			return this;
 		}
 
-		
+
 		@Override
 		public AStarPosition clone() {
+			// TODO to override  object clone() this should implement Cloneable.
+			// Otherwise it's better to call it something else. like copy().
 			AStarPosition clone = new AStarPosition(x, y);
 			clone.came_from = this;
 			return clone;
 		}
 	}
 
-	
+
 	@SuppressWarnings("unused")
 	private static double heuristic_vector_distance(AStarPosition start, AStarPosition goal /*, List<IObstacle> obsList, IShape simShape*/) {
 	    return Math.sqrt(Math.pow(Math.abs(goal.getX() - start.getX()), 2) + Math.pow(Math.abs(goal.getY() - start.getY()), 2));
 	}
-	
+
     public static double heuristic_manhattan_distance(AStarPosition a, AStarPosition b /*, List<IObstacle> obsList, IShape simShape*/){
       //  return Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY());
         return a.getDistance(b);
-    }	
-	
+    }
+
 	public static void main(String[] args) {
 		new ShortestPathTester();
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////
 	// 	Jump points algorithm, WIP										  //
 	// 	src: http://www.nicta.com.au/pub?doc=4856						  //
 	////////////////////////////////////////////////////////////////////////
-	
-	
+
+
 	public List<Position> getShortestPathJumpPointsSearch(Position startPos, Position endPos, List<IObstacle> obsList, double coordinateUpsampling) {
 			AStarPosition start = new AStarPosition(startPos.getX(), startPos.getY());
 			AStarPosition goal = new AStarPosition(endPos.getX(), endPos.getY());
@@ -625,7 +627,7 @@ public class ShortestPathTester extends JPanel {
 //				try {
 //					Thread.sleep(ITERATION_TIME);
 //				} catch (InterruptedException e) {
-//					
+//
 //				}
 //				 Log.v("openset" + openSet);
 ////				 Log.v("closedSet" + closedSet);
@@ -658,7 +660,7 @@ public class ShortestPathTester extends JPanel {
 			Log.e("Failed to find path to target!");
 			return Collections.emptyList();
 	}
-	
+
 	private AStarPosition retrieveInstance(HashSet<AStarPosition> openSet, AStarPosition node) {
 		if (node == null)
 			return null;
@@ -717,14 +719,14 @@ public class ShortestPathTester extends JPanel {
 		return nodes.toArray(new AStarPosition[nodes.size()]);
 	}
 
-	
+
 	private AStarPosition normalizeDirection(double x, double y, double d, double e) {
 		double dx = x - d, dy = y - e;
 		dx /= Math.max(Math.abs(dx), 1);
 		dy /= Math.max(Math.abs(dy), 1);
 		return new AStarPosition(dx, dy);
 	}
-	
+
 	private AStarPosition jump(AStarPosition node, AStarPosition parent) {
 		double x = node.getX(), y = node.getY(), px = parent.getX(), py = parent.getY();
 		double dx = (x - px);
@@ -736,7 +738,7 @@ public class ShortestPathTester extends JPanel {
 			return null;
 		if (node.equals(goal)) // reached goal
 			return new AStarPosition(node);
-		
+
 		// resolve forced neighbors
 		AStarPosition temp = new AStarPosition(node);
 		if (((int) dx & (int) dy) != 0) { // diagonal
@@ -768,12 +770,12 @@ public class ShortestPathTester extends JPanel {
 		try {
 			Thread.sleep(ITERATION_TIME);
 		} catch (InterruptedException e) {
-			
+
 		}
 
 		return jump(node.derive(dx, dy), node);
 	}
-	
+
 	private boolean walkable(AStarPosition node, List<IObstacle> obsList) {
 		if(node.x < 0 || node.y < 0 || node.x > 750 || node.y > 750) {
 			return false;
@@ -781,7 +783,7 @@ public class ShortestPathTester extends JPanel {
 		return !AbstractObstacle.isInsideObstacleList(obsList, node);
 	}
 
-	
-	
-	
+
+
+
 }

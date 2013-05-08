@@ -16,17 +16,17 @@ import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 /**
  * Class for handling map files. Reading and writing on them.
  * <p>
- * 
+ *
  * @author Erik Ramqvist
  *
  */
 public class MapFileHandler {
 	private static final File mapsFolder = new File(System.getProperty("user.dir") + "/maps");
-	
+
 	/**
 	 * Gets all maps from the maps folder.
 	 * @return null or empty list of no maps where found, otherwise the found maps.
-	 * 
+	 *
 	 */
 	public static List<SimulationMap> readMapsFromMapsFolder() {
 		List<File> fileList = getMapFiles();
@@ -42,7 +42,7 @@ public class MapFileHandler {
 		}
 		return result;
 	}
-	
+
 
 	/**
 	 * Reads a SimulationMap from the given File.
@@ -77,10 +77,10 @@ public class MapFileHandler {
 			return null;
 		}
 	}
-	
+
 	/**
-	 * Gets all map files in maps-folder. 
-	 * 
+	 * Gets all map files in maps-folder.
+	 *
 	 */
 	public static List<File> getMapFiles() {
 		if(mapsFolder.exists() && mapsFolder.isDirectory()) {
@@ -95,12 +95,12 @@ public class MapFileHandler {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Saves the SimulationMap to the Maps folder.
-	 * <p> 
+	 * <p>
 	 * Overwrites if there is already a file with that name.
-	 * 
+	 *
 	 * @param map
 	 * @return
 	 */
@@ -118,7 +118,7 @@ public class MapFileHandler {
 		}
 		return saveSimulationMap(new File(mapsFolder.getAbsolutePath() + "/" + map.getName() + ".map"), map);
 	}
-	
+
 	/**
 	 * Saves the given SimulationMap to the given File destination.
 	 * @param dest
@@ -142,10 +142,11 @@ public class MapFileHandler {
 			e.printStackTrace();
 			return false;
 		} finally {
-			pw.close();
+			if (pw != null)
+				pw.close();
 		}
 	}
-	
+
 	public static boolean deleteMap(SimulationMap map) {
 		if(map == null) {
 			return false;
@@ -172,5 +173,5 @@ public class MapFileHandler {
 		}
 		return null;
 	}
-	
+
 }

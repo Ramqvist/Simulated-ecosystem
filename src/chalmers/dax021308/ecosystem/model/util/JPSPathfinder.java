@@ -13,13 +13,13 @@ import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 
 /**
- * Class for calculating the shortest path to target. 
- * 
+ * Class for calculating the shortest path to target.
+ *
  * @author Erik
  *
  */
 public class JPSPathfinder {
-	
+
 	private List<IObstacle> obsList;
 	private IShape shape;
 	private Dimension simulationDim;
@@ -32,7 +32,7 @@ public class JPSPathfinder {
 		this.shape = shape;
 		this.simulationDim = simulationDim;
 	}
-	
+
 	public List<Position> getShortestPath(Position start, Position end, double safetyDistance) {
 		//double distance = start.getDistance(end);
 		//if(distance > 75) {
@@ -53,7 +53,7 @@ public class JPSPathfinder {
 
 	/**
 	 * Internal Position class for use with A* shortest path algorithm.
-	 * 
+	 *
 	 * @author Erik
 	 *
 	 */
@@ -67,18 +67,18 @@ public class JPSPathfinder {
 		public JPSNode(JPSNode a) {
 			super(a.x,a.y);
 		}
-		
+
 		@Override
 		public String toString() {
 			return "JPSNode G: " + g_score + " " + super.toString();
 		}
-		
+
 		public JPSNode shift(double x, double y) {
 			this.x += x;
 			this.y += y;
 			return this;
 		}
-		
+
 		protected double getG() {
 			if (g_score == 0) {
 				final JPSNode parent = came_from;
@@ -94,7 +94,7 @@ public class JPSPathfinder {
 			double steps = getSteps(x, y, px, py);
 			return x == px || y == px ? steps : (double) steps * 1;
 		}
-		
+
 		private double getSteps(double x, double y, double px, double py) {
 			double temp;
 			if ((temp = x - px) != 0) { // straight, horizontal AND will handle
@@ -104,7 +104,7 @@ public class JPSPathfinder {
 				return 0;
 			return Math.abs(temp);
 		}
-		
+
 		public JPSNode derive(double x, double y) {
 			return clone().shift(x, y);
 		}
@@ -116,15 +116,17 @@ public class JPSPathfinder {
 			return this;
 		}
 
-		
+
 		@Override
 		public JPSNode clone() {
+			// TODO to override  object clone() this should implement Cloneable.
+			// Otherwise it's better to call it something else. like copy().
 			JPSNode clone = new JPSNode(x, y);
 			clone.came_from = this;
 			return clone;
 		}
 	}
-	
+
 
 	private List<Position> reconstructPath(JPSNode current_node) {
 		List<Position> result = new LinkedList<Position>();
@@ -154,6 +156,8 @@ public class JPSPathfinder {
 					current = n;
 					lowScore = score;
 				} else if(score == lowScore) {
+					// TODO (==) is less good for float equality
+					// if(Math.abs(score - lowScore) < epsilon) // epsilon should be 0.000001 something
 					if(n != current) {
 						current = n;
 					}
@@ -189,7 +193,7 @@ public class JPSPathfinder {
 		Log.e("Failed to find path to target! Start: " + start + " End: " + endPos + " obsList: " + obsList + " Dimension: "+  simulationDim + " Shape: " + shape);
 		return null;
 	}
-	
+
 	private JPSNode retrieveInstance(HashSet<JPSNode> openSet, JPSNode node) {
 		if (node == null)
 			return null;
@@ -247,14 +251,14 @@ public class JPSPathfinder {
 		return nodes.toArray(new JPSNode[nodes.size()]);
 	}
 
-	
+
 	private JPSNode normalizeDirection(double x, double y, double d, double e) {
 		double dx = x - d, dy = y - e;
 		dx /= Math.max(Math.abs(dx), 1);
 		dy /= Math.max(Math.abs(dy), 1);
 		return new JPSNode(dx, dy);
 	}
-	
+
 	private JPSNode jump(JPSNode node, JPSNode parent, JPSNode goal) {
 		double x = node.getX(), y = node.getY(), px = parent.getX(), py = parent.getY();
 		double dx = (x - px);
@@ -266,7 +270,7 @@ public class JPSPathfinder {
 			return null;
 		if (node.equals(goal)) // reached goal
 			return new JPSNode(node);
-		
+
 		// resolve forced neighbors
 		JPSNode temp = new JPSNode(node);
 		if (((int) dx & (int) dy) != 0) { // diagonal
@@ -294,13 +298,13 @@ public class JPSPathfinder {
 		}
 		return jump(node.derive(dx, dy), node, goal);
 	}
-	
+
 	private boolean walkable(JPSNode node) {
 		if(node.equals(goal)){
 			return !AbstractObstacle.isInsideObstacleList(obsList, node, 0) && shape.isInside(simulationDim, node);
 		} else {
 			return !AbstractObstacle.isInsideObstacleList(obsList, node, safetyDistance) && shape.isInside(simulationDim, node);
 		}
-		
+
 	}
 }

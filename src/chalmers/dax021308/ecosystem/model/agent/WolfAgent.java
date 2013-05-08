@@ -46,11 +46,11 @@ public class WolfAgent extends AbstractAgent {
 		this.genome = genome;
 		
 		//Grouping parameters
-		this.groupBehaviour = this.genome.getGene(GeneralGeneTypes.ISGROUPING).haveGene();
-		cohesionConstant = ((Double)this.genome.getGene(GeneralGeneTypes.GROUPING_COHESION).getCurrentValue()).doubleValue();
-		separationConstant = ((Double)this.genome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).getCurrentValue()).doubleValue();
-		arrayalConstant = ((Double)this.genome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).getCurrentValue()).doubleValue();
-		forwardThrustConstant = ((Double)this.genome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).getCurrentValue()).doubleValue();
+		this.groupBehaviour = this.genome.getGene(GeneralGeneTypes.ISGROUPING).isGeneActive();
+		cohesionConstant = ((Double)this.genome.getGene(GeneralGeneTypes.GROUPING_COHESION).getCurrentDoubleValue()).doubleValue();
+		separationConstant = ((Double)this.genome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).getCurrentDoubleValue()).doubleValue();
+		arrayalConstant = ((Double)this.genome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).getCurrentDoubleValue()).doubleValue();
+		forwardThrustConstant = ((Double)this.genome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).getCurrentDoubleValue()).doubleValue();
 		if(this.groupBehaviour){
 			this.color = Color.RED;
 		} else {
@@ -58,7 +58,7 @@ public class WolfAgent extends AbstractAgent {
 		}
 		
 		//Focusing preys
-		willFocusPreys = this.genome.getGene(GeneralGeneTypes.FOCUSPREY).haveGene();
+		willFocusPreys = this.genome.getGene(GeneralGeneTypes.FOCUSPREY).isGeneActive();
 	}
 
 	@Override

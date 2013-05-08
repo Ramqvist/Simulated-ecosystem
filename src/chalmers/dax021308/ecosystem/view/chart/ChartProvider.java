@@ -18,20 +18,32 @@ public class ChartProvider {
 		GROUPING_PROPORTION_GRAPH;
 	}
 	
-	public static IChart makeChart(ChartType chart, IModel model){
+	private static LifeLengthGraph llg;
+	private static PopulationAmountGraph pag;
+	private static IterationTimeGraph itg;
+	private static GroupingProportionGraph gpg;
+	
+	public static IChart getChart(ChartType chart, IModel model){
 		int updatefrequency = 100;
 		switch(chart) {
 		case LIFE_LENGTH_GRAPH:
-			return new LifeLengthGraph(model, updatefrequency);
+			if (llg == null)
+				llg = new LifeLengthGraph(model, updatefrequency, "Life length", "Iterations", "Population life length mean");	
+			return llg;
 		case POPULATION_AMOUNT_GRAPH:
-			return new PopulationAmountGraph(model, updatefrequency);
+			if (pag == null)
+				pag =  new PopulationAmountGraph(model, updatefrequency, "Population amount", "Iterations", "Population amount");
+			return pag;
 		case ITERATION_TIME_GRAPH:
-			return new IterationTimeGraph(model, updatefrequency);
+			if (itg == null)
+				itg =  new IterationTimeGraph(model, updatefrequency, "Iteration time", "Iterations", "Iteration time (ms)");
+			return itg;
 		case GROUPING_PROPORTION_GRAPH:
-			return new GroupingProportionGraph(model, updatefrequency);
+			if (gpg == null)
+				gpg = new GroupingProportionGraph(model, updatefrequency,"Grouping","Iterations", "Grouping proportion");
+			return gpg;
 		default:
 			return null;
 		}
 	}
-	
 }

@@ -12,21 +12,21 @@ import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
  * Class for containing a map.
  * <p>
  * Represented by a String and list of obstacles.
- * 
+ *
  * @author Erik Ramqvist
  *
  */
 public class SimulationMap {
 	public static final Dimension DEFAULT_OBSTACLE_DIMENSION = new Dimension(1000, 1000);
-	
+
 	private List<IObstacle> obsList;
 	private String name;
-	
+
 	public SimulationMap(List<IObstacle> obsList, String name) {
 		this.obsList = obsList;
 		this.name = name;
 	}
-	
+
 	public SimulationMap(String name) {
 		this.obsList = new ArrayList<IObstacle>();
 		this.name = name;
@@ -42,10 +42,10 @@ public class SimulationMap {
 		return obsList;
 	}
 	/**
-	 * Use this method in simulation program to get the correct scaled versions of the obstacles. 
+	 * Use this method in simulation program to get the correct scaled versions of the obstacles.
 	 * <p>
 	 * Maps are encoded using 1000 x 1000 dimension.
-	 * 
+	 *
 	 * @param dim The Dimension to scale to.
 	 * @return the up-scaled obstacles, or null or empty list if this is not a valid map.
 	 */
@@ -85,7 +85,7 @@ public class SimulationMap {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public String toString() {
 		return name;
@@ -129,11 +129,18 @@ public class SimulationMap {
 		if (obsList == null) {
 			if (other.obsList != null)
 				return false;
-		} 
-		if(this.obsList.size() != other.getObsList().size()) {
-			return false;
 		}
+		if (obsList != null) {
+			if (other.obsList != null) {
+				if(this.obsList.size() != other.obsList.size()) {
+					return false;
+				}
+			}
+			else // (other.obsList == null)
+				return false;
+		}
+
 		return true;
 	}
-	
+
 }

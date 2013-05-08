@@ -53,13 +53,13 @@ import com.sun.opengl.util.FPSAnimator;
  * For Javadoc add the Jogl Javadoc jar as Javadoc refernce to the selected JOGL
  * jar.
  * <p>
- * 
+ *
  * @author Erik Ramqvist, Sebastian Anerud
- * 
+ *
  */
 
 public class OpenGLSimulationView extends GLCanvas implements IView {
-	
+
 	private static final long serialVersionUID = 1585638837620985591L;
 	private List<IPopulation> newPops = new ArrayList<IPopulation>();
 	private List<IObstacle> newObs = new ArrayList<IObstacle>();
@@ -141,7 +141,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 		animator.start();
 		// add();
 
-		this.showFPS = showFPS;
+		this.showFPS = showFPS;	// TODO error?  Self assignment
 		if (showFPS) {
 			fpsTimer = new Timer();
 			fpsTimer.schedule(new TimerTask() {
@@ -222,7 +222,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 
 	/**
 	 * Sets the FPS counter visible or not visible
-	 * 
+	 *
 	 * @param visible
 	 */
 	public void setFPSCounterVisible(boolean visible) {
@@ -249,9 +249,9 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 
 	/**
 	 * JOGL Listener, listenes to commands from the GLCanvas.
-	 * 
+	 *
 	 * @author Erik
-	 * 
+	 *
 	 */
 	private class JOGLListener implements GLEventListener {
 
@@ -264,7 +264,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 
 		/**
 		 * Called each frame to redraw all the 3D elements.
-		 * 
+		 *
 		 */
 		@Override
 		public void display(GLAutoDrawable drawable) {
@@ -336,7 +336,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 			drawShapes(gl, frameWidth, frameHeight, scaleX, scaleY);
 			drawAgents(gl, frameWidth, frameHeight, scaleX, scaleY);
 			drawObstacles(gl, frameWidth, frameHeight, scaleX, scaleY);
-			
+
 
 			//
 			// /* Information print, comment out to increase performance. */
@@ -450,20 +450,20 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 					double y = o.getPosition().getY();
 					double w = o.getWidth();
 					double h = o.getHeight();
-							 
+
 					Color c = o.getColor();
 					gl.glColor3d((double) c.getRed() / (double) 255,
 							(double) c.getGreen() / (double) 255,
 							(double) c.getBlue() / (double) 255);
 					gl.glLineWidth(2.5F);
 					gl.glBegin(GL.GL_POLYGON);
-					
+
 					Position p = new Position(x - w,y - h);
 					p = o.toObstacleCoordinates(p);
 					p.setPosition(-p.getX()+x,p.getY()+y);
 					gl.glVertex2d(p.getX()*xScale,
 							frameHeight - p.getY()*yScale);
-					
+
 					p.setPosition(x + w,y - h);
 					p = o.toObstacleCoordinates(p);
 					p.setPosition(-p.getX()+x,p.getY()+y);
@@ -481,7 +481,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 					p.setPosition(-p.getX()+x,p.getY()+y);
 					gl.glVertex2d(p.getX()*xScale,
 							frameHeight - p.getY()*yScale);
-					
+
 					gl.glEnd();
 				} else if (o != null && o instanceof TriangleObstacle) {
 					double xScale = frameWidth / size.width;
@@ -496,13 +496,13 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 							(double) c.getBlue() / (double) 255);
 					gl.glLineWidth(2.5F);
 					gl.glBegin(GL.GL_TRIANGLES);
-					
+
 					Position p = new Position(x + w,y - h);
 					p = o.toObstacleCoordinates(p);
 					p.setPosition(-p.getX()+x,p.getY()+y);
 					gl.glVertex2d(p.getX()*xScale,
 							frameHeight - p.getY()*yScale);
-					
+
 					p.setPosition(x - w,y - h);
 					p = o.toObstacleCoordinates(p);
 					p.setPosition(-p.getX()+x,p.getY()+y);
@@ -550,7 +550,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 						}
 						gl.glEnd();
 
-					} else {
+					} else if (a != null) {
 						Color c = a.getColor();
 						gl.glColor4f((1.0f / 255) * c.getRed(), COLOR_FACTOR
 								* c.getGreen(), COLOR_FACTOR * c.getBlue(),
@@ -630,7 +630,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 						 * Math.cos(angle + increment)*radius, cy +
 						 * Math.sin(angle + increment)*radius); gl.glEnd(); } }
 						 */
-						
+
 						if(showFocusedPath) {
 							List<Position> path = a.getFocusedPath();
 							if(path != null) {
@@ -639,13 +639,13 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 									gl.glBegin(GL.GL_POLYGON);
 									gl.glVertex2d(frameWidth * (pos.getX() - 2) / size.width,
 											frameHeight - frameHeight * (pos.getY() - 2) / size.height);
-	
+
 									gl.glVertex2d(frameWidth * (pos.getX() + 2) / size.width,
 											frameHeight - frameHeight * (pos.getY() - 2) / size.height);
-	
+
 									gl.glVertex2d(frameWidth * (pos.getX() + 2) / size.width,
 											frameHeight - frameHeight * (pos.getY() + 2) / size.height);
-	
+
 									gl.glVertex2d(frameWidth * (pos.getX() - 2) / size.width,
 											frameHeight - frameHeight * (pos.getY() + 2) / size.height);
 									gl.glEnd();
@@ -689,7 +689,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 		 * component has already called GL.glViewport(int, int, int, int)(x, y,
 		 * width, height) when this method is called, so the client may not have
 		 * to do anything in this method.
-		 * 
+		 *
 		 * @param gLDrawable
 		 *            The GLDrawable object.
 		 * @param x
