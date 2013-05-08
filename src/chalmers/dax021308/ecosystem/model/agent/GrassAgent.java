@@ -21,7 +21,7 @@ public class GrassAgent extends AbstractAgent {
 
 	private static double REPRODUCTION_RATE = GrassSettings.instance.reproduction_rate.value;
 	private static final int MAX_LIFE_LENGTH = 5000;
-	private static final double SPAWNING_STD = 250;
+	private static final double SPAWNING_STD = 300;
 
 	public GrassAgent(String name, Position pos, Color color, int width,
 			int height, Vector velocity, double maxSpeed, int capacity) {

@@ -8,8 +8,11 @@ import java.util.List;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.agent.WolfAgent;
 import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
+import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
 import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
 import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
+import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
+import chalmers.dax021308.ecosystem.model.genetics.newV.IGenome;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
@@ -52,9 +55,17 @@ public class WolfPopulation extends AbstractPopulation {
 				velocity.setVector(-maxSpeed + Math.random() * 2 * maxSpeed,
 						-maxSpeed + Math.random() * 2 * maxSpeed);
 			}
+			
+			IGenome<GeneralGeneTypes, IGene> genome = GeneticSettings.predSettings.getGenome().getCopy();
+			genome.getGene(GeneralGeneTypes.ISGROUPING).haveGene();
+			genome.getGene(GeneralGeneTypes.GROUPING_COHESION).setHasRandomStartValue(false);
+			genome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).setHasRandomStartValue(false);
+			genome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).setHasRandomStartValue(false);
+			genome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).setHasRandomStartValue(false);
+			genome.getGene(GeneralGeneTypes.FOCUSPREY).setHasRandomStartValue(false);
+			
 			IAgent a = new WolfAgent("Wolf", randPos, color, 10, 20,
-					velocity, maxSpeed, maxAcceleration, visionRange,
-					GeneticSettings.predSettings.getGenome().getCopy());
+					velocity, maxSpeed, maxAcceleration, visionRange, genome);
 			newAgents.add(a);
 		}
 		return newAgents;

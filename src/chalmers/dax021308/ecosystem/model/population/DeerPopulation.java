@@ -8,8 +8,11 @@ import java.util.List;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.agent.DeerAgent;
 import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
+import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
 import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
 import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
+import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
+import chalmers.dax021308.ecosystem.model.genetics.newV.IGenome;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
@@ -49,9 +52,21 @@ public class DeerPopulation extends AbstractPopulation {
 						-maxSpeed + Math.random() * 2 * maxSpeed);
 			}
 			
+			IGenome<GeneralGeneTypes, IGene> genome = GeneticSettings.preySettings.getGenome().getCopy();
+			genome.getGene(GeneralGeneTypes.ISGROUPING).haveGene();
+			genome.getGene(GeneralGeneTypes.GROUPING_COHESION).setHasRandomStartValue(false);
+			genome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).setHasRandomStartValue(false);
+			genome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).setHasRandomStartValue(false);
+			genome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).setHasRandomStartValue(false);
+			genome.getGene(GeneralGeneTypes.ISSTOTTING).setHasRandomStartValue(false);
+			genome.getGene(GeneralGeneTypes.STOTTINGRANGE).setHasRandomStartValue(false);
+			genome.getGene(GeneralGeneTypes.STOTTINGLENGTH).setHasRandomStartValue(false);
+			genome.getGene(GeneralGeneTypes.STOTTINGANGLE).setHasRandomStartValue(false);
+			
+			
 			IAgent a = new DeerAgent("Deer", randPos,
 					color, 5, 10, velocity, maxSpeed, maxAcceleration,
-					visionRange, GeneticSettings.preySettings.getGenome().getCopy());
+					visionRange, genome);
 			/*
 			 * IAgent a = new DeerAgent("Deer", randPos,
 					color, 5, 10, velocity, maxSpeed, maxAcceleration,

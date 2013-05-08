@@ -584,29 +584,34 @@ public class EcoWorld implements IModel {
 					startIterationTime = System.nanoTime();
 					System.out.println("Printed start values at iteration: " + (Integer.MAX_VALUE-numIterations));
 				}
+				boolean success = true;
 				if((numIterations-3647)%toFileInterval==0){
+					IPopulation failPop = null;
 					for(IPopulation pop: env.getPopulations()){
+						IPopulation p = pop.clonePopulation();
 						String dest = "C:\\GroupingData\\" + pop.getName() + "End.txt";
 						File file = new File(dest);
-						savePopulationToFile(file,pop.clonePopulation());
+						boolean b = savePopulationToFile(file,p);
+						if(!b){
+							failPop = p;
+							success = false;
+							numIterations = 0;
+						}
 					}
 					endIterationTime = System.nanoTime();
+					if(success){
 					System.out.println("Printed last end values at iteration: " + (Integer.MAX_VALUE-numIterations) + ". It took " + 
 							Stat.roundNDecimals(0.000000001*(endIterationTime-startIterationTime), 2) + 
 							" Seconds since last print.");
+					} else {
+						System.out.println(failPop.getName() + " died.");
+					}
 					startIterationTime = System.nanoTime();
 				}
 			}
 		} else {
 			stop();
-			//Lägg till är Sebastian.
-			if(printToFile) {
-				for(IPopulation pop: env.getPopulations()){
-					String dest = "C:\\GroupingData\\" + pop.getName() + "End.txt";
-					File file = new File(dest);
-					savePopulationToFile(file,pop.clonePopulation());
-				}
-			}
+
 			if (recording != null)
 				recording.close();
 			if (recordSimulation) {
@@ -691,6 +696,9 @@ public class EcoWorld implements IModel {
 	}
 	
 	private static synchronized boolean savePopulationToFile(File dest, IPopulation pop) {
+		if(pop.getSize()<=0) {
+			return false;
+		}
 		PrintWriter pw = null;
 		try {
 			if(dest.exists()) {
