@@ -1,6 +1,8 @@
 package chalmers.dax021308.ecosystem.model.environment.obstacle;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.util.Random;
 
 import chalmers.dax021308.ecosystem.model.util.Position;
 
@@ -90,5 +92,15 @@ public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 		double newWidth = width * scaleX;
 		double newHeight = height * scaleY;
 		return new RectangularObstacle(newWidth, newHeight, newPos, new Color(color.getRGB()), angle, transparent);
+	}
+
+	public static IObstacle getRandomObstacle(Dimension simDim) {
+		Random ran = new Random();
+		Position randomPos = new Position(ran.nextInt(simDim.width), ran.nextInt(simDim.height));
+		double randomWidth = ran.nextInt(simDim.width / 4);
+		double randomHeight = ran.nextInt(simDim.height / 4);
+		double randomAngle = Math.PI*Math.random();
+		Color randomColor = new Color(ran.nextInt(255), ran.nextInt(255), ran.nextInt(255));
+		return new RectangularObstacle(randomWidth, randomHeight, randomPos, randomColor , randomAngle, false);
 	}
 }
