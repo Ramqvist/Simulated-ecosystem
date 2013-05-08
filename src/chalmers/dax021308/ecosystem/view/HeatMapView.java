@@ -52,6 +52,7 @@ public class HeatMapView extends GLCanvas implements IView {
 	private Dimension grid;
 	private JOGLListener glListener;
 	private String populationName;
+	private boolean updateHeatMapWhenDisplay = true;
 	//private GLCanvas canvas;
 	
 	/**
@@ -89,7 +90,7 @@ public class HeatMapView extends GLCanvas implements IView {
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
 		String eventName = event.getPropertyName();
-		if(eventName == EcoWorld.EVENT_STOP) {
+		if(eventName == EcoWorld.EVENT_START) {
 			for(int i=0; i<nPopulations; i++){
 				maxVisited[i] = 1;
 				minVisited[i] = Integer.MAX_VALUE;
@@ -132,63 +133,71 @@ public class HeatMapView extends GLCanvas implements IView {
         	 */
             @Override
             public void display(GLAutoDrawable drawable) {
-            	long start = System.currentTimeMillis();
             	
                 double frameHeight = getHeight();
                 double frameWidth  = getWidth();
 
-                /*
-                 * Loops through all agents and truncates their positions to the correct box
-                 * in the heat map. It then adds 1 to that box to indicate that an agent visited
-                 * that box in this iteration. A pixel can only get +1 per iteration to prevent
-                 * the corners to dominate too much.
-                 */
-                for(int i=0; i<nPopulations; i++){
-        			minVisited[i] = Double.MAX_VALUE;
-        		}                
-                
-                visited = new boolean[nPopulations][heatMapWidth][heatMapHeight];
                 int popSize = newPops.size();
-          		for(int i = 0; i < popSize; i ++) {
+                for(int i = 0; i < popSize; i ++) {
           			if(newPops.get(i).getName().equals(populationName)){
           				populationID = i;
           			}
-        			List<IAgent> agents = newPops.get(i).getAgents();
-        			int size = agents.size();
-        			IAgent a;
-        			Position pos;
-        			int intPosX;
-        			int intPosY;
-        			for(int j = 0; j < size; j++) {
-        				a = agents.get(j);
-        				pos = a.getPosition();
-        				intPosX = (int)(pos.getX()/xSamplingConstant);
-    					intPosY = (int)(pos.getY()/ySamplingConstant);
-    					
-    					if(intPosX < heatMapWidth && intPosX >= 0 && intPosY < heatMapHeight && intPosY >= 0){
-    							heatMap[i][intPosX][intPosY]++;
-    							visited[i][intPosX][intPosY]=true;
-    							if(heatMap[i][intPosX][intPosY]>maxVisited[i]){
-    	    						maxVisited[i] = heatMap[i][intPosX][intPosY];
-    	    					} 
-    					} 
-                    }
-        		} 
-          		
-          		/*
-          		 * Check which pixel is visited the least.
-          		 * Must be able to do in a better way?
-          		 */
-          		for(int p=0;p<nPopulations;p++){
-	          		for(int j=0;j<heatMapHeight;j++){
-	          			for(int i=0;i<heatMapWidth;i++){
-	          				if(heatMap[p][i][j]<minVisited[p] && heatMap[p][i][j] > 0){
-	    						minVisited[p] = heatMap[p][i][j];
+                }
+                
+                if(updateHeatMapWhenDisplay) {
+	                /*
+	                 * Loops through all agents and truncates their positions to the correct box
+	                 * in the heat map. It then adds 1 to that box to indicate that an agent visited
+	                 * that box in this iteration. A pixel can only get +1 per iteration to prevent
+	                 * the corners to dominate too much.
+	                 */
+	                for(int i=0; i<nPopulations; i++){
+	        			minVisited[i] = Double.MAX_VALUE;
+	        		}                
+	                
+	                visited = new boolean[nPopulations][heatMapWidth][heatMapHeight];
+	           
+	          		for(int i = 0; i < popSize; i ++) {
+	        			List<IAgent> agents = newPops.get(i).getAgents();
+	        			int size = agents.size();
+	        			IAgent a;
+	        			Position pos;
+	        			int intPosX;
+	        			int intPosY;
+	        			for(int j = 0; j < size; j++) {
+	        				a = agents.get(j);
+	        				pos = a.getPosition();
+	        				intPosX = (int)(pos.getX()/xSamplingConstant);
+	    					intPosY = (int)(pos.getY()/ySamplingConstant);
+	    					
+	    					if(intPosX < heatMapWidth && intPosX >= 0 && intPosY < heatMapHeight && intPosY >= 0){
+	    							heatMap[i][intPosX][intPosY]++;
+	    							visited[i][intPosX][intPosY]=true;
+	    							if(heatMap[i][intPosX][intPosY]>maxVisited[i]){
+	    	    						maxVisited[i] = heatMap[i][intPosX][intPosY];
+	    	    					} 
 	    					} 
-	          			}
+	                    }
+	        		} 
+	          		
+	          		/*
+	          		 * Check which pixel is visited the least.
+	          		 * Must be able to do in a better way?
+	          		 */
+	          		for(int p=0;p<nPopulations;p++){
+		          		for(int j=0;j<heatMapHeight;j++){
+		          			for(int i=0;i<heatMapWidth;i++){
+		          				if(heatMap[p][i][j]<minVisited[p] && heatMap[p][i][j] > 0){
+		    						minVisited[p] = heatMap[p][i][j];
+		    					} 
+		          			}
+		          		}
 	          		}
-          		}
-          		          		
+          		   
+                } else {
+                	updateHeatMapWhenDisplay = true;
+                }
+                
           		/*
           		 * Draw the heat map.
           		 */
@@ -329,6 +338,8 @@ public class HeatMapView extends GLCanvas implements IView {
 	
 	public void setPopulationNameToShow(String populationName){
 		this.populationName = populationName;
+		updateHeatMapWhenDisplay = false;
+		repaint();
 	}
 
 }
