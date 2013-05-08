@@ -3,9 +3,13 @@ package chalmers.dax021308.ecosystem.model.environment.mapeditor;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
+import chalmers.dax021308.ecosystem.model.environment.obstacle.EllipticalObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.RectangularObstacle;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.TriangleObstacle;
 
 
 /**
@@ -134,6 +138,24 @@ public class SimulationMap {
 			return false;
 		}
 		return true;
+	}
+
+	public static SimulationMap randomMap() {
+		List<IObstacle> obsList = new ArrayList<IObstacle>();
+		String name = "RandomMap";
+		Random ran = new Random();
+		int endVal = ran.nextInt(10) + 1;
+		for(int i = 0; i < endVal; i++) {
+			int ranNum = ran.nextInt(3);
+			if(ranNum == 0) {
+				obsList.add(EllipticalObstacle.getRandomObstacle(DEFAULT_OBSTACLE_DIMENSION));
+			} else if(ranNum == 1) {
+				obsList.add(TriangleObstacle.getRandomObstacle(DEFAULT_OBSTACLE_DIMENSION));
+			} else if(ranNum == 2) {
+				obsList.add(RectangularObstacle.getRandomObstacle(DEFAULT_OBSTACLE_DIMENSION));
+			}
+		}
+		return new SimulationMap(obsList, name);
 	}
 	
 }

@@ -51,7 +51,7 @@ import com.sun.opengl.util.FPSAnimator;
 public class MapEditorGLView extends GLCanvas implements IView {
 	
 	private static final long serialVersionUID = 158552837620985591L;
-	private List<IObstacle> newObs = new ArrayList<IObstacle>();
+	public List<IObstacle> newObs = new ArrayList<IObstacle>();
 	public final Dimension size;
 	public final JOGLListener glListener;
 	public IObstacle selectedObstacle;

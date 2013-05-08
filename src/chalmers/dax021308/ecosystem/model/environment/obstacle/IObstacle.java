@@ -1,6 +1,7 @@
 package chalmers.dax021308.ecosystem.model.environment.obstacle;
 
 import java.awt.Color;
+import java.awt.Dimension;
 
 import chalmers.dax021308.ecosystem.model.util.Position;
 
