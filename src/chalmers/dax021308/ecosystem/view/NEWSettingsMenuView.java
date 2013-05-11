@@ -27,6 +27,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
@@ -609,7 +610,7 @@ public class NEWSettingsMenuView extends JDialog {
         //panelButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         shapeRadioPanel.setBorder(createTitledBorder("Shape of Universe"));
-        listMap.setBorder(createTitledBorder("Obstacles"));
+//        listMap.setBorder(createTitledBorder("Obstacles"));
         
         listPred.setBorder(createTitledBorder("Predators"));
         listPrey.setBorder(createTitledBorder("Preys"));
@@ -644,7 +645,7 @@ public class NEWSettingsMenuView extends JDialog {
         //c.weighty = 0;
         c.gridx = 0;
         c.gridy = 2;
-        left.add(listMap, c);
+        left.add(new JLabel("Maps"), c);
         
         c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -652,6 +653,16 @@ public class NEWSettingsMenuView extends JDialog {
         //c.weighty = 0;
         c.gridx = 0;
         c.gridy = 3;
+        JScrollPane scroll = new JScrollPane(listMap);
+//      left.add(listMap, c);
+        left.add(scroll, c);
+        
+        c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0.5;
+        //c.weighty = 0;
+        c.gridx = 0;
+        c.gridy = 4;
         left.add(checkBoxRecordSim, c);
     }
 
