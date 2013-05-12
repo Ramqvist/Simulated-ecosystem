@@ -86,6 +86,11 @@ public class MainWindowController implements IController {
 				    	return true;
 			    	} else if(e.getKeyCode() == KeyEvent.VK_F11) {
 			    		window.toggleFullscreen();
+			    		if(controlViewCtrl.view.isVisible()) {
+			    			controlViewCtrl.view.setVisible(false);
+			    		} else {
+			    			controlViewCtrl.view.setVisible(true);
+			    		}
 				    	return true;
 			    	} else if (e.getKeyCode() == KeyEvent.VK_SPACE){
 			    		if (!controlViewCtrl.view.play) {
