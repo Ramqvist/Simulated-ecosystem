@@ -38,13 +38,7 @@ import chalmers.dax021308.ecosystem.model.util.Stat;
  */
 public class GeneticPanel extends JPanel {
 
-	private GeneticSettings geneticContent;
-
-	@Deprecated
-	private Map<GenomeSpecification, List<JComponent>> guiMap = new HashMap<GenomeSpecification, List<JComponent>>();
-
 	public GeneticPanel(GeneticSettings geneticContent) {
-		this.geneticContent = geneticContent;
 		setLayout(new MigLayout("", "[][][65.00][65.00][65]", "[][][][][]"));
 
 		JLabel lblGeneticSettings = new JLabel("Genetic Settings");
@@ -90,7 +84,6 @@ public class GeneticPanel extends JPanel {
 			List<JComponent> jList = new ArrayList<JComponent>();
 			jList.add(chkbxActiveBirth);
 			jList.add(chckbxMutable);
-			guiMap.put(g, jList);
 		}
 		currentRow++;
 		JLabel emptyLabel = new JLabel(" ");
@@ -156,7 +149,6 @@ public class GeneticPanel extends JPanel {
 						}
 						gene.setMinValue(value);
 					} catch (Exception ex) {
-
 					}
 				}
 				@Override
@@ -179,7 +171,6 @@ public class GeneticPanel extends JPanel {
 						}
 						gene.setMaxValue(value);
 					} catch (Exception ex) {
-
 					}
 				}
 				@Override
@@ -207,31 +198,9 @@ public class GeneticPanel extends JPanel {
 				}
 			});
 			add(chkbxRandomStart, "cell 7 "+currentRow+",alignx center");
-//
-//			List<JComponent> jList = new ArrayList<JComponent>();
-//			jList.add(tfDoubleValue);
-//			guiMap.put(g, jList);
+			
 		}
 	}
 	private static final long serialVersionUID = 1L;
-
-	@Deprecated
-	public List<GenomeSpecification> getFilledSpecification() {
-		List<GenomeSpecification> result = new ArrayList<GenomeSpecification>();
-		for(GenomeSpecification g : guiMap.keySet()) {
-			List<JComponent> jList = guiMap.get(g);
-			if(g.getGenomeType() == GenomeSpecification.TYPE_BOOLEAN) {
-				JCheckBox c1 = (JCheckBox) jList.get(0);
-				JCheckBox c2 = (JCheckBox) jList.get(1);
-				g.activeOnBirth = c1.isSelected();
-				g.mutable = c2.isSelected();
-			} else if(g.getGenomeType() == GenomeSpecification.TYPE_DOUBLE) {
-				JTextField tb = (JTextField) jList.get(0);
-				g.doubleValue = Double.parseDouble(tb.getText());
-			}
-			result.add(g);
-		}
-		return result;
-	}
 
 }

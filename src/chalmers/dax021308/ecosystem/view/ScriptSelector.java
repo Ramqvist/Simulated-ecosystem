@@ -93,7 +93,7 @@ public class ScriptSelector extends JFrame implements IView {
 
 		final JCheckBox checkBoxShutdown = new JCheckBox("Shutdown computer when finished");
 		checkBoxShutdown.setForeground(Color.WHITE);
-		checkBoxShutdown.setForeground(Color.WHITE);
+		checkBoxMinimalGui.setForeground(Color.WHITE);
 		JButton btnRun = new JButton("Run Script");
 		btnRun.addActionListener(new ActionListener() {
 			@Override
