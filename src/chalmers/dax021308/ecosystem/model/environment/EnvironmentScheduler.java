@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionException;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld.OnFinishListener;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
@@ -210,8 +211,12 @@ public class EnvironmentScheduler implements Runnable {
         //Assign objects to workers.
 		for(int i = 0 ; i < populations.size(); i ++) {
 			finWorkers[i].p = populations.get(i);
-			Future f = workPool.submit(finWorkers[i]);
-	        futures.add(f);
+			try {
+				Future f = workPool.submit(finWorkers[i]);
+		        futures.add(f);
+			} catch (RejectedExecutionException e) {
+				
+			}
 		}
 		
 		//Log.v("Slowest population: " + lastSlowestPop + " Time in ms: " + (long) (0.000001*longestExecuteTime));
@@ -223,7 +228,6 @@ public class EnvironmentScheduler implements Runnable {
            try {
 			fut.get();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}

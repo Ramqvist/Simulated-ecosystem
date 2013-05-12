@@ -40,8 +40,8 @@ public class ScriptHandler implements IController{
 		
 		this.ss = new ScriptSelector(scriptList, new OnScriptSelectedListener() {
 			@Override
-			public void onScriptSelected(IScript s, boolean enableGUI, boolean shutdown) {
-				runScript(s, enableGUI);
+			public void onScriptSelected(IScript s, boolean enableGUI, boolean minimalGUI, boolean shutdown) {
+				runScript(s, enableGUI, minimalGUI);
 				ss.dispose();
 				ScriptHandler.this.shutdownOnFinish = shutdown;
 				//TODO: Add minimalistic gui option.
@@ -50,7 +50,7 @@ public class ScriptHandler implements IController{
 		});
 	}
 
-	private void runScript(IScript s, boolean enableGUI) {
+	private void runScript(IScript s, boolean enableGUI, boolean minimalGUI) {
 		EcoWorld e = null;
 		if(enableGUI) {
 			try {
@@ -60,6 +60,10 @@ public class ScriptHandler implements IController{
 			}
 			MainWindowController window = new MainWindowController();
 			e = window.model;
+			if(minimalGUI) {
+				window.window.toggleFullscreen();
+				window.window.releaseAllButOpenGL();
+			}
 		} else {
 			e = new EcoWorld();
 		}

@@ -229,6 +229,7 @@ public class MainWindow extends JFrame implements IView {
 
 	@Override
 	public void release() {
+		openGL.release();
 		heatMap.release();
 		smvc.release();
 		bottomTabbedGraphs.release();
@@ -260,5 +261,12 @@ public class MainWindow extends JFrame implements IView {
 				right.setVisible(true);
 			}
 		}
-	};
+	}
+
+	public void releaseAllButOpenGL() {
+		heatMap.release();
+		smvc.release();
+		bottomTabbedGraphs.release();
+		graphView2.release();
+	}
 }

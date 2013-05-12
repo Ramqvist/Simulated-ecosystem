@@ -54,6 +54,7 @@ public class LifeLengthGraph extends AbstractGraph2D {
 
 	@Override
 	public void release() {
+		super.release();
 		this.removeAllTraces().clear();
 		this.removeAll();
 	}

@@ -10,15 +10,11 @@ import java.awt.event.MouseWheelListener;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.Vector;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
-import javax.media.opengl.GLJPanel;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
@@ -29,7 +25,6 @@ import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.RectangularObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.TriangleObstacle;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
-import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.shape.CircleShape;
 import chalmers.dax021308.ecosystem.model.util.shape.IShape;
@@ -63,19 +58,14 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 	private static final long serialVersionUID = 1585638837620985591L;
 	private List<IPopulation> newPops = new ArrayList<IPopulation>();
 	private List<IObstacle> newObs = new ArrayList<IObstacle>();
-	private Timer fpsTimer;
-	private int updates;
-	private int lastFps;
-	private boolean showFPS;
-	private int newFps;
-	private Object fpsSync = new Object();
 	private Dimension size;
 	private JOGLListener glListener;
-	// private GLCanvas canvas;
 	private IShape shape;
 	private boolean isZoomed;
 	private boolean showFocusedPath = true;
 	private MouseEvent lastZoomEvent;
+	private IModel model;
+	private FPSAnimator animator;
 
 	/**
 	 * Create the panel.
@@ -83,6 +73,7 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 	public OpenGLSimulationView(IModel model) {
 		this.size = new Dimension();
 		model.addObserver(this);
+		this.model = model;
 		// setVisible(true);
 		// setSize(size);
 
@@ -137,57 +128,11 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 				}
 			}
 		});
-		FPSAnimator animator = new FPSAnimator(this, 60);
+		animator = new FPSAnimator(this, 60);
 		animator.start();
-		// add();
-
-		this.showFPS = showFPS;	// TODO error?  Self assignment
-		if (showFPS) {
-			fpsTimer = new Timer();
-			fpsTimer.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					int fps = getUpdate();
-					/*
-					 * if(fps + lastFps != 0) { fps = ( fps + lastFps ) / 2; }
-					 */
-					setNewFps(fps);
-					lastFps = fps;
-					setUpdateValue(0);
-				}
-			}, 1000, 1000);
-		}
 	}
 
-	private int getUpdate() {
-		synchronized (OpenGLSimulationView.class) {
-			return updates;
-		}
-	}
 
-	private void setUpdateValue(int newValue) {
-		synchronized (OpenGLSimulationView.class) {
-			updates = newValue;
-		}
-	}
-
-	private int getNewFps() {
-		synchronized (fpsSync) {
-			return newFps;
-		}
-	}
-
-	private void setNewFps(int newValue) {
-		synchronized (fpsSync) {
-			newFps = newValue;
-		}
-	}
-
-	private void increaseUpdateValue() {
-		synchronized (OpenGLSimulationView.class) {
-			updates++;
-		}
-	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
@@ -220,32 +165,6 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 		}
 	}
 
-	/**
-	 * Sets the FPS counter visible or not visible
-	 *
-	 * @param visible
-	 */
-	public void setFPSCounterVisible(boolean visible) {
-		if (showFPS && !visible) {
-			fpsTimer.cancel();
-			showFPS = visible;
-		} else if (!showFPS && visible) {
-			fpsTimer = new Timer();
-			fpsTimer.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					newFps = getUpdate();
-					int temp = newFps;
-					if (newFps + lastFps != 0) {
-						newFps = (newFps + lastFps) / 2;
-					}
-					lastFps = temp;
-					setUpdateValue(0);
-				}
-			}, 1000, 1000);
-			showFPS = true;
-		}
-	}
 
 	/**
 	 * JOGL Listener, listenes to commands from the GLCanvas.
@@ -316,7 +235,6 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 				gl.glOrtho(0, getWidth(), getHeight(), 0, 0, 1);
 			}
 
-			increaseUpdateValue();
 			// long start = System.currentTimeMillis();
 
 			double frameHeight = (double) getHeight();
@@ -755,7 +673,8 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 
 	@Override
 	public void release() {
-
+		model.removeObserver(this);
+		animator.stop();
 	}
 
 }

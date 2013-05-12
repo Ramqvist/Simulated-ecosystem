@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.ListModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -24,6 +25,7 @@ import chalmers.dax021308.ecosystem.controller.scripting.IScript;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JCheckBox;
 import java.awt.Window.Type;
+import java.beans.PropertyChangeEvent;
 
 
 /**
@@ -32,7 +34,7 @@ import java.awt.Window.Type;
  * @author Erik Ramqvist
  *
  */
-public class ScriptSelector extends JFrame {
+public class ScriptSelector extends JFrame implements IView {
 	private static final long serialVersionUID = -5289591637437045802L;
 
 	public ScriptSelector(final List<IScript> scriptList, final OnScriptSelectedListener listener) {
@@ -74,11 +76,23 @@ public class ScriptSelector extends JFrame {
 		});
 		getContentPane().add(list, "cell 0 1,grow");
 
+		final JCheckBox checkBoxMinimalGui = new JCheckBox("Only show OpenGL view.");
 		final JCheckBox chckbxEnableGui = new JCheckBox("Enable GUI");
+		chckbxEnableGui.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(chckbxEnableGui.isSelected()) {
+					checkBoxMinimalGui.setEnabled(true);
+				} else {
+					checkBoxMinimalGui.setEnabled(false);
+				}
+			}
+		});
 		chckbxEnableGui.setForeground(Color.WHITE);
 		getContentPane().add(chckbxEnableGui, "cell 0 2,growx");
 
 		final JCheckBox checkBoxShutdown = new JCheckBox("Shutdown computer when finished");
+		checkBoxShutdown.setForeground(Color.WHITE);
 		checkBoxShutdown.setForeground(Color.WHITE);
 		JButton btnRun = new JButton("Run Script");
 		btnRun.addActionListener(new ActionListener() {
@@ -86,16 +100,23 @@ public class ScriptSelector extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				IScript selected = list.getSelectedValue();
 				if(selected != null && listener != null) {
-					listener.onScriptSelected(selected,chckbxEnableGui.isSelected(), checkBoxShutdown.isSelected() );
+					listener.onScriptSelected(selected,chckbxEnableGui.isSelected(), checkBoxMinimalGui.isSelected(), checkBoxShutdown.isSelected() );
+				} else {
+					JOptionPane.showMessageDialog(ScriptSelector.this,
+						    "No script selected.",
+						    "Error!",
+						    JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
 		
-		getContentPane().add(checkBoxShutdown, "cell 0 3,growx");
+		getContentPane().add(checkBoxMinimalGui, "cell 0 3,grow");
+		checkBoxMinimalGui.setEnabled(false);
+		getContentPane().add(checkBoxShutdown, "cell 0 4,grow");
 		
 		btnRun.setBackground(Color.WHITE);
 		btnRun.setForeground(Color.BLACK);
-		getContentPane().add(btnRun, "cell 0 4,growx");
+		getContentPane().add(btnRun, "cell 0 5,growx");
 		revalidate();
 		centerOnScreen(this, true);
 		getContentPane().setVisible(true);
@@ -103,7 +124,7 @@ public class ScriptSelector extends JFrame {
 	}
 	
 	public interface OnScriptSelectedListener {
-		 public void onScriptSelected(IScript s, boolean runWithGUI, boolean shutdown);
+		 public void onScriptSelected(IScript s, boolean runWithGUI, boolean minimalGUI, boolean shutdown);
 	}
 	
 
@@ -118,6 +139,22 @@ public class ScriptSelector extends JFrame {
 	        y /= 2;
 	    }
 	    c.setLocation(x, y);
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+	}
+
+	@Override
+	public void init() {
+	}
+
+	@Override
+	public void addController(ActionListener controller) {
+	}
+
+	@Override
+	public void release() {
 	}
 
 }
