@@ -251,5 +251,15 @@ public class MainWindow extends JFrame implements IView {
 		public String getDescription() {
 			  return ".sim files"; 
 		}
+	}
+
+	public void toggleFullscreen() {
+		if(right != null) {
+			if(right.isVisible()) {
+				right.setVisible(false);
+			} else {
+				right.setVisible(true);
+			}
+		}
 	};
 }

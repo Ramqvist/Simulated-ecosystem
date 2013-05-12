@@ -84,7 +84,10 @@ public class MainWindowController implements IController {
 			    	} else if(e.getKeyCode() == KeyEvent.VK_F3) {
 						new MapEditorController();
 				    	return true;
-			    	}else if (e.getKeyCode() == KeyEvent.VK_SPACE){
+			    	} else if(e.getKeyCode() == KeyEvent.VK_F11) {
+			    		window.toggleFullscreen();
+				    	return true;
+			    	} else if (e.getKeyCode() == KeyEvent.VK_SPACE){
 			    		if (!controlViewCtrl.view.play) {
 							try {
 								model.start();
