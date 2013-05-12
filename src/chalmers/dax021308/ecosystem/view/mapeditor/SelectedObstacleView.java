@@ -268,11 +268,6 @@ public class SelectedObstacleView extends JPanel implements IView {
 	}
 
 	@Override
-	public void onTick() {
-		
-	}
-
-	@Override
 	public void release() {
 		
 	}

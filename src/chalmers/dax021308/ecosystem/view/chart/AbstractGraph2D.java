@@ -37,8 +37,10 @@ public abstract class AbstractGraph2D extends Chart2D implements IChart{
 	private int nIterationsPassed = 0;
 	protected int updateFrequency = 10; // every tenth iteration.
 	private boolean hasStopped = false;
+	private IModel model;
 
 	public AbstractGraph2D (IModel model, int updateFrequency, String title, String xTitle, String yTitle){
+		this.model = model;
 		model.addObserver(this);
 		this.updateFrequency = updateFrequency;
 		this.setName(title);
@@ -97,10 +99,10 @@ public abstract class AbstractGraph2D extends Chart2D implements IChart{
 	public void addController(ActionListener controller) {}
 
 	@Override
-	public void onTick() {}
-
-	@Override
-	public void release() {}
+	public void release() {
+		hasStopped = true;
+		model.removeObserver(this);
+	}
 
 	protected abstract void onStart(Object object);
 	protected abstract void onPause(Object object);

@@ -62,10 +62,6 @@ public class PopulationSettingsDialog extends JDialog implements IView {
 	}
 
 	@Override
-	public void onTick() {
-	}
-
-	@Override
 	public void release() {
 	}
 	

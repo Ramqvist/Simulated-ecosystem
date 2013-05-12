@@ -53,7 +53,7 @@ public class HeatMapView extends GLCanvas implements IView {
 	private JOGLListener glListener;
 	private String populationName;
 	private boolean updateHeatMapWhenDisplay = true;
-	//private GLCanvas canvas;
+	private IModel model;
 	
 	/**
 	 * Create the heat map.
@@ -80,6 +80,7 @@ public class HeatMapView extends GLCanvas implements IView {
 		heatMapHeight = (int)(grid.getHeight()/ySamplingConstant+1);
 		heatMap = new double[nPopulations][heatMapWidth][heatMapHeight];
 		visited = new boolean[nPopulations][heatMapWidth][heatMapHeight];
+		this.model = model;
 		model.addObserver(this);
      
 		glListener = new JOGLListener();
@@ -324,16 +325,10 @@ public class HeatMapView extends GLCanvas implements IView {
 		
 	}
 
-	@Override
-	public void onTick() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void release() {
-		// TODO Auto-generated method stub
-		
+		model.removeObserver(this);
 	}
 	
 	public void setPopulationNameToShow(String populationName){

@@ -32,6 +32,7 @@ public class ControlView extends JPanel implements IView {
 	public final JPanel iterationDelayPanel;
 	public final JLabel iterationDelayLabel;
 	public boolean play;
+	private EcoWorld model;
 	
 	public ControlView(EcoWorld model) {  
 		playPauseButton = new JButton(new ImageIcon("res/play.png"));//("res/pause.png"));
@@ -39,7 +40,7 @@ public class ControlView extends JPanel implements IView {
 		iterationDelaySpinner = new JSpinner();
 		iterationDelayPanel = new JPanel();
 		iterationDelayLabel = new JLabel("Iteration Delay");
-		
+		this.model = model;
 		model.addObserver(this);
 		init();
 	}
@@ -94,20 +95,13 @@ public class ControlView extends JPanel implements IView {
 
 	@Override
 	public void addController(ActionListener controller) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onTick() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void release() {
-		// TODO Auto-generated method stub
-		
+		model.removeObserver(this);
+		model = null;
 	}
 	
 	public void switchToPlayButton() {

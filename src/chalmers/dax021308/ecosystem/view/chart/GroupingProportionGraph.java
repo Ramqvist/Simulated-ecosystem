@@ -124,10 +124,6 @@ public class GroupingProportionGraph extends AbstractGraph2D {
 	}
 
 	@Override
-	public void onTick() {
-		// TODO Auto-generated method stub
-	}
-	@Override
 	protected void onStart(Object object) {
 		// Nothing
 

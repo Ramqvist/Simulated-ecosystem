@@ -63,11 +63,11 @@ public class HeatmapTabHolder extends JTabbedPane implements IView {
 	}
 
 	@Override
-	public void onTick() {
-	}
-
-	@Override
 	public void release() {
+		if(heatMap != null) {
+			heatMap.release();
+		}
+		m.removeObserver(this);
 	}
 	
 }

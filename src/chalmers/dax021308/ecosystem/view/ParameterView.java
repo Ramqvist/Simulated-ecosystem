@@ -195,12 +195,6 @@ public class ParameterView extends JPanel implements IView {
 	}
 
 	@Override
-	public void onTick() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void release() {
 		// TODO Auto-generated method stub
 		

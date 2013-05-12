@@ -47,8 +47,7 @@ public class ControlViewController implements IController {
 
 	@Override
 	public void release() {
-		// TODO Auto-generated method stub
-		
+		view.release();
 	}
 
 	@Override

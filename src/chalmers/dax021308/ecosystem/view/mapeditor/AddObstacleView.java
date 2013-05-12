@@ -160,11 +160,6 @@ public class AddObstacleView extends JPanel implements IView {
 	}
 
 	@Override
-	public void onTick() {
-		
-	}
-
-	@Override
 	public void release() {
 		
 	}

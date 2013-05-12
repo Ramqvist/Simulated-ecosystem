@@ -32,12 +32,6 @@ public interface IView extends PropertyChangeListener {
 	 */
 	public void addController(ActionListener controller);
 	
-	/**
-	 * Redraw the GUI, should be implemented fast to allow high frame-rate.
-	 * <p>
-	 */
-	public void onTick();
-	
 
 	/**
 	 * Releases all the resources held by this Controller.

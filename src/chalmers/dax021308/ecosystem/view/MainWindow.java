@@ -207,6 +207,7 @@ public class MainWindow extends JFrame implements IView {
 			public void windowClosing(WindowEvent arg0) {
 				//Try to shutdown all worker threads.
 				model.shutdownNow();
+				release();
 			}
 		});
 	}
@@ -227,13 +228,11 @@ public class MainWindow extends JFrame implements IView {
 	}
 
 	@Override
-	public void onTick() {
-		
-	}
-
-	@Override
 	public void release() {
-		
+		heatMap.release();
+		smvc.release();
+		bottomTabbedGraphs.release();
+		graphView2.release();
 	}
 
 	public void setBtnStartNewSimWindowActionListener(ActionListener a) {

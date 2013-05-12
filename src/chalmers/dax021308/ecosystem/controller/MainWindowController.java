@@ -155,7 +155,8 @@ public class MainWindowController implements IController {
 
 	@Override
 	public void release() {
-		// TODO Auto-generated method stub
+		window.release();
+		controlViewCtrl.release();
 	}
 
 	@Override
@@ -184,7 +185,6 @@ public class MainWindowController implements IController {
 			SimulationSettings s = window.smvc.getSimSettings();
 			s.saveToFile();
 			model.loadSimulationSettings(s);
-			// TODO: Uppdatera LiveSettingsgrejen?
 			try {
 				model.start();
 			} catch (IllegalStateException e) {

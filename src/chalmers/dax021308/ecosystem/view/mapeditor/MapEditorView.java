@@ -114,10 +114,6 @@ public class MapEditorView extends JFrame implements IView {
 	}
 
 	@Override
-	public void onTick() {
-	}
-
-	@Override
 	public void release() {
 	}
 	

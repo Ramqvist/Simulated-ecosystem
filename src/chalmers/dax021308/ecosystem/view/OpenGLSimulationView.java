@@ -754,11 +754,6 @@ public class OpenGLSimulationView extends GLCanvas implements IView {
 	}
 
 	@Override
-	public void onTick() {
-
-	}
-
-	@Override
 	public void release() {
 
 	}

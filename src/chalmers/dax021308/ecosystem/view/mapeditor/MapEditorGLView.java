@@ -553,11 +553,6 @@ public class MapEditorGLView extends GLCanvas implements IView {
 	}
 
 	@Override
-	public void onTick() {
-
-	}
-
-	@Override
 	public void release() {
 
 	}
