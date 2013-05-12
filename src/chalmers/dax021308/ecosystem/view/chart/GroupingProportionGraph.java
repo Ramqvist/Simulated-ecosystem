@@ -4,8 +4,6 @@ import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.List;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
-import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
-import chalmers.dax021308.ecosystem.model.population.DeerPopulation;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 
 import info.monitorenter.gui.chart.*;

@@ -17,9 +17,7 @@ import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
-import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings.GenomeSpecification;
-import chalmers.dax021308.ecosystem.model.genetics.newV.BooleanGene;
-import chalmers.dax021308.ecosystem.model.genetics.newV.DoubleGene;
+import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings.GeneSpecification;
 import chalmers.dax021308.ecosystem.model.population.settings.CommonSettings;
 import chalmers.dax021308.ecosystem.model.util.Stat;
 import chalmers.dax021308.ecosystem.view.populationsettings.CommonSettingsPanel;
@@ -33,12 +31,12 @@ import chalmers.dax021308.ecosystem.view.populationsettings.GeneticPanel2;
  *
  * Split GeneticPanel into this and GeneticPanel2 in an attempt to hide IGene from view classes.
  * Well, this also creates a PopulationPanel2
- * I don't remember if this works yes, but it might.
+ *
  */
 public class GeneticPanelController {
-	private EcoWorld model;
+	//private EcoWorld model;
 	private GeneticPanelController(EcoWorld model) {
-		this.model = model;
+		//this.model = model;
 	}
 
 	public static PopulationPanel2 getNewPopulationPanel(GeneticSettings s, CommonSettings c){
@@ -59,139 +57,155 @@ public class GeneticPanelController {
 			if(s != null) {
 				geneticContent = s;
 				geneticPanel = new GeneticPanel2();
-				newBooleanGeneSettings();
-				newDoubleGeneSettings();
+				newGeneSettings();
 				add(geneticPanel, "cell 0 2,grow");
 			}
 			setSize(new Dimension (700, 700));
 		}
 
-		protected void newDoubleGeneSettings(){
-			geneticPanel.initMiddleStuff();
-
-			for(final GenomeSpecification g : geneticContent.getGenomes()) {
-				if(g.getGenomeType() != GenomeSpecification.TYPE_DOUBLE) {
-					continue;
+		protected void newGeneSettings(){
+			for(final GeneSpecification geneSpec : geneticContent.getBooleanGeneSpecifications()) {
+				if(geneSpec.getGeneType() == GeneSpecification.TYPE_BOOLEAN) {
+					geneticPanel.addNewBooleanComponents(new JLabel(geneSpec.getName()),
+							makeComponent_ActiveOnBirth(geneSpec), makeComponent_Mutable(geneSpec));
 				}
+			}
 
-				final DoubleGene gene = (DoubleGene) g.getGene();
-
-				JLabel lblGroupBehavior = new JLabel(g.getName());
-
-				//Start value
-
-				final JTextField tfStartValue = new JTextField("" + Stat.roundNDecimals(((Double)gene.getCurrentDoubleValue()).doubleValue(),2));
-				tfStartValue.addKeyListener(new KeyListener() {
-					@Override
-					public void keyTyped(KeyEvent e) { }
-					@Override
-					public void keyReleased(KeyEvent e) {
-						try {
-							double value = Double.parseDouble(tfStartValue.getText());
-							gene.setCurrentDoubleValue(value);
-						} catch (Exception ex) {
-
-						}
-					}
-					@Override
-					public void keyPressed(KeyEvent e) {
-					}
-				});
-
-				//Min value
-				final JTextField tfMinValue = new JTextField("" +  Stat.roundNDecimals(gene.getMinValue(),2));
-				tfMinValue.addKeyListener(new KeyListener() {
-					@Override
-					public void keyTyped(KeyEvent e) { }
-					@Override
-					public void keyReleased(KeyEvent e) {
-						try {
-							double value = Double.parseDouble(tfMinValue.getText());
-							gene.setMinValue(value);
-						} catch (Exception ex) {
-
-						}
-					}
-					@Override
-					public void keyPressed(KeyEvent e) {
-					}
-				});
-
-				//Max value
-				final JTextField tfMaxValue = new JTextField("" +  Stat.roundNDecimals(gene.getMaxValue(),2));
-				tfMaxValue.addKeyListener(new KeyListener() {
-					@Override
-					public void keyTyped(KeyEvent e) { }
-					@Override
-					public void keyReleased(KeyEvent e) {
-						try {
-							double value = Double.parseDouble(tfMaxValue.getText());
-							gene.setMaxValue(value);
-						} catch (Exception ex) {
-
-						}
-					}
-					@Override
-					public void keyPressed(KeyEvent e) {
-					}
-				});
-
-				//Mutable
-				final JCheckBox chkbxMutable = new JCheckBox("", gene.isMutable());
-				chkbxMutable.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						gene.setMutable(chkbxMutable.isSelected());
-					}
-				});
-
-				//Random Start
-				final JCheckBox chkbxRandomStart = new JCheckBox("", gene.hasRandomStartValue());
-				chkbxRandomStart.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						gene.setRandomStartValue(chkbxRandomStart.isSelected());
-					}
-				});
-
-				geneticPanel.newDoubleComponents(lblGroupBehavior, tfStartValue,
-						tfMinValue, tfMaxValue, chkbxMutable, chkbxRandomStart);
-				geneticPanel.initDoubleGeneSettings();
+			geneticPanel.addDoubleHeaders();
+			for(final GeneSpecification geneSpec : geneticContent.getDoubleGeneSpecifications()) {
+				if(geneSpec.getGeneType() == GeneSpecification.TYPE_DOUBLE) {
+					geneticPanel.addNewDoubleComponents(new JLabel(geneSpec.getName()), makeComponent_StartValue(geneSpec),
+							makeComponent_MinValue(geneSpec), makeComponent_MaxValue(geneSpec),
+							makeComponent_Mutable(geneSpec), makeComponent_RandomStart(geneSpec));
+				}
 			}
 		}
 
-		protected void newBooleanGeneSettings(){
-			// actually getGenes
-			for(final GenomeSpecification g : geneticContent.getGenomes()) {
-				if(g.getGenomeType() != GenomeSpecification.TYPE_BOOLEAN) {
-					continue;
+		/**
+		 * @param geneSpec
+		 * @return
+		 */
+		private JCheckBox makeComponent_RandomStart(
+				final GeneSpecification geneSpec) {
+			//Random Start
+			final JCheckBox chkbxRandomStart = new JCheckBox("", geneSpec.hasRandomStartValue());
+			chkbxRandomStart.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					geneSpec.setRandomStartValue(chkbxRandomStart.isSelected());
 				}
-
-				final BooleanGene gene = (BooleanGene) g.getGene();
-
-				final JCheckBox chkbxActiveBirth = new JCheckBox("",gene.isGeneActive());
-				chkbxActiveBirth.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						gene.setHaveGene(chkbxActiveBirth.isSelected());
-					}
-				});
-
-				final JCheckBox chckbxMutable = new JCheckBox("", gene.isMutable());
-				chckbxMutable.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						gene.setMutable(chckbxMutable.isSelected());
-					}
-				});
-
-				geneticPanel.newBooleanComponents(new JLabel(g.getName()), chkbxActiveBirth, chckbxMutable);
-				geneticPanel.addNewBooleanGeneSettings();
-			}
+			});
+			return chkbxRandomStart;
 		}
 
+		/**
+		 * @param geneSpec
+		 * @return
+		 */
+		private JTextField makeComponent_MinValue(final GeneSpecification geneSpec) {
+			//Min value
+			final JTextField tfMinValue = new JTextField("" +  Stat.roundNDecimals(geneSpec.getMinValue(),2));
+			tfMinValue.addKeyListener(new KeyListener() {
+				@Override
+				public void keyTyped(KeyEvent e) { }
+				@Override
+				public void keyReleased(KeyEvent e) {
+					try {
+						double value = Double.parseDouble(tfMinValue.getText());
+						geneSpec.setMinValue(value);
+					} catch (Exception ex) {
 
+					}
+				}
+				@Override
+				public void keyPressed(KeyEvent e) {
+				}
+			});
+			return tfMinValue;
+		}
+
+		/**
+		 * @param geneSpec
+		 * @return
+		 */
+		private JTextField makeComponent_MaxValue(final GeneSpecification geneSpec) {
+			//Max value
+			final JTextField tfMaxValue = new JTextField("" +  Stat.roundNDecimals(geneSpec.getMaxValue(),2));
+			tfMaxValue.addKeyListener(new KeyListener() {
+				@Override
+				public void keyTyped(KeyEvent e) { }
+				@Override
+				public void keyReleased(KeyEvent e) {
+					try {
+						double value = Double.parseDouble(tfMaxValue.getText());
+						geneSpec.setMaxValue(value);
+					} catch (Exception ex) {
+
+					}
+				}
+				@Override
+				public void keyPressed(KeyEvent e) {
+				}
+			});
+			return tfMaxValue;
+		}
+
+		/**
+		 * @param geneSpec
+		 * @return
+		 */
+		private JTextField makeComponent_StartValue(
+				final GeneSpecification geneSpec) {
+			//Start value
+			final JTextField tfStartValue = new JTextField("" + Stat.roundNDecimals(geneSpec.getCurrentDoubleValue(),2));
+			tfStartValue.addKeyListener(new KeyListener() {
+				@Override
+				public void keyTyped(KeyEvent e) { }
+				@Override
+				public void keyReleased(KeyEvent e) {
+					try {
+						double value = Double.parseDouble(tfStartValue.getText());
+						geneSpec.setCurrentDoubleValue(value);
+					} catch (Exception ex) {
+
+					}
+				}
+				@Override
+				public void keyPressed(KeyEvent e) {
+				}
+			});
+			return tfStartValue;
+		}
+
+		/**
+		 * @param geneSpec
+		 * @return
+		 */
+		private JCheckBox makeComponent_ActiveOnBirth(final GeneSpecification geneSpec) {
+			final JCheckBox chkbxActiveBirth = new JCheckBox("",geneSpec.isActiveOnBirth());
+			chkbxActiveBirth.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					geneSpec.setActiveOnBirth(chkbxActiveBirth.isSelected());
+				}
+			});
+			return chkbxActiveBirth;
+		}
+
+		/**
+		 * @param geneSpec
+		 * @return
+		 */
+		private JCheckBox makeComponent_Mutable(final GeneSpecification geneSpec) {
+
+			final JCheckBox chckbxMutable = new JCheckBox("", geneSpec.isMutable());
+			chckbxMutable.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					geneSpec.setMutable(chckbxMutable.isSelected());
+				}
+			});
+			return chckbxMutable;
+		}
 	}
-
-
 }

@@ -10,8 +10,8 @@ import org.junit.runners.JUnit4;
 
 import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
 import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
-import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
-import chalmers.dax021308.ecosystem.model.genetics.newV.IGenome;
+import chalmers.dax021308.ecosystem.model.genetics.IGene;
+import chalmers.dax021308.ecosystem.model.genetics.IGenome;
 
 /**
  *

@@ -1,6 +1,5 @@
 package chalmers.dax021308.ecosystem.view.populationsettings;
 
-import java.awt.Checkbox;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,15 +16,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.jfree.text.TextBox;
-
 
 import net.miginfocom.swing.MigLayout;
-import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
 import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
-import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings.GenomeSpecification;
-import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
-import chalmers.dax021308.ecosystem.model.genetics.newV.IGenome;
+import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings.GeneSpecification;
 import chalmers.dax021308.ecosystem.model.util.Stat;
 
 /**
@@ -38,13 +32,10 @@ import chalmers.dax021308.ecosystem.model.util.Stat;
  */
 public class GeneticPanel extends JPanel {
 
-	private GeneticSettings geneticContent;
-
 	@Deprecated
-	private Map<GenomeSpecification, List<JComponent>> guiMap = new HashMap<GenomeSpecification, List<JComponent>>();
+	private Map<GeneSpecification, List<JComponent>> guiMap = new HashMap<GeneSpecification, List<JComponent>>();
 
 	public GeneticPanel(GeneticSettings geneticContent) {
-		this.geneticContent = geneticContent;
 		setLayout(new MigLayout("", "[][][65.00][65.00][65]", "[][][][][]"));
 
 		JLabel lblGeneticSettings = new JLabel("Genetic Settings");
@@ -58,31 +49,29 @@ public class GeneticPanel extends JPanel {
 		add(lblMutable, "cell 4 1");
 
 		int currentRow = 1;
-		for(final GenomeSpecification g : geneticContent.getGenomes()) {
-			if(g.getGenomeType() != GenomeSpecification.TYPE_BOOLEAN) {
+		for(final GeneSpecification geneSpec : geneticContent.getBooleanGeneSpecifications()) {
+			/*if(geneSpec.getGeneType() != GeneSpecification.TYPE_BOOLEAN) {
 				continue;
-			}
-
-			final IGene gene = g.getGene();
+			}*/
 
 			currentRow++;
-			JLabel lblGroupBehavoir = new JLabel(g.getName());
+			JLabel lblGroupBehavoir = new JLabel(geneSpec.getName());
 			add(lblGroupBehavoir, "cell 2 "+currentRow+",alignx right");
 
-			final JCheckBox chkbxActiveBirth = new JCheckBox("",gene.isGeneActive());
+			final JCheckBox chkbxActiveBirth = new JCheckBox("",geneSpec.isActiveOnBirth());
 			chkbxActiveBirth.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					gene.setHaveGene(chkbxActiveBirth.isSelected());
+					geneSpec.setActiveOnBirth(chkbxActiveBirth.isSelected());
 				}
 			});
 			add(chkbxActiveBirth, "cell 3 "+currentRow+",alignx center");
 
-			final JCheckBox chckbxMutable = new JCheckBox("", gene.isMutable());
+			final JCheckBox chckbxMutable = new JCheckBox("", geneSpec.isMutable());
 			chckbxMutable.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					gene.setMutable(chckbxMutable.isSelected());
+					geneSpec.setMutable(chckbxMutable.isSelected());
 				}
 			});
 			add(chckbxMutable, "cell 4 "+currentRow+",alignx left");
@@ -90,7 +79,7 @@ public class GeneticPanel extends JPanel {
 			List<JComponent> jList = new ArrayList<JComponent>();
 			jList.add(chkbxActiveBirth);
 			jList.add(chckbxMutable);
-			guiMap.put(g, jList);
+			guiMap.put(geneSpec, jList);
 		}
 		currentRow++;
 		JLabel emptyLabel = new JLabel(" ");
@@ -107,20 +96,18 @@ public class GeneticPanel extends JPanel {
 		JLabel randomStartLabel = new JLabel("Random Start");
 		add(randomStartLabel, "cell 7 "+currentRow+",alignx center");
 		currentRow++;
-		for(final GenomeSpecification g : geneticContent.getGenomes()) {
-			if(g.getGenomeType() == GenomeSpecification.TYPE_BOOLEAN) {
+		for(final GeneSpecification geneSpec : geneticContent.getDoubleGeneSpecifications()) {
+			/*if(geneSpec.getGeneType() == GeneSpecification.TYPE_BOOLEAN) {
 				continue;
-			}
-
-			final IGene gene = g.getGene();
+			}*/
 
 			currentRow++;
-			JLabel lblGroupBehavoir = new JLabel(g.getName());
+			JLabel lblGroupBehavoir = new JLabel(geneSpec.getName());
 			add(lblGroupBehavoir, "cell 2 "+currentRow+",alignx right");
 
 			//Start value
 
-			final JTextField tfStartValue = new JTextField("" + Stat.roundNDecimals(gene.getCurrentDoubleValue(),2));
+			final JTextField tfStartValue = new JTextField("" + Stat.roundNDecimals(geneSpec.getCurrentDoubleValue(),2));
 			tfStartValue.addKeyListener(new KeyListener() {
 				@Override
 				public void keyTyped(KeyEvent e) { }
@@ -128,7 +115,7 @@ public class GeneticPanel extends JPanel {
 				public void keyReleased(KeyEvent e) {
 					try {
 						double value = Double.parseDouble(tfStartValue.getText());
-						gene.setCurrentDoubleValue(value);
+						geneSpec.setCurrentDoubleValue(value);
 					} catch (Exception ex) {
 
 					}
@@ -140,9 +127,9 @@ public class GeneticPanel extends JPanel {
 			add(tfStartValue, "cell 3 "+currentRow+",growx");
 
 			//Min value
-			final JTextField tfMaxValue = new JTextField("" +  Stat.roundNDecimals(gene.getMaxValue(),2));
+			final JTextField tfMaxValue = new JTextField("" +  Stat.roundNDecimals(geneSpec.getMaxValue(),2));
 
-			final JTextField tfMinValue = new JTextField("" +  Stat.roundNDecimals(gene.getMinValue(),2));
+			final JTextField tfMinValue = new JTextField("" +  Stat.roundNDecimals(geneSpec.getMinValue(),2));
 			tfMinValue.addKeyListener(new KeyListener() {
 				@Override
 				public void keyTyped(KeyEvent e) { }
@@ -150,11 +137,11 @@ public class GeneticPanel extends JPanel {
 				public void keyReleased(KeyEvent e) {
 					try {
 						double value = Double.parseDouble(tfMinValue.getText());
-						if (value > gene.getMaxValue()) {
+						if (value > geneSpec.getMaxValue()) {
 							tfMaxValue.setText(tfMinValue.getText());
-							gene.setMaxValue(value);
+							geneSpec.setMaxValue(value);
 						}
-						gene.setMinValue(value);
+						geneSpec.setMinValue(value);
 					} catch (Exception ex) {
 
 					}
@@ -173,11 +160,11 @@ public class GeneticPanel extends JPanel {
 				public void keyReleased(KeyEvent e) {
 					try {
 						double value = Double.parseDouble(tfMaxValue.getText());
-						if (value < gene.getMinValue()) {
+						if (value < geneSpec.getMinValue()) {
 							tfMinValue.setText(tfMaxValue.getText());
-							gene.setMinValue(value);
+							geneSpec.setMinValue(value);
 						}
-						gene.setMaxValue(value);
+						geneSpec.setMaxValue(value);
 					} catch (Exception ex) {
 
 					}
@@ -189,21 +176,21 @@ public class GeneticPanel extends JPanel {
 			add(tfMaxValue, "cell 5 "+currentRow+",growx");
 
 			//Mutable
-			final JCheckBox chkbxMutable = new JCheckBox("", gene.isMutable());
+			final JCheckBox chkbxMutable = new JCheckBox("", geneSpec.isMutable());
 			chkbxMutable.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					gene.setMutable(chkbxMutable.isSelected());
+					geneSpec.setMutable(chkbxMutable.isSelected());
 				}
 			});
 			add(chkbxMutable, "cell 6 "+currentRow+",alignx center");
 
 			//Random Start
-			final JCheckBox chkbxRandomStart = new JCheckBox("", gene.hasRandomStartValue());
+			final JCheckBox chkbxRandomStart = new JCheckBox("", geneSpec.hasRandomStartValue());
 			chkbxRandomStart.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					gene.setRandomStartValue(chkbxRandomStart.isSelected());
+					geneSpec.setRandomStartValue(chkbxRandomStart.isSelected());
 				}
 			});
 			add(chkbxRandomStart, "cell 7 "+currentRow+",alignx center");
@@ -215,7 +202,7 @@ public class GeneticPanel extends JPanel {
 	}
 	private static final long serialVersionUID = 1L;
 
-	@Deprecated
+	/*@Deprecated
 	public List<GenomeSpecification> getFilledSpecification() {
 		List<GenomeSpecification> result = new ArrayList<GenomeSpecification>();
 		for(GenomeSpecification g : guiMap.keySet()) {
@@ -232,6 +219,6 @@ public class GeneticPanel extends JPanel {
 			result.add(g);
 		}
 		return result;
-	}
+	}*/
 
 }

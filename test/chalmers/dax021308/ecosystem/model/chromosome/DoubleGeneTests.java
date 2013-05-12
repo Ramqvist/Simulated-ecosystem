@@ -8,9 +8,9 @@ import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.Test;
 
-import chalmers.dax021308.ecosystem.model.genetics.newV.BooleanGene;
-import chalmers.dax021308.ecosystem.model.genetics.newV.DoubleGene;
-import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
+import chalmers.dax021308.ecosystem.model.genetics.BooleanGene;
+import chalmers.dax021308.ecosystem.model.genetics.DoubleGene;
+import chalmers.dax021308.ecosystem.model.genetics.IGene;
 
 /**
  * @author Loanne Berggren

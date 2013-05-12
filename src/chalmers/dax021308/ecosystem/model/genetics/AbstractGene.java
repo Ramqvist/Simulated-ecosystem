@@ -1,7 +1,7 @@
 /**
  * @author Loanne Berggren
  */
-package chalmers.dax021308.ecosystem.model.genetics.newV;
+package chalmers.dax021308.ecosystem.model.genetics;
 
 import java.util.Random;
 
@@ -17,6 +17,14 @@ public abstract class AbstractGene implements IGene {
 	protected boolean randomStartValue = false;
 	protected boolean geneActiveStatus = true;
 	protected Random randomGenerator = new Random();
+
+	private static NullGene nullGene;
+	public static IGene newNullGene(){
+		if (nullGene == null)
+			nullGene = new NullGene();
+
+		return nullGene;
+	}
 
 	/**
 	 *

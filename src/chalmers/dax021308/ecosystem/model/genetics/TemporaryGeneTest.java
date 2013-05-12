@@ -1,8 +1,6 @@
 package chalmers.dax021308.ecosystem.model.genetics;
 
-import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings.GenomeSpecification;
-import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
-import chalmers.dax021308.ecosystem.model.genetics.newV.IGenome;
+import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings.GeneSpecification;
 
 public class TemporaryGeneTest {
 	

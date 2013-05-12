@@ -3,13 +3,6 @@
  */
 package chalmers.dax021308.ecosystem.model.genetics;
 
-import chalmers.dax021308.ecosystem.model.genetics.newV.BooleanGene;
-import chalmers.dax021308.ecosystem.model.genetics.newV.DoubleGene;
-import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
-import chalmers.dax021308.ecosystem.model.genetics.newV.Chromosome;
-import chalmers.dax021308.ecosystem.model.genetics.newV.Genome;
-import chalmers.dax021308.ecosystem.model.genetics.newV.IChromosome;
-import chalmers.dax021308.ecosystem.model.genetics.newV.IGenome;
 
 
 
@@ -20,13 +13,11 @@ import chalmers.dax021308.ecosystem.model.genetics.newV.IGenome;
 public class GenomeFactory {
 	public static IGenome<GeneralGeneTypes, IGene> deerGenomeFactory(){
 		IGenome<GeneralGeneTypes, IGene> g = new Genome(initDeerGenome());
-		//g.setMutationProbability(0.1);
 		return g;
 	}
 
 	public static IGenome<GeneralGeneTypes, IGene> wolfGenomeFactory(){
 		IGenome<GeneralGeneTypes, IGene> g = new Genome(initWolfGenome());
-		//g.setMutationProbability(0.1);
 		return g;
 	}
 
@@ -67,6 +58,19 @@ public class GenomeFactory {
 		//Focus preys
 		chrom.addGene(GeneralGeneTypes.FOCUSPREY, new BooleanGene(true, mutProb, false, false));
 
+		return chrom;
+	}
+
+	public static IGenome<GeneralGeneTypes, IGene> grassGenomeFactory(){
+		IGenome<GeneralGeneTypes, IGene> g = new Genome(initWolfGenome());
+		return g;
+	}
+
+	private static IChromosome<GeneralGeneTypes,IGene> initGrassGenome(){
+		IChromosome<GeneralGeneTypes,IGene> chrom = new Chromosome();
+		chrom.addGene(GeneralGeneTypes.EATEN_EQUALS_DEATH, BooleanGene.newNullGene());
+		chrom.addGene(GeneralGeneTypes.WEED_TRANSFORMATION_FACTOR, DoubleGene.newNullGene());
+		chrom.addGene(GeneralGeneTypes.HIGH_FACTOR, DoubleGene.newNullGene());
 		return chrom;
 	}
 }

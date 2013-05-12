@@ -16,7 +16,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
  * Pig Agent.
- * 
+ *
  * @author Group 8, path finding edits by Erik Ramqvist
  */
 public class PigAgent extends AbstractAgent {
@@ -49,8 +49,8 @@ public class PigAgent extends AbstractAgent {
 		this.focusedPreyPath = new AgentPath();
 
 	}*/
-	
-	// TODO I removed obsList. 
+
+	// TODO I removed obsList.
 	public PigAgent(String name, Position p, Color c, int width, int height,
 			Vector velocity, double maxSpeed, double maxAcceleration,
 			double visionRange, boolean groupBehaviour) {
@@ -80,7 +80,7 @@ public class PigAgent extends AbstractAgent {
 					double newY = this.getPosition().getY() + ySign
 							* (0.001 + 0.001 * Math.random());
 					pos = new Position(newX, newY);
-				} while (!surroundings.getWorldShape().isInside(surroundings.getGridDimension(), pos));
+				} while (!SurroundingsSettings.getWorldShape().isInside(SurroundingsSettings.getGridDimension(), pos));
 				/*IAgent child = new PigAgent(name, pos, color, width, height,
 						new Vector(velocity), maxSpeed, maxAcceleration,
 						visionRange, groupBehaviour, surroundings.getObstacles());*/
@@ -98,7 +98,7 @@ public class PigAgent extends AbstractAgent {
 	 * Calculates the next position of the agent depending on the forces that
 	 * affects it. Note: The next position is not set until updatePosition() is
 	 * called.
-	 * 
+	 *
 	 * @author Sebbe
 	 */
 	@Override
@@ -108,7 +108,7 @@ public class PigAgent extends AbstractAgent {
 
 		updateNeighbourList(neutral, preys, predators);
 		Vector predatorForce = getPredatorForce();
-		Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys, surroundings, focusedPrey, 
+		Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys, surroundings, focusedPrey,
 				this, preyNeighbours, visionRange,
 				focusedPreyPath, 10);
 		if (predatorForce.isNullVector())
@@ -125,10 +125,10 @@ public class PigAgent extends AbstractAgent {
 				forwardThrust = ForceCalculator.forwardThrust(velocity, forwardThrustConstant);
 				arrayalForce = ForceCalculator.arrayalForce(neutralNeighbours, this, arrayalConstant);
 			}
-			
-			Vector environmentForce = ForceCalculator.getEnvironmentForce(surroundings.getGridDimension(), surroundings.getWorldShape(),
+
+			Vector environmentForce = ForceCalculator.getEnvironmentForce(SurroundingsSettings.getGridDimension(), SurroundingsSettings.getWorldShape(),
 					position);
-			Vector obstacleForce = ForceCalculator.getObstacleForce(surroundings.getObstacles(), position);
+			Vector obstacleForce = ForceCalculator.getObstacleForce(SurroundingsSettings.getObstacles(), position);
 
 			/*
 			 * Sum the forces from walls, predators and neutral to form the
@@ -224,12 +224,12 @@ public class PigAgent extends AbstractAgent {
 						return new Vector(focusedPreyPath.pop(), position);
 					}
 				} else {
-					if(AbstractObstacle.isInsidePathList(surroundings.getObstacles(), position, focusedPreyContainer.get().getPosition())) {
+					if(AbstractObstacle.isInsidePathList(SurroundingsSettings.getObstacles(), position, focusedPreyContainer.get().getPosition())) {
 						//focusedPreyPath.setPath(Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), obstacles, surroundings.getWorldShape(), surroundings.getGridDimension()), initial_ttl);
 						focusedPreyPath.setPath(
-								Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), 
-										surroundings.getObstacles(), surroundings.getWorldShape(), 
-										surroundings.getGridDimension(), surroundings.getObstacleSafetyDistance()), 
+								Position.getShortestPath(position, focusedPreyContainer.get().getPosition(),
+										SurroundingsSettings.getObstacles(), SurroundingsSettings.getWorldShape(),
+										SurroundingsSettings.getGridDimension(), surroundings.getObstacleSafetyDistance()),
 										initial_ttl);
 						if(focusedPreyPath.isEmpty()) {
 							//Unreachable target.
@@ -293,8 +293,8 @@ public class PigAgent extends AbstractAgent {
 
 		if (willFocusPreys && closestFocusPrey != null) {
 			focusedPreyContainer.set(closestFocusPrey);
-			if(AbstractObstacle.isInsidePathList(surroundings.getObstacles(), position, focusedPreyContainer.get().getPosition())) {
-				focusedPreyPath.setPath(Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), surroundings.getObstacles(), surroundings.getWorldShape(), surroundings.getGridDimension(), 5), initial_ttl);
+			if(AbstractObstacle.isInsidePathList(SurroundingsSettings.getObstacles(), position, focusedPreyContainer.get().getPosition())) {
+				focusedPreyPath.setPath(Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), SurroundingsSettings.getObstacles(), SurroundingsSettings.getWorldShape(), SurroundingsSettings.getGridDimension(), 5), initial_ttl);
 				if(focusedPreyPath.isEmpty()) {
 					return Vector.emptyVector();
 				} else {
@@ -304,12 +304,12 @@ public class PigAgent extends AbstractAgent {
 				focusedPreyPath.clearPath();
 				return new Vector(focusedPreyContainer.get().getPosition(), position);
 			}
-				
+
 		}
 		return preyForce;
 	}
 
-	
+
 	private Vector getPreyForce(SurroundingsSettings surroundings, Container<IAgent> focusedPreyContainer, int initial_ttl) {
 		if (willFocusPreys && focusedPreyContainer.get() != null && focusedPreyContainer.get().isAlive()) {
 			Position p = focusedPreyContainer.get().getPosition();
@@ -336,16 +336,16 @@ public class PigAgent extends AbstractAgent {
 						}
 					}
 					focusedPreyPath.decreaseTTL();
-					
+
 //					System.out.println(focusedPreyPath.getTTL());
 //					System.out.println(position + " to " +nextPathPosition);
 					return new Vector(nextPathPosition, position);
 				} else {
-					if(AbstractObstacle.isInsidePathList(surroundings.getObstacles(), position, focusedPreyContainer.get().getPosition())) {
+					if(AbstractObstacle.isInsidePathList(SurroundingsSettings.getObstacles(), position, focusedPreyContainer.get().getPosition())) {
 						focusedPreyPath.setPath(
-								Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), 
-										surroundings.getObstacles(), surroundings.getWorldShape(), 
-										surroundings.getGridDimension(), surroundings.getObstacleSafetyDistance())
+								Position.getShortestPath(position, focusedPreyContainer.get().getPosition(),
+										SurroundingsSettings.getObstacles(), SurroundingsSettings.getWorldShape(),
+										SurroundingsSettings.getGridDimension(), surroundings.getObstacleSafetyDistance())
 								,initial_ttl);
 						if(focusedPreyPath.isEmpty()) {
 //							System.out.println("NULL VECTOR");
@@ -364,7 +364,7 @@ public class PigAgent extends AbstractAgent {
 				}
 			}
 		}
-		
+
 		Vector preyForce = new Vector(0, 0);
 		IAgent closestFocusPrey = null;
 		int nrOfPreys = preyNeighbours.size();
@@ -393,7 +393,7 @@ public class PigAgent extends AbstractAgent {
 					 * Create a vector that points towards the prey.
 					 */
 					Vector newForce = new Vector(p, this.getPosition());
-	
+
 					/*
 					 * Add this vector to the prey force, with proportion to how
 					 * close the prey is. Closer preys will affect the force
@@ -410,11 +410,11 @@ public class PigAgent extends AbstractAgent {
 		}
 		if (willFocusPreys && closestFocusPrey != null) {
 			focusedPreyContainer.set(closestFocusPrey);
-			if(AbstractObstacle.isInsidePathList(surroundings.getObstacles(), position, focusedPreyContainer.get().getPosition())) {
+			if(AbstractObstacle.isInsidePathList(SurroundingsSettings.getObstacles(), position, focusedPreyContainer.get().getPosition())) {
 				focusedPreyPath.setPath(
-						Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), 
-								surroundings.getObstacles(), surroundings.getWorldShape(), 
-								surroundings.getGridDimension(), surroundings.getObstacleSafetyDistance())
+						Position.getShortestPath(position, focusedPreyContainer.get().getPosition(),
+								SurroundingsSettings.getObstacles(), SurroundingsSettings.getWorldShape(),
+								SurroundingsSettings.getGridDimension(), surroundings.getObstacleSafetyDistance())
 						,initial_ttl);
 				if(focusedPreyPath.isEmpty()) {
 					return Vector.emptyVector();
@@ -430,9 +430,9 @@ public class PigAgent extends AbstractAgent {
 		}
 		return preyForce;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * @return returns The force the preys attracts the agent with
 	 * @author Sebastian/Henrik
@@ -462,7 +462,7 @@ public class PigAgent extends AbstractAgent {
 							//Remove the next path, we are close to it, and go to next.
 							focusedPreyPath.pop();
 							return new Vector(focusedPreyPath.peek(), position);
-						} 
+						}
 					} else {
 						return new Vector(focusedPreyContainer.get().getPosition(), position);
 					}
@@ -518,11 +518,11 @@ public class PigAgent extends AbstractAgent {
 
 		if (willFocusPreys && closestFocusPrey != null) {
 			focusedPreyContainer.set(closestFocusPrey);
-			if(AbstractObstacle.isInsidePathList(surroundings.getObstacles(), position, focusedPreyContainer.get().getPosition())) {
+			if(AbstractObstacle.isInsidePathList(SurroundingsSettings.getObstacles(), position, focusedPreyContainer.get().getPosition())) {
 				focusedPreyPath.setPath(
-						Position.getShortestPath(position, focusedPreyContainer.get().getPosition(), 
-								surroundings.getObstacles(), surroundings.getWorldShape(), 
-								surroundings.getGridDimension(),surroundings.getObstacleSafetyDistance()));
+						Position.getShortestPath(position, focusedPreyContainer.get().getPosition(),
+								SurroundingsSettings.getObstacles(), SurroundingsSettings.getWorldShape(),
+								SurroundingsSettings.getGridDimension(),surroundings.getObstacleSafetyDistance()));
 				if(focusedPreyPath.isEmpty()) {
 					return Vector.emptyVector();
 				} else {
@@ -532,7 +532,7 @@ public class PigAgent extends AbstractAgent {
 				focusedPreyPath.clearPath();
 				return new Vector(focusedPreyContainer.get().getPosition(), position);
 			}
-				
+
 		}
 		return preyForce;
 	}
@@ -543,7 +543,7 @@ public class PigAgent extends AbstractAgent {
 	 * the predators, then normalized to have unit norm. Can be interpreted as
 	 * the average sum of forces that the agent feels, weighted by how close the
 	 * source of the force is.
-	 * 
+	 *
 	 * @author Sebbe
 	 */
 	private Vector getPredatorForce() {
@@ -628,7 +628,7 @@ public class PigAgent extends AbstractAgent {
 		if (energy == 0 || lifeLength > MAX_LIFE_LENGTH)
 			isAlive = false;
 	}
-	
+
 	@Override
 	public void eat() {
 		hungry = false;

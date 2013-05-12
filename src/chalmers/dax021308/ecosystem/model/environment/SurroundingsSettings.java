@@ -21,7 +21,7 @@ public class SurroundingsSettings {
 	private double OBSTACLE_SAFETY_DISTANCE;
 
 	/**
-	 * 
+	 *
 	 * @param d		Dimension of the world.
 	 * @param s		Shape of the world.
 	 * @param o		List of obstacles.
@@ -29,41 +29,41 @@ public class SurroundingsSettings {
 	public SurroundingsSettings(double obstacleSafetyDistance){
 		OBSTACLE_SAFETY_DISTANCE = obstacleSafetyDistance;
 	}
-	
+
 	/**
 	 * @return the gridDimension
 	 */
-	public Dimension getGridDimension() {
+	public static Dimension getGridDimension() {
 		return SurroundingsSettings.gridDimension;
 	}
 	/**
 	 * @param gridDimension the gridDimension to set
 	 */
-	public void setGridDimension(Dimension gridDimension) {
+	public static void setGridDimension(Dimension gridDimension) {
 		SurroundingsSettings.gridDimension = gridDimension;
 	}
 	/**
 	 * @return the obstacles
 	 */
-	public List<IObstacle> getObstacles() {
+	public static List<IObstacle> getObstacles() {
 		return SurroundingsSettings.obstacles;
 	}
 	/**
 	 * @param obstacles the obstacles to set
 	 */
-	public void setObstacles(List<IObstacle> obstacles) {
+	public static void setObstacles(List<IObstacle> obstacles) {
 		SurroundingsSettings.obstacles = obstacles;
 	}
 	/**
 	 * @return the worldShape
 	 */
-	public IShape getWorldShape() {
+	public static IShape getWorldShape() {
 		return SurroundingsSettings.worldShape;
 	}
 	/**
 	 * @param worldShape the worldShape to set
 	 */
-	public void setWorldShape(IShape worldShape) {
+	public static void setWorldShape(IShape worldShape) {
 		SurroundingsSettings.worldShape = worldShape;
 	}
 

@@ -6,16 +6,12 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
-import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
-import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
-import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
-import chalmers.dax021308.ecosystem.model.genetics.newV.IGenome;
+import chalmers.dax021308.ecosystem.model.genetics.IGene;
+import chalmers.dax021308.ecosystem.model.genetics.IGenome;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
-import chalmers.dax021308.ecosystem.model.population.settings.GrassSettings;
 import chalmers.dax021308.ecosystem.model.population.settings.PredSettings;
 import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
 import chalmers.dax021308.ecosystem.model.util.Position;
-import chalmers.dax021308.ecosystem.model.util.Stat;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
@@ -33,18 +29,18 @@ public class WolfAgent extends AbstractAgent {
 	private int digesting = 0;
 	private IGenome<GeneralGeneTypes, IGene> genome;
 
-	
+
 	public WolfAgent(String name, Position position, Color color, int width,
 			int height, Vector velocity, double maxSpeed,
 			double maxAcceleration, double visionRange,
 			IGenome<GeneralGeneTypes, IGene> genome) {
-		
+
 		super(name, position, color, width, height, velocity, maxSpeed,
 				visionRange, maxAcceleration);
 		REPRODUCTION_RATE = PredSettings.instance.reproduction_rate.value;
 		this.energy = MAX_ENERGY;
 		this.genome = genome;
-		
+
 		//Grouping parameters
 		this.groupBehaviour = this.genome.getGene(GeneralGeneTypes.ISGROUPING).isGeneActive();
 		cohesionConstant = ((Double)this.genome.getGene(GeneralGeneTypes.GROUPING_COHESION).getCurrentDoubleValue()).doubleValue();
@@ -56,7 +52,7 @@ public class WolfAgent extends AbstractAgent {
 		} else {
 			this.color = Color.ORANGE;
 		}
-		
+
 		//Focusing preys
 		willFocusPreys = this.genome.getGene(GeneralGeneTypes.FOCUSPREY).isGeneActive();
 	}
@@ -69,7 +65,7 @@ public class WolfAgent extends AbstractAgent {
 			digesting--;
 		} else {
 			updateNeighbourList(neutral, preys, predators);
-			Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys, surroundings, focusedPrey, 
+			Vector preyForce = ForceCalculator.getPreyForce(willFocusPreys, surroundings, focusedPrey,
 					this, preyNeighbours, FOCUS_RANGE,
 					focusedPreyPath, PATH_TTL);
 			Vector mutualInteractionForce = new Vector();
@@ -81,9 +77,9 @@ public class WolfAgent extends AbstractAgent {
 				forwardThrust = ForceCalculator.forwardThrust(velocity, forwardThrustConstant);
 				arrayalForce = ForceCalculator.arrayalForce(neutralNeighbours, this, arrayalConstant);
 			}
-			Vector environmentForce = ForceCalculator.getEnvironmentForce(surroundings.getGridDimension(), surroundings.getWorldShape(),
+			Vector environmentForce = ForceCalculator.getEnvironmentForce(SurroundingsSettings.getGridDimension(), SurroundingsSettings.getWorldShape(),
 					position);
-			Vector obstacleForce = ForceCalculator.getObstacleForce(surroundings.getObstacles(), position);
+			Vector obstacleForce = ForceCalculator.getObstacleForce(SurroundingsSettings.getObstacles(), position);
 
 			/*
 			 * Sum the forces from walls, predators and neutral to form the
@@ -91,7 +87,7 @@ public class WolfAgent extends AbstractAgent {
 			 * acceleration --> scale it to maxAcceleration, but keep the
 			 * correct direction of the acceleration.
 			 */
-			
+
 			Vector acceleration = preyForce.multiply(10)
 					.add(mutualInteractionForce).add(forwardThrust)
 					.add(arrayalForce);
@@ -146,7 +142,7 @@ public class WolfAgent extends AbstractAgent {
 					double newY = this.getPosition().getY() + ySign
 							* (0.001 + 0.001 * Math.random());
 					pos = new Position(newX, newY);
-				} while (!surroundings.getWorldShape().isInside(surroundings.getGridDimension(), pos));
+				} while (!SurroundingsSettings.getWorldShape().isInside(SurroundingsSettings.getGridDimension(), pos));
 				IGenome<GeneralGeneTypes, IGene> newGenome = genome.getCopy();
 				IAgent child = new WolfAgent(name, pos, color, width, height,
 						new Vector(velocity), maxSpeed, maxAcceleration,
@@ -176,5 +172,5 @@ public class WolfAgent extends AbstractAgent {
 	public boolean isAGroupingWolf() {
 		return groupBehaviour;
 	}
-	
+
 }

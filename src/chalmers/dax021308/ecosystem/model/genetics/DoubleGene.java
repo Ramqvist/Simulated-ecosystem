@@ -1,4 +1,4 @@
-package chalmers.dax021308.ecosystem.model.genetics.newV;
+package chalmers.dax021308.ecosystem.model.genetics;
 
 import java.util.Random;
 

@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,9 +24,9 @@ import chalmers.dax021308.ecosystem.model.util.Log;
 
 /**
  * Class representing a Recorded simulation.
- * 
+ *
  * Use the init methods before reading/writing.
- * 
+ *
  * @author Erik Ramqvist
  *
  */
@@ -43,7 +42,7 @@ public class SimulationRecording {
 	private static final String POPULATION    = "<P>";
 	private static final String AGENT         = "<A>";
 	private static final String FRAME_END     = "</F>";
-	
+
 	/* Temporary class variables */
 	private File recordedFile;
 	private BufferedReader br;
@@ -52,8 +51,8 @@ public class SimulationRecording {
 	private PrintWriter pw;
 	private String shapeConstant;
 	private List<IObstacle> obsList;
-	
-	
+
+
 	/**
 	 * Initialize the reading.
 	 * <p>
@@ -84,7 +83,7 @@ public class SimulationRecording {
 	/**
 	 * Initialize the writing.
 	 * <p>
-	 * Need to call this before writing. 
+	 * Need to call this before writing.
 	 * Otherwise undefined behavior.
 	 * @param fileName path to the file.
 	 * @return
@@ -110,10 +109,10 @@ public class SimulationRecording {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Adds a recorded frame to the currently writing file.
-	 * 
+	 *
 	 * @param popList
 	 */
 	public void appendFrame(List<IPopulation> popList) {
@@ -126,7 +125,7 @@ public class SimulationRecording {
 		}
 		pw.println(FRAME_END);
 	}
-	
+
 	/**
 	 * Reads the header information from the text file.
 	 * For now only contains obstacle.
@@ -154,7 +153,7 @@ public class SimulationRecording {
 				IObstacle o = AbstractObstacle.createFromFile(inputArr[1]);
 				if(obsList != null) obsList.add(o);
 				//Create obstacle method.
-			} 
+			}
 			try {
 				input = br.readLine();
 			} catch (IOException e) {
@@ -164,7 +163,7 @@ public class SimulationRecording {
 		Log.v("Reached end of header.");
 		return null;
 	}
-	
+
 	/**
 	 * Append header information, now only contains obstacles.
 	 * @param obsList
@@ -178,7 +177,7 @@ public class SimulationRecording {
 		pw.println(SHAPE + ';' + shapeConstant);
 		pw.println(HEADER_END);
 	}
-	
+
 	private String getDimensionBinaryString(Dimension d) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(DIMENSION);
@@ -188,18 +187,18 @@ public class SimulationRecording {
 		sb.append(d.height);
 		return sb.toString();
 	}
-	
+
 	public String getShapeConstant() {
 		return shapeConstant;
 	}
-	
+
 	private Dimension readDimension(String s) {
 		String[] input = s.split(";");
 		int width = Integer.parseInt(input[0]);
 		int height = Integer.parseInt(input[1]);
 		return new Dimension(width, height);
 	}
-	
+
 	public Dimension getLoadedDimension() {
 		return simDim;
 	}
@@ -247,11 +246,11 @@ public class SimulationRecording {
 		Log.v("Reached end of recording.");
 		return currentFrame;
 	}
-	
+
 	/**
-	 * Closes the streams used by this class. 
+	 * Closes the streams used by this class.
 	 * Do this after {@link #readFrame()} return null or the model has finished its iterations.
-	 * 
+	 *
 	 */
 	public void close() {
 		try {
@@ -262,13 +261,13 @@ public class SimulationRecording {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
+
+
+
 
 	/**
 	 * Helper method for readRecordFromDisk.
-	 * 
+	 *
 	 * Unfinished! Untested!
 	 * @param br
 	 * @return
@@ -314,7 +313,7 @@ public class SimulationRecording {
 		}
 		return result;
 	}
-	
+
 	public boolean saveToFile(File f) {
 		try {
 			copyFile(recordedFile, f);
@@ -349,9 +348,9 @@ public class SimulationRecording {
 
 	/**
 	 * Saves the given recording to the filePath
-	 * 
+	 *
 	 * Unfinished! Untested!
-	 * 
+	 *
 	 * @param record
 	 * @param filePath
 	 * @return

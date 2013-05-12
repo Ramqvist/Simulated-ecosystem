@@ -1,4 +1,4 @@
-package chalmers.dax021308.ecosystem.model.genetics.newV;
+package chalmers.dax021308.ecosystem.model.genetics;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
 
 public class Chromosome implements IChromosome<GeneralGeneTypes, IGene> {
 
@@ -33,10 +32,8 @@ public class Chromosome implements IChromosome<GeneralGeneTypes, IGene> {
 			while(it.hasNext()) {
 				Entry<GeneralGeneTypes,IGene> entry = it.next();
 				newChromosome.put(entry.getKey(), entry.getValue().getCopy());
-	//			System.out.println(entry.getKey());
 			}
 		}
-
 		return newChromosome;
 	}
 
@@ -58,8 +55,9 @@ public class Chromosome implements IChromosome<GeneralGeneTypes, IGene> {
 	}
 
 	@Override
-	public Object getGenes() {
-		return makeNewMap(this.chromosomeMap);
+	public Map<GeneralGeneTypes,IGene> getGenes() {
+		return this.chromosomeMap;
+		//return makeNewMap(this.chromosomeMap);
 	}
 
 	/* (non-Javadoc)

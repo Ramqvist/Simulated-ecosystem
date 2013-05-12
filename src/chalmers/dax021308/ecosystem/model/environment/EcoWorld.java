@@ -14,7 +14,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
-import chalmers.dax021308.ecosystem.model.environment.mapeditor.SimulationMap;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.EllipticalObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
@@ -257,8 +256,7 @@ public class EcoWorld implements IModel {
 		}
 		List<IPopulation> populations = new ArrayList<IPopulation>();
 
-		SurroundingsSettings surroundings = new SurroundingsSettings(0);
-		surroundings.setGridDimension(d);
+		SurroundingsSettings.setGridDimension(d);
 		/*
 		 * Creating obstacles here for test. This should be done in a proper way
 		 * later.
@@ -266,12 +264,12 @@ public class EcoWorld implements IModel {
 		if(s.getMap().getObsList() != null) {
 			List<IObstacle> obstacles = s.getMap().getScaledObstacles(d);
 			if(obstacles != null ) {
-				surroundings.setObstacles(obstacles);
+				SurroundingsSettings.setObstacles(obstacles);
 			} else {
-				surroundings.setObstacles(new ArrayList<IObstacle>(0));
+				SurroundingsSettings.setObstacles(new ArrayList<IObstacle>(0));
 			}
 		} else {
-			surroundings.setObstacles(new ArrayList<IObstacle>());
+			SurroundingsSettings.setObstacles(new ArrayList<IObstacle>());
 		}
 
 		statTime = new Stat<Double>();
@@ -291,7 +289,7 @@ public class EcoWorld implements IModel {
 			shape = new TriangleShape();
 			observers.firePropertyChange(EVENT_SHAPE_CHANGED, null, shape);
 		}
-		surroundings.setWorldShape(shape);
+		SurroundingsSettings.setWorldShape(shape);
 
 		SurroundingsSettings grassSourroundings = new SurroundingsSettings(GrassSettings.instance.obstacle_safety_distance.value);
 		SurroundingsSettings preySourroundings = new SurroundingsSettings(PreySettings.instance.obstacle_safety_distance.value);
@@ -331,7 +329,7 @@ public class EcoWorld implements IModel {
 		}
 
 		// TODO Shouldn't shape == null be before creating populations?
-		if (prey == null || pred == null || grass == null || surroundings.getWorldShape() == null) {
+		if (prey == null || pred == null || grass == null || SurroundingsSettings.getWorldShape() == null) {
 			throw new IllegalArgumentException("Wrong populations set.");
 		}
 
@@ -352,9 +350,9 @@ public class EcoWorld implements IModel {
 		if (recordSimulation) {
 			this.recording = new SimulationRecording();
 			recording.initWriting("Testrecording1.sim");
-			recording.appendHeader(surroundings.getObstacles(), d, s.getShapeModel());
+			recording.appendHeader(SurroundingsSettings.getObstacles(), d, s.getShapeModel());
 		}
-		this.env = new EnvironmentScheduler(populations, surroundings.getObstacles(),
+		this.env = new EnvironmentScheduler(populations, SurroundingsSettings.getObstacles(),
 				mOnFinishListener, d.height, d.width, s.getNumThreads());
 		s.setFinalPopulations(populations);
 		s.setSimulationDimension(d);
@@ -571,7 +569,7 @@ public class EcoWorld implements IModel {
 			} catch (RejectedExecutionException e) {
 
 			}
-
+			startIterationTime = System.nanoTime();
 			if(printToFile) {
 				if(!started && numIterations < Integer.MAX_VALUE-1) {
 					started = true;
@@ -581,7 +579,6 @@ public class EcoWorld implements IModel {
 						File file = new File(dest);
 						savePopulationToFile(file,p);
 					}
-					startIterationTime = System.nanoTime();
 					System.out.println("Printed start values at iteration: " + (Integer.MAX_VALUE-numIterations));
 				}
 				boolean success = true;
@@ -606,7 +603,6 @@ public class EcoWorld implements IModel {
 					} else {
 						System.out.println(failPop.getName() + " died.");
 					}
-					startIterationTime = System.nanoTime();
 				}
 			}
 		} else {

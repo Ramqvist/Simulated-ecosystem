@@ -21,7 +21,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
 
-import chalmers.dax021308.ecosystem.controller.ControlViewController;
 import chalmers.dax021308.ecosystem.controller.NEWSettingsMenuViewController;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.util.Log;
@@ -32,7 +31,7 @@ import chalmers.dax021308.ecosystem.view.populationsettings.PopulationSettingsDi
 
 /**
  * The view that holds the entire application.
- * 
+ *
  * @author Hanna
  *
  */
@@ -46,10 +45,10 @@ public class MainWindow extends JFrame implements IView {
 	private HeatmapTabHolder heatMap;
 	private BottomChartTabs bottomTabbedGraphs;
 	private IChart graphView2;
-	
-//	public final LiveSettingsViewController parameterViewCtrl; 
+
+//	public final LiveSettingsViewController parameterViewCtrl;
 	public final NEWSettingsMenuViewController smvc;
-	
+
 	public final MenuBar menuBar;
 	public final Menu mnFile;
 	public final MenuItem mntmLoad;
@@ -73,7 +72,7 @@ public class MainWindow extends JFrame implements IView {
 		setIconImage(new ImageIcon("res/Simulated ecosystem icon.png").getImage());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 613, 516);
-		//OpenGL   
+		//OpenGL
 		openGL = new OpenGLSimulationView(model);
 		openGL.init();
 //		parameterViewCtrl = new LiveSettingsViewController(model);
@@ -81,31 +80,31 @@ public class MainWindow extends JFrame implements IView {
 		heatMap = new HeatmapTabHolder(model);
 		bottomTabbedGraphs = new BottomChartTabs(model);
 		graphView2 = ChartProvider.getChart(ChartProvider.ChartType.GROUPING_PROPORTION_GRAPH, model);
-		
+
 		menuBar = new MenuBar();
 		setMenuBar(menuBar);
-		
+
 		mnFile = new Menu("File");
 		menuBar.add(mnFile);
-		
+
 
 		mnView = new Menu("View");
 		mntmMapEditor = new MenuItem("Map Editor");
 		menuBar.add(mnView);
 		mnView.add(mntmMapEditor);
-		
+
 		mntmSimulationSettings = new MenuItem("New Simulation");
 		mntmSimulationSettings.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				smvc.init();
 			}
 		});
-		
+
 		mnFile.add(mntmSimulationSettings);
-		
+
 		mntmLoad = new MenuItem("Load Simulation");
 		setExtendedState(MAXIMIZED_BOTH);
-		
+
 		//TODO: MOve this to controller.
 		mntmLoad.addActionListener(new ActionListener() {
 			@Override
@@ -128,10 +127,10 @@ public class MainWindow extends JFrame implements IView {
 			}
 		});
 		mnFile.add(mntmLoad);
-		
+
 		mntmSave = new MenuItem("Save Simulation");
 		mnFile.add(mntmSave);
-	
+
 		mntmExit = new MenuItem("Exit");
 		//TODO: MOve this to controller.
 		mntmSave.addActionListener(new ActionListener() {
@@ -157,26 +156,26 @@ public class MainWindow extends JFrame implements IView {
 				}
 			}
 		});
-		
+
 		mnFile.add(mntmExit);
-		
+
 		mnControls = new Menu("Controls");
 		menuBar.add(mnControls);
-		
+
 		mntmStart = new MenuItem("Start");
 		mnControls.add(mntmStart);
-		
+
 		mntmStop = new MenuItem("Stop");
 		mnControls.add(mntmStop);
-		
+
 		mntmPause = new MenuItem("Pause");
 		mnControls.add(mntmPause);
-		
+
 		mnSettings = new Menu("Settings");
 		menuBar.add(mnSettings);
-		
+
 		mntmPopulationSettings = new MenuItem("Population Settings");
-		
+
 //		mnSettings.add(mntmSimulationSettings);
 		mnSettings.add(mntmPopulationSettings);
 		mntmPopulationSettings.addActionListener(new ActionListener() {
@@ -188,21 +187,21 @@ public class MainWindow extends JFrame implements IView {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		left.setLayout(new BorderLayout(0,0));
-		
+
 		right.setLayout(new GridLayout(3,1));
 		right.setMinimumSize(new Dimension(500, 400));
 		right.setPreferredSize(new Dimension(500, 400));
 		setContentPane(contentPane);
-		
+
 //		left.add(parameterViewCtrl.view, BorderLayout.NORTH);
 		left.add(openGL, BorderLayout.CENTER);
 		right.add(graphView2.toComponent(), BorderLayout.CENTER); // during development.
 		right.add(bottomTabbedGraphs, BorderLayout.CENTER);
-		right.add(heatMap, BorderLayout.CENTER); 
-		
+		right.add(heatMap, BorderLayout.CENTER);
+
 		contentPane.add(left, BorderLayout.CENTER);
 		contentPane.add(right, BorderLayout.EAST);
-		addWindowListener(new WindowAdapter() {			
+		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
 				//Try to shutdown all worker threads.
@@ -213,43 +212,43 @@ public class MainWindow extends JFrame implements IView {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		
+
 	}
 
 	@Override
 	public void init() {
-		
+
 	}
 
 	@Override
 	public void addController(ActionListener controller) {
-		
+
 	}
 
 	@Override
 	public void onTick() {
-		
+
 	}
 
 	@Override
 	public void release() {
-		
+
 	}
 
 	public void setBtnStartNewSimWindowActionListener(ActionListener a) {
 	}
-	
+
 	private class SimFileFilter extends FileFilter{
-		
+
 		@Override
 		public boolean accept(File f) {
-			  return f.isDirectory() || f.getName().toLowerCase().endsWith(".sim");  
+			  return f.isDirectory() || f.getName().toLowerCase().endsWith(".sim");
 		}
-		
+
 
 		@Override
 		public String getDescription() {
-			  return ".sim files"; 
+			  return ".sim files";
 		}
 	};
 }

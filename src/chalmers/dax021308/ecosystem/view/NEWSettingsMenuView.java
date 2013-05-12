@@ -12,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractListModel;
@@ -47,7 +46,7 @@ import chalmers.dax021308.ecosystem.model.util.ButtonGroupWrapper;
 //import java.awt.Container;
 
 public class NEWSettingsMenuView extends JDialog {
-	
+
 	private static final long serialVersionUID = -7514048933302292458L;
 	static final int DEFAULT_ITERATION_DELAY = 16;
     static final int DEFAULT_PRED_POP_SIZE = 10;
@@ -56,7 +55,7 @@ public class NEWSettingsMenuView extends JDialog {
     static final int DEFAULT_NO_OF_ITERATIONS = 10000;
     static final int DEFAULT_WIDTH = 750;
     static final int DEFAULT_HEIGHT = 750;
-    
+
     private JPanel contentPane;
     private JPanel left;
     private JPanel right;
@@ -67,7 +66,7 @@ public class NEWSettingsMenuView extends JDialog {
     private JPanel panelPred;
     private JPanel panelPrey;
     private JPanel panelVeg;
-    
+
     private JLabel labelPredators;
     private JLabel labelPreys;
     private JLabel labelVegetation;
@@ -80,20 +79,20 @@ public class NEWSettingsMenuView extends JDialog {
     private JLabel labelHeight;
     private JLabel labelObstacle;
     private JPanel shapeRadioPanel;
-    
+
     //public final JTextField textFieldIterationDelay;
     //public final JTextField textFieldPredPopSize;
     //public final JTextField textFieldPreyPopSize;
     //public final JTextField textFieldVegPopSize;
     //public final JTextField textFieldNoOfIterations;
-    
+
     public final JTextField textFieldWidth;
     public final JTextField textFieldHeight;
-    
+
     public final JCheckBox checkBoxRecordSim;
     public final JCheckBox checkBoxLimitIterations;
     public final JCheckBox checkBoxCustomSize;
-    
+
     //de h�r kanske kan vara privata nu..?
     public final JRadioButton radioButton2Threads;
     public final JRadioButton radioButton4Threads;
@@ -103,40 +102,40 @@ public class NEWSettingsMenuView extends JDialog {
     public final JRadioButton radioButtonTriangle;
     public final ButtonGroupWrapper buttonGroupThread;
     public final ButtonGroupWrapper buttonGroupShape;
-    
+
     public final JButton buttonStart; //kanske den h�r bara ska vara apply, och sen startar man fr�n mainwindow?
     private JButton buttonCancel;
     private JButton buttonAdvanced;
-    
+
     //TODO: sliders till spinners?
     //public final JSlider sliderDelayLength;
     //public final JSlider sliderNoOfIterations;
     //public final JSlider sliderPreyPopSize;
     //public final JSlider sliderPredPopSize;
     //public final JSlider sliderVegPopSize;
-    
+
     public final JSpinner spinnerDelayLength;
     public final JSpinner spinnerNoOfIterations;
     public final JSpinner spinnerPreyPopSize;
     public final JSpinner spinnerPredPopSize;
     public final JSpinner spinnerVegPopSize;
-    
+
     public final JList listSimDimension;
     public final JList<SimulationMap> listMap;
     public final JList listPred;
     public final JList listPrey;
     public final JList listVegetation;
-    
+
     private Font heading;
-    
+
     private ActionListener listenerCancel;
     private ActionListener listenerAdvanced;
     private ChangeListener listenerCustomSize;
     private ChangeListener listenerLimitIterations;
 
     private AdvancedSettings advancedSettingsView;
-    
-    //Auto generated	
+
+    //Auto generated
     /**
      * Launch the application.
      */
@@ -162,7 +161,7 @@ public class NEWSettingsMenuView extends JDialog {
     public NEWSettingsMenuView(IModel model, Frame superFrame) {
     	super(superFrame);
 
-        //initializing the graphical objects - done here since most of them are final		
+        //initializing the graphical objects - done here since most of them are final
         contentPane = new JPanel();
         left = new JPanel();
         right = new JPanel();
@@ -222,7 +221,7 @@ public class NEWSettingsMenuView extends JDialog {
         buttonStart = new JButton();
         buttonCancel = new JButton();
         buttonAdvanced = new JButton();
-        
+
         spinnerDelayLength = new JSpinner(new SpinnerNumberModel(DEFAULT_ITERATION_DELAY, 0, Integer.MAX_VALUE, 1));
         spinnerNoOfIterations = new JSpinner(new SpinnerNumberModel(DEFAULT_NO_OF_ITERATIONS, 0, Integer.MAX_VALUE, 100));
         spinnerPreyPopSize = new JSpinner(new SpinnerNumberModel(DEFAULT_PREY_POP_SIZE, 0, Integer.MAX_VALUE, 1));
@@ -278,7 +277,7 @@ public class NEWSettingsMenuView extends JDialog {
 
 			@Override
             public void actionPerformed(ActionEvent e) {
-				advancedSettingsView = new AdvancedSettings(NEWSettingsMenuView.this); 
+				advancedSettingsView = new AdvancedSettings(NEWSettingsMenuView.this);
             }
         };
 
@@ -314,7 +313,7 @@ public class NEWSettingsMenuView extends JDialog {
                     //sliderNoOfIterations.setEnabled(false);
                     spinnerNoOfIterations.setEnabled(false);
                 }
-                
+
             }
         };
     }
@@ -329,7 +328,7 @@ public class NEWSettingsMenuView extends JDialog {
         panelButton2.setLayout(new GridBagLayout());
         panelButtonStart.setLayout(new GridBagLayout());
         panelButtonCancel.setLayout(new GridBagLayout());
-        
+
         shapeRadioPanel.setLayout(new GridLayout(3,1));
 
         /*
@@ -354,7 +353,7 @@ public class NEWSettingsMenuView extends JDialog {
         buttonGroupShape.add(radioButtonSquare);
         buttonGroupShape.add(radioButtonCircle);
         buttonGroupShape.add(radioButtonTriangle);
-        
+
         shapeRadioPanel.add(radioButtonSquare);
         shapeRadioPanel.add(radioButtonCircle);
         shapeRadioPanel.add(radioButtonTriangle);
@@ -422,7 +421,7 @@ public class NEWSettingsMenuView extends JDialog {
     }
 
     private void setMySpinners() {
-    
+
 
     }
 
@@ -430,7 +429,7 @@ public class NEWSettingsMenuView extends JDialog {
      private void setMySliders() {
      sliderDelayLength.setValue(16);
      sliderDelayLength.setSnapToTicks(true);  //kolla upp vad de h�r g�r...
-     sliderDelayLength.setPaintTicks(true); 
+     sliderDelayLength.setPaintTicks(true);
      sliderDelayLength.setPaintLabels(true);
      sliderDelayLength.addChangeListener(new ChangeListener() {
      @Override
@@ -439,7 +438,7 @@ public class NEWSettingsMenuView extends JDialog {
      + "");
      }
      });
-		
+
      sliderPreyPopSize.setMaximum(400);
      sliderPreyPopSize.setValue(100);
      sliderPreyPopSize.addChangeListener(new ChangeListener() {
@@ -449,7 +448,7 @@ public class NEWSettingsMenuView extends JDialog {
      + "");
      }
      });
-		
+
      sliderPredPopSize.setValue(10);
      sliderPredPopSize.addChangeListener(new ChangeListener() {
      @Override
@@ -458,7 +457,7 @@ public class NEWSettingsMenuView extends JDialog {
      + "");
      }
      });
-		
+
      sliderVegPopSize.setMaximum(1200);
      sliderVegPopSize.setValue(400);
      sliderVegPopSize.addChangeListener(new ChangeListener() {
@@ -468,7 +467,7 @@ public class NEWSettingsMenuView extends JDialog {
      + "");
      }
      });
-		
+
      sliderNoOfIterations.setEnabled(false); //TODO: h�ll koll p� den h�r
      sliderNoOfIterations.setMinimum(1);
      sliderNoOfIterations.setMaximum(20000);
@@ -483,7 +482,7 @@ public class NEWSettingsMenuView extends JDialog {
      + "");
      }
      });
-     }	
+     }
      */
     private void setMyButtons() {
         buttonCancel.addActionListener(listenerCancel);
@@ -564,10 +563,10 @@ public class NEWSettingsMenuView extends JDialog {
         	public void windowActivated(WindowEvent e) {
                 loadSimulationMaps();
         	}
-        	
+
         });
     }
-    
+
     private void loadSimulationMaps() {
     	SimulationMap lastSelected = listMap.getSelectedValue();
     	listMap.setModel(new SimulationMapListModel());
@@ -575,7 +574,7 @@ public class NEWSettingsMenuView extends JDialog {
     		listMap.setSelectedValue(lastSelected, true);
     	}
     }
-    
+
     private class SimulationMapListModel implements ListModel<SimulationMap> {
         	List<SimulationMap> mapList;
     		public SimulationMapListModel() {
@@ -610,14 +609,14 @@ public class NEWSettingsMenuView extends JDialog {
 
         shapeRadioPanel.setBorder(createTitledBorder("Shape of Universe"));
         listMap.setBorder(createTitledBorder("Obstacles"));
-        
+
         listPred.setBorder(createTitledBorder("Predators"));
         listPrey.setBorder(createTitledBorder("Preys"));
         listVegetation.setBorder(createTitledBorder("Vegetation"));
-        
+
         panelButton1.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
         panelButton2.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        
+
         //panelButtonStart.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
         //panelButtonCancel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
     }
@@ -645,7 +644,7 @@ public class NEWSettingsMenuView extends JDialog {
         c.gridx = 0;
         c.gridy = 2;
         left.add(listMap, c);
-        
+
         c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
@@ -713,7 +712,7 @@ public class NEWSettingsMenuView extends JDialog {
         c.gridx = 1;
         c.gridy = 5;
         right.add(spinnerVegPopSize, c);
-        
+
         c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
@@ -721,7 +720,7 @@ public class NEWSettingsMenuView extends JDialog {
         c.gridx = 0;
         c.gridy = 0;
         panelButton1.add(buttonAdvanced, c);
-        
+
         c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
@@ -729,7 +728,7 @@ public class NEWSettingsMenuView extends JDialog {
         c.gridx = 0;
         c.gridy = 0;
         panelButtonStart.add(buttonStart, c);
-        
+
         c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
@@ -737,7 +736,7 @@ public class NEWSettingsMenuView extends JDialog {
         c.gridx = 0;
         c.gridy = 0;
         panelButtonCancel.add(buttonCancel, c);
-        
+
         c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
@@ -745,7 +744,7 @@ public class NEWSettingsMenuView extends JDialog {
         c.gridx = 0;
         c.gridy = 0;
         panelButton2.add(panelButtonStart, c);
-        
+
         c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
@@ -761,7 +760,7 @@ public class NEWSettingsMenuView extends JDialog {
         c.gridx = 0;
         c.gridy = 7;
         right.add(panelButton1, c);
-        
+
         c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
@@ -772,7 +771,7 @@ public class NEWSettingsMenuView extends JDialog {
     }
 
     public void showErrorMessage() {
-        //TODO: create different exceptions if needed, and if-statements for different exceptions somewhere... 
+        //TODO: create different exceptions if needed, and if-statements for different exceptions somewhere...
         JOptionPane.showMessageDialog(this,
                 "Something went wrong.");
     }
@@ -832,7 +831,7 @@ public class NEWSettingsMenuView extends JDialog {
             layoutIterations();
             setMyAdvBorders();
             addToAdv();
-            
+
             setResizable(false);
             setTitle("Advanced Simulation Settings");
             setIconImage(new ImageIcon("res/Simulated ecosystem icon.png").getImage());
@@ -865,10 +864,10 @@ public class NEWSettingsMenuView extends JDialog {
             advRight.setLayout(new GridBagLayout());
             advPanelButton.setLayout(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         }
-                
+
         private void layoutDelay() {
             advPanelDelay.setLayout(new GridBagLayout());
-            
+
             GridBagConstraints c = new GridBagConstraints();
             c.gridx = c.gridy = 0;
             c.fill = GridBagConstraints.HORIZONTAL;
@@ -878,25 +877,25 @@ public class NEWSettingsMenuView extends JDialog {
             c.weightx = 1 - c.weightx;
             advPanelDelay.add(new JLabel(" ms"));
         }
-        
+
         private void layoutIterations() {
             advPanelIterations.setLayout(new GridLayout(2, 1));
-            
+
             advPanelIterations.add(checkBoxLimitIterations);
             advPanelIterations.add(spinnerNoOfIterations);
         }
-        
+
         private void layoutNumThreads() {
             advPanelNumThreads.setLayout(new GridLayout(3,1));
-            
+
             advPanelNumThreads.add(radioButton2Threads);
             advPanelNumThreads.add(radioButton4Threads);
-            advPanelNumThreads.add(radioButton8Threads);            
+            advPanelNumThreads.add(radioButton8Threads);
         }
-        
+
         private void layoutSimulationDimensions() {
             advPanelSimWindowDim.setLayout(new GridBagLayout());
-            
+
             advPanelWidth.add(labelWidth);
             advPanelWidth.add(textFieldWidth);
             advPanelHeight.add(labelHeight);
@@ -912,14 +911,14 @@ public class NEWSettingsMenuView extends JDialog {
             c.gridy++;
             advPanelSimWindowDim.add(advPanelWidth, c);
         }
-        
+
         private void setMyAdvBorders() {
             advPanelDelay.setBorder(createTitledBorder("Iteration delay"));
             advPanelIterations.setBorder(createTitledBorder("Limit number of iterations"));
-            
+
             advPanelNumThreads.setBorder(createTitledBorder("Number of threads"));
             advPanelSimWindowDim.setBorder(createTitledBorder("Simulation dimensions"));
-            
+
             advLeft.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 5));
             advRight.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 10));
             advPanelButton.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 10));
@@ -938,7 +937,7 @@ public class NEWSettingsMenuView extends JDialog {
             center.add(advLeft, c);
             c.gridx++;
             center.add(advRight, c);
-            
+
             advContentPane.add(center, BorderLayout.CENTER);
 
             advPanelButton.add(advButtonCancel);
@@ -971,7 +970,7 @@ public class NEWSettingsMenuView extends JDialog {
             c.gridx = 0;
             c.gridy = 3;
             advLeft.add(advPanelNumThreads, c);
-            
+
 
             c = new GridBagConstraints();
             c.fill = GridBagConstraints.HORIZONTAL;

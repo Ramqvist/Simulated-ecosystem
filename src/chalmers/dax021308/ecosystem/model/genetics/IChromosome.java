@@ -1,9 +1,10 @@
 /**
  * @author Loanne Berggren
  */
-package chalmers.dax021308.ecosystem.model.genetics.newV;
+package chalmers.dax021308.ecosystem.model.genetics;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -24,9 +25,9 @@ public interface IChromosome <E, T> {
 
 	/**
 	 *
-	 * @return A clone of the chromosome.
+	 * @return A map of the chromosome.
 	 */
-	public Object getGenes();
+	public Map<E,T> getGenes();
 
 	public List<E> getGeneNames();
 

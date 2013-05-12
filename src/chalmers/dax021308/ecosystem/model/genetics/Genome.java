@@ -1,6 +1,7 @@
-package chalmers.dax021308.ecosystem.model.genetics.newV;
+package chalmers.dax021308.ecosystem.model.genetics;
 
-import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
+import java.util.Map;
+
 
 /**
  *
@@ -8,7 +9,6 @@ import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
  *
  * @param <T> Type of genes
  */
-//public class Genome extends GenericGenome<GeneralGeneTypes, IGene> {
 public class Genome implements IGenome<GeneralGeneTypes, IGene> {
 
 	private IChromosome<GeneralGeneTypes,IGene> chromosome;
@@ -19,12 +19,10 @@ public class Genome implements IGenome<GeneralGeneTypes, IGene> {
 	 * @param chromosome
 	 */
 	public Genome(IChromosome<GeneralGeneTypes, IGene> chromosome) {
-		//super(chromosome);
 		this.chromosome = chromosome;
 	}
 
 	public Genome(){
-		//super(new Chromosome());
 		this.chromosome = new Chromosome();
 	}
 
@@ -63,7 +61,7 @@ public class Genome implements IGenome<GeneralGeneTypes, IGene> {
 	/**
 	 * @return {@inheritDoc}
 	 */
-	public Object getAllGenes(){
+	public Map<GeneralGeneTypes, IGene> getAllGenes(){
 		return this.chromosome.getGenes();
 	}
 

@@ -12,12 +12,12 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import chalmers.dax021308.ecosystem.model.genetics.BooleanGene;
+import chalmers.dax021308.ecosystem.model.genetics.Chromosome;
+import chalmers.dax021308.ecosystem.model.genetics.DoubleGene;
 import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
-import chalmers.dax021308.ecosystem.model.genetics.newV.BooleanGene;
-import chalmers.dax021308.ecosystem.model.genetics.newV.Chromosome;
-import chalmers.dax021308.ecosystem.model.genetics.newV.DoubleGene;
-import chalmers.dax021308.ecosystem.model.genetics.newV.IChromosome;
-import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
+import chalmers.dax021308.ecosystem.model.genetics.IChromosome;
+import chalmers.dax021308.ecosystem.model.genetics.IGene;
 
 /**
  *

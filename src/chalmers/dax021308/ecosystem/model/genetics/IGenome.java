@@ -1,4 +1,6 @@
-package chalmers.dax021308.ecosystem.model.genetics.newV;
+package chalmers.dax021308.ecosystem.model.genetics;
+
+import java.util.Map;
 
 
 /**
@@ -36,7 +38,7 @@ public interface IGenome<E extends Enum<E>, G> {
 	 *
 	 * @return The chromosomes
 	 */
-	public abstract Object getAllGenes();
+	public abstract Map<E,G> getAllGenes();
 
 	/**
 	 *

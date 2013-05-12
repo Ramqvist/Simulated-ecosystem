@@ -6,8 +6,8 @@ import java.util.List;
 
 import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
 import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
-import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
-import chalmers.dax021308.ecosystem.model.genetics.newV.IGenome;
+import chalmers.dax021308.ecosystem.model.genetics.IGene;
+import chalmers.dax021308.ecosystem.model.genetics.IGenome;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.population.settings.PreySettings;
 import chalmers.dax021308.ecosystem.model.util.ForceCalculator;
@@ -33,7 +33,7 @@ public class DeerAgent extends AbstractAgent {
 	private double STOTTING_RANGE;
 	private double STOTTING_LENGTH;
 	private double STOTTING_COOLDOWN;
-	private double STOTTING_ANGLE;
+	private double STOTTING_ANGLE; // not in use
 	private double stottingDuration;
 	private double stottingCoolDown = 0;
 	private boolean isAStottingDeer = false;
@@ -95,7 +95,7 @@ public class DeerAgent extends AbstractAgent {
 					double newY = this.getPosition().getY() + ySign
 							* (0.001 + 0.001 * Math.random());
 					pos = new Position(newX, newY);
-				} while (!surroundings.getWorldShape().isInside(surroundings.getGridDimension(), pos));
+				} while (!SurroundingsSettings.getWorldShape().isInside(SurroundingsSettings.getGridDimension(), pos));
 				IGenome<GeneralGeneTypes, IGene> newGenome = genome.getCopy();
 				IAgent child = new DeerAgent(name, pos, color, width, height,
 						new Vector(velocity), maxSpeed, maxAcceleration,
@@ -142,8 +142,8 @@ public class DeerAgent extends AbstractAgent {
 			}
 
 			Vector environmentForce = ForceCalculator.getEnvironmentForce(
-					surroundings.getGridDimension(), surroundings.getWorldShape(), position);
-			Vector obstacleForce = ForceCalculator.getObstacleForce(surroundings.getObstacles(),
+					SurroundingsSettings.getGridDimension(), SurroundingsSettings.getWorldShape(), position);
+			Vector obstacleForce = ForceCalculator.getObstacleForce(SurroundingsSettings.getObstacles(),
 					position);
 
 			/*

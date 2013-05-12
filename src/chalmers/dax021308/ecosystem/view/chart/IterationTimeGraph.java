@@ -64,7 +64,7 @@ public class IterationTimeGraph extends AbstractGraph2D {
 	}
 
 	private void updateGraph(Object object){
-		Double iterationTime = (Double) (object);
+		double iterationTime = ((Double) object).doubleValue();
 		if(lastIteration == 0) {
 			lastIteration = iterationTime;
 			this.iterationTimeTrace.addPoint(getIterationsPassed(), iterationTime);

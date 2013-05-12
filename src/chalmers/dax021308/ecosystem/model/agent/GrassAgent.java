@@ -14,7 +14,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
  * Simple grass, lowest part of the food chain
- * 
+ *
  * @author Henrik
  */
 public class GrassAgent extends AbstractAgent {
@@ -63,7 +63,7 @@ public class GrassAgent extends AbstractAgent {
 	/**
 	 * Finds a new position close to the current position, which lies inside the
 	 * shape and outside all the obstacles
-	 * 
+	 *
 	 * @return The position found
 	 */
 	private Position getSpawnPosition(SurroundingsSettings surroundings) {
@@ -74,8 +74,8 @@ public class GrassAgent extends AbstractAgent {
 		boolean validPos;
 		do {
 			p = Position.positionPlusVector(position, Stat.getNormallyDistributedVector(SPAWNING_STD));
-			validPos = surroundings.getWorldShape().isInside(surroundings.getGridDimension(), p);
-			for (IObstacle o : surroundings.getObstacles()) {
+			validPos = SurroundingsSettings.getWorldShape().isInside(SurroundingsSettings.getGridDimension(), p);
+			for (IObstacle o : SurroundingsSettings.getObstacles()) {
 				if (o.isInObstacle(p, surroundings.getObstacleSafetyDistance())) {
 					validPos = false;
 				}
