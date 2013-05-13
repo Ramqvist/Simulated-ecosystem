@@ -84,7 +84,15 @@ public class MainWindowController implements IController {
 			    	} else if(e.getKeyCode() == KeyEvent.VK_F3) {
 						new MapEditorController();
 				    	return true;
-			    	}else if (e.getKeyCode() == KeyEvent.VK_SPACE){
+			    	} else if(e.getKeyCode() == KeyEvent.VK_F11) {
+			    		window.toggleFullscreen();
+			    		if(controlViewCtrl.view.isVisible()) {
+			    			controlViewCtrl.view.setVisible(false);
+			    		} else {
+			    			controlViewCtrl.view.setVisible(true);
+			    		}
+				    	return true;
+			    	} else if (e.getKeyCode() == KeyEvent.VK_SPACE){
 			    		if (!controlViewCtrl.view.play) {
 							try {
 								model.start();
@@ -152,7 +160,8 @@ public class MainWindowController implements IController {
 
 	@Override
 	public void release() {
-		// TODO Auto-generated method stub
+		window.release();
+		controlViewCtrl.release();
 	}
 
 	@Override
@@ -181,7 +190,6 @@ public class MainWindowController implements IController {
 			SimulationSettings s = window.smvc.getSimSettings();
 			s.saveToFile();
 			model.loadSimulationSettings(s);
-			// TODO: Uppdatera LiveSettingsgrejen?
 			try {
 				model.start();
 			} catch (IllegalStateException e) {

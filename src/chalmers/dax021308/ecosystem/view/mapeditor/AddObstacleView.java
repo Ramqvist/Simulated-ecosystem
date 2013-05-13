@@ -27,8 +27,6 @@ public class AddObstacleView extends JPanel implements IView {
 	public final JRadioButton rdbtnTypeRectangle;
 	public final JRadioButton rdbtnTypeCircle;
 	public final JButton btnAddObstacle;
-	private JTextField textField;
-	private JTextField textField_1;
 
 	public AddObstacleView(IModel m) {
 		m.addObserver(this);
@@ -129,11 +127,6 @@ public class AddObstacleView extends JPanel implements IView {
 
 	@Override
 	public void addController(ActionListener controller) {
-
-	}
-
-	@Override
-	public void onTick() {
 
 	}
 

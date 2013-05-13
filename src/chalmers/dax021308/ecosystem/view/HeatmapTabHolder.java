@@ -1,6 +1,5 @@
 package chalmers.dax021308.ecosystem.view;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -23,7 +22,7 @@ public class HeatmapTabHolder extends JTabbedPane implements IView {
 		this.m = m;
 		m.addObserver(this);
 	}
-	
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if(evt.getPropertyName() == EcoWorld.EVENT_SETTINGS_CHANGED) {
@@ -39,18 +38,18 @@ public class HeatmapTabHolder extends JTabbedPane implements IView {
 						addTab(popList.get(i).getName(), null);
 					}
 				}
-				
+
 			}
 		}
 	}
-	
+
 	@Override
 	public void setSelectedIndex(int index) {
 		super.setSelectedIndex(index);
 		if(popList.size() >= index + 1){
 			heatMap.setPopulationNameToShow(popList.get(index).getName());
 		}
-		
+
 	}
 
 	@Override
@@ -59,15 +58,15 @@ public class HeatmapTabHolder extends JTabbedPane implements IView {
 
 	@Override
 	public void addController(ActionListener controller) {
-		
-	}
 
-	@Override
-	public void onTick() {
 	}
 
 	@Override
 	public void release() {
+		if(heatMap != null) {
+			heatMap.release();
+		}
+		m.removeObserver(this);
 	}
-	
+
 }

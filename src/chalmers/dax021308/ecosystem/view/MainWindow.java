@@ -206,6 +206,7 @@ public class MainWindow extends JFrame implements IView {
 			public void windowClosing(WindowEvent arg0) {
 				//Try to shutdown all worker threads.
 				model.shutdownNow();
+				release();
 			}
 		});
 	}
@@ -226,13 +227,12 @@ public class MainWindow extends JFrame implements IView {
 	}
 
 	@Override
-	public void onTick() {
-
-	}
-
-	@Override
 	public void release() {
-
+		openGL.release();
+		heatMap.release();
+		smvc.release();
+		bottomTabbedGraphs.release();
+		graphView2.release();
 	}
 
 	public void setBtnStartNewSimWindowActionListener(ActionListener a) {
@@ -250,5 +250,22 @@ public class MainWindow extends JFrame implements IView {
 		public String getDescription() {
 			  return ".sim files";
 		}
-	};
+	}
+
+	public void toggleFullscreen() {
+		if(right != null) {
+			if(right.isVisible()) {
+				right.setVisible(false);
+			} else {
+				right.setVisible(true);
+			}
+		}
+	}
+
+	public void releaseAllButOpenGL() {
+		heatMap.release();
+		smvc.release();
+		bottomTabbedGraphs.release();
+		graphView2.release();
+	}
 }

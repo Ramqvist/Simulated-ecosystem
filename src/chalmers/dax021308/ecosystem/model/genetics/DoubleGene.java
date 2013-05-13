@@ -34,25 +34,15 @@ public class DoubleGene extends AbstractGene {
 	public DoubleGene(double minValue, double maxValue,
 			boolean isMutable, double currentValue, double mutProb, int nBits, boolean randomStartValue) {
 		this(mutProb, nBits);
-		//this.randomStartValue = randomStartValue;
-		//this.nBits = nBits;
-		//this.maxInt = Math.pow(2, nBits) - 1;
-		this.setValueRange(minValue, maxValue);
+		this.randomStartValue = randomStartValue;
 
-		//this.minValue = minValue;
-		//this.maxValue = maxValue;
+		this.setValueRange(minValue, maxValue);
 		this.isMutable = isMutable;
 
 		if(randomStartValue) {
-			//this.currentValue = new Random().nextInt((int)maxInt + 1);
 			currentValue = randomGenerator.nextDouble() * (maxValue - minValue) + minValue;
-			//setCurrentDoubleValue(new Random().nextInt((int)maxInt + 1));	// error checks
-		} /*else {
-			//this.currentValue = parseToInt(currentValue);
-			setCurrentDoubleValue(currentValue);	// error checks
-		}*/
+		}
 		setCurrentDoubleValue(currentValue);	// error checks
-		//setMutationProbaility(mutProb);	// error checks
 	}
 
 	private DoubleGene(DoubleGene toCopy) {
@@ -251,6 +241,16 @@ public class DoubleGene extends AbstractGene {
 			return false;
 
 		return true;
+	}
+
+	@Override
+	public String toString() {
+
+		StringBuffer sB = new StringBuffer(super.toString());
+		sB.append("Min: " + minValue + "\t");
+		sB.append("Max: " + maxValue + "\t");
+		sB.append("Current: " + this.getCurrentDoubleValue() + "\t");
+		return sB.toString();
 	}
 
 }

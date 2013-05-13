@@ -121,4 +121,26 @@ public class Chromosome implements IChromosome<GeneralGeneTypes, IGene> {
 		return this.chromosomeMap.get(geneType).isGeneActive();
 	}
 
+	/* (non-Javadoc)
+	 * @see chalmers.dax021308.ecosystem.model.genetics.IChromosome#setGeneActive(java.lang.Object, boolean)
+	 */
+	@Override
+	public void setGeneActive(GeneralGeneTypes geneType, boolean active) {
+		if (chromosomeMap.containsKey(geneType))
+			chromosomeMap.get(geneType).setHaveGene(active);
+	}
+
+	@Override
+	public String toString() {
+		StringBuffer bf = new StringBuffer();
+
+		Iterator<Entry<GeneralGeneTypes,IGene>> it = this.chromosomeMap.entrySet().iterator();
+		while(it.hasNext()) {
+			Entry<GeneralGeneTypes,IGene> entry = it.next();
+			bf.append("Gene: " + entry.getKey().getName() + " \n" + entry.getValue().toString() + "\n\n");
+		}
+
+		return bf.toString();
+	}
+
 }

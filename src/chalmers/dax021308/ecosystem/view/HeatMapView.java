@@ -2,14 +2,20 @@ package chalmers.dax021308.ecosystem.view;
 
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
+
+import com.sun.opengl.util.Screenshot;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
@@ -36,7 +42,7 @@ import chalmers.dax021308.ecosystem.model.util.Position;
  *
  */
 public class HeatMapView extends GLCanvas implements IView {
-	
+
 	private static final long serialVersionUID = 1585638837620985591L;
 	private List<IPopulation> newPops = new ArrayList<IPopulation>();
 	private double[][][] heatMap;
@@ -53,8 +59,8 @@ public class HeatMapView extends GLCanvas implements IView {
 	private JOGLListener glListener;
 	private String populationName;
 	private boolean updateHeatMapWhenDisplay = true;
-	//private GLCanvas canvas;
-	
+	private IModel model;
+
 	/**
 	 * Create the heat map.
 	 */
@@ -75,15 +81,16 @@ public class HeatMapView extends GLCanvas implements IView {
 			maxVisited[i] = 1;
 			minVisited[i] = Integer.MAX_VALUE;
 		}
-		
+
 		heatMapWidth = (int)(grid.getWidth()/xSamplingConstant+1);
 		heatMapHeight = (int)(grid.getHeight()/ySamplingConstant+1);
 		heatMap = new double[nPopulations][heatMapWidth][heatMapHeight];
 		visited = new boolean[nPopulations][heatMapWidth][heatMapHeight];
+		this.model = model;
 		model.addObserver(this);
-     
+
 		glListener = new JOGLListener();
-		addGLEventListener(glListener);     
+		addGLEventListener(glListener);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -101,7 +108,7 @@ public class HeatMapView extends GLCanvas implements IView {
 			//Tick notification recived from model. Do something with the data.
 			if(event.getNewValue() instanceof List<?>) {
 				this.newPops = (List<IPopulation>) event.getNewValue();
-			}	
+			}
 			repaint();
 		} else if(eventName == EcoWorld.EVENT_DIMENSIONCHANGED) {
 			Object o = event.getNewValue();
@@ -113,27 +120,27 @@ public class HeatMapView extends GLCanvas implements IView {
 				visited = new boolean[nPopulations][heatMapWidth][heatMapHeight];
 			}
 			//Handle dimension change here.
-		} 
+		}
 	}
-	
+
 	/**
 	 * JOGL Listener, listens to commands from the GLCanvas.
-	 * 
+	 *
 	 * @author Erik
 	 *
 	 */
     private class JOGLListener implements GLEventListener {
-    	
+
         	GL gl = getGL();
-    		
+
         	/**
         	 * @author Sebastian. Credit to Erik for original class.
         	 * Called each time the model updates itself.
-        	 * 
+        	 *
         	 */
             @Override
             public void display(GLAutoDrawable drawable) {
-            	
+
                 double frameHeight = getHeight();
                 double frameWidth  = getWidth();
 
@@ -143,7 +150,7 @@ public class HeatMapView extends GLCanvas implements IView {
           				populationID = i;
           			}
                 }
-                
+
                 if(updateHeatMapWhenDisplay) {
 	                /*
 	                 * Loops through all agents and truncates their positions to the correct box
@@ -153,10 +160,10 @@ public class HeatMapView extends GLCanvas implements IView {
 	                 */
 	                for(int i=0; i<nPopulations; i++){
 	        			minVisited[i] = Double.MAX_VALUE;
-	        		}                
-	                
+	        		}
+
 	                visited = new boolean[nPopulations][heatMapWidth][heatMapHeight];
-	           
+
 	          		for(int i = 0; i < popSize; i ++) {
 	        			List<IAgent> agents = newPops.get(i).getAgents();
 	        			int size = agents.size();
@@ -169,17 +176,17 @@ public class HeatMapView extends GLCanvas implements IView {
 	        				pos = a.getPosition();
 	        				intPosX = (int)(pos.getX()/xSamplingConstant);
 	    					intPosY = (int)(pos.getY()/ySamplingConstant);
-	    					
+
 	    					if(intPosX < heatMapWidth && intPosX >= 0 && intPosY < heatMapHeight && intPosY >= 0){
 	    							heatMap[i][intPosX][intPosY]++;
 	    							visited[i][intPosX][intPosY]=true;
 	    							if(heatMap[i][intPosX][intPosY]>maxVisited[i]){
 	    	    						maxVisited[i] = heatMap[i][intPosX][intPosY];
-	    	    					} 
-	    					} 
+	    	    					}
+	    					}
 	                    }
-	        		} 
-	          		
+	        		}
+
 	          		/*
 	          		 * Check which pixel is visited the least.
 	          		 * Must be able to do in a better way?
@@ -189,21 +196,21 @@ public class HeatMapView extends GLCanvas implements IView {
 		          			for(int i=0;i<heatMapWidth;i++){
 		          				if(heatMap[p][i][j]<minVisited[p] && heatMap[p][i][j] > 0){
 		    						minVisited[p] = heatMap[p][i][j];
-		    					} 
+		    					}
 		          			}
 		          		}
 	          		}
-          		   
+
                 } else {
                 	updateHeatMapWhenDisplay = true;
                 }
-                
+
           		/*
           		 * Draw the heat map.
           		 */
           		for(int j=0;j<heatMapHeight;j++){
           			for(int i=0;i<heatMapWidth;i++){
-          				
+
           				/*
           				 * "value" is a value between 0 and 1 and is based on where a pixel lies on the scale between
           				 * minVisited and maxVisited. If a pixel has minVisited visits, it gets value 0. If a pixel has
@@ -211,11 +218,11 @@ public class HeatMapView extends GLCanvas implements IView {
           				 */
           				double value = (heatMap[populationID][i][j]-minVisited[populationID])/
           						(maxVisited[populationID]-minVisited[populationID]);
-          				
+
           				if(value < 0) {
           					value = 0;
           				}
-          				
+
           				/*
           				 * Below does the following re-scaling of colors:
           				 * If 0 <= value < 0.5 the color is 0 <= red < 255 and green = 255.
@@ -224,58 +231,58 @@ public class HeatMapView extends GLCanvas implements IView {
           				 */
           				double red = 1;
           				double green = 1;
-          				
+
           				if(value < 0.5){
           					red = 2*value;
           				} else {
           					green = 1 - 2*(value-0.5);
           				}
-          				
+
           				gl.glColor3d(red, green, 0);
                   		gl.glBegin(GL.GL_POLYGON);
-                  		
+
                   		/*
                   		 * Create a box with for corners at the right positions
                   		 */
                   		double xBotLeft = ((double)i)*frameWidth/(double)heatMapWidth;
                   		double yBotLeft = frameHeight - ((double)j)*frameHeight/(double)heatMapHeight;
-                  		
+
                   		double xBotRight = ((double)(i+1))*frameWidth/(double)heatMapWidth;
                   		double yBotRight = yBotLeft;
-                  		
+
                   		double xTopLeft = xBotLeft;
                   		double yTopLeft = frameHeight - ((double)(j+1))*frameHeight/(double)heatMapHeight;
-                  		
+
                   		double xTopRight = xBotRight;
                   		double yTopRight = yTopLeft;
-                  		
+
                   		gl.glVertex2d(xBotLeft, yBotLeft);
                   		gl.glVertex2d(xTopLeft, yTopLeft);
                   		gl.glVertex2d(xTopRight, yTopRight);
                   		gl.glVertex2d(xBotRight, yBotRight);
-                  		
+
                   		gl.glEnd();
               		}
           		}
-          		
+
 //        		/* Information print, comment out to increase performance. */
 //        		Long totalTime = System.currentTimeMillis() - start;
 //        		StringBuffer sb = new StringBuffer("OpenGL Redraw!  ");
 ////        		sb.append(getNewFps());
 //        		sb.append(" Rendertime in ms: ");
 //        		sb.append(totalTime);
-//            	System.out.println(sb.toString());	
+//            	System.out.println(sb.toString());
         		/* End Information print. */
-          		
+
 //          		long end = System.currentTimeMillis();
 //          		System.out.println(end-start);
             }
-            
+
             @Override
             public void init(GLAutoDrawable drawable) {
 //                    System.out.println("INIT CALLED");
             }
-            
+
            /**
             * Called by the drawable during the first repaint after the component has been resized. The
             * client can update the viewport and view volume of the window appropriately, for example by a
@@ -298,48 +305,60 @@ public class HeatMapView extends GLCanvas implements IView {
             gl.glOrtho(0, getWidth(), getHeight(), 0, 0, 1);
             gl.glMatrixMode(GL.GL_MODELVIEW);
             gl.glDisable(GL.GL_DEPTH_TEST);
-            gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);  
+            gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             gl.glClear(GL.GL_COLOR_BUFFER_BIT);
             gl.glBlendFunc (GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
             gl.glEnable (GL.GL_BLEND);
             gl.glLoadIdentity();
             }
-            
+
 			@Override
 			public void displayChanged(GLAutoDrawable arg0, boolean arg1,
 					boolean arg2) {
-				
-			}     
+
+			}
     }
 
 	@Override
 	public void init() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void addController(ActionListener controller) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	@Override
-	public void onTick() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void release() {
-		// TODO Auto-generated method stub
-		
+		model.removeObserver(this);
 	}
-	
+
 	public void setPopulationNameToShow(String populationName){
 		this.populationName = populationName;
 		updateHeatMapWhenDisplay = false;
 		repaint();
 	}
 
+	public void snapShot() {
+
+	}
+/*
+	public void saveSnapShot(String preText) {
+		try {
+			String fileName = preText + this.populationName + ".png";
+		    // retrieve image
+		    BufferedImage bi = Screenshot.readToBufferedImage(this.heatMapWidth, this.heatMapHeight);
+		    File outputfile = new File(fileName);
+		    ImageIO.write(bi, "png", outputfile);
+
+
+		} catch (IOException e) {
+		   System.out.print("Error saving heatmap image!");
+		}
+	}
+*/
 }

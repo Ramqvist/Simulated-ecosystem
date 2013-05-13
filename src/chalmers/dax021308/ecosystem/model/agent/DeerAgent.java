@@ -41,10 +41,6 @@ public class DeerAgent extends AbstractAgent {
 	private Vector stottingVector = new Vector();
 	private IGenome<GeneralGeneTypes, IGene> genome;
 
-	/*public DeerAgent(String name, Position p, Color c, int width, int height,
-			Vector velocity, double maxSpeed, double maxAcceleration,
-			double visionRange, boolean groupBehaviour,
-			IGenomeGeneric<GeneralGeneTypes, Double> genome)*/
 	public DeerAgent(String name, Position p, Color c, int width, int height,
 			Vector velocity, double maxSpeed, double maxAcceleration,
 			double visionRange, IGenome<GeneralGeneTypes, IGene> genome) {

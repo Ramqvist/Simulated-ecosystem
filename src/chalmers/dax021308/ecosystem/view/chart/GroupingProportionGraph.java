@@ -53,6 +53,7 @@ public class GroupingProportionGraph extends AbstractGraph2D {
 
 	@Override
 	public void release() {
+		super.release();
 		this.removeAllTraces().clear();
 		this.removeAll();
 	}
@@ -122,16 +123,12 @@ public class GroupingProportionGraph extends AbstractGraph2D {
 	}
 
 	@Override
-	public void onTick() {
-		// TODO Auto-generated method stub
-	}
-	@Override
 	protected void onStart(Object object) {
 		// Nothing
 
 	}
 
 	@Override
-	protected void onStop(Object object){}
+	protected void onStop(Object object) { }
 }
 

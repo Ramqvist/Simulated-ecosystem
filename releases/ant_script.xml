@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project Simulated Ecosystem">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="C:/Users/Erik/Documents/GitHub/Simulated-ecosystem/releases/build3/Build3.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="chalmers.dax021308.ecosystem.main.EcosystemInitializer"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="C:/Users/Erik/Documents/GitHub/Simulated-ecosystem/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Erik/Documents/GitHub/Simulated-ecosystem/lib/gnujaxp.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Erik/Documents/GitHub/Simulated-ecosystem/lib/iText-2.1.5.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Erik/Documents/GitHub/Simulated-ecosystem/lib/jcommon-1.0.17.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Erik/Documents/GitHub/Simulated-ecosystem/lib/jfreechart-1.0.14-experimental.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Erik/Documents/GitHub/Simulated-ecosystem/lib/jfreechart-1.0.14-swt.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Erik/Documents/GitHub/Simulated-ecosystem/lib/jfreechart-1.0.14.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Erik/Documents/GitHub/Simulated-ecosystem/lib/junit.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Erik/Documents/GitHub/Simulated-ecosystem/lib/servlet.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Erik/Documents/GitHub/Simulated-ecosystem/lib/swtgraphics2d.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Erik/Documents/GitHub/Simulated-ecosystem/lib/jchart2d-3.2.2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/jogl/gluegen-rt.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/jogl/jogl.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Erik/Documents/GitHub/Simulated-ecosystem/lib/miglayout15-swing.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/adt-bundle-windows/eclipse/plugins/org.junit_4.10.0.v4_10_0_v20120426-0900/junit.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/adt-bundle-windows/eclipse/plugins/org.hamcrest.core_1.1.0.v20090501071000.jar"/>
+        </jar>
+    </target>
+</project>

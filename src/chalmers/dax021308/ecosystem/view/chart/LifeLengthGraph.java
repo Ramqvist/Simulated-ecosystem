@@ -54,6 +54,7 @@ public class LifeLengthGraph extends AbstractGraph2D {
 
 	@Override
 	public void release() {
+		super.release();
 		this.removeAllTraces().clear();
 		this.removeAll();
 	}
@@ -120,9 +121,5 @@ public class LifeLengthGraph extends AbstractGraph2D {
 		// TODO Auto-generated method stub
 	}
 
-	@Override
-	public void onTick() {
-		// TODO Auto-generated method stub
-	}
 }
 

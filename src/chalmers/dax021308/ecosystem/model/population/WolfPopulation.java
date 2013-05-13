@@ -33,7 +33,7 @@ public class WolfPopulation extends AbstractPopulation {
 
 		this.visionRange = visionRange;
 		this.groupBehaviour = groupBehaviour;
-		agents = initializePopulation(initPopulationSize, surroundings.getGridDimension(), color,
+		agents = initializePopulation(initPopulationSize, SurroundingsSettings.getGridDimension(), color,
 				maxSpeed, maxAcceleration, visionRange);
 	}
 
@@ -56,12 +56,13 @@ public class WolfPopulation extends AbstractPopulation {
 			}
 
 			IGenome<GeneralGeneTypes, IGene> genome = GeneticSettings.predSettings.getGenome().getCopy();
+			/*// TODO commented this during sim
 			genome.getGene(GeneralGeneTypes.ISGROUPING).isGeneActive();
 			genome.getGene(GeneralGeneTypes.GROUPING_COHESION).setRandomStartValue(false);
 			genome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).setRandomStartValue(false);
 			genome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).setRandomStartValue(false);
 			genome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).setRandomStartValue(false);
-			genome.getGene(GeneralGeneTypes.FOCUSPREY).setRandomStartValue(false);
+			genome.getGene(GeneralGeneTypes.FOCUSPREY).setRandomStartValue(false);*/
 
 			IAgent a = new WolfAgent("Wolf", randPos, color, 10, 20,
 					velocity, maxSpeed, maxAcceleration, visionRange, genome);

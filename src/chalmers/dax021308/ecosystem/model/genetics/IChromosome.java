@@ -40,6 +40,8 @@ public interface IChromosome <E, T> {
 
 	public boolean isGeneActive(E geneType);
 
+	public void setGeneActive(E geneType, boolean active);
+
 	public void setCurrentDoubleValue(E geneType, double currentValue);
 
 	/**

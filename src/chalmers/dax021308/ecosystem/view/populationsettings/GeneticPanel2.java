@@ -2,10 +2,19 @@ package chalmers.dax021308.ecosystem.view.populationsettings;
 
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import chalmers.dax021308.ecosystem.controller.GeneticPanelController;
+import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings.GeneSpecification;
+import chalmers.dax021308.ecosystem.model.util.Stat;
 import net.miginfocom.swing.MigLayout;
 
 
@@ -34,9 +43,9 @@ public class GeneticPanel2 extends JPanel {
 	}
 	private static final long serialVersionUID = 1L;
 
-	public void addNewBooleanComponents(JLabel lblGroupBehavior, JCheckBox chkbxActiveBirth, JCheckBox chckbxMutable){
+	public void addNewBooleanComponents(JLabel name, JCheckBox chkbxActiveBirth, JCheckBox chckbxMutable){
 		currentRow++;
-		add(lblGroupBehavior, "cell 2 "+currentRow+",alignx right");
+		add(name, "cell 2 "+currentRow+",alignx right");
 		add(chkbxActiveBirth, "cell 3 "+currentRow+",alignx center");
 		add(chckbxMutable, "cell 4 "+currentRow+",alignx left");
 	}
@@ -53,16 +62,15 @@ public class GeneticPanel2 extends JPanel {
 		currentRow++;
 	}
 
-	public void addNewDoubleComponents(JLabel lblGroupBehavior, JTextField tfStartValue,
+	public void addNewDoubleComponents(JLabel title, JTextField tfStartValue,
 			JTextField tfMinValue, JTextField tfMaxValue, JCheckBox chckbxMutable, JCheckBox chkbxRandomStart){
 		currentRow++;
-		add(lblGroupBehavior, "cell 2 "+currentRow+",alignx right");
+		add(title, "cell 2 "+currentRow+",alignx right");
 		add(tfStartValue, "cell 3 "+currentRow+",growx");
 		add(tfMinValue, "cell 4 "+currentRow+",growx");
 		add(tfMaxValue, "cell 5 "+currentRow+",growx");
 		add(chckbxMutable, "cell 6 "+currentRow+",alignx center");
 		add(chkbxRandomStart, "cell 7 "+currentRow+",alignx center");
 	}
-
 
 }

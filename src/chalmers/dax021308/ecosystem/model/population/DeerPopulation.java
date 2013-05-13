@@ -17,9 +17,9 @@ import chalmers.dax021308.ecosystem.model.util.Position;
 import chalmers.dax021308.ecosystem.model.util.Vector;
 
 /**
- * 
+ *
  * @author Sebastian
- * 
+ *
  */
 public class DeerPopulation extends AbstractPopulation {
 
@@ -29,10 +29,10 @@ public class DeerPopulation extends AbstractPopulation {
 
 	public DeerPopulation(String name, int initPopulationSize, Color color, double maxSpeed,
 			double maxAcceleration, double visionRange, boolean groupBehaviour, SurroundingsSettings surroundings) {
-		
+
 		super(name, color, surroundings);
 		//this.groupBehaviour = groupBehaviour;
-		agents = initializePopulation(initPopulationSize, surroundings.getGridDimension(), color,
+		agents = initializePopulation(initPopulationSize, SurroundingsSettings.getGridDimension(), color,
 				maxSpeed, maxAcceleration, visionRange);
 	}
 
@@ -51,8 +51,9 @@ public class DeerPopulation extends AbstractPopulation {
 				velocity.setVector(-maxSpeed + Math.random() * 2 * maxSpeed,
 						-maxSpeed + Math.random() * 2 * maxSpeed);
 			}
-			
+
 			IGenome<GeneralGeneTypes, IGene> genome = GeneticSettings.preySettings.getGenome().getCopy();
+			/*// TODO commented this during sim
 			genome.getGene(GeneralGeneTypes.ISGROUPING).isGeneActive();
 			genome.getGene(GeneralGeneTypes.GROUPING_COHESION).setRandomStartValue(false);
 			genome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).setRandomStartValue(false);
@@ -61,9 +62,9 @@ public class DeerPopulation extends AbstractPopulation {
 			genome.getGene(GeneralGeneTypes.ISSTOTTING).setRandomStartValue(false);
 			genome.getGene(GeneralGeneTypes.STOTTINGRANGE).setRandomStartValue(false);
 			genome.getGene(GeneralGeneTypes.STOTTINGLENGTH).setRandomStartValue(false);
-			genome.getGene(GeneralGeneTypes.STOTTINGANGLE).setRandomStartValue(false);
-			
-			
+			genome.getGene(GeneralGeneTypes.STOTTINGANGLE).setRandomStartValue(false);*/
+
+
 			IAgent a = new DeerAgent("Deer", randPos,
 					color, 5, 10, velocity, maxSpeed, maxAcceleration,
 					visionRange, genome);
@@ -77,35 +78,35 @@ public class DeerPopulation extends AbstractPopulation {
 		}
 		return newAgents;
 	}
-	
+
 	public double stottingProportion(){
 		double stottingCount = 0;
 		DeerAgent da = null;
 		for(IAgent a: agents) {
 			if(a instanceof DeerAgent) {
 				da = (DeerAgent) a;
-			} 
+			}
 			if(da.isAStottingDeer()){
 				stottingCount++;
 			}
 		}
 		return stottingCount/((double)agents.size());
 	}
-	
+
 	public double agentsGroupingProportion(){
 		double groupCount = 0;
 		DeerAgent da = null;
 		for(IAgent a: agents) {
 			if(a instanceof DeerAgent) {
 				da = (DeerAgent) a;
-			} 
+			}
 			if(da.isAGroupingDeer()){
 				groupCount++;
 			}
 		}
 		return groupCount/((double)agents.size());
 	}
-	
+
 	@Override
 	public void updatePositions() {
 		super.updatePositions();

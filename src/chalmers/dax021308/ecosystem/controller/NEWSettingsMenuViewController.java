@@ -172,7 +172,6 @@ public class NEWSettingsMenuViewController implements IController {
 		
 	@Override
 	public void release() {
-		// TODO: waddafakk is this?
 	}
 
 	@Override

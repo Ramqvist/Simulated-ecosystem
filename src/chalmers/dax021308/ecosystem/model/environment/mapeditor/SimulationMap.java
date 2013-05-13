@@ -94,6 +94,9 @@ public class SimulationMap {
 	public String toString() {
 		return name;
 	}
+	/**
+	 * Warning. Is not valid for empty map.
+	 */
 	public boolean isValidMap() {
 		if(getName() == null || getObsList() == null) {
 			return false;
@@ -147,6 +150,10 @@ public class SimulationMap {
 		return true;
 	}
 
+	/**
+	 * Generates a random map, with size between 1 and 10.
+	 * @return
+	 */
 	public static SimulationMap randomMap() {
 		List<IObstacle> obsList = new ArrayList<IObstacle>();
 		String name = "RandomMap";

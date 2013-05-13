@@ -35,14 +35,16 @@ import chalmers.dax021308.ecosystem.view.populationsettings.GeneticPanel2;
  */
 public class GeneticPanelController {
 	//private EcoWorld model;
+
 	private GeneticPanelController(EcoWorld model) {
 		//this.model = model;
 	}
 
+
+
 	public static PopulationPanel2 getNewPopulationPanel(GeneticSettings s, CommonSettings c){
 		return new PopulationPanel2(s, c);
 	}
-
 
 	private static class PopulationPanel2 extends JPanel {
 		private static final long serialVersionUID = 5187994142800876532L;
@@ -63,6 +65,7 @@ public class GeneticPanelController {
 			setSize(new Dimension (700, 700));
 		}
 
+
 		protected void newGeneSettings(){
 			for(final GeneSpecification geneSpec : geneticContent.getBooleanGeneSpecifications()) {
 				if(geneSpec.getGeneType() == GeneSpecification.TYPE_BOOLEAN) {
@@ -81,10 +84,10 @@ public class GeneticPanelController {
 			}
 		}
 
-		/**
-		 * @param geneSpec
-		 * @return
-		 */
+		private String doubleToString(double d) {
+			return "" + Stat.roundNDecimals(d,2);
+		}
+
 		private JCheckBox makeComponent_RandomStart(
 				final GeneSpecification geneSpec) {
 			//Random Start
@@ -98,13 +101,9 @@ public class GeneticPanelController {
 			return chkbxRandomStart;
 		}
 
-		/**
-		 * @param geneSpec
-		 * @return
-		 */
 		private JTextField makeComponent_MinValue(final GeneSpecification geneSpec) {
 			//Min value
-			final JTextField tfMinValue = new JTextField("" +  Stat.roundNDecimals(geneSpec.getMinValue(),2));
+			final JTextField tfMinValue = new JTextField(doubleToString(geneSpec.getMinValue()));
 			tfMinValue.addKeyListener(new KeyListener() {
 				@Override
 				public void keyTyped(KeyEvent e) { }
@@ -124,13 +123,9 @@ public class GeneticPanelController {
 			return tfMinValue;
 		}
 
-		/**
-		 * @param geneSpec
-		 * @return
-		 */
 		private JTextField makeComponent_MaxValue(final GeneSpecification geneSpec) {
 			//Max value
-			final JTextField tfMaxValue = new JTextField("" +  Stat.roundNDecimals(geneSpec.getMaxValue(),2));
+			final JTextField tfMaxValue = new JTextField(doubleToString(geneSpec.getMaxValue()));
 			tfMaxValue.addKeyListener(new KeyListener() {
 				@Override
 				public void keyTyped(KeyEvent e) { }
@@ -150,14 +145,10 @@ public class GeneticPanelController {
 			return tfMaxValue;
 		}
 
-		/**
-		 * @param geneSpec
-		 * @return
-		 */
 		private JTextField makeComponent_StartValue(
 				final GeneSpecification geneSpec) {
 			//Start value
-			final JTextField tfStartValue = new JTextField("" + Stat.roundNDecimals(geneSpec.getCurrentDoubleValue(),2));
+			final JTextField tfStartValue = new JTextField(doubleToString(geneSpec.getCurrentDoubleValue()));
 			tfStartValue.addKeyListener(new KeyListener() {
 				@Override
 				public void keyTyped(KeyEvent e) { }
@@ -177,10 +168,6 @@ public class GeneticPanelController {
 			return tfStartValue;
 		}
 
-		/**
-		 * @param geneSpec
-		 * @return
-		 */
 		private JCheckBox makeComponent_ActiveOnBirth(final GeneSpecification geneSpec) {
 			final JCheckBox chkbxActiveBirth = new JCheckBox("",geneSpec.isActiveOnBirth());
 			chkbxActiveBirth.addActionListener(new ActionListener() {
@@ -192,10 +179,6 @@ public class GeneticPanelController {
 			return chkbxActiveBirth;
 		}
 
-		/**
-		 * @param geneSpec
-		 * @return
-		 */
 		private JCheckBox makeComponent_Mutable(final GeneSpecification geneSpec) {
 
 			final JCheckBox chckbxMutable = new JCheckBox("", geneSpec.isMutable());
@@ -207,5 +190,9 @@ public class GeneticPanelController {
 			});
 			return chckbxMutable;
 		}
+
 	}
+
+
+
 }

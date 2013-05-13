@@ -16,7 +16,7 @@ public abstract class AbstractGene implements IGene {
 	protected boolean isMutable = false;
 	protected boolean randomStartValue = false;
 	protected boolean geneActiveStatus = true;
-	protected Random randomGenerator = new Random();
+	protected static Random randomGenerator = new Random();
 
 	private static NullGene nullGene;
 	public static IGene newNullGene(){
@@ -139,6 +139,13 @@ public abstract class AbstractGene implements IGene {
 		return true;
 	}
 
-
+	@Override
+	public String toString() {
+		StringBuffer sB = new StringBuffer();
+		sB.append("Active: " + geneActiveStatus + "\t");
+		sB.append("Mutable: " + isMutable + "\t");
+		sB.append("Random start: " + randomStartValue + "\t");
+		return sB.toString();
+	}
 
 }

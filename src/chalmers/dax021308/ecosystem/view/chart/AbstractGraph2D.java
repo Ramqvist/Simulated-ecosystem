@@ -2,7 +2,14 @@ package chalmers.dax021308.ecosystem.view.chart;
 
 import java.awt.Component;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.IModel;
@@ -37,8 +44,10 @@ public abstract class AbstractGraph2D extends Chart2D implements IChart{
 	private int nIterationsPassed = 0;
 	protected int updateFrequency = 10; // every tenth iteration.
 	private boolean hasStopped = false;
+	private IModel model;
 
 	public AbstractGraph2D (IModel model, int updateFrequency, String title, String xTitle, String yTitle){
+		this.model = model;
 		model.addObserver(this);
 		this.updateFrequency = updateFrequency;
 		this.setName(title);
@@ -97,10 +106,11 @@ public abstract class AbstractGraph2D extends Chart2D implements IChart{
 	public void addController(ActionListener controller) {}
 
 	@Override
-	public void onTick() {}
-
-	@Override
-	public void release() {}
+	public void release() {
+		hasStopped = true;
+		model.removeObserver(this);
+		this.removeAllTraces();
+	}
 
 	protected abstract void onStart(Object object);
 	protected abstract void onPause(Object object);
@@ -108,13 +118,19 @@ public abstract class AbstractGraph2D extends Chart2D implements IChart{
 	protected abstract void onTick(Object object);
 	protected abstract void onIterationFinished(Object object);
 
+	@Override
 	public Component toComponent(){
 		return this;
 	}
 
+	@Override
 	public String getTitle(){
 		return this.getName();
 	}
 
+	@Override
+	public BufferedImage getSnapShot() {
+		return this.snapShot();
+	}
 
 }

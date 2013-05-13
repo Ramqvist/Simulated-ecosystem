@@ -7,8 +7,14 @@ import java.util.Random;
 import chalmers.dax021308.ecosystem.controller.scripting.ScriptHandler.OnFinishedScriptListener;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
+import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
+import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
 import chalmers.dax021308.ecosystem.model.population.IPopulation;
 import chalmers.dax021308.ecosystem.model.util.Log;
+import chalmers.dax021308.ecosystem.model.util.SimulationResultPrinter;
+import chalmers.dax021308.ecosystem.view.chart.ChartProvider;
+import chalmers.dax021308.ecosystem.view.chart.ChartProvider.ChartType;
+import chalmers.dax021308.ecosystem.view.chart.IChart;
 
 /**
  * Simple script, used to create new ones. Copy and rename this class.
@@ -26,9 +32,14 @@ public class MyBlubbScript implements IScript {
 	private List<IPopulation> lastPopulation;
 	private OnFinishedScriptListener listener;
 
-	private static final String name = "Simple Script";
-	private static final int NUM_ITERATION_PER_SIMULATION = 100000;
+	private static final String name = "RandomSettingBlubbSaveChartsGrejs";
+	private int numberOfRuns = 3;
+	private int currentRun = 0;
+	private static final int NUM_ITERATION_PER_SIMULATION = 10000;
 
+	public int getCurrentRunNumber(){
+		return currentRun;
+	}
 	/**
 	 * Use this to initialize variables.
 	 * Called from ScriptHandler when this is selected to run.
@@ -37,8 +48,17 @@ public class MyBlubbScript implements IScript {
 	public void init(EcoWorld e, OnFinishedScriptListener listener) {
 		this.listener = listener;
 		this.model = e;
-		e.addObserver(this);
-		e.loadSimulationSettings(set());
+
+		model.addObserver(this);
+		//restart();
+		//e.loadSimulationSettings(set());
+		//ChartProvider.initCharts(model);
+
+		currentRun++;
+		SimulationResultPrinter.setGeneSettingsFileName("simResult/run_" + currentRun + "_geneSettings.txt");
+		SimulationSettings ssettings = set();
+		model.loadSimulationSettings(ssettings);
+		ChartProvider.initCharts(model);
 	}
 
 	@Override
@@ -68,11 +88,30 @@ public class MyBlubbScript implements IScript {
 	@Override
 	public void onFinishOneRun() {
 		Log.v("onFinishOneRun");
+		saveChartImages();
 		if(isThisScriptFinished()) {
 			onFinishScript();
 		} else {
-			model.loadSimulationSettings(set());
+			restart();
 			model.start();
+		}
+	}
+
+	private void restart() {
+		currentRun++;
+		SimulationResultPrinter.setGeneSettingsFileName("simResult/run_" + currentRun + "_geneSettings.txt");
+		SimulationSettings ssettings = set();
+		GeneticSettings.reInitialize();
+		model.loadSimulationSettings(ssettings);
+		ChartProvider.initCharts(model);
+	}
+
+	public void saveChartImages() {
+		for (ChartType ct : ChartType.values()) {
+			IChart temp = ChartProvider.getChart(ct, model);
+			SimulationResultPrinter.saveChartSnapShot("simResult/run_" + currentRun + "_chart_" + temp.getTitle(),
+					temp.getSnapShot()
+				);
 		}
 	}
 
@@ -81,7 +120,7 @@ public class MyBlubbScript implements IScript {
 	 * @return
 	 */
 	private boolean isThisScriptFinished() {
-		return new Random().nextBoolean();
+		return (numberOfRuns-currentRun) <= 0;
 	}
 
 	@Override

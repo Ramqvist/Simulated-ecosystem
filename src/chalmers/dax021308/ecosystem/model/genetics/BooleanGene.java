@@ -10,10 +10,10 @@ import java.util.Random;
 public class BooleanGene extends AbstractGene {
 
 	/**
-	 * standard mutation probability and number of bits
+	 * standard mutation probability, random start value
 	 */
 	public BooleanGene(){
-		this(true, 0.1, true, false);
+		this(true, 0.1, true, true);
 	}
 
 	/**
@@ -23,22 +23,12 @@ public class BooleanGene extends AbstractGene {
 	 */
 	public BooleanGene(double mutationProbability, boolean isMutable) {
 		this(true, mutationProbability, isMutable, true);
-		//this.randomStartValue = true;
-		//this.geneActiveStatus = new Random().nextBoolean();
-
-		//this.setMutationProbaility(mutationProbability); // error checks
-		//this.isMutable = isMutable;
 	}
 
 	public BooleanGene(boolean geneActive, double mutationProbability, boolean isMutable, boolean randomStartValue) {
-		//this.randomStartValue = randomStartValue;
+		this.randomStartValue = randomStartValue;
 		if(randomStartValue) {
 			this.geneActiveStatus = randomGenerator.nextBoolean();
-			/*if(Math.random()<0.5){
-				this.geneActiveStatus = false;
-			} else {
-				this.geneActiveStatus = true;
-			}*/
 		} else {
 			this.geneActiveStatus = geneActive;
 		}
@@ -50,9 +40,6 @@ public class BooleanGene extends AbstractGene {
 	private BooleanGene(BooleanGene toCopy) {
 		// false randomStartValue, otherwise it the copy will randomize
 		this(toCopy.geneActiveStatus,toCopy.mutationProbability,toCopy.isMutable, false);
-		/*if (toCopy.randomStartValue){
-			this.setHaveGene(toCopy.geneActiveStatus);
-		}*/
 		this.randomStartValue = toCopy.randomStartValue;
 	}
 

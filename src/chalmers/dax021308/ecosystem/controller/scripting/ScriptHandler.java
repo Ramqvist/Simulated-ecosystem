@@ -15,33 +15,34 @@ import chalmers.dax021308.ecosystem.view.ScriptSelector;
 import chalmers.dax021308.ecosystem.view.ScriptSelector.OnScriptSelectedListener;
 
 /**
- * Class that handles the connection to the Scripts and the view starting them. 
+ * Class that handles the connection to the Scripts and the view starting them.
  * <p>
  * Add your own script to the list and start it using the ScriptInitializer class in the main package.
- * <p> 
+ * <p>
  * Don't forget to copy the run configuration (VM Arguments) from the normal one to ScriptInitializer.
- * 
+ *
  * @author Erik Ramqvist
  *
  */
 public class ScriptHandler implements IController{
-	
+
 	private ScriptSelector ss;
 	private boolean shutdownOnFinish;
 
 	public ScriptHandler() {
 		List<IScript> scriptList = new ArrayList<IScript>();
 
-		/* Add your created script to this list here! */	
+		/* Add your created script to this list here! */
 		scriptList.add(new MultiThreadedPerformanceScript());
 		scriptList.add(new OptimalMapSelectionScript());
 		scriptList.add(new MySillyScript());
+		scriptList.add(new MyBlubbScript());
 		//scriptList.add(new MyFancyScript());
-		
+
 		this.ss = new ScriptSelector(scriptList, new OnScriptSelectedListener() {
 			@Override
-			public void onScriptSelected(IScript s, boolean enableGUI, boolean shutdown) {
-				runScript(s, enableGUI);
+			public void onScriptSelected(IScript s, boolean enableGUI, boolean minimalGUI, boolean shutdown) {
+				runScript(s, enableGUI, minimalGUI);
 				ss.dispose();
 				ScriptHandler.this.shutdownOnFinish = shutdown;
 				//TODO: Add minimalistic gui option.
@@ -50,7 +51,7 @@ public class ScriptHandler implements IController{
 		});
 	}
 
-	private void runScript(IScript s, boolean enableGUI) {
+	private void runScript(IScript s, boolean enableGUI, boolean minimalGUI) {
 		EcoWorld e = null;
 		if(enableGUI) {
 			try {
@@ -60,11 +61,15 @@ public class ScriptHandler implements IController{
 			}
 			MainWindowController window = new MainWindowController();
 			e = window.model;
+			if(minimalGUI) {
+				window.window.toggleFullscreen();
+				window.window.releaseAllButOpenGL();
+			}
 		} else {
 			e = new EcoWorld();
 		}
 		s.init(e, new OnFinishedScriptListener() {
-			
+
 			@Override
 			public void onFinishScript() {
 				if(shutdownOnFinish) {
@@ -76,28 +81,31 @@ public class ScriptHandler implements IController{
 						e.printStackTrace();
 					}
 				}
+				else {
+					System.exit(0);
+				}
 			}
 		});
 		e.start();
 	}
 	@Override
 	public void init() {
-		
+
 	}
 
 	@Override
 	public void release() {
-		
+
 	}
 
 	@Override
 	public void setModel(IModel m) {
-		
+
 	}
-	
+
 	/**
 	 * Shutdowns your computer! Herp derp!
-	 * 
+	 *
 	 * @throws RuntimeException
 	 * @throws IOException
 	 */
@@ -119,7 +127,7 @@ public class ScriptHandler implements IController{
 	    Runtime.getRuntime().exec(shutdownCommand);
 	    System.exit(0);
 	}
-	
+
 	public interface OnFinishedScriptListener {
 		public void onFinishScript();
 	}

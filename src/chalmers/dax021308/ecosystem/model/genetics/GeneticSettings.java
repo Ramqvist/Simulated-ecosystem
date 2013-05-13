@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class GeneticSettings {
+
 	//TEST Setups
 	public static GeneticSettings preySettings = new GeneticSettings(GenomeFactory.deerGenomeFactory());
 	public static GeneticSettings predSettings = new GeneticSettings(GenomeFactory.wolfGenomeFactory());
@@ -16,7 +17,12 @@ public class GeneticSettings {
 	private List<GeneSpecification> genes_d;
 	private List<GeneSpecification> genes_b;
 
-	public GeneticSettings(IGenome<GeneralGeneTypes, IGene> genome){
+	public static void reInitialize() {
+		preySettings = new GeneticSettings(GenomeFactory.deerGenomeFactory());
+		predSettings = new GeneticSettings(GenomeFactory.wolfGenomeFactory());
+	}
+
+	protected GeneticSettings(IGenome<GeneralGeneTypes, IGene> genome){
 		this.genome = genome;
 		genes_d = new ArrayList<GeneSpecification>();
 		genes_b = new ArrayList<GeneSpecification>();
@@ -39,11 +45,11 @@ public class GeneticSettings {
 		Iterator<Entry<GeneralGeneTypes,IGene>> it = genome.getAllGenes().entrySet().iterator();
 		while(it.hasNext()) {
 			Entry<GeneralGeneTypes,IGene> entry = it.next();
-
-			if (entry.getKey().getType() == GeneSpecification.TYPE_BOOLEAN)
-				this.genes_b.add(makeSpec(entry.getKey(), entry.getValue()));
-			else if (entry.getKey().getType() == GeneSpecification.TYPE_DOUBLE)
-				this.genes_d.add(makeSpec(entry.getKey(), entry.getValue()));
+			GeneralGeneTypes key = entry.getKey();
+			if (key.getType() == GeneSpecification.TYPE_BOOLEAN)
+				this.genes_b.add(makeSpec(key, entry.getValue()));
+			else
+				this.genes_d.add(makeSpec(key, entry.getValue()));
 		}
 	}
 
