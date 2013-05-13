@@ -1,0 +1,51 @@
+Deers
+Gene: Stotting 
+Active: true	Mutable: true	Random start: true	
+
+Gene: Stotting length 
+Active: true	Mutable: true	Random start: true	Min: 0.0	Max: 30.0	Current: 23.52941176470588	
+
+Gene: Stotting range 
+Active: true	Mutable: true	Random start: true	Min: 0.0	Max: 200.0	Current: 141.1764705882353	
+
+Gene: Stotting angle 
+Active: true	Mutable: true	Random start: true	Min: 1.5707963267948966	Max: 3.141592653589793	Current: 2.254554727870322	
+
+Gene: Grouping 
+Active: true	Mutable: true	Random start: true	
+
+Gene: Separation force 
+Active: true	Mutable: true	Random start: true	Min: 0.0	Max: 120.0	Current: 10.90909090909091	
+
+Gene: Cohesion 
+Active: true	Mutable: true	Random start: true	Min: 0.0	Max: 10.0	Current: 2.1603128054740957	
+
+Gene: Forward thrust 
+Active: true	Mutable: true	Random start: true	Min: 0.0	Max: 2.0	Current: 1.8963831867057674	
+
+Gene: Arrayal force 
+Active: true	Mutable: true	Random start: true	Min: 0.0	Max: 10.0	Current: 3.8905180840664713	
+
+
+
+Wolves
+Gene: Grouping 
+Active: true	Mutable: true	Random start: true	
+
+Gene: Separation force 
+Active: true	Mutable: true	Random start: true	Min: 0.0	Max: 150.0	Current: 1.906158357771261	
+
+Gene: Cohesion 
+Active: true	Mutable: true	Random start: true	Min: 0.0	Max: 20.0	Current: 0.7624633431085044	
+
+Gene: Forward thrust 
+Active: true	Mutable: true	Random start: true	Min: 0.0	Max: 2.5	Current: 1.681329423264907	
+
+Gene: Arrayal force 
+Active: true	Mutable: true	Random start: true	Min: 0.0	Max: 10.0	Current: 6.158357771260997	
+
+Gene: Focus prey 
+Active: false	Mutable: true	Random start: true	
+
+
+

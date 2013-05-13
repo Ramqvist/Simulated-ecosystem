@@ -10,16 +10,16 @@ import chalmers.dax021308.ecosystem.model.environment.IModel;
 import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.SimulationMap;
 import chalmers.dax021308.ecosystem.model.util.Log;
-import chalmers.dax021308.ecosystem.view.NEWSettingsMenuView;
+import chalmers.dax021308.ecosystem.view.SettingsView;
 
-public class NEWSettingsMenuViewController implements IController {
+public class SettingsController implements IController {
 	private EcoWorld model;
-	private NEWSettingsMenuView view;
+	private SettingsView view;
 	private ActionListener listenerStartButton;
 	private SimulationSettings s;
 	private Frame superFrame;
 	
-	public NEWSettingsMenuViewController(EcoWorld model, Frame superFrame) {
+	public SettingsController(EcoWorld model, Frame superFrame) {
 		this.superFrame = superFrame;
 		this.model = model;
 		init();
@@ -31,7 +31,7 @@ public class NEWSettingsMenuViewController implements IController {
 			throw new NullPointerException("Model not set.");
 		}
 		if(view == null) {
-			view = new NEWSettingsMenuView(model, superFrame);
+			view = new SettingsView(model, superFrame);
 			listenerStartButton = new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {

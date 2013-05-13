@@ -53,7 +53,7 @@ public class DeerPopulation extends AbstractPopulation {
 			}
 
 			IGenome<GeneralGeneTypes, IGene> genome = GeneticSettings.preySettings.getGenome().getCopy();
-			/*// TODO commented this during sim
+			// TODO comment this during sim?
 			genome.getGene(GeneralGeneTypes.ISGROUPING).isGeneActive();
 			genome.getGene(GeneralGeneTypes.GROUPING_COHESION).setRandomStartValue(false);
 			genome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).setRandomStartValue(false);
@@ -62,7 +62,7 @@ public class DeerPopulation extends AbstractPopulation {
 			genome.getGene(GeneralGeneTypes.ISSTOTTING).setRandomStartValue(false);
 			genome.getGene(GeneralGeneTypes.STOTTINGRANGE).setRandomStartValue(false);
 			genome.getGene(GeneralGeneTypes.STOTTINGLENGTH).setRandomStartValue(false);
-			genome.getGene(GeneralGeneTypes.STOTTINGANGLE).setRandomStartValue(false);*/
+			genome.getGene(GeneralGeneTypes.STOTTINGANGLE).setRandomStartValue(false);
 
 
 			IAgent a = new DeerAgent("Deer", randPos,

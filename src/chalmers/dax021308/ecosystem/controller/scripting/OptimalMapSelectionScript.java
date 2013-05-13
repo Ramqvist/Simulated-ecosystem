@@ -35,7 +35,7 @@ public class OptimalMapSelectionScript implements IScript {
 	private int rounds = 10;
 	
 	private static final String populationToTrack = "Deers";
-	private static final int NUM_ITERATION_PER_SIM = 1000;
+	private static final int NUM_ITERATION_PER_SIM = 100;
 	private static final int NUM_BESTMAPS  = 5;
 	private static final int NUM_WORSTMAPS = 5;
 	
@@ -44,6 +44,7 @@ public class OptimalMapSelectionScript implements IScript {
 	private static final int PHASE_FINALIZE_MAPS 		= 3;
 	
 	private int current_phase = PHASE_BROAD_RANDOMINESS;
+	private String name = "Optimal Map Selection Script";
 	
 
 	@Override
@@ -56,7 +57,8 @@ public class OptimalMapSelectionScript implements IScript {
 		worstMaps = new HashMap<SimulationMap, Long>();
 		
 		SimulationSettings s = SimulationSettings.DEFAULT;
-		s.setMap(null);  //TODO: fix
+		lastMap = SimulationMap.randomMap();
+		s.setMap(lastMap); 
 		s.setDelayLength(0);
 		s.setRunWithoutTimer(true);
 		s.setNumIterations(NUM_ITERATION_PER_SIM);
@@ -66,18 +68,22 @@ public class OptimalMapSelectionScript implements IScript {
 	@Override
 	public void onFinishOneRun() {
 		//Handle data
-		if(bestMaps.size() > NUM_BESTMAPS) {
+		if(bestMaps.size() < NUM_BESTMAPS) {
 			bestMaps.put(lastMap, currentPopulationPoints);
 		} else {
 			for(SimulationMap m : bestMaps.keySet()) {
-				if(currentPopulationPoints > bestMaps.get(m)) {
+				Long l = bestMaps.get(m);
+				if(l == null) {
+					Log.v("L IS NULL");
+				}
+				if(currentPopulationPoints > l) {
 					bestMaps.remove(m);
 					bestMaps.put(lastMap, currentPopulationPoints);
 					break;
 				}
 			}
 		}
-		if(worstMaps.size() > NUM_WORSTMAPS) {
+		if(worstMaps.size() < NUM_WORSTMAPS) {
 			worstMaps.put(lastMap, currentPopulationPoints);
 		} else {
 			for(SimulationMap m : worstMaps.keySet()) {
@@ -90,10 +96,9 @@ public class OptimalMapSelectionScript implements IScript {
 		}
 		currentPopulationPoints = 0;
 		if(--rounds >= 0) {
-			onFinishScript();
 			SimulationSettings s = SimulationSettings.DEFAULT;
 			s.setNumIterations(NUM_ITERATION_PER_SIM);
-			lastMap = new SimulationMap(null, null); //TODO: fix
+			lastMap = SimulationMap.randomMap();
 			s.setMap(lastMap);
 			e.loadSimulationSettings(s);
 			e.start();
@@ -104,6 +109,7 @@ public class OptimalMapSelectionScript implements IScript {
 
 	@Override
 	public void onFinishScript() {
+		Log.v("*** Script finished ***");
 		Log.v("--- Best Maps ---");
 		printObstacles(bestMaps.keySet());
 		dumpMapsToFile("BestMaps", bestMaps.keySet());
@@ -131,7 +137,7 @@ public class OptimalMapSelectionScript implements IScript {
 	
 	@Override
 	public String getName() {
-		return "Optimal Map Selection Script";
+		return name ;
 	} 
 	
 	@Override
@@ -151,7 +157,9 @@ public class OptimalMapSelectionScript implements IScript {
 		if(maps == null) {
 			return;
 		}
+		int counter = 1;
 		for(SimulationMap m : maps) {
+			Log.v("Map number " + counter++);
 			printMap(m);
 		}
 	}

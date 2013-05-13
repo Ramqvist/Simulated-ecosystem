@@ -21,7 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
 
-import chalmers.dax021308.ecosystem.controller.NEWSettingsMenuViewController;
+import chalmers.dax021308.ecosystem.controller.ControlViewController;
+import chalmers.dax021308.ecosystem.controller.SettingsController;
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
 import chalmers.dax021308.ecosystem.model.util.Log;
 import chalmers.dax021308.ecosystem.view.chart.BottomChartTabs;
@@ -47,7 +48,7 @@ public class MainWindow extends JFrame implements IView {
 	private IChart graphView2;
 
 //	public final LiveSettingsViewController parameterViewCtrl;
-	public final NEWSettingsMenuViewController smvc;
+	public final SettingsController smvc;
 
 	public final MenuBar menuBar;
 	public final Menu mnFile;
@@ -76,7 +77,7 @@ public class MainWindow extends JFrame implements IView {
 		openGL = new OpenGLSimulationView(model);
 		openGL.init();
 //		parameterViewCtrl = new LiveSettingsViewController(model);
-		smvc = new NEWSettingsMenuViewController(model, this);
+		smvc = new SettingsController(model, this);
 		heatMap = new HeatmapTabHolder(model);
 		bottomTabbedGraphs = new BottomChartTabs(model);
 		graphView2 = ChartProvider.getChart(ChartProvider.ChartType.GROUPING_PROPORTION_GRAPH, model);

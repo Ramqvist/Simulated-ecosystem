@@ -19,14 +19,12 @@ import com.sun.java_cup.internal.runtime.Scanner;
  */
 public class GenomeFactory {
 	public static IGenome<GeneralGeneTypes, IGene> deerGenomeFactory(){
-		//IGenome<GeneralGeneTypes, IGene> g = new Genome(initDeerGenome());
-		IGenome<GeneralGeneTypes, IGene> g = new Genome(rand_deerChromosome());
+		IGenome<GeneralGeneTypes, IGene> g = new Genome(initDeerGenome());
 		return g;
 	}
 
 	public static IGenome<GeneralGeneTypes, IGene> wolfGenomeFactory(){
-		//IGenome<GeneralGeneTypes, IGene> g = new Genome(initWolfGenome());
-		IGenome<GeneralGeneTypes, IGene> g = new Genome(rand_wolfChromosome());
+		IGenome<GeneralGeneTypes, IGene> g = new Genome(initWolfGenome());
 		return g;
 	}
 
@@ -86,7 +84,17 @@ public class GenomeFactory {
 	/*
 	 * For script
 	 */
-	public static IChromosome<GeneralGeneTypes,IGene> rand_deerChromosome(){
+
+	public static IGenome<GeneralGeneTypes, IGene> deerGenomeFactory_script(){
+		IGenome<GeneralGeneTypes, IGene> g = new Genome(rand_deerChromosome());
+		return g;
+	}
+
+	public static IGenome<GeneralGeneTypes, IGene> wolfGenomeFactory_script(){
+		IGenome<GeneralGeneTypes, IGene> g = new Genome(rand_wolfChromosome());
+		return g;
+	}
+	private static IChromosome<GeneralGeneTypes,IGene> rand_deerChromosome(){
 
 		double mutProb = 0.01;
 		IChromosome<GeneralGeneTypes,IGene> chrom = new Chromosome();
@@ -108,7 +116,7 @@ public class GenomeFactory {
 		return chrom;
 	}
 
-	public static IChromosome<GeneralGeneTypes,IGene> rand_wolfChromosome(){
+	private static IChromosome<GeneralGeneTypes,IGene> rand_wolfChromosome(){
 		double mutProb = 0.01;
 		IChromosome<GeneralGeneTypes,IGene> chrom = new Chromosome();
 

@@ -102,6 +102,8 @@ public class MyBlubbScript implements IScript {
 		SimulationResultPrinter.setGeneSettingsFileName("simResult/run_" + currentRun + "_geneSettings.txt");
 		SimulationSettings ssettings = set();
 		GeneticSettings.reInitialize();
+		GeneticSettings.preySettings = new GeneticSettings(GenomeFactory.deerGenomeFactory_script());
+		GeneticSettings.predSettings = new GeneticSettings(GenomeFactory.wolfGenomeFactory_script());
 		model.loadSimulationSettings(ssettings);
 		ChartProvider.initCharts(model);
 	}

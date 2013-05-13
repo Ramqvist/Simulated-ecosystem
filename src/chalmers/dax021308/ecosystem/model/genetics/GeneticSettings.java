@@ -22,7 +22,7 @@ public class GeneticSettings {
 		predSettings = new GeneticSettings(GenomeFactory.wolfGenomeFactory());
 	}
 
-	protected GeneticSettings(IGenome<GeneralGeneTypes, IGene> genome){
+	public GeneticSettings(IGenome<GeneralGeneTypes, IGene> genome){
 		this.genome = genome;
 		genes_d = new ArrayList<GeneSpecification>();
 		genes_b = new ArrayList<GeneSpecification>();
