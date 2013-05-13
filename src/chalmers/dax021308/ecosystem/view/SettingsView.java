@@ -609,12 +609,12 @@ public class SettingsView extends JDialog {
         right.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 10));
         //panelButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        shapeRadioPanel.setBorder(createTitledBorder("Shape of Universe"));
+        shapeRadioPanel.setBorder(createTitledBorder("Shape"));
 //        listMap.setBorder(createTitledBorder("Obstacles"));
         
-        listPred.setBorder(createTitledBorder("Predators"));
-        listPrey.setBorder(createTitledBorder("Preys"));
-        listVegetation.setBorder(createTitledBorder("Vegetation"));
+//        listPred.setBorder(createTitledBorder("Predators"));
+//        listPrey.setBorder(createTitledBorder("Preys"));
+//        listVegetation.setBorder(createTitledBorder("Vegetation"));
         
         panelButton1.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
         panelButton2.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -667,13 +667,21 @@ public class SettingsView extends JDialog {
     }
 
     private void addToRightPanel() {
-        GridBagConstraints c = new GridBagConstraints();
+    	GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
         //c.weighty = 0;
         c.gridx = 0;
         c.gridy = 1;
-        right.add(listPred, c);
+        right.add(new JLabel("Predators"), c);
+    	
+    	c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0.5;
+        //c.weighty = 0;
+        c.gridx = 0;
+        c.gridy = 2;
+        right.add(new JScrollPane(listPred), c);
         //panelPred.add(sliderPredPopSize);
         //panelPred.add(textFieldPredPopSize);
 
@@ -682,7 +690,7 @@ public class SettingsView extends JDialog {
         c.weightx = 0.5;
         //c.weighty = 0;
         c.gridx = 1;
-        c.gridy = 1;
+        c.gridy = 2;
         right.add(spinnerPredPopSize, c);
 
         //center.add(panelPred, c);
@@ -693,7 +701,15 @@ public class SettingsView extends JDialog {
         //c.weighty = 0;
         c.gridx = 0;
         c.gridy = 3;
-        right.add(listPrey, c);
+        right.add(new JLabel("Preys"), c);
+        
+        c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0.5;
+        //c.weighty = 0;
+        c.gridx = 0;
+        c.gridy = 4;
+        right.add(new JScrollPane(listPrey), c);
         //panelPrey.add(sliderPreyPopSize);
         //panelPrey.add(textFieldPreyPopSize);
 
@@ -702,7 +718,7 @@ public class SettingsView extends JDialog {
         c.weightx = 0.5;
         //c.weighty = 0;
         c.gridx = 1;
-        c.gridy = 3;
+        c.gridy = 4;
         right.add(spinnerPreyPopSize, c);
 
         //center.add(panelPrey, c);
@@ -713,7 +729,15 @@ public class SettingsView extends JDialog {
         //c.weighty = 0;
         c.gridx = 0;
         c.gridy = 5;
-        right.add(listVegetation, c);
+        right.add(new JLabel("Vegetation"), c);
+        
+        c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0.5;
+        //c.weighty = 0;
+        c.gridx = 0;
+        c.gridy = 6;
+        right.add(new JScrollPane(listVegetation), c);
         //panelVeg.add(sliderVegPopSize);
         //panelVeg.add(textFieldVegPopSize);
 
@@ -722,7 +746,7 @@ public class SettingsView extends JDialog {
         c.weightx = 0.5;
         //c.weighty = 0;
         c.gridx = 1;
-        c.gridy = 5;
+        c.gridy = 6;
         right.add(spinnerVegPopSize, c);
         
         c = new GridBagConstraints();
