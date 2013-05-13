@@ -12,8 +12,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import chalmers.dax021308.ecosystem.model.environment.EcoWorld;
+import chalmers.dax021308.ecosystem.model.environment.IModel;
+import chalmers.dax021308.ecosystem.model.environment.SimulationSettings;
+import chalmers.dax021308.ecosystem.model.util.Log;
 
 /**
  * The view that holds the controls for starting, stopping and pausing a simulation.
@@ -32,9 +37,9 @@ public class ControlView extends JPanel implements IView {
 	public final JPanel iterationDelayPanel;
 	public final JLabel iterationDelayLabel;
 	public boolean play;
-	private EcoWorld model;
+	private IModel model;
 	
-	public ControlView(EcoWorld model) {  
+	public ControlView(IModel model) {  
 		playPauseButton = new JButton(new ImageIcon("res/play.png"));//("res/pause.png"));
 		restartButton = new JButton(new ImageIcon("res/restart.png"));
 		iterationDelaySpinner = new JSpinner();
@@ -59,6 +64,12 @@ public class ControlView extends JPanel implements IView {
 			switchToPlayButton();
 			playPauseButton.setEnabled(false);
 			restartButton.setEnabled(false);
+		} else if (evt.getPropertyName() == EcoWorld.EVENT_SETTINGS_CHANGED) {
+			Object o = evt.getNewValue();
+			if(o instanceof SimulationSettings) {
+				SimulationSettings s = (SimulationSettings) o;
+				iterationDelaySpinner.setValue(s.getDelayLength());
+			}
 		}
 	}
 

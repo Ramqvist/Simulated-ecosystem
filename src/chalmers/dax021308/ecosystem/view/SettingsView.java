@@ -47,7 +47,7 @@ import chalmers.dax021308.ecosystem.model.environment.mapeditor.SimulationMap;
 import chalmers.dax021308.ecosystem.model.util.ButtonGroupWrapper;
 //import java.awt.Container;
 
-public class NEWSettingsMenuView extends JDialog {
+public class SettingsView extends JDialog {
 	
 	private static final long serialVersionUID = -7514048933302292458L;
 	static final int DEFAULT_ITERATION_DELAY = 16;
@@ -147,7 +147,7 @@ public class NEWSettingsMenuView extends JDialog {
 
             public void run() {
                 try {
-                    NEWSettingsMenuView frame = new NEWSettingsMenuView(model, null);
+                    SettingsView frame = new SettingsView(model, null);
                     frame.setVisible(true);
                     frame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
                 } catch (Exception e) {
@@ -160,7 +160,7 @@ public class NEWSettingsMenuView extends JDialog {
     /**
      * Create the frame.
      */
-    public NEWSettingsMenuView(IModel model, Frame superFrame) {
+    public SettingsView(IModel model, Frame superFrame) {
     	super(superFrame);
 
         //initializing the graphical objects - done here since most of them are final		
@@ -271,7 +271,7 @@ public class NEWSettingsMenuView extends JDialog {
         listenerCancel = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                NEWSettingsMenuView.this.dispose();
+                SettingsView.this.dispose();
             }
         };
 
@@ -279,7 +279,7 @@ public class NEWSettingsMenuView extends JDialog {
 
 			@Override
             public void actionPerformed(ActionEvent e) {
-				advancedSettingsView = new AdvancedSettings(NEWSettingsMenuView.this); 
+				advancedSettingsView = new AdvancedSettings(SettingsView.this); 
             }
         };
 

@@ -157,7 +157,9 @@ public class OptimalMapSelectionScript implements IScript {
 		if(maps == null) {
 			return;
 		}
+		int counter = 1;
 		for(SimulationMap m : maps) {
+			Log.v("Map number " + counter++);
 			printMap(m);
 		}
 	}
