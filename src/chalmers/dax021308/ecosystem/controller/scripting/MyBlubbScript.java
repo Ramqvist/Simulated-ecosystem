@@ -33,7 +33,7 @@ public class MyBlubbScript implements IScript {
 	private OnFinishedScriptListener listener;
 
 	private static final String name = "RandomSettingBlubbSaveChartsGrejs";
-	private int numberOfRuns = 3;
+	private int numberOfRuns = 10;
 	private int currentRun = 0;
 	private static final int NUM_ITERATION_PER_SIMULATION = 10000;
 
