@@ -77,6 +77,8 @@ public class RectangularObstacle extends AbstractObstacle implements IObstacle{
 		sb.append(width);
 		sb.append(" Height: ");
 		sb.append(height);
+		sb.append(" Color: ");
+		sb.append(color);
 		sb.append(' ');
 		return sb.toString();
 	}

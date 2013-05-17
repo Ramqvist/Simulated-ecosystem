@@ -21,7 +21,7 @@ import chalmers.dax021308.ecosystem.model.util.Vector;
  */
 public class DeerAgent extends AbstractAgent {
 
-	private static final int MAX_ENERGY = 1000;
+	private static final int MAX_ENERGY = Integer.MAX_VALUE;
 	private static final int MAX_LIFE_LENGTH = Integer.MAX_VALUE;
 	private static final int DIGESTION_TIME = 10;
 	private static double REPRODUCTION_RATE = PreySettings.instance.reproduction_rate.value;
@@ -60,11 +60,11 @@ public class DeerAgent extends AbstractAgent {
 		separationConstant = this.genome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).getCurrentDoubleValue();
 		arrayalConstant = this.genome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).getCurrentDoubleValue();
 		forwardThrustConstant = this.genome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).getCurrentDoubleValue();
-		if (this.groupBehaviour) {
-			this.color = Color.BLUE;
-		} else {
-			this.color = Color.MAGENTA;
-		}
+//		if (this.groupBehaviour) {
+//			this.color = Color.BLUE;
+//		} else {
+//			this.color = Color.MAGENTA;
+//		}
 
 		//Stotting parameters
 		isAStottingDeer = this.genome.getGene(GeneralGeneTypes.ISSTOTTING).isGeneActive();
@@ -140,7 +140,7 @@ public class DeerAgent extends AbstractAgent {
 				arrayalForce = ForceCalculator.arrayalForce(neutralNeighbours,
 						this, arrayalConstant);
 			}
-
+			
 			Vector environmentForce = ForceCalculator.getEnvironmentForce(
 					surroundings.getGridDimension(), surroundings.getWorldShape(), position);
 			Vector obstacleForce = ForceCalculator.getObstacleForce(surroundings.getObstacles(),
@@ -156,7 +156,7 @@ public class DeerAgent extends AbstractAgent {
 			if (isAStottingDeer && isStotting) {
 				acceleration = predatorForce;
 			} else {
-				acceleration = predatorForce.multiply(5)
+				acceleration = predatorForce.multiply(50)
 					.add(mutualInteractionForce)
 					.add(forwardThrust)
 					.add(arrayalForce)

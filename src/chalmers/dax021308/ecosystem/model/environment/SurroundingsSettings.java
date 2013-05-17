@@ -16,7 +16,7 @@ import chalmers.dax021308.ecosystem.model.util.shape.IShape;
 public class SurroundingsSettings {
 
 	private static Dimension gridDimension;
-	private static List<IObstacle> obstacles;
+	private List<IObstacle> obstacles;
 	private static IShape worldShape;
 	private double OBSTACLE_SAFETY_DISTANCE;
 
@@ -26,9 +26,12 @@ public class SurroundingsSettings {
 	 * @param s		Shape of the world.
 	 * @param o		List of obstacles.
 	 */
-	public SurroundingsSettings(double obstacleSafetyDistance){
+	public SurroundingsSettings(SurroundingsSettings surr, double obstacleSafetyDistance){
+		this.obstacles = surr.obstacles;
 		OBSTACLE_SAFETY_DISTANCE = obstacleSafetyDistance;
 	}
+	
+	public SurroundingsSettings(){}
 	
 	/**
 	 * @return the gridDimension
@@ -46,13 +49,13 @@ public class SurroundingsSettings {
 	 * @return the obstacles
 	 */
 	public List<IObstacle> getObstacles() {
-		return SurroundingsSettings.obstacles;
+		return obstacles;
 	}
 	/**
 	 * @param obstacles the obstacles to set
 	 */
 	public void setObstacles(List<IObstacle> obstacles) {
-		SurroundingsSettings.obstacles = obstacles;
+		this.obstacles = obstacles;
 	}
 	/**
 	 * @return the worldShape

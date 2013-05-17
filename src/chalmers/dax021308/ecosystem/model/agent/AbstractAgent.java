@@ -53,8 +53,8 @@ public abstract class AbstractAgent implements IAgent {
 	protected Container<IAgent> focusedPrey;
 	protected boolean isAlive = true;
 	protected boolean hungry = true;
-	protected static final boolean USE_PRIORITY_NEIGHBOURS = true;
-	protected static final int K_NEAREST_NEIGHBOURS = 25;
+	protected static final boolean USE_PRIORITY_NEIGHBOURS = false;
+	protected static final int K_NEAREST_NEIGHBOURS = 50;
 
 	/* Neighbour list module variables */
 	protected List<IAgent> preyNeighbours;
@@ -86,7 +86,7 @@ public abstract class AbstractAgent implements IAgent {
 		this.height = height;
 		this.velocity = velocity;
 		this.maxSpeed = maxSpeed;
-		this.visionRange = visionRange;
+		this.visionRange = 10;
 		this.maxAcceleration = maxAcceleration;
 		this.focusedPreyPath = new AgentPath();
 		/*
@@ -317,7 +317,7 @@ public abstract class AbstractAgent implements IAgent {
 				for (IAgent a : p.getAgents()) {
 					if (a != this) {
 						double distance = a.getPosition().getDistance(position);
-						if (distance <= visionRange) {
+						if (distance <= 10000) {
 							if (USE_PRIORITY_NEIGHBOURS) {
 								neutralNeighboursQueue
 										.insertWithOverflow(new AgentQueueObject(
@@ -335,7 +335,7 @@ public abstract class AbstractAgent implements IAgent {
 		for (IPopulation p : prey) {
 			for (IAgent a : p.getAgents()) {
 				double distance = a.getPosition().getDistance(position);
-				if (distance <= visionRange) {
+				if (distance <= 100000) {
 					if (USE_PRIORITY_NEIGHBOURS) {
 						preyNeighboursQueue
 								.insertWithOverflow(new AgentQueueObject(a,
@@ -487,7 +487,8 @@ public abstract class AbstractAgent implements IAgent {
 
 	@Override
 	public boolean isLookingTasty(IAgent agent) {
-		return position.getDistance(agent.getPosition()) <= agent.getVisionRange();
+		return true;
+//		return position.getDistance(agent.getPosition()) <= agent.getVisionRange();
 	}
 
 	@Override

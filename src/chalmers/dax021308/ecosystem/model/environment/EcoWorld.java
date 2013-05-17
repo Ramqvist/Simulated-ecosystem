@@ -14,9 +14,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
+import chalmers.dax021308.ecosystem.model.environment.mapeditor.MapFileHandler;
 import chalmers.dax021308.ecosystem.model.environment.mapeditor.SimulationMap;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.EllipticalObstacle;
 import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
+import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
+import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
+import chalmers.dax021308.ecosystem.model.genetics.newV.IGene;
+import chalmers.dax021308.ecosystem.model.genetics.newV.IGenome;
 import chalmers.dax021308.ecosystem.model.population.AbstractPopulation;
 import chalmers.dax021308.ecosystem.model.population.DeerPopulation;
 import chalmers.dax021308.ecosystem.model.population.DummyPredatorPopulation;
@@ -257,8 +262,9 @@ public class EcoWorld implements IModel {
 		}
 		List<IPopulation> populations = new ArrayList<IPopulation>();
 
-		SurroundingsSettings surroundings = new SurroundingsSettings(0);
+		SurroundingsSettings surroundings = new SurroundingsSettings();
 		surroundings.setGridDimension(d);
+		
 		/*
 		 * Creating obstacles here for test. This should be done in a proper way
 		 * later.
@@ -293,19 +299,71 @@ public class EcoWorld implements IModel {
 		}
 		surroundings.setWorldShape(shape);
 
-		SurroundingsSettings grassSourroundings = new SurroundingsSettings(GrassSettings.instance.obstacle_safety_distance.value);
-		SurroundingsSettings preySourroundings = new SurroundingsSettings(PreySettings.instance.obstacle_safety_distance.value);
-		SurroundingsSettings predSourroundings = new SurroundingsSettings(PredSettings.instance.obstacle_safety_distance.value);
+		SurroundingsSettings grassSourroundings = new SurroundingsSettings(surroundings,GrassSettings.instance.obstacle_safety_distance.value);
+		SurroundingsSettings preySourroundings = new SurroundingsSettings(surroundings,PreySettings.instance.obstacle_safety_distance.value);
+		SurroundingsSettings predSourroundings = new SurroundingsSettings(surroundings,PredSettings.instance.obstacle_safety_distance.value);
+		
+		
+//		grassSourroundings = new SurroundingsSettings(new SurroundingsSettings(),GrassSettings.instance.obstacle_safety_distance.value);
+//		preySourroundings = new SurroundingsSettings(new SurroundingsSettings(),PreySettings.instance.obstacle_safety_distance.value);
+//		
+//		SimulationMap grassSpawn = null;
+//		SimulationMap deerSpawn = null;
+//		
+//		//Get grass and deer spawning maps
+//		List<SimulationMap> readMaps = MapFileHandler.readMapsFromMapsFolder();
+//		for(SimulationMap map: readMaps){
+//			if(map.getName().equals("DeerSpaltSpawn")) {
+//				deerSpawn = map;
+//			} else if(map.getName().equals("GrassSpawning")){
+//				grassSpawn = map;
+//			}
+//		}
+//	
+//		//Add all obstacles to deer surroundings
+//		List<IObstacle> obstacles = deerSpawn.getScaledObstacles(d);
+//		if(obstacles != null ) {
+//			preySourroundings.setObstacles(obstacles);
+//		} else {
+//			preySourroundings.setObstacles(new ArrayList<IObstacle>(0));
+//		}
+//	
+//		//Add all obstacles to grass surroundings
+//		obstacles = grassSpawn.getScaledObstacles(d);
+//		if(obstacles != null ) {
+//			grassSourroundings.setObstacles(obstacles);
+//		} else {
+//			grassSourroundings.setObstacles(new ArrayList<IObstacle>(0));
+//		}
+//		
+		
+		
+		
 
+		IGenome<GeneralGeneTypes, IGene> prey2Genome = GeneticSettings.preySettings.getGenome().getCopy();
+		IGenome<GeneralGeneTypes, IGene> predatorGenome = GeneticSettings.predSettings.getGenome().getCopy();
+		
+		prey2Genome.getGene(GeneralGeneTypes.ISGROUPING).setHaveGene(
+				predatorGenome.getGene(GeneralGeneTypes.ISGROUPING).isGeneActive());
+		prey2Genome.getGene(GeneralGeneTypes.GROUPING_COHESION).setCurrentDoubleValue(
+				predatorGenome.getGene(GeneralGeneTypes.GROUPING_COHESION).getCurrentDoubleValue());
+		prey2Genome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).setCurrentDoubleValue(
+				predatorGenome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).getCurrentDoubleValue());
+		prey2Genome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).setCurrentDoubleValue(
+				predatorGenome.getGene(GeneralGeneTypes.GROUPING_ARRAYAL_FORCE).getCurrentDoubleValue());
+		prey2Genome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).setCurrentDoubleValue(
+				predatorGenome.getGene(GeneralGeneTypes.GROUPING_FORWARD_THRUST).getCurrentDoubleValue());
+
+		
 		if (s.getPredatorModel() == SimulationSettings.POP_DUMMYPRED) {
 			pred = new DummyPredatorPopulation(s.getPredPopSize(),
 					Color.red, 3, 0.75, 275, predSourroundings);
 		} else if (s.getPredatorModel() == SimulationSettings.POP_WOLF) {
-			pred = new WolfPopulation("Wolves", s.getPredPopSize(), Color.red,
-					PredSettings.instance.maxSpeed.value,
-					PredSettings.instance.maxAcceleration.value,
-					PredSettings.instance.visionRange.value,
-					true, predSourroundings);
+			pred = new DeerPopulation("Deers2", s.getPredPopSize(), Color.red,
+					PreySettings.instance.maxSpeed.value,
+					PreySettings.instance.maxAcceleration.value,
+					PreySettings.instance.visionRange.value,
+					true, preySourroundings, prey2Genome);
 		}
 
 		if (s.getPreyModel() == SimulationSettings.POP_DEER) {
@@ -313,7 +371,7 @@ public class EcoWorld implements IModel {
 					PreySettings.instance.maxSpeed.value,
 					PreySettings.instance.maxAcceleration.value,
 					PreySettings.instance.visionRange.value,
-					true, preySourroundings);
+					true, preySourroundings, null);
 		} else if (s.getPreyModel() == SimulationSettings.POP_DUMMYPREY) {
 			prey = new DummyPreyPopulation(s.getPreyPopSize(), Color.blue,
 					2.2, 2, 250, preySourroundings);
@@ -338,7 +396,8 @@ public class EcoWorld implements IModel {
 		prey.addPredator(pred);
 		prey.addPrey(grass);
 
-		pred.addPrey(prey);
+		pred.addPredator(prey);
+		pred.addPrey(grass);
 		populations.add(grass);
 		populations.add(prey);
 		populations.add(pred);

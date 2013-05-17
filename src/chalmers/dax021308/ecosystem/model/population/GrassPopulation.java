@@ -43,6 +43,7 @@ public class GrassPopulation extends AbstractPopulation {
 		List<IAgent> newAgents = new ArrayList<IAgent>(populationSize * 100);
 		for (int i = 0; i < populationSize; i++) {
 			Position randPos = getRandomPosition();
+			randPos.setY(randPos.getY()-9000);
 			Vector velocity = new Vector(maxSpeed, maxSpeed);
 			IAgent a = new GrassAgent(getName(), randPos, color, 5, 5,
 					velocity, maxSpeed, capacity);

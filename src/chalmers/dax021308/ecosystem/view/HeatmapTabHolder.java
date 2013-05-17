@@ -31,7 +31,7 @@ public class HeatmapTabHolder extends JTabbedPane implements IView {
 				SimulationSettings s = (SimulationSettings) evt.getNewValue();
 				popList = s.getFinalPopulations();
 				removeAll();
-				heatMap = new HeatMapView(m, s.getSimDimension(), new Dimension(50,50), popList);
+				heatMap = new HeatMapView(m, s.getSimDimension(), new Dimension(100,100), popList);
 				int nPops = popList.size();
 				if(nPops>0) {
 					addTab(popList.get(0).getName(), heatMap);

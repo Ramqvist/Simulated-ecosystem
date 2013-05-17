@@ -8,6 +8,7 @@ import java.util.List;
 import chalmers.dax021308.ecosystem.model.agent.IAgent;
 import chalmers.dax021308.ecosystem.model.agent.DeerAgent;
 import chalmers.dax021308.ecosystem.model.environment.SurroundingsSettings;
+import chalmers.dax021308.ecosystem.model.environment.obstacle.IObstacle;
 import chalmers.dax021308.ecosystem.model.genetics.GeneralGeneTypes;
 import chalmers.dax021308.ecosystem.model.genetics.GeneticSettings;
 import chalmers.dax021308.ecosystem.model.genetics.GenomeFactory;
@@ -28,17 +29,34 @@ public class DeerPopulation extends AbstractPopulation {
 	}
 
 	public DeerPopulation(String name, int initPopulationSize, Color color, double maxSpeed,
-			double maxAcceleration, double visionRange, boolean groupBehaviour, SurroundingsSettings surroundings) {
+			double maxAcceleration, double visionRange, boolean groupBehaviour,
+			SurroundingsSettings surroundings, IGenome<GeneralGeneTypes, IGene> genome) {
 		
 		super(name, color, surroundings);
 		//this.groupBehaviour = groupBehaviour;
 		agents = initializePopulation(initPopulationSize, surroundings.getGridDimension(), color,
-				maxSpeed, maxAcceleration, visionRange);
+				maxSpeed, maxAcceleration, visionRange, genome);
+		
+		if(color.equals(Color.blue)) {
+			List<IObstacle> obstacleList = surroundings.getObstacles();
+			int size = obstacleList.size();
+			if(size>0){
+				if(obstacleList.get(size-1).getColor().equals(Color.black)) {
+					System.out.println(obstacleList.get(size-1));
+					obstacleList.remove(obstacleList.get(size-1));
+				}
+			}
+			
+
+		}
+	
+	
+		
 	}
 
 	private List<IAgent> initializePopulation(int populationSize,
 			Dimension gridDimension, Color color, double maxSpeed,
-			double maxAcceleration, double visionRange) {
+			double maxAcceleration, double visionRange, IGenome<GeneralGeneTypes, IGene> genome) {
 		List<IAgent> newAgents = new ArrayList<IAgent>(populationSize);
 		addNeutralPopulation(this);
 		for (int i = 0; i < populationSize; i++) {
@@ -51,8 +69,9 @@ public class DeerPopulation extends AbstractPopulation {
 				velocity.setVector(-maxSpeed + Math.random() * 2 * maxSpeed,
 						-maxSpeed + Math.random() * 2 * maxSpeed);
 			}
-			
-			IGenome<GeneralGeneTypes, IGene> genome = GeneticSettings.preySettings.getGenome().getCopy();
+			if(genome == null) {
+				genome = GeneticSettings.preySettings.getGenome().getCopy();
+			}
 			genome.getGene(GeneralGeneTypes.ISGROUPING).isGeneActive();
 			genome.getGene(GeneralGeneTypes.GROUPING_COHESION).setRandomStartValue(false);
 			genome.getGene(GeneralGeneTypes.GROUPING_SEPARATION_FACTOR).setRandomStartValue(false);
