@@ -609,7 +609,6 @@ public class SettingsView extends JDialog {
         right.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 10));
         //panelButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-<<<<<<< HEAD
         shapeRadioPanel.setBorder(createTitledBorder("Shape of Universe"));
 
 //      listMap.setBorder(createTitledBorder("Obstacles"));
@@ -618,15 +617,6 @@ public class SettingsView extends JDialog {
         listPrey.setBorder(createTitledBorder("Preys"));
         listVegetation.setBorder(createTitledBorder("Vegetation"));
 
-=======
-        shapeRadioPanel.setBorder(createTitledBorder("Shape"));
-//        listMap.setBorder(createTitledBorder("Obstacles"));
-        
-//        listPred.setBorder(createTitledBorder("Predators"));
-//        listPrey.setBorder(createTitledBorder("Preys"));
-//        listVegetation.setBorder(createTitledBorder("Vegetation"));
-        
->>>>>>> e5d0847ebf28dc126a810d49c5e2d51d58b97a32
         panelButton1.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
         panelButton2.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
