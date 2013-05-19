@@ -613,9 +613,9 @@ public class SettingsView extends JDialog {
 
 //      listMap.setBorder(createTitledBorder("Obstacles"));
 
-        listPred.setBorder(createTitledBorder("Predators"));
-        listPrey.setBorder(createTitledBorder("Preys"));
-        listVegetation.setBorder(createTitledBorder("Vegetation"));
+//        listPred.setBorder(createTitledBorder("Predators"));
+//        listPrey.setBorder(createTitledBorder("Preys"));
+//        listVegetation.setBorder(createTitledBorder("Vegetation"));
 
         panelButton1.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
         panelButton2.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
